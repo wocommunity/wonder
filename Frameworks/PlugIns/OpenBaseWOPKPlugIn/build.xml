@@ -1,0 +1,118 @@
+<project name="OpenBaseWOPKPlugIn" default="build" basedir=".">
+
+	<!-- main targets  -->
+	<!-- add optional targets to depends list if needed -->
+	<target name="build" depends="setProps,init.build,build.woframework" />
+
+	<target name="compileAndBuild" depends="setProps,init.build,compile,build.woframework" />
+
+	<target name="install" depends="setProps,init.install,build.woframework" />
+
+	<target name="clean" depends="setProps">
+		<delete dir="dist" />
+	</target>
+
+	<!-- property determination  -->
+	<target name="setProps">
+		<property file="${user.home}${file.separator}build.properties" />
+		<property file="build.properties" />
+		<property file="${user.home}${file.separator}Library${file.separator}wobuild.properties" />
+		<condition property="wo.properties.check.failed">
+			<not>
+				<and>
+					<isset property="wo.wosystemroot" />
+					<isset property="wo.wolocalroot" />
+				</and>
+			</not>
+		</condition>
+		<fail message="Could not find ${user.home}${file.separator}Library${file.separator}wobuild.properties." if="wo.properties.check.failed" />
+		<property name="install.dir" value="${wo.wolocalroot}/Library/Frameworks" />
+	</target>
+
+	<!-- basic initializations  -->
+	<target name="init.install">
+		<tstamp />
+		<property name="dest.dir" value="${install.dir}" />
+	</target>
+
+	<target name="init.build">
+		<tstamp />
+		<property name="dest.dir" value="dist" />
+	</target>
+
+	<!-- woproject tasks -->
+	<target name="build.woframework">
+
+		<taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+		</taskdef>
+
+		<woframework name="${project.name}" destDir="${dest.dir}" customInfoPListContent="${customInfoPListContent}" principalClass="${principalClass}" eoAdaptorClassName="${eoAdaptorClassName}" javaVersion="${javaVersion}" cfbundleversion="${cfBundleVersion}" cfbundleshortversion="${cfBundleShortVersion}" cfbundleID="${cfBundleID}">
+			<classes dir="${classes.dir}">
+				<patternset>
+					<includesfile name="woproject/classes.include.patternset" />
+					<excludesfile name="woproject/classes.exclude.patternset" />
+				</patternset>
+			</classes>
+			<wsresources dir="WebServerResources">
+				<patternset>
+					<include name="**/*" />
+					<exclude name="CVS" />
+					<exclude name=".svn" />
+					<excludesfile name="woproject/wsresources.exclude.patternset" />
+				</patternset>
+			</wsresources>
+			<resources dir="Resources">
+				<patternset>
+					<include name="**/*" />
+					<exclude name="CVS" />
+					<exclude name=".svn" />
+					<excludesfile name="woproject/resources.exclude.patternset" />
+				</patternset>
+			</resources>
+			<resources dir="Components">
+				<patternset>
+					<include name="**/*" />
+					<exclude name="CVS" />
+					<exclude name=".svn" />
+					<excludesfile name="woproject/resources.exclude.patternset" />
+				</patternset>
+			</resources>
+			<lib dir="Libraries">
+				<include name="*.jar" />
+				<exclude name="**/*.framework/**" />
+			</lib>
+		</woframework>
+	</target>
+
+	<target name="compile" depends="setProps,init.build">
+		<taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile" />
+		<mkdir dir="bin" />
+		<wocompile srcdir="Sources" destdir="bin">
+			<frameworks root="${wo.dir.user.home.library.frameworks}">
+				<patternset>
+					<includesfile name="woproject/ant.frameworks.user.home" />
+				</patternset>
+			</frameworks>
+			<frameworks root="${wo.wolocalroot}">
+				<patternset>
+					<includesfile name="woproject/ant.frameworks.wo.wolocalroot" />
+				</patternset>
+			</frameworks>
+			<frameworks root="${wo.wosystemroot}">
+				<patternset>
+					<includesfile name="woproject/ant.frameworks.wo.wosystemroot" />
+				</patternset>
+			</frameworks>
+			<classpath>
+				<fileset dir="${wo.wolocalroot}">
+					<patternset>
+						<includesfile name="woproject/ant.frameworks.wo.wolocalroot" />
+					</patternset>
+				</fileset>
+				<fileset dir="Libraries">
+					<filename name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</wocompile>
+	</target>
+</project>
