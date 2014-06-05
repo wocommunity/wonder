@@ -42,12 +42,14 @@ public  class ERXRequest extends WORequest {
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
-    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
+    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"x-forwarded-for", "pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
 
     // 'Host' is the official HTTP 1.1 header for the host name in the request URL, so this should be checked first.
     // @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.23
+    // when the app is behind a reverse proxy 'Host' will contain the proxy address instead of the requested one so check first for 'x-forwarded-host'
+    // @see http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#x-headers
     // Fallback headers such as server_name will screw up your complete URL generation for secure domains that have wildcard subdomains since it returns sth like *.domain.com for host name
-    protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"Host", "x-forwarded-host",  "x-webobjects-server-name", "server_name", "http_host"});
+    protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"x-forwarded-host", "Host", "x-webobjects-server-name", "server_name", "http_host"});
     
     /** NSArray to keep browserLanguages in. */
     protected NSArray<String> _browserLanguages;
