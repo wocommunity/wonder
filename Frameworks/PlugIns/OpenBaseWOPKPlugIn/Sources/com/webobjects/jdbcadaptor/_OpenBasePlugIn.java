@@ -398,6 +398,11 @@ public class _OpenBasePlugIn extends JDBCPlugIn {
 			return createStatements.arrayByAddingObjectsFromArray(otherStatements);
 		}
 		
+		public NSArray statementsToConvertColumnType(String columnName, String tableName, EOSchemaSynchronization.ColumnTypes type, EOSchemaSynchronization.ColumnTypes newType, EOSchemaGenerationOptions options) {
+		  System.err.println("openbase statements to convert column type");
+		  return new NSArray(this._expressionForString("alter table " + tableName + " add column " + columnName + " " + newType));
+		}
+		
 		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, EOSchemaGenerationOptions options) {
 			return new NSArray(this._expressionForString("alter table " + tableName + " add column " + columnName + " set " + (allowsNull ? "null" : "not null")));
 		}
