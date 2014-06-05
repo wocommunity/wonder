@@ -26,7 +26,6 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueArchiving;
-import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -36,11 +35,10 @@ import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCoding.UnknownKeyException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
-
-import com.webobjects.foundation.NSKeyValueCoding.UnknownKeyException;
 
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -61,6 +59,8 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ \\.'\"\\(]|$)");
 
 	public static final Logger log = Logger.getLogger(ERXExistsQualifier.class);
 	public static final String EXISTS_ALIAS = "exists";
@@ -271,12 +271,9 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 expression.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
             }
 
-    		String regexToReplaceWithExistsAlias = "([ '\"\\(]|^)(t)([0-9])([ \\.'\"\\(]|$)";
-    		Pattern pattern = Pattern.compile(regexToReplaceWithExistsAlias);
-
             String subExprStr = subExpression.statement();
 
-    		Matcher matcher = pattern.matcher(subExprStr);
+    		Matcher matcher = PATTERN.matcher(subExprStr);
     		if (matcher.find()) {
     			subExprStr = matcher.replaceAll("$1" + EXISTS_ALIAS + "$3$4");
     		}
