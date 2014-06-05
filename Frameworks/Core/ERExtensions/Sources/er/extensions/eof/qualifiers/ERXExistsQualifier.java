@@ -11,7 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -60,9 +61,13 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/** 
+	 * <a href="http://wiki.wocommunity.org/display/documentation/Wonder+Logging">new org.slf4j.Logger</a> 
+	 */
+	static final Logger log = LoggerFactory.getLogger(ERXExistsQualifier.class);
+
 	private static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ \\.'\"\\(]|$)");
 
-	public static final Logger log = Logger.getLogger(ERXExistsQualifier.class);
 	public static final String EXISTS_ALIAS = "exists";
 	public static final boolean UseSQLInClause = true;
 	public static final boolean UseSQLExistsClause = false;
