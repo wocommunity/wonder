@@ -7,6 +7,8 @@
 package er.extensions.eof.qualifiers;
 
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -269,75 +271,16 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 expression.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
             }
 
+    		String regexToReplaceWithExistsAlias = "([ '\"\\(]|^)(t)([0-9])([ \\.'\"\\(]|$)";
+    		Pattern pattern = Pattern.compile(regexToReplaceWithExistsAlias);
+
             String subExprStr = subExpression.statement();
-            subExprStr = StringUtils.replace(subExprStr, "t0.", EXISTS_ALIAS + "0.");
-            subExprStr = StringUtils.replace(subExprStr, "t0 ", EXISTS_ALIAS + "0 ");
-            subExprStr = StringUtils.replace(subExprStr, "T0.", EXISTS_ALIAS + "0.");
-            subExprStr = StringUtils.replace(subExprStr, "T0 ", EXISTS_ALIAS + "0 ");
-            subExprStr = StringUtils.replace(subExprStr, "t1.", EXISTS_ALIAS + "1.");
-            subExprStr = StringUtils.replace(subExprStr, "t1 ", EXISTS_ALIAS + "1 ");
-            subExprStr = StringUtils.replace(subExprStr, "T1.", EXISTS_ALIAS + "1.");
-            subExprStr = StringUtils.replace(subExprStr, "T1 ", EXISTS_ALIAS + "1 ");
-            subExprStr = StringUtils.replace(subExprStr, "t2.", EXISTS_ALIAS + "2.");
-            subExprStr = StringUtils.replace(subExprStr, "t2 ", EXISTS_ALIAS + "2 ");
-            subExprStr = StringUtils.replace(subExprStr, "T2.", EXISTS_ALIAS + "2.");
-            subExprStr = StringUtils.replace(subExprStr, "T2 ", EXISTS_ALIAS + "2 ");
-            subExprStr = StringUtils.replace(subExprStr, "t3.", EXISTS_ALIAS + "3.");
-            subExprStr = StringUtils.replace(subExprStr, "t3 ", EXISTS_ALIAS + "3 ");
-            subExprStr = StringUtils.replace(subExprStr, "T3.", EXISTS_ALIAS + "3.");
-            subExprStr = StringUtils.replace(subExprStr, "T3 ", EXISTS_ALIAS + "3 ");
-            subExprStr = StringUtils.replace(subExprStr, "t4.", EXISTS_ALIAS + "4.");
-            subExprStr = StringUtils.replace(subExprStr, "t4 ", EXISTS_ALIAS + "4 ");
-            subExprStr = StringUtils.replace(subExprStr, "T4.", EXISTS_ALIAS + "4.");
-            subExprStr = StringUtils.replace(subExprStr, "T4 ", EXISTS_ALIAS + "4 ");
-            subExprStr = StringUtils.replace(subExprStr, "t5.", EXISTS_ALIAS + "5.");
-            subExprStr = StringUtils.replace(subExprStr, "T5.", EXISTS_ALIAS + "5.");
-            subExprStr = StringUtils.replace(subExprStr, "t5 ", EXISTS_ALIAS + "5 ");
-            subExprStr = StringUtils.replace(subExprStr, "T5 ", EXISTS_ALIAS + "5 ");
-            subExprStr = StringUtils.replace(subExprStr, "t6.", EXISTS_ALIAS + "6.");
-            subExprStr = StringUtils.replace(subExprStr, "t6 ", EXISTS_ALIAS + "6 ");
-            subExprStr = StringUtils.replace(subExprStr, "T6.", EXISTS_ALIAS + "6.");
-            subExprStr = StringUtils.replace(subExprStr, "T6 ", EXISTS_ALIAS + "6 ");
-            subExprStr = StringUtils.replace(subExprStr, "t7.", EXISTS_ALIAS + "7.");
-            subExprStr = StringUtils.replace(subExprStr, "t7 ", EXISTS_ALIAS + "7 ");
-            subExprStr = StringUtils.replace(subExprStr, "T7.", EXISTS_ALIAS + "7.");
-            subExprStr = StringUtils.replace(subExprStr, "T7 ", EXISTS_ALIAS + "7 ");
-            subExprStr = StringUtils.replace(subExprStr, "t8.", EXISTS_ALIAS + "8.");
-            subExprStr = StringUtils.replace(subExprStr, "t8 ", EXISTS_ALIAS + "8 ");
-            subExprStr = StringUtils.replace(subExprStr, "T8.", EXISTS_ALIAS + "8.");
-            subExprStr = StringUtils.replace(subExprStr, "T8 ", EXISTS_ALIAS + "8 ");
-            subExprStr = StringUtils.replace(subExprStr, "t9.", EXISTS_ALIAS + "9.");
-            subExprStr = StringUtils.replace(subExprStr, "t9 ", EXISTS_ALIAS + "9 ");
-            subExprStr = StringUtils.replace(subExprStr, "T9.", EXISTS_ALIAS + "9.");
-            subExprStr = StringUtils.replace(subExprStr, "T9 ", EXISTS_ALIAS + "9 ");
-            
-            // (AR) Note that the "space" character separates simple "t0 " from being part of a password hash or other 
-            // valid data. It has never been 100% but generally true that you are replacing a table alias when we had 
-            // a trailing space for match and replace. This fails when the "t0" is the last breath of subExprStr so 
-            // let us match and replace at the end of the string now.
-            
-            if (StringUtils.endsWithIgnoreCase(subExprStr, " T0")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "0";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T1")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "1";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T2")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "2";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T3")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "3";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T4")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "4";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T5")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "5";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T6")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "6";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T7")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "7";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T8")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "8";
-            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T9")) {
-            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "9";
-            }
-            
+
+    		Matcher matcher = pattern.matcher(subExprStr);
+    		if (matcher.find()) {
+    			subExprStr = matcher.replaceAll("$1" + EXISTS_ALIAS + "$3$4");
+    		}
+    		
             StringBuffer sb = new StringBuffer();
             if (existsQualifier.usesInQualInstead()) {
             	// (AR) Write the IN clause
