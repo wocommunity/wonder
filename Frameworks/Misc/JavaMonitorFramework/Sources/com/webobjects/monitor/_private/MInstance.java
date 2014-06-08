@@ -762,8 +762,8 @@ public class MInstance extends MObject {
         long cutOffTime = _lastRegistration.getTime() + lifebeatCheckInterval();
         String assumedToBeDead = "";
         if (currentTime.getTime() > cutOffTime) {
-        	long secondsDifference = (currentTime.getTime() - cutOffTime) / 1000;
-        	assumedToBeDead = "The app did not respond for " + secondsDifference + "seconds " +
+        	long secondsDifference = (currentTime.getTime() - _lastRegistration.getTime()) / 1000;
+        	assumedToBeDead = "The app did not respond for " + secondsDifference + " seconds " +
         			"which is greater than the allowed threshold of " + lifebeatCheckInterval() + " seconds " +
         			"(Lifebeat Interval * WOAssumeApplicationIsDeadMultiplier) so it is assumed to be dead.\n";
         }
