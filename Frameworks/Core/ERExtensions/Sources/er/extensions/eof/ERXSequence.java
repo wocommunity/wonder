@@ -202,8 +202,10 @@ public class ERXSequence {
 	        Connection con = broker().getConnection();
 	        try {
 	            try {
-	                con.setAutoCommit(false);
-	                con.setReadOnly(false);
+	            	if(con.getTransactionIsolation() != 0) {
+	            		con.setAutoCommit(false);
+	            		con.setReadOnly(false);
+	            	}
 	            } catch (SQLException e) {
 	                log.error(e, e);
 	            }
