@@ -197,7 +197,7 @@ public class ERXDatabaseContextDelegate {
 				throw e;
 			}
 			String exceptionsRegex = ERXProperties.stringForKeyWithDefault(ERX_ADAPTOR_EXCEPTIONS_REGEX, ERX_ADAPTOR_EXCEPTIONS_REGEX_DEFAULT);
-			if(!handled && throwable.getMessage() != null && exceptionsRegex.matches(throwable.getMessage())) {
+			if(!handled && throwable.getMessage() != null && throwable.getMessage().matches(exceptionsRegex)) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
 					EOModel model = (EOModel)e.nextElement();
