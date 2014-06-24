@@ -1822,6 +1822,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public void dispose() {
 		if (_shouldDisposeEditingContext && _editingContext != null) {
+			ERXEC.unlockAllContextsForCurrentThread();
 			_editingContext.dispose();
 			_editingContext = null;
 		}
