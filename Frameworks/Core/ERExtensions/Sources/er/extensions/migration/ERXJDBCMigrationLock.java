@@ -145,6 +145,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		catch (Exception e) {
 			channel.adaptorContext().rollbackTransaction();
+			channel.adaptorContext().beginTransaction();
 			String createTableStatement = dbUpdaterCreateStatement(model, adaptor);
 			if (createTableIfMissing) {
 				try {
