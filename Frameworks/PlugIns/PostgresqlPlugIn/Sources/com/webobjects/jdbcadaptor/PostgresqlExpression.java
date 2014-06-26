@@ -28,6 +28,9 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.eof.ERXSortNullHandling;
+import er.extensions.eof.ERXSortOrdering;
+
 /**
  * Postgres needs special handling of NSData conversion, special
  * escape char, has a regex query selector and handles JOIN clauses correctly.
@@ -349,7 +352,7 @@ public class PostgresqlExpression extends JDBCExpression {
         if(selectString.indexOf(" DISTINCT") != -1) {
             String [] columns = orderByClause.split(",");
             for(int i = 0; i < columns.length; i++) {
-                String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*", "");
+                String column = columns[i].replaceFirst("\\s+(ASC|DESC)(\\s+NULLS\\s+(FIRST|LAST))?\\s*", "");
                 if(columnList.indexOf(column) == -1) {
                     sb.append(", ");
                     sb.append(column);
@@ -1118,5 +1121,50 @@ public class PostgresqlExpression extends JDBCExpression {
 	 */
 	private String customFunctionForStringComparison() {
 		return System.getProperty(getClass().getName() + ".customFunctionForStringComparison");
+	}
+
+	/**
+	 * Overridden to add custom handling of <code>null</code> values.
+	 */
+	@Override
+	public void addOrderByAttributeOrdering(EOSortOrdering sortOrdering) {
+		NSSelector selector = sortOrdering.selector();
+		String attributePath = sortOrdering.key();
+
+		String attributeSQL = sqlStringForAttributeNamed(attributePath);
+		if (attributeSQL == null) {
+			throw new IllegalStateException("addOrderByAttributeOrdering: attempt to generate SQL for "
+					+ sortOrdering.getClass().getName() + " " + sortOrdering + " failed because attribute identified by key '"
+					+ sortOrdering.key() + "' was not reachable from from entity '" + this._entity.name() + "'");
+		}
+
+		StringBuilder orderBy = new StringBuilder();
+
+		// add attribute name
+		if ((selector == EOSortOrdering.CompareCaseInsensitiveAscending || selector == EOSortOrdering.CompareCaseInsensitiveDescending)
+				&& entity()._attributeForPath(attributePath).adaptorValueType() == EOAttribute.AdaptorCharactersType) {
+			orderBy.append(this._upperFunctionName).append("(").append(attributeSQL).append(")");
+		} else {
+			orderBy.append(attributeSQL);
+		}
+
+		// add ASC or DESC
+		if (selector == EOSortOrdering.CompareCaseInsensitiveAscending || selector == EOSortOrdering.CompareAscending) {
+			orderBy.append(" ASC");
+		} else if (selector == EOSortOrdering.CompareCaseInsensitiveDescending || selector == EOSortOrdering.CompareDescending) {
+			orderBy.append(" DESC");
+		}
+
+		// add NULL sorting behavior
+		if (sortOrdering instanceof ERXSortOrdering) {
+			ERXSortNullHandling nullHandling = ((ERXSortOrdering) sortOrdering).resolvedNullHandling();
+			if (nullHandling == ERXSortNullHandling.FIRST) {
+				orderBy.append(" NULLS FIRST");
+			} else if (nullHandling == ERXSortNullHandling.LAST) {
+				orderBy.append(" NULLS LAST");
+			}
+		}
+
+		appendItemToListString(orderBy.toString(), _orderByString());
 	}
 }
