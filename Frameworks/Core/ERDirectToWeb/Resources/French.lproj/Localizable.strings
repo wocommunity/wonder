@@ -5,6 +5,7 @@
 	"CouldNotSavePleaseReapply" = "Ne peut enregistrer vos modifications. L'attribut @@displayNameForEntity@@ a été modifié dans la base de données avant que vous puissiez enregistrer vos modifications. Vos modifications sont perdues, veuillez les reprendre.";
 	"ends with" = "se termine par";
 	"ERD2W.addButtonLabel" = "Ajouter";
+	"ERD2W.advancedFindButtonLabel" = "Avancé...";
 	"ERD2W.cancelButtonLabel" = "Annuler";
 	"ERD2W.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la cr\U00e9ation de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va \U00e9liminer vos changements et cliquer sur annulation retournera \U00e0 l'\U00e9dition de @@displayNameForEntity@@.";
 	"ERD2W.clearButtonLabel" = "Vider";
@@ -114,7 +115,7 @@
 	"ERDQueryTwoLevelRelationship.all" = "- tout -";
 	"ERDTrashcan.confirmDeletionMessage" = "<b>Etes-vous sur de vouloir \U00e9liminer ce @@displayNameForEntity@@?</b>";
 	"is" = "est";
-	"like" = "est sembable";
+	"like" = "est semblable à";
 	"starts with" = "commence par";
 	"ERD2WQueryUnavailable.CanNotBeUsed" = "- ne peut être utilisé dans une requête -";
 	"Hint.SampleText" = "Information sur l'attribut";
@@ -126,7 +127,7 @@
 	"ERD2WDebugFlags.METRICS" = "Métriques sur la page";
 	"ERD2WDebugFlags.SHOW" = "Montrer les détails";
 	"ERD2WDebugFlags.HIDE" = "Cacher les détails";
-	"ERD2WDebugFlags.DUMP" = "Clés créés";
+	"ERD2WDebugFlags.DUMP" = "Clés créées";
 	"ERD2WDebugFlags.LOCALIZE" = "Localisation";
 	"ERD2WDebugFlags.STATS" = "WOStats";
 	"ERD2WDebugFlags.RUN" = "Lancer un test";	
