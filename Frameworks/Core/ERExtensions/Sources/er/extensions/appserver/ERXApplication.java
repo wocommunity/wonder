@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -737,12 +738,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					URL userPropertiesPath = null;
 					String mainBundleName = NSProperties._mainBundleName();
 
+					// Look for a jar file name like: myapp[-1.0][-SNAPSHOT].jar
+					Pattern mainBundleJarPattern = Pattern.compile("\\b" + mainBundleName.toLowerCase() + "[-\\.\\d]*(snapshot)?\\.jar");
+					
 					while (jarBundles.hasMoreElements()) {
 						URL url = jarBundles.nextElement();
 
 						String urlAsString = url.toString();
 
-						if (urlAsString.contains(mainBundleName + ".jar")) {
+						if (mainBundleJarPattern.matcher(urlAsString.toLowerCase()).find()) {
 							try {
 								propertiesPath = new URL(URLDecoder.decode(urlAsString, CharEncoding.UTF_8));
 								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
