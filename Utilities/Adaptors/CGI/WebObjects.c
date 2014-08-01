@@ -39,6 +39,7 @@ and limitations under the License.
 #include "transaction.h"
 #include "listing.h"
 #include "wastring.h"
+#include "shmem.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,7 +205,15 @@ static int readContentData(HTTPRequest *req, void *buffer, int dataSize, int mus
    return n == dataSize ? n : -1;
 }
 
+int do_tests()
+{
+  int res = 0;
+  
+  if(res == 0)
+    res = shmem_do_tests();
 
+  return res;
+}
 
 #ifdef  PROFILE
 int doit(int argc, char *argv[], char **envp);  /* forward */
@@ -237,6 +246,11 @@ int doit(int argc, char *argv[], char **envp) {
       _setmode(_fileno(stdout), _O_BINARY);
       _setmode(_fileno(stdin), _O_BINARY);
 #endif
+
+      if(argc == 2 && strcmp(argv[1], "test") == 0)
+      {
+	exit(do_tests());
+      }
 
       script_name = getenv(CGI_SCRIPT_NAME);
       path_info = getenv(CGI_PATH_INFO);

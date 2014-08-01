@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -378,6 +381,21 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 	@Override
 	public Class defaultExpressionClass() {
 		return DerbyExpression.class;
+	}
+
+	@Override
+	public Object fetchCLOB(ResultSet resultSet, int column, EOAttribute attribute, boolean materialize) throws SQLException {
+		Clob clob = resultSet.getClob(column);
+
+		if (clob == null) {
+	      return null;
+	    }
+
+	    if (!materialize) {
+	      return clob;
+	    }
+
+	    return clob.getSubString(1L, (int)clob.length());
 	}
 
 	/**
