@@ -368,4 +368,15 @@ public class ERXPartial<T extends ERXGenericRecord> {
 			throw exception.exceptionWithObjectAndKey(this, key);
 		}
 	}
+
+	/**
+	 * Delegated from the base entity. A partial entity can override this method
+	 * to perform object initialisation. It will be called when the base
+	 * entity's {@code init()} method is called.
+	 * 
+	 * @param editingContext
+	 *            this object's {@link EOEditingContext}
+	 */
+	protected void init(EOEditingContext editingContext) {
+	}
 }
