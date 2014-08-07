@@ -210,7 +210,9 @@ public class ERXPartial<T extends ERXGenericRecord> {
 	 * 
 	 * @param editingContext
 	 *            this object's {@link EOEditingContext}
+	 * @deprecated use {@link #init(EOEditingContext)} instead
 	 */
+    @Deprecated
     public void awakeFromInsertion(EOEditingContext editingContext) {
     	// DO NOTHING
     }
