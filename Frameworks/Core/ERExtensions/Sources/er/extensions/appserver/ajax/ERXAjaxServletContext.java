@@ -8,6 +8,7 @@ package er.extensions.appserver.ajax;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.jspservlet.WOServletContext;
 
 /**
  * <span class="en">
@@ -23,24 +24,18 @@ import com.webobjects.appserver.WORequest;
  * 
  * @author mschrag
  */
-public class ERXAjaxContext extends WOContext {
+public class ERXAjaxServletContext extends WOServletContext {
 	
-	public ERXAjaxContext(WORequest request) {
+	public ERXAjaxServletContext(WORequest request) {
 		super(request);
 	}
 
-	@Override
-	public boolean wasFormSubmitted() {
-		return _wasFormSubmitted();
-	}
-	
 	/*
-	 * NOTE: ERXAjaxServletContext is a direct copy of this class.  Keep it in sync with this.
+	 * NOTE: This class was copied directly from ERXAjaxContext.  Keep it in sync with that.
 	 */
 	@Override
-	@Deprecated
-	public boolean _wasFormSubmitted() {
-		boolean wasFormSubmitted = super._wasFormSubmitted();
+	public boolean wasFormSubmitted() {
+		boolean wasFormSubmitted = super.wasFormSubmitted();
 		if (wasFormSubmitted) {
 			WORequest request = request();
 			String partialSubmitSenderID = ERXAjaxApplication.partialFormSenderID(request);
@@ -61,4 +56,5 @@ public class ERXAjaxContext extends WOContext {
 		}
 		return wasFormSubmitted;
 	}
+	
 }

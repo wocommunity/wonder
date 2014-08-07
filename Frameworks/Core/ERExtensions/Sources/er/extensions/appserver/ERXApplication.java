@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -62,6 +63,7 @@ import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.appserver._private.WOWebServicePatch;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObserverCenter;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
@@ -737,12 +739,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					URL userPropertiesPath = null;
 					String mainBundleName = NSProperties._mainBundleName();
 
+					// Look for a jar file name like: myapp[-1.0][-SNAPSHOT].jar
+					Pattern mainBundleJarPattern = Pattern.compile("\\b" + mainBundleName.toLowerCase() + "[-\\.\\d]*(snapshot)?\\.jar");
+					
 					while (jarBundles.hasMoreElements()) {
 						URL url = jarBundles.nextElement();
 
 						String urlAsString = url.toString();
 
-						if (urlAsString.contains(mainBundleName + ".jar")) {
+						if (mainBundleJarPattern.matcher(urlAsString.toLowerCase()).find()) {
 							try {
 								propertiesPath = new URL(URLDecoder.decode(urlAsString, CharEncoding.UTF_8));
 								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
@@ -1103,6 +1108,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		ERXStats.initStatisticsIfNecessary();
 
+		WOWebServicePatch.initServer();
+		
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
     	// This is the workaround.
 		frameworksBaseURL();
