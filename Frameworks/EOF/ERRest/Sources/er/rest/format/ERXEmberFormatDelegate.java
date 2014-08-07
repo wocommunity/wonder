@@ -18,7 +18,7 @@ import er.rest.ERXRestRequestNode;
  *
  * @author mschrag
  */
-public class ERXEmberFormatDelegate implements ERXRestFormat.Delegate {
+public class ERXEmberFormatDelegate extends ERXRestFormatDelegate {
 	public static final String ID_KEY = "id";
 	public static final String TYPE_KEY = "type";
 	public static final String NIL_KEY = "nil";
@@ -51,92 +51,10 @@ public class ERXEmberFormatDelegate implements ERXRestFormat.Delegate {
 		_writeTypeKey = writeTypeKey;
 	}
 
-	public void nodeDidParse(ERXRestRequestNode node) {
-		if (node.isRootNode()) {
-			node.setName(ERXRestNameRegistry.registry().internalNameForExternalName(node.name()));
-		}
-
-		Object id = node.removeAttributeOrChildNodeNamed(_idKey);
-		node.setID(id);
-
-		String externalType = (String) node.removeAttributeOrChildNodeNamed(_typeKey);
-		if (externalType != null) {
-			if (_arrayTypes && "array".equals(externalType)) {
-				node.setArray(true);
-			}
-			else {
-				String type = ERXRestNameRegistry.registry().internalNameForExternalName(externalType);
-				if (_underscoreNames) {
-					type = ERXStringUtilities.camelCaseToUnderscore(type, false);
-				}
-				node.setType(type);
-			}
-		}
-
-		Object nil = node.removeAttributeOrChildNodeNamed(_nilKey);
-		if (nil != null) {
-			node.setNull("true".equals(nil) || Boolean.TRUE.equals(nil));
-		}
-		
-		if (_underscoreNames) {
-			String name = node.name();
-			if (name != null) {
-				name = ERXStringUtilities.underscoreToCamelCase(name, node.isRootNode());
-				node.setName(name);
-			}
-		}
-	}
-
 	public void nodeWillWrite(ERXRestRequestNode node) {
-		if (node.isRootNode() && node.isArray()) {
-			if (_pluralNames) {
-				System.out.println("nodebame: " + node.name());
-				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(ERXLocalizer.englishLocalizer().plurifiedString(node.name(), 2)));
-			}
-			else {
-				System.out.println("nodebame: " + node.name());
-				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(node.name()));
-			}
-		} else {
-			// KL CODE
-			if(node.isRootNode()) {
-				if(node.name() != null) {
-					node.setName(ERXStringUtilities.uncapitalize(ERXRestNameRegistry.registry().externalNameForInternalName(node.name())));
-				}
-			}
+		if (node.isRootNode() && node.name() != null && !node.isArray()) {
+			node.setName(ERXStringUtilities.uncapitalize(node.name()));
 		}
-
-		Object id = node.id();
-		if (id != null) {
-			node.setAttributeForKey(id, _idKey);
-		}
-
-		if (_writeTypeKey) {
-			String internalType = node.type();
-			if (internalType != null) {
-				if (_arrayTypes && node.isArray()) {
-					node.setAttributeForKey("array", _typeKey);
-				}
-				else {
-					String type = ERXRestNameRegistry.registry().externalNameForInternalName(internalType);
-					if (_underscoreNames) {
-						type = ERXStringUtilities.camelCaseToUnderscore(type, true);
-					}
-					node.setAttributeForKey(type, _typeKey);
-				}
-			}
-		}
-
-		if (node.isNull() && _writeNilKey) {
-			node.setAttributeForKey(Boolean.TRUE, _nilKey);
-		}
-		
-		if (_underscoreNames) {
-			String name = node.name();
-			if (name != null) {
-				name = ERXStringUtilities.camelCaseToUnderscore(name, true);
-				node.setName(name);
-			}
-		}
+		super.nodeWillWrite(node);
 	}
 }

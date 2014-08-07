@@ -19,8 +19,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			recordsNode.setArray(true);
 			rootNode.addChild(recordsNode);
 			if(rootObjectName == null) {
-				System.out.println("!!!!!!!! null key setting to aaa");
-				rootObjectName = "aaa";
+				rootObjectName = "undefined";
 			}
 			for(ERXRestRequestNode child : node.children()) {
 				linksNode = new ERXRestRequestNode("links", false);
