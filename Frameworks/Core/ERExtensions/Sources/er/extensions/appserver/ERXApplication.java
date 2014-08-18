@@ -1108,7 +1108,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		ERXStats.initStatisticsIfNecessary();
 
-		WOWebServicePatch.initServer();
+		try {
+			WOWebServicePatch.initServer();
+		} catch (Throwable e) {
+			Throwable cause = ERXExceptionUtilities.getMeaningfulThrowable(e);
+			if (!(cause instanceof ClassNotFoundException ||
+					cause instanceof NoClassDefFoundError)) {
+				e.printStackTrace();
+			}
+		}
 		
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
     	// This is the workaround.
