@@ -33,8 +33,8 @@ public class ERXServletApplication extends ERXApplication {
     		didSetBaseUrl = true;
     		ServletContext servletContext = (ServletContext) request.userInfo().get("ServletContext");
     		if (servletContext != null) {
-    			setApplicationBaseURL(servletContext.getContextPath() + "/static/"); // "static" is the built-in static resource servlet for Tomcat and Jetty
-    			setFrameworksBaseURL(servletContext.getContextPath() + "/static/Frameworks/");
+//    			setApplicationBaseURL(servletContext.getContextPath() + "/static/"); // "static" is the built-in static resource servlet for Tomcat and Jetty
+//    			setFrameworksBaseURL(servletContext.getContextPath() + "/static/Frameworks/");
     		}
     	}
     	
