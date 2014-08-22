@@ -57,6 +57,6 @@ public class ERQMButtonExternal extends ERQMButton
 	@Override
 	public String dataRelDefault()
 	{
-		return "dialog";
+		return "external";
 	}
 }
