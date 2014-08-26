@@ -66,6 +66,7 @@ public class ERQMListView extends ERQMComponentBase
 	@Override
 	public void appendCustomTags(StringBuilder sb, NSMutableArray<String> classes, NSMutableArray<String> styles)
 	{
+	    appendStringTag(sb, "data-theme", null, "theme");
 		appendBooleanTag(sb, "data-autodividers", false, null);
 		appendStringTag(sb, "data-count-theme", null, "countBubble-theme");
 		appendStringTag(sb, "data-divider-theme", null, "divider-theme");

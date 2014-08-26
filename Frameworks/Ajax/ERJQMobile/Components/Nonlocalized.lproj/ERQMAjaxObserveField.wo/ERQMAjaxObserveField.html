@@ -1,5 +1,6 @@
 <div data-role="none" style = "display:none;"><webobject name = "InvSubBtn"/></div>
 <script>
+$('body').on( "pagecontainershow", function( event, ui ) {
 $('<wo:str value = "$jqObserveFieldID" />').change(function(event) {
 	url = $('<wo:str value = "$jqObserveFieldID" />').closest('form').attr('action');
 	/*url = url.replace(/\/wo\//, '/ajax/');*/
@@ -33,4 +34,5 @@ $('<wo:str value = "$jqObserveFieldID" />').change(function(event) {
 		$.get(url);
 	</wo:else>
 });
+} );
 </script>
