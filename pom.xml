@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>6.1.2-SNAPSHOT</version>
+    <version>6.1.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -314,11 +314,6 @@
             <dependency>
                 <groupId>wonder.misc</groupId>
                 <artifactId>ERDivaliteLook</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>wonder.misc</groupId>
-                <artifactId>ERJaxWS</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
