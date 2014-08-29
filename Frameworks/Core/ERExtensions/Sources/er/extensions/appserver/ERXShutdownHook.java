@@ -56,7 +56,8 @@ public abstract class ERXShutdownHook extends Thread {
 							ALL_HOOKS.wait();
 						}
 
-						NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationWillTerminateNotification, NSKeyValueCoding.NullValue));
+						if ( ! ERXApplication.erxApplication().getIsTerminating())
+							NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationWillTerminateNotification, NSKeyValueCoding.NullValue));
 
 						System.out.println( "APPLICATION SHUTDOWN SEQUENCE COMPLETE" );
 					}
