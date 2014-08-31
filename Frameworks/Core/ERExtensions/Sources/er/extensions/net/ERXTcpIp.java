@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
@@ -380,7 +381,7 @@ public class ERXTcpIp {
 
 			// 文字で始まるドメイン
 			char firstLetter = string.charAt(0);  
-			if(!ERXStringUtilities.isDigitsOnly("" + firstLetter)) {
+			if(!StringUtils.isNumeric("" + firstLetter)) {
 				results.addObject(string);
 
 				// IP を調査し追加すること

@@ -308,70 +308,8 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * @deprecated This is duplicated from {link: er.extensions.ERXExtensions#userInfoUnit(EOEnterpriseObject, String)}
      */
     public static String userInfoUnit(EOEnterpriseObject object, String key) {
-        // return the unit stored in the userInfo dictionary of the appropriate EOAttribute
-        EOEntity entity=null;
-        String lastKey=null;
-        String result=null;
-        if (object == null || key == null) {
-            log.warn("UserInfoUnit: Attempting to relsolve a unit for object: " + object + " key: " + key);
-        } else if (key.indexOf(".")==-1) {
-            String entityName=object.entityName();
-            entity=EOModelGroup.defaultGroup().entityNamed(entityName);
-            lastKey=key;
-        } else {
-            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(key);
-            EOEnterpriseObject objectForPropertyDisplayed=(EOEnterpriseObject)object.valueForKeyPath(partialKeyPath);
-            if (objectForPropertyDisplayed!=null) {
-                entity=EOModelGroup.defaultGroup().entityNamed(objectForPropertyDisplayed.entityName());
-                lastKey=KeyValuePath.lastPropertyKeyInKeyPath(key);
-            }
-        }
-        if (entity!=null && lastKey!=null) {
-            Object property=entity.attributeNamed(lastKey);
-            property=property==null ? entity.relationshipNamed(lastKey) : property;
-            //BOOGIE
-            EOAttribute a=entity.attributeNamed(lastKey);
-            NSDictionary userInfo=null;
-            if (a!=null) userInfo=a.userInfo();
-            else {
-                EORelationship r=entity.relationshipNamed(lastKey);
-                if (r!=null) userInfo=r.userInfo();
-            }
-            //
-           // NSDictionary userInfo=(NSDictionary)(property!=null ? property.valueForKey("userInfo") : null);
-            result= (String)(userInfo!=null ? userInfo.valueForKey("unit") : null);
-        }
+    	String result = er.extensions.ERXExtensions.userInfoUnit(object, key);
         return result;
-    }
-
-    /** @deprecated use ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(D2WContext context, WOSession session)*/
-    @Deprecated
-    public static WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
-        return ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(context, session);
-    }
-
-    /** @deprecated use ERD2WFactory.erFactory().csvExportPageForD2WContext(D2WContext context, WOSession session)*/
-    @Deprecated
-    public static WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
-        return ERD2WFactory.erFactory().csvExportPageForD2WContext(context, session);
-    }
-
-    /** @deprecated use ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session)*/
-    @Deprecated
-    public static WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
-        return ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(task, subtask, entityName, session);
-    }
-
-    /** @deprecated use ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session)*/
-    @Deprecated
-    public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session) {
-        return ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(fsName, entityName, session);
-    }
-
-    /** @deprecated use ERD2WFactory.erFactory().errorPageForException(Throwable e, WOSession session)*/
-    @Deprecated
-    public static WOComponent errorPageForException(Throwable e, WOSession session) {
-        return ERD2WFactory.erFactory().errorPageForException(e, session);
     }
 
     /**

@@ -162,14 +162,6 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return instantMessenger;
 	}
 
-	/**
-	 * @deprecated use {@link #defaultInstantMessenger()}
-	 */
-	@Deprecated
-	public IInstantMessenger instantMessenger() {
-		return defaultInstantMessenger();
-	}
-
 	public IInstantMessenger defaultInstantMessenger() {
 		return instantMessengerForScreenName(_defaultScreenName);
 	}

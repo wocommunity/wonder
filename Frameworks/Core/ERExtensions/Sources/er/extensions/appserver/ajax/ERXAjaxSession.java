@@ -164,11 +164,6 @@ public class ERXAjaxSession extends WOSession {
       return _page;
     }
 
-    @Deprecated
-    public WOContext context() {
-    	throw new RuntimeException("Deprecated method");
-    }
-
     // MS: The preferrable behavior here is for Ajax records to expire
     // when the original context it's associated with expires from the 
     // page cache, but we can't get to the _contextRecords map in

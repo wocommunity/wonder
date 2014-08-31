@@ -1419,19 +1419,6 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** @deprecated use {@link #saveChanges()} */
-    @Override
-    @Deprecated
-	public void saveChanges(Object obj) {
-		boolean wasAutoLocked = autoLock("saveChanges");
-		try {
-			saveChanges();
-		}
-		finally {
-			autoUnlock(wasAutoLocked);
-		}
-	}
-
     @Override
 	public void refreshObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("refreshObject");
@@ -1905,9 +1892,6 @@ public class ERXEC extends EOEditingContext {
 		if (ec instanceof ERXEC) {
 			ERXEC erxec = (ERXEC) ec;
 			erxec.saveChangesTolerantly(doesRetry, mergesChanges);
-		}
-		else {
-			ERXTolerantSaver.save(ec, doesRetry, mergesChanges);
 		}
 	}
 

@@ -478,7 +478,7 @@ public class ERD2WModel extends D2WModel {
                         delayedDependendKeysPerKey.put(rhsKey, recipientForNewKeys);
                     }
                 }
-                NSArray extraKeys=((ERDComputingAssignmentInterface)r.rhs()).dependentKeys(rhsKey);
+                NSArray extraKeys=((er.directtoweb.assignments.ERDLocalizedAssignment)r.rhs()).dependentKeys(rhsKey);
                 if (extraKeys!=null) {
                     for (Enumeration e6=extraKeys.objectEnumerator(); e6.hasMoreElements(); ) {
                         String k=(String)e6.nextElement();

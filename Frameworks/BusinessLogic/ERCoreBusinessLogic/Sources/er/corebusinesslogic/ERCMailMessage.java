@@ -132,18 +132,6 @@ public class ERCMailMessage extends _ERCMailMessage {
     	setIsRead(true);
     }
 
-    /**
-     * Use setIsRead(boolean)
-     * @deprecated use {@link #setIsRead(Boolean)}
-     */
-    @Deprecated
-    public void setReadAsBoolean(boolean read) {
-        setIsRead(read);
-    }
-    public boolean isReadAsBoolean() {
-        return ERXValueUtilities.booleanValue(isRead());
-    }
-
     public NSArray toAddressesAsArray() {
         return toAddresses() != null ? NSArray.componentsSeparatedByString(toAddresses(), ",") : NSArray.EmptyArray;
     }

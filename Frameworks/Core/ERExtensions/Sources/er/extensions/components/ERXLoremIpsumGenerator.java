@@ -219,26 +219,6 @@ public class ERXLoremIpsumGenerator {
 
 	/**
    * <span class="en">
-	 * Returns a random sentence from the Lorem text.
-	 * 
-	 * @return a string of a random sentence
-   * </span>
-   * 
-   * <span class="ja">>
-   * Lorem Ipsum テキストよりランダム文を戻します。
-   * 
-   * @return Lorem Ipsum テキストよりランダム文
-   * </span>
-   * 
-	 * @deprecated use {@link #sentence()} instead
-	 */
-	@Deprecated
-	public static String randomSentence() {
-		return sentence();
-	}
-
-	/**
-   * <span class="en">
 	 * Selects a particular sentence from a particular paragraph. If the <b>sentenceNumber</b> is greater than the
 	 * number of sentences in the paragraph, it "wraps" around.
 	 * 

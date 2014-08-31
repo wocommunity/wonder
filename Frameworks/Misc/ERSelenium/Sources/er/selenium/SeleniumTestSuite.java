@@ -23,6 +23,8 @@
 
 package er.selenium;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -55,7 +57,7 @@ public class SeleniumTestSuite extends WODirectAction {
 	    }
 
 	    SeleniumTestSuitePage page = (SeleniumTestSuitePage)pageWithName(SeleniumTestSuitePage.class.getName());
-	    page.setTestPath(ERXStringUtilities.replaceStringByStringInString(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
+	    page.setTestPath(StringUtils.replace(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
 	    return page;
 	}
 }

@@ -220,8 +220,6 @@ public enum ERXMoneyEnums {
 
 	/* Y */
 	YER("rial", "fils", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Yemeni Rial"),
-	@Deprecated /* use JPY*/
-	YEN("yen", "", "￥", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, 1, "Japanese yen"),
 
 	/* Z */
 	ZAR("rand", "cent", "R", "c", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "South African Rand"),

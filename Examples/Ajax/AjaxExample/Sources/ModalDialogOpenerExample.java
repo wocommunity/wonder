@@ -94,7 +94,7 @@ public class ModalDialogOpenerExample extends ModalDialogExample {
     	catch (Exception e)
     	{
     		validationMessage = e.getMessage();
-        	AjaxModalDialog.update(context());
+        	AjaxModalDialog.update(context(), "Edit");
     	}
     }
     
@@ -111,7 +111,7 @@ public class ModalDialogOpenerExample extends ModalDialogExample {
     	catch (Exception e)
     	{
     		validationMessage = e.getMessage();
-        	AjaxModalDialog.update(context());
+        	AjaxModalDialog.update(context(), "Edit");
     	}
     }
     

@@ -66,13 +66,6 @@ public class ERDSavedQueriesComponent extends WOComponent {
     public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
     public static final EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
 
-    /** @deprecated  use {@link #originalEOKVArchivingTimestampSupport} */
-    @Deprecated
-    public static final EOKeyValueArchiving.Support originalEOKVArchiningTimestampSupport = originalEOKVArchivingTimestampSupport;
-    /** @deprecated  use {@link #newEOKVArchivingTimestampSupport} */
-    @Deprecated
-    public static final EOKeyValueArchiving.Support newEOKVArchiningTimestampSupport = newEOKVArchivingTimestampSupport;
-
 	public ERDSavedQueriesComponent(WOContext context) {
 		super(context);
 	}

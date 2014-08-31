@@ -3,6 +3,7 @@ package er.extensions.foundation;
 import static org.junit.Assert.assertEquals;
 import junit.framework.JUnit4TestAdapter;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -240,7 +241,7 @@ public class ERXStringUtilitiesTest {
 	@Test
 	public void testDistance() {
 		for (LevenshteinExample l : levs) {
-			assertEquals(l.d, ERXStringUtilities.distance(l.s1, l.s2), 0.00001);
+			assertEquals(l.d, StringUtils.getLevenshteinDistance(l.s1, l.s2), 0.00001);
 		}
 	}
 
@@ -251,7 +252,7 @@ public class ERXStringUtilitiesTest {
 	public void testLevenshteinDistance() {
 		for (LevenshteinExample l : levs) {
 			assertEquals(l.d,
-					ERXStringUtilities.levenshteinDistance(l.s1, l.s2));
+					StringUtils.getLevenshteinDistance(l.s1, l.s2));
 		}
 	}
 }

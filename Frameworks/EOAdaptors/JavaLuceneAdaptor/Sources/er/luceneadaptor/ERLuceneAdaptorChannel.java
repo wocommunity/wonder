@@ -435,12 +435,6 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	}
 
 	@Override
-	@Deprecated
-	public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
-		return adaptorContext()._newPrimaryKey(null, entity);
-	}
-
-	@Override
 	public ERLuceneAdaptorContext adaptorContext() {
 		return (ERLuceneAdaptorContext) super.adaptorContext();
 	}

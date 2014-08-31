@@ -39,7 +39,7 @@ public class ModalDialogEmployeeEditor extends WOComponent {
         	if (e.additionalExceptions().count() > 0) {
         		errorMessages += "<br/>" + ((NSArray)e.additionalExceptions().valueForKey("localizedMessage")).componentsJoinedByString("<br/>");
         	}
-        	AjaxModalDialog.update(context());
+        	AjaxModalDialog.update(context(), "Edit");
     	}
     	
     	return null;

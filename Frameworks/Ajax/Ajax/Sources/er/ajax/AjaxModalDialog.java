@@ -256,32 +256,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		AjaxUtils.setPageReplacementCacheKey(context, currentDialog._containerID(context));
 	}
 
-	/**
-	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog
-	 * without updating the title.
-	 * 
-	 * @see #update(WOContext, String)
-	 * @param context the current WOContext
-	 * @deprecated use {@link #update(WOContext, String)}
-	 */
-	@Deprecated
-	public static void update(WOContext context) {
-		update(context, null);
-	}
-	
-	/**
-	 * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
-	 * 
-	 * @see #update(WOContext, String)
-	 * @param context the current WOContext
-	 * @param title the new title for the dialog window
-	 * @deprecated use {@link #update(WOContext, String)}
-	 */
-	@Deprecated
-	public static void setTitle(WOContext context, String title) {
-		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
-	}
-
 	public void setCurrentDialogInPageIfNecessary(WOActionResults results, WORequest request, WOContext context) {
 		if (AjaxUtils.isAjaxRequest(request) && results instanceof WOComponent && results != context.page()) {
 			ERXResponseRewriter.pageUserInfo((WOComponent)results).setObjectForKey(this, AjaxModalDialog.class.getName());
