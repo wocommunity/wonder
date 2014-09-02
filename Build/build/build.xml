@@ -1129,8 +1129,8 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIMAdaptor" />
             <param name="project.dir" value="Frameworks/WOAdaptors/ERIMAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1162,8 +1162,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.memoryadaptor.ERMemoryAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaMemoryAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaMemoryAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1175,8 +1175,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.neo4jadaptor.Neo4JAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaNeo4JAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaNeo4JAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1188,8 +1188,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.luceneadaptor.ERLuceneAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaLuceneAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaLuceneAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
         </antcall>
@@ -1201,8 +1201,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.FSAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaFSAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaFSAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1214,8 +1214,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.restadaptor.ERRESTAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaRESTAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaRESTAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1227,8 +1227,8 @@
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.jdbcadaptor.ERJDBCAdaptor&lt;/string&gt;"/>
             <param name="project.name" value="JavaERJDBCAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaERJDBCAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+            <param name = "compiler.target" value = "1.6" />
+            <param name = "compiler.source" value = "1.6" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
