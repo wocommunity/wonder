@@ -74,6 +74,11 @@
             <artifactId>JavaWOJSPServlet</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.webobjects</groupId>
+            <artifactId>JavaWebServicesSupport</artifactId>
+            <version>${webobjects.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
         </dependency>
