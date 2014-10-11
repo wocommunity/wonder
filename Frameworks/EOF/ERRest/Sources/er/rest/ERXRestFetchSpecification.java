@@ -433,7 +433,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 				else {
 					range = new NSRange(offset, length);
 				}
-				results = objects.subarrayWithRange(range);
+				results = results.subarrayWithRange(range);
 			}
 		}
 		return results;
