@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright ? 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -28,6 +28,7 @@ and limitations under the License.
 
 #include <errno.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 #ifndef DISABLE_SHARED_MEMORY
 
@@ -63,10 +64,14 @@ typedef struct {
  */
 static int WOShmem_fd = -1;
 
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void *)-1)
+#endif
+
 /*
  * The address in memory at which the file has been mapped.
  */
-static intptr_t WOShmem_base_address = -1;
+static void * WOShmem_base_address = MAP_FAILED;
 
 /*
  * The total size of the mapped memory.
@@ -75,12 +80,8 @@ static unsigned int WOShmem_size = 0;
 
 static WA_recursiveLock WOShmem_mutex;
 
-#define offset_to_addr(offset) ((void *)(WOShmem_base_address + (intptr_t)offset))
-#define addr_to_offset(addr) ((intptr_t)addr - WOShmem_base_address)
-
-#ifndef MAP_FAILED
-#define MAP_FAILED -1
-#endif
+#define offset_to_addr(offset) ((void *)(WOShmem_base_address + offset))
+#define addr_to_offset(addr) ((void *)addr - WOShmem_base_address)
 
 #ifndef MAP_FILE
 #define MAP_FILE 0
@@ -250,8 +251,8 @@ int WOShmem_init(const char *file, size_t memsize)
       WOShmem_size = ensure_file_size(WOShmem_fd, memsize);
       if (WOShmem_size != -1)
       {
-         WOShmem_base_address = (intptr_t)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
-         if (WOShmem_base_address == (intptr_t)MAP_FAILED)
+         WOShmem_base_address = (void *)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
+         if (WOShmem_base_address == MAP_FAILED)
          {
             errMsg = WA_errorDescription(WA_error());
             WOLog(WO_ERR, "WOShmem_init(): couldn't map file: %s", errMsg);
@@ -507,7 +508,7 @@ ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, uns
       array->elementCount = elementCount;
       for (i=0; i<array->elementCount; i++)
       {
-         array->elements[i].element = (void *)((intptr_t)arrayBase + elementSize * i);
+         array->elements[i].element = (void *)(arrayBase + elementSize * i);
          array->elements[i].lock = WA_createLock("array element lock");
          array->elements[i].writeLock = WA_createLock("array element write lock");
          array->elements[i].lockCount = 0;
@@ -619,4 +620,27 @@ void sha_unlock(ShmemArray *array, unsigned int elementNumber)
    }
 }
 
+int shmem_do_tests()
+{
+   int res = 0;
+
+   if(res == 0 && sizeof(void *) == 8)
+   {
+      long long testaddr  = 0x111122227fffffff;
+      long long testaddr2 = 0x1111222280000003;
+      ShmemArray *mem = sha_alloc("Test", (void *)testaddr, 4, 2);
+
+      printf("Testing against 64 bit address handling (long long=%d, long=%d, int=%d, void *=%d)\n", (int)sizeof(long long), (int)sizeof(long), (int)sizeof(int), (int)sizeof(void *));
+
+      if(mem->elements[1].element != (void *)testaddr2)
+      {
+         printf("Test error in shmem, Test 1 ");
+         res = 1;
+      }
+   }
+
+   if(res == 0)
+      printf(" => OK");
+   return 0;
+}
 

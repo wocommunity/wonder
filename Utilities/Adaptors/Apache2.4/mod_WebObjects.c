@@ -724,6 +724,7 @@ static int WebObjects_handler (request_rec *r)
     int retval;
     const char *docroot;
     WOURLError urlerr;
+	
 #ifdef _MSC_VER // SWK changed url = WOURLComponents_Initializer;
 	memset(&wc,0,sizeof(WOURLComponents));
 #endif

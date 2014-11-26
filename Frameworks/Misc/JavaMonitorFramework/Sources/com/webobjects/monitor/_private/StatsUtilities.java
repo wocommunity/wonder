@@ -42,6 +42,19 @@ public class StatsUtilities {
         }
         return Integer.valueOf(aTotalTrans);
     }
+    
+    
+    /**
+     * Returns the total number of transactions for running instances of the given monitored application
+     * If the monitored application has no running instances, returns Integer.valueOf(0)
+     * 
+     * @param monitoredApplication
+     * @return
+     */
+    public static Integer totalTransactionsForActiveInstancesOfApplication(MApplication monitoredApplication) {
+    	Integer totalTransactions = sumStatisticOfActiveInstances(monitoredApplication, "transactions");
+        return totalTransactions;
+    }
 
 
     static public Integer totalActiveSessionsForApplication(MApplication anApp) {
@@ -66,6 +79,49 @@ public class StatsUtilities {
         return Integer.valueOf(aTotalActiveSessions);
     }
 
+    
+    /**
+     * Returns the total number of active sessions for running instances of the given monitored application
+     * If the monitored application has no running instances, returns Integer.valueOf(0)
+     * 
+     * @param monitoredApplication
+     * @return
+     */
+    public static Integer totalActiveSessionsForActiveInstancesOfApplication(MApplication monitoredApplication) {
+    	Integer totalActiveSessions = sumStatisticOfActiveInstances(monitoredApplication, "activeSessions");
+        return totalActiveSessions;
+    }
+
+
+    /**
+     * Calculates and returns the sum of the statistic indicated by the given statisticsKey for 
+     * the running instances of the given monitored application.
+     * 
+     * @param monitoredApplication
+     * @param statisticsKey
+     * @return
+     */
+    protected static Integer sumStatisticOfActiveInstances(MApplication monitoredApplication, String statisticsKey){
+        int sum = 0;
+        NSArray<MInstance> instances = monitoredApplication.instanceArray();
+        for (MInstance anInstance : instances) {
+        	if (anInstance.isRunning_M()){
+	            NSDictionary statistics = anInstance.statistics();
+	            if (statistics != null) {
+	                try {
+	                    String aValue = (String) statistics.valueForKey(statisticsKey);
+	                    sum = sum + Integer.parseInt(aValue);
+	                } catch (Throwable ex) {
+	                    // do nothing
+	                }
+	            }	
+        	}
+		}
+        Integer sumAsInteger = Integer.valueOf(sum);
+        return sumAsInteger;
+    }
+    
+    
 
     static public Float totalAverageTransactionForApplication(MApplication anApp) {
         NSArray anInstArray = anApp.instanceArray();

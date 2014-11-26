@@ -140,7 +140,7 @@ There are many ways to use this script:
         <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
         <property name="wo.external.root" value="${build.root}" />
         <property name="wo.external.frameworks" value="${wo.external.root}" />
-        <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML" />
+        <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaWebServicesSupport" />
         <property name="wo.system.root.bundles.embed" value="false" />
         <property name="wo.external.root.bundles.embed" value="false" />
         <property name="wo.local.root.bundles.embed" value="false" />

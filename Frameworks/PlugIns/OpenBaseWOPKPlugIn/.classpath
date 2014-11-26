@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="WOFramework/JavaERJDBCAdaptor"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOAccess"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOControl"/>
+	<classpathentry kind="con" path="WOFramework/ERJars"/>
+	<classpathentry kind="con" path="WOFramework/JavaJDBCAdaptor"/>
+	<classpathentry kind="con" path="WOFramework/JavaFoundation"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

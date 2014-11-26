@@ -123,16 +123,16 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * 
  *     public ${entity.classNameWithOptionalPackage} copy() {
- *         $entity.classNameWithOptionalPackage copy = copy(new NSMutableDictionary<EOGlobalID, ERXCopyable<?>>());
+ *         $entity.classNameWithOptionalPackage copy = copy(new NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt;());
  *         return copy;
  *     }
  * 
- *     public ${entity.classNameWithOptionalPackage} copy(NSMutableDictionary<EOGlobalID, ERXCopyable<?>> copiedObjects) {
- *         ${entity.classNameWithOptionalPackage} copy = ERXCopyable.DefaultImplementation.copy(copiedObjects, (${entity.classNameWithOptionalPackage}) this);
+ *     public ${entity.classNameWithOptionalPackage} copy(NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt; copiedObjects) {
+ *         ${entity.classNameWithOptionalPackage} copy = duplicate(copiedObjects);
  *         return copy;
  *     }
  * 
- *     public ${entity.classNameWithOptionalPackage} duplicate(NSMutableDictionary<EOGlobalID, ERXCopyable<?>> copiedObjects) {
+ *     public ${entity.classNameWithOptionalPackage} duplicate(NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt; copiedObjects) {
  * #if(${entity.userInfo.ERXCopyable} == 'Model')
  *         ${entity.classNameWithOptionalPackage} duplicate = ERXCopyable.Utility.modelCopy(copiedObjects, (${entity.classNameWithOptionalPackage}) this);
  * #elseif(${entity.userInfo.ERXCopyable} == 'Default')
@@ -174,61 +174,59 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 	public enum CopyType {
 
 		/**
-		 * <em>For attributes and relationships.</em>Stored as "
-		 * {@code ERXCopyable.CopyType = Nullify;}" in the property's UserInfo
-		 * dictionary. This setting <b>does not</b> copy the {@code original}'s
-		 * value. It sets the {@code copy}'s value to <code>null</code>.
+		 * Stored as " {@code ERXCopyable.CopyType = Nullify;}" in the
+		 * property's UserInfo dictionary. Sets the {@code copy}'s value to
+		 * <code>null</code>. This setting <b>does not</b> copy the
+		 * {@code original}'s value. <em>For attributes and relationships.</em>
 		 */
 		NULLIFY("Nullify", new NSArray<Class<? extends EOProperty>>(EOAttribute.class, EORelationship.class)),
 
 		/**
-		 * <em>For attributes and relationships.</em> Stored as "
-		 * {@code ERXCopyable.CopyType = Reference;}" in the {@link EOAttribute}
-		 * 's and {@link EORelationship}'s UserInfo dictionary. For attributes
-		 * this simply sets the same value on the destination as the source. For
-		 * relationships, this sets the {@code copy}'s relationship to point to
-		 * the <b>same</b> {@link ERXCopyable} object as the {@code original}'s
-		 * relationship does. <b>WARNING:</b> if you use this on a
-		 * non-flattening, to-many relationship, the destination objects will be
-		 * <b>moved<b> from the {@code original} to the {@code copy}.
+		 * Stored as " {@code ERXCopyable.CopyType = Reference;}" in the
+		 * {@link EOAttribute} 's and {@link EORelationship}'s UserInfo
+		 * dictionary. For attributes this simply sets the same value on the
+		 * destination as the source. For relationships, this sets the
+		 * {@code copy}'s relationship to point to the <b>same</b> destination
+		 * object as the {@code original}'s relationship does. <b>WARNING:</b>
+		 * if you use this on a non-flattening, to-many relationship, the
+		 * destination objects will be <b>moved</b> from the {@code original} to
+		 * the {@code copy}. <em>For attributes and relationships.</em>
 		 */
 		REFERENCE("Reference", new NSArray<Class<? extends EOProperty>>(EOAttribute.class, EORelationship.class)),
 
 		/**
-		 * <em>For relationships only.</em> Stored as "
-		 * {@code ERXCopyable.CopyType = Shallow;}" in the
+		 * Stored as " {@code ERXCopyable.CopyType = Shallow;}" in the
 		 * {@link EORelationship}'s UserInfo dictionary. New instances of the
 		 * destination {@link ERXCopyable} objects will be made and all of the
 		 * original's attributes and relationships will be reference copied.
+		 * <em>For relationships only.</em>
 		 */
 		SHALLOW("Shallow", new NSArray<Class<? extends EOProperty>>(EORelationship.class)),
 
 		/**
-		 * <em>For relationships only.</em> Stored as "
-		 * {@code ERXCopyable.CopyType = Deep;}" in the {@link EORelationship}'s
-		 * UserInfo dictionary. Duplicates each of the destination
-		 * {@link ERXCopyable} objects using their implementation of the
-		 * {@link #duplicate(NSMutableDictionary)} method.
+		 * Stored as " {@code ERXCopyable.CopyType = Deep;}" in the
+		 * {@link EORelationship}'s UserInfo dictionary. Duplicates each of the
+		 * destination {@link ERXCopyable} objects using their implementation of
+		 * the {@link #duplicate(NSMutableDictionary)} method.
+		 * <em>For relationships only.</em>
 		 */
 		DEEP("Deep", new NSArray<Class<? extends EOProperty>>(EORelationship.class)),
 
 		/**
-		 * <em>For attributes only.</em> Stored as "
-		 * {@code ERXCopyable.CopyType = CurrentTimestamp;}" in the
+		 * Stored as " {@code ERXCopyable.CopyType = CurrentTimestamp;}" in the
 		 * {@link EOAttribute}'s UserInfo dictionary. This setting <b>does
 		 * not</b> copy the {@code original}'s value. It sets the {@code copy}'s
 		 * value to the <em>current</em> date and time using
-		 * {@code new NSTimestamp()}
+		 * {@code new NSTimestamp()} <em>For attributes only.</em>
 		 */
 		CURRENT_TIMESTAMP("CurrentTimestamp", new NSArray<Class<? extends EOProperty>>(EOAttribute.class)),
 
 		/**
-		 * <em>For attributes only.</em> Stored as "
-		 * {@code ERXCopyable.CopyType = UUID;}" in the {@link EOAttribute}'s
-		 * UserInfo dictionary. This setting <b>does not</b> copy the
-		 * {@code original}'s value. It sets the {@code copy}'s value to a newly
-		 * generated {@link java.util.UUID} using
-		 * {@link java.util.UUID#randomUUID()}
+		 * Stored as " {@code ERXCopyable.CopyType = UUID;}" in the
+		 * {@link EOAttribute}'s UserInfo dictionary. This setting <b>does
+		 * not</b> copy the {@code original}'s value. It sets the {@code copy}'s
+		 * value to a newly generated {@link java.util.UUID} using
+		 * {@link java.util.UUID#randomUUID()} <em>For attributes only.</em>
 		 */
 		UUID("UUID", new NSArray<Class<? extends EOProperty>>(EOAttribute.class));
 
@@ -668,8 +666,6 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		/**
 		 * @param <T>
 		 *            the Type of the {@code source} and {@code destination}
-		 * @param <E>
-		 *            the Type of the object for the {@code relationship}
 		 * @param copiedObjects
 		 *            the copied objects keyed on the {@code EOGlobalID} of the
 		 *            object the copy was made from
@@ -700,8 +696,6 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		/**
 		 * @param <T>
 		 *            the Type of the {@code source} and {@code destination}
-		 * @param <E>
-		 *            the Type of the objects for the {@code relationship}
 		 * @param copiedObjects
 		 *            the copied objects keyed on the {@code EOGlobalID} of the
 		 *            object the copy was made from
@@ -731,7 +725,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 
 			for (ERXCopyable original : originals) {
 				try {
-					ERXCopyable copy = (ERXCopyable) original.copy(copiedObjects);
+					ERXCopyable copy = original.copy(copiedObjects);
 	
 					/*
 					 * This is a tricky part. Making the copy in the previous line

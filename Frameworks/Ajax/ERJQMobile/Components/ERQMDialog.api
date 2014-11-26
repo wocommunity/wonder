@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMDialog" wocomponentcontent="false">
+    <binding name="data-theme"/>
+    <binding name="id"/>
+    <binding name="class"/>
+    <binding name="heading"/>
+    <binding name="otherTagString"/>
+    
+    <binding name="data-title"/>
+    <binding name="data-url"/>
+    <binding name="data-overlay-theme"/>
+    <binding defaults="Boolean" name="data-dom-cache"/>
+    <binding name="data-corners"/>
+    <binding name="data-close-btn"/>
+    <binding name="data-close-btn-text"/>
+    <binding defaults="Boolean" name="data-disabled"/>
+    </wo>
+</wodefinitions>

@@ -29,6 +29,7 @@ public class ERXTestSuite {
     suite.addTestSuite(com.webobjects.eoaccess.ERXEntityTest.class);
 
     suite.addTestSuite(com.webobjects.appserver.WORequestTest.class);
+    suite.addTestSuite(com.webobjects.appserver.WOTimerTest.class);
 
     suite.addTestSuite(er.extensions.eof.ERXECTest.class);
     suite.addTestSuite(er.extensions.eof.ERXEOAccessUtilitiesTest.class);
@@ -52,6 +53,8 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalFormatterTests.class);
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalDateFormatterTests.class);
     
+    suite.addTestSuite(er.javamail.ERMailUtilsTest.class);
+
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
 
     suite.addTestSuite(er.extensions.net.ERXEmailValidatorTest.class);

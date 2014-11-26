@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomComponent;
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.appserver.ERXWOContext;
 
 /**
@@ -67,6 +68,26 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     
     public boolean hasPropertyName() {
         return !booleanValueForBinding("hidePropertyName");
+    }
+
+    /**
+     * Gets the <code>displayVariant</code> for the current property key.  The intention is that the display variant
+     * allows variation in the display method of property keys without needing different, slightly varying,
+     * <code>displayPropertyKeys</code> or <code>tabSectionsContents</code> rules.  Template support has been added for
+     * the <code>omit</code> and <code>blank</code> variants.  One could imagine others, such as <code>collapsed</code>,
+     * <code>ajax</code>, etc.
+     * @return the display variant, if specified
+     */
+    public String displayVariant() {
+        return (String)d2wContext().valueForKey(ERD2WPage.Keys.displayVariant);
+    }
+
+    /**
+     * Determines if display of the current property key should be <code>omitted</code>.
+     * @return true if key should be omitted
+     */
+    public boolean isKeyOmitted() {
+        return "omit".equals(displayVariant());
     }
 
     public NSArray<String> displayPropertyKeys() {

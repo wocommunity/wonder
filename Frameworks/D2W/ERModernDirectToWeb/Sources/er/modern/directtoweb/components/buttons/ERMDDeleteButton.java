@@ -116,14 +116,15 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	dataSource().deleteObject(object());
     	EOEnterpriseObject obj = (EOEnterpriseObject)d2wContext().valueForKey(Keys.objectPendingDeletion);
     	obj.editingContext().deleteObject(obj);
-    	
+
     	try {
 	    	obj.editingContext().saveChanges();
 	    	if (displayGroup() != null && displayGroup().displayedObjects().count() == 0) {
 	    		displayGroup().displayPreviousBatch();
 	    	}
-	    	if (finalCommit) { // if we are editing, then don't save the parent ec.
-	    		object().editingContext().saveChanges();
+            if (finalCommit && !ERXEOControlUtilities.isNewObject(object())) {
+                // if we are editing a new object, then don't save
+	    	    object().editingContext().saveChanges();
 	    	}
 	    	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
 	    	postDeleteNotification();

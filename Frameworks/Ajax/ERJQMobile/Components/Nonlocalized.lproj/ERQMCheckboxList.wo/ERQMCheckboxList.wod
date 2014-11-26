@@ -1,0 +1,31 @@
+CheckBoxWrapper : WOGenericContainer {
+	elementName = "fieldset";
+	name = context.elementID;
+	elementID = wrapperElementID;
+	formValues = selections;
+	data-role = "controlgroup";
+	otherTagString = html;
+}
+
+CheckBoxRepetition : WORepetition {
+	list = ^list;
+	item = currentItem;
+	index = index;
+}
+
+CheckBox : WOGenericElement {
+	elementName = "input";
+	type = "checkbox";
+	name = wrapperElementID;
+	otherTagString = isCurrentItemChecked;
+	id = id;
+	value = index;
+}
+
+LABEL : WOGenericContainer {
+	elementName = "label";
+	for = id;
+}
+
+Content : WOComponentContent {}
+

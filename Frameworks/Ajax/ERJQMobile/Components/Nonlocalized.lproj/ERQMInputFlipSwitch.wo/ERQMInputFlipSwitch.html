@@ -1,0 +1,10 @@
+<wo:if condition = "$inset">
+  <div class = "ui-field-contain">
+    <wo:genericContainer elementName = "label" for = "$javaScriptElementID"><wo:str value = "$^label" /></wo:genericContainer>
+    <wo:popUpButton list = "$list" selection = "$^value" otherTagString = "$otherTagString" />
+  </div>
+</wo:if>
+<wo:else>
+  <wo:genericContainer elementName = "label" for = "$javaScriptElementID"><wo:str value = "$^label" /></wo:genericContainer>
+  <wo:popUpButton list = "$list" selection = "$^value" otherTagString = "$otherTagString" />
+</wo:else>
