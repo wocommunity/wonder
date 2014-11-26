@@ -13,6 +13,7 @@ package com.webobjects.monitor.application;
  SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -71,6 +72,12 @@ public class FileBrowser extends MonitorComponent {
             errorMsg = me.getMessage();
         }
         return errorMsg;
+    }
+
+    @Override
+    public void appendToResponse(WOResponse response, WOContext context) {
+        fileList(); // init variable
+        super.appendToResponse(response, context);
     }
 
     public boolean isCurrentFileDirectory() {
