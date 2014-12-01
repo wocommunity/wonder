@@ -866,7 +866,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Called when the application starts up and saves the command line
 	 * arguments for {@link ERXConfigurationManager}.
 	 * 
-	 * @see WOApplication#String[], Class)
+	 * @see WOApplication#main(String[], Class)
 	 */
 	public static void main(String argv[], Class applicationClass) {
 		setup(argv);
