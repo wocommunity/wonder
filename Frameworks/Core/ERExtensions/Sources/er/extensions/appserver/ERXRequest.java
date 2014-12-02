@@ -39,6 +39,7 @@ public  class ERXRequest extends WORequest {
     public static final String UNKNOWN_HOST = "UNKNOWN";
 
     public static final String X_FORWARDED_PROTO_FOR_SSL = ERXProperties.stringForKeyWithDefault("er.extensions.appserver.ERXRequest.xForwardedProtoForSsl", "https");
+    public static final String X_FORWARDED_PROTO_HEADER_KEY_FOR_SSL = ERXProperties.stringForKeyWithDefault("er.extensions.appserver.ERXRequest.xForwardedProtoHeaderKeyForSsl", "x-forwarded-proto");
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
@@ -337,7 +338,7 @@ public  class ERXRequest extends WORequest {
 	        
 	        // Check if we've got an x-forwarded-proto header which is typically sent by a load balancer that is 
 	        // implementing ssl termination to indicate the request on the public side of the load balancer is secure.
-	        else if (X_FORWARDED_PROTO_FOR_SSL.equals(request.headerForKey("x-forwarded-proto"))) {
+	        else if (X_FORWARDED_PROTO_FOR_SSL.equals(request.headerForKey(X_FORWARDED_PROTO_HEADER_KEY_FOR_SSL))) {
 	    		isRequestSecure = true;
 	        }
         }
