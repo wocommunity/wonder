@@ -587,7 +587,7 @@ public class _H2PlugIn extends JDBCPlugIn {
                     String attributeName = result.sqlStringForAttribute(priKeyAttribute);
                     String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-                    sql = "CREATE SEQUENCE " + sequenceName + " START WITH (SELECT MAX(" + attributeName + ") FROM " + tableName + ")";
+                    sql = "CREATE SEQUENCE " + sequenceName + " START WITH (SELECT MAX(" + attributeName + ") + 1 FROM " + tableName + ")";
                     results.addObject(createExpression(entity, sql));
 
                     sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + attributeName + " SET DEFAULT nextval('" + sequenceName + "')";
