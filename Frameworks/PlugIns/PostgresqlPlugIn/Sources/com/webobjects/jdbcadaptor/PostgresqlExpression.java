@@ -52,6 +52,11 @@ public class PostgresqlExpression extends JDBCExpression {
     // CHECKME AK: why is this public??
     public static final NSSelector REGEX_OPERATOR = new NSSelector( "~", new Class[]{ Object.class });
 
+	/**
+	 * Selector used for the extension pg_trgm.
+	 */
+	public static final NSSelector TRIGRAM_OPERATOR = new NSSelector("%", new Class[] { Object.class });
+
     /**
      * Lookup table for conversion of bytes -> hex.
      */
@@ -915,7 +920,9 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     @Override
     public String sqlStringForSelector(NSSelector selector, Object value) {
-        if(CASE_INSENSITIVE_REGEX_OPERATOR.name().equals( selector.name() ) || REGEX_OPERATOR.name().equals( selector.name() ) ) {
+        if(CASE_INSENSITIVE_REGEX_OPERATOR.name().equals( selector.name() )
+                || REGEX_OPERATOR.name().equals( selector.name() )
+                || TRIGRAM_OPERATOR.name().equals( selector.name() )) {
             return selector.name();
         }
         return super.sqlStringForSelector(selector, value);
