@@ -859,7 +859,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	
 	// You should not use ERXShutdownHook when deploying as servlet.
 	protected static boolean enableERXShutdownHook() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.enableERXShutdownHook", false);
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.enableERXShutdownHook", true);
 	}
 
 	/**
