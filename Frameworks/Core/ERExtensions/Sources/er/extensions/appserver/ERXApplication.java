@@ -1047,6 +1047,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
+	 * This heuristic to determine if an application is deployed as servlet relays on the fact, 
+	 * that contextClassName() is set WOServletContext or ERXWOServletContext
+	 * 
+	 * @return true if the application is deployed as servlet.
+	 */
+	public boolean isDeployedAsServlet() {
+		return contextClassName().contains("Servlet"); // i.e one of WOServletContext or ERXWOServletContext
+	}
+
+
+	/**
 	 * Called prior to actually initializing the app. Defines framework load
 	 * order, class path order, checks patches etc.
 	 */
@@ -1064,7 +1075,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			ERXShutdownHook.useMe();
 		}
 	}
-
+	
 	/**
 	 * Installs several bugfixes and enhancements to WODynamicElements. Sets the
 	 * Context class name to "er.extensions.ERXWOContext" if it is "WOContext".
