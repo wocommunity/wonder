@@ -25,6 +25,7 @@
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
     <property name="framework.erjars.httpclient" value="httpclient-4.3.1.jar" />
     <property name="framework.erjars.httpcore" value="httpcore-4.3.jar" />
+    <property name="framework.erjars.commons.lang3" value="commons-lang3-3.1.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
     <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
@@ -42,6 +43,7 @@
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.codec}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.io}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang3}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpcore}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.icu4j}" />
@@ -1644,6 +1646,7 @@
                 <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
                 <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang3}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERFoundation.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERJars.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERWebObjects.jar" />
