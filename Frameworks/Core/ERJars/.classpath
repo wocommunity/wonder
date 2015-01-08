@@ -20,5 +20,6 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang3-3.1.jar" sourcepath="LibrarySources/commons-lang3-3.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
