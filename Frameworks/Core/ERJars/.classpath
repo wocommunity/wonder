@@ -12,14 +12,14 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="LibrarySources/commons-codec-1.6-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-cli-1.2.jar" sourcepath="LibrarySources/commons-cli-1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-io-2.2.jar" sourcepath="LibrarySources/commons-io-2.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.5.jar" sourcepath="LibrarySources/slf4j-api-1.7.5-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.5.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.5-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.1.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/fluent-hc-4.3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang3-3.1.jar" sourcepath="LibrarySources/commons-lang3-3.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/fluent-hc-4.3.6.jar" sourcepath="LibrarySources/fluent-hc-4.3.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.3.6.jar" sourcepath="LibrarySources/httpclient-4.3.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.3.6.jar" sourcepath="LibrarySources/httpclient-cache-4.3.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.3.3.jar" sourcepath="LibrarySources/httpcore-4.3.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.3.6.jar" sourcepath="LibrarySources/httpmime-4.3.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.10.jar" sourcepath="LibrarySources/slf4j-api-1.7.10-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.10.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.10-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
