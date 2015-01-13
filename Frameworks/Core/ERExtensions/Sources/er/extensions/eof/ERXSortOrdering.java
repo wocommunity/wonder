@@ -8,6 +8,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * <p>
  * ERXSortOrdering is an EOSortOrdering subclass that provides support for
@@ -21,6 +23,8 @@ import com.webobjects.foundation.NSSelector;
  * Person.COMPANY.dot(Company.NAME).asc().then(Person.FIRST_NAME.desc())
  * </pre>
  * 
+ * @property er.extensions.ERXSortOrdering.defaultNullHandling
+ * 
  * @author mschrag
  * 
  */
@@ -31,6 +35,10 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private static ERXSortNullHandling _defaultNullHandling = null;
+
+	private ERXSortNullHandling _nullHandling;
 
 	/**
 	 * Constructs an ERXSortOrdering (see EOSortOrdering).
@@ -54,6 +62,69 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 */
 	public ERXSortOrdering(ERXKey key, NSSelector selector) {
 		this(key.key(), selector);
+	}
+
+	/**
+	 * Returns the behavior for handling <code>null</code> values for this sort ordering.
+	 * Note that the plain value from the object will be returned. When a value for actual
+	 * sorting logic is needed, {@link #resolvedNullHandling()} should be used instead!
+	 * 
+	 * @return see above
+	 */
+	public ERXSortNullHandling nullHandling() {
+		return _nullHandling;
+	}
+
+	/**
+	 * Returns the behavior for handling <code>null</code> values for this sort ordering.
+	 * However the values <code>LARGEST</code> and <code>SMALLEST</code> will be resolved
+	 * to <code>FIRST</code> and <code>LAST</code>, depending on whether this sort ordering
+	 * is ascending or descending. Furthermore a default value will be loaded from the
+	 * properties if the value at this sort ordering object is <code>null</code>.
+	 * <p>
+	 * This method will never return <code>null</code>. <code>DEFAULT</code> will be returned
+	 * if no special handling for null values is desired.
+	 * 
+	 * @return see above
+	 */
+	public ERXSortNullHandling resolvedNullHandling() {
+		ERXSortNullHandling result = nullHandling();
+		if (result == null) {
+			result = defaultNullHandling();
+		}
+		if (result == ERXSortNullHandling.LARGEST) {
+			result = (selector() == CompareAscending || selector() == CompareCaseInsensitiveAscending) ?
+					ERXSortNullHandling.LAST : ERXSortNullHandling.FIRST;
+		} else if (result == ERXSortNullHandling.SMALLEST) {
+			result = (selector() == CompareAscending || selector() == CompareCaseInsensitiveAscending) ?
+					ERXSortNullHandling.FIRST : ERXSortNullHandling.LAST;
+		}
+		return result;
+	}
+
+	/**
+	 * Sets the behavior for handling <code>null</code> values for this sort ordering.
+	 * <p>
+	 * Note that this feature is currently only supported in SQL when using PostgreSQL.
+	 * 
+	 * @param nullHandling the new value
+	 */
+	public void setNullHandling(ERXSortNullHandling nullHandling) {
+		this._nullHandling = nullHandling;
+	}
+
+	/**
+	 * Convenience method for setting the behavior for handling <code>null</code> values
+	 * with method chaining support.
+	 * <p>
+	 * Note that this feature is currently only supported in SQL when using PostgreSQL.
+	 * 
+	 * @param nullHandling the new value
+	 * @return <code>this</code>
+	 */
+	public ERXSortOrdering nulls(ERXSortNullHandling nullHandling) {
+		setNullHandling(nullHandling);
+		return this;
 	}
 
 	/**
@@ -162,7 +233,21 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public static ERXSortOrdering sortOrderingWithKey(ERXKey key, NSSelector selector) {
 		return new ERXSortOrdering(key, selector);
 	}
-	
+
+	/**
+	 * Returns the default behavior for handling <code>null</code> values. Will never
+	 * return <code>null</code>.
+	 * 
+	 * @return see above
+	 */
+	public static ERXSortNullHandling defaultNullHandling() {
+		if (_defaultNullHandling == null) {
+			_defaultNullHandling = ERXProperties.enumValueForKeyWithDefault(ERXSortNullHandling.class,
+					"er.extensions.ERXSortOrdering.defaultNullHandling", ERXSortNullHandling.DEFAULT);
+		}
+		return _defaultNullHandling;
+	}
+
 	/**
 	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
 	 * provides methods for chaining.
