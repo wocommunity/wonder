@@ -11,6 +11,10 @@
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaJDBCAdaptor</artifactId>
 		</dependency>

@@ -1257,6 +1257,7 @@
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
             <param name="project.name" value="PostgresqlPlugIn" />
             <param name="project.dir" value="Frameworks/PlugIns/PostgresqlPlugIn" />
+			<param name="wo.external.root.bundles" value="ERExtensions" />
         </antcall>
     </target>
 
