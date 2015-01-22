@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.jgroups.Channel;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -64,7 +63,6 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
         _channel = new JChannel(propertiesUrl);
         _postLocal = ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsNotificationCenter.postLocal", false);
-//      _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
         _channel.setDiscardOwnMessages(Boolean.FALSE);
         _channel.connect(_groupName);
         _channel.setReceiver(new ReceiverAdapter() {
