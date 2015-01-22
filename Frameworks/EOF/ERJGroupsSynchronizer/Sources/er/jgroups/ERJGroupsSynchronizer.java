@@ -8,12 +8,9 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import org.jgroups.Channel;
-import org.jgroups.ChannelClosedException;
-import org.jgroups.ChannelException;
-import org.jgroups.ChannelNotConnectedException;
-import org.jgroups.ExtendedReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
+import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 
 import com.webobjects.appserver.WOApplication;
@@ -56,7 +53,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
   private String _groupName;
   private JChannel _channel;
 
-  public ERJGroupsSynchronizer(IChangeListener listener) throws ChannelException {
+  public ERJGroupsSynchronizer(IChangeListener listener) throws Exception {
     super(listener);
     String jgroupsPropertiesFile = ERXProperties.stringForKey("er.extensions.jgroupsSynchronizer.properties");
     String jgroupsPropertiesFramework = null;
@@ -71,21 +68,26 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
       System.setProperty("bind.address", WOApplication.application().hostAddress().getHostAddress());
     }
     else {
-      System.setProperty("bind.address", localBindAddressStr);
+    	System.out.println("localBindAddressStr = " + localBindAddressStr);
+        System.setProperty("bind.address", localBindAddressStr);
     }
 
     URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
     _channel = new JChannel(propertiesUrl);
-    _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
-    if (ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsSynchronizer.autoReconnect", true)) {
-      _channel.setOpt(Channel.AUTO_RECONNECT, Boolean.TRUE);
-    }
+//  _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
+    _channel.setDiscardOwnMessages(Boolean.FALSE);
+  /*
+   * remove this as Shunning was eliminated a long time ago!
+   */
+//  if (ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsSynchronizer.autoReconnect", true)) {
+//    _channel.setOpt(Channel.AUTO_RECONNECT, Boolean.TRUE);
+//  }
 
-    _registerForCleanup();
-  }
+  _registerForCleanup();
+}
 
   @Override
-  public void join() throws ChannelException {
+  public void join() throws Exception {
     _channel.connect(_groupName);
   }
 
@@ -96,9 +98,9 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 
   @Override
   public void listen() {
-    _channel.setReceiver(new ExtendedReceiverAdapter() {
+	    _channel.setReceiver(new ReceiverAdapter() {
 
-      @Override
+     // @Override
       public void receive(Message message) {
         try {
           byte[] buffer = message.getBuffer();
@@ -122,7 +124,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
         }
       }
 
-      @Override
+   //   @Override
       public void viewAccepted(View view) {
         // System.out.println(".viewAccepted: " + view);
       }
@@ -130,7 +132,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
   }
 
   @Override
-  protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws ChannelNotConnectedException, ChannelClosedException, IOException {
+  protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws Exception, IOException {
     if (!_channel.isConnected()) {
       if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
         ERXRemoteSynchronizer.log.info("Channel not connected: Not Sending " + cacheChanges.count() + " changes.");
