@@ -34,6 +34,9 @@ public class ERXAjaxContext extends WOContext {
 		return _wasFormSubmitted();
 	}
 	
+	/*
+	 * NOTE: ERXAjaxServletContext is a direct copy of this class.  Keep it in sync with this.
+	 */
 	@Override
 	@Deprecated
 	public boolean _wasFormSubmitted() {

@@ -183,43 +183,7 @@
                     </dirset>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
-            <header><![CDATA[<script>
-function change(){
-  var supportedLang = ["en", "ja"];
-  var browserLang;
-  if(document.all){
-    browserLang = navigator.browserLanguage;
-  } else if(document.layers){
-    browserLang = navigator.language;
-  } else if(document.getElementById){
-    browserLang = navigator.language.substr(0,2);
-  }
-  var lang = supportedLang[0];
-  for(var i=0; i < supportedLang.length; i++){
-    if(supportedLang[i] == browserLang){
-      lang = browserLang;
-      break;
-    }
-  }
-  if(document.styleSheets[0]){
-    var rules = document.styleSheets[0].cssRules;
-    if(!rules){
-      rules = document.styleSheets[0].rules;
-    }
-    for(var i=0; i< rules.length;i++){
-      if(rules[i].selectorText.length == 3){
-        if(rules[i].selectorText == "."+lang){
-          rules[i].style.display = "block";
-        }else{
-        rules[i].style.display = "none";
-        }
-      }
-    }
-  }
-}
-window.onload=change;
-</script>
-<em>Project Wonder ${project.version}</em>]]></header>
+            <header>Project Wonder ${project.version}</header>
             <bottom><![CDATA[Copyright &#169; 2002 &#8211; ${current.year} Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://docs.oracle.com/javase/1.5.0/docs/api/"/>
