@@ -298,9 +298,8 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
 				constraint.append("\"");
 
-				fkSql.append(')');
-				// BOO
-				//fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
+				// New with version 10.11, by default constraint are now immediate
+				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
 				if (USE_NAMED_CONSTRAINTS)
 					sql.append(constraint);
