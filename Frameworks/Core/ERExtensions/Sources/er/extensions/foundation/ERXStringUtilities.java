@@ -2053,15 +2053,13 @@ public class ERXStringUtilities {
      */
     public static String safeIdentifierName(String source, String prefix, char replacement)
     {
-    	StringBuilder b;
+    	StringBuilder b = new StringBuilder();
     	// Add prefix if source does not start with valid character
-        if (source == null || source.length() == 0 || Character.isJavaIdentifierStart(source.charAt(0))) {
-            b = new StringBuilder(source);
-        } else {
-        	b = new StringBuilder(prefix);
-        	b.append(source);
+        if (source == null || source.length() == 0 || !Character.isJavaIdentifierStart(source.charAt(0))) {
+            b.append(prefix);
         }
-    	
+        b.append(source);
+
         for (int i = 0; i < b.length(); i++) {
             char c = b.charAt(i);
             if ( ! Character.isJavaIdentifierPart(c)) {
