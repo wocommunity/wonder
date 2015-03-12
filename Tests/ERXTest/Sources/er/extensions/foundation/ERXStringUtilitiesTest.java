@@ -1,6 +1,7 @@
 package er.extensions.foundation;
 
 import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 import junit.framework.JUnit4TestAdapter;
 
 import org.junit.After;
@@ -253,5 +254,39 @@ public class ERXStringUtilitiesTest {
 			assertEquals(l.d,
 					ERXStringUtilities.levenshteinDistance(l.s1, l.s2));
 		}
+	}
+	
+	@Test
+	public void testSafeIdentifierName() {
+		String safeJavaIdentifierStart = "IamSafe";
+		String safeJavaIdentifierStartWithUnsafeChars = "Iam Nearly+Safe";
+		String unsafeJavaIdentifierStart = "0safe";
+		String nullIdentifierStart = null;
+		String emptyIdentifierStart = "";
+		String prefix = "prefix";
+		char replacement = '_';
+		
+		String resultWithSafeStart = ERXStringUtilities.safeIdentifierName(safeJavaIdentifierStart, prefix, replacement);
+		String resultWithSafeStartUnsafeContent = ERXStringUtilities.safeIdentifierName(safeJavaIdentifierStartWithUnsafeChars, prefix, replacement);
+		String resultWithUnsafeStart = ERXStringUtilities.safeIdentifierName(unsafeJavaIdentifierStart, prefix, replacement);
+		String resultWithNullStart = ERXStringUtilities.safeIdentifierName(nullIdentifierStart, prefix, replacement);
+		String resultWithEmptyStart = ERXStringUtilities.safeIdentifierName(emptyIdentifierStart, prefix, replacement);
+		
+		Assert.assertEquals(safeJavaIdentifierStart, resultWithSafeStart);
+		
+		Assert.assertNotSame(safeJavaIdentifierStartWithUnsafeChars, resultWithSafeStartUnsafeContent);
+		Assert.assertEquals("Expected 2 replacements for unsafe characters", 2, resultWithSafeStartUnsafeContent.replaceAll("[^_]", "").length());
+		Assert.assertFalse("Did not expect prefix as identifier starts with safe character.", resultWithSafeStartUnsafeContent.contains(prefix));
+
+		Assert.assertNotSame(unsafeJavaIdentifierStart, resultWithUnsafeStart);
+		Assert.assertFalse("Expected no replacement for unsafe characters", resultWithUnsafeStart.contains("_"));
+		Assert.assertTrue("Did expect prefix as identifier starts with unsafe character.", resultWithUnsafeStart.contains(prefix));
+
+		Assert.assertNotSame(nullIdentifierStart, resultWithNullStart);
+		Assert.assertTrue("Did expect 'null' as identifier was null.", resultWithNullStart.contains("null"));
+		Assert.assertTrue("Did expect prefix as identifier was null.", resultWithNullStart.contains(prefix));
+
+		Assert.assertNotSame(emptyIdentifierStart, resultWithEmptyStart);
+		Assert.assertEquals(prefix, resultWithEmptyStart);
 	}
 }
