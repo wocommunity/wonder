@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
@@ -119,7 +120,9 @@ import org.apache.log4j.Logger;
  * 
  * @version 1.2.1 11/05/02
  * @author Marc A. Mnich
+ * @deprecated use {@link UUID} instead
  */
+@Deprecated
 public class ERXRandomGUID {
     private static Logger log = Logger.getLogger(ERXRandomGUID.class);
     public String valueBeforeMD5 = "";
