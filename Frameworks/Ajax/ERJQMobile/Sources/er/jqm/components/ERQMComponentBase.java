@@ -77,6 +77,14 @@ abstract public class ERQMComponentBase extends ERXNonSynchronizingComponent
 		return _elementID;
 	}
 
+	/**
+	 * @return the elementID for jquery usage with leading #
+	 */
+	public String jqJavaScriptElementID()
+	{
+		return "#" + javaScriptElementID();
+	}
+
 	public boolean hasNonNullBinding(String key)
 	{
 		if (hasBinding(key))

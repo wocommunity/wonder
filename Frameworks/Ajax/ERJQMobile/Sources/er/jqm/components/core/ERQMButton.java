@@ -22,6 +22,7 @@ import er.jqm.components.ERQMComponentBase;
  * isButton	<strong>true</strong> | false
  * string
  * id
+ * updateContainerID if set, only the content of the update container will be replaced
  * 
  * otherTagString tag string added to the container
  * class
@@ -116,6 +117,11 @@ public class ERQMButton extends ERQMComponentBase
 	public String href()
 	{
 		return stringValueForBinding("href");
+	}
+
+	public String updateContainerID()
+	{
+		return stringValueForBinding("updateContainerID", null);
 	}
 
 	@Override

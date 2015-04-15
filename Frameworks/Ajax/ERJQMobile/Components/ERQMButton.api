@@ -27,5 +27,6 @@
         <binding name="data-position-to"/>
     <binding name="queryDictionary"/>
     <binding name="target"/>
+    <binding name="updateContainerID"/>
     </wo>
 </wodefinitions>
