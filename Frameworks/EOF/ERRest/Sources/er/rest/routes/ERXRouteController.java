@@ -1592,7 +1592,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		else if (meaningfulThrowble instanceof ERXBasicAuthenticationException) {
 			WOResponse response = (WOResponse) errorResponse(meaningfulThrowble, ERXHttpStatusCodes.UNAUTHORIZED);
-			response.setHeader("Basic realm=\"" +  ((ERXBasicAuthenticationException) meaningfulThrowble).basicRealm() +  "\"", "WWW-Authenticate");
+			response.setHeader("Basic realm=\"" +  ((ERXBasicAuthenticationException) meaningfulThrowble).realm() +  "\"", "WWW-Authenticate");
 			results = response;
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {

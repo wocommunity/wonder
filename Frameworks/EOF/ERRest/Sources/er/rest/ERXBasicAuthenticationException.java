@@ -2,77 +2,90 @@ package er.rest;
 
 
 /**
- * Basic Authentication Exception.
- * 
+ * The <code>ERXBasicAuthenticationException</code> can be thrown when performing an action
+ * containing invalid credentials.
  * <p>
- * This class responsible for exception when use Basic Authentication.
- * 
- * This exception can be used with checkAcces method of ERXRouteController class.
- * </p>
- * 
- * <b>Example</b>
- * 
+ * Usage:
  * <pre>
  * protected void checkAccess() throws SecurityException {
- *     throw new ERXBasicAuthenticationException("invalid credentials");
+ *     if (invalidCredentials) {
+ *         throw new ERXBasicAuthenticationException("Invalid credentials");
+ *     }
  * }
  * </pre>
  */
 public class ERXBasicAuthenticationException extends SecurityException {
+	private static final String DEFAULT_REALM = "application";
 
-	private final String basicRealm;
-	
-    /**
+	/**
+	 * A string to be displayed to users so they know which username and password to use.
+	 */
+	private final String realm;
+
+	/**
      * Creates a <code>ERXBasicAuthenticationException</code> with the specified
-     * detail message and cause. 
-     * 
-     * For @param basicRealm use default 'application'. 
+     * detail message and the default realm.
      *
      * @param message the detail message (which is saved for later retrieval
      *        by the {@link #getMessage()} method).
-     */	
+     */
 	public ERXBasicAuthenticationException(String message) {
-		this(message, "application");
+		this(message, DEFAULT_REALM);
 	}
 
-    /**
+	/**
      * Creates a <code>ERXBasicAuthenticationException</code> with the specified
-     * detail message and cause.
+     * detail message and realm.
      *
      * @param message the detail message (which is saved for later retrieval
      *        by the {@link #getMessage()} method).
-     * @param basicRealm message about server authentication requested for user. 
-     */	
-	public ERXBasicAuthenticationException(String message, String basicRealm) {
+     * @param realm the realm for which the credentials are used
+     */
+	public ERXBasicAuthenticationException(String message, String realm) {
 		super(message);
-		
-		this.basicRealm = basicRealm;
+
+		this.realm = realm;
 	}
 
-    /**
-     * Creates a <code>ERXBasicAuthenticationException</code> with the specified
-     * detail message and cause.
+	/**
+	 * Creates a <code>ERXBasicAuthenticationException</code> with the specified
+     * detail message and cause using the default realm.
      *
      * @param message the detail message (which is saved for later retrieval
      *        by the {@link #getMessage()} method).
      * @param cause the cause (which is saved for later retrieval by the
      *        {@link #getCause()} method).  (A <tt>null</tt> value is permitted,
      *        and indicates that the cause is nonexistent or unknown.)
-     * @param basicRealm message about server authentication requested for user. 
+	 */
+	public ERXBasicAuthenticationException(String message, Throwable cause) {
+		this(message, cause, DEFAULT_REALM);
+	}
+
+    /**
+     * Creates a <code>ERXBasicAuthenticationException</code> with the specified
+     * detail message, cause and realm.
+     *
+     * @param message the detail message (which is saved for later retrieval
+     *        by the {@link #getMessage()} method).
+     * @param cause the cause (which is saved for later retrieval by the
+     *        {@link #getCause()} method).  (A <tt>null</tt> value is permitted,
+     *        and indicates that the cause is nonexistent or unknown.)
+     * @param realm message about server authentication requested for user.
+     * @param realm the realm for which the credentials are used
      */
-	public ERXBasicAuthenticationException(String message, Throwable cause, String basicRealm) {
+	public ERXBasicAuthenticationException(String message, Throwable cause, String realm) {
 		super(message, cause);
-		
-		this.basicRealm = basicRealm;
+
+		this.realm = realm;
 	}
 
 	/**
-	 * Message about server authentication.
-	 * 
-	 * @return basicRealm message
+	 * The realm for which the credentials are used.
+	 *
+	 * @return Returns the realm representation.
 	 */
-	public String basicRealm() {
-		return basicRealm;
+	public String realm() {
+		return realm;
 	}
 
 }
