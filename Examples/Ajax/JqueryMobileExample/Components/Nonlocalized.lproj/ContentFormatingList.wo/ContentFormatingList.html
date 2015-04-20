@@ -1,35 +1,27 @@
-<wo:ERQMHtmlTemplate title="ContentFormatingList">
-	<wo:ERQMHeaderBar string="ContentFormatingList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<wo:ERQMListView>
-		
-			<wo:ERQMListViewElement countBubble="2" theme="b">Friday, October 8, 2010</wo:ERQMListViewElement>
-				<wo:ERQMListViewElement sideText="6:24 PM" linkResource="da://default">
-					<h3>Stephen Weber</h3>
-					<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-					<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement sideText="9:18 AM" linkResource="da://default">
-					<h3>jQuery Team</h3>
-					<p><strong>Boston Conference Planning</strong></p>
-					<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-				</wo:ERQMListViewElement>
-			
-			<wo:ERQMListViewElement countBubble="1" theme="b">Thursday, October 7, 2010</wo:ERQMListViewElement>
-				<wo:ERQMListViewElement sideText="4:48 PM" linkResource="da://default">
-					<h3>Avery Walker</h3>
-					<p><strong>Re: Dinner Tonight</strong></p>
-					<p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait! </p>
-				</wo:ERQMListViewElement>
-			
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Content Formating List">
+  <wo:ERQMListView>
+    <wo:ERQMListViewElement countBubble = "2" data-theme = "b">Friday, October 8, 2010</wo:ERQMListViewElement>
+    <wo:ERQMListViewElement sideText = "6:24 PM" linkResource = "da://default">
+      <h3>Stephen Weber</h3>
+      <p>
+        <strong>You've been invited to a meeting at Filament Group in Boston, MA</strong>
+      </p>
+      <p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
+    </wo:ERQMListViewElement>
+    <wo:ERQMListViewElement sideText = "9:18 AM" linkResource = "da://default">
+      <h3>jQuery Team</h3>
+      <p>
+        <strong>Boston Conference Planning</strong>
+      </p>
+      <p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+    </wo:ERQMListViewElement>
+    <wo:ERQMListViewElement countBubble = "1" data-theme = "b">Thursday, October 7, 2010</wo:ERQMListViewElement>
+    <wo:ERQMListViewElement sideText = "4:48 PM" linkResource = "da://default">
+      <h3>Avery Walker</h3>
+      <p>
+        <strong>Re: Dinner Tonight</strong>
+      </p>
+      <p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait! </p>
+    </wo:ERQMListViewElement>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>
