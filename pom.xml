@@ -546,7 +546,7 @@
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
-                <version>4.3.6</version>
+                <version>3.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.htmlparser</groupId>
