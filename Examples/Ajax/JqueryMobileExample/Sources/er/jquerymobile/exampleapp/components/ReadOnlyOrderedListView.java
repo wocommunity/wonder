@@ -4,14 +4,15 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
-public class NumberedList extends SampleComponentBase {
+public class ReadOnlyOrderedListView extends SampleComponentBase {
+
+  private static final long serialVersionUID = 1L;
 
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
-  public NumberedList(WOContext aContext) {
+  public ReadOnlyOrderedListView(WOContext aContext) {
     super(aContext);
   }
 

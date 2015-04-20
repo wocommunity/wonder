@@ -4,14 +4,15 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
-public class NestedList extends SampleComponentBase {
+public class LinkedListView extends SampleComponentBase {
+
+  private static final long serialVersionUID = 1L;
 
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
-  public NestedList(WOContext aContext) {
+  public LinkedListView(WOContext aContext) {
     super(aContext);
   }
 

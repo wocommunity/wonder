@@ -8,14 +8,21 @@ import er.jquerymobile.exampleapp.components.Main;
 
 public class DirectAction extends ERXDirectAction {
 
-  public DirectAction(WORequest request) {
-    super(request);
-  }
+	//********************************************************************
+	//  Constructor : コンストラクタ
+	//********************************************************************
 
-  @Override
-  public WOActionResults defaultAction() {
-    return pageWithName(Main.class.getName());
-  }
+	public DirectAction(WORequest request) {
+		super(request);
+	}
 
+	//********************************************************************
+	//  Actions : アクション
+	//********************************************************************
+
+	@Override
+	public WOActionResults defaultAction() {
+		return pageWithName(Main.class.getName());
+	}
 
 }

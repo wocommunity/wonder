@@ -1,14 +1,6 @@
-<wo:ERQMHtmlTemplate title="One Object">
-	<wo:ERQMHeaderBar string="One Object" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="back" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		You selected Movie: <wo:str value = "$oneMovie.title" /><br />
-		You selected Talent: <wo:str value = "$oneTalent.firstName" /> <wo:str value = "$oneTalent.lastName" /><br />
-	
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:if condition = "$oneMovie">
+  <wo:JQPageWrapper title = "$oneMovie.title"><wo:string value = "$oneMovie.category" /> </wo:JQPageWrapper>
+</wo:if>
+<wo:else>
+  <wo:JQPageWrapper title = "$oneTalent.lastName"><wo:string value = "$oneTalent.firstName" /> </wo:JQPageWrapper>
+</wo:else>

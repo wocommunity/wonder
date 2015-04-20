@@ -1,0 +1,18 @@
+<wo:JQPageWrapper title = "Form Entries">
+  <h1>Update by hyperlink</h1>
+  <wo:ERQMButton action = "$doLinkAction" updateContainerID = "AUCShowValues">Update</wo:ERQMButton>
+  <h1>Update by submit</h1>
+  <wo:form>
+    <wo:ERQMInputText id = "ID_TEXT" label = "JQMInputText" value = "$testString" inset = "true" placeholder = "Username" />
+    <wo:ERQMSubmitButton action = "$doSubmitAction" updateContainerID = "AUCShowValues" value = "Submit" />
+  </wo:form>
+  <h1>Update Container</h1>
+  <wo:ERQMAjaxUpdateContainer id = "AUCShowValues">
+    <wo:str value = "$submitText" />
+    <br />
+    <br />
+    Text: 
+    <wo:string value = "$testString" valueWhenEmpty = "- not set yet -" />
+    <br />
+  </wo:ERQMAjaxUpdateContainer>
+</wo:JQPageWrapper>

@@ -15,6 +15,7 @@ import er.jqm.components.ERQMComponentBase;
  *    actionClass + directActionName
  * value
  * id
+ * updateContainerID if set, only the content of the update container will be replaced
  * 
  * otherTagString tag string added to the container
  * class
@@ -64,6 +65,21 @@ public class ERQMSubmitButton extends ERQMComponentBase
 	public String dataRelDefault()
 	{
 		return null;
+	}
+
+	public String updateContainerID()
+	{
+		return stringValueForBinding("updateContainerID", null);
+	}
+
+	public String invSubBtnId()
+	{
+		return "isb_" + javaScriptElementID();
+	}
+
+	public String jqInvSubBtnId()
+	{
+		return "#" + invSubBtnId();
 	}
 
 	@Override
