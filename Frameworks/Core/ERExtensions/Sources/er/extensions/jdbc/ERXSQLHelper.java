@@ -1958,11 +1958,14 @@ public class ERXSQLHelper {
 
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-			NSMutableArray<String> columnNames = new NSMutableArray<String>();
-			for (ColumnIndex columnIndex : columnIndexes) {
-				columnNames.addObject(columnIndex.columnName());
-			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE INDEX \""+indexName+"\" ON "+tableName+	" ("+columnNames.componentsJoinedByString(", ")+")";
 		}
 		
 		/**
