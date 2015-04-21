@@ -1,4 +1,0 @@
-04-15 22:58:28 jdbc[2]: exception
-org.h2.jdbc.JdbcSQLException: Tabelle "MOVIE" nicht gefunden
-Table "MOVIE" not found; SQL statement:
-SELECT RTRIM(t0.CATEGORY), t0.DATE_RELEASED, t0.MOVIE_ID, RTRIM(t0.POSTER_NAME), RTRIM(t0.RATED), t0.REVENUE, t0.STUDIO_ID, RTRIM(t0.TITLE), RTRIM(t0.TRAILER_NAME) FROM MOVIE t0 ORDER BY t0.TITLE ASC [42102-168]

@@ -21,8 +21,7 @@ public class Application extends ERXApplication {
 
 		NSBundle bundle = NSBundle.mainBundle();
 
-		String file = bundle.bundlePath() + "/Resources/H2DB/Movies";
-
+		String file = bundle.bundlePath() + "/Contents/Resources/H2DB/Movies";
 		System.setProperty("Movies.URL", "jdbc:h2:file:" + file);
 	}
 
