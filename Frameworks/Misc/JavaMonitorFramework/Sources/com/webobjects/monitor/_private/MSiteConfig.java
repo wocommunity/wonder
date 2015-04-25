@@ -793,6 +793,11 @@ public class MSiteConfig extends MObject {
     /**********/
     
 
+    /**
+     * This method should be removed, because it is only used by the deprecated MigrationPage in JavaMonitor.
+     * @return 
+     */
+    @Deprecated
 	public String generateHttpWebObjectsConfig(){
 		StringBuilder result = new StringBuilder();
 		result.append("ProxyRequests On\nProxyMaxForwards 10000\nProxyVia Full\n");

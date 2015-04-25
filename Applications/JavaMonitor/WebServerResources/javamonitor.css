@@ -190,6 +190,10 @@ label {
 	background-color: #fff;
 	color: #333;
 }
+#ModProxy li.ModProxy a {
+	background-color: #fff;
+	color: #333;
+}
 
 #NavigationLogo {
 	position: relative;
