@@ -567,7 +567,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
        length = (char *)WOMALLOC(32);
        if (length)
        {
-          sprintf(length,"%ul",req->content_length);
+          sprintf(length,"%lu",req->content_length);
           req_addHeader(req, CONTENT_LENGTH, length, STR_FREEVALUE);
        }
        if (p->lpszContentType != NULL)
