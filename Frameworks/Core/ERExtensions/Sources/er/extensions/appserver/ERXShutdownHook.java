@@ -29,6 +29,15 @@ import java.util.Set;
  *     }
  * };
  * </pre></blockquote></p>
+ * 
+ *
+ * <b>CAUTION</b><br><br>
+ * You should not use this class when deploying the application as a J2EE servlet as it may interfere with other servlets running in the same VM. 
+ * To disable this feature you have to provide the following start parameter to the java VM:
+ * 
+ * <code>
+ * -Der.extensions.ERXApplication.enableERXShutdownHook=false
+ * </code><br>
  *
  * @author Maik Musall, maik@selbstdenker.ag
  *
@@ -37,7 +46,8 @@ public abstract class ERXShutdownHook extends Thread {
 
 	static final Set<ERXShutdownHook> ALL_HOOKS = new HashSet<ERXShutdownHook>();
 	
-	static {
+	public static void initERXShutdownHook() {
+		System.out.println( "WILL ADD SHUTDOWNHOOK" );
 		Runtime.getRuntime().addShutdownHook( new Thread() {
 			@Override
 			public void run() {
