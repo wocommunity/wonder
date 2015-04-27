@@ -147,7 +147,7 @@ static void sendResponse(HTTPResponse *resp)
 #ifndef PROFILE
    /* resp->content_valid will be 0 for HEAD requests and empty responses */
    if (resp->content_valid) {
-      int count;
+      long count;
 
       while (resp->content_read < resp->content_length &&
              (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID) {
