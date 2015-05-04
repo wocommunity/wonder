@@ -2283,7 +2283,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			String schemaName = extractSchemaName(tableName, "`");
 			tableName = extractTableName(tableName, "`");
-			sql.append("ALTER TABLE `" + schemaName + tableName + "` ADD UNIQUE `" + tableName + "`.`" + indexName + "` (");
+			sql.append("ALTER TABLE " + schemaName + tableName + " ADD UNIQUE " + tableName + ".`" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
 			return sql.toString();
@@ -2294,7 +2294,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			String schemaName = extractSchemaName(tableName, "`");
 			tableName = extractTableName(tableName, "`");
-			sql.append("CREATE INDEX `" + indexName + "` ON `" + schemaName + tableName + "` (");
+			sql.append("CREATE INDEX `" + indexName + "` ON " + schemaName + tableName + " (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
 			String temp = sql.toString();

@@ -595,6 +595,13 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		return splitted[0];
 	}
 	
+	static protected String extractQuotedTableName(String fullName) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		return '"' + splitted[0] + '"';
+	}
+	
 	protected static String notNullConstraintName(EOAttribute attribute) {
 		return notNullConstraintName(extractQuotedSchemaName(attribute.entity().externalName()), attribute.entity().externalName(), attribute.columnName());
 	}
@@ -605,7 +612,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		String splitted[] = fullName.split("\\.");
 		if (splitted.length == 1)
 			return '"' + splitted[0] + '"';
-		return '"' + splitted[0] + "\".\"" + splitted[1];
+		return '"' + splitted[0] + "\".\"" + splitted[1]+ '"';
 		}
 
 	protected static String notNullConstraintName(String schemaName, String externalName, String columnName) {
@@ -830,9 +837,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					if (unique == null) {
 						unique = "1000000";
 					}
-					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + extractQuotedSchemaName(externalName) + extractTableName(externalName)));
-					result.addObject(_expressionForString("ALTER TABLE " + extractQuotedSchemaName(externalName) + extractTableName(externalName)
-							+ " ALTER " + extractTableName(externalName) + priKeyAttribute.name() + " SET DEFAULT UNIQUE"));
+					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + extractQuotedSchemaName(externalName) + extractQuotedTableName(externalName)));
+					result.addObject(_expressionForString("ALTER TABLE " + extractQuotedSchemaName(externalName) + extractQuotedTableName(externalName)
+							+ " ALTER \"" + priKeyAttribute.name() + "\" SET DEFAULT UNIQUE"));
 				}
 			}
 			return result;
@@ -1049,10 +1056,10 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			}
 			else {
 				if (USE_NAMED_CONSTRAINTS) {
-					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CONSTRAINT " + notNullConstraintName(_schemaName, _tableName, columnName) + " CHECK (" + extractTableName(_tableName) + "\"." + columnName + " IS NOT NULL)"));
+					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CONSTRAINT " + notNullConstraintName(_schemaName, _tableName, columnName) + " CHECK (" + extractQuotedTableName(_tableName) + ".\"" + columnName + "\" IS NOT NULL)"));
 				}
 				else {
-					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CHECK (" + extractTableName(_tableName) + "\"." + columnName + " IS NOT NULL)"));
+					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CHECK (" + extractQuotedTableName(_tableName) + ".\"" + columnName + "\" IS NOT NULL)"));
 				}
 			}
 			return statements;
@@ -1212,7 +1219,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 			sql.append('"');
 			sql.append(attribute.columnName());
-			sql.append('"');
+			sql.append("\" ");
 			sql.append(columnTypeStringForAttribute(attribute));
 
 			NSDictionary dictionary = attribute.userInfo();
