@@ -1679,14 +1679,18 @@ public class ERXSQLHelper {
 		}
 	}
 	
-	static protected String extractSchemaName(String fullName, char delimiter) {
+	static protected String extractSchemaName(String fullName, String delimiter) {
+		if (fullName == null)
+			return null;
 		String splitted[] = fullName.split("\\."); 
 		if (splitted.length == 1)
-			return null;
+			return "";
 		return delimiter + splitted[0] + delimiter + '.';
 	}
 	
-	static protected String extractTableName(String fullName, char delimiter) {
+	static protected String extractTableName(String fullName, String delimiter) {
+		if (fullName == null)
+			return null;
 		String splitted[] = fullName.split("\\."); 
 		return delimiter + splitted[0] + delimiter;
 	}
@@ -1843,7 +1847,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + "." + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -1852,7 +1858,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -1919,13 +1927,17 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "ALTER TABLE " + schemaName + tableName + " ADD CONSTRAINT " + tableName + ".\"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
 		}
 		
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE INDEX \""+indexName+"\" ON "+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE INDEX \""+indexName+"\" ON "+schemaName+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
 		}
 
 		/**
@@ -1968,16 +1980,21 @@ public class ERXSQLHelper {
 			return 0;
 		}
 
+
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+schemaName+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE INDEX \""+indexName+"\" ON "+tableName+	" ("+columnNames.componentsJoinedByString(", ")+")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE INDEX \""+indexName+"\" ON "+schemaName+tableName+" ("+columnNames.componentsJoinedByString(", ")+")";
 		}
 		
 		/**
@@ -2079,16 +2096,16 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			String schemaName = extractSchemaName(tableName, '"');
-			tableName = extractTableName(tableName, '"');
-			return "ALTER TABLE " + schemaName +  tableName + " ADD CONSTRAINT " + tableName + ".\"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "ALTER TABLE " + schemaName + tableName + " ADD CONSTRAINT " + tableName + ".\"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			String schemaName = extractSchemaName(tableName, '"');
-			tableName = extractTableName(tableName, '"');
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
 			return "CREATE INDEX "+tableName+".\""+indexName+"\" ON "+schemaName+tableName+" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
 		}
 
@@ -2264,8 +2281,9 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			StringBuffer sql = new StringBuffer();
-			tableName = tableName.replaceAll("\\.", "`\\.`");
-			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + tableName + "`.`" + indexName + "` (");
+			String schemaName = extractSchemaName(tableName, "`");
+			tableName = extractTableName(tableName, "`");
+			sql.append("ALTER TABLE `" + schemaName + tableName + "` ADD UNIQUE `" + tableName + "`.`" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
 			return sql.toString();
@@ -2274,11 +2292,13 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			StringBuffer sql = new StringBuffer();
-			sql.append("CREATE INDEX `" + indexName + "` ON `" + tableName + "` (");
+			String schemaName = extractSchemaName(tableName, "`");
+			tableName = extractTableName(tableName, "`");
+			sql.append("CREATE INDEX `" + indexName + "` ON `" + schemaName + tableName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
 			String temp = sql.toString();
-			return temp.replaceAll("(CREATE.*)\\.(.*)", "$1`.`$2");
+			return temp;
 		}
 
 		private void _appendIndexColNames(StringBuffer sql, ColumnIndex... columnIndexes) {
@@ -2420,7 +2440,9 @@ public class ERXSQLHelper {
 				columnNames.addObject(columnIndex.columnName());
 			}
 			indexName = indexName.replace('.', '_');
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2429,7 +2451,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2549,7 +2573,9 @@ public class ERXSQLHelper {
 				columnNames.addObject(columnIndex.columnName());
 			}
 			indexName = indexName.replace('.', '_');
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2558,7 +2584,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 	}
@@ -2633,7 +2661,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -2642,7 +2672,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 	}
@@ -2716,7 +2748,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -2725,7 +2759,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
