@@ -19,16 +19,18 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 
 /**
- * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
+ * A RPC mechanism to call methods on the Java server side from a JavaScript client.
+ * It Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
  * java world, running in a WebObject application. This remote-procedure-call communication is done using json protocol,
  * as implemented by the JSON-RPC library.
  * <p>
- * This component generate javascript code that will initialize a variable that will be the starting point for rpc
+ * This component generates javascript code that will initialize a variable that will be the starting point for rpc
  * communication. The name of this variable is given in the <code>name</code> binding. There will be an object, server
  * side that will be the proxy and will handle the request. You can define the proxy on the server side (it has to be a
  * JSONRPCBridge). The proxy will be your window to the java world, from there you can access your java objects from the
  * javascript side. The name for this java variable is <code>proxyName</code>. By default, it will configure the
- * parent component as one java proxy object and name it <code>wopage</code> from the javascript side. A JSONRPCBridge
+ * parent component as one java proxy object and name it <code>wopage</code> from the javascript side.
+ * (WARNING: DON'T DO THIS. YOU SHOULD ALWAYS PROVIDE A SEPARATE PROXY OBJECT. See below.) The JSONRPCBridge
  * object is created if not given as a binding. If the binding is there but the value is null, it will create the bridge
  * then push it to the binding. That way, you can configure a single bridge for multiple proxy objects. It is of good
  * practice to provide a value in a binding (at least a binding) so that the object is not created on every ajax
@@ -63,23 +65,37 @@ import er.extensions.appserver.ERXWOContext;
  * </tr>
  * </table>
  * <p>
- * Remember that is no proxy object is given, it will use the parent component, which is the component in which this component is embedded.
- * </p>
+ * <b>Every public instance and static method of the proxy object is published on the javascript side.</b>
+ * Remember that if no proxy object is given, it will use the parent component, which is the component in which this component is embedded.
+ * This is probably a very bad idea, as it possible to call something like 'valueForKeyPath("application.terminate")' from the client side.
+ * And you usually don't control the client.</p>
+ * <p>
+ * You currently cannot publish more than one proxy object under a given bridge "name" (e.g. "jsonrpc"). The initialization code will only be
+ * called for the first object.</p>
+ * <p>
+ * Note: The component used to have a binding "JSONRPCBridge". This seems to been renamed to "AjaxBridge". Both bindings are supported. In
+ * future versions the JSONRPCBridge may be removed.</p>   
  * <h2>Todo</h2>
  * <ul>
+ * <li> Remove support to automatically proxy the parent component. Maybe even warn about proxying WOComponents per se.</li> 
  * <li> Complete the JSON-RPC integration to be able to leverage all possibilities of that library (foreign references,
- * etc.).
+ * etc.).</li>
+ * <li> Allow the use of interfaces to reduce the number of published methods ({@link JSONRPCBridge#registerObject(Object, Object, Class)}</li>
+ * <li> Allow multiple proxy objects under a given bridge name.</li> 
+ * <li> Update org.jabsorb to latest version (1.3.2) </li>
+ * <li> Extend JSONRPCBridge to only publish methods marked with an annotation.</li>  
  * </ul>
  * 
  * @binding proxy Server side object (Java) that will be visible for rpc communication (Javascript).  
- * If no object is bound, the parent() object is assigned by default.
+ * If no object is bound, the parent() object is assigned by default. You should ALWYAS provide an object.
  * @binding proxyName Client side name (Javascript) used to identify the proxy (Java) from the bridge object.
  * @binding name Client side name (Javascript) of the bridge object.
- * @binding JSONRPCBridge Server side object (Java) used to handle the request.  Of no value are bound, a new 
- * object is created for every ajax request.  If a binding is there but null value, a new 
+ * @binding AjaxBridge Server side object (Java) used to handle the request.  If no value is bound, a new 
+ * object is created for every ajax request.  If a binding is there but has a null value, a new 
  * object will be created and pushed to the binding so that this new object can be shared 
- * for multiple proxy.
- * @binding lazy (default false) if true, the proxy is only initialized on-demand, rather than on-load
+ * for multiple proxies.
+ * @binding lazy (default false) if true, the proxy is only initialized on-demand, rather than on-load. The initialization requests 
+ * the available methods from the proxy object.
  * 
  * @author Jean-François Veillette &lt;jfveillette@os.ca&gt;
  * @version $Revision $, $Date $ <br>
@@ -107,6 +123,31 @@ public class AjaxProxy extends AjaxComponent {
 	public boolean isStateless() {
 		return true;
 	}
+	
+	/**
+	 * The binding is now called "AjaxBridge", but we also used "JSONRPCBridge" in the past. 
+	 * @return the JSONRPCBridge to use
+	 */
+	private JSONRPCBridge getBridgeBinding() {
+		Object bridge = valueForBinding("AjaxBridge");
+		if (bridge == null) {
+			bridge = valueForBinding("JSONRPCBridge");
+		}
+		return (JSONRPCBridge)bridge;
+	}
+	
+	/**
+	 * Push the bridge object to "AjaxBridge" and "JSONRPCBridge" if available. 
+	 * @param bridge the bridge object to set in the binding
+	 */
+	private void setBridgeBinding(JSONRPCBridge bridge)	{
+		if (canSetValueForBinding("AjaxBridge")) {
+			setValueForBinding(bridge, "AjaxBridge");
+		}
+		if (canSetValueForBinding("JSONRPCBridge")) {
+			setValueForBinding(bridge, "JSONRPCBridge");
+		}
+	}
 
 	/**
 	 * Adds the jsonrpc.js script to the head in the response if not already present and also adds a javascript proxy
@@ -122,7 +163,7 @@ public class AjaxProxy extends AjaxComponent {
 		String name = (String) valueForBinding("name");
 		String key = "JSONRPC_" + name;
 		Object oldValue = userInfo.objectForKey(key);
-		Object bridge = valueForBinding("JSONRPCBridge");
+		Object bridge = getBridgeBinding();
 		if (bridge == null) {
 			bridge = NSKeyValueCoding.NullValue;
 		}
@@ -174,18 +215,14 @@ public class AjaxProxy extends AjaxComponent {
 			}
 			else {
 				proxy = parent();
+				log.warn("No proxy binding given, so using parent component. This is probably a very bad idea.");
 			}
 			String proxyName = (String) valueForBinding("proxyName");
 
-			JSONRPCBridge bridge = null;
-			if (canGetValueForBinding("AjaxBridge")) {
-				bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
-			}
-			else {
+			JSONRPCBridge bridge = getBridgeBinding();
+			if (bridge == null) {
 				bridge = JSONBridge.createBridge();
-				if (canSetValueForBinding("AjaxBridge")) {
-					setValueForBinding(bridge, "AjaxBridge");
-				}
+				setBridgeBinding(bridge);
 			}
 			bridge.registerObject(proxyName, proxy);
 			output = bridge.call(new Object[] { request, context, response, proxy }, input);
