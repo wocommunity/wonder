@@ -227,7 +227,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if(log.isDebugEnabled()) {
 			log.debug("setSelectedObjects@" + hashCode()  + ":" + (objects != null ? objects.count() : "0"));
 		}
-		if (this instanceof ERXBatchingDisplayGroup) {
+		if (this instanceof ERXBatchingDisplayGroup || dataSource() == null) {
 			// keep previous behavior
 			// CHECKME a batching display group has its own _displayedObjects variable so setSelectionIndexes won't work
 			super.setSelectedObjects(objects);
