@@ -23,8 +23,8 @@ import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOSchemaSynchronization;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -58,7 +58,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	
 	private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
 
-	static final boolean USE_NAMED_CONSTRAINTS = true;
+	static final boolean USE_NAMED_CONSTRAINTS = Boolean.getBoolean("jdbcadaptor.frontbase.frontbaseUseNameConstraints");
 
 	static final String _frontbaseIncludeSynonyms = System.getProperty("jdbcadaptor.frontbase.includeSynonyms", null);
 	static final String _frontbaseWildcardPatternForAttributes = System.getProperty("jdbcadaptor.frontbase.wildcardPatternForAttributes", null);
@@ -114,7 +114,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public EOSynchronizationFactory createSynchronizationFactory() {
+	public EOSchemaSynchronizationFactory createSchemaSynchronizationFactory() {
 		return new _FrontBasePlugIn.FrontbaseSynchronizationFactory(_adaptor);
 	}
 
@@ -465,7 +465,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				}
 			}
 			else {
-				sql.append("SELECT UNIQUE FROM " + quoteTableName(eoentity.primaryKeyRootName()));
+				sql.append("SELECT UNIQUE FROM " + quoteFullName(eoentity.primaryKeyRootName()));
 			}
 			if (keyNum < keyBatchSize - 1) {
 				sql.append(", ");
@@ -570,27 +570,63 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	@Deprecated
 	protected static final int FB_LongInteger = 23;
 
-	protected static String notNullConstraintName(EOAttribute attribute) {
-		return notNullConstraintName(attribute.entity().externalName(), attribute.columnName());
-	}
-
-	protected static String notNullConstraintName(String tableName, String columnName) {
-		StringBuilder constraintBuffer = new StringBuilder();
-		constraintBuffer.append("NOT_NULL_");
-		constraintBuffer.append(tableName);
-		constraintBuffer.append("__");
-		constraintBuffer.append(columnName);
-		return constraintBuffer.toString();
-	}
-
-	protected static String quoteTableName(String s) {
-		if (s == null)
+	static protected String extractSchemaName(String fullName) {
+		if (fullName == null)
 			return null;
-		int i = s.lastIndexOf(46);
-		if (i == -1)
-			return "\"" + s + "\"";
-		else
-			return "\"" + s.substring(0, i) + "\".\"" + s.substring(i + 1, s.length()) + "\"";
+		String splitted[] = fullName.split("\\."); 
+		if (splitted.length == 1)
+			return "";
+		return splitted[0];
+	}
+	
+	static protected String extractQuotedSchemaName(String fullName) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		if (splitted.length == 1)
+			return "";
+		return '"' + splitted[0] + "\".";
+	}
+	
+	static protected String extractTableName(String fullName) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		return splitted[0];
+	}
+	
+	static protected String extractQuotedTableName(String fullName) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		return '"' + splitted[0] + '"';
+	}
+	
+	protected static String notNullConstraintName(EOAttribute attribute) {
+		return notNullConstraintName(extractQuotedSchemaName(attribute.entity().externalName()), attribute.entity().externalName(), attribute.columnName());
+	}
+
+	protected static String quoteFullName(String fullName) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\.");
+		if (splitted.length == 1)
+			return '"' + splitted[0] + '"';
+		return '"' + splitted[0] + "\".\"" + splitted[1]+ '"';
+		}
+
+	protected static String notNullConstraintName(String schemaName, String externalName, String columnName) {
+		StringBuilder constraintBuffer = new StringBuilder();
+		constraintBuffer.append('"');
+		constraintBuffer.append(schemaName);
+		constraintBuffer.append("NOT_NULL_");
+		constraintBuffer.append(schemaName);
+		constraintBuffer.append("_");
+		constraintBuffer.append(externalName);
+		constraintBuffer.append("_");
+		constraintBuffer.append(columnName);
+		constraintBuffer.append('"');
+		return constraintBuffer.toString();
 	}
 
 	/**
@@ -645,7 +681,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return -1;
 	}
 
-	public static class FrontbaseSynchronizationFactory extends EOSynchronizationFactory {
+	public static class FrontbaseSynchronizationFactory extends EOSchemaSynchronizationFactory {
 
 		public FrontbaseSynchronizationFactory(EOAdaptor eoadaptor) {
 			super(eoadaptor);
@@ -656,19 +692,13 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return true;
 		}
 
-		public static boolean boolValueForKeyDefault(NSDictionary nsdictionary, String s, boolean flag) {
-			String s1 = (String) nsdictionary.objectForKey(s);
-			if (s1 == null)
-				return flag;
-			else
-				return s1.equals("YES");
-		}
-
+//	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EOAdaptor adaptor, EOSchemaGenerationOptions options) {
+//	schemaCreationScriptForEntities(entities, options);
 		@Override
-		public String schemaCreationScriptForEntities(NSArray<EOEntity> allEntities, NSDictionary<String, String> options) {
+		public String schemaCreationScriptForEntities(NSArray<EOEntity> allEntities, EOSchemaGenerationOptions options) {
 			StringBuffer result = new StringBuffer();
 			if (options == null) {
-				options = NSDictionary.emptyDictionary();
+				options = new EOSchemaGenerationOptions();
 			}
 			NSArray<EOSQLExpression> statements = schemaCreationStatementsForEntities(allEntities, options);
 			int i = 0;
@@ -686,7 +716,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * </span>
 		 */
 		@Override
-		public NSArray<EOSQLExpression> schemaCreationStatementsForEntities(NSArray<EOEntity> entities, NSDictionary<String, String> options) {
+		public NSArray<EOSQLExpression> schemaCreationStatementsForEntities(NSArray<EOEntity> entities, EOSchemaGenerationOptions options) {
 			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
 
 			if (entities == null || entities.count() == 0)
@@ -699,34 +729,34 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			result.addObject(_expressionForString("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE, LOCKING PESSIMISTIC"));
 
 			NSDictionary<String, Object> connectionDict = entities.lastObject().model().connectionDictionary();
-			if (boolValueForKeyDefault(options, "dropDatabase", false)) {
+			if (options.dropDatabase()) {
 				result.addObjectsFromArray(dropDatabaseStatementsForConnectionDictionary(connectionDict, null));
 			}
-			if (boolValueForKeyDefault(options, "createDatabase", false)) {
+			if (options.createDatabase()) {
 				result.addObjectsFromArray(createDatabaseStatementsForConnectionDictionary(connectionDict, null));
 			}
-			if (boolValueForKeyDefault(options, "dropPrimaryKeySupport", true)) {
+			if (options.dropPrimaryKeySupport()) {
 				NSArray<NSArray<EOEntity>> entityGroups = primaryKeyEntityGroupsForEntities(entities);
 				result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(entityGroups));
 			}
-			if (boolValueForKeyDefault(options, "dropTables", true)) {
+			if (options.dropTables()) {
 				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
 				result.addObjectsFromArray(dropTableStatementsForEntityGroups(entityGroups));
 			}
-			if (boolValueForKeyDefault(options, "createTables", true)) {
+			if (options.createTables()) {
 				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
 				result.addObjectsFromArray(createTableStatementsForEntityGroups(entityGroups));
 				result.addObjectsFromArray(createIndexStatementsForEntityGroups(entityGroups));
 			}
-			if (boolValueForKeyDefault(options, "createPrimaryKeySupport", true)) {
+			if (options.createPrimaryKeySupport()) {
 				NSArray<NSArray<EOEntity>> entityGroups = primaryKeyEntityGroupsForEntities(entities);
 				result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(entityGroups));
 			}
-			if (boolValueForKeyDefault(options, "primaryKeyConstraints", true)) {
+			if (options.primaryKeyConstraints()) {
 				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
 				result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(entityGroups));
 			}
-			if (boolValueForKeyDefault(options, "foreignKeyConstraints", false)) {
+			if (options.foreignKeyConstraints()) {
 				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
 				for (NSArray<EOEntity> entityGroup : entityGroups) {
 					result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup(entityGroup));
@@ -769,7 +799,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					dropType = " RESTRICT";
 			}
 
-			EOSQLExpression expression = _expressionForString("DROP TABLE " + quoteTableName(entity.externalName()) + dropType);
+			EOSQLExpression expression = _expressionForString("DROP TABLE " + quoteFullName(entity.externalName()) + dropType);
 
 			return new NSArray<EOSQLExpression>(expression);
 		}
@@ -807,9 +837,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					if (unique == null) {
 						unique = "1000000";
 					}
-					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
-					result.addObject(_expressionForString("ALTER TABLE " + quoteTableName(externalName) + " ALTER "
-							+ quoteTableName(priKeyAttribute.name()) + " SET DEFAULT UNIQUE"));
+					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + extractQuotedSchemaName(externalName) + extractQuotedTableName(externalName)));
+					result.addObject(_expressionForString("ALTER TABLE " + extractQuotedSchemaName(externalName) + extractQuotedTableName(externalName)
+							+ " ALTER \"" + priKeyAttribute.name() + "\" SET DEFAULT UNIQUE"));
 				}
 			}
 			return result;
@@ -819,15 +849,16 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
 				StringBuilder sql = new StringBuilder();
-				String tableName = relationship.entity().externalName();
 
 				sql.append("ALTER TABLE ");
-				sql.append(quoteTableName(tableName.toUpperCase()));
+				sql.append(quoteFullName(relationship.entity().externalName()));
 				sql.append(" ADD");
 
-				StringBuilder constraint = new StringBuilder(" CONSTRAINT \"FOREIGN_KEY_");
-				constraint.append(tableName);
-
+				StringBuilder constraint = new StringBuilder(" CONSTRAINT ");
+				constraint.append(extractQuotedSchemaName(relationship.entity().externalName()));
+				constraint.append("FOREIGN_KEY_");
+				constraint.append(relationship.entity().externalName());
+				
 				StringBuilder fkSql = new StringBuilder(" FOREIGN KEY (");
 				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
@@ -847,7 +878,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				constraint.append('_');
 
 				String referencedExternalName = relationship.destinationEntity().externalName();
-				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
+				fkSql.append(quoteFullName(referencedExternalName.toUpperCase()));
 				constraint.append(referencedExternalName);
 
 				fkSql.append(" (");
@@ -939,7 +970,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 			StringBuilder sql = new StringBuilder();
 			sql.append("CREATE TABLE ");
-			sql.append(quoteTableName(eoentity.externalName()));
+			sql.append(quoteFullName(eoentity.externalName()));
 			sql.append(" (\n\t");
 			sql.append(columns.toString());
 			sql.append("\n)");
@@ -993,7 +1024,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * <span class="ja">1つのアトリビュートの SQL を生成します </span>
 		 */
 		public StringBuilder addCreateClauseForAttribute(EOAttribute eoattribute) {
-			EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
+			FrontbaseExpression expression = (FrontbaseExpression) _expressionForEntity(eoattribute.entity());
 			expression.addCreateClauseForAttribute(eoattribute);
 			return new StringBuilder(expression.listString());
 		}
@@ -1004,18 +1035,20 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary<String, String> options) {
+		public NSArray<EOSQLExpression> statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, EOSchemaGenerationOptions options) {
 			String columnTypeString = statementToCreateDataTypeClause(newType);
-			NSArray<EOSQLExpression> statements = new NSArray<EOSQLExpression>(_expressionForString("alter column " + quoteTableName(tableName) + "." + quoteTableName(columnName) + " to " + columnTypeString));
+			NSArray<EOSQLExpression> statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER COLUMN " + quoteFullName(tableName) + "." + columnName + " TO " + columnTypeString));
 			return statements;
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary<String, String> options) {
+		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, EOSchemaGenerationOptions options) {
+			String _schemaName = extractSchemaName(tableName);
+			String _tableName = extractTableName(tableName);
 			NSArray<EOSQLExpression> statements;
 			if (allowsNull) {
 				if (USE_NAMED_CONSTRAINTS) {
-					statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(_FrontBasePlugIn.notNullConstraintName(tableName, columnName)) + " cascade"));
+					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " DROP CONSTRAINT " + notNullConstraintName(_schemaName, _tableName, columnName) + " CASCADE"));
 				}
 				else {
 					statements = null;
@@ -1023,18 +1056,18 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			}
 			else {
 				if (USE_NAMED_CONSTRAINTS) {
-					statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + quoteTableName(tableName) + " add constraint " + quoteTableName(_FrontBasePlugIn.notNullConstraintName(tableName, columnName)) + " check (" + quoteTableName(columnName) + " is not null)"));
+					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CONSTRAINT " + notNullConstraintName(_schemaName, _tableName, columnName) + " CHECK (" + extractQuotedTableName(_tableName) + ".\"" + columnName + "\" IS NOT NULL)"));
 				}
 				else {
-					statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(columnName) + " is not null)"));
+					statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " ADD CHECK (" + extractQuotedTableName(_tableName) + ".\"" + columnName + "\" IS NOT NULL)"));
 				}
 			}
 			return statements;
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary<String, String> options) {
-			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + quoteTableName(tableName) + " drop column \"" + columnName.toUpperCase() + "\" cascade"));
+		public NSArray<EOSQLExpression> statementsToDeleteColumnNamed(String columnName, String tableName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(tableName) + " DROP COLUMN \"" + columnName.toUpperCase() + "\" CASCADE"));
 		}
 
 		@Override
@@ -1043,12 +1076,12 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary<String, String> options) {
+		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(EOAttribute attribute, EOSchemaGenerationOptions options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + quoteTableName(attribute.entity().externalName()) + " add " + clause));
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + quoteFullName(attribute.entity().externalName()) + " ADD " + clause));
 		}
 
-		private String statementToCreateDataTypeClause(EOSchemaSynchronization.ColumnTypes columntypes) {
+		private String statementToCreateDataTypeClause(ColumnTypes columntypes) {
 			switch (FrontBaseTypes.internalTypeForExternal(columntypes.name())) {
 			case FrontBaseTypes.FB_Decimal:
 			case FrontBaseTypes.FB_Numeric:
@@ -1084,13 +1117,14 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary<String, String> options) {
-			return new NSArray<EOSQLExpression>(_expressionForString("alter column name " + quoteTableName(tableName) + "." + quoteTableName(columnName) + " to " + quoteTableName(newName)));
+		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER COLUMN NAME " + quoteFullName(tableName) + "." + columnName + " TO " + 
+																							quoteFullName(tableName) + "." + newName));
 		}
 
 		@Override
-		public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary<String, String> options) {
-			return new NSArray<EOSQLExpression>(_expressionForString("alter table name " + quoteTableName(tableName) + " to " + quoteTableName(newName)));
+		public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE NAME " + quoteFullName(tableName) + " TO " + quoteFullName(newName)));
 		}
 
 		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray<EOAttribute> attributes) {
@@ -1121,17 +1155,19 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		public NSArray<EOSQLExpression> primaryKeyConstraintStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
 			if (entityGroup.count() != 0) {
 				EOEntity entity = entityGroup.objectAtIndex(0);
-				String tableName = entity.externalName();
+				String tableName = extractTableName(entity.externalName());
 				NSArray<String> keys = entity.primaryKeyAttributeNames();
 				StringBuilder sql = new StringBuilder();
 
 				if (tableName != null && keys.count() > 0) {
 					sql.append("ALTER TABLE ");
-					sql.append(quoteTableName(tableName.toUpperCase()));
+					sql.append(quoteFullName(entity.externalName()));
 					sql.append(" ADD");
 
-					StringBuilder constraint = new StringBuilder(" CONSTRAINT \"PRIMARY_KEY_");
-					constraint.append(tableName);
+					StringBuilder constraint = new StringBuilder(" CONSTRAINT ");
+					constraint.append(extractQuotedSchemaName(entity.externalName()));
+					constraint.append("\"PRIMARY_KEY_");
+					constraint.append(entity.externalName());
 
 					StringBuilder pkSql = new StringBuilder(" PRIMARY KEY (");
 
@@ -1140,13 +1176,13 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						if (j != 0)
 							pkSql.append(',');
 
-						pkSql.append("\"");
+						pkSql.append('"');
 						String columnName = entity.attributeNamed(keys.objectAtIndex(j)).columnName();
 						pkSql.append(columnName.toUpperCase());
-						pkSql.append("\"");
+						pkSql.append('"');
 						constraint.append(columnName);
 					}
-					constraint.append("\"");
+					constraint.append('"');
 					pkSql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
 
 					if (USE_NAMED_CONSTRAINTS)
@@ -1181,7 +1217,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		public void addCreateClauseForAttribute(EOAttribute attribute) {
 			StringBuilder sql = new StringBuilder();
 
-			sql.append("\"");
+			sql.append('"');
 			sql.append(attribute.columnName());
 			sql.append("\" ");
 			sql.append(columnTypeStringForAttribute(attribute));
@@ -1339,9 +1375,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		protected String sqlStringForSelectorTreatingContainsAsLike(NSSelector qualifierOperator, Object value) {
 			if (qualifierOperator.equals(EOQualifier.QualifierOperatorContains))
 				if (value == NSKeyValueCoding.NullValue)
-					return "is";
+					return "IS";
 				else
-					return "like";
+					return "LIKE";
 			else
 				return super.sqlStringForSelector(qualifierOperator, value);
 		}
@@ -1356,7 +1392,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			String value = super.sqlStringForAttribute(attribute);
 
 			if (!useAliases())
-				value = "\"" + value + "\"";
+				value = '"' + value + '"';
 
 			return value;
 		}
@@ -1624,7 +1660,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		@Override
 		public String assembleDeleteStatementWithQualifier(EOQualifier eoqualifier, String table, String qualifier) {
 			if (table != null && table.indexOf('"') == -1)
-				return super.assembleDeleteStatementWithQualifier(eoqualifier, quoteTableName(table), qualifier);
+				return super.assembleDeleteStatementWithQualifier(eoqualifier, quoteFullName(table), qualifier);
 			else
 				return super.assembleDeleteStatementWithQualifier(eoqualifier, table, qualifier);
 		}
@@ -1632,7 +1668,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		@Override
 		public String assembleInsertStatementWithRow(NSDictionary row, String table, String columns, String values) {
 			if (table != null && table.indexOf('"') == -1)
-				return super.assembleInsertStatementWithRow(row, quoteTableName(table), columns, values);
+				return super.assembleInsertStatementWithRow(row, quoteFullName(table), columns, values);
 			else
 				return super.assembleInsertStatementWithRow(row, table, columns, values);
 		}
@@ -1641,7 +1677,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		public String assembleUpdateStatementWithRow(NSDictionary row, EOQualifier qualifier, String table, String values, String sqlQualifier) {
 			_qualifier = qualifier;
 			if (table != null && table.indexOf('"') == -1)
-				return super.assembleUpdateStatementWithRow(row, qualifier, quoteTableName(table), values, sqlQualifier);
+				return super.assembleUpdateStatementWithRow(row, qualifier, quoteFullName(table), values, sqlQualifier);
 			else
 				return super.assembleUpdateStatementWithRow(row, qualifier, table, values, sqlQualifier);
 		}

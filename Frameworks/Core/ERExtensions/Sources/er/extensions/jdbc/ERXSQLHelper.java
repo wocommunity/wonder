@@ -34,9 +34,9 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
-import com.webobjects.eoaccess.EOSchemaGeneration;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -46,7 +46,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
@@ -121,7 +120,7 @@ public class ERXSQLHelper {
 	 * @return a <code>String</code> containing SQL statements to create
 	 *         tables
 	 */
-	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
+	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, EOSchemaGenerationOptions optionsCreate) {
 		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, m, optionsCreate);
 	}
@@ -170,7 +169,7 @@ public class ERXSQLHelper {
 	 *         tables
 	 */
 	@SuppressWarnings("unchecked")
-	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray<EOEntity> entities, EOModel model, NSDictionary optionsCreate) {
+	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray<EOEntity> entities, EOModel model, EOSchemaGenerationOptions optionsCreate) {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
@@ -217,7 +216,7 @@ public class ERXSQLHelper {
 	 *            createSchemaSQLForEntitiesInModelWithNameAndOptions)
 	 * @return a sql script
 	 */
-	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EODatabaseContext databaseContext, NSDictionary<String, String> optionsCreate) {
+	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EODatabaseContext databaseContext, EOSchemaGenerationOptions optionsCreate) {
 		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext.adaptorContext().adaptor(), optionsCreate);
 	}
 
@@ -230,18 +229,19 @@ public class ERXSQLHelper {
 	 * @return the sql script
 	 */
 	public String createDependentSchemaSQLForEntities(NSArray<EOEntity> entities, EOAdaptor adaptor) {
-		NSMutableDictionary<String, String> optionsCreateTables = new NSMutableDictionary<String, String>();
-		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
-		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
-		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		optionsCreateTables.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
-		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		EOSchemaGenerationOptions optionsCreateTables = new EOSchemaGenerationOptions();
+		optionsCreateTables.setDropTables(false);
+		optionsCreateTables.setDropPrimaryKeySupport(false);
+		optionsCreateTables.setCreateTables(true);
+		optionsCreateTables.setCreatePrimaryKeySupport(true);
+		optionsCreateTables.setPrimaryKeyConstraints(true);
+		optionsCreateTables.setForeignKeyConstraints(false);
+		optionsCreateTables.setCreateDatabase(false);
+		optionsCreateTables.setDropDatabase(false);
 		StringBuilder sqlBuffer = new StringBuilder();
-		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
-		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
+		EOSchemaSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().schemaSynchronizationFactory();
+		
+		NSArray<EOSQLExpression> creationScript = sf.schemaCreationStatementsForEntities(entities, optionsCreateTables);
 		sqlBuffer.append(creationScript);
 		
 		NSMutableArray<EOEntity> foreignKeyEntities = entities.mutableClone();
@@ -256,15 +256,15 @@ public class ERXSQLHelper {
 			}
 		}
 		
-		NSMutableDictionary<String, String> optionsCreateForeignKeys = new NSMutableDictionary<String, String>();
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateTablesKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		optionsCreateForeignKeys.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-		optionsCreateForeignKeys.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		EOSchemaGenerationOptions optionsCreateForeignKeys = new EOSchemaGenerationOptions();
+		optionsCreateForeignKeys.setDropTables(false);
+		optionsCreateForeignKeys.setDropPrimaryKeySupport(false);
+		optionsCreateForeignKeys.setCreateTables(false);
+		optionsCreateForeignKeys.setCreatePrimaryKeySupport(true);
+		optionsCreateForeignKeys.setPrimaryKeyConstraints(false);
+		optionsCreateForeignKeys.setForeignKeyConstraints(true);
+		optionsCreateForeignKeys.setCreateDatabase(false);
+		optionsCreateForeignKeys.setDropDatabase(false);
 		String foreignKeyScript = sf.schemaCreationScriptForEntities(foreignKeyEntities, optionsCreateForeignKeys);
 		sqlBuffer.append(foreignKeyScript);
 		
@@ -277,14 +277,14 @@ public class ERXSQLHelper {
 	 *            the entities to create sql for
 	 * @param adaptor
 	 *            the adaptor to use
-	 * @param optionsDictionary
+	 * @param options
 	 *            the options (@see
 	 *            createSchemaSQLForEntitiesInModelWithNameAndOptions)
 	 * @return a sql script
 	 */
-	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EOAdaptor adaptor, NSDictionary<String, String> optionsDictionary) {
-		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
-		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsDictionary);  
+	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EOAdaptor adaptor, EOSchemaGenerationOptions options) {
+		EOSchemaSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().schemaSynchronizationFactory();
+		String creationScript = sf.schemaCreationScriptForEntities(entities, options);
 		return creationScript;
 	}
 
@@ -349,16 +349,16 @@ public class ERXSQLHelper {
 	 * @return a <code>String</code> containing SQL statements to create
 	 *         tables
 	 */
-	public NSMutableDictionary<String, String> defaultOptionDictionary(boolean create, boolean drop) {
-		NSMutableDictionary<String, String> optionsCreate = new NSMutableDictionary<String, String>();
-		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
-		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
-		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+	public EOSchemaGenerationOptions defaultOptionDictionary(boolean create, boolean drop) {
+		EOSchemaGenerationOptions optionsCreate = new EOSchemaGenerationOptions();
+		optionsCreate.setDropTables(drop);
+		optionsCreate.setDropPrimaryKeySupport(drop);
+		optionsCreate.setCreateTables(create);
+		optionsCreate.setCreatePrimaryKeySupport(create);
+		optionsCreate.setPrimaryKeyConstraints(create);
+		optionsCreate.setForeignKeyConstraints(create);
+		optionsCreate.setCreateDatabase(false);
+		optionsCreate.setDropDatabase(false);
 		return optionsCreate;
 	}
 
@@ -416,7 +416,7 @@ public class ERXSQLHelper {
 				String key = keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
-					if (ERXStringUtilities.isDigitsOnly(numbers)) {
+					if (StringUtils.isNumeric(numbers)) {
 						String attributeNames = (String) d.objectForKey(key);
 						if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) {
 							continue;
@@ -1678,7 +1678,23 @@ public class ERXSQLHelper {
 			return sqlHelper;
 		}
 	}
-
+	
+	static protected String extractSchemaName(String fullName, String delimiter) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		if (splitted.length == 1)
+			return "";
+		return delimiter + splitted[0] + delimiter + '.';
+	}
+	
+	static protected String extractTableName(String fullName, String delimiter) {
+		if (fullName == null)
+			return null;
+		String splitted[] = fullName.split("\\."); 
+		return delimiter + splitted[0] + delimiter;
+	}
+	
 	public static class EROracleSQLHelper extends ERXSQLHelper.OracleSQLHelper {
 	}
 
@@ -1716,7 +1732,7 @@ public class ERXSQLHelper {
 		 * @see ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
 		 */
 		@Override
-		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
+		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, EOSchemaGenerationOptions optionsCreate) {
 			String oldConstraintName = null;
 			int i = 0;
 			String s = super.createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
@@ -1831,7 +1847,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + "." + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -1840,7 +1858,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -1907,13 +1927,17 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "ALTER TABLE " + schemaName + tableName + " ADD CONSTRAINT " + tableName + ".\"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
 		}
 		
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE INDEX \""+indexName+"\" ON "+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE INDEX \""+indexName+"\" ON "+schemaName+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
 		}
 
 		/**
@@ -1956,16 +1980,21 @@ public class ERXSQLHelper {
 			return 0;
 		}
 
+
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+schemaName+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE INDEX \""+indexName+"\" ON "+tableName+	" ("+columnNames.componentsJoinedByString(", ")+")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE INDEX \""+indexName+"\" ON "+schemaName+tableName+" ("+columnNames.componentsJoinedByString(", ")+")";
 		}
 		
 		/**
@@ -2067,13 +2096,17 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "ALTER TABLE " + schemaName + tableName + " ADD CONSTRAINT " + tableName + ".\"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
-			return "CREATE INDEX \""+indexName+"\" ON \""+tableName+"\" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
+			String schemaName = extractSchemaName(tableName, "\"");
+			tableName = extractTableName(tableName, "\"");
+			return "CREATE INDEX "+tableName+".\""+indexName+"\" ON "+schemaName+tableName+" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
 		}
 
 		@Override
@@ -2144,7 +2177,7 @@ public class ERXSQLHelper {
 			if (columnName == null)
 				return null;
 
-			int i = columnName.lastIndexOf(46);
+			int i = columnName.lastIndexOf('.');
 			
 			if (i == -1)
 				return "\"" + columnName + "\"";
@@ -2248,7 +2281,9 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			StringBuffer sql = new StringBuffer();
-			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
+			String schemaName = extractSchemaName(tableName, "`");
+			tableName = extractTableName(tableName, "`");
+			sql.append("ALTER TABLE " + schemaName + tableName + " ADD UNIQUE " + tableName + ".`" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
 			return sql.toString();
@@ -2257,10 +2292,13 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			StringBuffer sql = new StringBuffer();
-			sql.append("CREATE INDEX `"+ indexName + "` ON `"+tableName+"` (");
+			String schemaName = extractSchemaName(tableName, "`");
+			tableName = extractTableName(tableName, "`");
+			sql.append("CREATE INDEX `" + indexName + "` ON " + schemaName + tableName + " (");
 			_appendIndexColNames(sql, columnIndexes);
 			sql.append(')');
-			return sql.toString();
+			String temp = sql.toString();
+			return temp;
 		}
 
 		private void _appendIndexColNames(StringBuffer sql, ColumnIndex... columnIndexes) {
@@ -2402,7 +2440,9 @@ public class ERXSQLHelper {
 				columnNames.addObject(columnIndex.columnName());
 			}
 			indexName = indexName.replace('.', '_');
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2411,7 +2451,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2531,7 +2573,9 @@ public class ERXSQLHelper {
 				columnNames.addObject(columnIndex.columnName());
 			}
 			indexName = indexName.replace('.', '_');
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override
@@ -2540,7 +2584,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 	}
@@ -2615,7 +2661,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -2624,7 +2672,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 	}
@@ -2698,7 +2748,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 		
 		@Override
@@ -2707,7 +2759,9 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
-			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			String schemaName = extractSchemaName(tableName, "");
+			tableName = extractTableName(tableName, "");
+			return "CREATE INDEX " + indexName + " ON " + schemaName + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
 		@Override

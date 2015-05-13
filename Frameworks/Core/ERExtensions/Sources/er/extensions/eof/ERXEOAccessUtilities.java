@@ -36,6 +36,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -708,9 +709,9 @@ public class ERXEOAccessUtilities {
      * @return a <code>String</code> containing SQL statements to create
 	 *         tables
      * 
-     * @see er.extensions.jdbc.ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
+     * @see er.extensions.jdbc.ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, EOSchemaGenerationOptions)
      */
-    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, EOSchemaGenerationOptions optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
@@ -746,7 +747,7 @@ public class ERXEOAccessUtilities {
      * @deprecated
      */
     @Deprecated
-    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, EOSchemaGenerationOptions optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
@@ -761,7 +762,7 @@ public class ERXEOAccessUtilities {
      * @deprecated
      */
     @Deprecated
-    public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
+    public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, EOSchemaGenerationOptions optionsCreate) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
     
