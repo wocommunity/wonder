@@ -1,5 +1,20 @@
 package com.webobjects.jspservlet;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
@@ -10,23 +25,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSLog.Logger;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableRange;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Fixes a bug in servletDispatchRequest() that manifests when a WOResponse
@@ -95,7 +95,7 @@ public class _WOApplicationWrapper
 
     Map<String, Object> ourUserInfo = new HashMap(userInfo.size());
     for (Iterator<String> mapEnum = userInfo.keySet().iterator(); mapEnum.hasNext();) {
-      String key = (String)mapEnum.next();
+      String key = mapEnum.next();
       ourUserInfo.put(key, userInfo.get(key));
     }
     
@@ -180,7 +180,8 @@ public class _WOApplicationWrapper
       
       if (is == null) {
         NSMutableRange range = new NSMutableRange();
-        byte[] contentBytesNoCopy = ourContent.bytesNoCopy(range);
+        @SuppressWarnings("null") // as neither ourContent and is may be null
+		byte[] contentBytesNoCopy = ourContent.bytesNoCopy(range);
         out.write(contentBytesNoCopy, range.location(), range.length());
       } else {
         try {
@@ -240,8 +241,8 @@ public class _WOApplicationWrapper
     Iterator<String> mapEnum;
     if (extraHeaders != null) {
       for (mapEnum = extraHeaders.keySet().iterator(); mapEnum.hasNext();) {
-        String key = (String)mapEnum.next();
-        List<String> value = (List)extraHeaders.get(key);
+        String key = mapEnum.next();
+        List<String> value = extraHeaders.get(key);
         if (value == null) {
           headers.remove(key.toLowerCase());
         } else {
@@ -269,15 +270,15 @@ public class _WOApplicationWrapper
   }
   
   private static void _mergeHeaders(WOResponse woResponse, HttpServletResponse servletResponse) {
-    for (Iterator iterator = woResponse.headerKeys().iterator(); iterator.hasNext();) { String key = (String)iterator.next();
-      String lowercaseKey = key.toLowerCase();
-      if (!"content-length".equals(lowercaseKey)) {
-        for (String value : woResponse.headersForKey(lowercaseKey)) {
-          servletResponse.addHeader(key, value);
-        }
-      }
-    }
-    String key;
+	  for (Iterator iterator = woResponse.headerKeys().iterator(); iterator.hasNext();) { 
+		  String key = (String)iterator.next();
+		  String lowercaseKey = key.toLowerCase();
+		  if (!"content-length".equals(lowercaseKey)) {
+			  for (String value : woResponse.headersForKey(lowercaseKey)) {
+				  servletResponse.addHeader(key, value);
+			  }
+		  }
+	  }
   }
   
   public String servletResponseForComponentWithName(String name, Map<String, Object> bindings, Map<String, ? extends List<String>> extraHeaders, Map<String, Object> userInfo, String urlPrefix, String appName, boolean mergeResponseHeaders, boolean isDeployed)
