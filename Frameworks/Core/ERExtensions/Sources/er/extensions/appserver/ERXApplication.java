@@ -1261,9 +1261,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	        }
 	    }
 
-		if (isDeployedAsServlet()) {
-			NSNotificationCenter.defaultCenter().postNotification(WOApplication.ApplicationDidFinishLaunchingNotification, this);
-		}
 	}
 
 	/**

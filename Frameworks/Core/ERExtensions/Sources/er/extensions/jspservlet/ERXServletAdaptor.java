@@ -6,6 +6,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.jspservlet.WOServletAdaptor;
 
 public class ERXServletAdaptor extends WOServletAdaptor
@@ -34,8 +36,12 @@ public class ERXServletAdaptor extends WOServletAdaptor
         }
     }
     
+	@Override
     public void init() throws ServletException {
         invokeApplicationSetupMethod(this.getServletContext());
         super.init();
+        
+        // Fix for wocommunity/wonder#642
+		NSNotificationCenter.defaultCenter().postNotification(WOApplication.ApplicationDidFinishLaunchingNotification, this);
     }
 }
