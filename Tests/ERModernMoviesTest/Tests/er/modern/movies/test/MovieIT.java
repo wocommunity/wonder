@@ -5,18 +5,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 public class MovieIT extends AbstractSelenideIT {
-
-    @Before
-    public void setUp() throws Exception {
-        System.setProperty("selenide.baseUrl",
-                "http://127.0.0.1:9876/cgi-bin/WebObjects/ERModernMoviesTest.woa");
-        System.setProperty("browser", "phantomjs");
-    }
 
     @Test
     public void searchByCompleteTitleTest() {
