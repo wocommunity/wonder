@@ -70,8 +70,11 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	protected final Logger log = Logger.getLogger(getClass());
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger.getLogger(AjaxFlexibleFileUpload.class);
 	
 	public static interface Keys {
 		public static final String name = "name";
