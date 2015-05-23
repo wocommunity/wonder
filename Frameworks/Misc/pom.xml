@@ -25,7 +25,7 @@
 		<module>ERXiss</module>
 		<module>JavaMonitorFramework</module>
 		<module>SnapshotExplorer</module>
-		<module>WOJRebel</module>
+		<!--<module>WOJRebel</module>-->
 		<module>WOLips</module>
 	</modules>
 </project>
