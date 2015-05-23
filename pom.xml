@@ -12,14 +12,11 @@
         <module>Applications</module>
         <module>Examples</module>
         <module>Frameworks</module>
-        <!-- Tests module configuration not finished yet -->
-        <!-- <module>Tests</module> -->
+        <module>Tests</module>
         <module>Utilities</module>
     </modules>
 
     <properties>
-        <!-- VERY BAD PRACTICE: But there are broken tests -->
-        <maven.test.skip>true</maven.test.skip>
         <skip.apple.frameworks>true</skip.apple.frameworks>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
