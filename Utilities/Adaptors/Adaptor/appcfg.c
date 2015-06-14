@@ -1232,7 +1232,7 @@ static char *_retrieveServerInfo(ConfigServer *server, net_fd s, int *len, char 
    }
    tr_close(c, AC_INVALID_HANDLE, 0);
    if (resp != NULL) {
-      *len = resp->content_length;
+      *len = (int) resp->content_length;
       *content_type = '\0';
       if (resp->status == HTTP_OK) {
          /* may be NOT_MODIFIED (or worse!) */

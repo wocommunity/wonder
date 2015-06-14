@@ -1,6 +1,7 @@
 package er.jqm.components.core;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -11,6 +12,9 @@ import com.webobjects.foundation.NSMutableDictionary;
  * id
  * class
  * value
+ * 
+ * localValues
+ * localMatchFromStart <strong>true</strong> | false
  * 
  * data-corners	<strong>true</strong> | false
  * data-clear-btn	true | <strong>false</strong> - Adds a clear button
@@ -69,6 +73,47 @@ public class ERQMAutoComplete extends ERQMTextField
 	public String hiddenValueId()
 	{
 		return "h_" + javaScriptElementID();
+	}
+
+	public boolean hasLocalValues()
+	{
+		return hasBinding("localValues");
+	}
+
+	public String localValuesAsString()
+	{
+		String result = null;
+		Object obj = _objectValueForBinding("localValues", null, null);
+		if (obj != null)
+		{
+			if (obj instanceof String)
+			{
+				result = (String) obj;
+			}
+			else if (obj instanceof NSArray)
+			{
+				@SuppressWarnings("unchecked")
+				NSArray<Object> array = (NSArray<Object>) obj;
+				StringBuffer buf = new StringBuffer();
+				for (int i = 0; i < array.count(); i++)
+				{
+					if (i > 0)
+					{
+						buf.append(", ");
+					}
+					buf.append("'");
+					buf.append(array.get(i).toString());
+					buf.append("'");
+				}
+				result = buf.toString();
+			}
+		}
+		return result;
+	}
+
+	public boolean localMatchFromStart()
+	{
+		return booleanValueForBinding("localMatchFromStart", true);
 	}
 
 	public String jsonActionClass()

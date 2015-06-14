@@ -4,29 +4,30 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
 public class ReadOnlyInsetList extends SampleComponentBase {
 
-  //********************************************************************
-  //  Constructor
-  //********************************************************************
+	private static final long serialVersionUID = 1L;
 
-  public ReadOnlyInsetList(WOContext aContext) {
-    super(aContext);
-  }
+	//********************************************************************
+	//  Constructor : コンストラクタ
+	//********************************************************************
 
-  //********************************************************************
-  //  Methods
-  //********************************************************************
+	public ReadOnlyInsetList(WOContext aContext) {
+		super(aContext);
+	}
 
-  public int _index;
+	//********************************************************************
+	//  Methods : メソッド
+	//********************************************************************
 
-  public String iconName() {
-    return "images/flag-0" + _index + ".png";
-  }
+	public int _index;
 
-  public String fileName() {
-    return "images/album-0" + _index + ".jpg";
-  }
+	public String iconName() {
+		return "images/flag-0" + _index + ".png";
+	}
+
+	public String fileName() {
+		return "images/album-0" + _index + ".jpg";
+	}
 
 }

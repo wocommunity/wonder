@@ -2,11 +2,12 @@ package er.jquerymobile.exampleapp.components;
 
 import com.webobjects.appserver.WOContext;
 
-@SuppressWarnings("serial")
 public class FormList extends FormInsetList {
 
+  private static final long serialVersionUID = 1L;
+
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
   public FormList(WOContext aContext) {

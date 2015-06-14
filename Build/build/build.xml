@@ -23,15 +23,19 @@
     <property name="framework.erjars.commons.codec" value="commons-codec-1.6.jar" />
     <property name="framework.erjars.commons.io" value="commons-io-2.2.jar" />
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
-    <property name="framework.erjars.httpclient" value="httpclient-4.3.1.jar" />
-    <property name="framework.erjars.httpcore" value="httpcore-4.3.jar" />
+    <property name="framework.erjars.commons.lang3" value="commons-lang3-3.1.jar" />
+    <property name="framework.erjars.fluent-hc" value="fluent-hc-4.3.6.jar" />
+    <property name="framework.erjars.httpclient" value="httpclient-4.3.6.jar" />
+    <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.3.6.jar" />
+    <property name="framework.erjars.httpcore" value="httpcore-4.3.3.jar" />
+    <property name="framework.erjars.httpmime" value="httpmime-4.3.6.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
     <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
     <property name="framework.erjars.ognl" value="ognl-2.6.7.jar" />
-    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.5.jar" />
-    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.5.jar" />
+    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.10.jar" />
+    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.10.jar" />
 
     <target name="ERJars.all">
         <fail message="Please check versions of jar files included in ERJars project. See properties in Build/build//build.xml.">
@@ -42,8 +46,12 @@
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.codec}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.io}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang3}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.fluent-hc}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient-cache}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpcore}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpmime}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.icu4j}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.joda}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.junit}" />
@@ -1342,7 +1350,7 @@
             <param name="project.name" value="JqueryMobileExample" />
             <param name="project.dir" value="Examples/Ajax/JqueryMobileExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJQueryMobile/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/ERJQMobile/H2PlugIn/WOOgnl" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
         </antcall>
@@ -1644,6 +1652,7 @@
                 <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
                 <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang3}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERFoundation.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERJars.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERWebObjects.jar" />

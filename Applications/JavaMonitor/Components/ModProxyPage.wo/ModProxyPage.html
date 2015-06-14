@@ -1,0 +1,209 @@
+<webobject name="NavPage">
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">Parameter settings</h2>
+    <br />
+    <webobject name="ParamForm">
+      <table class="FormFieldTable">
+        <tr>
+          <th>Timeout</th>
+          <td><webobject name="TFTimeout" /></td>
+        </tr>
+        <tr>
+          <th>Load Balancer</th>
+          <td><webobject name="PBLoadBalancer" /></td>
+        </tr>
+      </table>
+      <p><webobject name="BtnSubmit" /></p>
+    </webobject>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">Apache mod_proxy and proxy_balancer_module settings</h2>
+    <p>Copy this in your proxy-webobjects.conf file for your Apache 2.x WebServer:</p>
+    <pre><code><webobject name="adaptorProxyContent"></webobject></code></pre>
+    <p>More proxy pass parameters are described 
+      <a href="http://httpd.apache.org/docs/current/mod/mod_proxy.html#proxypass" target="_blank">here.</a>
+    </p>
+    <p>
+      <span class="Comment">If you run your application on different machines be shure your applications use differen ports!</span>
+    </p>
+    <p>
+      <span class="Comment">Don't forget to remove mod_webobjects.so and your old webobjects.conf.</span>
+    </p>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">Common configuration</h2>
+    <p />
+    <h3>Needed apache modules</h3>
+    <p />
+    <ul>
+      <li>LoadModule 
+        <strong>slotmem_shm_module</strong>
+        libexec/apache2/mod_slotmem_shm.so</li>
+      <li>LoadModule 
+        <strong>proxy_module</strong>
+        libexec/apache2/mod_proxy.so</li>
+      <li>LoadModule 
+        <strong>proxy_http_module</strong>
+        libexec/apache2/mod_proxy_http.so</li>
+      <li>LoadModule 
+        <strong>proxy_balancer_module</strong>
+        libexec/apache2/mod_proxy_balancer.so</li>
+      <li>LoadModule 
+        <strong>lbmethod_byrequests_module</strong>
+        libexec/apache2/mod_lbmethod_byrequests.so<br />
+        <span class="Comment">(Or one of: mod_lbmethod_bytraffic.so, mod_lbmethod_bybusyness.so, mod_lbmethod_heartbeat.so)</span>
+      </li>
+      <li>LoadModule 
+        <strong>status_module</strong>
+        libexec/apache2/mod_status.so<br />
+        <span class="Comment">(If you want to use /blancer_manager)</span></li>
+      <li>LoadModule 
+        <strong>rewrite_module</strong>
+        libexec/apache2/mod_rewrite.so<br />
+        <span class="Comment">(If you want to use url rewrite)</span></li>
+    </ul>
+    <p />
+    <h3>Insert the following in your httpd.conf file</h3>
+    <p />
+    <pre>
+&lt;IfModule proxy_module&gt;
+# Turn Forward Proxy off
+ProxyRequests Off
+
+# We want all previous proxy routes
+ProxyVia Full
+
+# Just in case: Deny proxy access
+&lt;Proxy *&gt;
+    Order deny,allow
+    Deny from none
+    Allow from localhost
+&lt;/Proxy&gt;
+
+# Balancer-manager: Allowed only from localhost
+&lt;Location /balancer-manager&gt;
+    SetHandler balancer-manager
+
+    Order deny,allow
+    Deny from none
+    Allow from localhost
+&lt;/Location&gt;
+
+# Include conf/extra/proxy-webobjects.conf
+# Mac OSX -&gt;
+# Include /private/etc/apache2/extra/proxy-webobjects.conf
+
+&lt;/IfModule&gt;
+    </pre>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">Changes in your Application class</h2>
+    <pre>
+    public Application() {
+        super();
+        ...
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("addBalancerRouteCookieByNotification", new Class[] { NSNotification.class }),
+            WORequestHandler.DidHandleRequestNotification, null);
+    }
+     
+    private String _proxyBalancerRoute = null;
+    private String _proxyBalancerCookieName = null;
+    private String _proxyBalancerCookiePath = null;
+
+    public void addBalancerRouteCookieByNotification(NSNotification notification) {
+        if (notification.object() instanceof WOContext) {
+            addBalancerRouteCookie((WOContext) notification.object());
+        }
+    }
+
+    public void addBalancerRouteCookie(WOContext context) {
+        if (context != null && context.request() != null && context.response() != null) {
+            if (_proxyBalancerRoute == null) {
+                _proxyBalancerRoute = (name() + "_" + port().toString()).toLowerCase();
+                _proxyBalancerRoute = "." + _proxyBalancerRoute.replace('.', '_');
+            }
+            if (_proxyBalancerCookieName == null) {
+                _proxyBalancerCookieName = ("routeid_" + name()).toLowerCase();
+                _proxyBalancerCookieName = _proxyBalancerCookieName.replace('.', '_');
+            }
+            if (_proxyBalancerCookiePath == null) {
+                _proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
+            }
+        }
+        WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
+        cookie.setExpires(null);
+        context.response().addCookie(cookie);
+    }
+</pre>
+    <br />
+    <h3>If you need the client ip you need to ask for 'x-forwarded-for' e.g.:</h3>
+    <pre>
+    public static String clientIP(WORequest request) {
+        Object ipAddress = request.headerForKey("x-forwarded-for");
+        if (ipAddress != null && ipAddress.toString().length() > 0) {
+            ipAddress = StringUtils.split(ipAddress.toString(), ',')[0];
+        }
+        if (ipAddress == null) {
+            ipAddress = request._remoteAddress();
+            if (ipAddress == null) {
+                ipAddress = request._originatingAddress();
+                if (ipAddress == null) {
+                    ipAddress = request.headerForKey("remote_host");
+                }
+                else {
+                    ipAddress = ((InetAddress) ipAddress).getHostAddress();
+                }
+            }
+        }
+        if (ipAddress != null) {
+            return ipAddress.toString();
+        }
+        return null;
+    }
+</pre>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">URL rewrite rules</h2>
+    <p>If you want to rewrite your application URLs from /cgi-bin/WebObjects/YourApp.woa to /yourapp, you can set the following properties and add the apache rewrite rule</p>
+<pre><code><webobject name="adaptorRewriteContent"></webobject></code></pre>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">Error handling</h2>
+    <br />
+    <p>Examle to add your own error pages</p>
+    <pre>
+    # error folder
+    &lt;Location "/errors"&gt;
+        Options -Indexes
+        Order Deny,Allow
+        Allow from all
+    &lt;/Location&gt;
+    
+    # Proxy everything except for /error
+    ProxyPass /errors !
+
+    # Service unavailable
+    ErrorDocument 503 /errors/error503.html
+</pre>
+  </div>
+  <div class="Box ModProxyBox">
+    <h2 class="SectionHeader">More information</h2>
+    <br />
+    <h4>Basic</h4>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_proxy.html">proxy</a>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_proxy_balancer.html">balancer</a>
+    <br />
+    <br />
+    <h4>Load balancing methods</h4>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_lbmethod_byrequests.html">requests</a>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_lbmethod_bytraffic.html">traffic</a>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_lbmethod_bybusyness.html">busyness</a>
+    <br />
+    <a target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_lbmethod_heartbeat.html">heartbeat</a>
+  </div>
+</webobject>

@@ -56,12 +56,13 @@ public class ERQMSessionPing extends ERQMComponentBase
 
 		StringBuilder b = new StringBuilder();
 		b.append("<script>");
+		b.append("var pingTimer = null;");
 		b.append("function jqmPingSesseion() {");
 		b.append(" var url = '" + url() + "' + '&t=' +new Date().getTime();");
 		b.append(" $.get( url )");
 		b.append(".fail(function() { " + onFailure() + " })");
-		b.append(".always(function() { setTimeout(jqmPingSesseion, " + frequency() + " ); });}\n");
-		b.append("$(document).ready(function() { setTimeout(jqmPingSesseion, " + frequency() + " );});");
+		b.append(".always(function() { if (pingTimer != null) clearTimeout(pingTimer); pingTimer = setTimeout(jqmPingSesseion, " + frequency() + " ); });}\n");
+		b.append("$(document).ready(function() { pingTimer =  setTimeout(jqmPingSesseion, " + frequency() + " );});");
 		b.append("</script>");
 
 		response.appendContentString(b.toString());

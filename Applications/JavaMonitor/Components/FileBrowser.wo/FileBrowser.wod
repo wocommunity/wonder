@@ -70,3 +70,8 @@ SubmitJumpTo : WOSubmitButton {
 MessageString: WOString {
     value = errorMsg;
 }
+
+ShowFileBrowser: WOConditional {
+    condition = hasErrorMsg;
+    negate = true;
+}
