@@ -3,11 +3,7 @@
     <parent>
         <groupId>wonder.frameworks</groupId>
         <artifactId>core</artifactId>
-<<<<<<< HEAD
         <version>7.0.0-SNAPSHOT</version>
-=======
-        <version>6.1.4-SNAPSHOT</version>
->>>>>>> master
     </parent>
 
     <groupId>wonder.core</groupId>
