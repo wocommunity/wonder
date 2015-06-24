@@ -9,6 +9,7 @@
 	<artifactId>ERJavaMail</artifactId>
 	<name>ERJavaMail Framework</name>
 	<packaging>woframework</packaging>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
@@ -60,6 +61,12 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>pop3</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>wonder.javamail</groupId>
+			<artifactId>mockmail</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

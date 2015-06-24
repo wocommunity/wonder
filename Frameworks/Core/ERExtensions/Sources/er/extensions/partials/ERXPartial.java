@@ -1,5 +1,7 @@
 package er.extensions.partials;
 
+import java.io.Serializable;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -50,7 +52,12 @@ import er.extensions.eof.ERXGenericRecord;
  * @param <T>
  *            the EO class that this is a partial of
  */
-public class ERXPartial<T extends ERXGenericRecord> {
+public class ERXPartial<T extends ERXGenericRecord> implements Serializable {
+	/**
+	 * Serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * This partial's primary EO
 	 */

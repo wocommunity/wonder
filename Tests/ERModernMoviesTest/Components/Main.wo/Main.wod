@@ -1,0 +1,35 @@
+LoginForm : WOForm {
+  multipleSubmit = false;
+  directActionName = "login";
+  actionClass = "DirectAction";
+  name="LoginForm";
+}
+
+UsernameField : WOTextField {
+  value = username;
+  name = "username";
+}
+
+PasswordField : WOPasswordField {
+  value = password;
+  name = "password";
+}
+
+Stylesheet : ERXStyleSheet {
+	filename = "default_login_page.css";
+	framework = "ERModernDefaultSkin";
+}
+
+HasErrorMessage : WOConditional {
+  condition = errorMessage;
+}
+
+ErrorMessage : WOString {
+  value = errorMessage;
+}
+
+DefaultSubmit : WOImageButton {
+  filename = "s.gif";
+  framework = "ERExtensions";
+  directActionName = "login";
+}

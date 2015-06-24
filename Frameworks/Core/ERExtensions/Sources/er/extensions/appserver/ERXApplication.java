@@ -1260,6 +1260,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	        	_replaceApplicationPathReplace = "";
 	        }
 	    }
+
 	}
 
 	/**

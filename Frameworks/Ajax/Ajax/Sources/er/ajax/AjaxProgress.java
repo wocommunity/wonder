@@ -13,11 +13,19 @@ import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 /**
  * AjaxProgress is the model for an AjaxProgressBar.  By holding
  * onto this, you can keep track of and control the progress
- * of whatever operation is bound to this progress object. 
- * 
+ * of whatever operation is bound to this progress object.
+ *
  * @author mschrag
  */
 public class AjaxProgress {
+
+    /**
+     * Do I need to update serialVersionUID?
+     * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the
+     * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+     */
+    private static final long serialVersionUID = 1L;
+
 	private String _id;
 	private long _value;
 	private long _maximum;
@@ -30,7 +38,7 @@ public class AjaxProgress {
 
 	/**
 	 * Construct an AjaxProgress
-	 * 
+	 *
 	 * @param maximum the maximum value of this progress
 	 */
 	public AjaxProgress(long maximum) {
@@ -60,7 +68,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns the id of this progress model.
-	 * 
+	 *
 	 * @return the id of this progress model
 	 */
 	public String id() {
@@ -71,7 +79,7 @@ public class AjaxProgress {
 	 * Sets the current value of this progress model.  In the context of
 	 * an upload, value would represent the number of bytes uploaded
 	 * so far.
-	 *  
+	 *
 	 * @param value the new value
 	 */
 	public void setValue(long value) {
@@ -81,7 +89,7 @@ public class AjaxProgress {
 	/**
 	 * Returns the current value of this progress model.  If this
 	 * model isSucceeded, then this will return maximum().
-	 *  
+	 *
 	 * @return the current value of this progress model
 	 */
 	public long value() {
@@ -97,7 +105,7 @@ public class AjaxProgress {
 
 	/**
 	 * Increment value by the given amount.
-	 * 
+	 *
 	 * @param count the mount to increment value by
 	 */
 	public void incrementValue(long count) {
@@ -106,7 +114,7 @@ public class AjaxProgress {
 
 	/**
 	 * Sets the maximum value for this progress model.
-	 * 
+	 *
 	 * @param maximum the maximum value for this progress model
 	 */
 	public void setMaximum(long maximum) {
@@ -115,7 +123,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns the maximum value for this progress model.
-	 * 
+	 *
 	 * @return the maximum value for this progress model
 	 */
 	public long maximum() {
@@ -124,7 +132,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns the percentage completion of this progress model (0.0 - 1.0).
-	 * 
+	 *
 	 * @return the percentage completion of this progress model (0.0 - 1.0)
 	 */
 	public double percentage() {
@@ -139,7 +147,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns whether or not this procedure has started.
-	 * 
+	 *
 	 * @return whether or not this procedure has started
 	 */
 	public boolean isStarted() {
@@ -148,7 +156,7 @@ public class AjaxProgress {
 
 	/**
 	 * Sets whether or not this procedure is done.
-	 * 
+	 *
 	 * @param done whether or not this procedure is done
 	 */
 	public void setDone(boolean done) {
@@ -157,7 +165,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns whether or not this procedure is done.
-	 * 
+	 *
 	 * @return whether or not this procedure is done
 	 */
 	public boolean isDone() {
@@ -166,7 +174,7 @@ public class AjaxProgress {
 
 	/**
 	 * Sets the exception that caused this procedure to fail.
-	 * 
+	 *
 	 * @param failure the exception that caused this procedure to fail
 	 */
 	public void setFailure(Throwable failure) {
@@ -206,7 +214,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns true if this procedure is done, not canceled, and not failed.
-	 * 
+	 *
 	 * @return true if this procedure is done, not canceled, and not failed
 	 */
 	public boolean isSucceeded() {
@@ -222,13 +230,13 @@ public class AjaxProgress {
 
 	/**
 	 * Sets whether or not this procedure has notified listeners of its completion.
-	 * 
+	 *
 	 * @param completionEventsFired whether or not this procedure has notified listeners of its completion
 	 */
 	public void setCompletionEventsFired(boolean completionEventsFired) {
 		_completionEventsFired = completionEventsFired;
 	}
-	
+
 	/**
 	 * Returns whether or not this procedure has notified listeners of its completion.
 	 * @return whether or not this procedure has notified listeners of its completion
@@ -236,44 +244,44 @@ public class AjaxProgress {
 	public boolean completionEventsFired() {
 		return _completionEventsFired;
 	}
-	
+
 	/**
 	 * Flags the attached procedure to reset the next time it is processed.
 	 */
 	public void reset() {
 		_reset = true;
 	}
-	
+
 	/**
 	 * Returns whether or not the attached procedure should reset the next time it is processed.
-	 * 
+	 *
 	 * @return whether or not the attached procedure should reset the next time it is processed
 	 */
 	public boolean shouldReset() {
 		return _reset;
 	}
-	
+
 	/**
 	 * Sets the current status message for this process.
-	 * 
+	 *
 	 * @param status the current status message for this process
 	 */
 	public void setStatus(String status) {
 		_status = status;
 	}
-	
+
 	/**
 	 * Returns the current status message for this process.
-	 * 
+	 *
 	 * @return the current status message for this process
 	 */
 	public String status() {
 		return _status;
 	}
-	
+
 	/**
 	 * Convenience method for copying a stream and tracking it with this progress model.
-	 * 
+	 *
 	 * @param inputStream the input stream to copy from
 	 * @param outputStream the output stream to copy to
 	 * @param maxSize the maximum size to read
@@ -312,11 +320,11 @@ public class AjaxProgress {
 			throw e;
 		}
 	}
-	
+
 
 	/**
 	 * Register a progress object in the registry.
-	 * 
+	 *
 	 * @param session
 	 *            the session
 	 * @param progress
@@ -333,7 +341,7 @@ public class AjaxProgress {
 
 	/**
 	 * Unregister a progress object from the registry.
-	 * 
+	 *
 	 * @param session
 	 *            the session
 	 * @param progress
@@ -348,7 +356,7 @@ public class AjaxProgress {
 
 	/**
 	 * Returns the progress object with the given id (or null if one does not exist).
-	 * 
+	 *
 	 * @param session
 	 *            the session
 	 * @param id
