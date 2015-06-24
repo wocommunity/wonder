@@ -161,7 +161,6 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T first(NSArray<T> array, EOQualifier qualifier) {
 		T object = null;
