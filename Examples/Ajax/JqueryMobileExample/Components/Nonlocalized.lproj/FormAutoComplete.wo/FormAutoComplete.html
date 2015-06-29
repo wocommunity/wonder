@@ -1,0 +1,15 @@
+<wo:JQPageWrapper title = "Form Auto Complete">
+  <h1>Auto Complete</h1>
+  <wo:form>
+    <h4>Local Array (match from start)</h4>
+    <wo:ERQMAutoComplete type = "search" value = "$testStringLocal" localValues = "$programmingLanguages" minLength = "1" hideLabel = "true" label = "Movie" placeholder = "Programming language" list-data-icon = "false" />
+    <h4>Local Array (match any)</h4>
+    <wo:ERQMAutoComplete type = "search" value = "$testStringLocalAny" localValues = "$programmingLanguages" localMatchFromStart = "false" minLength = "1" hideLabel = "true" label = "Movie" placeholder = "Programming language" list-data-icon = "false" />
+    <h4>Set movie title as string</h4>
+    <wo:ERQMAutoComplete type = "search" value = "$testString" minLength = "1" hideLabel = "true" label = "Movie" placeholder = "Title" jsonAction = "$suggest" list-data-icon = "false" />
+    <h4>Set movie title as string and hidden value. In this case the primary key</h4>
+    <wo:ERQMAutoComplete type = "search" value = "$testStringComplex" valueHidden = "$testStringComplexHidden" minLength = "1" hideLabel = "true" label = "Movie" placeholder = "Title" jsonComplex = "true" jsonAction = "$suggestComplex" list-data-icon = "false" />
+    <br />
+    <wo:ERQMSubmitButton action = "$doSubmitAction" value = "Submit" />
+  </wo:form>
+</wo:JQPageWrapper>

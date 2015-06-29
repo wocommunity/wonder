@@ -151,7 +151,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
-	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
+	protected boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
 	
 	/**
 	 * Notification that is sent when the model group was created form the bundle loading.
@@ -698,11 +698,11 @@ public class ERXModelGroup extends EOModelGroup {
 		return value;
 	}
 
-	private static String getProperty(String key, String alternateKey) {
+	protected static String getProperty(String key, String alternateKey) {
 		return getProperty(key, alternateKey, null);
 	}
 
-	private static String decryptProperty(String key, String alternateKey) {
+	protected static String decryptProperty(String key, String alternateKey) {
 		String value = ERXProperties.decryptedStringForKey(key);
 		if (value == null) {
 			value = ERXProperties.decryptedStringForKey(alternateKey);

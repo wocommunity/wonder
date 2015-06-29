@@ -374,7 +374,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
 		boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
-		if (secure && !generatingCompleteURLs) {
+		boolean requestIsSecure = context.secureMode();
+		boolean switchToCompleteURLs = secure ^ requestIsSecure;
+		if (switchToCompleteURLs && !generatingCompleteURLs) {
 			context.generateCompleteURLs();
 		}
 		try {
@@ -405,7 +407,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			}
 		}
 		finally {
-			if (secure && !generatingCompleteURLs) {
+			if (switchToCompleteURLs && !generatingCompleteURLs) {
 				context.generateRelativeURLs();
 			}
 		}

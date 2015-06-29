@@ -1,83 +1,65 @@
-<wo:ERQMHtmlTemplate title="ReadOnlyInsetList">
-	<wo:ERQMHeaderBar string="ReadOnlyInsetList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<h2>BasicList</h2>
-		<wo:ERQMListView inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie">
-				<wo:ERQMListViewElement><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>CountBubble</h2>
-		<wo:ERQMListView inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie">
-				<wo:ERQMListViewElement countBubble="$oneMovie.directors.count"><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>NumberedList</h2>
-		<wo:ERQMListView isNumberedList="true" inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie">
-				<wo:ERQMListViewElement><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>ContentFormatingList</h2>
-		<wo:ERQMListView inset="true">
-			<wo:ERQMListViewElement sideText="6:24 PM">
-				<h3>Stephen Weber</h3>
-				<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-				<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-			</wo:ERQMListViewElement>
-			
-			<wo:ERQMListViewElement sideText="9:18 AM">
-				<h3>jQuery Team</h3>
-				<p><strong>Boston Conference Planning</strong></p>
-				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-			</wo:ERQMListViewElement>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>IconsList</h2>
-		<wo:ERQMListView inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie" index="$index">
-				<wo:ERQMListViewElement>
-					<wo:ERQMListViewIcon imageResource="$iconName" alt="Test Icon" />
-					<wo:str value = "$oneMovie.title" />
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>ThumbnailsList</h2>
-		<wo:ERQMListView inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie" index="$index">
-				<wo:ERQMListViewElement>
-					<wo:ERQMListViewImage imageResource="$fileName" alt="Test Image" />
-					<h3><wo:str value = "$oneMovie.title" /></h3>
-					<p><wo:str value = "$oneMovie.studio.name" /></p>
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		<br />
-		
-		<h2>SearchFilterBarWithDividersList</h2>
-		<wo:ERQMListView filter="true" inset="true">
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie">
-				<wo:ERQMListViewElement automaticDivider="true" filtertext="$oneMovie.title">
-					<wo:str value = "$oneMovie.title" />
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Read Only Inset List">
+  <h2>BasicList</h2>
+  <wo:ERQMListView data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <h2>CountBubble</h2>
+  <wo:ERQMListView data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement countBubble = "$oneMovie.directors.count"><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <h2>NumberedList</h2>
+  <wo:ERQMListView isNumberedList = "true" data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <h2>ContentFormatingList</h2>
+  <wo:ERQMListView data-inset = "true">
+    <wo:ERQMListViewElement sideText = "6:24 PM">
+      <h3>Stephen Weber</h3>
+      <p>
+        <strong>You've been invited to a meeting at Filament Group in Boston, MA</strong>
+      </p>
+      <p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
+    </wo:ERQMListViewElement>
+    <wo:ERQMListViewElement sideText = "9:18 AM">
+      <h3>jQuery Team</h3>
+      <p>
+        <strong>Boston Conference Planning</strong>
+      </p>
+      <p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+    </wo:ERQMListViewElement>
+  </wo:ERQMListView>
+  <br />
+  <h2>IconsList</h2>
+  <wo:ERQMListView data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie" index = "$index">
+      <wo:ERQMListViewElement imageResource = "$iconName" imageClass = "ui-li-icon"> <wo:str value = "$oneMovie.title" /> </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <h2>ThumbnailsList</h2>
+  <wo:ERQMListView data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie" index = "$index">
+      <wo:ERQMListViewElement>
+        <wo:image src = "$fileName" alt = "Test Image" />
+        <h3><wo:str value = "$oneMovie.title" /></h3>
+        <p><wo:str value = "$oneMovie.studio.name" /></p>
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <h2>SearchFilterBarWithDividersList</h2>
+  <wo:ERQMListView data-filter = "true" data-inset = "true" data-autodividers = "true" data-filter-label = "Name" data-filter-placeholder = "Type a name">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement data-filtertext = "$oneMovie.title"> <wo:str value = "$oneMovie.title" /> </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

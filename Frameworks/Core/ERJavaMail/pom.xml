@@ -3,12 +3,13 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>core</artifactId>
-		<version>6.1.3-SNAPSHOT</version>
+		<version>6.1.4-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
 	<artifactId>ERJavaMail</artifactId>
 	<name>ERJavaMail Framework</name>
 	<packaging>woframework</packaging>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
@@ -60,6 +61,12 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>pop3</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>wonder.javamail</groupId>
+			<artifactId>mockmail</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

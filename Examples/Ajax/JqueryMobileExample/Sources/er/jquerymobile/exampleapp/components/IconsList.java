@@ -4,25 +4,26 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
 public class IconsList extends SampleComponentBase {
 
-  //********************************************************************
-  //  Constructor
-  //********************************************************************
+	private static final long serialVersionUID = 1L;
 
-  public IconsList(WOContext aContext) {
-    super(aContext);
-  }
+	//********************************************************************
+	//  Constructor : コンストラクタ
+	//********************************************************************
 
-  //********************************************************************
-  //  Methods
-  //********************************************************************
+	public IconsList(WOContext aContext) {
+		super(aContext);
+	}
 
-  public int _index;
+	//********************************************************************
+	//  Methods : メソッド
+	//********************************************************************
 
-  public String fileName() {
-    return "images/flag-0" + _index + ".png";
-  }
+	public int _index;
+
+	public String fileName() {
+		return "images/flag-0" + _index + ".png";
+	}
 
 }

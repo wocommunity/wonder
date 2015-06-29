@@ -1,0 +1,33 @@
+NavPage: NavigationPage {
+	currentPage = MOD_PROXY_PAGE;
+	title = "ModProxy";
+	pageId = "ModProxy";
+}
+
+ParamForm : WOForm {
+	action = reload;
+}
+
+TFTimeout : WOTextField {
+	value = timeout;
+	numberformat = "0";
+}
+
+PBLoadBalancer : WOPopUpButton {
+	list = loadBalencers;
+	item = loadBalancerItem;
+	selection = loadBalancer;
+}
+
+BtnSubmit : WOSubmitButton {
+	action = reload;
+	value = "Update Settings";
+}
+
+adaptorProxyContent: WOString {
+	value = modProxyContent;
+}
+
+adaptorRewriteContent: WOString {
+	value = modRewriteContent;
+}

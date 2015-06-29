@@ -3,6 +3,10 @@ package er.extensions.eof;
 import java.math.BigDecimal;
 import java.util.Locale;
 
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -13,6 +17,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
 import er.extensions.eof.qualifiers.ERXExistsQualifier;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
@@ -1500,12 +1505,123 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Enums to desribe the type of key this represents.
+	 * Enums to describe the type of key this represents.
 	 * 
 	 * @author mschrag
 	 */
 	public static enum Type {
-		Attribute, ToOneRelationship, ToManyRelationship
+		/**
+		 * <p>
+		 * Indicates that this key represents an {@link EOAttribute} defined in
+		 * the {@link EOModel}. Since it is defined in the model it can be used
+		 * when instantiating Objects that impact SQL generation, e.g.,
+		 * {@link EOQualifier} and {@link EOSortOrdering}.
+		 * </p>
+		 */
+		Attribute, 
+		/**
+		 * <p>
+		 * Indicates that this key represents an {@link EORelationship} defined
+		 * in the {@link EOModel} that will return <code>false</code> for
+		 * {@link EORelationship#isToMany()}. Since it is defined in the model
+		 * it can be used when instantiating Objects that impact SQL generation,
+		 * e.g., {@link EOQualifier} and {@link EOSortOrdering}.
+		 * </p>
+		 */
+		ToOneRelationship, 
+		/**
+		 * <p>
+		 * Indicates that this key represents an {@link EORelationship} defined
+		 * in the {@link EOModel} that will return <code>true</code> for
+		 * {@link EORelationship#isToMany()}. Since it is defined in the model
+		 * it can be used when instantiating Objects that impact SQL generation,
+		 * e.g., {@link EOQualifier} and {@link EOSortOrdering}.
+		 * </p>
+		 */
+		ToManyRelationship, 
+		/**
+		 * <p>
+		 * Indicates that this key represents an {@link NSArray.Operator}, e.g.,
+		 * {@link NSArray._SumNumberOperator @sum},
+		 * {@link ERXArrayUtilities.FlattenOperator @flatten},
+		 * {@link ERXArrayUtilities.FlattenOperator @fetchSpec},
+		 * {@link NSArray._MinOperator @min}
+		 * </p>
+		 * <p>
+		 * <em>Note:</em> this Type is not recognized by the
+		 * {@link ERXKeyFilter#matches(ERXKey, Type)} and will not be included
+		 * in {@link ERXKeyFilter#includeAll()},
+		 * {@link ERXKeyFilter#includeAttributes()} nor
+		 * {@link ERXKeyFilter#includeAttributesAndToOneRelationships()} because
+		 * {@link ERXKeyFilter} can only be used with {@link ERXKey}s that
+		 * represent a single key {@link NSArray.Operator}s represent a keypath.
+		 * </p>
+		 */
+		Operator,
+		/**
+		 * <p>
+		 * Indicates that this key represents a visible method or ivar that
+		 * returns an object of type T, but does not have a corresponding
+		 * relationship entry in the {@link EOModel} and therefore cannot be
+		 * used to instantiate objects that will impact SQL generation. e.g.,
+		 * {@link EOQualifier} and {@link EOSortOrdering}.
+		 * </p>
+		 * <p>
+		 * <em>Note:</em> this ERXKey.Type is not recognized by the
+		 * {@link ERXKeyFilter#matches(ERXKey, Type)} and will not be included
+		 * in {@link ERXKeyFilter#includeAll()},
+		 * {@link ERXKeyFilter#includeAttributes()} nor
+		 * {@link ERXKeyFilter#includeAttributesAndToOneRelationships()}.
+		 * </p>
+		 * <p>
+		 * TODO: Additional work needs to be done to validate that ERRest's use
+		 * of ERXKeyFilter is compatible with this ERXKey.Type.
+		 * </p>
+		 */
+		NonModelAttribute,
+		/**
+		 * <p>
+		 * Indicates that this key represents a visible instance member that
+		 * returns an instance of {@link EOEnterpriseObject} of type T, but does
+		 * not have a corresponding relationship entry in the {@link EOModel}
+		 * and therefore cannot be used to instantiate objects that will impact
+		 * SQL generation. e.g., {@link EOQualifier} and {@link EOSortOrdering}.
+		 * </p>
+		 * <p>
+		 * <em>Note:</em> this ERXKey.Type is not recognized by the
+		 * {@link ERXKeyFilter#matches(ERXKey, Type)} and will not be included
+		 * in {@link ERXKeyFilter#includeAll()},
+		 * {@link ERXKeyFilter#includeAttributes()} nor
+		 * {@link ERXKeyFilter#includeAttributesAndToOneRelationships()}.
+		 * </p>
+		 * <p>
+		 * TODO: Additional work needs to be done to validate that ERRest's use
+		 * of ERXKeyFilter is compatible with this ERXKey.Type.
+		 * </p>
+		 */
+		NonModelToOneRelationship, 
+		/**
+		 * <p>
+		 * Indicates that this key represents a visible instance member that
+		 * returns an array of {@link EOEnterpriseObject} instances of type T,
+		 * but does not have a corresponding relationship entry in the
+		 * {@link EOModel} and therefore cannot be used to instantiate objects
+		 * that will impact SQL generation. e.g., {@link EOQualifier} and
+		 * {@link EOSortOrdering}.
+		 * </p>
+		 * <p>
+		 * <em>Note:</em> this ERXKey.Type is not recognized by the
+		 * {@link ERXKeyFilter#matches(ERXKey, Type)} and will not be included
+		 * in {@link ERXKeyFilter#includeAll()},
+		 * {@link ERXKeyFilter#includeAttributes()} nor
+		 * {@link ERXKeyFilter#includeAttributesAndToOneRelationships()}.
+		 * </p>
+		 * <p>
+		 * TODO: Additional work needs to be done to validate that ERRest's use
+		 * of ERXKeyFilter is compatible with this ERXKey.Type.
+		 * </p>
+		 */
+		NonModelToManyRelationship
 	}
 	
 	public interface ValueCoding {
@@ -1515,6 +1631,7 @@ public class ERXKey<T> {
 	}
 
 	private String _key;
+	private Type _type;
 
 	/**
 	 * Constructs an ERXKey.
@@ -1527,6 +1644,32 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Constructs an ERXKey, specifying what {@link Type} it is.
+	 * 
+	 * You can have EOGenerator use this constructor by using the following code
+	 * in the EOGenerator template that generates your _Entity.java files.
+	 * Replace the existing code that creates the ERXKeys declarations for the
+	 * Entity's attributes, to-one relationships and to-many relationships.
+	 * 
+	 * <pre>
+	 *     public static final ERXKey<$attribute.javaClassName> ${attribute.uppercaseUnderscoreName} = new ERXKey<$attribute.javaClassName>("$attribute.name", ERXKey.Type.Attribute);
+	 * 
+	 *     public static final ERXKey<$relationship.actualDestination.classNameWithDefault> ${relationship.uppercaseUnderscoreName} = new ERXKey<$relationship.actualDestination.classNameWithDefault>("$relationship.name", ERXKey.Type.ToOneRelationship);
+	 * 
+	 *     public static final ERXKey<$relationship.actualDestination.classNameWithDefault> ${relationship.uppercaseUnderscoreName} = new ERXKey<$relationship.actualDestination.classNameWithDefault>("$relationship.name", ERXKey.Type.ToManyRelationship);
+	 * </pre>
+	 * 
+	 * @param key
+	 *            the underlying key or keypath
+	 * @param type
+	 *            the {@link Type}
+	 */
+	public ERXKey(String key, Type type) {
+		_key = key;
+		_type = type;
+	}
+
+	/**
 	 * Constructs a localized ERXKey.
 	 * 
 	 * @param key
@@ -1536,6 +1679,23 @@ public class ERXKey<T> {
 	 */
 	public ERXKey(String key, String locale) {
 		_key = key + "_" + locale;
+	}
+
+	/**
+	 * Constructs a localized ERXKey, specifying what {@link Type} it is.
+	 * 
+	 * @param key
+	 *            the underlying keypath
+	 * @param locale
+	 *            the locale for the key
+	 * @param type
+	 *            the {@link Type}
+	 *            
+	 * @see #ERXKey(String, Type)
+	 */
+	public ERXKey(String key, String locale, Type type) {
+		_key = key + "_" + locale;
+		_type = type;
 	}
 
 	/**
@@ -2642,5 +2802,100 @@ public class ERXKey<T> {
 	 */
 	public ERXSortOrderings dot(NSArray<EOSortOrdering> sortOrderings) {
 		return prefix(sortOrderings);
+	}
+
+	/**
+	 * See {@link #ERXKey(String, Type)} for information on how to automatically
+	 * set this.
+	 * 
+	 * @return the {@link Type}, if specified, for this key.
+	 */
+	public Type type() {
+		return _type;
+	}
+
+	public void setType(Type type) {
+		_type = type;
+	}
+	
+	/**
+	 * Checks this key's {@link Type} to determine if it represents an
+	 * {@link EOAttribute}.
+	 * <p>
+	 * <em>Note:</em> if {@link #type()} has not been set, then this will return
+	 * <code>false</code>. To set it, you have the following options:
+	 * <ul>
+	 * <li>Set it manually using {@link #setType(Type)}</li>
+	 * <li>Set it using the {@link #ERXKey(String, Type)} constructor. If this
+	 * key was declared in code generated by EOGenerator (i.e. in a _Entity.java
+	 * class), you will need to modify your EOGenerator template. See
+	 * {@link #ERXKey(String, Type)} for details.</li>
+	 * </ul>
+	 * </p>
+	 * 
+	 * @return <code>true</code> if {@link #type()} returns either
+	 *         {@link ERXKey.Type.Attribute} or
+	 *         {@link ERXKey.Type.NonModelAttribute}, <code>false</code>
+	 *         otherwise.
+	 *         
+	 * @see isToOneRelationship
+	 * @see isToManyRelationship
+	 */
+	public boolean isAttribute() {
+		return type() == ERXKey.Type.Attribute || type() == ERXKey.Type.NonModelAttribute;
+	}
+	
+	/**
+	 * Checks this key's {@link ERXKey.Type} to determine if it represents a
+	 * to-one {@link EORelationship}.
+	 * <p>
+	 * <em>Note:</em> if {@link #type()} has not been set, then this will return
+	 * <code>false</code>. To set it, you have the following options:
+	 * <ul>
+	 * <li>Set it manually using {@link #setType(Type)}</li>
+	 * <li>Set it using the {@link #ERXKey(String, Type)} constructor. If this
+	 * key was declared in code generated by EOGenerator (i.e. in a _Entity.java
+	 * class), you will need to modify your EOGenerator template. See
+	 * {@link #ERXKey(String, Type)} for details.</li>
+	 * </ul>
+	 * </p>
+	 * 
+	 * @return <code>true</code> if {@link #type()} returns either
+	 *         {@link ERXKey.Type.ToOneRelationship} or
+	 *         {@link ERXKey.Type.NonModelToOneRelationship}, <code>false</code>
+	 *         otherwise.
+	 * 
+	 * @see isAttribute
+	 * @see isToManyRelationship
+	 */
+	public boolean isToOneRelationship() {
+		return type() == ERXKey.Type.ToOneRelationship || type() == ERXKey.Type.NonModelToOneRelationship;
+	}
+	
+	/**
+	 * Checks this key's {@link ERXKey.Type} to determine if it represents a
+	 * to-many {@link EORelationship}.
+	 * <p>
+	 * <em>Note:</em> if {@link #type()} has not been set, then this will return
+	 * <code>false</code>. To set it, you have the following options:
+	 * <ul>
+	 * <li>Set it manually using {@link #setType(Type)}</li>
+	 * <li>Set it using the {@link #ERXKey(String, Type)} constructor. If this
+	 * key was declared in code generated by EOGenerator (i.e. in a _Entity.java
+	 * class), you will need to modify your EOGenerator template. See
+	 * {@link #ERXKey(String, Type)} for details.</li>
+	 * </ul>
+	 * </p>
+	 * 
+	 * @return <code>true</code> if {@link #type()} returns either
+	 *         {@link ERXKey.Type.ToOneRelationship} or
+	 *         {@link ERXKey.Type.NonModelToOneRelationship}, <code>false</code>
+	 *         otherwise.
+	 *         
+	 * @see isAttribute
+	 * @see isToOneRelationship
+	 */
+	public boolean isToManyRelationship() {
+		return type() == ERXKey.Type.ToManyRelationship || type() == ERXKey.Type.NonModelToManyRelationship;
 	}
 }

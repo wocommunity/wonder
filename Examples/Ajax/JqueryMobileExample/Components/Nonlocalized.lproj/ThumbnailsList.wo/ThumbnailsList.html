@@ -1,21 +1,10 @@
-<wo:ERQMHtmlTemplate title="ThumbnailsList">
-	<wo:ERQMHeaderBar string="ThumbnailsList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<wo:ERQMListView>
-			<wo:foreach list="$onlyFiveMovies" item="$oneMovie" index="$index">
-				<wo:ERQMListViewElement action="$doShowOneMovieAction">
-					<wo:ERQMListViewImage imageResource="$fileName" alt="Test Image" />
-					<h3><wo:str value = "$oneMovie.title" /></h3>
-					<p><wo:str value = "$oneMovie.studio.name" /></p>
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Thumbnails List">
+  <wo:ERQMListView>
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie" index = "$index">
+      <wo:ERQMListViewElement action = "$doShowOneMovieAction" imageResource = "$fileName">
+        <h3><wo:str value = "$oneMovie.title" /></h3>
+        <p><wo:str value = "$oneMovie.studio.name" /></p>
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

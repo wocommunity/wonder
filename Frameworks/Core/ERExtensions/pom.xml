@@ -3,7 +3,7 @@
     <parent>
         <groupId>wonder.frameworks</groupId>
         <artifactId>core</artifactId>
-        <version>6.1.3-SNAPSHOT</version>
+        <version>6.1.4-SNAPSHOT</version>
     </parent>
 
     <groupId>wonder.core</groupId>
@@ -72,6 +72,11 @@
         <dependency>
             <groupId>com.webobjects</groupId>
             <artifactId>JavaWOJSPServlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.webobjects</groupId>
+            <artifactId>JavaWebServicesSupport</artifactId>
+            <version>${webobjects.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>

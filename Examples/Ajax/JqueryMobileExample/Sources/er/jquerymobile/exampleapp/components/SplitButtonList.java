@@ -4,11 +4,14 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
 public class SplitButtonList extends SampleComponentBase {
 
+  private static final long serialVersionUID = 1L;
+
+  public int _index;
+
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
   public SplitButtonList(WOContext aContext) {
@@ -16,10 +19,8 @@ public class SplitButtonList extends SampleComponentBase {
   }
 
   //********************************************************************
-  //  Methods
+  //  Methods : メソッド
   //********************************************************************
-
-  public int _index;
 
   public String fileName() {
     return "images/album-0" + _index + ".jpg";

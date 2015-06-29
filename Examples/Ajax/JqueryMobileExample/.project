@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>JQueryMobileExample</name>
+	<name>JqueryMobileExample</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -15,9 +15,15 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.zeroturnaround.eclipse.rebelXmlBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.objectstyle.wolips.incrementalapplicationnature</nature>
+		<nature>org.zeroturnaround.eclipse.jrebelNature</nature>
 	</natures>
 </projectDescription>

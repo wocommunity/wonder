@@ -61,8 +61,13 @@ public class NavigationPage extends MonitorComponent {
 		return pageWithName("HelpPage");
 	}
 
+	@Deprecated
 	public WOComponent MigrationPageClicked() {
 		return pageWithName("MigrationPage");
+	}
+
+	public WOComponent ModProxyPageClicked() {
+		return pageWithName("ModProxyPage");
 	}
 
 	public boolean logoutRequired() {
@@ -74,7 +79,12 @@ public class NavigationPage extends MonitorComponent {
 		return pageWithName("Main");
 	}
 	
+	@Deprecated
 	public boolean showMigrationsTab() {
 		return ERXProperties.booleanForKeyWithDefault("er.javamonitor.showMigrationsTab", false);
+	}
+
+	public boolean showModProxyTab() {
+		return ERXProperties.booleanForKeyWithDefault("er.javamonitor.showModProxyTab", false);
 	}
 }
