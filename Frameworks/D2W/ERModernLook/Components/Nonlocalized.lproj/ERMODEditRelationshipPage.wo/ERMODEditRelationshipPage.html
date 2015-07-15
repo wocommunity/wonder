@@ -12,13 +12,18 @@
           <webobject name = "ShowTopBatchCount">
             <webobject name = "TopNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
           </webobject>
-          <webobject name = "ToManyListRepetition" />
-          <webobject name = "ShowBottomBatchNavBar">
-            <webobject name = "BottomNavBar"> <webobject name = "NavigationBar" /> </webobject>
-          </webobject>
-          <webobject name = "ShowBottomBatchCount">
-            <webobject name = "BottomNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
-          </webobject>
+		  <webobject name = "IsNotEditList">
+	          <webobject name = "ToManyListRepetition" />
+              <webobject name = "ShowBottomBatchNavBar">
+                <webobject name = "BottomNavBar"> <webobject name = "NavigationBar" /> </webobject>
+              </webobject>
+              <webobject name = "ShowBottomBatchCount">
+                <webobject name = "BottomNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
+              </webobject>
+		  </webobject>
+		  <webobject name = "IsEditList">
+			  <webobject name = "EditListComponent" />
+		  </webobject>
         </webobject>
       </div>
       </webobject>
@@ -40,6 +45,9 @@
         </webobject>
         <webobject name = "IsEntityWritable">
           <li><webobject name = "NewButton" /></li>
+        </webobject>
+        <webobject name = "ShowEditList">
+	      <li><webobject name = "EditListButton"/></li>
         </webobject>
       </ul>
     </webobject>

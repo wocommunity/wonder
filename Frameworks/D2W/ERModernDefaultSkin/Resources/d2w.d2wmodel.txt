@@ -14,7 +14,7 @@
     20 : pageConfiguration like '*Embedded*' => printerButtonComponentName = "ERXEmptyComponent" [com.webobjects.directtoweb.Assignment],
     20 : *true* => defaultMainPrintStylesheet = {"filename" = "default_print_stylesheet.css"; "media" = "print"; } [com.webobjects.directtoweb.Assignment],
     20 : *true* => defaultMainScreenStylesheet = {"filename" = "default_screen_stylesheet.css"; "media" = "screen"; } [com.webobjects.directtoweb.Assignment],
-    20 : (pageConfiguration like '*Embedded*' and task != 'editRelationship' and task != 'list') => showHeader = "true" [com.webobjects.directtoweb.BooleanAssignment],
+    20 : (pageConfiguration like '*Embedded*' and task != 'editRelationship' and task != 'list' and (task != 'edit' and subTask != 'list')) => showHeader = "true" [com.webobjects.directtoweb.BooleanAssignment],
     30 : pageConfiguration like '*Embedded*' => showBottomBatchCount = "true" [com.webobjects.directtoweb.BooleanAssignment],
     30 : (pageConfiguration like '*Embedded*' and parentPageConfiguration != null) => showBottomActionBlock = "true" [com.webobjects.directtoweb.BooleanAssignment]
 )
