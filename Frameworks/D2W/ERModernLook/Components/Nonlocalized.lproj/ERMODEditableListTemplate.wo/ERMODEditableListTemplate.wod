@@ -1,0 +1,145 @@
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	watchedContainerID = d2wContext.idForRepetitionContainer;
+}
+
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}
+
+
+ShouldShowDefaultPageButtons : WOConditional {
+	condition = d2wContext.shouldShowDefaultPageButtons;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ReturnButton: CCSmartAjaxButton {
+	alt = "Returns to the previous page";
+	value = d2wContext.returnButtonLabel;
+	action = backAction;
+	class = "Button PageButton ReturnPageButton";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+	updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+SecondaryActionBlock: ERMODSecondaryActionButtons {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+
+ErrorBlock : ERMODErrorBlock {
+  d2wContext = d2wContext;
+  errorMessage = errorMessage;
+  errorMessages = errorMessages;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+	elementName = "div";
+	id = d2wContext.idForRepetitionContainer;
+	onSuccess = updateBottomActionBlock;
+}
+
+ObserveEditList : AjaxObserveField {
+	updateContainerID = d2wContext.idforRepetitionContainer;
+}
+
+ShowBottomActionBlock : WOConditional {
+	condition = d2wContext.showBottomActionBlock;
+}
+
+BottomActionBlock : AjaxUpdateContainer {
+	class = d2wContext.classForBottomActionBlock;
+	id = idForBottomActionBlock;
+}
+
+CancelButton: CCSmartAjaxButton {
+	alt = "Reverts your changes";
+	value = d2wContext.cancelButtonLabel;
+	action = cancel;
+	dontSubmitForm = true;
+	class = "Button PageButton CancelPageButton";
+	useAjax = false;
+	updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+SubmitChanges: CCSmartAjaxButton {
+	action = saveAction;
+	alt = "Saves your changes";
+	value = d2wContext.saveButtonLabel;
+	class = "Button PageButton SubmitPageButton";
+	useAjax = false;
+    updateContainerID = d2wContext.idForParentMainContainer;
+}
+
+ShowBottomBatchNavBar : WOConditional {
+    condition = d2wContext.showBottomBatchNavBar;
+}
+
+ShowBottomBatchCount : WOConditional {
+    condition = d2wContext.showBottomBatchCount;
+}
+
+BottomNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomNavBar;
+}
+
+BottomNavBatchSize : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForBottomBatchSize;
+}
+
+BatchSizeControl : ERMDBatchSizeControl {
+    displayGroup = displayGroup;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+    d2wContext = d2wContext;
+}
+
+NavigationBar: WOSwitchComponent {   
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+    d2wContext = d2wContext;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}

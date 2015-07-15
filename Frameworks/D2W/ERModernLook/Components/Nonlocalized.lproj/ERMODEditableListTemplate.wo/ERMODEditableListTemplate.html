@@ -1,0 +1,44 @@
+<webobject name = "PageWrapper">
+  <webobject name = "RequiredWrapper">
+    <webobject name = "ShowTopActionBlock">
+      <webobject name = "TopActionBlock">
+        <webobject name = "ShouldShowDefaultPageButtons">
+          <webobject name = "ShowCancel">
+            <ul class = "ActionList">
+              <li><webobject name = "ReturnButton" /></li>
+            </ul>
+          </webobject>
+        </webobject>
+        <webobject name = "SecondaryActionBlock" />
+      </webobject>
+    </webobject>
+    <webobject name = "InnerWrapper">
+      <webobject name = "ErrorBlock" />
+      <webobject name = "ListNotEmpty">
+          <webobject name = "RepetitionUpdateContainer">
+            <webobject name = "ObserveEditList">
+              <webobject name = "ListPageRepetition" />
+            </webobject>
+            <webobject name = "ShowBottomBatchNavBar">
+              <webobject name = "BottomNavBar"> <webobject name = "NavigationBar" /> </webobject>
+            </webobject>
+            <webobject name = "ShowBottomBatchCount">
+              <webobject name = "BottomNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
+            </webobject>
+            <webobject name = "ShowBottomActionBlock">
+              <webobject name = "BottomActionBlock">
+                <webobject name = "ShouldShowDefaultPageButtons">
+                  <ul class = "ActionList">
+                    <li><webobject name = "CancelButton" /></li>
+                    <li><webobject name = "SubmitChanges" /></li>
+                  </ul>
+                </webobject>
+                <webobject name = "SecondaryActionBlock" />
+              </webobject>
+            </webobject>
+          </webobject>
+      </webobject>
+      <webobject name = "ListEmpty"><webobject name = "EmptyMessageComponent" /> </webobject>
+    </webobject>
+  </webobject>
+</webobject>

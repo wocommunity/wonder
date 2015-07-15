@@ -35,6 +35,11 @@ IsEntityWritable: WOConditional {
 	condition = isEntityCreatable;
 }
 
+ShowEditList: WOConditional {
+	_unroll = true;
+	condition = shouldShowEditListButton;
+}
+
 IsToMany: WOConditional {
 	condition = isRelationshipToMany;
 }
@@ -59,6 +64,16 @@ NewButton: CCSmartAjaxButton {
 	class = "Button PageButton CreatePageButton";
 	value = d2wContext.newRelationshipButtonLabel;
 	useAjax = d2wContext.useAjaxControls;
+    updateContainerID = d2wContext.idForMainContainer;
+    dontSubmitForm = true;
+}
+
+EditListButton: CCSmartAjaxButton {
+	alt = "Enables editing of the list of relationship objects";
+	action = editListAction;
+	class = "Button PageButton EditListPageButton";
+	value = "Edit list";
+	useAjax = true;
     updateContainerID = d2wContext.idForMainContainer;
     dontSubmitForm = true;
 }
@@ -105,12 +120,21 @@ RequiredWrapper : ERMODRequiredWrapper {
 }
 
 ShowBottomActionBlock : WOConditional {
-    condition = d2wContext.showBottomActionBlock;
+    condition = showBottomActionBlock;
 }
 
 InnerWrapper : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForInnerWrapper;
+}
+
+IsNotEditList : WOConditional {
+	condition = displayEditList;
+	negate = true;
+}
+
+IsEditList : WOConditional {
+	condition = displayEditList;
 }
 
 RepetitionUpdateContainer : AjaxUpdateContainer {
@@ -123,6 +147,13 @@ ToManyListRepetition: WOSwitchComponent {
     d2wContext = localContext;
     displayGroup = relationshipDisplayGroup;
     updateContainerID = idForRepetitionContainer;
+}
+
+EditListComponent: ERXD2WList {
+    pageConfiguration = d2wContext.editListEmbeddedConfigurationName;
+	action = saveAction;
+	dataSource = editListDataSource;
+	settings = settings;
 }
 
 ToOneListRepetition: WOSwitchComponent {
