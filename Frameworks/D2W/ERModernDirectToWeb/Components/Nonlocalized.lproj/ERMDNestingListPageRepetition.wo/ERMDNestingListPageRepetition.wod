@@ -1,7 +1,5 @@
 AttributeDisplay: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
 	localContext = d2wContext;
 	object = d2wContext.object;
 }
@@ -60,6 +58,42 @@ ListTableRow: WOGenericContainer {
 	class = objectRowClass;
 }
 
+HasNestedRelationship : WOConditional {
+	condition = hasNestedRelationship;
+}
+
+NestedUC : AjaxUpdateContainer {
+	id = idForNestedUpdateContainer;
+	elementName = "tr";
+	class = nestedRowClass;
+}
+
+showNestedRelationshipEditor : WOConditional {
+	condition = showNestedRelationshipEditor;
+}
+
+NestedRelationshipField : WOGenericContainer {
+	elementName = "td";
+	colspan = columnCount;
+}
+
+HiddenNestedRelationshipField : WOGenericContainer {
+	elementName = "td";
+	colspan = columnCount;
+	class = "hidden";
+}
+
+NestedRelationshipEditor : WOSwitchComponent {
+	WOComponentName = childContext.componentName;
+	localContext = childContext;
+	object = childContext.object; // VALID
+}
+
+hideNestedRelationshipEditor : WOConditional {
+	condition = showNestedRelationshipEditor;
+	negate = true;
+}
+
 TableHeaderSwitchComponent : WOSwitchComponent {
 	WOComponentName = d2wContext.tableHeaderComponentName;
 	displayGroup = displayGroup;
@@ -97,10 +131,36 @@ AttColumnHeader : WOGenericContainer {
 AttColumnCell : WOGenericContainer {
 	elementName = "td";
 	class = d2wContext.classForAttributeColumn;
+	data-label = d2wContext.displayNameForProperty;
 }
 
 HasLeftActionsConditional : WOConditional {
 	condition = hasLeftActions;
+}
+
+HasChildren : WOConditional {
+	condition = hasChildren;
+}
+
+ToggleNestedRelationshipEditor : AjaxUpdateLink {
+	action = toggleNestedRelationshipEditor;
+	updateContainerID = idForNestedUpdateContainer;
+	onComplete = toggleIconsScript;
+	style = "display:block;";
+}
+
+DoOpenIcon : WOImage {
+	filename = "RightTriangle.gif";
+	framework = "JavaWOExtensions";
+	id = idForDoOpenIcon;
+	style = initialStyleForDoOpenIcon;
+}
+
+DoCloseIcon : WOImage {
+	filename = "DownTriangle.gif";
+	framework = "JavaWOExtensions";
+	id = idForDoCloseIcon;
+	style = initialStyleForDoCloseIcon;
 }
 
 HasRightActionsConditional : WOConditional {
