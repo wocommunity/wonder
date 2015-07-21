@@ -6,8 +6,8 @@ import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 
-import javassist.gluonj.embedded.ClassPool;
-import javassist.gluonj.embedded.LoaderClassPath;
+import javassist.ClassPool;
+import javassist.LoaderClassPath;
 import javassist.gluonj.weave.Weaver;
 
 /**
