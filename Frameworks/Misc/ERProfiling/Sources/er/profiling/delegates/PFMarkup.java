@@ -137,7 +137,7 @@ public class PFMarkup implements PFProfiler.Delegate {
                         for (int i = startIndex; i < endIndex; i++) {
                             char ch = contentStr.charAt(i);
                             if (ch == '<') {
-                                if (i < endIndex - 1 && contentStr.charAt(i + 1) != '/') {
+                                if (i < endIndex - 1 && contentStr.charAt(i + 1) != '/' && contentStr.charAt(i + 1) != '!') {
                                     tagIndex = i;
                                     break;
                                 }
