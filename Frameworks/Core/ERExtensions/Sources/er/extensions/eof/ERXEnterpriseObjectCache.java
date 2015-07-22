@@ -233,7 +233,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
 	
     /**
-     * Call this to stop cache updating.  
+     * Call this to stop cache updating.
 	 * @see #start()
      */
 	public void stop() {
@@ -280,7 +280,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Helper to check a dictionary of objects from an EOF notification and return any that are for the
      * entity that we are caching.
      * 
-     * @param dict dictionary of key to NSArray<EOEnterpriseObject>
+     * @param dict dictionary of key to {@literal NSArray<EOEnterpriseObject>}
      * @param key key into dict indicating which list to process
      * @return objects from the list that are of the entity we are caching, or an empty array if there are no matches
      */
@@ -301,7 +301,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Handler for the editingContextDidSaveChanges notification. If <code>_resetOnChange</code> is <code>true</code>, this
-     * calls reset() to discard the entire cache contents if an object of the given entity has been changed.  
+     * calls reset() to discard the entire cache contents if an object of the given entity has been changed.
      * If <code>_resetOnChange</code> is <code>false</code>, this updates the cache to reflect the added/changed/removed
      * objects.
      * 
@@ -341,7 +341,10 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Handler for the clearCaches notification. Calls reset if n.object is the name of the entity we are caching.
      * Other code can send this notification if it needs to have this cache discard all of the objects.
-     * @param n
+     * 
+     * @see #ClearCachesNotification
+     * 
+     * @param n NSNotification with an entity name
      */
     public void clearCaches(NSNotification n) {
     	if(n.object() == null || entityName().equals(n.object())) {
