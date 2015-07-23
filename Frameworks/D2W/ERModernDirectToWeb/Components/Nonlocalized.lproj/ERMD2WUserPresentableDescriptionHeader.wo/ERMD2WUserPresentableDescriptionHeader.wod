@@ -1,0 +1,8 @@
+HeadingString : WOString {
+	value = headerString;
+	escapeHTML = d2wContext.escapeHTML;
+}
+
+ShowHeading : WOConditional {
+	condition = showHeading;
+}
