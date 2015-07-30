@@ -2185,7 +2185,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							compressedData = ERXCompressionUtilities.gzipByteArrayAsNSData(input._bytesNoCopy(), 0, (int)inputBytesLength);
 						} else
 						{
-							compressedData = new NSData();
+							compressedData = NSData.EmptyData;
 						}
 					}
 					if ( inputBytesLength > 0 ) {
