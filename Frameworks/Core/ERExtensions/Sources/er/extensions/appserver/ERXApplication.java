@@ -2197,7 +2197,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							response.setHeader(String.valueOf(compressedData.length()), "content-length");
 							response.setHeader("gzip", "content-encoding");
 							if (log.isDebugEnabled()) {
-								System.out.println("before: " + inputBytesLength + ", after " + compressedData.length() + ", time: " + (System.currentTimeMillis() - start));
+								log.debug("before: " + inputBytesLength + ", after " + compressedData.length() + ", time: " + (System.currentTimeMillis() - start));
 							}
 						}
 					}
