@@ -2171,29 +2171,33 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					long start = System.currentTimeMillis();
 					long inputBytesLength;
 					InputStream contentInputStream = response.contentInputStream();
-					byte[] compressedData;
+					NSData compressedData;
 					if (contentInputStream != null) {
 						inputBytesLength = response.contentInputStreamLength();
-						NSData compressedNSData = ERXCompressionUtilities.gzipInputStreamAsNSData(contentInputStream, (int)inputBytesLength);
-						//compressedData = compressedNSData._bytesNoCopy();
-						compressedData = compressedNSData.bytes();
-						response.setContentStream(null, 0, 0L);
+						compressedData = ERXCompressionUtilities.gzipInputStreamAsNSData(contentInputStream, (int)inputBytesLength);
+						response.setContentStream(null, 0, 0);
 					}
 					else {
 						NSData input = response.content();
 						inputBytesLength = input.length();
-						compressedData = (inputBytesLength > 0) ? ERXCompressionUtilities.gzipByteArray(input._bytesNoCopy()) : null;
+						if(inputBytesLength > 0)
+						{
+							compressedData = ERXCompressionUtilities.gzipByteArrayAsNSData(input._bytesNoCopy(), 0, (int)inputBytesLength);
+						} else
+						{
+							compressedData = new NSData();
+						}
 					}
 					if ( inputBytesLength > 0 ) {
 						if (compressedData == null) {
 							// something went wrong
 						}
 						else {
-							response.setContent(new NSData(compressedData, new NSRange(0, compressedData.length), true));
-							response.setHeader(String.valueOf(compressedData.length), "content-length");
+							response.setContent(compressedData);
+							response.setHeader(String.valueOf(compressedData.length()), "content-length");
 							response.setHeader("gzip", "content-encoding");
 							if (log.isDebugEnabled()) {
-								log.debug("before: " + inputBytesLength + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
+								System.out.println("before: " + inputBytesLength + ", after " + compressedData.length() + ", time: " + (System.currentTimeMillis() - start));
 							}
 						}
 					}
