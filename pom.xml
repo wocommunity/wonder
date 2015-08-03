@@ -653,15 +653,15 @@
 				<version>3.1</version>
             </dependency>
             <dependency>
-                <groupId>javassist</groupId>
+                <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.11.0.GA</version>
+                <version>3.19.0-GA</version>
             </dependency>
             <dependency>
-                <groupId>glounj</groupId>
-                <artifactId>glounj</artifactId>
+                <groupId>gluonj</groupId>
+                <artifactId>gluonj</artifactId>
                 <version>1.5-beta</version>
-                <classifier>javassist-embedded</classifier>
+                <classifier>jdk6</classifier>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
