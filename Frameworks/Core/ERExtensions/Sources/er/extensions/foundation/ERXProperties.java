@@ -3072,7 +3072,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			if((ss[loop] != null) && (ss[loop].length() > 0)){
 				value = stringForKey(ss[loop]);
 				if(!ERXStringUtilities.stringIsNullOrEmpty(value))
-					return stringForKey(ss[loop]);
+					return value;
 			}
 		}
 		return defaultValue;
