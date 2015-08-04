@@ -111,7 +111,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXTimestampUtilities;
-import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
