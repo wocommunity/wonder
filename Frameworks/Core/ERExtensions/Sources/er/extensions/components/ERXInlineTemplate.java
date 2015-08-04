@@ -21,7 +21,7 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
 /**
  * ERXInlineTemplate allows to specify a component's template dynamically. <br />
  * The content which would usually go into the ".html" file within a WOComponent's bundle, is specified using the "html"
- * binding, the ".wod" part is pecified by the "wod" binding. <br />
+ * binding, the ".wod" part is specified by the "wod" binding. <br />
  * <br />
  * When using {@link WOOgnl} with "ognl.helperFunctions = true" and "ognl.inlineBindings = true", you can leave out the
  * WOD part. <br />

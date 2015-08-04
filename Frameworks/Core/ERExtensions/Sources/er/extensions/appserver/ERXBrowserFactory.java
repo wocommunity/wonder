@@ -70,7 +70,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * setFactory(new SubClassOfERXBrowserFactory())};</code>
  * <p>
  * If you want to use your own subclass of <code>ERXBrowser</code>, 
- * put the follwoing statement into the application's constructor.
+ * put the following statement into the application's constructor.
  * <p>
  * <code>ERXBrowserFactory.factory().{@link #setBrowserClassName 
  * setBrowserClassName("NameOfTheSubClassOfERXBrowser")}</code>
@@ -310,7 +310,7 @@ public class ERXBrowserFactory {
      * <span class="en">
      * Gets a shared browser object for given request. 
      * Parses <code>"user-agent"</code> string in the request and gets 
-     * the appropiate browser object. 
+     * the appropriate browser object. 
      * <p>
      * This is the primary method to call from application logics, and 
      * once you get a browser object, you are responsible to call 
