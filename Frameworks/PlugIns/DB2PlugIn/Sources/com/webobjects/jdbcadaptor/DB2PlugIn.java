@@ -148,7 +148,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * Expression class to create. We have custom code, so we need our own class.                                                                               
    */
   @Override
-  public Class defaultExpressionClass() {
+  public Class<? extends JDBCExpression> defaultExpressionClass() {
     return DB2Expression.class;
   }
 

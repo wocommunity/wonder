@@ -488,7 +488,7 @@ public class _OpenBasePlugIn extends JDBCPlugIn {
 		return DriverProductName;
 	}
 	
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return _OpenBasePlugIn.OpenBaseExpression.class;
 	}
 	
