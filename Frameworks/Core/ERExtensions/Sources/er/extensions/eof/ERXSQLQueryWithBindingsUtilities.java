@@ -4,7 +4,6 @@ package er.extensions.eof;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -219,7 +218,7 @@ public class ERXSQLQueryWithBindingsUtilities {
 
         NSArray pkDicts = ec.objectsWithFetchSpecification(pkSpec);
         NSMutableArray pks = new NSMutableArray();
-        String pkAtttributeName = ((EOAttribute) entity.primaryKeyAttributes().lastObject()).name();
+        String pkAtttributeName = entity.primaryKeyAttributes().lastObject().name();
 
         for ( Enumeration rowEnumerator = pkDicts.objectEnumerator(); rowEnumerator.hasMoreElements(); ) {
             NSDictionary row = (NSDictionary) rowEnumerator.nextElement();
