@@ -38,7 +38,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.eof.ERXKeyTest.class);
 
     suite.addTestSuite(er.extensions.eof.qualifiers.ERXToManyQualifierTest.class);
-    suite.addTestSuite(er.extensions.eof.qualifiers.ERXQTest.class);
+    suite.addTestSuite(er.extensions.eof.ERXQTest.class);
 
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);

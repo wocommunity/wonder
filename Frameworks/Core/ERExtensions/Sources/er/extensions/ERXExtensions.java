@@ -62,6 +62,7 @@ import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXDatabaseContextMulticastingDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEnterpriseObjectCache;
 import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXModelGroup;
@@ -294,7 +295,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
-    
+
+    @Override
+    public void didFinishInitialization() {
+        ERXEnterpriseObjectCache.setApplicationDidFinishInitialization(true);
+        super.didFinishInitialization();
+    }
+
     private static Map<String, Support> _qualifierKeys;
     
     public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {

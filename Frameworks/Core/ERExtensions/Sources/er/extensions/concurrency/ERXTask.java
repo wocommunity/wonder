@@ -150,7 +150,7 @@ public abstract class ERXTask<T> {
 	 * 
 	 * @return the timestamp lag to use for new ec's created in the task thread.
 	 */
-	private long taskEditingContextTimestampLag() {
+	protected long taskEditingContextTimestampLag() {
 		if (_taskEditingContextTimestampLag == null) {
 			_taskEditingContextTimestampLag = Long.valueOf(System.currentTimeMillis());
 		}

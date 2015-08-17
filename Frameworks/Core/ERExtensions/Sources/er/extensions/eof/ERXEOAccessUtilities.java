@@ -2333,8 +2333,11 @@ public class ERXEOAccessUtilities {
     }
 
 	/**
+	 * Utility method used to find all of the non-abstract sub entity names
+	 * for a given entity including itself.
 	 * @param ec editing context
-	 * @param rootEntityName
+	 * @param rootEntityName name of entity to walk all of the <code>subEntities</code>
+	 *            relationships
 	 * @return a list of all concrete entity names that inherit from
 	 *         rootEntityName, including rootEntityName itself if it is
 	 *         concrete.

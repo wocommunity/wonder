@@ -155,7 +155,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      * <span class="en">
      * MozillaVersion string
      * 
-     * @return what Mozilla version equivement to the browser's version
+     * @return Mozilla version equivalent to the browser's version
      * </span>
      * 
      * <span class="ja">
@@ -171,7 +171,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      * <span class="en">
      * The revision of the gecko rendering engine. 1.0.2 and up support xslt.
      * 
-     * @return what gecko revision equivement to the browser's version
+     * @return gecko revision equivalent to the browser's version
      * </span>
      * 
      * <span class="ja">

@@ -4,6 +4,13 @@ package er.extensions.appserver;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.webobjects.foundation.NSKeyValueCoding;
+
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+
+import er.extensions.appserver.ERXApplication;
+
 
 /**
  * <p>Use this to register shutdown hooks instead of directly using Runtime.addShutdownHook().
@@ -29,7 +36,6 @@ import java.util.Set;
  *     }
  * };
  * </pre></blockquote></p>
- * 
  *
  * <b>CAUTION</b><br><br>
  * You should not use this class when deploying the application as a J2EE servlet as it may interfere with other servlets running in the same VM. 
@@ -58,6 +64,11 @@ public abstract class ERXShutdownHook extends Thread {
 							System.out.println( "ShutdownHook waiting for " + ALL_HOOKS.size() + " hook" + (ALL_HOOKS.size() > 1 ? "s" : "") + " to complete" );
 							ALL_HOOKS.wait();
 						}
+
+						if ( ! ERXApplication.erxApplication().getIsTerminating()) {
+							NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationWillTerminateNotification, NSKeyValueCoding.NullValue));
+						}
+
 						System.out.println( "APPLICATION SHUTDOWN SEQUENCE COMPLETE" );
 					}
 				} catch( Exception e ) {
@@ -69,7 +80,6 @@ public abstract class ERXShutdownHook extends Thread {
 	
 	private String name;
 
-	
 	/**
 	 * Call this in your app constructor if you have no other shutdown hooks. If you don't call
 	 * anything, this class will not be loaded at all and won't work.
