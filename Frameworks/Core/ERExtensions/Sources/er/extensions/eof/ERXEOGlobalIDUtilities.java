@@ -1,9 +1,3 @@
-/*
- * Created on 24.01.2005
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package er.extensions.eof;
 
 import java.net.InetAddress;
@@ -45,7 +39,7 @@ public class ERXEOGlobalIDUtilities {
     public static final Logger log = Logger.getLogger(ERXEOGlobalIDUtilities.class);
     
     /**
-     * Unencrypts the byte array of NSData PKs so you get the process number or port, 
+     * Decrypts the byte array of NSData PKs so you get the process number or port, 
      * host and timestamp.
      *
      * @author ak
@@ -145,19 +139,23 @@ public class ERXEOGlobalIDUtilities {
     		return host().getHostAddress() + ":" + port() + " " + counter() + "@" + timestamp();
     	}
     }
-    
+
     /**
      * Groups an array of global IDs by their entity name.
-     * @param globalIDs
+     * 
+     * @param globalIDs list of global IDs
+     * @return dictionary with global IDs grouped by their entity name
      */
     public static NSDictionary<String, NSArray<EOGlobalID>> globalIDsGroupedByEntityName(NSArray<EOGlobalID> globalIDs) {
         return ERXArrayUtilities.arrayGroupedByKeyPath(globalIDs, "entityName");
     }
 
     /**
-     * Translates an array of {@link EOGlobalID} to primary key values. Returns null if the given
-     * global IDs are not EOKeyValueGlobalIDs and the primary keys are not single values.
-     * @param globalIDs
+     * Translates an array of {@link EOGlobalID} to primary key values. Throws an exception if the given
+     * global IDs are not EOKeyGlobalIDs and the primary keys are not single values.
+     * 
+     * @param globalIDs list of global IDs
+     * @return list of primary key values
      */
     public static NSArray<Object> primaryKeyValuesWithGlobalIDs(NSArray<EOGlobalID> globalIDs) {
     	if (globalIDs == null || globalIDs.count() == 0) {
@@ -182,11 +180,13 @@ public class ERXEOGlobalIDUtilities {
     	}
     	return result;
     }
-    
+
     /**
-     * Translates an array of single-value raw primary values to EOGlobalIDs.
-     * @param entityName
-     * @param values
+     * Translates an array of single-value raw primary key values to EOGlobalIDs.
+     * 
+     * @param entityName the entity name of the raw primary values
+     * @param values list of raw primary key values
+     * @return list of global IDs
      */
     public static NSArray<EOGlobalID> globalIDsWithPrimaryKeyValues(String entityName, NSArray<Object> values) {
         if (values == null || values.count() == 0) {
@@ -204,7 +204,7 @@ public class ERXEOGlobalIDUtilities {
      * Fetches an object defined by gid without refreshing refetched objects.
      * 
      * @param ec the editing context to fetch within
-     * @param gid the global id to fetch
+     * @param gid the global ID to fetch
      * @return the fetched EO
      */
     public static EOEnterpriseObject fetchObjectWithGlobalID(EOEditingContext ec, EOGlobalID gid) {
@@ -221,8 +221,8 @@ public class ERXEOGlobalIDUtilities {
      * refreshing refetched objects.
      * 
      * @param ec the editing context to fetch within
-     * @param globalIDs the global ids to fetch
-     * @return the fetched EO's
+     * @param globalIDs the global IDs to fetch
+     * @return the fetched EOs
      */
     public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> globalIDs) {
     	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
@@ -232,9 +232,9 @@ public class ERXEOGlobalIDUtilities {
      * Fetches an array of objects defined by the globalIDs in a single fetch per entity.
      * 
      * @param ec the editing context to fetch within
-     * @param globalIDs the global ids to fetch
+     * @param globalIDs the global IDs to fetch
      * @param refreshesRefetchedObjects whether or not to refresh refetched objects
-     * @return the fetched EO's
+     * @return the fetched EOs
      */
 	public static NSMutableArray<EOEnterpriseObject> fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> globalIDs, boolean refreshesRefetchedObjects) {
     	NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>();
@@ -297,12 +297,14 @@ public class ERXEOGlobalIDUtilities {
 
     /**
      * Fires all faults in the given global IDs on one batch together with their relationships.
-     * This is much more efficient than triggering the individual faults and relationships later on. 
+     * This is much more efficient than triggering the individual faults and relationships later on.
      * The method should use only 1 fetch for all objects per entity
      * and then one for each relationship per entity.
-     * @param ec
-     * @param globalIDs
-     * @param prefetchingKeypaths
+     * 
+     * @param ec editing context to fault into
+     * @param globalIDs the global IDs to fault
+     * @param prefetchingKeypaths list of key paths to prefetch or null
+     * @return faulted objects
      */
     public static NSArray<EOEnterpriseObject> fireFaultsForGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> globalIDs, NSArray<String> prefetchingKeypaths) {
     	if (globalIDs == null || globalIDs.count() == 0) {
@@ -339,17 +341,26 @@ public class ERXEOGlobalIDUtilities {
     	}
     	return result;
     }
-    
+
     /**
      * Fires all faults in the given global IDs on one batch. This is much more efficient than
      * triggering the individual faults later on. The method should use only 1 fetch for all objects per entity.
-     * @param ec
-     * @param globalIDs
+     * 
+     * @param ec editing context to fault in
+     * @param globalIDs the global IDs to fault
+     * @return list of faulted objects
      */
     public static NSArray<EOEnterpriseObject> fireFaultsForGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> globalIDs) {
         return fireFaultsForGlobalIDs(ec, globalIDs, NSArray.EmptyArray);
     }
 
+    /**
+     * Creates a global ID for the given entity name and its primary key value(s).
+     * 
+     * @param entityName the entity name
+     * @param values one or more primary key values
+     * @return global ID object
+     */
 	public static EOKeyGlobalID createGlobalID(String entityName, Object[] values) {
 		if (values != null && values.length == 1) {
 			Object primaryKey = values[0];
