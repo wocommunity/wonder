@@ -60,19 +60,27 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 
 	@Override
 	protected boolean traverseOrQualifier(EOOrQualifier q) {
-		NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
-		ERXOrQualifier oq = new ERXOrQualifier(_qualifiers.subarrayWithRange(range));
-		_qualifiers.removeObjectsInRange(range);
-		_qualifiers.addObject(oq);
+		if (q.qualifiers().isEmpty()) {
+			_qualifiers.addObject(new ERXOrQualifier());
+		} else {
+			NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
+			ERXOrQualifier oq = new ERXOrQualifier(_qualifiers.subarrayWithRange(range));
+			_qualifiers.removeObjectsInRange(range);
+			_qualifiers.addObject(oq);
+		}
 		return true;
 	}
 
 	@Override
 	protected boolean traverseAndQualifier(EOAndQualifier q) {
-		NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
-		ERXAndQualifier aq = new ERXAndQualifier(_qualifiers.subarrayWithRange(range));
-		_qualifiers.removeObjectsInRange(range);
-		_qualifiers.addObject(aq);
+		if (q.qualifiers().isEmpty()) {
+			_qualifiers.addObject(new ERXAndQualifier());
+		} else {
+			NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
+			ERXAndQualifier aq = new ERXAndQualifier(_qualifiers.subarrayWithRange(range));
+			_qualifiers.removeObjectsInRange(range);
+			_qualifiers.addObject(aq);
+		}
 		return true;
 	}
 
