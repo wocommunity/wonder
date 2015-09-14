@@ -1170,7 +1170,6 @@
                 <exclude name="**/Roots/**" />
                 <exclude name="**/null*" />
                 <exclude name="**/.git/**" />
-                <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
              	<exclude name="**/bin/**"/>
              	<exclude name="**/build/**"/>
@@ -1188,12 +1187,6 @@
             zipfile="${dist.base}/Wonder-src-${project.version}.tgz"/>
 
         <delete file="${dist.base}/Wonder-src-${project.version}.tar"/>
-        <!-- zip destfile="${dist.base}/Wonder-${project.version}.zip"
-            basedir="${dist.base}/wonder-${project.version}"
-            excludes="**/CVS/*, **/dist/**" / -->
-    </target>
-
-
     </target>
 
     <target name="build">

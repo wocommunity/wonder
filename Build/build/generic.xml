@@ -207,16 +207,12 @@ There are many ways to use this script:
 
         <mkdir dir="${project.source.dir}/Documentation" />
         <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Documentation" />
         </copy>
 
         <mkdir dir="${project.source.dir}/Support" />
         <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}/Support" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Support" />
         </copy>
     </target>
 
@@ -238,16 +234,12 @@ There are many ways to use this script:
 
         <mkdir dir="${project.source.dir}/Documentation" />
         <copy todir="${dist.dir}/Documentation/Applications/${project}" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Documentation" />
         </copy>
 
         <mkdir dir="${project.source.dir}/Support" />
         <copy todir="${dist.dir}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Support" />
         </copy>
     </target>
 
@@ -405,8 +397,6 @@ There are many ways to use this script:
                 <include name="**/*" />
                 <exclude name="**/*.class" />
                 <exclude name="**/*.java" />
-                <exclude name="**/.svn" />
-                <exclude name="**/CVS" />
             </classes>
             <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
@@ -471,15 +461,11 @@ There are many ways to use this script:
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
-                <exclude name=".svn" />
-                <exclude name=".CVS" />
             </classes>
             <classes dir="${project.sources.dir}">
                 <include name="**/*" />
                 <exclude name="**/*.java" />
                 <exclude name="**/*.class" />
-                <exclude name="**/.svn" />
-                <exclude name="**/CVS" />
             </classes>
             <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
@@ -531,13 +517,6 @@ There are many ways to use this script:
             <arg line="a+x ${project.name}" />
         </exec>
     </target>
-    
-    <!-- compatibility with prior scripts -->
-    <target name="global.framework" depends="global.framework.build">
-    </target>
-    <target name="global.application" depends="global.application.build">
-    </target>
-    <!-- /compatibility -->
     
     <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${web.framework.install.root}/${project.name}.framework" />
