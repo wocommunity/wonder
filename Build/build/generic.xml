@@ -69,12 +69,6 @@ There are many ways to use this script:
          <!-- project.type, either "global.application" or "global.framework" -->
          <antcall target="global.application.${build.action}" >
 
-            <!-- princical class if the framework or Application class -->
-            <param name="project.principal.class" value="com.company.Application" />
-
-            <!-- Name of the framework or application -->
-            <param name="project.name" value="SomeNewProject" />
-
             <!-- Path where the project resides, can be absolute -->
             <param name="project.dir" value="/path/to/your/project" />
         </antcall>
@@ -90,9 +84,6 @@ There are many ways to use this script:
     </target>
     
     <target name="generic.build">
-        <condition property="project.principal.class" value="${principalClass}">
-            <and><isset property="principalClass" /><not><isset property="project.principal.class" /></not></and>
-        </condition>
         <antcall target="global.${project.type}.build" >
             <param name="project.principal.class" value="${project.principal.class}" />
             <param name="project.name" value="${project.name}" />
