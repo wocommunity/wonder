@@ -101,7 +101,7 @@
         </ant>
     </target>
 
-    <target name="build" depends="frameworks,applications,examples" />
+    <target name="build" depends="frameworks, applications, examples" />
 
     <target name="plugins">
         <ant antFile="Build/build/build.xml" target="plugins.all">

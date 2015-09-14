@@ -363,8 +363,7 @@ There are many ways to use this script:
         </unzip>
     </target>
 
-    <target name="global.framework.build" depends="global.properties,global.compile,global.unjar">
-
+    <target name="global.framework.build" depends="global.properties, global.compile, global.unjar">
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>

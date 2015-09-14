@@ -1127,7 +1127,7 @@
     <target name="ajax.frameworks.all" depends="GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERJQueryMobile.all, ERJQMobile.all, ERPrototaculous.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all, ERMootoolsDirectToWeb.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, ERModernMoviesDemo.all" />
 
-    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all,MySQLPlugIn.all,DB2PlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all, FrontBasePlugIn.all, DerbyPlugIn.all, EROraclePlugIn.all, H2PlugIn.all, MySQLPlugIn.all, DB2PlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
@@ -1155,7 +1155,7 @@
 
     <target name="dist">
         <!-- do dist target on known frameworks -->
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="dist.base" value="${dist.base}" />
             <param name="project.version" value="${project.version}" />
             <param name="dist.dir" value="${dist.base}/wonder-${project.version}"/>
@@ -1199,19 +1199,19 @@
     <target name="build">
         <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
         <property name="include.source" value="true" />
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="build" />
         </antcall>
     </target>
 
     <target name="install">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="install" />
         </antcall>
     </target>
 
     <target name="web">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="web" />
         </antcall>
     </target>
@@ -1290,7 +1290,7 @@
     </target>
 
     <target name="clean">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="clean" />
         </antcall>
     </target>
