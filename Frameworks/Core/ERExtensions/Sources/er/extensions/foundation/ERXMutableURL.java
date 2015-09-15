@@ -235,6 +235,15 @@ public class ERXMutableURL {
 	 * @return the port of this URL (can be null)
 	 */
 	public Integer port() {
+		if (_port == null) {
+			if (protocol() != null) {
+				if ("https".equals(protocol())) {
+					_port = 443;
+				} else {
+					_port = 80;
+				}
+			}
+		}
 		return _port;
 	}
 
