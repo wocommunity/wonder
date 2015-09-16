@@ -3,7 +3,7 @@
 	<wo class="AjaxTabbedPanel.java" wocomponentcontent="true">
         <binding name="id"/>
         <binding name="busyDiv"/>
-        <binding name="onLoadw"/>
+        <binding name="onLoad"/>
 	<binding name="onSelect"/>
     <validation message="'id' is a required binding.">
             <unbound name="id"/>
