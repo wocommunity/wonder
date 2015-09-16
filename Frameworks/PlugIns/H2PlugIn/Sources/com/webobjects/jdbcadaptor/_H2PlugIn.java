@@ -940,7 +940,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return H2Expression.class;
 	}
 

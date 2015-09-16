@@ -213,7 +213,7 @@ public class ERXComponentActionRedirector {
         return (ERXComponentActionRedirector)ERXThreadStorage.valueForKey("redirector");
     }
 
-    /** contructs the redirector from the Restorable. 
+    /** constructs the redirector from the Restorable. 
      * @param r - Restorable component used to construct a redirector */
     public ERXComponentActionRedirector(Restorable r) {
         WOComponent component = (WOComponent)r;

@@ -374,7 +374,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
 		boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
-		if (secure && !generatingCompleteURLs) {
+		boolean requestIsSecure = context.secureMode();
+		boolean switchToCompleteURLs = secure ^ requestIsSecure;
+		if (switchToCompleteURLs && !generatingCompleteURLs) {
 			context.generateCompleteURLs();
 		}
 		try {
@@ -405,7 +407,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			}
 		}
 		finally {
-			if (secure && !generatingCompleteURLs) {
+			if (switchToCompleteURLs && !generatingCompleteURLs) {
 				context.generateRelativeURLs();
 			}
 		}
@@ -421,13 +423,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				_appendOpenTagToResponse(response, context);
 				if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
 					if (_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component()) || (_addDefaultSubmitButton == null && addDefaultSubmitButtonDefault)) {
-						ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
-						boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("3.0.3") > 0);
-						if(useDisplayNone) {
-							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
-						} else {
-							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; visibility: hidden\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
-						}
+						response._appendContentAsciiString("<div style=\"position:absolute;left:-100000px\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 					}
 				}
 				appendChildrenToResponse(response, context);

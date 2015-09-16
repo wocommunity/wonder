@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
@@ -3065,14 +3066,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * </span>
 	 */
 	public static String stringForManyKeysWithDefault(final String[] ss, final String defaultValue) {
-		if((ss == null) || (ss.length == 0)) return defaultValue;	// 文字列配列が無いならdefaultValue
+		if(ArrayUtils.isEmpty(ss)) return defaultValue;	// 文字列配列が無いならdefaultValue
 		int count = ss.length;
-		String value = null;
 		for(int loop = 0; loop < count; loop++){
-			if((ss[loop] != null) && (ss[loop].length() > 0)){
-				value = stringForKey(ss[loop]);
+			if(!ERXStringUtilities.stringIsNullOrEmpty(ss[loop])){
+				String value = stringForKey(ss[loop]);
 				if(!ERXStringUtilities.stringIsNullOrEmpty(value))
-					return stringForKey(ss[loop]);
+					return value;
 			}
 		}
 		return defaultValue;
