@@ -5,12 +5,9 @@
         <binding name="busyDiv"/>
         <binding name="onLoad"/>
 	<binding name="onSelect"/>
+    
     <validation message="'id' is a required binding.">
             <unbound name="id"/>
         </validation>
     </wo>
-	
-	<validation message="'id' is a required binding">
-        <unbound name="id"/>
-    </validation>
 </wodefinitions>
