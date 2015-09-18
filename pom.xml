@@ -639,17 +639,17 @@
             <dependency>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jr-sdk</artifactId>
-                <version>3.0.1</version>
+                <version>3.6.1</version>
             </dependency>
             <dependency>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jr-utils</artifactId>
-                <version>3.0.1</version>
+                <version>3.6.1</version>
             </dependency>
             <dependency>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jr-javassist</artifactId>
-                <version>3.11.0.GA</version>
+                <version>3.14.0-GA</version>
             </dependency>
             <dependency>
                 <groupId>org.xhtmlrenderer</groupId>
