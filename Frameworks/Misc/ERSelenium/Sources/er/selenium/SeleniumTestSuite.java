@@ -48,7 +48,7 @@ public class SeleniumTestSuite extends WODirectAction {
 	@Override
 	public WOActionResults performActionNamed(String anActionName) {
 	    if(!ERSelenium.testsEnabled()) {
-	        return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+	        return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
 	    }
 	    if (anActionName.equals("default")) {
 	        return defaultAction();
