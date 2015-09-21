@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>core</artifactId>
-		<version>6.1.4-SNAPSHOT</version>
+		<version>6.2-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
 	<artifactId>ERJavaMail</artifactId>
@@ -39,27 +39,14 @@
 			<artifactId>activation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.mail</groupId>
-			<artifactId>imap</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>smtp</artifactId>
-			<optional>true</optional>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>dsn</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>pop3</artifactId>
+			<version>1.5.4</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

@@ -1,13 +1,15 @@
-package er.extensions.eof.qualifiers;
+package er.extensions.eof;
 
 import junit.framework.TestCase;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
-
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 
@@ -95,5 +97,80 @@ public class ERXQTest extends TestCase {
                 qualifier = ERXQ.matchingValues(values, "friendOf", "John");
                 assertNotNull(qualifier);
                 assertTrue(qualifier instanceof EOAndQualifier && ((EOAndQualifier)qualifier).qualifiers().size() == 3);
+	}
+
+	public void testOne() {
+		NSArray<EOGenericRecord> persons = personArray();
+		EOGenericRecord firstElement = persons.get(0);
+		
+		EOGenericRecord result = ERXQ.one(persons, ERXQ.is("firstName", "Bill"));
+		assertNotNull(result);
+		assertEquals(firstElement, result);
+
+		result = ERXQ.one(persons, ERXQ.is("firstName", "Billl"));
+		assertNull(result);
+
+		result = ERXQ.one(null, ERXQ.is("firstName", "Bill"));
+		assertNull(result);
+		
+		result = ERXQ.one(NSArray.<EOGenericRecord>emptyArray(), ERXQ.is("firstName", "Bill"));
+		assertNull(result);
+
+		try {
+			result = ERXQ.one(persons, null);
+			fail("missing IllegalStateException");
+		} catch (IllegalStateException e) {
+			// got expected exception
+		}
+
+		try {
+			result = ERXQ.one(persons, ERXQ.is("lastName", "Smith"));
+			fail("missing IllegalStateException");
+		} catch (IllegalStateException e) {
+			// got expected exception
+		}
+	}
+
+	public void testFirst() {
+		NSArray<EOGenericRecord> persons = personArray();
+		EOGenericRecord firstElement = persons.get(0);
+		
+		EOGenericRecord result = ERXQ.first(persons, ERXQ.is("firstName", "Bill"));
+		assertNotNull(result);
+		assertEquals(firstElement, result);
+
+		result = ERXQ.first(persons, ERXQ.is("firstName", "Billl"));
+		assertNull(result);
+
+		result = ERXQ.first(null, ERXQ.is("firstName", "Bill"));
+		assertNull(result);
+		
+		result = ERXQ.first(NSArray.<EOGenericRecord>emptyArray(), ERXQ.is("firstName", "Bill"));
+		assertNull(result);
+
+		result = ERXQ.first(persons, null);
+		assertNotNull(result);
+		assertEquals(firstElement, result);
+		
+		result = ERXQ.first(persons, ERXQ.is("lastName", "Smith"));
+		assertNotNull(result);
+		assertEquals(firstElement, result);
+	}
+
+	private NSArray<EOGenericRecord> personArray() {
+		NSMutableArray<EOGenericRecord> persons = new NSMutableArray<EOGenericRecord>();
+		persons.add(createPerson("Bill", "Smith"));
+		persons.add(createPerson("Bob", "Anything"));
+		persons.add(createPerson("John", "Smith"));
+		persons.add(createPerson("Peter", "Pan"));
+		return persons.immutableClone();
+	}
+
+	private EOGenericRecord createPerson(String firstName, String lastName) {
+		EOClassDescription classDescription = EOClassDescription.classDescriptionForEntityName("Person");
+		EOGenericRecord person = new EOGenericRecord(classDescription);
+		person.takeValueForKey(firstName, "firstName");
+		person.takeValueForKey(lastName, "lastName");
+		return person;
 	}
 }

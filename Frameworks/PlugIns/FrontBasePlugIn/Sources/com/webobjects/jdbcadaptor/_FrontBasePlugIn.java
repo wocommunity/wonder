@@ -159,7 +159,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return FrontbaseExpression.class;
 	}
 

@@ -379,7 +379,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 			results = new Results<T>(objects, 0, -1, objects.count());
 		}
 		else {
-			ERXFetchSpecificationBatchIterator batchIterator = new ERXFetchSpecificationBatchIterator(fetchSpec, editingContext, range.length());
+			ERXFetchSpecificationBatchIterator<T> batchIterator = new ERXFetchSpecificationBatchIterator<T>(fetchSpec, editingContext, range.length());
 			objects = batchIterator.batchWithRange(range);
 			results = new Results<T>(objects, range.location(), range.length(), batchIterator.count());
 		}

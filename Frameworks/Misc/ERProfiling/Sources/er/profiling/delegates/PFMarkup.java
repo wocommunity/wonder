@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOMessage;
@@ -137,7 +139,7 @@ public class PFMarkup implements PFProfiler.Delegate {
                         for (int i = startIndex; i < endIndex; i++) {
                             char ch = contentStr.charAt(i);
                             if (ch == '<') {
-                                if (i < endIndex - 1 && contentStr.charAt(i + 1) != '/') {
+                                if (i < endIndex - 1 && contentStr.charAt(i + 1) != '/' && contentStr.charAt(i + 1) != '!') {
                                     tagIndex = i;
                                     break;
                                 }
@@ -145,33 +147,27 @@ public class PFMarkup implements PFProfiler.Delegate {
                         }
 
                         if (tagIndex != -1) {
-                            int attributeOffset = -1;
-                            boolean spacesFound = false;
-                            for (int i = tagIndex; i < endIndex; i++) {
-                                char ch = contentStr.charAt(i);
-                                if (ch == ' ') {
-                                    spacesFound = true;
-                                } else if (ch == '>' || ch == '/') {
-                                    if (attributeOffset > tagIndex + 1) {
-                                        attributeOffset = i;
-                                    }
-                                    break;
-                                } else if (spacesFound) {
-                                    attributeOffset = i;
-                                    break;
-                                }
-                            }
-                            if (attributeOffset != -1) {
-                                String profilerID = markerStats._stats.cssID();
-                                String profilerIDAttributeName = "class";
-                                if (regionMatches(contentStr, attributeOffset, profilerIDAttributeName, 0, profilerIDAttributeName.length())) {
-                                    int openQuoteIndex = indexOf(contentStr, "\"", attributeOffset);
-                                    if (openQuoteIndex != -1) {
-                                        insert(contentStr, openQuoteIndex + 1, profilerID + " ");
-                                    }
+                            String profilerIDAttributeName = "class";
+                            String profilerIDAttributeStart = " " + profilerIDAttributeName + "=\"";
+                            boolean foundClassAttribute = false;
+                            int closeOffset = StringUtils.indexOf(contentStr, '>', tagIndex);
+                            int attributeOffset = StringUtils.indexOf(contentStr, profilerIDAttributeName, tagIndex);
+                            if (attributeOffset == -1 || attributeOffset > closeOffset) {
+                                char ch = contentStr.charAt(closeOffset - 1);
+                                if (ch == '/') {
+                                    attributeOffset = closeOffset - 1;
                                 } else {
-                                    insert(contentStr, attributeOffset, " " + profilerIDAttributeName + "=\"" + profilerID + "\" ");
+                                    attributeOffset = closeOffset;
                                 }
+                            } else {
+                                attributeOffset += profilerIDAttributeStart.length() -1;
+                                foundClassAttribute = true;
+                            }
+                            String profilerID = markerStats._stats.cssID();
+                            if (foundClassAttribute) {
+                                insert(contentStr, attributeOffset, profilerID + " ");
+                            } else {
+                                insert(contentStr, attributeOffset, profilerIDAttributeStart + profilerID + "\"");
                             }
                         }
                     }

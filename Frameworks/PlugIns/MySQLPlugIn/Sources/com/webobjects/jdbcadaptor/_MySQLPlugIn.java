@@ -673,7 +673,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class<MySQLExpression> defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		try {
 			if (NSProperties.booleanForKey("com.webobjects.jdbcadaptor.MySQLExpression.enable")) {
 				return com.webobjects.jdbcadaptor.MySQLPlugIn.MySQLExpression.class;

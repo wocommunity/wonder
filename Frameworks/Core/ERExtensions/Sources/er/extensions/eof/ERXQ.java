@@ -136,20 +136,14 @@ public class ERXQ {
 	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T one(NSArray<T> array, EOQualifier qualifier) {
-		T object;
-		if (array == null) {
-			object = null;
-		}
-		else {
+		T object = null;
+		if (array != null && !array.isEmpty()) {
 			NSArray<T> objects = ERXQ.filtered(array, qualifier);
 			int count = objects.count();
-			if (count == 0) {
-				object = null;
-			}
-			else if (count == 1) {
+			if (count == 1) {
 				object = objects.lastObject();
 			}
-			else {
+			else if (count > 1) {
 				throw new IllegalStateException("There was more than one object that matched the qualifier '" + qualifier + "'.");
 			}
 		}
@@ -167,20 +161,12 @@ public class ERXQ {
 	 * @param qualifier
 	 *            the qualifier to filter on
 	 * @return one matching object or null
-	 * @throws IllegalStateException if more than one object matched
 	 */
 	public static <T> T first(NSArray<T> array, EOQualifier qualifier) {
-		T object;
-		if (array == null) {
-			object = null;
-		}
-		else {
+		T object = null;
+		if (array != null && !array.isEmpty()) {
 			NSArray<T> objects = ERXQ.filtered(array, qualifier);
-			int count = objects.count();
-			if (count == 0) {
-				object = null;
-			}
-			else {
+			if (!objects.isEmpty()) {
 				object = objects.objectAtIndex(0);
 			}
 		}

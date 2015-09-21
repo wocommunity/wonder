@@ -33,7 +33,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * to get an appropriate browser object.
  * <p>
  * You can extends <code>ERXBasicBrowser</code> or its abstract parent <code>ERXBrowser</code>
- * to implement more specific questions for your application. One potencial
+ * to implement more specific questions for your application. One potential
  * example will be to have a question <code>isSupportedBrowser</code> that
  * checks if the client is using one of the supported browsers for your
  * application.
