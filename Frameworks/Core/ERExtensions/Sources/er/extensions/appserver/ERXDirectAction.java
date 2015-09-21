@@ -549,6 +549,6 @@ public class ERXDirectAction extends WODirectAction {
 	 * @return 403 response
 	 */
 	protected WOResponse forbiddenResponse() {
-		return new ERXResponse(null, ERXHttpStatusCodes.STATUS_FORBIDDEN);
+		return new ERXResponse(null, ERXHttpStatusCodes.FORBIDDEN);
 	}
 }
