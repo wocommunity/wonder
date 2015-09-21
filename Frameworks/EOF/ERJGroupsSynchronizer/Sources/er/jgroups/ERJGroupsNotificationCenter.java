@@ -7,13 +7,9 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.jgroups.Channel;
-import org.jgroups.ChannelClosedException;
-import org.jgroups.ChannelException;
-import org.jgroups.ChannelNotConnectedException;
-import org.jgroups.ExtendedReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
+import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 
 import com.webobjects.appserver.WOApplication;
@@ -48,7 +44,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
 
     private static volatile ERJGroupsNotificationCenter _sharedInstance;
 
-    protected ERJGroupsNotificationCenter() throws ChannelException {
+    protected ERJGroupsNotificationCenter() throws Exception {
         String jgroupsPropertiesFile = ERXProperties.stringForKey("er.extensions.jgroupsNotificationCenter.properties");
         String jgroupsPropertiesFramework = null;
         if (jgroupsPropertiesFile == null) {
@@ -67,9 +63,9 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
         _channel = new JChannel(propertiesUrl);
         _postLocal = ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsNotificationCenter.postLocal", false);
-        _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
+        _channel.setDiscardOwnMessages(Boolean.FALSE);
         _channel.connect(_groupName);
-        _channel.setReceiver(new ExtendedReceiverAdapter() {
+        _channel.setReceiver(new ReceiverAdapter() {
 
             @Override
             public void receive(Message message) {
@@ -108,7 +104,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
                     try {
                         _sharedInstance = new ERJGroupsNotificationCenter();
                         setDefaultCenter(_sharedInstance);
-                    } catch (ChannelException e) {
+                    } catch (Exception e) {
                         throw NSForwardException._runtimeExceptionForThrowable(e);
                     }
                 }
@@ -128,7 +124,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         }
     }
 
-    protected void writeNotification(NSNotification notification) throws ChannelNotConnectedException, ChannelClosedException, IOException {
+    protected void writeNotification(NSNotification notification) throws Exception, IOException {
         RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
         ObjectOutputStream dos = new ObjectOutputStream(baos);
         dos.writeObject(notification.name());
