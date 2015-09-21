@@ -102,7 +102,7 @@ public class ERXHttpStatusCodes {
 	 * 403 Forbidden 
 	 * The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated.
 	 */
-	public static final int STATUS_FORBIDDEN = WOMessage.HTTP_STATUS_FORBIDDEN;
+	public static final int FORBIDDEN = WOMessage.HTTP_STATUS_FORBIDDEN;
 
 	/** 
 	 * 404 Not Found 
