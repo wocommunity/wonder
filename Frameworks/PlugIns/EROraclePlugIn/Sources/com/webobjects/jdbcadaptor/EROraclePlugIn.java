@@ -16,7 +16,7 @@ public class EROraclePlugIn extends OraclePlugIn {
    * @see com.webobjects.jdbcadaptor.JDBCPlugIn#defaultExpressionClass()
    */
   @Override
-  public Class defaultExpressionClass() {
+  public Class<? extends JDBCExpression> defaultExpressionClass() {
     return EROracleExpression.class;
   }
 

@@ -37,7 +37,7 @@
         {
             adaptorValueConversionMethodName = toCryptoString; 
             columnName = cryptoString; 
-            externalType = VARCHAR; 
+            externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
             valueClassName = "er.extensions.crypting.ERXCryptoString"; 
@@ -128,7 +128,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = VARCHAR; 
+            externalType = varchar; 
             name = ipAddress; 
             valueClassName = NSString; 
             valueType = S; 
@@ -137,7 +137,7 @@
         {
             adaptorValueConversionMethodName = name; 
             columnName = ""; 
-            externalType = VARCHAR; 
+            externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = javaEnum; 
             valueClassName = "java.lang.Enum"; 

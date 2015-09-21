@@ -378,7 +378,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return DerbyExpression.class;
 	}
 
