@@ -249,7 +249,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
 
             String srcEntityForeignKey = null;
-            NSArray<EOAttribute> sourceAttributes = relationship.sourceAttributes();
+            NSArray<EOAttribute> sourceAttributes = relationship != null ? relationship.sourceAttributes() : null;
             if (sourceAttributes != null && sourceAttributes.count() > 0) {
                 EOAttribute fk = sourceAttributes.lastObject();
                 srcEntityForeignKey = expression.sqlStringForAttribute(fk);
@@ -259,8 +259,14 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 srcEntityForeignKey = expression.sqlStringForAttribute(pk);
             }
             
-            EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
-            String destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(parentChildJoin.destinationAttribute().columnName());
+            String destEntityForeignKey;
+            if (relationship != null) {
+                EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
+                destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(parentChildJoin.destinationAttribute().columnName());
+            } else {
+                EOAttribute pk = srcEntity.primaryKeyAttributes().lastObject();
+                destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(pk.columnName());
+            }
             
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
             EOFetchSpecification fetchSpecification = new EOFetchSpecification(destEntity.name(), qual, null, false, true, null);
