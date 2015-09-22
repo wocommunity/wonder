@@ -4,7 +4,7 @@ BranchButton: CCSubmitLinkButton {
 	class = "Button OptionButton";
 }
 
-Help: ERDDebuggingHelp {
+Help: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
