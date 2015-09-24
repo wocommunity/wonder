@@ -19,9 +19,9 @@
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>jgroups</groupId>
-            <artifactId>jgroups</artifactId>
-        </dependency>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
