@@ -1,6 +1,6 @@
 package com.secretpal.components.person;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.secretpal.components.application.Main;
 import com.secretpal.components.application.SPPage;

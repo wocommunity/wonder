@@ -2,7 +2,7 @@ package er.extensions.components;
 
 import java.util.UUID;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;

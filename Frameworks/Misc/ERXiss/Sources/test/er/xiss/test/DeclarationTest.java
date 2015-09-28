@@ -2,7 +2,7 @@ package er.xiss.test;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import er.xiss.ERXML;
 
