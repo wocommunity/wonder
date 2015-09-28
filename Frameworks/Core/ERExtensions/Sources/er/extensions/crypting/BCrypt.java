@@ -17,7 +17,7 @@ package er.extensions.crypting;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * BCrypt implements OpenBSD-style Blowfish password hashing using

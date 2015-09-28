@@ -18,7 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

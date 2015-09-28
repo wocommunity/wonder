@@ -6,7 +6,7 @@
 //
 package er.extensions.components;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.appserver.WOContext;
 

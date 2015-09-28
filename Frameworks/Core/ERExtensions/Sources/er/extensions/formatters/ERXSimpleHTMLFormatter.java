@@ -9,7 +9,7 @@ package er.extensions.formatters;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import er.extensions.foundation.ERXStringUtilities;

@@ -3,7 +3,7 @@ package er.pdf;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;

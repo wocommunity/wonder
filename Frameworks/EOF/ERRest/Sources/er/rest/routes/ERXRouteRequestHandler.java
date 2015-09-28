@@ -3,7 +3,7 @@ package er.rest.routes;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAction;

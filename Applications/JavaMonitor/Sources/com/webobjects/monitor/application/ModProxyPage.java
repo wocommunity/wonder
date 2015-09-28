@@ -2,7 +2,7 @@ package com.webobjects.monitor.application;
 
 import java.util.Enumeration;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;

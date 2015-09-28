@@ -2,8 +2,8 @@ package er.extensions.appserver;
 
 import java.lang.reflect.Field;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
