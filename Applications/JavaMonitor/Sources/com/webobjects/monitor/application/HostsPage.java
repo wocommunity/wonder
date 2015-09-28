@@ -20,7 +20,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;

@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.eocontrol.changeNotification.EOChangeNotificationOptions;
 import com.webobjects.foundation.NSArray;
