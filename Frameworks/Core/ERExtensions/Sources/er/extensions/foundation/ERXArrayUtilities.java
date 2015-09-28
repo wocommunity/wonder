@@ -2072,13 +2072,34 @@ public class ERXArrayUtilities {
     }
 
     /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, the new object will replace the previous one in the dictionary.
+	 *
+     * This is a typesafe variant of dictionaryOfObjectsIndexedByKeyPath(NSArray<V> objects, String keyPath).
+     *
+     * Calls <code>dictionaryOfObjectsIndexedByKeyPathThrowOnCollision()</code> passing <code>false</code> for throwOnCollision.
+     *
+     * @param array array to index
+     * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
+     *        object is not put into the resulting dictionary.
+     * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     */
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(final NSArray<T> array, final ERXKey<K> keyPath) {
+        return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath, false);
+    }
+
+    /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, the new object will replace the previous one in the dictionary.
+     *
      * Calls <code>dictionaryOfObjectsIndexedByKeyPathThrowOnCollision()</code> passing <code>false</code> for throwOnCollision.
      * 
      * @param array array to index
      * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
      *        object is not put into the resulting dictionary.
      * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
-     * @see #dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(NSArray, String, boolean)
      */
     public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(final NSArray<T> array, final String keyPath) {
         return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath, false);
@@ -2086,12 +2107,28 @@ public class ERXArrayUtilities {
 
     /**
      * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
-     * the array to the object in the array. This is similar in concept to but different in semantic from
-     * <code>arrayGroupedByKeyPath()</code>. That method is focused on multiple objects returning the same value for the keypath
-     * and, so, objects are grouped into arrays. That is not particularly useful when there aren't collisions in the array or when
-     * you don't care if there are collisions. For example, with a CreditCard EO object, one could rely on the paymentType.name value
-     * to be unique and thus you're more interested in being able to rapidly get to the EO. <code>arrayGroupedByKeyPath()</code>
-     * would require either flattening out the arrays or navigating to them every time.
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, if throwOnCollision is true, an exception is thrown, otherwise, the 
+     * the new object will replace the previous one in the dictionary.
+     * 
+     * This is a typesafe variant of dictionaryOfObjectsIndexedByKeyPath(NSArray<V> objects, String keyPath, boolean throwOnCollision).
+     *
+     * @param array array to index
+     * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
+     *        object is not put into the resulting dictionary.
+     * @param throwOnCollision if <code>true</code> and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
+     *        an exception is thrown. If <code>false</code>, the last object in the array wins.
+     * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     */
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(final NSArray<T> array, final ERXKey<K> keyPath, final boolean throwOnCollision) {
+    	return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath.key(), throwOnCollision);
+    }
+    
+    /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, if throwOnCollision is true, an exception is thrown, otherwise, the 
+     * the new object will replace the previous one in the dictionary.
      *
      * @param array array to index
      * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the

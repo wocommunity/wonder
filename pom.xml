@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>6.2-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -92,8 +92,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -515,9 +515,9 @@
                 <version>3.0.3</version>
             </dependency>
             <dependency>
-                <groupId>jgroups</groupId>
+                <groupId>org.jgroups</groupId>
                 <artifactId>jgroups</artifactId>
-                <version>2.6.8.GA</version>
+                <version>3.6.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -532,7 +532,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.3.168</version>
+                <version>1.4.186</version>
             </dependency>
             <dependency>
                 <groupId>com.octo.captcha</groupId>

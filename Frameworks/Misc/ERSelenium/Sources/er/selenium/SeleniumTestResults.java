@@ -101,7 +101,7 @@ public class SeleniumTestResults extends WODirectAction {
     @Override
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
         if (actionName.equals("default"))
             return defaultAction();

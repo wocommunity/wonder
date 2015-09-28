@@ -626,7 +626,7 @@ public class AdminAction extends WODirectAction {
                 throwable.printStackTrace();
             }
         } else {
-            woresponse.setStatus(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+            woresponse.setStatus(ERXHttpStatusCodes.FORBIDDEN);
             woresponse.setContent("Monitor is password protected - password missing or incorrect.");
         }
         return woresponse;
