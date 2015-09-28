@@ -3,7 +3,7 @@ package er.extensions.components;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;

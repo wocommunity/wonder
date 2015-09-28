@@ -1,6 +1,6 @@
 package er.extensions.foundation;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 

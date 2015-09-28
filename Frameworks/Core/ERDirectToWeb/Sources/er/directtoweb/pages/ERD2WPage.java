@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 

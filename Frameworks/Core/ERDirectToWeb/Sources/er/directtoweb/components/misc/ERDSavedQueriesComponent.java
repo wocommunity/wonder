@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Enumeration;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;

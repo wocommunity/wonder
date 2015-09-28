@@ -1,6 +1,6 @@
 package er.modern.look.pages;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;

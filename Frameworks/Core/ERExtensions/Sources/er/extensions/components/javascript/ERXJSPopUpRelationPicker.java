@@ -11,7 +11,7 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;

@@ -9,7 +9,7 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;

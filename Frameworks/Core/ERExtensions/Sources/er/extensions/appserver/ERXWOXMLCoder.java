@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Enumeration;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.xml.WOXMLCoder;
 import com.webobjects.appserver.xml.WOXMLDecoder;

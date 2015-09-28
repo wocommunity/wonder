@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;

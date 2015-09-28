@@ -1,6 +1,6 @@
 package er.extensions.components._private;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
