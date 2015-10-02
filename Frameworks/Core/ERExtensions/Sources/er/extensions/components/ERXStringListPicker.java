@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Useful for picking a String from a list.<br />
+ * Useful for picking a String from a list.
  * 
  * @binding item 
  * @binding selection

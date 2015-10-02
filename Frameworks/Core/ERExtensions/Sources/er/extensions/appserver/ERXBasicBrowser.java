@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * <span class="en">
+ * <div class="en">
  * <code>ERXBasicBrowser</code> is a concrete subclass of {@link ERXBrowser}
  * that defines browser object. A browser object represents the web browser
  * that the current request-response cycle is dealing with. It holds the
@@ -70,9 +70,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * <p><strong>IE WIndows 6.02</strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0));
- * </span>
+ * </div>
  *  
- * <span class="ja">
+ * <div class="ja">
  * <code>ERXBasicBrowser</code> はブラウザ・オブジェクトを定義する {@link ERXBrowser} の明確なサブクラスです。
  * ブラウザ・オブジェクトはカレント・リクエスト・レスポンス・ループの Webブラウザを表します。
  * HTTP リクエスト・ヘッダー <code>"user-agent"</code> の情報を保持し、さらに
@@ -116,7 +116,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * <p><strong>IE WIndows 6.02: </strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0));
- * </span>
+ * </div>
  */
 public class ERXBasicBrowser extends ERXBrowser {
 
@@ -272,19 +272,17 @@ public class ERXBasicBrowser extends ERXBrowser {
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * CPU string
+     * </div>
      * 
-     * @return what processor that the browser is running on
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザが動作している CPU を戻します
+     * </div>
      * 
-     * @return ブラウザが動作している CPU
-     * </span>
+     * @return <div class="en">what processor that the browser is running on</div>
+     *         <div class="ja">ブラウザが動作している CPU</div>
      */
-    @SuppressWarnings("javadoc")
     public String cpu() {
         return _cpu;
     }
@@ -350,11 +348,11 @@ public class ERXBasicBrowser extends ERXBrowser {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * Mozilla ですか？
      * 
      * @return Mozilla の場合には true を戻します
-     * </span>
+     * </div>
      */
     public boolean isMozilla() {
         return _isMozilla;
@@ -479,48 +477,44 @@ public class ERXBasicBrowser extends ERXBrowser {
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Does the browser support IFrames?
+     * </div>
      * 
-     * @return true if the browser is IE.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザが iFrames をサポートしていますか？
+     * </div>
      * 
-     * @return iFrames サポートの場合には true を戻します
-     * </span>
+     * @return <div class="en">true if the browser is IE.</div>
+     *         <div class="ja">iFrames サポートの場合には true を戻します</div>
      */
-    @SuppressWarnings("javadoc")
     public boolean isIFrameSupported() {
         return isIE();
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is not netscape or is a version 5 browser.
+     * </div>
      * 
-     * @return true if this browser can handle nested tables
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ネストされているテーブルを高速でレンダリング可能？
      * Browser is not netscape or is a version 5 browser.
+     * </div>
      * 
-     * @return ネストされているテーブルを高速でレンダリング可能の場合には true を戻します
-     * </span>
+     * @return <div class="en">true if this browser can handle nested tables</div>
+     *         <div class="ja">ネストされているテーブルを高速でレンダリング可能の場合には true を戻します</div>
      */
-    @SuppressWarnings("javadoc")
     public boolean willRenderNestedTablesFast() {
         return isNotNetscape() || isMozilla50Compatible();
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * Javascript OnImage ボタンがサポートされていますか？
      * 
      * @return Javascript OnImage ボタンがサポートされている場合には true を戻します
-     * </span>
+     * </div>
      */
     public boolean isJavaScriptOnImageButtonSupported() {
         return isNotNetscape() || isMozilla50Compatible();

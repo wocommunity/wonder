@@ -26,7 +26,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.<br />
+ * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.
  * 
  * @binding dataSource
  * @binding destinationDisplayKey

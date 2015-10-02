@@ -1481,7 +1481,7 @@ public class ERXFileUtilities {
         return length;
     }
     
-    /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
+    /** shortens a filename, for example aVeryLongFileName.java -&gt; aVer...Name.java
      * @param name the name to modify
      * @param maxLength the maximum length of the name.
      * <code>maxLength</code> values under 4 have no effect, the returned string is

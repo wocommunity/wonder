@@ -7,15 +7,15 @@ package er.javamail;
 import javax.activation.DataHandler;
 
 /**
- * <span class="en">
+ * <div class="en">
  * This ERMailDelivery subclass is specifically crafted for plain text messages.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * 標準テキスト・メッセージに使用する ERMailDelivery サブクラス
- * </span>
+ * </div>
  * 
- * @author Camille Troillard <tuscland@mac.com>
+ * @author Camille Troillard &lt;tuscland@mac.com&gt;
  */
 public class ERMailDeliveryPlainText extends ERMailDelivery {
 	
@@ -38,13 +38,13 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Pre-processes the mail before it gets sent.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 送信前に前処理を行います。
-	 * </span>
+	 * </div>
 	 * 
 	 * @see ERMailDelivery#prepareMail()
 	 */

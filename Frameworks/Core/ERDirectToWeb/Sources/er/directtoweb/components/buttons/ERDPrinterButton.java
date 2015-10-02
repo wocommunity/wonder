@@ -17,7 +17,7 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Handles the switching of the current task to print, which uses the print templates.<br />
+ * Handles the switching of the current task to print, which uses the print templates.
  * 
  * @binding d2wContext
  * @binding dataSource

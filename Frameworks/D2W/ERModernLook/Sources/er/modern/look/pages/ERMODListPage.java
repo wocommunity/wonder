@@ -11,7 +11,7 @@ import er.directtoweb.pages.templates.ERD2WListPageTemplate;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Modernized list page.<br />
+ * Modernized list page.
  * 
  * @d2wKey printerButtonComponentName
  * @d2wKey emptyListComponentName

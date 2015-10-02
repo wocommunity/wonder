@@ -146,8 +146,8 @@ public class Chronic {
   /**
    * Clean up the specified input text by stripping unwanted characters,
    * converting idioms to their canonical form, converting number words
-   * to numbers (three => 3), and converting ordinal words to numeric
-   * ordinals (third => 3rd)
+   * to numbers (three =&gt; 3), and converting ordinal words to numeric
+   * ordinals (third =&gt; 3rd)
    */
   protected static String preNormalize(String text) {
     String normalizedText = text.toLowerCase();
@@ -180,14 +180,14 @@ public class Chronic {
   }
 
   /**
-   * Convert number words to numbers (three => 3)
+   * Convert number words to numbers (three =&gt; 3)
    */
   protected static String numericizeNumbers(String text) {
     return Numerizer.numerize(text);
   }
 
   /**
-   * Convert ordinal words to numeric ordinals (third => 3rd)
+   * Convert ordinal words to numeric ordinals (third =&gt; 3rd)
    */
   protected static String numericizeOrdinals(String text) {
     return text;

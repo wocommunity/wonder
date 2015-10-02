@@ -9,19 +9,18 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Similar to ERD2WCustomQueryBoolean but displays elements in a <ul></ul> instead of table/matrix
- * @see ERD2WCustomQueryBoolean
+ * </div>
  * 
- * @d2wKey choicesNames
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * ERD2WCustomQueryBoolean と全く同じです。交換性の為に残しています。
- * @see ERD2WCustomQueryBoolean
+ * </div>
  * 
- * @d2wKey choicesNames - ローカライズ名：("ERD2WBoolean.Yes", "ERD2WBoolean.No", "ERD2WBoolean.Unset")
- * </span>
+ * @d2wKey choicesNames <div class="en"></div>
+ *                      <div class="ja">ローカライズ名：("ERD2WBoolean.Yes", "ERD2WBoolean.No", "ERD2WBoolean.Unset")</div>
+ * 
+ * @see ERD2WCustomQueryBoolean
  * 
  * @author mendis
  */

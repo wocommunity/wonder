@@ -25,7 +25,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
  * If in an inspect page for entity A, you use b.k as a display 
  * key, then the D2W rules which are based on d2wContext.attribute
  * will not fire properly. This is because attribute is null, instead 
- * of containing <EOAttribute entity=B1 name=k>. The reason D2W does 
+ * of containing &lt;EOAttribute entity=B1 name=k&gt;. The reason D2W does 
  * not find it is that it uses the Model to find out the EOAttribute 
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for an attribute named k returns nil and you lose.

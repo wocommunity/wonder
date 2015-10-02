@@ -13,7 +13,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.components._private.ERXWOForm;
 
 /**
- * Better navigation bar without a form.<br />
+ * Better navigation bar without a form.
  * 
  * @binding d2wContext the D2W context that this component is in
  * @binding displayGroup the WODisplayGroup that is being controlled

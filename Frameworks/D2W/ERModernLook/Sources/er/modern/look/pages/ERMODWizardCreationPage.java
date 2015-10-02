@@ -18,7 +18,7 @@ import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * A wizard inspect/edit template. Can be used in-line, and supports ajax updates<br />
+ * A wizard inspect/edit template. Can be used in-line, and supports ajax updates
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey bannerFileName

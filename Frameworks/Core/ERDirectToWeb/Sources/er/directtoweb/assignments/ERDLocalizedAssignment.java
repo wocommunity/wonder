@@ -16,7 +16,7 @@ import er.extensions.localization.ERXLocalizer;
 /**
  * This assignment runs it's value through the localizer and evaluates
  * it as a template before returning it. Meaning something like
- *   *true* => cancelCreationMessage = "ERD2W.cancelCreationMessage"
+ *   *true* =&gt; cancelCreationMessage = "ERD2W.cancelCreationMessage"
  * will look up "ERD2W.cancelCreationMessage", then look at the translation
  * and finally parses it with the D2WContext as a parameter.
  * Of course, you can also simply give it a string like

@@ -24,16 +24,16 @@ import er.extensions.foundation.ERXThreadStorage;
  * <br>
  *  The mode of operation is as follows; given a component action in a typical page:
  * <br>
- * <code><pre>
+ * <pre><code>
  *  public WOComponent myAction() {
  *      WOComponent nextPage = pageWithName("Main");
  *      nextPage.takeValueForKey(Integer.valueOf(100), "someValue");
  *      return nextPage;
  *  }
  * 
- *  </pre></code>
+ *  </code></pre>
  *  then Main could be implemented something like this:
- * <code><pre>
+ * <pre><code>
  *  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
  *      static Logger log = Logger.getLogger(Main.class);
  * 
@@ -67,7 +67,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *          }
  *      }
  *  }
- *  </pre></code>
+ *  </code></pre>
  *  But this is just one possibility. It only locates all the code in one place. <br>
  * 
  * The actual workings are:
@@ -80,16 +80,16 @@ import er.extensions.foundation.ERXThreadStorage;
  * session-based cache and return a redirect instead. The current page is asked for the URL for the redirect when it implements 
  * the Restorable interface.<br>
  * So the users browser receives redirection to a "reasonable" URL like "/article/1234/edit?wosid=..." or 
- * "../wa/EditArticle?__key=1234&wosid=...". This URL is intercepted and looked up in the cache. If found, the stored 
+ * "../wa/EditArticle?__key=1234&amp;wosid=...". This URL is intercepted and looked up in the cache. If found, the stored 
  * response is returned, else the request is handled normally.
- * <br>
+ * <p>
  *  The major thing about this class is that you can detach URLs from actions. For example, it is very hard to create a 
  *  direct action that creates a page that uses a Tab panel or a collapsible component because you need to store a 
  *  tremendous amount of state in the URL. With this class, you say: "OK, I won't be able to totally restore everything, 
  *  but I'll show the first page with everything collapsed."<br>
  * 
  *  For all of this to work, your application should override the request-response loop like:
- * <code><pre>
+ * <pre><code>
  *  public WOActionResults invokeAction(WORequest request, WOContext context) {
  *      WOActionResults results = super.invokeAction(request, context);
  *      ERXComponentActionRedirector.createRedirector(results);
@@ -118,7 +118,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *      }
  *      return response;
  *  }
- * </pre></code>
+ * </code></pre>
  * If you are using ERXApplication, you should set the 
  * <code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property instead.
  *  

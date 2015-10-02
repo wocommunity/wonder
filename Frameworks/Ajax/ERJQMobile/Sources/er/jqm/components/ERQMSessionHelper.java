@@ -9,9 +9,9 @@ import com.webobjects.foundation.NSLog;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 /**
- * Helper class to send only ERQMAjaxUpdateContainer content to the client<br />
- * <br />
- * You need to add the following to your Session class
+ * Helper class to send only ERQMAjaxUpdateContainer content to the client.
+ * <p>
+ * You need to add the following to your Session class:
  * 
  * <pre>
  * &#064;Override

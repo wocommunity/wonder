@@ -32,8 +32,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.eof.ERXConstant;
 
 /**
- * (Back port from WO 5 WOExtensions)<br />
- * 
+ * (Back port from WO 5 WOExtensions)
  */
 
 public class WOCollapsibleComponentContent extends WOComponent {

@@ -19,21 +19,19 @@ import er.extensions.appserver.ERXWOContext;
 
 /**
  * WebObjects wrapper for LivePipe Rating component, MIT license.
- *
  * <p>
  * CCRating is a fully customizable CSS based ratings widget. By default it acts as an input.  Alternatively, it can notify the
- * server when the rating is changed, update the bound value, and call an action method.</p>
- *
- * <p>It uses four (customizable) CSS class names to determine each link's state:
+ * server when the rating is changed, update the bound value, and call an action method.
+ * <p>
+ * It uses four (customizable) CSS class names to determine each link's state:
  * <ul>
  * <li>rating_off</li>
  * <li>rating_half</li>
  * <li>rating_on</li>
  * <li>rating_selected</li>
  * </ul>
- * </p>
  *
- * <p><b>Example Usages</b></p>
+ * <h3>Example Usages</h3>
  *
  * <pre>
  * Rating: CCRating {

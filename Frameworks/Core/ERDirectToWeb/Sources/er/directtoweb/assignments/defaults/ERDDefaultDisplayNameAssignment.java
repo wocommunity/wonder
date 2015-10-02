@@ -17,7 +17,7 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Beautify the display names for the various keys in D2W a better way.<br />
+ * Beautify the display names for the various keys in D2W a better way.
  * @author ak
  */
 

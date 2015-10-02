@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXStringUtilities;
 //		it is here is because we used to not have the dependent
 //		keys passing in the current keyPath.
 /**
- * Beautify the entity name.<br />
+ * Beautify the entity name.
  * @deprecated for entityName, use {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment}, for displayNameForEntity and displayNameForDestinationEntity use {@link er.directtoweb.assignments.defaults.ERDDefaultDisplayNameAssignment}
  */
 @Deprecated

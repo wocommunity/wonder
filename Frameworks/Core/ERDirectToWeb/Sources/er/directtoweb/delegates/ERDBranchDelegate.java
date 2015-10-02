@@ -89,7 +89,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * Implementation of the {@link NextPageDelegate NextPageDelegate}
      * interface. This method provides the dynamic dispatch based on
      * the selected branch provided by the sender. Will call the 
-     * method <branchName>(WOComponent) on itself returning the 
+     * method &lt;branchName&gt;(WOComponent) on itself returning the 
      * result. 
      * @param sender template invoking the branch delegate
      * @return result of dynamic method lookup and execution on itself.

@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WGroupingListPage;
 
 /**
- * Displays a groups of objects grouped by a key.<br />
+ * Displays a groups of objects grouped by a key.
+ * <p>
  * Actually, this component uses none of the variables and methods defined here,
  * as all the work is done by the ERDGroupingListPageRepetition that should be set
  * in the rules when a "ListGroupSomeEntity" page configuration is called up.

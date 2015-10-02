@@ -18,8 +18,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Uses JSPopUpRelationPicker to edit a toOne relationship.<br />
- * 
+ * Uses JSPopUpRelationPicker to edit a toOne relationship.
  */
 
 public class ERXJSTwoLevelEditToOneRelationship extends WOComponent {

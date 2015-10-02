@@ -19,7 +19,7 @@ import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXExceptionHolder;
 
 /**
- * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.<br />
+ * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.
  * 
  * @binding choiceDisplayKey
  * @binding choicePageName

@@ -14,7 +14,7 @@ import er.directtoweb.delegates.ERD2WSelectActionDelegate;
 
 // Only difference between this component and D2WSelect is that this one uses ERD2WSwitchComponent
 /**
- * Embedded component that can be used for nesting a pick inside another page configuration.<br />
+ * Embedded component that can be used for nesting a pick inside another page configuration.
  * 
  * @binding action
  * @binding branchDelegate

@@ -11,7 +11,8 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Rich text edit component.<br />
+ * Rich text edit component.
+ * 
  * @deprecated use {@link ERDEditHTML} instead
  */
 @Deprecated

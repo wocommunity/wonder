@@ -13,8 +13,8 @@ import com.webobjects.foundation.NSArray;
  * This component takes a list of tabs, the same as ERXTabPanel
  * to find images, the naming convention is:
  * 
- * /nsi/tab<tabName>.gif : tab is not selected
- * /nsi/tab<tabName>Selected.gif : tab is selected
+ * /nsi/tab&lt;tabName&gt;.gif : tab is not selected
+ * /nsi/tab&lt;tabName&gt;Selected.gif : tab is selected
  * where tabName is the name of the tab, minus spaces
  *
  * @binding bgcolor
@@ -26,7 +26,6 @@ import com.webobjects.foundation.NSArray;
  * @binding textColor
  * @binding useFormSubmit defaults=Boolean
  */
-
 public class ERXImageTabPanel extends ERXTabPanel  {
 	/**
 	 * Do I need to update serialVersionUID?

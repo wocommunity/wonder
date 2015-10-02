@@ -28,7 +28,7 @@ import er.extensions.foundation.ERXStringUtilities;
  *
  * Component originally named: HWOSubmitLink
  * 
- * @author Greg Bartnick <gbartnick@hosts.com>
+ * @author Greg Bartnick &lt;gbartnick@hosts.com&gt;
  * @version 1.0; April 04, 2005
  * 
  * Modified:

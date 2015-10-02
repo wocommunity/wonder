@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Used to display a tab as text instead of images.<br />
- * 
+ * Used to display a tab as text instead of images.
  */
 
 public class ERDTabImage extends WOComponent {

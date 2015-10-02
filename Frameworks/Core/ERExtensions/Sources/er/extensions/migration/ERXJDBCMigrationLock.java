@@ -37,7 +37,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  *           acquire locks properly and you may end up with multiple instances
  *           attempting to create lock tables and/or failing to startup
  *           properly.
- * @property <ModelName>.InitialMigrationVersion the starting version number (in
+ * @property &lt;ModelName&gt;.InitialMigrationVersion the starting version number (in
  *           case you are retrofitting a project with migrations)
  * @author mschrag
  */

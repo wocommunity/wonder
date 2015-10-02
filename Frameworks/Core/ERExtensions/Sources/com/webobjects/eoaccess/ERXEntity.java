@@ -17,8 +17,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * ERXEntity provides a basic subclass of EOEntity providing
  * a simple fix for vertical inheritance.
- * 
- * <p><b>Note:</b> If you plan on subclassing EOEntity or ERXEntity you
+ * <p>
+ * <b>Note:</b> If you plan on subclassing EOEntity or ERXEntity you
  * MUST put your subclass in the same package if you want it
  * to work. There are numerous default and protected instance
  * methods within EOEntity itself that will fail to resolve at
@@ -58,9 +58,9 @@ public class ERXEntity extends EOEntity {
 	
 	/**
 	 * ldeck radar bug#6302622.
-	 * 
-	 * <p>Relating two sub-entities in vertical inheritance can fail to resolve
-	 *  the foreign key for inserts. i.e., NeededByEOF<index> was not dealt with.
+	 * <p>
+	 * Relating two sub-entities in vertical inheritance can fail to resolve
+	 *  the foreign key for inserts. i.e., NeededByEOF&lt;index&gt; was not dealt with.
 	 *  The simple fix is to return the primary key attribute at the given index.
 	 * 
 	 * @see com.webobjects.eoaccess.EOEntity#anyAttributeNamed(java.lang.String)

@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Displays a boolean localized as Yes or No.<br />
+ * Displays a boolean localized as Yes or No.<br>
  * You should use ERD2WCustomDisplayBoolean with the choicesNames d2w key instead.
  */
 @Deprecated 

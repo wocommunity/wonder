@@ -15,8 +15,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
    we need to sublass one of the qualifier class of D2W in order for the LA code to work properly
 */
 /**
- * Tests if an object is a kind of an entity.<br />
- * 
+ * Tests if an object is a kind of an entity.
  */
 
 public class ERDIsKindOfEntityQualifier extends BooleanQualifier {

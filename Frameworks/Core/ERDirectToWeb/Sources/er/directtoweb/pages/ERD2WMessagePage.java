@@ -17,7 +17,8 @@ import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.directtoweb.interfaces.ERDMessagePageInterface;
 
 /**
- * Superclass for all message pages.<br />
+ * Superclass for all message pages.
+ * <p>
  * If the key <code>explanationComponentName</code> resolves to non-empty, then
  * this component will get shown in the page and wired up with a 
  * <code>object</code>, <code>dataSource</code> and <code>pageConfiguration</code> binding.

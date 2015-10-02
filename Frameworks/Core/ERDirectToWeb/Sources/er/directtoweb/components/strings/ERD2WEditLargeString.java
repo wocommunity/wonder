@@ -12,40 +12,41 @@ import com.webobjects.directtoweb.D2WEditLargeString;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Same as D2WEditLargeString except that it allows you to
  * have empty strings in fields that don't allow null.
  * You need to set <code>isMandatory</code> to false and the null
  * value is morphed to the empty string. It also pulls
  * the <code>disabled</code> binding from the WOContext, allowing
  * you to have a readonly field.
+ * </div>
  * 
- * @d2wKey id
- * @d2wKey title
- * @d2wKey name
- * @d2wKey length
- * @d2wKey rows
- * @d2wKey disabled
- * @d2wKey isMandatory
-
- * @d2wKey staySmall
- * @d2wKey readOnly
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * D2WEditLargeString と基本的には同じ動作しますが、
  * null を許可しない空文字列を対応しています。
  * 
  * <code>isMandatory</code> を false にセットすると null 値が空文字列に変換されます。
  * さらに <code>disabled</code> バインディングでリードオンリー・フィールドを作成できます。
+ * </div>
  * 
- * @d2wKey id - id タグ
- * @d2wKey title - title タグ
- * @d2wKey name - name タグ
- * @d2wKey length - cols タグ
- * @d2wKey rows - rows タグ
- * @d2wKey disabled - 編集禁止
- * @d2wKey isMandatory - 入力必須
+ * @d2wKey id <div class="en"></div>
+ *            <div class="ja">id タグ</div>
+ * @d2wKey title <div class="en"></div>
+ *               <div class="ja">title タグ</div>
+ * @d2wKey name <div class="en"></div>
+ *              <div class="ja">name タグ</div>
+ * @d2wKey length <div class="en"></div>
+ *                <div class="ja">cols タグ</div>
+ * @d2wKey rows <div class="en"></div>
+ *              <div class="ja">rows タグ</div>
+ * @d2wKey disabled <div class="en"></div>
+ *                  <div class="ja">編集禁止</div>
+ * @d2wKey isMandatory <div class="en"></div>
+ *                     <div class="ja">入力必須</div>
+ * @d2wKey staySmall <div class="en"></div>
+ *                   <div class="ja"></div>
+ * @d2wKey readOnly <div class="en"></div>
+ *                  <div class="ja"></div>
  * 
  * @d2wKey staySmall - true の場合 EditLargeString の替わりに EditString を使用する (see Rule)
  * @d2wKey readOnly - 編集禁止

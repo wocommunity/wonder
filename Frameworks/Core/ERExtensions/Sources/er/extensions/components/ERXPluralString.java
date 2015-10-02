@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Given a count and a string pluralizes the string if count &gt; 1.<br />
+ * Given a count and a string pluralizes the string if count &gt; 1.
  * 
  * @binding value the object name to plurify
  * @binding count the number of objects

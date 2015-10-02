@@ -149,7 +149,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param delegate
 	 *            the format delegate to notify during rendering
 	 * @param conversionMap
-	 *            the conversion map to use to record object => request node mappings
+	 *            the conversion map to use to record object =&gt; request node mappings
 	 * 
 	 * @return the Java object that corresponds to this node hierarchy
 	 */
@@ -163,7 +163,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param delegate
 	 *            the format delegate to notify during rendering
 	 * @param conversionMap
-	 *            the conversion map to use to record object => request node mappings
+	 *            the conversion map to use to record object =&gt; request node mappings
 	 * @param associatedObjects
 	 *            the associatedObjects map (to prevent infinite loops)
 	 * @return the Java object that corresponds to this node hierarchy

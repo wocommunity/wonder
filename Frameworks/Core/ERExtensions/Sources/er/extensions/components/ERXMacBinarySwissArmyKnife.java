@@ -23,8 +23,7 @@ import com.webobjects.foundation.NSRange;
  */
 
 /**
- * Useful for extracting files from binhexed files, ie when a Mac user uploads a file.<br />
- * 
+ * Useful for extracting files from binhexed files, ie when a Mac user uploads a file.
  */
 
 public class ERXMacBinarySwissArmyKnife {

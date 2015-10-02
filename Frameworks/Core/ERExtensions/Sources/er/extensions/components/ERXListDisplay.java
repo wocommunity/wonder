@@ -15,7 +15,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Useful for displaying a list of objects. Ex. a list of person eos could be displayed as "Fred, Mark and Max".<br />
+ * Useful for displaying a list of objects. Ex. a list of person eos could be displayed as "Fred, Mark and Max".
  * If you give the "item" binding, then the content is used to render. Otherwise the "attribute" binding will get used.
  * @binding list
  * @binding attribute
@@ -28,7 +28,6 @@ import er.extensions.localization.ERXLocalizer;
  * @author NetStruxr
  * @author kieran - I noticed nullArrayDisplay binding was not implemented. Implemented more useful emptyArrayDisplay with fallback to nullArrayDisplay binding for backwards compatibility.
  */
-
 public class ERXListDisplay extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?

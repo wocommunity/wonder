@@ -9,8 +9,7 @@ package er.testrunner;
 import junit.framework.TestListener;
 
 /**
- * template listner interface.<br />
- * 
+ * template listner interface.
  */
 
 public interface ERXTestListener extends TestListener {

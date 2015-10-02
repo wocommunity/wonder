@@ -66,8 +66,9 @@ public class ERXPatcher {
 	}
 
 	/**
-	 * Returns the class registered for the name <code>className</code>.<br/> Uses the private WebObjects class
-	 * cache.
+	 * Returns the class registered for the name <code>className</code>.
+	 * <p>
+	 * Uses the private WebObjects class cache.
 	 * 
 	 * @param className
 	 *            class name
@@ -79,8 +80,8 @@ public class ERXPatcher {
 	}
 
 	/**
-	 * Sets the class registered for the name <code>className</code> to the given class.<br/> Changes the private
-	 * WebObjects class cache.
+	 * Sets the class registered for the name <code>className</code> to the given class.
+	 * <p>Changes the private WebObjects class cache.
 	 * 
 	 * @param clazz
 	 *            class object
@@ -133,10 +134,12 @@ public class ERXPatcher {
 
 	/**
 	 * This class holds patches for WebObjects dynamic elements, which have always a closing tag and all attribute
-	 * values are enclosed in quotes. The patches are automatically registered if this framework gets loaded.<br/>
+	 * values are enclosed in quotes. The patches are automatically registered if this framework gets loaded.
+	 * <p>
 	 * <b>Note</b>: <code>WOForm</code> is not replaced, because it is ok if you don't use <code>?</code>-bindings.
-	 * If you need additional parameters, just insert <code>WOHiddenField</code>s.<br/> Also
-	 * <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
+	 * If you need additional parameters, just insert <code>WOHiddenField</code>s.
+	 * <p>
+	 * Also <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
 	 */
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
@@ -1084,15 +1087,16 @@ public class ERXPatcher {
 		 * will be closed correctly, all attribute values will be quoted and attributes without a value like
 		 * <code>disabled</code> will get a quoted value. All attribute-values with uncorrectly escaped ampersands
 		 * (&amp;) will be corrected. E.g. <code>&quot;w&amp;amp;auml;hlen&quot;</code> will become
-		 * <code>&quot;w&amp;auml;hlen&quot;</code>.<br/> This method would normally be called in the following way:
-		 * 
-		 * <pre>
+		 * <code>&quot;w&amp;auml;hlen&quot;</code>.
+		 * <p>
+		 * This method would normally be called in the following way:
+		 * <pre><code>
 		 * public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		 * 	String pre = woresponse.contentString();
 		 * 	super.appendToResponse(woresponse, wocontext);
 		 * 	correctResponse(woresponse, pre.length(), pre);
 		 * }
-		 * </pre>
+		 * </code></pre>
 		 * 
 		 * @param response
 		 *            the response to be corrected.

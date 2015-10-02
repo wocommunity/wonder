@@ -16,7 +16,7 @@ import com.webobjects.foundation.NSDictionary;
 //    This component will remap keys, useful if you want to have the ability to have two sets of keys for a page
 //	Look in the Comparision template for how this component can be used.
 /**
- * Useful for remapping keys if say you want to compare two different objects in a compare list.<br />
+ * Useful for remapping keys if say you want to compare two different objects in a compare list.
  * @d2wKey componentName
  * @d2wKey keyMappingsForComparisonObject
  */

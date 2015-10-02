@@ -51,7 +51,7 @@ import com.webobjects.foundation.NSMutableArray;
  * <td>ajaxTabbedPanelPane-unselected</td>
  * <td>The LI representing the unselected panel(s).</td>
  * </tr>
- * </table
+ * </table>
  *
  * @binding id required, String the id of the UL that wraps the tabs
  * @binding busyDiv optional, String the id of a div that should be shown when a

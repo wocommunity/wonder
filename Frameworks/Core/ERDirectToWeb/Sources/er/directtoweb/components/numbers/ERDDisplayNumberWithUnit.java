@@ -12,8 +12,7 @@ import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Cool class.  Specify a 'unit' in the userInfo dictionary of an EOAttribute and this component will display the number plus the unit.<br />
- * 
+ * Cool class.  Specify a 'unit' in the userInfo dictionary of an EOAttribute and this component will display the number plus the unit.
  */
 public class ERDDisplayNumberWithUnit extends ERDCustomEditComponent {
 	/**

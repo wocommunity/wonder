@@ -11,8 +11,7 @@ import com.webobjects.directtoweb.NextPageDelegate;
 
 /**
  * Generic little delegate. Nice when all you really want to do is return a
- * page, but the interface says you have to use a delegate.<br />
- * 
+ * page, but the interface says you have to use a delegate.
  */
 
 public class ERDPageDelegate implements NextPageDelegate {

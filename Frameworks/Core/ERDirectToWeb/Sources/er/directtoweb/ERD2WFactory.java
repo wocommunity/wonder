@@ -42,8 +42,7 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
 
 /**
- * Not used at the moment, but shows how it might be used in the future. <br />
- *  
+ * Not used at the moment, but shows how it might be used in the future.
  */
 
 public class ERD2WFactory extends D2W {

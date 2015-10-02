@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Allows the display of strings instead of Yes/No/Unset or checkboxes for boolean values.<br />
+ * Allows the display of strings instead of Yes/No/Unset or checkboxes for boolean values.
  * @d2wKey choicesNames
  */
 public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {

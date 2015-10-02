@@ -14,8 +14,7 @@ import er.extensions.components.ERXStatelessComponent;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Displays section name as a string.<br />
- * 
+ * Displays section name as a string.
  */
 
 public class ERDDefaultSectionComponent extends ERXStatelessComponent {

@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 
 // Subclasses in look frameworks provide custom images for mandatory fields.
 /**
- * Displays a mandatory field marker. Extended in look frameworks to provide custom images.<br />
+ * Displays a mandatory field marker. Extended in look frameworks to provide custom images.
  * 
  * @binding condition If the condition returns true, will display a '*', if false, it will
  *		display a transparent 1x1 pixel
