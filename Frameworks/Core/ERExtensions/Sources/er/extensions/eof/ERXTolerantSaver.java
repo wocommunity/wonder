@@ -18,8 +18,8 @@ import com.webobjects.foundation.NSValidation;
 /**
  * This class is pulled directly out of David Neumann's
  * ChangeNotification framework.  The only changes made are
- * to use log4j instead of System.out.println.<br/>
- * <br/>
+ * to use log4j instead of System.out.println.
+ * <p>
  * The tolerant saver provides a way to save an editing context in
  * a tolerant fashion. By tolerant we mean that you can have the
  * option to save an editing context and have the exception ignored,

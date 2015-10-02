@@ -103,8 +103,8 @@ public class ERXEOControlUtilities {
 
     /**
      * Simple utility method that will convert an array
-     * of enterprise objects into an EOArrayDataSource.<br/>
-     * <br/>
+     * of enterprise objects into an EOArrayDataSource.
+     * <p>
      * Note that the data source that is constructed uses the
      * class description and editing context of the first object
      * of the array.
@@ -162,7 +162,8 @@ public class ERXEOControlUtilities {
      * from the relationship. If an array data source were used
      * then the list would not reflect the changes made, however
      * the detail data source will reflect changes made to the
-     * relationship.<br/>
+     * relationship.
+     * <p>
      * Note: the relationship key does not have to be an eo
      * relationship, instead it just has to return an array of
      * enterprise objects.
@@ -329,9 +330,8 @@ public class ERXEOControlUtilities {
      * Creates an object using the utility method <code>createEO</code>
      * from this utility class. After creating the enterprise object it
      * is added to the relationship of the enterprise object passed in.
-     * For instance:<br/>
-     * <code>createAndAddObjectToRelationship(ec, foo, "toBars", "Bar", dictValues);</code><br/>
-     * <br/>
+     * For instance:<br>
+     * <code>createAndAddObjectToRelationship(ec, foo, "toBars", "Bar", dictValues);</code><br>
      * will create an instance of Bar, set all of the key-value pairs
      * from the dictValues dictionary, insert it into an editing context
      * and then add it to both sides of the relationship "toBars" off of
@@ -1928,8 +1928,7 @@ public class ERXEOControlUtilities {
      /**
      * Determines if an enterprise object is a new object and
      * hasn't been saved to the database yet. 
-     * 
-     * <br/>
+     * <p>
      * Note: An object that has been deleted will have it's
      * editing context set to null which means this method
      * would report true for an object that has been deleted
@@ -2342,13 +2341,13 @@ public class ERXEOControlUtilities {
 	 * with the same values on the given key paths.
 	 * 
 	 * Should be combined with a constraint on the corresponding database
-	 * columns. <br />
-	 * <br />
-	 * Based on Zak Burke's idea he posted to WOCode a while ago. <br />
-	 * <br />
+	 * columns.
+	 * <p>
+	 * Based on Zak Burke's idea he posted to WOCode a while ago.
+	 * <p>
 	 * Use in <code>validateForSave</code> like this:
 	 * 
-	 * <pre>
+	 * <pre><code>
 	 *       ...
 	 *       public class WikiPage extends _WikiPage {
 	 *       ...
@@ -2358,7 +2357,7 @@ public class ERXEOControlUtilities {
 	 *       	}
 	 *       ...
 	 *       }
-	 * </pre>
+	 * </code></pre>
 	 * 
 	 * Combine with entries in <code>ValidationTemplate.strings</code> like:
 	 * 

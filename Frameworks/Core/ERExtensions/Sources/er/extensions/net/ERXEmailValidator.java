@@ -109,7 +109,7 @@ public final class ERXEmailValidator implements Serializable {
 	 * It seems that after about 25 chars, the regular expression matching
 	 * takes exponentially longer to match the string. The same address with
 	 * quoting does not exhibit the problem. 
-	 * Ex. "Blah blah" <blahblahblahblahblahblahblah@blah.com>
+	 * Ex. "Blah blah" &lt;blahblahblahblahblahblahblah@blah.com&gt;
 	 * 
 	 * Nor does using a validator that does not allow quoted identifiers. In
 	 * order to work around this problem, a second internal validator is

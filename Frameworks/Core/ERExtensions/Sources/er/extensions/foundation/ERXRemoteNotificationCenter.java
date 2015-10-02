@@ -26,7 +26,8 @@ import com.webobjects.foundation.NSNotificationCenter;
  * NSNotificationCenter that can post simple notifications to other
  * applications. Currently just posts the name, no object and the userInfo as a
  * dictionary of strings. You must specifically register observers and post notifications here, not at
- * <code>NSNotificationCenter.defaultCenter()</code>. <br/>
+ * <code>NSNotificationCenter.defaultCenter()</code>.
+ * <p>
  * If you don't link ERJGroupsSynchronizer, it will create a simple implementation, which posts via 
  * multicast - and is thus not really reliable and can't handle larger useInfo dict 
  * (of which keys and values must be strings). Also, you need to explicitely send the 
@@ -39,7 +40,6 @@ import com.webobjects.foundation.NSNotificationCenter;
  * 
  * @author ak
  */
-
 // TODO subclass of NSNotification that custom-serialize itself to a sparser
 // format
 public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {

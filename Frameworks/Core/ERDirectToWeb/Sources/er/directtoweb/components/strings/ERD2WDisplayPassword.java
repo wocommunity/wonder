@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
- * Displays '*********' instead.<br />
- * 
+ * Displays '*********' instead.
  */
 
 public class ERD2WDisplayPassword extends D2WDisplayString {

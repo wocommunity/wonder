@@ -18,7 +18,7 @@ import er.pdf.ERPDFWrapper;
  * ERFOPWrapper will render the containing component content as a PDF document using
  * Apache FOP.
  * 
- * @binding xml2fopXsl the location of the xml->fo transform sheet (should be in the classpath)
+ * @binding xml2fopXsl the location of the xml-&gt;fo transform sheet (should be in the classpath)
  * @author lmg42
  */
 public class ERFOPWrapper extends ERPDFWrapper {

@@ -29,7 +29,6 @@ import com.webobjects.foundation.NSMutableArray;
  * boolean value to a string or an integer. {@link ERXObjectBinding} can be used for non-modeled columns.
  * Please read the {@link ERXObjectBinding} class documentation for important notes regarding some databases
  * that expect SQL queries with binding typification.
- * </p>
  * <p>
  * This class is used by calling the most appropriate static method for the intended usage. Specific requirements
  * for the SQL query resulting columns are detailed on each of the method's documentation. Generally, you need
@@ -37,14 +36,12 @@ import com.webobjects.foundation.NSMutableArray;
  * Depending on the database plug-in being used, the '?' character will be automatically replaced by a different
  * expression if the {@link ERXKeyValueBinding} class is used to wrap the binded value. In PostgreSQL, for instance,
  * the '?' character could be replaced by '?::varchar(1000)'.
- * </p>
  * <p>
  * Here are some sample uses of this class:
- * </p>
- * <pre>
+ * <pre><code>
  *   // Obtains EOs that match the query
  *   ERXSQLQueryWithBindingsUtilities.selectObjectsOfEntityForSqlWithBindings(editingContext(), Song.ENTITY_NAME,
- *     "SELECT * FROM SONG WHERE FAVORITE = ? AND DURATION > ? ORDER BY NUMBER ASC", true,
+ *     "SELECT * FROM SONG WHERE FAVORITE = ? AND DURATION &gt; ? ORDER BY NUMBER ASC", true,
  *     new ERXKeyValueBinding("favorite", true), new ERXKeyValueBinding("duration", 120));
  *     
  *   // Obtains raw rows for query
@@ -58,10 +55,10 @@ import com.webobjects.foundation.NSMutableArray;
  *   // Obtains ERXFetchSpecificationBatchIterator
  *   // Note the query must obtain the primary key!
  *   ERXSQLQueryWithBindingsUtilities.batchIteratorForObjectsWithSqlWithBindings(editingContext(), Employee.ENTITY_NAME,
- *     "SELECT ID FROM EMPLOYEE WHERE HEIGHT < ? AND FIRST_NAME = ? ORDER BY NUMBER DESC", false, 100,
- *     new NSArray<EOSortOrdering>(new EOSortOrdering[] {new EOSortOrdering("number", EOSortOrdering.CompareDescending)}),
+ *     "SELECT ID FROM EMPLOYEE WHERE HEIGHT &lt; ? AND FIRST_NAME = ? ORDER BY NUMBER DESC", false, 100,
+ *     new NSArray&lt;EOSortOrdering&gt;(new EOSortOrdering[] {new EOSortOrdering("number", EOSortOrdering.CompareDescending)}),
  *     new ERXObjectBinding(190), new ERXKeyValueBinding("firstName", "John"));
- * </pre>
+ * </code></pre>
  */
 public class ERXSQLQueryWithBindingsUtilities {
 

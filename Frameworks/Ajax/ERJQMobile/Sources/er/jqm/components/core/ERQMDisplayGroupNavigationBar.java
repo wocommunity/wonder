@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSMutableArray;
 import er.jqm.components.ERQMComponentBase;
 
 /**
- * Don't forget to add the stylesheet "dgnavbar/icon-pack-custom.css" to your page wrapper.<br />
- * <br />
+ * Don't forget to add the stylesheet "dgnavbar/icon-pack-custom.css" to your page wrapper.
+ * <p>
  * displayGroup
  * 
  */

@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * So for instance, if you are inside of an AjaxInPlace with the id "blogForm" you can do
  * 
  * <pre>
- * &lt:wo:AjaxFunctionLink action = "edit"&gt;
+ * &lt;wo:AjaxFunctionLink action = "edit"&gt;
  * </pre>
  * 
  * to go into edit mode.

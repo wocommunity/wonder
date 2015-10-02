@@ -21,8 +21,7 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Confirming an action template.<br />
- * 
+ * Confirming an action template.
  */
 public class ERDConfirmMessage extends ERDCustomEditComponent {
 	/**

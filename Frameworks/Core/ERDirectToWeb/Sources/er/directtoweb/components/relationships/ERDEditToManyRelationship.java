@@ -17,19 +17,21 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Convenient way to add, edit, remove or delete objects from a to-many relationship. 
- * Best used for owned relationships with not much info in them.<br />
+ * Best used for owned relationships with not much info in them.
+ * <p>
  * Displays a list of edit configurations, one for each related object, along
  * with a check box that handles the selection for the Delete and Remove buttons.
  * If the keypath is not directly off the root object, then the last part will be 
  * selected as the relationship. Meaning you can edit a customer and have the keypath
- * being <code>lastPurchase.items</code> <br />
+ * being <code>lastPurchase.items</code>
+ * <p>
  * A know bug is when you add object and have validation failures, the failure display may
  * end up with the wrong object.
  * 
  * @binding object eo to edit
  * @binding key keypath to the relationship
  * @binding destinationEntityName entity name for the destination of the relationship
- * @binding hasRemove true if the objects can also be removed (as opposed to just beeing deleted)
+ * @binding hasRemove true if the objects can also be removed (as opposed to just being deleted)
  * @binding inspectConfigurationName page configuration to use for the edit component
  * @binding task should be "edit"
  */

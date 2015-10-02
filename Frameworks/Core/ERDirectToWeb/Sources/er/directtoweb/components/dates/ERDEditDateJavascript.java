@@ -21,7 +21,7 @@ import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />
+ * Crazy cool little date picker that uses javascript to pick the date from a little calendar.
  * Uses ERXEditDateJavascript.
  */
 

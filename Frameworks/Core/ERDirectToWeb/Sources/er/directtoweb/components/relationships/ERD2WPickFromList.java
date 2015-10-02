@@ -15,8 +15,7 @@ import com.webobjects.foundation.NSArray;
 import er.directtoweb.components.ERDCustomQueryComponent;
 
 /**
- * Custom query component that let's the user select from an arbitrary list.<br />
- * 
+ * Custom query component that let's the user select from an arbitrary list.
  */
 public class ERD2WPickFromList extends ERDCustomQueryComponent {
 	/**

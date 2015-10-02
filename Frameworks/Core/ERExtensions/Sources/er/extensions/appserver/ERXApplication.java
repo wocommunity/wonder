@@ -1303,7 +1303,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Configures the statistics logging for a given application. By default
-	 * will log to a file <base log directory>/<WOApp Name>-<host>-<port>.log
+	 * will log to a file &lt;base log directory&gt;/&lt;WOApp Name&gt;-&lt;host&gt;-&lt;port&gt;.log
 	 * if the base log path is defined. The base log path is defined by the
 	 * property <code>er.extensions.ERXApplication.StatisticsBaseLogPath</code>
 	 * The default log rotation frequency is 24 hours, but can be changed by
@@ -1413,16 +1413,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Adds support for automatic application cycling. Applications can be
-	 * configured to cycle in two ways:<br/> <br/> The first way is by setting
+	 * configured to cycle in two ways:
+	 * <p>
+	 * The first way is by setting
 	 * the System property <b>ERTimeToLive</b> to the number of seconds (+ a
 	 * random interval of 10 minutes) that the application should be up before
 	 * terminating. Note that when the application's time to live is up it will
-	 * quit calling the method <code>killInstance</code>.<br/> <br/> The
+	 * quit calling the method <code>killInstance</code>.
+	 * <p>The
 	 * second way is by setting the System property <b>ERTimeToDie</b> to the
 	 * time in seconds after midnight when the app should be starting to refuse
 	 * new sessions. In this case when the application starts to refuse new
 	 * sessions it will also register a kill timer that will terminate the
-	 * application between 0 minutes and 1:00 minutes.<br/>
+	 * application between 0 minutes and 1:00 minutes.
 	 */
 	@Override
 	public void run() {
@@ -1743,11 +1746,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * The name suffix is appended to the current name of the application. This
 	 * adds the ability to add a useful suffix to differentiate between
-	 * different sets of applications on the same machine.<br/> <br/> The name
-	 * suffix is set via the System property <b>ERApplicationNameSuffix</b>.<br/>
-	 * <br/> For example if the name of an application is Buyer and you want to
+	 * different sets of applications on the same machine.
+	 * <p>
+	 * The name suffix is set via the System property <b>ERApplicationNameSuffix</b>.
+	 * For example if the name of an application is Buyer and you want to
 	 * have a training instance appear with the name BuyerTraining then you
-	 * would set the ERApplicationNameSuffix to Training.<br/> <br/>
+	 * would set the ERApplicationNameSuffix to Training.
 	 * 
 	 * @return the System property <b>ERApplicationNameSuffix</b> or
 	 *         <code>null</code>
@@ -1767,7 +1771,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Adds the ability to completely change the applications name by setting
 	 * the System property <b>ERApplicationName</b>. Will also append the
-	 * <code>nameSuffix</code> if one is set.<br/> <br/>
+	 * <code>nameSuffix</code> if one is set.
 	 * 
 	 * @return the computed name of the application.
 	 */
@@ -1787,7 +1791,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * This method returns {@link WOApplication}'s <code>name</code> method.<br/>
+	 * This method returns {@link WOApplication}'s <code>name</code> method.
 	 * 
 	 * @return the name of the application executable.
 	 */
@@ -1798,7 +1802,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Puts together a dictionary with a bunch of useful information relative to
 	 * the current state when the exception occurred. Potentially added
-	 * information:<br/>
+	 * information:
 	 * <ol>
 	 * <li>the current page name</li>
 	 * <li>the current component</li>
@@ -1808,7 +1812,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * <li>the previous page list (from the WOStatisticsStore)</li>
 	 * </ol>
 	 * Also, in case the top-level exception was a EOGeneralAdaptorException,
-	 * then you also get the failed ops and the sql exception. <br/>
+	 * then you also get the failed ops and the sql exception.
 	 * 
 	 * @param e exception
 	 * @param context the current context

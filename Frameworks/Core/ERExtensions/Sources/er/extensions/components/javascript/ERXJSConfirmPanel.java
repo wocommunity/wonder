@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Stateless implementation of JSConfirmPanel.*<br />
+ * Stateless implementation of JSConfirmPanel.
  *
  * @binding hyperlinkMessage
  * @binding action

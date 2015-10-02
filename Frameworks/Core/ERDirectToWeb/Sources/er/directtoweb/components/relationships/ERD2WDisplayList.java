@@ -13,9 +13,9 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
- * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />
- * RENAMEME: ERDDisplayList
+ * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.
  */
+// TODO rename to ERDDisplayList
 public class ERD2WDisplayList extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?

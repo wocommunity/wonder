@@ -25,8 +25,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXKeyValuePair;
 
 /**
- * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />
- * 
+ * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.
  */
 // CHECKME: this can't ever have worked? Why Strings?
 public class ERDListOrganizer extends ERDCustomEditComponent {

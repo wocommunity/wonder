@@ -172,7 +172,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * Appends the &ltlink&gt; tag, either by using the style sheet name and
+	 * Appends the &lt;link&gt; tag, either by using the style sheet name and
 	 * framework or by using the component content and then generating a link to
 	 * it.
 	 */

@@ -16,10 +16,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * Useful for creating a javascript window for a form submit.
  * @binding multipleSubmit true the form multiple submit
  * @binding targetDictionary dictionary (optionally) containing
- *  <li>width - width of the window
- *  <li>targetName - name of the target window
- *  <li>height - height of the target window
- *  <li>scrollbars - NO/false if you don't want scrollbars 
+ *  <ul>
+ *  <li>width - width of the window</li>
+ *  <li>targetName - name of the target window</li>
+ *  <li>height - height of the target window</li>
+ *  <li>scrollbars - NO/false if you don't want scrollbars</li>
+ *  </ul> 
  */
 public class ERXJSFormForTarget extends WOComponent {
 	/**

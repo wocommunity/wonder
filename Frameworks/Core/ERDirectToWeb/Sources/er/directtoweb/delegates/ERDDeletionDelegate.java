@@ -34,10 +34,8 @@ import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * Delete used after confirming a delete action. <br />
- *  
+ * Delete used after confirming a delete action.
  */
-
 public class ERDDeletionDelegate implements NextPageDelegate {
 
     /** logging support */

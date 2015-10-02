@@ -34,7 +34,8 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Superclass for all inspecting/editing ERD2W templates.<br />
+ * Superclass for all inspecting/editing ERD2W templates.
+ * 
  * @d2wKey inspectConfirmConfigurationName
  * @d2wKey object
  * @d2wKey editConfigurationName

@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditNumber;
 
 /**
- * Edits a percentage number with radio buttons.<br />
+ * Edits a percentage number with radio buttons.
+ * 
  * @d2wKey propertyKey
  */
 public class ERD2WEditPercentage extends D2WEditNumber {

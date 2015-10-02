@@ -16,20 +16,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <span class="en">
+ * <div class="en">
  * NSDictionary reimplementation to support JDK 1.5 templates. Use with
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * JDK 1.5 テンプレートをサポートする為の再実装。使用は
- * </span>
+ * </div>
  * 
- * <pre>
+ * <pre>{@code
  * NSDictionary<String, String> env = new NSDictionary<String, String>(System.getenv(), true);
  * 
  * for (String key : env)
  * 	logger.debug(env.valueForKey(key));
- * </pre>
+ * }</pre>
  * 
  * @param <K>
  *            type of key contents

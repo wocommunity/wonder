@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditToOneRelationship;
 
 /**
- * Uses JSTwoLevelEditToOneRelationship to edit the relationship.<br />
+ * Uses JSTwoLevelEditToOneRelationship to edit the relationship.
  * 
  * @d2wKey sortKey
  * @d2wKey restrictingRelationshipSortKey

@@ -15,7 +15,7 @@ import er.directtoweb.delegates.ERD2WEmbeddedComponentActionDelegate;
 
 // Only difference between this component and D2WInspect is that this one uses ERD2WSwitchComponent
 /**
- * Uses a the ERD2WSwitchComponent so that this component won't cache the d2w context.  Useful for reusing of pages.<br />
+ * Uses a the ERD2WSwitchComponent so that this component won't cache the d2w context.  Useful for reusing of pages.
  * 
  * @binding action
  * @binding displayKeys

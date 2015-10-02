@@ -156,7 +156,7 @@ public class ERXML {
   }
 
   /**
-   * Declaration represents an XML declaration (the &lt? ... ?&gt; part of the XML document).
+   * Declaration represents an XML declaration (the &lt;? ... ?&gt; part of the XML document).
    * 
    * @author mschrag
    */

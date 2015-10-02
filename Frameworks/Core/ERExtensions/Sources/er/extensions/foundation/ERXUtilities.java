@@ -177,7 +177,8 @@ public class ERXUtilities {
  
     /**
      * Traverses a key path to return the last {@link EORelationship}
-     * object.<br/>
+     * object.
+     * <p>
      * Note: that this method uses the object and not the model to traverse
      * the key path, this has the added benefit of handling EOF inheritance
      * @param object enterprise object to find the relationship off of
@@ -294,7 +295,8 @@ public class ERXUtilities {
 
     /**
      * Finds an entity given a case insensitive search
-     * of all the entity names.<br/>
+     * of all the entity names.
+     * <p>
      * Note: The current implementation caches the entity-entity name
      * pair in an insensitive manner. This means that all of the
      * models should be loaded before this method is called.

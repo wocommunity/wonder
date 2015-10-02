@@ -11,7 +11,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Modernized inspect page.<br />
+ * Modernized inspect page.
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName

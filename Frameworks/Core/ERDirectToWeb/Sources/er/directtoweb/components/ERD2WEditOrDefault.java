@@ -17,7 +17,7 @@ import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Generic edit or default value component, uses other components like editNumber or editString.<br />
+ * Generic edit or default value component, uses other components like editNumber or editString.
  * @d2wKey displayValueForNull
  * @d2wKey innerComponentName
  * @d2wKey defaultValue

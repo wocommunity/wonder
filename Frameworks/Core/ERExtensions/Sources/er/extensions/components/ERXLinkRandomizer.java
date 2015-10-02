@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 /**
  * This simple stateless component adds a javascript function
  * 'RandomizeLink' that will either add a dummy=0 or
- * change the previous value of a dummy=<some number>
+ * change the previous value of a dummy=&lt;some number&gt;
  * parameter of a hyperlink. This can be very useful
  * for making sure that the browser does not cache the return
  * value of a dynamic link.

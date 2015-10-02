@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WTabInspectPage;
 
 /**
- * A tab inspect/edit template.<br />
+ * A tab inspect/edit template.
+ * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName
  * @d2wKey editButtonLabel

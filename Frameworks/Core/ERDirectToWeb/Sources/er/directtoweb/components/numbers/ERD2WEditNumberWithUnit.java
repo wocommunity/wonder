@@ -9,7 +9,7 @@ package er.directtoweb.components.numbers;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Edits a number displaying the unit off of the EOAttributes userInfo.<br />
+ * Edits a number displaying the unit off of the EOAttributes userInfo.
  * 
  * @d2wKey maxLength
  * @d2wKey resolvedUnit

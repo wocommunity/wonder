@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Edits a boolean with radio buttons and Yes/No<br />
+ * Edits a boolean with radio buttons and Yes/No<br>
  * You should use ERD2WCustomEditBoolean with the choicesNames d2w key instead.
  */
 

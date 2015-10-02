@@ -12,8 +12,7 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Displays a number as say 5 years 2 months.<br />
- * 
+ * Displays a number as say 5 years 2 months.
  */
 
 public class ERDDisplayYearsMonths extends ERDCustomEditComponent {

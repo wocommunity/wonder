@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.templates.ERD2WMessagePageTemplate;
 
 /**
- * Used to present a message to the user with only one option, usually "OK".<br />
+ * Used to present a message to the user with only one option, usually "OK".
  * 
  * @d2wKey okButtonLabel
  * @d2wKey cancelButtonLabel

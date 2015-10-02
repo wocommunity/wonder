@@ -16,8 +16,7 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Used to edit a number as if it where a number of years and a number of months.<br />
- * 
+ * Used to edit a number as if it where a number of years and a number of months.
  */
 public class ERDEditYearsMonths extends ERDCustomEditComponent {
 	/**

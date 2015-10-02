@@ -35,7 +35,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * {@link com.webobjects.foundation.NSArray} and {@link java.util.Vector} (which is a {@link java.util.List} in 1.4). This
  * is listed as Radar #3325342 since June 2003.</li>
  * <li>help with backtracking issues by adding not only the current index, but also the current object's hash code to
- * the element id, so it looks like "x.y.12345.z".<br />
+ * the element id, so it looks like "x.y.12345.z".<br>
  * If they don't match when invokeAction is called, the list is searched for a matching object. If none is found, then:
  * <ul>
  * <li>if the property <code>er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true</code> -
@@ -45,17 +45,18 @@ import er.extensions.foundation.ERXValueUtilities;
  * <li>otherwise, the action is ignored</li>
  * </ul>
  * This feature is turned on globally if <code>er.extensions.ERXWORepetition.checkHashCodes=true</code> or on a
- * per-component basis by setting the <code>checkHashCodes</code> binding to true or false.<br />
+ * per-component basis by setting the <code>checkHashCodes</code> binding to true or false.<br>
  * <em>Known issues:</em>
  * <ul>
  * <li>you can't re-generate your list by creating new objects between the appendToReponse and the next
  * takeValuesFromRequest unless you use <code>uniqueKey</code> and the value for that key is consistent across
- * the object instances<br />
+ * the object instances<br>
  * When doing this by fetching EOs, this is should not a be problem, as the EO most probably has the same hashCode if
  * the EC stays the same. </li>
  * <li>Your moved object should still be in the list.</li>
  * <li>Form values are currently not fixed, which may lead to NullpointerExceptions or other failures. However, if they
  * happen, by default you would have used the wrong values, so it may be arguable that having an error is better...</li>
+ * </ul>
  * </li>
  * </ul>
  * Note that this implementation adds a small amount of overhead due to the creation of the Context for each RR phase,
@@ -88,7 +89,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * @author ak
  */
-
 public class ERXWORepetition extends WODynamicGroup {
 	/** logging support */
 	private static final Logger log = Logger.getLogger(ERXWORepetition.class);

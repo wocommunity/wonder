@@ -32,7 +32,7 @@ import er.extensions.foundation.ERXUtilities;
  * As an example, you may want to track stats on keypaths in your components.  In your
  * base components, you could add:
  * </p>
- * <code><pre>
+ * <pre><code>
  * public Object valueForKeyPath(String keyPath) {
  *   Object value;
  *   if (_shouldTrackStats) {
@@ -46,7 +46,7 @@ import er.extensions.foundation.ERXUtilities;
  *   }
  *   return value;
  * }
- * </pre></code>
+ * </code></pre>
  * 
  * @author anjo
  * @author mschrag

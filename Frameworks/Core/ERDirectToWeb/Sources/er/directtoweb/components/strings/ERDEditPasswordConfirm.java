@@ -13,7 +13,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Used to edit passwords where when changed the changed value must be confirmed.<br />
+ * Used to edit passwords where when changed the changed value must be confirmed.
  *
  * @binding errorMessage
  * @binding password
@@ -22,7 +22,6 @@ import er.directtoweb.components.ERDCustomEditComponent;
  * @binding key
  * @binding object
  */
-
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?

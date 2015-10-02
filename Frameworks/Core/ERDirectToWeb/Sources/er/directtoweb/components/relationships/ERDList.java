@@ -23,7 +23,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />
+ * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.
  * 
  * @binding object
  * @binding key

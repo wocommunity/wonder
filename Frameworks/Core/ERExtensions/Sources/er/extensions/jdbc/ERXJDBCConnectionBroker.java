@@ -46,9 +46,10 @@ import er.extensions.foundation.ERXValueUtilities;
  * <dd>Number of days a connection should stay active, default 1.0</dd>
  * </dl>
  * The {@link er.extensions.foundation.ERXConfigurationManager} adds these entries to each
- * EOModels connectionDictionary.<br/>
- * Usage: check out a connection: <br/><code>
- * <pre>
+ * EOModels connectionDictionary.
+ * <p>
+ * Usage: check out a connection:
+ * <pre><code>
  * java.sql.Connection con = ERXJDBCConnectionBroker.connectionBrokerForModel(myModel).getConnection();
  * try {
  *     java.sql.Statement s = con.createStatement();
@@ -56,12 +57,11 @@ import er.extensions.foundation.ERXValueUtilities;
  * } finally {
  *     ERXJDBCConnectionBroker.connectionBrokerForModel(myModel).freeConnection(con);
  * }
- * </pre></code>
+ * </code></pre>
  * @author Marc A. Mnich, based on version 1.0.13 3/12/02
  * @author david@cluster9.com original Wonder version
  * @author ak Major refactoring
  */
-
 // CHECKME ak: How should the maxCheckout stuff work? We can't really close a
 // connection while it still active??
 public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker {

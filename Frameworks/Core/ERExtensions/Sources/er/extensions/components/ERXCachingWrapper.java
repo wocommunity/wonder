@@ -23,7 +23,8 @@ import er.extensions.foundation.ERXAssert;
 
 /**
  * Wrapper that caches its content based on a set of bindings. Use this component to wrap
- * parts of your HTML whose generation is costly. <br />
+ * parts of your HTML whose generation is costly.
+ * <p>
  * Valid keys would be for example:
  * <ul>
  *   <li><code>parent.isEnabled</code>, where isEnabled would be some method on the parent.

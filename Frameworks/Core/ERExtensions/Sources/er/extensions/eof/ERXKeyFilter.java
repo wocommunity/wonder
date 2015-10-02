@@ -10,42 +10,34 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
 /**
- * <p>
  * ERXKeyFilter provides a way to specify hierarchical rules for 
  * including and excluding ERXKeys. This is useful if you need
  * to perform operations on a set of EO's and optional relationships
  * and attributes within those EO's. As an example, ERXRest uses
  * ERXKeyFilter to programmatically specify which attributes and
  * relationships will be rendered for a particular root EO.
- * </p>
- * 
  * <p>
  * ERXKeyFilter is a hierarchical mapping between ERXKeys (single key, 
  * not keypaths), whether an include or exclude
  * rule should be applied for that key, and if it's an include, the 
  * next set of filter rules to apply to the destination object.
- * </p>
- * 
- * <pre>
+ * <pre><code>
  * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
  * ERXKeyFilter remindersFilter = companyFilter.include(Company.REMINDERS);
  * remindersFilter.include(Reminder.SUMMARY);
  * ERXKeyFilter reminderAuthorFilter = remindersFilter.include(Reminder.AUTHOR);
  * reminderAuthorFilter.includeAll();
  * reminderAuthorFilter.exclude(Author.HUGE_RELATIONSHIP);
- * </pre>
- * 
- * <p>
+ * </code></pre>
  * For keys representing to-many relationships you can set a distinct flag
  * if you want to filter that relationship to return only distinct objects.
  * For this you can either pass in a key with the unique operator of
  * ERXArrayUtilities or explicitly set the flag:
- * <pre>
+ * <pre><code>
  * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
  * companyFilter.include(ERXKey.unique(Company.EMPLOYEES));
  * companyFilter.include(Company.CLIENTS).setDistinct(true);
- * </pre>
- * </p>
+ * </code></pre>
  * 
  * more method comments to come ...
  * 

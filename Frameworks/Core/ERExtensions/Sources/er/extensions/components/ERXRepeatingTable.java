@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Useful when given a list of n items and you want to display m keys. This will
- * construct a table nxm and push the current indexes up though the bindings.<br />
+ * construct a table nxm and push the current indexes up though the bindings.
  * 
  * @binding list
  * @binding item

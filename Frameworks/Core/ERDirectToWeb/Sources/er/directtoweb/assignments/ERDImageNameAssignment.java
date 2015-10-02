@@ -13,8 +13,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Default way of generating image references for tabs and sections.<br />
- * 
+ * Default way of generating image references for tabs and sections.
  */
 
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {

@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * page wrapper in xml.<br />
- * 
+ * page wrapper in xml.
  */
 public class ERDXMLPageWrapper extends WOComponent {
 	/**

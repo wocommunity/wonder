@@ -24,13 +24,9 @@ import er.extensions.formatters.ERXTimeDurationFormatter;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 /**
- * <p>
  * <code>StopWatch</code> provides a convenient API for timings.
- * </p>
- * 
  * <p>
  * To start the watch, call {@link #start()}. At this point you can:
- * </p>
  * <ul>
  * <li>{@link #split()} the watch to get the time whilst the watch continues in the background. {@link #unsplit()} will
  * remove the effect of the split. At this point, these three options are available again.</li>
@@ -38,25 +34,18 @@ import er.extensions.formatters.ERXUnitAwareDecimalFormat;
  * suspend and resume will not be counted in the total. At this point, these three options are available again.</li>
  * <li>{@link #stop()} the watch to complete the timing session.</li>
  * </ul>
- * 
- * <p>
  * It is intended that the output methods {@link #toString()} and {@link #getTime()} should only be called after stop,
  * split or suspend, however a suitable result will be returned at other points.
- * </p>
- * 
  * <p>
  * NOTE: As from v2.1, the methods protect against inappropriate calls. Thus you cannot now call stop before start,
  * resume before suspend or unsplit before split.
- * </p>
- * 
- * <p>
- * 1. split(), suspend(), or stop() cannot be invoked twice<br />
- * 2. unsplit() may only be called if the watch has been split()<br />
- * 3. resume() may only be called if the watch has been suspend()<br />
- * 4. start() cannot be called twice without calling reset()
- * </p>
- * 
- * <p>This class is not thread-safe</p>
+ * <ol>
+ * <li>split(), suspend(), or stop() cannot be invoked twice</li>
+ * <li>unsplit() may only be called if the watch has been split()</li>
+ * <li>resume() may only be called if the watch has been suspend()</li>
+ * <li>start() cannot be called twice without calling reset()</li>
+ * </ol>
+ * This class is not thread-safe
  * 
  * @author Apache Software Foundation
  * @author kieran (Sep 1, 2010) - borrowed apache lang StopWatch for ERExtensions and changed to our own time duration formatter

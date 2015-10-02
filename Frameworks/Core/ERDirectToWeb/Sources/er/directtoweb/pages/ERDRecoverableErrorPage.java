@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 
 
 /**
- * A recoverable error page.<br />
+ * A recoverable error page.
+ * 
  * @deprecated subclass {@link ERD2WMessagePage} instead
  * @d2wKey pageWrapperName
  */

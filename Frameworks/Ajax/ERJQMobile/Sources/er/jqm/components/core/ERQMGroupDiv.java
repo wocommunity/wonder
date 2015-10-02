@@ -13,7 +13,7 @@ import er.jqm.components.ERQMComponentBase;
  *   
  * data-corners	<strong>true</strong> | false
  * data-exclude-invisible	<strong>true</strong> | false - Sets whether to exclude invisible children in the assignment of rounded corners
- * data-mini	true | <strong>false</<strong> - Compact sized version for all items in the controlgroup
+ * data-mini	true | <strong>false</strong> - Compact sized version for all items in the controlgroup
  * data-theme	swatch letter (a-z)
  * data-type	horizontal | <strong>vertical</strong> - For horizontal or vertical item alignment
  * </pre>

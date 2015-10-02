@@ -19,7 +19,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Used for displaying the propertyName in a template.<br />
+ * Used for displaying the propertyName in a template.
  * 
  * @binding localContext
  * @d2wKey displayRequiredMarkerCell

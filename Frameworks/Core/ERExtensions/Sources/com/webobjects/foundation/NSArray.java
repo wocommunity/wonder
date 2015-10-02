@@ -19,20 +19,20 @@ import er.extensions.eof.ERXKey;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
- * <span class="en">
+ * <div class="en">
  * NSArray re-implementation to support JDK 1.5 templates. Use with
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * JDK 1.5 テンプレートをサポートする為の再実装。使用は
- * </span>
+ * </div>
  * 
- * <pre>
- * NSArray<Bug> bugs = ds.fetchObjects();
+ * <pre><code>
+ * NSArray&lt;Bug&gt; bugs = ds.fetchObjects();
  * 
  * for(Bug : bugs) {
  * 	  ...
- * }</pre>
+ * }</code></pre>
  *
  * @param <E> - type of array contents
  */
@@ -1096,7 +1096,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	/**
-	 * <p>
 	 * A type-safe wrapper for {@link #valueForKey(String)} that automatically
 	 * does the following (in order) to the resulting array prior to returning
 	 * it:
@@ -1110,7 +1109,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
 	 * objects</li>
 	 * </ol>
-	 * </p>
 	 * 
 	 * @param <T>
 	 *            the Type of elements in the returned {@code NSArray}
@@ -1125,11 +1123,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	/**
-	 * <p>
 	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that calls
 	 * {@code valueForKeyPath(erxKey.key())} and attempts to cast the result to
 	 * {@code NSArray<T>}.
-	 * </p>
 	 * <p>
 	 * Then, depending upon the parameters,
 	 * <ol>
@@ -1142,11 +1138,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
 	 * objects</li>
 	 * </ol>
-	 * </p>
 	 * <p>
 	 * <b>If the value cannot be cast it will throw a {@link ClassCastException}
 	 * .</b>
-	 * </p>
 	 * 
 	 * @param <T>
 	 *            the Type of elements in the returned {@code NSArray}

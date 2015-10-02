@@ -15,7 +15,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * A modernized tab inspect/edit template.<br />
+ * A modernized tab inspect/edit template.
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName

@@ -9,25 +9,25 @@ package er.extensions.localization;
 import org.apache.log4j.Logger;
 
 /**
- * <span class="en">
- *  ERXNonPluralFormLocalizer is a subclass of {@link ERXLocalizer}.<br/>
- *  <br/>
+ * <div class="en">
+ *  ERXNonPluralFormLocalizer is a subclass of {@link ERXLocalizer}.
+ *  <p>
  *  Overrides <code>plurifiedString</code> from its super class 
- *  and cancels all plural form translations includind the one provided by 
+ *  and cancels all plural form translations including the one provided by 
  *  <code>plurifiedStringWithTemplateForKey</code>.
- *  <br/>
+ *  <p>
  *  Good for languages that don't have plural forms (such as Japanese).
- *  </span>
+ *  </div>
  *  
- *  <span class="ja">
- *  ERXNonPluralFormLocalizerは{@link ERXLocalizer}のサブクラスである<br>
- *  <br>
+ *  <div class="ja">
+ *  ERXNonPluralFormLocalizerは{@link ERXLocalizer}のサブクラスである
+ *  <p>
  *  スーパークラスの<code>plurifiedString</code>をオーバーライドします。
  *  全ての複数形を翻訳対象から取り除きます。
  *  <code>plurifiedStringWithTemplateForKey</code>を含む
- *  <br>
+ *  <p>
  *  複数形を持っていない言語のためです。 (例、日本語)
- *  </span>
+ *  </div>
  */
 public class ERXNonPluralFormLocalizer extends ERXLocalizer {
   
@@ -38,14 +38,14 @@ public class ERXNonPluralFormLocalizer extends ERXLocalizer {
     }
     
     /**
-     * <span class="ja">
+     * <div class="ja">
      * 複数形の文字列を戻します (スーパークラス参照) 
      * 
      * @param name - 翻訳対象キー
      * @param count - 数
      * 
      * @return ローカライズ済み文字列
-     * </span>
+     * </div>
      */
     @Override
     public String plurifiedString(String name, int count) { return name; }

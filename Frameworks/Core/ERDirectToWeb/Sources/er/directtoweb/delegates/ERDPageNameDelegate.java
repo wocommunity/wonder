@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.NextPageDelegate;
 
 /**
- * NextPageDelegate that takes a given page name and when called creates and returns the given named page.<br />
- * 
+ * NextPageDelegate that takes a given page name and when called creates and returns the given named page.
  */
 
 public class ERDPageNameDelegate implements NextPageDelegate {

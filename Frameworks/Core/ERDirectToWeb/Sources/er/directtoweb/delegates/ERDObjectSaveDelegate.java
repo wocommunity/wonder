@@ -16,17 +16,18 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
  * implementation that saves the editing context of an enterprise
  * object before returning the next page. This can be particularly
  * handy for example if you want a user to confirm an action before
- * the editing context is committed, for example:<br/>
- * Assume that you have a User object that has been editinged in
+ * the editing context is committed, for example:<br>
+ * Assume that you have a User object that has been edited in
  * a peer context and now you want the user to confirm that they
  * really should save the changes to the editing context, you
- * could have this method:<br/><code>
+ * could have this method:
+ * <pre><code>
  * public WOComponent confirmSave() {
  *      ConfirmPageInterface cpi = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed("ConfirmSaveUserChanges", session());
  *      cpi.setConfirmDelegate(new ERXObjectSaveDelegate(user, context().page()));
  *      cpi.setCancelDelegate(someCancelDelegate);
  *	return (WOComponent)cpi;
- * }</code>
+ * }</code></pre>
  * This way if the user selects the confirm button the editing context
  * will be saved and they will be brought back to the current page.
  */

@@ -17,7 +17,8 @@ import er.directtoweb.components.ERDCustomComponent;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Default component shown when a D2W list is empty.<br />
+ * Default component shown when a D2W list is empty.
+ * 
  * @d2wKey showCreateObjectLink
  */
 public class ERDEmptyListMessage extends ERDCustomComponent {
@@ -56,7 +57,7 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
 	
     /**
      * Returns whether the "create new" link should be shown, depends on a rule like:<br><br>
-     * pageConfiguration = 'ListEntity' => showCreateObjectLink = true [prio]
+     * pageConfiguration = 'ListEntity' =&gt; showCreateObjectLink = true [prio]
      * 
      */
     public boolean showCreateObjectLink () {

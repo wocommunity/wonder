@@ -501,8 +501,8 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	 *            ERCoreUserPreferences set
 	 * @param pageConfigurationName
 	 *            {@link String}
-	 * @return {@link NSDictionary} <br/>
-	 *         key - {@link String} name of savedQuery <br/>
+	 * @return {@link NSDictionary} <br>
+	 *         key - {@link String} name of savedQuery <br>
 	 *         value - {@link SavedQuery}
 	 */
 	public static NSDictionary savedQueriesForPageConfigurationNamed(WOSession session, String pageConfigurationName) {

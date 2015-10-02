@@ -10,9 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 import java.util.Vector;
 /**
- * <span class="en">
+ * <div class="en">
  * Bugfix reimplementation of NSMutableArray. To be able to use this class, the framework this class resides in must be
- * before JavaFoundation.framework in your classpath. <br />
+ * before JavaFoundation.framework in your classpath.
+ * <p>
  * It fixes a lot of issues:
  * <ul>
  * <li>implements the correct Collection methods, so you can <code>anArray.add(anObject)</code>
@@ -22,15 +23,13 @@ import java.util.Vector;
  * </ul>
  * 
  * Once these issues are resolved in a WO distribution, this class will go away and the Apple 
- * supplied will will be used again without changes in code on your side. <br />
+ * supplied will will be used again without changes in code on your side. 
+ * </div>
  * 
- * @param <E> type of array contents
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * NSMutableArray のバッグフィックス再実装。
- * このクラスを使用する為には現フレームワークのクラスパスが JavaFoundation.framework の前にある必要があります。<br>
- * 
+ * このクラスを使用する為には現フレームワークのクラスパスが JavaFoundation.framework の前にある必要があります。
+ * <p>
  * 次の問題を対応しています:
  * <ul>
  * <li>正しいコレクション・メソッドの実装：<code>anArray.add(anObject)</code> が可能
@@ -38,9 +37,9 @@ import java.util.Vector;
  * <li>実際のオブジェクトが replaceObjectAtIndex() の外で処理されるバッグフィックス
  * <li><code>_EOCheapCopyMutableArray</code> でのフォルトはトリーガされない問題のバッグフィックス
  * </ul>
+ * </div>
  * 
  * @param <E> type of array contents
- * </span>
  * 
  * @author ak
  */

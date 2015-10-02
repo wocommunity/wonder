@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSDictionary;
  * The style "ajax-hinted-text-with-default" defines the color for this.
  * 
  * The default value for the field comes from setting default = "something"; on the input element.  For instance,
- * to set the default value on a text field, you would do <wo:WOTextField value = "$value" default = "Fill this in"/>.
+ * to set the default value on a text field, you would do &lt;wo:WOTextField value = "$value" default = "Fill this in"/&gt;.
  * <pre>
  * HTML:
  * &lt;webobject name="Form"&gt;

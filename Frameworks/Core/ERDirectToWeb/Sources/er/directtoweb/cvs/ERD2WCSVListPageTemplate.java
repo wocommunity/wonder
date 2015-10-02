@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Standard list in CSV format.<br />
+ * Standard list in CSV format.
+ * 
  * @d2wKey propertyKey
  * @d2wKey displayPropertyKeys
  * @d2wKey displayNameForProperty

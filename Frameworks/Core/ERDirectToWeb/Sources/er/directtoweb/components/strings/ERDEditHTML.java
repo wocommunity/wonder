@@ -12,9 +12,9 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Very, very basic version of a TinyMCE integration. As it doesn't make much sense to load the the JS files
  * it's excepted that you put them somewhere on your server and specify the location with
- * the property <code>er.directtoweb.ERDEditHTML.tinyMceSourceUrl=http://somewhere/.../tiny_mce.js</code>.<br />
+ * the property <code>er.directtoweb.ERDEditHTML.tinyMceSourceUrl=http://somewhere/.../tiny_mce.js</code>.
  * The default is the TinyMce server which would be very unfriendly and slow to use in deployment...
- * <br /><br />
+ * <p>
  * You can also use <code>er.directtoweb.ERDEditHTML.tinyMceSourceFileName</code> and 
  * <code>er.directtoweb.ERDEditHTML.tinyMceSourceFrameworkName</code> properties to specify file name and framework name ("app" by default)
  * of TinyMCE if you want to store the files in WebServerResources of your application of framework. For example:

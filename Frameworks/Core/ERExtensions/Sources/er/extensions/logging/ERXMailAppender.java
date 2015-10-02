@@ -50,7 +50,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *	ExceptionPage - name of the exception page, is unset, <br>
  *	Title - Title of the email messages, if not specified the title will be a
  *		truncated version of the log message.<br>
- *	Qualifier - qualifier that defines if the event should be logged.<br>
+ *	Qualifier - qualifier that defines if the event should be logged.
  */
 
 public class ERXMailAppender extends AppenderSkeleton {

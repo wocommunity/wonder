@@ -17,7 +17,7 @@ import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Beautify the propertyKey name in a better way.<br />
+ * Beautify the propertyKey name in a better way.
  * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultDisplayNameAssignment}
  */
 @Deprecated
