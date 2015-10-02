@@ -24,7 +24,7 @@ import er.extensions.foundation.ERXProperties;
  * We place rules with a <code>pageConfiguration</code> so high that they will be higher than rules with the same author setting
  * but lower than a rule with a higher setting.
  * </ul>
- * <br>In order to be usable with the D2WClient and Rule editor, we also patch the encoded 
+ * In order to be usable with the D2WClient and Rule editor, we also patch the encoded 
  * dictionary so these tools find no trace of the patched rules.
  * @author ak
  */
@@ -137,7 +137,7 @@ public class ERD2WRule extends Rule {
     
     /**
      * Builds a string like:<br>
-     * <pre><code>   100: ((entity.name = 'Bug') and (task = 'edit')) => isInspectable = true [com.directtowen.BooleanAssignment]</code></pre>
+     * <pre><code>   100: ((entity.name = 'Bug') and (task = 'edit')) =&gt; isInspectable = true [com.directtowen.BooleanAssignment]</code></pre>
      * @return a nice description of the rule
      */
     @Override

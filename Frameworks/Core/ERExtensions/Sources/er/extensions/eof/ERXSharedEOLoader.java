@@ -55,8 +55,7 @@ import er.extensions.foundation.ERXUtilities;
 
 // CHECKME: I believe this bug has been fixed, should be removed if this is the case.
 /**
- * Java port of Kelly Hawk's shared EO loader. Works around a bug with shared eos and multiple models.<br />
- * 
+ * Java port of Kelly Hawk's shared EO loader. Works around a bug with shared eos and multiple models.
  */
 
 public class ERXSharedEOLoader {

@@ -504,8 +504,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * this method with the parameter 1. If called
      * with the parameter 0 the garbage collector
      * will continue to run until no more free memory
-     * is available to collect. <br/>
-     * <br/>
+     * is available to collect.
+     * <p>
      * Note: This can be a very costly operation and
      * should only be used in extreme circumstances.
      * @param maxLoop maximum times to run the garbage
@@ -557,8 +557,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * A safe comparison method that first checks to see
      * if either of the objects are <code>null</code> before comparing
-     * them with the <code>equals</code> method.<br/>
-     * <br/>
+     * them with the <code>equals</code> method.
+     * <p>
      * Note that if both objects are <code>null</code> then they will
      * be considered equal.
      * @param v1 first object
@@ -574,8 +574,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * A safe different comparison method that first checks to see
      * if either of the objects are <code>null</code> before comparing
-     * them with the <code>equals</code> method.<br/>
-     * <br/>
+     * them with the <code>equals</code> method.
+     * <p>
      * Note that if both objects are <code>null</code> then they will
      * be considered equal.
      * @param v1 first object
@@ -649,10 +649,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * This method handles 3 different cases
      *
      * 1. keyPath is a single key and represents a relationship
-     *		--> addObjectToBothSidesOfRelationshipWithKey
+     *		--&gt; addObjectToBothSidesOfRelationshipWithKey
      * 2. keyPath is a single key and does NOT represents a relationship
      * 3. keyPath is a real key path: break it up, navigate to the last atom
-     *		--> back to 1. or 2.
+     *		--&gt; back to 1. or 2.
      * @param to enterprise object that is having objects added to it
      * @param from enterprise object that is providing the objects
      * @param keyPath that specifies the relationship on the to object
@@ -772,13 +772,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * last property of the key path's EOAttribute or EORelationship.
      * The userInfo dictionary can be edited via EOModeler, it is that
      * open book looking icon when looking at either an attribute or
-     * relationship.<br/>
-     * <br/>
+     * relationship.
+     * <p>
      * For example if the userInfo dictionary or the attribute 'speed' on the
      * entity Car contained the key-value pair unit=mph, then this method
-     * would be able to resolve that unit given either of these keypaths:<br/>
-     * <code>userInfoUnit(aCar, "speed");<br/>
-     * userInfoUnit(aDrive, "toCar.speed");</code></br>
+     * would be able to resolve that unit given either of these keypaths:
+     * <pre><code>userInfoUnit(aCar, "speed");
+     *userInfoUnit(aDrive, "toCar.speed");</code></pre>
      * Units can be very useful for adding meta information to particular
      * attributes and relationships in models. The ERDirectToWeb framework
      * adds support for displaying units.
@@ -831,7 +831,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * keys. These keys need to start with the '@@' symbol. For instance
      * if you have the user info value '@unit' off of an attribute for the
      * entity Movie, then you can either pass in a Movie object or a
-     * different object with a prefix key path to a movie object.<br/>
+     * different object with a prefix key path to a movie object.
+     * 
      * @param userInfoUnitString string to be resolved, needs to start with
      *		'@@'. This keypath will be evaluated against either the object
      *		if no prefixKeyPath is specified or the object returned by
@@ -938,7 +939,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
-     * adding the parameter [? | &]r=random_number to the end of the
+     * adding the parameter [? | &amp;]r=random_number to the end of the
      * url.
      * @param daURL a url to add the randomization to.
      * @return url with the addition of the randomization key
@@ -954,7 +955,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
-     * adding the parameter [? | &]r=random_number to the end of the
+     * adding the parameter [? | &amp;]r=random_number to the end of the
      * url.
      * @param daURL a url to add the randomization to.
      */

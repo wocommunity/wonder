@@ -13,8 +13,7 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
 
 // FIXME: This may need to subclass EOQualifier now.
 /**
- * Qualifer used to test if something is null.<br />
- * 
+ * Qualifer used to test if something is null.
  */
 
 public class ERDNullQualifier implements EOQualifierEvaluation {

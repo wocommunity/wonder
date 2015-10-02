@@ -249,7 +249,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 
 	/**
-	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
+	 * ERXSortOrderings is an NSMutableArray&lt;EOSortOrdering&gt; that
 	 * provides methods for chaining.
 	 * 
 	 * @author mschrag

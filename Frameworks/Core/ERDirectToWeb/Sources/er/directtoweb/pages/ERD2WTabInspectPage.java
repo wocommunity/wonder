@@ -23,7 +23,8 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Superclass for all tab and wizard pages.<br />
+ * Superclass for all tab and wizard pages.
+ * 
  * @d2wKey firstResponder
  * @d2wKey tabComponentName
  */

@@ -10,13 +10,11 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Component that generates a mailto href of the form: "<a href=mailto:foo@bar.com>foo@bar.com</a>".
- * <br/>
- * Synopsis:<br/>
+ * Component that generates a mailto href of the form: {@literal "<a href=mailto:foo@bar.com>foo@bar.com</a>"}.
+ * <h3> Synopsis:</h3>
  * email=<i>anEmail</i>;
- * <br/>
+ * 
  * @binding email email address to generate href
- * <br/>
  */
 public class ERXMailTo extends WOComponent {
 	/**

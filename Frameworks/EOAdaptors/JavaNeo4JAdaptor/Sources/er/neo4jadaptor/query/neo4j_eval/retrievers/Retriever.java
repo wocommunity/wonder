@@ -7,7 +7,7 @@ import er.neo4jadaptor.query.neo4j_eval.HasCost;
 
 
 /**
- * For an object retrieves a value being a set of objects of some type. In other words it's a function (in mathematical terms) f:Arg -> {x:Value} (result is a set!).
+ * For an object retrieves a value being a set of objects of some type. In other words it's a function (in mathematical terms) f:Arg -&gt; {x:Value} (result is a set!).
  * It is allowed to return an empty set.
  * 
  * @author Jedrzej Sobanski

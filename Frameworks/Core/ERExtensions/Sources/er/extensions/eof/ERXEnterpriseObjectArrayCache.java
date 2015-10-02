@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
 /**
  * Caches objects of one entity by a given key. Listens to
  * EOEditingContextDidSaveChanges notifications to track changes.
- * Typically you'd fetch values by:<code><pre>
+ * Typically you'd fetch values by:<pre><code>
  * ERXEnterpriseObjectArrayCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectArrayCache&lt;HelpText&gt;("HelpText") {
  *    protected void handleUnsuccessfullQueryForKey(Object key) {
  *       NSArray helpTexts = ... fetch from somewhere
@@ -32,7 +32,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * ...
  * NSArray&lt;HelpText&gt; helpTexts = helpTextCache.objectsForKey(ec, "AllTexts");
  * ...
- * </pre></code>
+ * </code></pre>
  * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
  * that this implementation only caches the global IDs, not the actual data. 
  * @author ak

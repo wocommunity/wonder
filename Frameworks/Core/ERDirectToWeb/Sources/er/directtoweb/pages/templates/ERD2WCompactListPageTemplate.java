@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Compact list page.  Doesn't have any of the navigation at the top.<br />
+ * Compact list page.  Doesn't have any of the navigation at the top.
  * 
  * @d2wKey emptyListComponentName
  * @d2wKey repetitionComponentName

@@ -32,12 +32,12 @@ import er.extensions.foundation.ERXArrayUtilities;
  * There are several ways to implement this interface:
  * <ol>
  * <li>Manually implement the interface in each {@code Entity.java} class that
- * you want to be able to copy</br>This is the quickest way to get started.
+ * you want to be able to copy<br>This is the quickest way to get started.
  * Simply add specify that your EO implements ERXCopyable&lt;MyEntity&gt; in the
  * class declaration, then implement the required methods. Here is what you'll
  * need to add to get started:
  * 
- * <pre>
+ * <pre><code>
  * &#064;Override
  * public MyEntity copy() {
  * 	MyEntity copy = copy(new NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt;());
@@ -55,18 +55,18 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 	MyEntity duplicate = ERXCopyable.Utility.deepCopy(copiedObjects, (MyEntity) this);
  * 	return duplicate;
  * }
- * </pre>
+ * </code></pre>
  * 
  * </li>
  * <li>Manually implement the interface in a {@link ERXGenericRecord} subclass
- * </br>This is almost as easy as option #1 but has the added advantage of
+ * <br>This is almost as easy as option #1 but has the added advantage of
  * allowing you to implement the interface just once, and then override the
  * default behavior as needed for individual EOs. Simply specify that your
  * {@link ERXGenericRecord} subclass implements
  * ERXCopyable&lt;MyGenericRecord&gt; in the class declaration and then
  * implement the required methods. The defaults are very similar to option #1:
  * 
- * <pre>
+ * <pre><code>
  * &#064;Override
  * public MyGenericRecord copy() {
  * 	MyGenericRecord copy = copy(new NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt;());
@@ -84,19 +84,19 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 	MyGenericRecord duplicate = ERXCopyable.Utility.deepCopy(copiedObjects, this);
  * 	return duplicate;
  * }
- * </pre>
+ * </code></pre>
  * 
  * </li>
  * <li>Add {@code UserInfo} dictionary entries into your EOModel and make some
  * additions to your EOGenerator templates that will automatically implement
- * this interface based on your model settings.</br>This option is the most
+ * this interface based on your model settings.<br>This option is the most
  * powerful and flexible, and requires the least amount of ongoing programming,
  * but takes more work to get setup. It's well worth it if you are going to be
  * implementing ERXCopyable on more than just a few EOs. Here's what you'll need
- * to do:</li>
+ * to do:
  * <ol>
  * <li>Create or modify your own EOGenerator template with the following
- * additions:</li>
+ * additions:
  * <ul>
  * <li>In the imports section, add the following:
  * 
@@ -111,7 +111,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * '{') insert the following:
  * 
  * <pre>
- * #if(${entity.userInfo.ERXCopyable}) implements ERXCopyable<${entity.classNameWithOptionalPackage}>#end
+ * #if(${entity.userInfo.ERXCopyable}) implements ERXCopyable&lt;${entity.classNameWithOptionalPackage}&gt;#end
  * </pre>
  * 
  * </li>
@@ -145,6 +145,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * </li>
  * </ul>
+ * </li>
  * </ol>
  * </ol>
  * 
@@ -285,13 +286,10 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 	}
 
 	/**
-	 * <p>
 	 * This class provides a default implementation of ERXCopyable that handles
 	 * the most common situations encountered copying {@link EOEnterpriseObject}
 	 * s.
-	 * </p>
-	 * <p>
-	 * <b>Notes</b>
+	 * <h3>Notes</h3>
 	 * <ul>
 	 * <li>Debugging information can be turned on with the DEBUG level of the
 	 * log4j logger
@@ -305,14 +303,13 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 	 * register the new object before copying its relationships to so that
 	 * circular relationships will be copied correctly. For example:
 	 * 
-	 * <pre>
+	 * <pre><code>
 	 * EOGlobalID globalID = editingContext().globalIDForObject(this);
 	 * copiedObjects.setObjectForKey(copy, globalID);
-	 * </pre>
+	 * </code></pre>
 	 * 
 	 * </li>
 	 * </ul>
-	 * </p>
 	 */
 	public static class DefaultImplementation {
 
@@ -377,7 +374,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 	 * implementations of
 	 * <ul>
 	 * <li>{@link Utility#modelCopy(NSMutableDictionary, ERXCopyable)}</li>
-	 * <li>{@link Utility#referenceCopy(ERXCopyable)}</li>
+	 * <li>{@link Utility#referenceCopy(ERXEnterpriseObject)}</li>
 	 * <li>{@link Utility#shallowCopy(ERXCopyable)}</li>
 	 * <li>{@link Utility#deepCopy(NSMutableDictionary, ERXCopyable)}</li>
 	 * </ul>
@@ -493,7 +490,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		 * class property and also used in a relationship it is assumed to be an
 		 * exposed primary- or foreign-key and <em>are not</em> copied. Such
 		 * attributes are set to null. See
-		 * {@link #exposedPKAndFKAttributes(ERXCopyable)} for details on how
+		 * {@link #exposedPKandFKAttributeNames(ERXCopyable)} for details on how
 		 * this is determined. It can be used when creating custom
 		 * implementations of the
 		 * {@link ERXCopyable#duplicate(NSMutableDictionary)} method.
@@ -1108,8 +1105,6 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		 * 
 		 * @param <T>
 		 *            the Type of the {@code source} and {@code destination}
-		 * @param <E>
-		 *            the Type of the objects for the {@code relationship}
 		 * @param source
 		 *            the subclass of {@code ERXCopyable} to copy the
 		 *            {@code relationship}'s value(s) from
@@ -1139,8 +1134,6 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		 * 
 		 * @param <T>
 		 *            the Type of the {@code source} and {@code destination}
-		 * @param <E>
-		 *            the Type of the objects for the {@code relationship}
 		 * @param source
 		 *            the subclass of {@code ERXCopyable} to copy the
 		 *            relationship's value from
@@ -1162,25 +1155,20 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		}
 
 		/**
-		 * <p>
 		 * Creates a new instance of the {@code source}'s Entity, then steps
 		 * through all attributes and relationships, copying them as defined in
 		 * each property's UserInfo dictionary in the EOModel.
-		 * </p>
-		 * 
 		 * <p>
 		 * To make use of this method of copying an EO, simply override the
 		 * {@link ERXCopyable#duplicate(NSMutableDictionary)
 		 * duplicate(NSMutableDictionary)} method in your EO with the following:
 		 * 
-		 * <pre>
+		 * <pre><code>
 		 * public MyEO duplicate(NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt; copiedObjects) {
 		 * 	MyEO duplicate = ERXCopyable.Utility.modelCopy(copiedObjects, (MyEO) this);
 		 * 	return duplicate;
 		 * }
-		 * </pre>
-		 * 
-		 * </p>
+		 * </code></pre>
 		 * 
 		 * @param <T>
 		 *            the Type of the {@code source} and returned objects

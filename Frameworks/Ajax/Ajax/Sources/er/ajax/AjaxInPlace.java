@@ -14,9 +14,9 @@ import er.extensions.components._private.ERXWOForm;
 
 /**
  * AjaxInPlace is a generalization of the AjaxInPlaceEditor. To use this component, you must wrap an ERXWOTemplate named
- * "view" and an ERXWOTemplate named "edit". <br />
- * For instance:<br />
- * <br />
+ * "view" and an ERXWOTemplate named "edit".<br>
+ * For instance:
+ * <p>
  * HTML:
  * 
  * <pre>

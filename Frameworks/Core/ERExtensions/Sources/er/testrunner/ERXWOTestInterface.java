@@ -25,8 +25,7 @@ import com.webobjects.foundation.NSMutableSet;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * component for interactively running tests.<br />
- * 
+ * component for interactively running tests.
  */
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {

@@ -44,27 +44,26 @@ import er.extensions.appserver.ERXWOContext;
  * }</code> <br>
  * will be used as follow : <table border="1">
  * <tr>
- * <th width="50%">JavaScript (client)</th>
- * <th width="50%">Java (server)</th>
+ * <th style="width:50%">JavaScript (client)</th>
+ * <th style="width:50%">Java (server)</th>
  * </tr>
  * <tr>
- * <td><code>
- *      <em>// index of the selection on the client</em>;<br/>
- *      var idx = 3; // fixed value for the demo<br/>
- *      <em>// using rpc, ask our page to get the name for that client for that index.<br/>
- *      var nom = jsonrpc.wopage.clientNameAtIndex(idx);<br/>
- * </code></td>
- * <td><code>
- * // Java-WebObject side, we receive the index and simple return what they asked for, as for any java call.
- *      public String clientNameAtIndex(int i) { <br/>
- *          return <em>"something!"+i</em>;<br/>
- *  }<br/>
- * </code></td>
+ * <td><pre><code>
+ * <em>// index of the selection on the client</em>
+ * var idx = 3; // fixed value for the demo
+ * <em>// using rpc, ask our page to get the name for that client for that index.</em>
+ * var nom = jsonrpc.wopage.clientNameAtIndex(idx);
+ * </code></pre></td>
+ * <td><pre><code>
+ * <em>// Java-WebObject side, we receive the index and simple return what they asked for, as for any java call.</em>
+ * public String clientNameAtIndex(int i) {
+ *     return <em>"something!"+i</em>;
+ * }
+ * </code></pre></td>
  * </tr>
  * </table>
- * </p>
  * <p>
- * Remember that is no proxy object is given, it will use the parent component, which is the component in which this component is embeded.
+ * Remember that is no proxy object is given, it will use the parent component, which is the component in which this component is embedded.
  * </p>
  * <h2>Todo</h2>
  * <ul>
@@ -82,7 +81,7 @@ import er.extensions.appserver.ERXWOContext;
  * for multiple proxy.
  * @binding lazy (default false) if true, the proxy is only initialized on-demand, rather than on-load
  * 
- * @author Jean-François Veillette <jfveillette@os.ca>
+ * @author Jean-François Veillette &lt;jfveillette@os.ca&gt;
  * @version $Revision $, $Date $ <br>
  *          &copy; 2005-2006 OS communications informatiques, inc. http://www.os.ca
  *          Tous droits réservés.

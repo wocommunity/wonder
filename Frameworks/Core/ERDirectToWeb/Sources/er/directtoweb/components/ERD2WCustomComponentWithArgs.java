@@ -20,7 +20,7 @@ import er.extensions.validation.ERXExceptionHolder;
 // Fixes validation failures being propogated
 // Adds valueForBinding that resolves in the d2wContext.
 /**
- * Allows custom components to resolve valueForBinding requests in the rules.<br />
+ * Allows custom components to resolve valueForBinding requests in the rules.
  * @d2wKey extraBindings
  */
 public class ERD2WCustomComponentWithArgs extends D2WCustomComponent implements ERXExceptionHolder {

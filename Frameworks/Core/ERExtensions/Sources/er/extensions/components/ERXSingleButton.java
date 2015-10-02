@@ -17,21 +17,21 @@ import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * A stand alone submit button to be used as an action button.
- *
+ *<p>
  * This is useful for cancel buttons which should not submit the
  * page and create all the validation messages. It can also create
  * its own FORM, so you can drop this component anywhere.
  *
  * @binding action
  * @binding value
- * @binding doNotUseForm If <code>true<code>, do not output a form, ever.
-            If <code>false</code> or not specified, do what is more efficient.
+ * @binding doNotUseForm If <code>true</code>, do not output a form, ever.
+ *          If <code>false</code> or not specified, do what is more efficient.
  * @binding actionClass
  * @binding directActionName
  * @binding target
  * @binding shouldSubmitForm If <code>false</code>, will let the submit button
-            use javascript code to set "document.location", which does not submit
-            the form the button is in. The default value is <code>false</code>.
+ *          use javascript code to set "document.location", which does not submit
+ *          the form the button is in. The default value is <code>false</code>.
  * @binding name If is null takes context.elementID
  * @binding class the CSS class for the button
  * @binding style the CSS style for the button

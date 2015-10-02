@@ -11,7 +11,7 @@ import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.foundation.NSData;
 
 /**
- * Displays an image via the src or data binding, with imageHeight and imageWidth from the d2wContext<br />
+ * Displays an image via the src or data binding, with imageHeight and imageWidth from the d2wContext
  * 
  * @d2wKey imageWidth
  * @d2wKey imageHeight

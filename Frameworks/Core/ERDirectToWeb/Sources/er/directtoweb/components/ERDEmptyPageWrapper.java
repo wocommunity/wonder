@@ -11,8 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.components.ERXStatelessComponent;
 
 /**
- * Empty page wrapper component.<br />
- * 
+ * Empty page wrapper component.
  */
 
 public class ERDEmptyPageWrapper extends ERXStatelessComponent {

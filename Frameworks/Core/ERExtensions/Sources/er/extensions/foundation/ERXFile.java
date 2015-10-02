@@ -13,17 +13,17 @@ import com.ibm.icu.text.Normalizer;
  * should be used as a replacement.
  *
  * For example, the following code will not work as expected:
- * <code><pre>
+ * <pre><code>
  * 	File f = new File("/tmp/FilenameWithSpecialCharacterÄÖÜ");
  * 	f.createNewFile();
  * 	File tmp = new File("/tmp");
  * 	File[] contents = tmp.listFiles();
- * 	for (int i = 0; i < contents.length; i++) {
+ * 	for (int i = 0; i &lt; contents.length; i++) {
  * 		if (contents[i].getName().equals("FilenameWithSpecialCharacterÄÖÜ")) {
  * 			System.out.println("found it!");
  * 		}
  * 	}
- * </pre></code>
+ * </code></pre>
  *
  * One would expect that the comparison
  * <code>contents[i].getName().equals("FilenameWithSpecialCharacterÄÖÜ")</code>
@@ -108,7 +108,7 @@ public class ERXFile extends File {
      * 
      * For a given abstract pathname <code>f</code> it is guaranteed that
      * 
-     * <code><pre>new File(f.toURI()).equals(f.getAbsoluteFile())</pre></code>
+     * <pre><code>new File(f.toURI()).equals(f.getAbsoluteFile())</code></pre>
      * 
      * so long as the original abstract pathname, the URI, and the new abstract pathname are all
      * created in (possibly different invocations of) the same Java virtual machine. This relationship

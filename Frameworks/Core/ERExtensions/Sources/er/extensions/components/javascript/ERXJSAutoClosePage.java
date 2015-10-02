@@ -11,9 +11,7 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * When returned will close the current page by calling <code>onload=window.close()</code>.
- * Useful for server side determining if a window should be closed.<br/>
- * <br/>
- * No Bindings.
+ * Useful for server side determining if a window should be closed.
  */
 public class ERXJSAutoClosePage extends WOComponent {
 	/**

@@ -27,7 +27,7 @@ import er.extensions.woextensions.WOSortOrder;
 //		if you want the app to 'remember' what the last sort was for a user.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Better sort order changer. Useful for providing custom sort order images and remembering the sort orderings.<br />
+ * Better sort order changer. Useful for providing custom sort order images and remembering the sort orderings.
  * 
  * @binding d2wContext
  * @binding displayGroup

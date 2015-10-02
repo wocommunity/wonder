@@ -16,7 +16,7 @@ import er.directtoweb.assignments.ERDLocalizedAssignment;
 
 // FIXME: Should be renamed ERDDefaultLocalizedMessageAssignment.
 /**
- * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
+ * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.
  * @deprecated use {@link er.directtoweb.assignments.ERDLocalizedAssignment}
  */
 @Deprecated

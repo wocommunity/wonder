@@ -13,7 +13,7 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * This abstract (by design) superclass component isolate general utility methods.
  * 
- * @author Jean-Francois Veillette <jean.francois.veillette@gmail.com>
+ * @author Jean-Francois Veillette &lt;jean.francois.veillette@gmail.com&gt;
  * @version $Revision $, $Date $ <br>
  *          &copy; 2006 OS communications informatiques, inc. http://www.os.ca
  *          Tous droits réservés.

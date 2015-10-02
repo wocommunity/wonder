@@ -105,7 +105,6 @@ public class ERXStringUtilities {
     }
 
 	/**
-	 * <p>
 	 * Returns the <a
 	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
 	 * distance</a> between {@code a} and {@code b}. This code is based on <a
@@ -113,7 +112,6 @@ public class ERXStringUtilities {
 	 * ="http://mail.python.org/pipermail/python-list/1999-August/006031.html"
 	 * >some Python code posted to a mailing list</a> by Magnus L. Hetland
 	 * &lt;mlh@idt.ntnu.no&gt;, and assumed to be in the public domain.
-	 * </p>
 	 * 
 	 * <h3>Algorithm</h3>
 	 * 
@@ -146,7 +144,6 @@ public class ERXStringUtilities {
 	 * {@code a} into {@code b}? The method is based on the following idea. We
 	 * want to find the distance between {@code a[:x]} and {@code b[:y]}. To do
 	 * this, we first calculate:
-	 * </p>
 	 * 
 	 * <ol>
 	 * <li>the distance between {@code a[:x-1]} and {@code b[:y]}, adding the
@@ -159,14 +156,10 @@ public class ERXStringUtilities {
 	 * cost of a <em>possible</em> exchange of the letter {@code b[y]} (with
 	 * {@code a[x]}).</li>
 	 * </ol>
-	 * 
-	 * <p>
 	 * The cost of the subtraction and addition operations are 1, while the
 	 * exchange operation has a cost of 1 if {@code a[x]} and {@code b[y]} are
 	 * different, and 0 otherwise. After calculating these costs, we choose the
 	 * least one of them (since we want to use the best solution.)
-	 * </p>
-	 * 
 	 * <p>
 	 * Instead of doing this recursively, i.e. calculating ourselves "back" from
 	 * the final value, we build a cost-matrix {@code c} containing the optimal
@@ -176,7 +169,6 @@ public class ERXStringUtilities {
 	 * string of length {@code j}) are {@code j}. Finally, the cost of
 	 * translating between the full strings {@code a} and {@code b} (
 	 * {@code c[n,m]}) is returned.
-	 * </p>
 	 * 
 	 * @param a
 	 *            first string
@@ -647,7 +639,7 @@ public class ERXStringUtilities {
      * Utility method to append a character to a
      * StringBuffer if the last character is not
      * a certain character. Useful for determining
-     * if you need to add an '&' to the end of a
+     * if you need to add an '&amp;' to the end of a
      * form value string.
      * @param separator character to potentially
      *		add to the StringBuffer.
@@ -665,7 +657,7 @@ public class ERXStringUtilities {
      * Utility method to append a character to a
      * StringBuilder if the last character is not
      * a certain character. Useful for determining
-     * if you need to add an '&' to the end of a
+     * if you need to add an '&amp;' to the end of a
      * form value string.
      * @param separator character to potentially
      *		add to the StringBuilder.
@@ -1734,7 +1726,6 @@ public class ERXStringUtilities {
    * @param str the string to hash
    * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
    * @return the MD5 sum of the bytes
-   * @exception IOException
    */
   public static byte[] md5(String str, String encoding) {
 	byte[] bytes;
@@ -1764,7 +1755,6 @@ public class ERXStringUtilities {
    * @param str the string to hash
    * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
    * @return the MD5 sum of the bytes in a hex string
-   * @exception IOException
    */
   public static String md5Hex(String str, String encoding) {
 	  String hexStr;

@@ -16,7 +16,8 @@ import com.webobjects.foundation.NSDictionary;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Conditional component that compares two objects using the <code>equals</code> method.<br/>
+ * Conditional component that compares two objects using the <code>equals</code> method.
+ * 
  * @binding value1 first object to compare
  * @binding value2 second object to compare
  * @binding negate Inverts the sense of the conditional.
@@ -41,7 +42,7 @@ public class ERXEqualConditional extends ERXWOConditional {
     
     /**
      * Tests for the equality of the two value bindings. First tests a direct
-     * <code>==</code> comparision then tests with an <code>equals</code> comparision.
+     * <code>==</code> comparison then tests with an <code>equals</code> comparison.
      * @return equality of the two bindings.
      */
     @Override

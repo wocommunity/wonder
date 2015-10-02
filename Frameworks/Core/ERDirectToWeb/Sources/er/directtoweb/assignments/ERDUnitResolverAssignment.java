@@ -14,8 +14,7 @@ import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.assignments.delayed.ERDDelayedAssignment;
 
 /**
- * Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.<br />
- * 
+ * Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.
  */
 
 public class ERDUnitResolverAssignment extends ERDDelayedAssignment {

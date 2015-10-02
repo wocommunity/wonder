@@ -14,7 +14,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Query component for null or non-null.<br />
+ * Query component for null or non-null.
+ * 
  * @d2wKey choicesNames
  */
 public class ERD2WQueryNonNull extends QueryComponent {

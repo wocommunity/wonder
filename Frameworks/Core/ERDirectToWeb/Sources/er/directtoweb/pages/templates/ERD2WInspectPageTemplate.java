@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WInspectPage;
 
 /**
- * Beefed up inspect page.<br />
+ * Beefed up inspect page.
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName

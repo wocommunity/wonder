@@ -8,7 +8,8 @@ package er.directtoweb.pages;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Query page utilizing fetch specifications.<br />
+ * Query page utilizing fetch specifications.
+ * 
  * @deprecated use {@link ERD2WQueryPage}
  * @d2wKey entity
  * @d2wKey pageWrapperName

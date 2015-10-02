@@ -34,27 +34,23 @@ import org.apache.commons.lang3.CharEncoding;
  * call the hashpw method with a random salt, like this:
  * <p>
  * <code>
- * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.gensalt()); <br />
+ * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.gensalt());
  * </code>
  * <p>
  * To check whether a plaintext password matches one that has been
  * hashed previously, use the checkpw method:
- * <p>
- * <code>
- * if (BCrypt.checkpw(candidate_password, stored_hash))<br />
- * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("It matches");<br />
- * else<br />
- * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("It does not match");<br />
- * </code>
- * <p>
+ * <pre><code>
+ * if (BCrypt.checkpw(candidate_password, stored_hash))
+ *     System.out.println("It matches");
+ * else
+ *     System.out.println("It does not match");
+ * </code></pre>
  * The gensalt() method takes an optional parameter (log_rounds)
  * that determines the computational complexity of the hashing:
- * <p>
- * <code>
- * String strong_salt = BCrypt.gensalt(10)<br />
- * String stronger_salt = BCrypt.gensalt(12)<br />
- * </code>
- * <p>
+ * <pre><code>
+ * String strong_salt = BCrypt.gensalt(10);
+ * String stronger_salt = BCrypt.gensalt(12);
+ * </code></pre>
  * The amount of work increases exponentially (2**log_rounds), so 
  * each increment is twice as much work. The default log_rounds is
  * 10, and the valid range is 4 to 31.

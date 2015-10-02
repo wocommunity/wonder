@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSValidation;
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Edits dates with popup lists.<br />
+ * Edits dates with popup lists.
  * 
  * @binding yearRangeBottom
  * @binding yearRangeTop

@@ -20,7 +20,7 @@ import er.extensions.eof.ERXEnterpriseObject;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Useful for displaying a dictionary of caught exception messages.<br />
+ * Useful for displaying a dictionary of caught exception messages.
  * 
  * @binding errorMessages An NSMutableDictionary that contains the list of errors to display
  * @binding extraErrorMessage An String containing an error. If errorMessages is also set, 

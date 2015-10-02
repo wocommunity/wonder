@@ -13,7 +13,7 @@ import er.extensions.components.ERXComponent;
  * there is one).
  * 
  * <code>
- * var jsonClient = <wo:StatelessJSONClient/>;
+ * var jsonClient = &lt;wo:StatelessJSONClient/&gt;;
  * </code>
  * 
  * @author mschrag

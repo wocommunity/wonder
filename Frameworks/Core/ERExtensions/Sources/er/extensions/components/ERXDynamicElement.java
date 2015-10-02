@@ -228,6 +228,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 	/**
 	 * Resolves a given binding as an NSArray object.
 	 * 
+	 * @param <T> the type of the array's items
 	 * @param name binding name
 	 * @param component component to get value from
 	 * @return retrieved array value or <code>null</code>
@@ -239,6 +240,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 	/**
 	 * Resolves a given binding as an NSArray object.
 	 * 
+	 * @param <T> the type of the array's items
 	 * @param name binding name
 	 * @param defaultValue default value
 	 * @param component component to get value from
@@ -303,10 +305,9 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 	 * and field name (e.g. <i>MyDynamicElement.myField</i>).
 	 * The ContextData field itself can and should be declared static as it doesn't store the
 	 * value itself, it is only used as an accessor to the value stored within the context.
-	 * <p>
-	 * Example:
-	 * <pre>
-	 * public static final ContextData<String> myField = new ContextData<String>("MyClass.myField");
+	 * <h3>Example:</h3>
+	 * <pre><code>
+	 * public static final ContextData&lt;String&gt; myField = new ContextData&lt;&gt;("MyClass.myField");
 	 * 
 	 * public void appendToResponse(WOResponse response, WOContext context) {
 	 *   beforeProcessing(context);
@@ -342,7 +343,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 	 * protected void afterProcessing(WOContext context) {
 	 *   myField.end(context);
 	 * }
-	 * </pre>
+	 * </code></pre>
 	 * 
 	 * @param <T> type of data to store 
 	 * @author sgaertner

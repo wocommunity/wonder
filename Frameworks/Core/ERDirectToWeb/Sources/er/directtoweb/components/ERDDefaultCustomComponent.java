@@ -14,8 +14,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
- * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.<br />
- * 
+ * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.
  */
 public class ERDDefaultCustomComponent extends WOComponent {
 	/**

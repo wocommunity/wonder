@@ -18,8 +18,7 @@ import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
- * Given an action opens the action in a new window.<br />
- * 
+ * Given an action opens the action in a new window.
  */
 public class ERXJSOpenWindowHyperlink extends WOComponent {
 	/**

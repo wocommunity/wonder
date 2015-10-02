@@ -39,7 +39,8 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Superclass for all query pages.<br />
+ * Superclass for all query pages.
+ * <p>
  * In addition to the rest of the goodies of ERD2WPage, it lets you save and
  * restore the initial query bindings by supplying a NS(Mutable)Dictionary which
  * contains the keys "queryMin", "queryMax" etc from the respective fields of

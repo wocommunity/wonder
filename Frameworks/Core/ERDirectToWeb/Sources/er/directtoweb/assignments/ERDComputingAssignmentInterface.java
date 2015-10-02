@@ -11,8 +11,7 @@ import com.webobjects.foundation.NSArray;
 // 	Implemented by custom assignments that need to tell the rule system that they depend on other
 //	keys.
 /**
- * In the new rule caching system the significant keys are built on the fly.  For custom assignments that explicitly depend on other keys this interface needs to be implemented so the caching system can take them in to account.<br />
- * 
+ * In the new rule caching system the significant keys are built on the fly.  For custom assignments that explicitly depend on other keys this interface needs to be implemented so the caching system can take them in to account.
  */
 
 public interface ERDComputingAssignmentInterface {

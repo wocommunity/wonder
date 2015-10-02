@@ -6,9 +6,9 @@ import com.webobjects.directtoweb.D2WCustomComponent;
 /**
  * Displays multiple items in one line. Useful for "firstName lastName" stuff.
  * Rules:
- * 100 : .. => displayPropertyKeys = (..., name, ...)
- * 100 : .. and (propertyKey = "name") => displayPropertyKeys = (firstName, lastName)
- * 100 : .. and (propertyKey = "name") => componentName = ERD2WMultiItemCustomComponent
+ * 100 : .. =&gt; displayPropertyKeys = (..., name, ...)
+ * 100 : .. and (propertyKey = "name") =&gt; displayPropertyKeys = (firstName, lastName)
+ * 100 : .. and (propertyKey = "name") =&gt; componentName = ERD2WMultiItemCustomComponent
  * Then all firstName and lastName will end up in one line with a "name" label.
  * @author ak
  * @d2wKey propertyKey

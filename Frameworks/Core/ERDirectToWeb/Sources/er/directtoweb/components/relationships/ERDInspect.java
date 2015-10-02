@@ -16,7 +16,8 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.<br />
+ * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.
+ * 
  * @d2wKey destinationEntityName
  */
 public class ERDInspect extends ERDCustomEditComponent {

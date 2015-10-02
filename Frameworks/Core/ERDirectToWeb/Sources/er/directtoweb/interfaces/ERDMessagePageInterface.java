@@ -17,8 +17,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 // This interface is a super-set of both the confirm and error page interfaces.
 // Depending on what the task is the different method names make sense.
 /**
- * Super set of all D2W message interfaces, confirm and error.<br />
- * 
+ * Super set of all D2W message interfaces, confirm and error.
  */
 
 public interface ERDMessagePageInterface extends ConfirmPageInterface, ErrorPageInterface, InspectPageInterface {

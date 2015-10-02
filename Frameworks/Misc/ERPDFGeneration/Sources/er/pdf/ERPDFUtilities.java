@@ -145,7 +145,7 @@ public class ERPDFUtilities {
 	 * to pdf like freakin' magic.
 	 * 
 	 * @param xml a string of xml to be passed into the transformation process 
-	 * @param fopxsl the location of the xml->fo transform sheet (should be in the classpath)
+	 * @param fopxsl the location of the xml-&gt;fo transform sheet (should be in the classpath)
 	 * @param config dictionary of additional configuration elements for the fop engine 
 	 * @return NSData raw pdf file contents
 	 * @throws Throwable java.io.IOException 

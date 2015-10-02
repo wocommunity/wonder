@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Used to edit urls with a default value.<br />
+ * Used to edit urls with a default value.
  * 
  * @binding value The URL to edit (can be a string or a java.net.URL object). If not set, 
  * the default value is http://www.

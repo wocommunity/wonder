@@ -15,7 +15,7 @@ import er.extensions.eof.ERXConstant;
 
 /**
  * Popup used for picking a number or some other value by 
- * using the key restrictedChoiceKey.<br />
+ * using the key restrictedChoiceKey.
  * You should use ERD2WEditToOneRelationship, though.
  * @d2wKey restrictedChoiceKey
  */

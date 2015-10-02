@@ -41,8 +41,8 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * <li>fixes wrong computation of average session memory</li>
  * </ul>
  *
- * <p>In order to turn on this functionality, you must make this call in your Application null constructor:<br/>
- * <pre>this.setStatisticsStore(new ERXStatisticsStore());</pre>
+ * <p>In order to turn on this functionality, you must make this call in your Application null constructor:
+ * <pre><code>this.setStatisticsStore(new ERXStatisticsStore());</code></pre>
  * 
  * Then configure the behavior of this class with the three properties that determine how much it logs and when it logs.
  *

@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOContext;
 
 // Will open a new window. 
 /**
- * Submit button to open a new window with an action.<br />
- * 
+ * Submit button to open a new window with an action.
  */
 
 public class ERXJSOpenWindowSubmitButton extends ERXJSOpenWindowHyperlink {

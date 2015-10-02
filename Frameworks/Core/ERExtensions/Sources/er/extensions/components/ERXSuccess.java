@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * "Success" string<br />
- * 
+ * "Success" string
  */
 public class ERXSuccess extends WOComponent {
 	/**

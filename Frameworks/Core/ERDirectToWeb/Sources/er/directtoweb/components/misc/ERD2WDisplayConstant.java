@@ -11,8 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERD2WStatelessComponent;
 
 /**
- * For a given key it asks the context for the value.  Presumablly the constant is already in the rules.<br />
- * 
+ * For a given key it asks the context for the value.  Presumablly the constant is already in the rules.
  */
 
 public class ERD2WDisplayConstant extends ERD2WStatelessComponent {

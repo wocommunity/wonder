@@ -12,8 +12,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 // FIXME: Needs to move to look framework.
 /**
- * Printer friendly page wrapper.<br />
- * 
+ * Printer friendly page wrapper.
  */
 public class ERDPrinterFriendlyWrapper extends WOComponent {
 	/**

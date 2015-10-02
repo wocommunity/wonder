@@ -11,12 +11,12 @@ import er.directtoweb.ERD2WFactory;
  * Simple class that makes creating flows of pages a bit easier. Instead of the
  * normal (sender instanceof ...) in nextPage(), you can implement methods
  * <b>nextPageFrom</b>SomePageConfiguration() or
- * <b>nextPageFrom</b>PageNameOfCurrentPage(). For example:<code><pre>
+ * <b>nextPageFrom</b>PageNameOfCurrentPage(). For example:<pre><code>
  * public class CreateAssetWithSelectionDelegate extends ERDFlowDelegate {
  * 	  
  *    public WOComponent nextPageFromSelectAssetGroups() {
  *        ERD2WListPage page = parent(ERD2WListPage.class)
- *        if(page.selectedObjects().count() > 0)
+ *        if(page.selectedObjects().count() &gt; 0)
  *           ...
  *           return D2W.factory.pageForConfigurationNamed("CreateAsset");
  *        return page.pageWithName("MaybeNextTimePage");
@@ -35,7 +35,7 @@ import er.directtoweb.ERD2WFactory;
  *   page.setNextPageDelegate(new CreateAssetWithSelectionDelegate())
  * ...
  * 
- * </pre></code>
+ * </code></pre>
  * 
  * @author ak
  * 

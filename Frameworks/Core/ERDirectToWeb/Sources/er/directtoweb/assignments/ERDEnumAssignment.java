@@ -10,8 +10,8 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * A simple assignment class to assign enums. An example rule:
- * <br/>
- * 100: *true* => someEnumKey = package.EnumName.INSTANCE [ERDEnumAssignment]
+ * <br>
+ * 100: *true* =&gt; someEnumKey = package.EnumName.INSTANCE [ERDEnumAssignment]
  *
  */
 public class ERDEnumAssignment extends ERDAssignment {

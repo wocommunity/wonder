@@ -11,48 +11,49 @@ package er.extensions.localization;
 import org.apache.log4j.Logger;
 
 /**
- *  ERXDutchLocalizer is a subclass of {@link ERXLocalizer}.<br/>
- *  <br/>
+ *  ERXDutchLocalizer is a subclass of {@link ERXLocalizer}.
+ *  <p>
  *  Overrides <code>plurify</code> from its super class 
  *  and tries to pluralize the string according to dutch grammar rules.
  *  
- *  
+ *  <pre>
  *  +en voor de meeste substantieven
- *  De bank -> de banken
- *  Het boek -> de boeken
+ *  De bank -&gt; de banken
+ *  Het boek -&gt; de boeken
  *  voorbeelden in context
  *  
  *  -s wordt –zen
- *  de buis -> de buizen
- *  het huis -> de huizen
+ *  de buis -&gt; de buizen
+ *  het huis -&gt; de huizen
  *  voorbeelden in context
  *  
  *  -f wordt –ven
- *  de korf -> de korven
+ *  de korf -&gt; de korven
  *  voorbeelden in context
  *  
  *  -heid wordt –heden
- *  de grootheid -> de grootheden
- *  de waarheid -> de waarheden
+ *  de grootheid -&gt; de grootheden
+ *  de waarheid -&gt; de waarheden
  *  voorbeelden in context
  *  
  *  meervoud met -s
  *  
  *  +s voor substantieven met meer dan 1 lettergreep die eindigen op -e, -el, -en, -er, -em, -ie 
- *  De wafel -> de wafels
+ *  De wafel -&gt; de wafels
  *  voorbeelden in context
  *  
  *  +s voor substantieven die eindigen op é, eau: 
- *  Het cadeau -> De cadeaus
- *  Het café -> de cafés
+ *  Het cadeau -&gt; De cadeaus
+ *  Het café -&gt; de cafés
  *  
  *  +’s voor substantieven die eindigen op –a, -i, -o, -u, -y: 
- *  De paraplu -> De paraplu’s
+ *  De paraplu -&gt; De paraplu’s
  *  voorbeelden in context
  *  
  *  +’s voor afkortingen, +'en als afkorting eindigt –s of -x: 
- *  tv -> tv's
- *  GPS -> GPS'en
+ *  tv -&gt; tv's
+ *  GPS -&gt; GPS'en
+ *  </pre>
  */
 public class ERXDutchLocalizer extends ERXLocalizer {
   

@@ -16,7 +16,7 @@ import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components._private.ERXWOForm;
 
 /**
- * Nice guy for performing actions when a popup item is selected.<br />
+ * Nice guy for performing actions when a popup item is selected.
  * 
  * @binding string
  * @binding list

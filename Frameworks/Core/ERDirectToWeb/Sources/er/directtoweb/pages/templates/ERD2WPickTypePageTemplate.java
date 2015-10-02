@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WPickTypePage;
 
 /**
- * Useful for picking the type of something.  A type being a string description and either radio buttons or checkboxes  displayed to the left.<br />
+ * Useful for picking the type of something.  A type being a string description and either radio buttons or checkboxes  displayed to the left.
+ * 
  * @d2wKey formEncoding
  * @d2wKey uiStyle
  * @d2wKey explanationComponentName

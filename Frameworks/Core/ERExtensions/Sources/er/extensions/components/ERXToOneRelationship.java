@@ -14,7 +14,7 @@ import er.extensions.woextensions.WOToOneRelationship;
 
 /**
  * Better layout options that the {@link WOToOneRelationship}, in addition you can set a 
- * qualifier on the dataSource if you passed any.<br />
+ * qualifier on the dataSource if you passed any.
  *
  * @binding dataSource
  * @binding destinationDisplayKey

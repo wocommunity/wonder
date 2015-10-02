@@ -24,7 +24,8 @@ import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Provides a toOne relationship-like component except the value is pushed in as a string.<br />
+ * Provides a toOne relationship-like component except the value is pushed in as a string.
+ * <p>
  * The coices can be either given as an NSDictionary with {key1=val1;key2=val2...}, an NSArray of
  * NSDictionaries with ({key1=val1;},{key2=val2;}...) or a means not yet clear to me (ak:).
  */

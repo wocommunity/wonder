@@ -24,17 +24,14 @@ import er.extensions.foundation.ERXStringUtilities;
  * earlier on the page that this conflict will not be resolved. You will have to
  * define an accesskey for the conflicting button as well. If you don't want a
  * hot key, bind accesskey to the empty string.
- * 
  * <p>
  * The default is to use the u (underline) element to identify the hot key in
  * the button text. Use the accesskeyElement binding to specify a different
  * element. The element can be decorated with other attributes, e.g.
  * 
- * <pre>
+ * <pre><code>
  * accesskeyElement = &quot;span style='text-decoration: underline;'&quot;;
- * </pre>
- * 
- * </p>
+ * </code></pre>
  * 
  * <p>
  * You can have this class replace WOSubmitButton via
@@ -42,7 +39,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * "WOSubmitButton"); or use it explicitly by name in your WOD. It works best
  * (does the most work for you) if you use it with the value attribute. No self
  * configuring is done if there is any content between the open and close tags.
- * </p>
  * 
  * @binding accesskey optional key for hot key, "" to disable hot key
  * @binding accesskeyElement optional element name and decoration to wrap hot

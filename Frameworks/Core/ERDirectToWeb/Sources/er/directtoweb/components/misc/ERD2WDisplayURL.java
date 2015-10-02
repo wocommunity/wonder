@@ -38,7 +38,7 @@ public class ERD2WDisplayURL extends D2WDisplayString {
     
     /**
      * Gets the string from the 
-     * D2W key <propertyKey>
+     * D2W key &lt;propertyKey&gt;
      * @return the display string of the hyperlink
      */
     public String string() {

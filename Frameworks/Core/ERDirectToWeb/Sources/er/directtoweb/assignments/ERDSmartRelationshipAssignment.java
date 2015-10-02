@@ -19,15 +19,15 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
 
 
 /**
- * This class works around the following problem:</br>
- * <br/>
+ * This class works around the following problem:
+ * <p>
  * An entity A has a relationship b to an entity B, which 
  * has a subentity B1. B1 has a relationship k, which B does 
  * not have. If in an inspect page for entity A, you use b.k 
  * as a display key, then the D2W rules which are based on 
  * d2wContext.relationship will not fire properly. This is 
  * because relationship is null, instead of containing 
- * <EORelationship entity=B1 name=k>. The reason D2W does not 
+ * &lt;EORelationship entity=B1 name=k&gt;. The reason D2W does not 
  * find it is that it uses the Model to find out the EORelationship
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for a relationship named k returns null and you lose.
@@ -89,7 +89,7 @@ public class ERDSmartRelationshipAssignment extends ERDAssignment {
     /**
      * Resolves the {@link EORelationship} in a smarter manner using
      * the current object from the context as well as the propertyKey
-     * to determine the current relationship. Works even with inheirtance.
+     * to determine the current relationship. Works even with inheritance.
      * @param c current D2W context
      * @return relationship for the current propertyKey object combination.
      */

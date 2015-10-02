@@ -15,7 +15,7 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
 /**
  * ERXFilteredQualifierTraversal performs a security check on a qualifier, throwing a SecurityException if a qualifier
  * is found that attempts to qualify a key that isn't permitted by a given ERXKeyFilter. This prevents people from doing
- * things like "employee.salary > 100000" when employee.salary is an excluded key in your filter.
+ * things like "employee.salary &gt; 100000" when employee.salary is an excluded key in your filter.
  * 
  * @author mschrag
  */

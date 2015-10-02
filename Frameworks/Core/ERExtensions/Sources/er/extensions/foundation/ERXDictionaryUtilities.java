@@ -48,7 +48,7 @@ public class ERXDictionaryUtilities {
 
     /**
      * Creates an NSDictionary from a resource associated with a given bundle
-     * that is in property list format.<br/>
+     * that is in property list format.
      * @param name name of the file or resource.
      * @param bundle NSBundle to which the resource belongs.
      * @return NSDictionary de-serialized from the property list.

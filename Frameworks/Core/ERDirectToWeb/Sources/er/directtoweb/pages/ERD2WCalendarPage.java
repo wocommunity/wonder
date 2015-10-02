@@ -16,11 +16,11 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.components.ERXDateGrouper;
 
 /**
- * Superclass of all calendar list pages.<br />
+ * Superclass of all calendar list pages.
+ * <p>
  * Note that they are not compatible with the NetStruxr version.
  * Using a {@link ERXDateGrouper} as the display group, most of the logic is gone from this page.
  */
-
 public class ERD2WCalendarPage extends ERD2WListPage {
 	/**
 	 * Do I need to update serialVersionUID?

@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.<br />
+ * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.
  * 
  * @binding list
  * @binding listComponentName

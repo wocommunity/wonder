@@ -109,7 +109,7 @@ public class ERXMultiKey {
     
     /**
      * Method used to return the object array
-     * of keys for the current multi-key.<br />
+     * of keys for the current multi-key.<br>
      * DO NOT MODIFY!
      * @return object array of keys
      */  

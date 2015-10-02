@@ -11,7 +11,8 @@ import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.foundation.NSArray;
 
 /**
- * xml display component for to many relationships<br />
+ * xml display component for to many relationships
+ * 
  * @d2wKey propertyKey
  */
 public class ERD2WXMLDisplayToMany extends D2WDisplayString {

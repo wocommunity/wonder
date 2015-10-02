@@ -13,7 +13,6 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Abstract super class for a navigation bar that can be used with AjaxGrid. Use
  * of this is not mandatory, it is provided as a convenience.
- * <p>
  * <h3>Example Usage</h3>
  * This class has a symbiotic relationship with AjaxGrid. When this nav bar
  * changes the data (e.g. batch size, batch displayed) it updates the grid's
@@ -56,8 +55,6 @@ import er.extensions.foundation.ERXValueUtilities;
  *    &lt;/webobject name=&quot;NavUpdater&quot;&gt;
  *  &lt;/div&gt;
  * </pre>
- * 
- * <p>
  * 
  * <pre>
  *  NavUpdater: AjaxUpdateContainer {

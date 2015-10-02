@@ -21,7 +21,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 /**
- * Same as D2WList but uses ERD2WSwitchComponent so that its context won't be cached in case the page is reused.<br />
+ * Same as D2WList but uses ERD2WSwitchComponent so that its context won't be cached in case the page is reused.
  * 
  * @binding action
  * @binding list

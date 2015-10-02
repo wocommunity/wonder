@@ -12,7 +12,8 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Generic link component used to view or edit an object.<br />
+ * Generic link component used to view or edit an object.
+ * 
  * @binding object object to get list from
  * @binding key keypath to get list from object
  * @binding keyWhenRelationship in case the object is the value at the keypath, defines the display key

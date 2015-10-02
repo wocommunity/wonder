@@ -24,7 +24,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.woextensions.WOParsedErrorLine;
 
 /**
- * WOComponent display of an ERTestResult.<br />
+ * WOComponent display of an ERTestResult.
  * 
  * @binding errorMessage
  * @binding testResult

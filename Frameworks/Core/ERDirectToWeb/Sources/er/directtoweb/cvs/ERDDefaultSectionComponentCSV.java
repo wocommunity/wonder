@@ -11,8 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDDefaultSectionComponent;
 
 /**
- * Displays section name for CSV pages.<br />
- * 
+ * Displays section name for CSV pages.
  */
 
 public class ERDDefaultSectionComponentCSV extends ERDDefaultSectionComponent {

@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDCustomComponent;
 
 /**
- * Used to display sections as images instead of text.<br />
+ * Used to display sections as images instead of text.
  */
 public class ERDSectionImage extends ERDCustomComponent {
 	/**
