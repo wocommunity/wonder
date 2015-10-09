@@ -483,25 +483,25 @@ public class ERXArrayUtilities {
      * @return result of comparison
      */
     public static <T> boolean arraysAreIdenticalSets(NSArray<? super T> a1, NSArray<? super T> a2) {
-    	if (a1 == null || a2 == null) {
-    		return a1 == a2;
-    	}
-        boolean result=true;
+        if (a1 == null || a2 == null) {
+            return a1 == a2;
+        }
+    	
         for (Enumeration<? super T> e=a1.objectEnumerator();e.hasMoreElements();) {
             Object i=e.nextElement();
             if (!a2.containsObject(i)) {
-                result=false; break;
+                return false;
             }
         }
-        if (result) {
-            for (Enumeration<? super T> e=a2.objectEnumerator();e.hasMoreElements();) {
-                Object i=e.nextElement();
-                if (!a1.containsObject(i)) {
-                    result=false; break;
-                }
+        
+        for (Enumeration<? super T> e=a2.objectEnumerator();e.hasMoreElements();) {
+            Object i=e.nextElement();
+            if (!a1.containsObject(i)) {
+                return false;
             }
         }
-        return result;
+        
+        return true;
     }
 
     /**
