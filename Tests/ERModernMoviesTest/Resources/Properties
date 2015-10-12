@@ -38,7 +38,7 @@ er.extensions.ERXLocalizer.availableLanguages=(English)
 # Migrations
 er.migration.migrateAtStartup=true
 er.migration.createTablesIfNecessary=true
-er.migration.modelNames=Movies
+er.migration.modelNames=Movies,ERCoreBusinessLogic
 
 # Misc Components
 #er.extensions.ERXWOForm.multipleSubmitDefault=true

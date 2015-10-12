@@ -13,5 +13,6 @@
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/ERCoreBusinessLogic"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
