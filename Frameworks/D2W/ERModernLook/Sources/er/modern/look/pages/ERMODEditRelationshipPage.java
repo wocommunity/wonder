@@ -32,6 +32,7 @@ import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.pages.ERD2WEditRelationshipPage;
 import er.directtoweb.pages.ERD2WPage;
+import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -93,7 +94,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public boolean isRelationshipToMany;
 	public WOComponent nextPage;
 	public NextPageDelegate nextPageDelegate;
-	
+	private Integer _batchSize;
+
 	public ERMODEditRelationshipPage(WOContext context) {
         super(context);
     }
@@ -491,19 +493,43 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @return WODisplayGroup lazily instantiated display group.
 	 */
+
 	public WODisplayGroup relationshipDisplayGroup() {
-		if (_relationshipDisplayGroup == null) {
-			_relationshipDisplayGroup = new WODisplayGroup();
-			String count = (String)d2wContext().valueForKey("defaultBatchSize");
-			if (count != null) {
-				int intCount = Integer.parseInt(count);
-				_relationshipDisplayGroup.setNumberOfObjectsPerBatch(intCount);
-			}
-			
+		if(_relationshipDisplayGroup == null) {
+			_relationshipDisplayGroup = new ERXDisplayGroup<EOEnterpriseObject>();
+			setSortOrderingsOnDisplayGroup(sortOrderings(), _relationshipDisplayGroup);
+			_relationshipDisplayGroup.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
 		}
 		return _relationshipDisplayGroup;
 	}
-
+	
+	protected void setSortOrderingsOnDisplayGroup(NSArray<EOSortOrdering> sortOrderings, WODisplayGroup dg) {
+		if(sortOrderings == null) {
+			sortOrderings = NSArray.emptyArray();
+		}
+		dg.setSortOrderings(sortOrderings);
+	}
+	
+	public int numberOfObjectsPerBatch() {
+		  if (_batchSize == null) {
+		    if (shouldShowBatchNavigation()) {
+		      int batchSize = ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("defaultBatchSize"), 0);
+		      Object batchSizePref = userPreferencesValueForPageConfigurationKey("batchSize");
+		      if (batchSizePref != null) {
+		        if (log.isDebugEnabled()) {
+		          log.debug("batchSize User Preference: " + batchSizePref);
+		        }
+		        batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
+		      }
+		      _batchSize = ERXConstant.integerForInt(batchSize);
+		    } else {
+		      // We are not showing the batch nav, so we need to display all results.
+		      _batchSize = ERXConstant.ZeroInteger;
+		    }
+		  }
+		  return _batchSize.intValue();
+		}
+	
 	public void setRelationshipDisplayGroup(WODisplayGroup relationshipDisplayGroup) {
 		_relationshipDisplayGroup = relationshipDisplayGroup;
 	}
@@ -568,5 +594,14 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 			d2wContext().takeValueForKey(inlineTask, "inlineTask");
 		}
 	}
+	
+	/**
+	   * Determines if the batch navigation should be shown.  It can be explicitly disabled by setting the D2W key 
+	   * <code>showBatchNavigation</code> to false.
+	   * @return true if the batch navigation should be shown
+	   */
+	  public boolean shouldShowBatchNavigation() {
+	    return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBatchNavigation"), true);
+	  }
 
 }
