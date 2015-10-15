@@ -132,5 +132,28 @@ public class ERCPreferIT extends AbstractSelenideIT {
         $(".ComboTHLinkDes").should(Condition.exist);
 
     }
+     
+    @Test
+    public void toggleRatingColumn() {
+        open("/");
+        $(By.linkText("Login")).click();
+        $(".QueryAllMovieLine").$(By.linkText("Find")).click();
+        $(".ListMovieObjTable").shouldHave(text("Surreal"));
+        $(".ColumnSelector").hover();
+        // disable the "Category" column
+        $(".ColumnSelectorMenu").$(By.linkText("Category")).click();
+        // there should be no more "Surreal" occurences in the table 
+        $(".ListMovieObjTable").shouldNotHave(text("Surreal"));
+        // leave the page and go back
+        $(By.linkText("Home")).click();
+        $(".QueryAllMovieLine").$(By.linkText("Find")).click();
+        // still no "Surreal" occurences in the table 
+        $(".ListMovieObjTable").shouldNotHave(text("Surreal"));
+        $(".ColumnSelector").hover();
+        // enable the "Category" column
+        $(".ColumnSelectorMenu").$(By.linkText("Category")).click();
+        // "Surreal" should occur in the table again
+        $(".ListMovieObjTable").shouldHave(text("Surreal"));
+    }
     
 }
