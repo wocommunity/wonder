@@ -10,4 +10,5 @@ DateInput : WOTextField {
   disabled = ^disabled;
   onfocus = onFocusScript;
   onclick = onClickScript;
+  otherTagString = ^otherTagString;
 }
