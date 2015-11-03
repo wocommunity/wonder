@@ -16,10 +16,10 @@ import java.sql.Statement;
 import java.util.Enumeration;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 import org.apache.log4j.Logger;
 
-import com.sun.rowset.CachedRowSetImpl;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -947,7 +947,7 @@ public class ERXJDBCUtilities {
 	 *             if something goes wrong
 	 */
 	public static CachedRowSet fetchRowSet(EOAdaptorChannel adaptorChannel, String query) throws Exception {
-		final CachedRowSetImpl rowSet = new CachedRowSetImpl();
+		final CachedRowSet rowSet = RowSetProvider.newFactory().createCachedRowSet();
 		ERXJDBCUtilities.executeQuery(adaptorChannel, query, new IResultSetDelegate() {
 			public void processResultSet(EOAdaptorChannel innerAdaptorChannel, ResultSet rs) throws Exception {
 				rowSet.populate(rs);
