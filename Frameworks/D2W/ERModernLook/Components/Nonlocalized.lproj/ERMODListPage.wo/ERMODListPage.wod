@@ -38,6 +38,15 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
+QuickSearch: ERMD2WListFilter {
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
+ShowQuickSearch: WOConditional {
+	condition = d2wContext.searchKey;
+}
+
 ReturnButton: CCSmartAjaxButton {
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;

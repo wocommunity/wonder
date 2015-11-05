@@ -1,3 +1,6 @@
 ##  Properies Info
 er.extensions.load.Properties.framework.ERModernDirectToWeb=load
 er.extensions.ERModernDirectToWeb.hasLocalization=true
+
+# uncomment the following line to use European-style formats in ERMD2WListFilter
+#er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate.datePatterns=(dd.MM,dd.MM.,dd.MM.yy,dd.MM.yyyy,yyyy)

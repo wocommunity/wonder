@@ -1341,6 +1341,23 @@ div.RtActionCell li {
     padding:0;
 }
 
+/* LIST FILTER */
+
+.ListFilter {
+	position: relative;
+	top: 22px;
+	width: 40%;
+	padding: 0 100px;
+	margin: auto;
+	z-index: 100;
+}
+
+.ListFilter input {
+	font-size: 16px;
+	padding: 1px 3px;
+	width: 70%;
+}
+
 /* ATTACHMENT */
 
 .AjaxFlexibleFileUpload {
