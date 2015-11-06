@@ -953,7 +953,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
             ERXStats.markEnd("D2W", statsKey);
             
-            d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
             String currentTabKey = (String) d2wContext().valueForKey(Keys.tabKey);
             for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
@@ -977,6 +976,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     protected void clearTabSectionsContents() {
     	_tabSectionsContents = null;
+    	_currentTab = null;
     }
 
     /** Dummy denoting to sections. */
