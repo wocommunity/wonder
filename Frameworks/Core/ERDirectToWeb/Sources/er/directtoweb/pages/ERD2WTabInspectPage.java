@@ -123,14 +123,20 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
             return scriptForFirstResponderActivation();
         } else {
-            String result = "";
             String formName = ERXWOForm.formName(context(), "EditForm");
-            if (formName != null) {
-                int pos = tabSectionsContents().count() - 1;
-                result = "var pos=0;\n if (document." + formName + ".elements.length>" + pos +
-                        ") pos=" + pos + ";\n var elem = document." + formName + ".elements[" + pos +
-                        "];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
-            }
+            String result = "var focusedElement = document.querySelector('form[name=\"" + formName + "\"] input:focus');"
+                    // only continue when no form element is focused, yet
+                    + "if (focusedElement == undefined) {"
+                    + "    var focusableElements = document.querySelectorAll('form[name=\"" + formName + "\"] input');"
+                    + "    var qualifiedTypes = ['text', 'textarea'];"
+                    + "    for (i = 0; i < focusableElements.length; i++) { "
+                    + "        var anElement = focusableElements[i];"
+                    + "        if (qualifiedTypes.include(anElement.type.toLowerCase())) {"
+                    + "            anElement.focus();"
+                    + "            break;"
+                    + "        }"
+                    + "    }"
+                    + "}";
             return result;
         }
     }
