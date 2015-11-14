@@ -2,7 +2,7 @@
     0 : *true* => useAjaxControls = "true" [com.webobjects.directtoweb.BooleanAssignment],
     0 : *true* => displayKeyForEntity = "entity.name" [com.webobjects.directtoweb.Assignment],
     0 : *true* => includeOptionalForm = "true" [com.webobjects.directtoweb.BooleanAssignment],
-    0 : *true* => typeAheadMinimumCharaceterCount = "3" [com.webobjects.directtoweb.Assignment],
+    0 : *true* => typeAheadMinimumCharacterCount = "3" [com.webobjects.directtoweb.Assignment],
     0 : *true* => useAjaxControlsWhenEmbedded = "false" [com.webobjects.directtoweb.BooleanAssignment],
     0 : *true* => typeAheadSearchTemplate = "*@@searchValue@@*" [com.webobjects.directtoweb.Assignment],
     0 : pageConfiguration like '*Embedded*' => useAjaxControls = "true" [com.webobjects.directtoweb.BooleanAssignment],

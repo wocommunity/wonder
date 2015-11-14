@@ -51,7 +51,7 @@ import er.modern.directtoweb.components.buttons.ERMDActionButton;
  * @d2wKey restrictingFetchSpecification - name of the model FetchSpec supplies the list of objects to be searched from (keyWhenRelationship is NOT an attribute) or that additionally qualifies the fetch
  * @d2wKey extraRestrictingQualifier - an additional qualifier (defined in the rules) that additionally qualifies the search
  * @d2wKey typeAheadSearchTemplate - a template that wraps the searchValue (for the inclusion of pre/post wildcards: i.e: "*@@searchValue@@*" )
- * @d2wKey typeAheadMinimumCharaceterCount - minimum number of characters before a search is performed
+ * @d2wKey typeAheadMinimumCharacterCount - minimum number of characters before a search is performed
  * @d2wKey sortKey
  * @d2wKey isMandatory
  * @d2wKey propertyKey
@@ -67,7 +67,9 @@ import er.modern.directtoweb.components.buttons.ERMDActionButton;
 
 public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
-	public interface Keys extends ERDCustomEditComponent.Keys {
+    private static final long serialVersionUID = 1L;
+
+    public interface Keys extends ERDCustomEditComponent.Keys {
 		public static final String newButtonLabel = "newButtonLabel";
 		public static final String classForNewObjButton = "classForNewObjButton";
 		public static final String pageConfiguration = "pageConfiguration";
@@ -80,7 +82,8 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		public static final String typeAheadSearchTemplate = "typeAheadSearchTemplate";
 		public static final String extraRestrictingQualifier = "extraRestrictingQualifier";
 		public static final String keyWhenRelationship = "keyWhenRelationship";
-		public static final String typeAheadMinimumCharaceterCount = "typeAheadMinimumCharaceterCount";
+		public static final String typeAheadMinimumCharacterCount = "typeAheadMinimumCharacterCount";
+        public static final String fetchLimit = "fetchLimit";
 	}
 	
 	public static Logger log = Logger.getLogger(ERMD2WEditToOneTypeAhead.class);
@@ -107,10 +110,13 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
         super(context);
     }
 	
+    @SuppressWarnings("rawtypes")
     @Override
     public void awake() {
     	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.awake();
+        // make sure we don't display a previous search value
+    	_searchValue = null;
     }
     
     @Override
@@ -120,8 +126,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
     }
     
 	/**
-	 * Called when an {@link ERMDActionButton} changes the related object. Nulls
-	 * {@link #_searchValue} which in turn lets it rebuild on the next display
+	 * Called when an {@link ERMDActionButton} changes the related object. 
 	 */
 	@SuppressWarnings("unchecked")
 	public void relatedObjectDidChange(NSNotification notif) {
@@ -130,7 +135,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 			Object key = userInfo.valueForKey("propertyKey");
 			EOEnterpriseObject obj = (EOEnterpriseObject)userInfo.valueForKey("object");
 			if (propertyKey() != null && propertyKey().equals(key) && ERXEOControlUtilities.eoEquals(object(), obj)) {
-				_searchValue = null;
 				_currentSelection = null;
 			}
 		}
@@ -140,6 +144,14 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
     @Override
     public boolean synchronizesVariablesWithBindings() {
     	return false;
+    }
+    
+    /** Used by stateful but non-synching subclasses */
+    @Override
+    public void resetCachedBindingsInStatefulComponent() {
+        super.resetCachedBindingsInStatefulComponent();
+        // make sure we clear a previous selection
+        _currentSelection = null;
     }
     
     /**
@@ -221,11 +233,10 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	/**
 	 * Action called when user clicks the Add button
 	 */
-	@SuppressWarnings("unchecked")
 	public WOActionResults addObject() {
 		String currentPageConfiguration = stringValueForBinding(Keys.pageConfiguration);
 		
-		NSDictionary extraValues = currentPageConfiguration != null ? new NSDictionary(currentPageConfiguration, Keys.pageConfiguration) : null;
+		NSDictionary<String, String> extraValues = currentPageConfiguration != null ? new NSDictionary<String, String>(currentPageConfiguration, Keys.pageConfiguration) : null;
         String createPageConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey(Keys.createConfigurationName, destinationEntityName(), extraValues);
         
 		EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(createPageConfigurationName, session());
@@ -275,6 +286,11 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	        	qual = ERXQ.and(qual, restrictingFetchSpec().qualifier());
 	        }
 	        EOFetchSpecification fetchSpec = new EOFetchSpecification(destinationEntityName(), qual, orderings);
+            if (!ERXStringUtilities.stringIsNullOrEmpty((String) d2wContext()
+                    .valueForKey(Keys.fetchLimit))) {
+                fetchSpec.setFetchLimit(Integer.valueOf((String) d2wContext()
+                        .valueForKey(Keys.fetchLimit)));
+            }
 			fetchSpec.setIsDeep(true);
 			EOEditingContext ec = ERXEC.newEditingContext();
 			result = ec.objectsWithFetchSpecification(fetchSpec);
@@ -330,8 +346,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	public EOFetchSpecification restrictingFetchSpec() {
 		if (_restrictingFetchSpec == null) {
-			
-			_restrictingFetchSpec = EOModelGroup.defaultGroup().fetchSpecificationNamed(restrictingFetchSpecificationName(), destinationEntityName());;
+			_restrictingFetchSpec = EOModelGroup.defaultGroup().fetchSpecificationNamed(restrictingFetchSpecificationName(), destinationEntityName());
 		}
 		return _restrictingFetchSpec;
 	}
@@ -366,7 +381,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 
 	public Integer minimumCharacterCount() {
 		if (_minimumCharacterCount == null) {
-			_minimumCharacterCount = ERXValueUtilities.IntegerValueWithDefault(stringValueForBinding(Keys.typeAheadMinimumCharaceterCount), 1);
+			_minimumCharacterCount = ERXValueUtilities.IntegerValueWithDefault(stringValueForBinding(Keys.typeAheadMinimumCharacterCount), 1);
 		}
 		return _minimumCharacterCount;
 	}
@@ -384,8 +399,8 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName = stringValueForBinding(Keys.restrictingFetchSpecification);
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(),
-                                                                                        (String)d2wContext().valueForKey(Keys.propertyKey));
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(
+                    (EOEnterpriseObject) object(), propertyKey());
             return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }
         return null;
@@ -407,12 +422,21 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 
 	// AJAX IDs
 	
-	public String searchTermSelectedFunctionName() {
-		if (_safeElementID == null) {
-			_safeElementID =ERXStringUtilities.safeIdentifierName(context().elementID());
-		}
-		return "ermdtorlu_" + _safeElementID + "CompleteFunction";
-	}
+    public String updateContainerID() {
+        if (_safeElementID == null) {
+            _safeElementID = ERXStringUtilities.safeIdentifierName(this.context()
+                    .elementID());
+        }
+        return "PCUC_" + _safeElementID;
+    }
+
+    public String searchTermSelectedFunctionName() {
+        if (_safeElementID == null) {
+            _safeElementID = ERXStringUtilities.safeIdentifierName(this.context()
+                    .elementID());
+        }
+        return "ermdtorlu_" + _safeElementID + "CompleteFunction";
+    }
 
 	public String searchTermSelectedFunction() {
 		return "function(e) { " + searchTermSelectedFunctionName() + "(); }";
