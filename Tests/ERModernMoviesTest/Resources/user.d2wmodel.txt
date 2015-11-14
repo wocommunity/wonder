@@ -45,6 +45,7 @@
     100 : (pageConfiguration like 'Edit*Movie' or pageConfiguration like 'Inspect*Movie') => subTask = "tab" [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Studio' and task = 'edit' and propertyKey = 'movies') => componentName = "ERMDEditRelationship" [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Movie' and (task = 'inspect' or task = 'edit')) => tabSectionsContents = ("title", "plotSummary") [com.webobjects.directtoweb.Assignment],
+    100 : pageConfiguration = 'ListMovie' => searchKey = ("title", "category", "revenue", "dateReleased", "plotSummary.summary") [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Studio' and task = 'edit' and propertyKey = 'movies') => listConfigurationName = "ListEmbeddedFooMovie" [com.webobjects.directtoweb.Assignment],
     100 : (smartRelationship != null and smartRelationship.isToMany = 0 and task = 'inspect') => componentName = "ERD2WDisplayToOne" [com.webobjects.directtoweb.Assignment],
     100 : (pageConfiguration = 'ListEmbeddedMovie' and parentPageConfiguration like '*Studio') => displayPropertyKeys = ("title", "category", "rated") [com.webobjects.directtoweb.Assignment],
