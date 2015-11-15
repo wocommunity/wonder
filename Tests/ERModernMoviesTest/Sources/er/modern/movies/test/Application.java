@@ -1,6 +1,6 @@
 package er.modern.movies.test;
 
-import webobjectsexamples.businesslogic.movies.common.AppUser;
+import webobjectsexamples.businesslogic.rentals.common.User;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.navigation.ERXNavigationManager;
@@ -30,6 +30,6 @@ public class Application extends ERXApplication {
     	
     	// Modify model to enable ERCPreference
     	ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity(
-    	        AppUser.ENTITY_NAME);
+    	        User.ENTITY_NAME);
     }
 }

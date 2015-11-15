@@ -1,6 +1,6 @@
 package er.modern.movies.test;
 
-import webobjectsexamples.businesslogic.movies.common.AppUser;
+import webobjectsexamples.businesslogic.rentals.common.User;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
@@ -53,10 +53,10 @@ public class DirectAction extends ERD2WDirectAction {
 		
 		// this is a demo, so everybody is welcome 
 		EOEditingContext ec = ERXEC.newEditingContext();
-        AppUser user = AppUser.fetchAppUser(ec, AppUser.USER_NAME_KEY, username);
+        User user = User.fetchUser(ec, User.USERNAME_KEY, username);
         // if user does not yet exist, create it
 		if (user == null) {
-		    user = AppUser.createAppUser(ec, username);
+		    user = User.createUser(ec, User.AdministratorAccessLevel, "", username);
 		    ec.saveChanges();
 		}
 		session().takeValueForKeyPath(user, "objectStore.user");

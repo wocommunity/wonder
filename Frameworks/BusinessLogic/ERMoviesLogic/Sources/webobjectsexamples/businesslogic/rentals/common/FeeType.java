@@ -12,55 +12,25 @@
 
 package webobjectsexamples.businesslogic.rentals.common;
 
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGenericRecord;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.foundation.NSArray;
 
-public class FeeType extends EOGenericRecord {
-	private static final long	serialVersionUID		= -3924679005498502385L;
+public class FeeType extends _FeeType {
+    private static final long serialVersionUID = 1L;
 
-	public static final String	EnabledKey				= "enabled";
+    public FeeType() {
+        super();
+    }
 
-	public static final String	FeeTypeKey				= "feeType";
+    public static FeeType defaultFeeType(EOEditingContext editingContext) {
+        // default fee type is the object with primary key = 1
+        return (FeeType) EOUtilities.objectWithPrimaryKeyValue(editingContext,
+                ENTITY_NAME, 1);
+    }
 
-	public static final String	OrderByKey				= "orderBy";
-
-	public static final String	FeeTypeEntityName		= "FeeType";
-
-	public static final String	FeeTypeIDKey			= "feeTypeID";
-
-	private static EOGlobalID	_defaultFeeTypeGlobalID	= null;
-
-	private static EOGlobalID	_lateFeeTypeGlobalID	= null;
-
-	public FeeType() {
-		super();
-	}
-
-	private static EOGlobalID _globalIDForPrimaryKey(int primaryKey, EOEditingContext editingContext) {
-		EOFetchSpecification fetchSpecification = new EOFetchSpecification(FeeTypeEntityName, new EOKeyValueQualifier(FeeTypeIDKey, EOQualifier.QualifierOperatorEqual, Integer.valueOf(primaryKey)), null);
-		NSArray objects = editingContext.objectsWithFetchSpecification(fetchSpecification);
-		return (objects.count() > 0) ? editingContext.globalIDForObject((EOEnterpriseObject) (objects.objectAtIndex(0))) : null;
-	}
-
-	public static FeeType defaultFeeType(EOEditingContext editingContext) {
-		if (_defaultFeeTypeGlobalID == null) {
-			// default fee type is the object with primary key = 1
-			_defaultFeeTypeGlobalID = _globalIDForPrimaryKey(1, editingContext);
-		}
-		return (_defaultFeeTypeGlobalID != null) ? (FeeType) (editingContext.faultForGlobalID(_defaultFeeTypeGlobalID, editingContext)) : null;
-	}
-
-	public static FeeType lateFeeType(EOEditingContext editingContext) {
-		if (_lateFeeTypeGlobalID == null) {
-			// late fee type is the object with primary key = 2
-			_lateFeeTypeGlobalID = _globalIDForPrimaryKey(2, editingContext);
-		}
-		return (_lateFeeTypeGlobalID != null) ? (FeeType) (editingContext.faultForGlobalID(_lateFeeTypeGlobalID, editingContext)) : null;
-	}
+    public static FeeType lateFeeType(EOEditingContext editingContext) {
+        // late fee type is the object with primary key = 2
+        return (FeeType) EOUtilities.objectWithPrimaryKeyValue(editingContext,
+                ENTITY_NAME, 1);
+    }
 }
