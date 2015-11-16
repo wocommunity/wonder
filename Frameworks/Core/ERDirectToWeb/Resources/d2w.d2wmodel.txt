@@ -243,6 +243,7 @@
     10 : *true* => confirmDeleteConfigurationName = "<ERDDefaultConfigurationNameAssignment>" [er.directtoweb.ERDDefaultConfigurationNameAssignment],
     10 : (pageConfiguration like 'SelectGroup*' or pageConfiguration like 'ListGroup*') => subTask = "group" [com.webobjects.directtoweb.Assignment],
     10 : *true* => createEmbeddedConfigurationName = "<ERDDefaultConfigurationNameAssignment>" [er.directtoweb.ERDDefaultConfigurationNameAssignment],
+    10 : *true* => navigationState = "<ERDDelayedNavigationStateAssignment>" [er.directtoweb.assignments.delayed.ERDDelayedNavigationStateAssignment],
     10 : *true* => inspectEmbeddedConfigurationName = "<ERDDefaultConfigurationNameAssignment>" [er.directtoweb.ERDDefaultConfigurationNameAssignment],
     10 : *true* => editRelationshipConfigurationName = "<ERDDefaultConfigurationNameAssignment>" [er.directtoweb.ERDDefaultConfigurationNameAssignment],
     10 : (propertyType = 'r' and propertyKey != null) => listConfigurationName = "listEmbeddedConfigurationName" [er.directtoweb.ERDKeyValueAssignment],

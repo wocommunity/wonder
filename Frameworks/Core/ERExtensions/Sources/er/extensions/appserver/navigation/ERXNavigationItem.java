@@ -56,7 +56,9 @@ public class ERXNavigationItem implements Serializable {
 	protected String _pageName;
 	protected String _displayName;
 	protected String _hasActivity;
-	protected NSArray _children, _childrenConditions;
+	protected NSArray<String> _children;
+	protected String _defaultChild;
+	protected NSArray _childrenConditions;
 	protected String _childrenBinding;
 	protected NSDictionary _childrenChoices;
 	protected NSDictionary _queryBindings;
@@ -96,6 +98,7 @@ public class ERXNavigationItem implements Serializable {
 			if (values.valueForKey("width") != null)
 				_width = Integer.valueOf((String) values.valueForKey("width")).intValue();
 			_name = (String) values.valueForKey("name");
+			_defaultChild = (String) values.valueForKey("defaultChild");
 			_displayName = (String) values.valueForKey("displayName");
 			if (_displayName == null || _displayName.length() == 0)
 				_displayName = _name;
@@ -268,7 +271,7 @@ public class ERXNavigationItem implements Serializable {
 		return this == ERXNavigationManager.manager().rootNavigationItem();
 	}
 
-	public NSArray children() {
+	public NSArray<String> children() {
 		return _children;
 	}
 
@@ -287,12 +290,23 @@ public class ERXNavigationItem implements Serializable {
 	public NSDictionary childrenChoices() {
 		return _childrenChoices;
 	}
+	
+	public String defaultChild() {
+		return _defaultChild;
+	}
 
+	public void setDefaultChild(String name) {
+		_defaultChild = name;
+	}
+	
 	public NSDictionary queryBindings() {
 		return _queryBindings;
 	}
 
 	public String action() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).action();
+		}
 		return _action;
 	}
 
@@ -301,18 +315,30 @@ public class ERXNavigationItem implements Serializable {
 	}
 
 	public String href() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).href();
+		}
 		return _href;
 	}
 
 	public String directActionName() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).directActionName();
+		}
 		return directActionClass() == null ? _directActionName : directActionClass() + "/" + _directActionName;
 	}
 
 	public String uneditedDirectActionName() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).uneditedDirectActionName();
+		}
 		return _directActionName;
 	}
 
 	public String directActionClass() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).directActionClass();
+		}
 		return _directActionClass;
 	}
 
@@ -329,6 +355,9 @@ public class ERXNavigationItem implements Serializable {
 	}
 
 	public String pageName() {
+		if (defaultChild() != null) {
+			return ERXNavigationManager.manager().navigationItemForName(defaultChild()).pageName();
+		}
 		return _pageName;
 	}
 
@@ -379,4 +408,5 @@ public class ERXNavigationItem implements Serializable {
 
 		return result.toString();
 	}
+
 }
