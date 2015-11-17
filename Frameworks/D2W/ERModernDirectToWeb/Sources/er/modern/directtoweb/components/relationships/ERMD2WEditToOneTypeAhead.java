@@ -53,7 +53,7 @@ import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate.ERMD2WQueryC
  * @d2wKey restrictingFetchSpecification - name of the model FetchSpec supplies the list of objects to be searched from (keyWhenRelationship is NOT an attribute) or that additionally qualifies the fetch
  * @d2wKey extraRestrictingQualifier - an additional qualifier (defined in the rules) that additionally qualifies the search
  * @d2wKey typeAheadSearchTemplate - a template that wraps the searchValue (for the inclusion of pre/post wildcards: i.e: "*@@searchValue@@*" )
- * @d2wKey typeAheadMinimumCharacterCount - minimum number of characters before a search is performed
+ * @d2wKey typeAheadMinimumCharaceterCount - minimum number of characters before a search is performed
  * @d2wKey sortKey
  * @d2wKey isMandatory
  * @d2wKey propertyKey
@@ -86,7 +86,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent implements 
 		public static final String typeAheadSearchTemplate = "typeAheadSearchTemplate";
 		public static final String extraRestrictingQualifier = "extraRestrictingQualifier";
 		public static final String keyWhenRelationship = "keyWhenRelationship";
-		public static final String typeAheadMinimumCharacterCount = "typeAheadMinimumCharacterCount";
+		public static final String typeAheadMinimumCharaceterCount = "typeAheadMinimumCharaceterCount";
 	}
 	
 	public static Logger log = Logger.getLogger(ERMD2WEditToOneTypeAhead.class);
@@ -373,7 +373,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent implements 
 
 	public Integer minimumCharacterCount() {
 		if (_minimumCharacterCount == null) {
-			_minimumCharacterCount = ERXValueUtilities.IntegerValueWithDefault(stringValueForBinding(Keys.typeAheadMinimumCharacterCount), 1);
+			_minimumCharacterCount = ERXValueUtilities.IntegerValueWithDefault(stringValueForBinding(Keys.typeAheadMinimumCharaceterCount), 1);
 		}
 		return _minimumCharacterCount;
 	}
