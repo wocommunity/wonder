@@ -72,8 +72,10 @@ public class ERXArrayUtilities {
      *
      * @param array of elements
      * @return set created from given array
+     * @deprecated use {@link ERXSetUtilities#setFromArray(Collection)} instead
      */
     // CHECKME: Is this a value add?
+    @Deprecated
     public static <T> NSSet<T> setFromArray(NSArray<T> array) {
         if (array == null || array.count() == 0) {
             return NSSet.EmptySet;
@@ -2369,7 +2371,9 @@ public class ERXArrayUtilities {
       * @param set the set to clone
       * @param onlyCollections if true, only collections in this array will be cloned, not individual values
       * @return a deep clone of set
+      * @deprecated user {@link ERXSetUtilities#deepClone(NSSet, boolean)} instead
       */
+	@Deprecated
 	public static <T> NSSet<T> deepClone(NSSet<T> set, boolean onlyCollections) {
 		NSMutableSet<T> clonedSet = null;
 		if (set != null) {

@@ -1,5 +1,6 @@
 package er.extensions.foundation;
 
+import java.util.Collection;
 import java.util.Enumeration;
 
 import com.webobjects.eocontrol.EOQualifier;
@@ -105,5 +106,46 @@ public class ERXSetUtilities {
 		NSMutableArray<T> array = new NSMutableArray<T>((T[]) set.toArray());
 		array.sortUsingComparator(comparator);
 		return array;
+	}
+
+	/**
+	 * Simple utility method to create a concrete set object from an array.
+	 *
+	 * @param array of elements
+	 * @return set created from given array
+	 */
+	public static <T> NSSet<T> setFromArray(Collection<T> array) {
+		if (array == null || array.isEmpty()) {
+			return NSSet.emptySet();
+		}
+		return new NSSet<>(array);
+	}
+
+	/**
+	 * Returns a deep clone of the given set.  A deep clone will attempt
+	 * to clone the values of this set as well as the set itself.
+	 * 
+	 * @param <T> class of set elements
+	 * @param set the set to clone
+	 * @param onlyCollections if true, only collections in this array will be cloned, not individual values
+	 * @return a deep clone of set
+	 */
+	public static <T> NSSet<T> deepClone(NSSet<T> set, boolean onlyCollections) {
+		if (set == null) {
+			return null;
+		}
+		NSMutableSet<T> clonedSet = set.mutableClone();
+		for (T value : set) {
+			T clonedValue = ERXUtilities.deepClone(value, onlyCollections);
+			if (clonedValue != null) {
+				if (clonedValue != value) {
+					clonedSet.remove(value);
+					clonedSet.add(clonedValue);
+				}
+			} else {
+				clonedSet.remove(value);
+			}
+		}
+		return clonedSet;
 	}
 }
