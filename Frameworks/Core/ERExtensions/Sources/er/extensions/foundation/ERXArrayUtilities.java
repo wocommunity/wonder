@@ -52,7 +52,7 @@ public class ERXArrayUtilities {
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
     /** caches if array utilities have been initialized */
-    private static boolean initialized = false;
+    private static volatile boolean initialized = false;
 
     /** Caches sort orderings for given keys */
     private final static NSDictionary<String, NSSelector> _selectorsByKey = new NSDictionary<String, NSSelector>(new NSSelector[] {
