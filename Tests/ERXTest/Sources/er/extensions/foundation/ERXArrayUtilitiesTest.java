@@ -2,11 +2,18 @@
 package er.extensions.foundation;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import junit.framework.Assert;
 
+import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
@@ -36,6 +43,22 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     static NSArray<NSDictionary<String,String>> nullList;
     static String nullString;
     static ERXKey<String> nullERXKey;
+
+    static EOQualifierEvaluation trueQualifierEvaluation = new EOQualifierEvaluation() {
+        @Override
+        public boolean evaluateWithObject(Object object) {
+            return true;
+        }
+    };
+    static EOQualifierEvaluation redQualifierEvaluation = new EOQualifierEvaluation() {
+        @Override
+        public boolean evaluateWithObject(Object object) {
+            if (object instanceof String) {
+                return ((String)object).equals("red");
+            }
+            return false;
+        }
+    };
 
     static {
 
@@ -175,10 +198,6 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         //
         map6 = new NSMutableDictionary<String,NSArray<NSDictionary<String,String>>>();
         map6.setObjectForKey(objs, "extra");
-    }
-
-    public void testSetFromArray() {
-        // public static com.webobjects.foundation.NSSet setFromArray(com.webobjects.foundation.NSArray);
     }
 
     /* Tests that this method does create an NSSelector from a number of valid keys, and also tests that when there is a
@@ -567,170 +586,236 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     }
 
     public void testArraysAreIdenticalSets() {
+        assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(null, null));
+        assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<>(), new NSArray<>()));
 
-        Assert.assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(null, null));
-        Assert.assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<Object>(), new NSArray<Object>()));
+        assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(null, new NSArray<>()));
+        assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<>(), null));
 
-        Assert.assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(null, new NSArray<Object>()));
-        Assert.assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<Object>(), null));
+        NSArray<String> set1 = new NSArray<>("red");
+        NSArray<String> set2 = new NSArray<>("blue");
 
-        NSArray<String> set1 = new NSArray<String>("red");
-        NSArray<String> set2 = new NSArray<String>("blue");
+        assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<>("red"), set1));
+        assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<>("red"), set2));
 
-        Assert.assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<String>("red"), set1));
-        Assert.assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(new NSArray<String>("red"), set2));
+        NSArray<String> set3 = new NSArray<>("red", "blue");
+        NSArray<String> set4 = new NSArray<>("blue", "red");
 
-        NSArray<String> set3 = new NSArray<String>(new String[] { "red", "blue" });
-        NSArray<String> set4 = new NSArray<String>(new String[] { "blue", "red" });
+        assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(set3, set4));
 
-        Assert.assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(set3, set4));
+        NSArray<String> set5 = new NSArray<>("blue", "red", "green");
+        NSArray<String> set6 = new NSArray<>("green", "blue", "red");
 
-        NSArray<String> set5 = new NSArray<String>(new String[] { "blue", "red", "green" });
-        NSArray<String> set6 = new NSArray<String>(new String[] { "green", "blue", "red" });
-
-        Assert.assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(set5, set6));
-        Assert.assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(set5, set4));
+        assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(set5, set6));
+        assertFalse(ERXArrayUtilities.arraysAreIdenticalSets(set5, set4));
     }
 
-    public void testfilteredArrayWithQualifierEvaluationNSArray() {
-        // public static com.webobjects.foundation.NSArray filteredArrayWithQualifierEvaluation(com.webobjects.foundation.NSArray, com.webobjects.eocontrol.EOQualifierEvaluation);
+    public void testFilteredArrayWithQualifierEvaluation() {
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.filteredArrayWithQualifierEvaluation((NSArray)null, trueQualifierEvaluation));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.filteredArrayWithQualifierEvaluation(new NSArray<>(), trueQualifierEvaluation));
+
+        NSArray<String> array1 = new NSArray<>("red");
+        NSArray<String> array2 = new NSArray<>("red", "blue");
+
+        assertEquals(array1, ERXArrayUtilities.filteredArrayWithQualifierEvaluation(array1, trueQualifierEvaluation));
+        assertEquals(array2, ERXArrayUtilities.filteredArrayWithQualifierEvaluation(array2, trueQualifierEvaluation));
+
+        assertEquals(array1, ERXArrayUtilities.filteredArrayWithQualifierEvaluation(array1, redQualifierEvaluation));
+        assertEquals(array1, ERXArrayUtilities.filteredArrayWithQualifierEvaluation(array2, redQualifierEvaluation));
+
+        List<String> array3 = Arrays.asList("green", "red", "blue");
+
+        assertEquals(array1, ERXArrayUtilities.filteredArrayWithQualifierEvaluation(array3, redQualifierEvaluation));
     }
 
-    public void testfilteredArrayWithQualifierEvaluationEnumeration() {
-        // public static com.webobjects.foundation.NSArray filteredArrayWithQualifierEvaluation(java.util.Enumeration, com.webobjects.eocontrol.EOQualifierEvaluation);
+    public void testEnumerationHasMatchWithQualifierEvaluation() {
+        NSArray<String> array1 = new NSArray<>("red");
+        NSArray<String> array2 = new NSArray<>("red", "blue");
+        NSArray<String> array3 = new NSArray<>("green", "blue");
+
+        assertTrue(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array1.objectEnumerator(), trueQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array2.objectEnumerator(), trueQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array3.objectEnumerator(), trueQualifierEvaluation));
+
+        assertTrue(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array1.objectEnumerator(), redQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array2.objectEnumerator(), redQualifierEvaluation));
+        assertFalse(ERXArrayUtilities.enumerationHasMatchWithQualifierEvaluation(array3.objectEnumerator(), redQualifierEvaluation));
     }
 
-    public void testenumerationHasMatchWithQualifierEvaluation() {
-        // public static boolean enumerationHasMatchWithQualifierEvaluation(java.util.Enumeration, com.webobjects.eocontrol.EOQualifierEvaluation);
+    public void testIteratorHasMatchWithQualifierEvaluation() {
+    	NSArray<String> array1 = new NSArray<String>("red");
+        NSArray<String> array2 = new NSArray<String>("red", "blue");
+        NSArray<String> array3 = new NSArray<String>("green", "blue");
+
+        assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array1.iterator(), trueQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array2.iterator(), trueQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array3.iterator(), trueQualifierEvaluation));
+
+        assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array1.iterator(), redQualifierEvaluation));
+        assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array2.iterator(), redQualifierEvaluation));
+        assertFalse(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array3.iterator(), redQualifierEvaluation));
     }
 
-    public void testiteratorHasMatchWithQualifierEvaluation() {
-        // public static boolean iteratorHasMatchWithQualifierEvaluation(java.util.Iterator, com.webobjects.eocontrol.EOQualifierEvaluation);
-    }
+    public static class Person {
+        private String name;
+        private Integer age;
 
-    public void testfilteredArrayWithQualifierEvaluation() {
-        // public static com.webobjects.foundation.NSArray filteredArrayWithQualifierEvaluation(java.util.Iterator, com.webobjects.eocontrol.EOQualifierEvaluation);
+        public Person(String name, Integer age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public Integer age() {
+            return age;
+        }
+
+        public Object emptyAttribute() {
+            return null;
+        }
     }
 
     public void testArrayWithoutDuplicateKeyValue() {
-        // public static com.webobjects.foundation.NSArray arrayWithoutDuplicateKeyValue(com.webobjects.foundation.NSArray, java.lang.String);
+        String ageKeyString = "age";
+        ERXKey<Integer> ageKey = new ERXKey<>(ageKeyString);
+        Person p1 = new Person("Adam", 20);
+        Person p2 = new Person("Bertram", 20);
+        Person p3 = new Person("Cassius", 25);
+        Person p4 = new Person("Dorothe", 27);
+        NSArray<Person> array1 = new NSArray<>(p1, p2);
+        NSArray<Person> array2 = new NSArray<>(p1, p1, p1);
+        NSArray<Person> array3 = new NSArray<>(p1, p3, p4);
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(null, nullERXKey));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(null, nullString));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(new NSArray<>(), ageKeyString));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(new ArrayList<>(), ageKeyString));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(new NSArray<>(), ageKey));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayWithoutDuplicateKeyValue(new ArrayList<>(), ageKey));
+
+        assertEquals(1, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array1, ageKeyString).size());
+        assertEquals(1, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array2, ageKeyString).size());
+        assertEquals(array3, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array3, ageKeyString));
+        assertEquals(1, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array1, ageKey).size());
+        assertEquals(1, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array2, ageKey).size());
+        assertEquals(array3, ERXArrayUtilities.arrayWithoutDuplicateKeyValue(array3, ageKey));
     }
 
     public void testArrayMinusArray() {
-
         // TODO - null-safety in arrayMinusArray would be good.
+        // assertNull(ERXArrayUtilities.arrayMinusArray(null, null));
 
-        // Assert.assertNull(ERXArrayUtilities.arrayMinusArray(null, null));
-        // Assert.assertEquals(new NSArray<Object>(), ERXArrayUtilities.arrayMinusArray(new NSArray<Object>(), null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayMinusArray(new NSArray<>(), null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayMinusArray(new NSArray<>(), new NSArray<>()));
 
-        Assert.assertEquals(new NSArray<Object>(), ERXArrayUtilities.arrayMinusArray(new NSArray<Object>(), new NSArray<Object>()));
+        NSArray<String> array1 = new NSArray<>("red", "blue");
+        NSArray<String> array2 = new NSArray<>("purple", "blue");
+        NSArray<String> array3 = new NSArray<>("purple", "white");
 
-        NSArray<String> array1 = new NSArray<String>(new String[] { "red", "blue" });
-        NSArray<String> array2 = new NSArray<String>(new String[] { "purple", "blue" });
-        NSArray<String> array3 = new NSArray<String>(new String[] { "purple", "white" });
-
-        Assert.assertEquals(new NSArray<String>("red") , ERXArrayUtilities.arrayMinusArray(array1, array2));
-        Assert.assertEquals(array1, ERXArrayUtilities.arrayMinusArray(array1, array3));
-        Assert.assertEquals(new NSArray<String>(), ERXArrayUtilities.arrayMinusArray(array1, array1));
-        Assert.assertEquals(array3, ERXArrayUtilities.arrayMinusArray(array3, array1));
+        assertEquals(new NSArray<>("red") , ERXArrayUtilities.arrayMinusArray(array1, array2));
+        assertEquals(array1, ERXArrayUtilities.arrayMinusArray(array1, array3));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayMinusArray(array1, array1));
+        assertEquals(array3, ERXArrayUtilities.arrayMinusArray(array3, array1));
     }
 
     public void testArrayMinusObject() {
-
         // TODO - null-safety in arrayMinusObject would be good.
+        // assertNull(ERXArrayUtilities.arrayMinusObject(null, null));
+    	
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayMinusObject(new NSArray<>(), null));
 
-        //Assert.assertNull(ERXArrayUtilities.arrayMinusObject(null, null));
-        //Assert.assertEquals(new NSArray<String>(), ERXArrayUtilities.arrayMinusObject(new NSArray<String>(), null));
+        NSArray<String> array1 = new NSArray<>("red", "blue");
 
-        NSArray<String> array1 = new NSArray<String>(new String[] { "red", "blue" });
+        assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, null));
 
-        //Assert.assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, null));
-
-        Assert.assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, "something"));
-        Assert.assertEquals(new NSArray<String>("red"), ERXArrayUtilities.arrayMinusObject(array1, "blue"));
-        Assert.assertEquals(new NSArray<String>("blue"), ERXArrayUtilities.arrayMinusObject(array1, "red"));
+        assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, "something"));
+        assertEquals(new NSArray<>("red"), ERXArrayUtilities.arrayMinusObject(array1, "blue"));
+        assertEquals(new NSArray<>("blue"), ERXArrayUtilities.arrayMinusObject(array1, "red"));
     }
 
     public void testArrayByAddingObjectsFromArrayWithoutDuplicates() {
-
         // TODO - null-safety in arrayByAddingObjectsFromArrayWithoutDuplicates would be good.
+        // assertNull(ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(null, null));
 
-        //Assert.assertNull(ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(null, null));
+        NSArray<String> array1 = new NSArray<>("red", "blue");
+        NSArray<String> array2 = new NSArray<>("purple", "blue");
+        NSArray<String> array3 = new NSArray<>("purple", "white");
 
-        NSArray<String> array1 = new NSArray<String>(new String[] { "red", "blue" });
-        NSArray<String> array2 = new NSArray<String>(new String[] { "purple", "blue" });
-        NSArray<String> array3 = new NSArray<String>(new String[] { "purple", "white" });
+        assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, null));
 
-        //Assert.assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, null));
+        assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, new NSArray<>()));
+        assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, array1));
 
-        Assert.assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, new NSArray<String>()));
-        Assert.assertEquals(array1, ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, array1));
-
-        Assert.assertEquals(new NSArray<String>(new String[] { "red", "blue", "purple" }),
+        assertEquals(new NSArray<>("red", "blue", "purple"),
                             ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, array2));
 
-        Assert.assertEquals(new NSArray<String>(new String[] { "red", "blue", "purple", "white" }),
+        assertEquals(new NSArray<>("red", "blue", "purple", "white"),
                             ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array1, array3));
 
-        Assert.assertEquals(new NSArray<String>(new String[] { "purple", "blue", "red" }),
+        assertEquals(new NSArray<>("purple", "blue", "red"),
                             ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(array2, array1));
     }
 
     public void testArrayByRemovingFirstObject() {
+        NSArray<String> immutableThree = new NSArray<>("one", "two", "three");
+        NSArray<String> immutableTwo = new NSArray<>("two", "three");
+        NSArray<String> immutableOne = new NSArray<>("three");
 
-        NSArray<String> immutableThree = new NSArray<String>(new String[] { "one", "two", "three" });
-
-		NSArray<String> immutableTwo = new NSArray<String>(new String[] { "two", "three" });
-
-		NSArray<String> immutableOne = new NSArray<String>(new String[] { "three" });
-
-        Assert.assertEquals(immutableTwo, ERXArrayUtilities.arrayByRemovingFirstObject(immutableThree));
-        Assert.assertEquals(immutableOne, ERXArrayUtilities.arrayByRemovingFirstObject(ERXArrayUtilities.arrayByRemovingFirstObject(immutableThree)));
-        Assert.assertEquals(new NSArray(), ERXArrayUtilities.arrayByRemovingFirstObject(
+        assertEquals(immutableTwo, ERXArrayUtilities.arrayByRemovingFirstObject(immutableThree));
+        assertEquals(immutableOne, ERXArrayUtilities.arrayByRemovingFirstObject(ERXArrayUtilities.arrayByRemovingFirstObject(immutableThree)));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayByRemovingFirstObject(
                                                    ERXArrayUtilities.arrayByRemovingFirstObject(ERXArrayUtilities.arrayByRemovingFirstObject(immutableThree))));
 
-        Assert.assertEquals(new NSArray<Object>(), ERXArrayUtilities.arrayByRemovingFirstObject(new NSArray<Object>()));
-        Assert.assertEquals(null, null);
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayByRemovingFirstObject(NSArray.emptyArray()));
     }
 
     public void testSafeAddObject() {
-        NSMutableArray<String> target = new NSMutableArray<String>();
+        NSMutableArray<String> target = new NSMutableArray<>();
+        NSArray<String> one = new NSArray<>("one");
 
         ERXArrayUtilities.safeAddObject(target, "one");
-        Assert.assertEquals(new NSMutableArray<String>("one"), target);
+        assertEquals(one, target);
 
         String str = null;
         ERXArrayUtilities.safeAddObject(target, str);
-        Assert.assertEquals(new NSMutableArray<String>("one"), target);
+        assertEquals(one, target);
 
         NSMutableArray<String> bad = null;
-
         ERXArrayUtilities.safeAddObject(bad, str);
+        assertEquals(null, bad);
     }
 
     public void testAddObjectsFromArrayWithoutDuplicates() {
+        NSMutableArray<String> first = new NSMutableArray<>("one", "two");
+        NSMutableArray<String> second = new NSMutableArray<>("two", "one");
 
-        NSMutableArray<String> first = new NSMutableArray<String>(new String[] { "one", "two" });
-        NSMutableArray<String> second = new NSMutableArray<String>(new String[] { "two", "one" });
-
-        NSArray<String> third = new NSArray<String>(new String[] { "one", "three" });
-        NSArray<String> four = new NSArray<String>(new String[] { "three", "one" });
+        NSArray<String> third = new NSArray<>("one", "three");
+        NSArray<String> four = new NSArray<>("three", "one");
 
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(first, third);
-        Assert.assertEquals(new NSMutableArray<String>(new String[] { "one", "two", "three" }), first);
+        assertEquals(new NSArray<>("one", "two", "three"), first);
 
-        first = new NSMutableArray<String>(new String[] { "one", "two" });
+        first = new NSMutableArray<>("one", "two");
 
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(first, four);
-        Assert.assertEquals(new NSMutableArray<String>(new String[] { "one", "two", "three" }), first);
+        assertEquals(new NSArray<>("one", "two", "three"), first);
 
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, third);
-        Assert.assertEquals(new NSMutableArray<String>(new String[] { "two", "one", "three" }), second);
+        assertEquals(new NSArray<>("two", "one", "three"), second);
 
-        second = new NSMutableArray<String>(new String[] { "two", "one" });
+        second = new NSMutableArray<>("two", "one");
 
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, four);
-        Assert.assertEquals(new NSMutableArray<String>(new String[] { "two", "one", "three" }), second);
+        assertEquals(new NSArray<>("two", "one", "three"), second);
+
+        second = new NSMutableArray<String>("two", "one");
+        ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, null);
+        assertEquals(new NSArray<>("two", "one"), second);
+        ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, new ArrayList<>());
+        assertEquals(new NSArray<>("two", "one"), second);
     }
 
     public void testFlattenBoolean() {
@@ -745,24 +830,97 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // public static com.webobjects.foundation.NSArray arrayFromPropertyList(java.lang.String, com.webobjects.foundation.NSBundle);
     }
 
-    public void testvaluesForKeyPaths() {
-        // public static com.webobjects.foundation.NSArray valuesForKeyPaths(java.lang.Object, com.webobjects.foundation.NSArray);
+    public void testValuesForKeyPaths() {
+        Person p1 = new Person("Adam", 20);
+        Person p2 = new Person("Bertram", 20);
+        NSArray<Person> array1 = new NSArray<>(p1, p2);
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.valuesForKeyPaths(array1, null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.valuesForKeyPaths(array1, new NSArray<>()));
+
+        assertEquals(new NSArray<>(20, 20), ERXArrayUtilities.valuesForKeyPaths(array1, new NSArray<>("age")).get(0));
+        assertEquals(new NSArray<>(NSKeyValueCoding.NullValue, NSKeyValueCoding.NullValue), ERXArrayUtilities.valuesForKeyPaths(array1, new NSArray<>("emptyAttribute")).get(0));
     }
 
-    public void testfirstObject() {
-        // public static java.lang.Object firstObject(com.webobjects.foundation.NSArray);
+    public void testFirstObject() {
+        NSArray<String> array1 = new NSArray<>("one", "two", "three");
+        List<String> array2 = Arrays.asList("one", "two", "three");
+
+        assertNull(ERXArrayUtilities.firstObject(null));
+        assertEquals("one", ERXArrayUtilities.firstObject(array1));
+        assertEquals("one", ERXArrayUtilities.firstObject(array2));
     }
 
-    public void testindexOfFirstObjectWithValueForKeyPath() {
-        // public static int indexOfFirstObjectWithValueForKeyPath(com.webobjects.foundation.NSArray, java.lang.Object, java.lang.String);
+    public void testIndexOfFirstObjectWithValueForKeyPath() {
+        String nameKeyString = "name";
+        ERXKey<String> nameKey = new ERXKey<>(nameKeyString);
+        Person p1 = new Person("Adam", 20);
+        Person p2 = new Person("Bertram", 20);
+        Person p3 = new Person("Cassius", 25);
+        Person p4 = new Person("Dorothe", 27);
+        NSArray<Person> array1 = new NSArray<>(p1, p2, p3, p4);
+
+        assertEquals(-1, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(new NSArray<>(), null, nullERXKey));
+        assertEquals(-1, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(new NSArray<>(), null, nullString));
+
+        assertEquals(-1, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(array1, "xyz", nameKey));
+        assertEquals(-1, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(array1, "xyz", nameKeyString));
+
+        assertEquals(0, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(array1, "Adam", nameKeyString));
+        assertEquals(1, ERXArrayUtilities.indexOfFirstObjectWithValueForKeyPath(array1, "Bertram", nameKeyString));
     }
 
-    public void testfirstObjectWithValueForKeyPath() {
-        // public static java.lang.Object firstObjectWithValueForKeyPath(com.webobjects.foundation.NSArray, java.lang.Object, java.lang.String);
+    public void testFirstObjectWithValueForKeyPath() {
+        String nameKeyString = "name";
+        ERXKey<String> nameKey = new ERXKey<>(nameKeyString);
+        Person p1 = new Person("Adam", 20);
+        Person p2 = new Person("Bertram", 20);
+        Person p3 = new Person("Cassius", 25);
+        Person p4 = new Person("Dorothe", 27);
+        NSArray<Person> array1 = new NSArray<>(p1, p2, p3, p4);
+
+        assertNull(ERXArrayUtilities.firstObjectWithValueForKeyPath(new NSArray<>(), null, nullERXKey));
+        assertNull(ERXArrayUtilities.firstObjectWithValueForKeyPath(new NSArray<>(), null, nullString));
+
+        assertNull(ERXArrayUtilities.firstObjectWithValueForKeyPath(array1, "xyz", nameKey));
+        assertNull(ERXArrayUtilities.firstObjectWithValueForKeyPath(array1, "xyz", nameKeyString));
+
+        assertEquals(p1, ERXArrayUtilities.firstObjectWithValueForKeyPath(array1, "Adam", nameKeyString));
+        assertEquals(p2, ERXArrayUtilities.firstObjectWithValueForKeyPath(array1, "Bertram", nameKeyString));
     }
 
-    public void testobjectsWithValueForKeyPath() {
-        // public static com.webobjects.foundation.NSArray objectsWithValueForKeyPath(com.webobjects.foundation.NSArray, java.lang.Object, java.lang.String);
+    public void testObjectsWithValueForKeyPath() {
+        String nameKeyString = "name";
+        String ageKeyString = "age";
+        ERXKey<String> nameKey = new ERXKey<>(nameKeyString);
+        Person p1 = new Person("Adam", 20);
+        Person p2 = new Person("Bertram", 20);
+        Person p3 = new Person("Cassius", 25);
+        Person p4 = new Person("Dorothe", 27);
+        NSArray<Person> array1 = new NSArray<>(p1, p2, p3, p4);
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(null, null, nullERXKey));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(null, null, nullString));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(new NSArray<>(), null, nullERXKey));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(new NSArray<>(), null, nullString));
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(array1, "xyz", nameKeyString));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.objectsWithValueForKeyPath(array1, "xyz", nameKey));
+        assertEquals(new NSArray<>(p3), ERXArrayUtilities.objectsWithValueForKeyPath(array1, "Cassius", nameKey));
+        assertEquals(new NSArray<>(p1, p2), ERXArrayUtilities.objectsWithValueForKeyPath(array1, 20, ageKeyString));
+
+        assertEquals(new NSArray<>(p1), ERXArrayUtilities.objectsWithValueForKeyPath(new NSArray<>(p1), null, "emptyAttribute"));
+    }
+
+    public void testIndexOfObjectUsingEqualator() {
+        NSArray<String> array1 = new NSArray<>("red");
+        NSArray<String> array2 = new NSArray<>("red", "blue");
+
+        assertEquals(-1, ERXArrayUtilities.indexOfObjectUsingEqualator(new NSArray<>(), null, ERXEqualator.SafeEqualsEqualator));
+        assertEquals(-1, ERXArrayUtilities.indexOfObjectUsingEqualator(array1, null, ERXEqualator.SafeEqualsEqualator));
+        assertEquals(0, ERXArrayUtilities.indexOfObjectUsingEqualator(array1, "red", ERXEqualator.SafeEqualsEqualator));
+        assertEquals(-1, ERXArrayUtilities.indexOfObjectUsingEqualator(array1, "blue", ERXEqualator.SafeEqualsEqualator));
+        assertEquals(1, ERXArrayUtilities.indexOfObjectUsingEqualator(array2, "blue", ERXEqualator.SafeEqualsEqualator));
     }
 
     public void testSortedMutableArraySortedWithKey() {
@@ -789,36 +947,43 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // public static void sortArrayWithKey(com.webobjects.foundation.NSMutableArray, java.lang.String, com.webobjects.foundation.NSSelector);
     }
 
-    public void testInitialize() {
-        // public static void initialize();
-    }
-
     public void testMedian() {
         // public static java.lang.Number median(com.webobjects.foundation.NSArray, java.lang.String);
     }
 
-    public void testDistinct() {
-        // public static com.webobjects.foundation.NSArray distinct(com.webobjects.foundation.NSArray);
-    }
-
     public void testArrayWithoutDuplicates() {
-        // public static com.webobjects.foundation.NSArray arrayWithoutDuplicates(com.webobjects.foundation.NSArray);
+        NSArray<String> array1 = new NSArray<>("one", "two", "three");
+        NSArray<String> array2 = new NSArray<>("one", "two", "one", "four");
+        List<String> array3 = Arrays.asList("one", "two", "one", "four");
+
+        assertEquals(array1, ERXArrayUtilities.arrayWithoutDuplicates(array1));
+        assertEquals(new NSArray<>("one", "two", "four"), ERXArrayUtilities.arrayWithoutDuplicates(array2));
+        assertEquals(new NSArray<>("one", "two", "four"), ERXArrayUtilities.arrayWithoutDuplicates(array3));
     }
 
-    public void testbatchedArrayWithSize() {
-        // public static com.webobjects.foundation.NSArray batchedArrayWithSize(com.webobjects.foundation.NSArray, int);
+    public void testBatchedArrayWithSize() {
+        NSArray<String> array1 = new NSArray<>("a", "b", "c", "d", "e", "f", "g", "h");
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.batchedArrayWithSize(null, 1));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.batchedArrayWithSize(new NSArray<>(), 1));
+
+        try {
+            ERXArrayUtilities.batchedArrayWithSize(array1, 0);
+            fail("expected IllegalArgumentException for batchSize = 0");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        assertEquals(array1, ERXArrayUtilities.batchedArrayWithSize(array1, 100).get(0));
+        assertEquals(array1.size(), ERXArrayUtilities.batchedArrayWithSize(array1, 1).size());
+
+        NSArray<NSArray<String>> result = ERXArrayUtilities.batchedArrayWithSize(array1, 2);
+        assertEquals(4, result.size());
+        assertEquals(new NSArray<>("a", "b"), result.get(0));
     }
 
     public void testfilteredArrayWithEntityFetchSpecificationWithNSDictionary() {
         // public static com.webobjects.foundation.NSArray filteredArrayWithEntityFetchSpecification(com.webobjects.foundation.NSArray, java.lang.String, java.lang.String, com.webobjects.foundation.NSDictionary);
-    }
-
-    public void testfilteredArrayWithFetchSpecificationNamedEntityNamedBindings() {
-        // public static com.webobjects.foundation.NSArray filteredArrayWithFetchSpecificationNamedEntityNamedBindings(com.webobjects.foundation.NSArray, java.lang.String, java.lang.String, com.webobjects.foundation.NSDictionary);
-    }
-
-    public void testfilteredArrayWithFetchSpecificationNamedEntityNamed() {
-        // public static com.webobjects.foundation.NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(com.webobjects.foundation.NSArray, java.lang.String, java.lang.String);
     }
 
     public void testfilteredArrayWithEntityFetchSpecification() {
@@ -826,27 +991,89 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     }
 
     public void testShiftObjectLeft() {
-        // public static void shiftObjectLeft(com.webobjects.foundation.NSMutableArray, java.lang.Object);
+        NSMutableArray<String> array1 = new NSMutableArray<>("one", "two");
+        NSArray<String> array2 = array1.immutableClone();
+
+        ERXArrayUtilities.shiftObjectLeft(array1, "one");
+        assertEquals(array2, array1);
+        ERXArrayUtilities.shiftObjectLeft(array1, "three");
+        assertEquals(array2, array1);
+
+        ERXArrayUtilities.shiftObjectLeft(array1, "two");
+        assertEquals(new NSArray<>("two", "one"), array1);
     }
 
     public void testShiftObjectRight() {
-        // public static void shiftObjectRight(com.webobjects.foundation.NSMutableArray, java.lang.Object);
+    	NSMutableArray<String> array1 = new NSMutableArray<>("one", "two");
+        NSArray<String> array2 = array1.immutableClone();
+
+        ERXArrayUtilities.shiftObjectRight(array1, "two");
+        assertEquals(array2, array1);
+        ERXArrayUtilities.shiftObjectRight(array1, "three");
+        assertEquals(array2, array1);
+
+        ERXArrayUtilities.shiftObjectRight(array1, "one");
+        assertEquals(new NSArray<>("two", "one"), array1);
     }
 
     public void testArrayContainsAnyObjectFromArray() {
-        // public static boolean arrayContainsAnyObjectFromArray(com.webobjects.foundation.NSArray, com.webobjects.foundation.NSArray);
+        NSArray<String> array1 = new NSArray<>("one", "two", "three", "four");
+        NSArray<String> array2 = new NSArray<>("a", "b", "one", "c");
+        NSArray<String> array3 = new NSArray<>("a", "b", "x", "c");
+        List<String> array4 = Arrays.asList("1", "2", "one");
+
+        assertFalse(ERXArrayUtilities.arrayContainsAnyObjectFromArray(null, null));
+        assertFalse(ERXArrayUtilities.arrayContainsAnyObjectFromArray(new NSArray<>(), null));
+        assertFalse(ERXArrayUtilities.arrayContainsAnyObjectFromArray(null, new NSArray<>()));
+        assertFalse(ERXArrayUtilities.arrayContainsAnyObjectFromArray(new NSArray<>(), new NSArray<>()));
+
+        assertTrue(ERXArrayUtilities.arrayContainsAnyObjectFromArray(array1, array1));
+        assertTrue(ERXArrayUtilities.arrayContainsAnyObjectFromArray(array1, array2));
+        assertFalse(ERXArrayUtilities.arrayContainsAnyObjectFromArray(array1, array3));
+        assertTrue(ERXArrayUtilities.arrayContainsAnyObjectFromArray(array1, array4));
     }
 
     public void testArrayContainsArray() {
-        // public static boolean arrayContainsArray(com.webobjects.foundation.NSArray, com.webobjects.foundation.NSArray);
+        NSArray<String> array1 = new NSArray<>("one", "two", "three", "four");
+        NSArray<String> array2 = new NSArray<>("one", "two", "three");
+        NSArray<String> array3 = new NSArray<>("1", "2", "3");
+
+        assertFalse(ERXArrayUtilities.arrayContainsArray(null, null));
+        assertFalse(ERXArrayUtilities.arrayContainsArray(new NSArray<>(), null));
+
+        assertTrue(ERXArrayUtilities.arrayContainsArray(array1, null));
+        assertTrue(ERXArrayUtilities.arrayContainsArray(array1, new NSArray<>()));
+
+        assertTrue(ERXArrayUtilities.arrayContainsArray(array1, array1));
+        assertTrue(ERXArrayUtilities.arrayContainsArray(array1, array2));
+        assertFalse(ERXArrayUtilities.arrayContainsArray(array2, array1));
+        assertFalse(ERXArrayUtilities.arrayContainsArray(array1, array3));
     }
 
-    public void testintersectingElements() {
-        // public static com.webobjects.foundation.NSArray intersectingElements(com.webobjects.foundation.NSArray, com.webobjects.foundation.NSArray);
+    public void testIntersectingElements() {
+        NSArray<String> array1 = new NSArray<>("one", "two", "three", "four");
+        NSArray<String> array2 = new NSArray<>("one", "two", "three");
+        NSArray<String> array3 = new NSArray<>("1", "2", "3");
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.intersectingElements(null, null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.intersectingElements(array1, null));
+
+        assertEquals(array2, ERXArrayUtilities.intersectingElements(array1, array2));
+        assertEquals(new NSArray<>("2"), ERXArrayUtilities.intersectingElements(array3, new NSArray<>("2")));
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.intersectingElements(array1, new NSArray<>()));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.intersectingElements(array1, array3));
     }
 
-    public void testreverse() {
-        // public static com.webobjects.foundation.NSArray reverse(com.webobjects.foundation.NSArray);
+    public void testReverse() {
+        NSArray<String> array1 = new NSArray<>("1", "2", "3");
+        List<Integer> array2 = IntStream.range(1, 100).boxed().collect(Collectors.toList());
+        
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.reverse(null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.reverse(new NSArray<>()));
+
+        assertEquals(new NSArray<>("3", "2", "1"), ERXArrayUtilities.reverse(array1));
+        assertEquals(new NSArray<>(99, 98, 97, 96, 95), ERXArrayUtilities.reverse(array2).subList(0, 5));
     }
 
     public void testfriendlyDisplayForKeyPath() {
@@ -918,153 +1145,445 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
 
     public void testToStringArray() {
         String[] str1 = new String[] {};
-        String[] str2 = ERXArrayUtilities.toStringArray(new NSArray<Object>());
+        String[] str2 = ERXArrayUtilities.toStringArray(new NSArray<>());
 
-        Assert.assertEquals(new NSArray<String>(str1), new NSArray<String>(str2));
+        assertEquals(new NSArray<String>(str1), new NSArray<String>(str2));
     }
 
     public void testDictionaryOfObjectsIndexedByKeyPath() {
-        // Does nothing but call testDictionaryOfObjectsIndexedByKeyPathThrowOnCollision with throwsOnCollision = false, and
-        // so can test those cases in testDictionaryOfObjectsIndexedByKeyPathThrowOnCollision().
-    }
+        assertEquals(NSDictionary.emptyDictionary(), ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(nullList, "name", true));
+        assertEquals(NSDictionary.emptyDictionary(), ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(nullList, "name", false));
+        assertEquals(NSDictionary.emptyDictionary(), ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(NSArray.emptyArray(), "name", true));
+        assertEquals(NSDictionary.emptyDictionary(), ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(NSArray.emptyArray(), "name", false));
 
-    // TODO Why is this failing for me?
-    //
-    public void _testDictionaryOfObjectsIndexedByKeyPathThrowOnCollision() {
+        NSMutableDictionary<String, String> dataOne = new NSMutableDictionary<>();
+        dataOne.put("name", "Bob");
+        dataOne.put("favoriteColor", "blue");
 
-        //Assert.assertEquals(NSDictionary.EmptyDictionary, ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(nullList, "name", true));
-        //Assert.assertEquals(NSDictionary.EmptyDictionary, ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(nullList, "name", false));
+        NSMutableDictionary<String, String> dataTwo = new NSMutableDictionary<>();
+        dataTwo.put("name", "Frank");
+        dataTwo.put("favoriteColor", "green");
 
-        NSMutableDictionary<String,String> dataOne = new NSMutableDictionary<String,String>();
-        one.setObjectForKey("Bob", "name");
-        one.setObjectForKey("blue", "favoriteColor");
+        NSMutableDictionary<String, String> dataThree = new NSMutableDictionary<>();
+        dataThree.put("name", "Frank");
+        dataThree.put("favoriteColor", "purple");
 
-        NSMutableDictionary<String,String> dataTwo = new NSMutableDictionary<String,String>();
-        two.setObjectForKey("Frank", "name");
-        two.setObjectForKey("green", "favoriteColor");
+        NSMutableArray<NSDictionary<String, String>> array1 = new NSMutableArray<>(dataOne, dataTwo);
 
-        NSMutableDictionary<String,String> dataThree = new NSMutableDictionary<String,String>();
-        three.setObjectForKey("Frank", "name");
-        three.setObjectForKey("purple", "favoriteColor");
+        NSDictionary<String, NSDictionary<String, String>> result1 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array1, "name", true);
 
-        NSMutableArray<NSDictionary<String,String>> listOne = new NSMutableArray<NSDictionary<String,String>>();
-        listOne.add(dataOne);
-        listOne.add(dataTwo);
+        assertEquals(dataOne, result1.get("Bob"));
+        assertEquals(dataTwo, result1.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result1.allKeys()));
 
-        NSDictionary<String,NSDictionary<String,String>> result1 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list1, "name", true);
+        NSDictionary<String, NSDictionary<String, String>> result2 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array1, "name", false);
 
-        Assert.assertEquals(one, result1.objectForKey("Bob"));
-        Assert.assertEquals(two, result1.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result1.allKeys()));
+        assertEquals(dataOne, result2.get("Bob"));
+        assertEquals(dataTwo, result2.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result2.allKeys()));
 
-        NSDictionary<String,NSDictionary<String,String>> result2 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list1, "name", false);
-
-        Assert.assertEquals(dataOne, result2.objectForKey("Bob"));
-        Assert.assertEquals(dataTwo, result2.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result2.allKeys()));
-
-        NSMutableArray<NSDictionary<String,String>> list2 = new NSMutableArray<NSDictionary<String,String>>();
-        list2.add(dataOne);
-        list2.add(dataTwo);
-        list2.add(dataThree);
+        NSMutableArray<NSDictionary<String, String>> array2 = new NSMutableArray<>(dataOne, dataTwo, dataThree);
 
         try {
-            @SuppressWarnings("unused")
-			NSDictionary<String,NSDictionary<String,String>> result3 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list2, "name", true);
-            Assert.fail();
-        } catch (java.lang.RuntimeException re) { /* ok */ }
+            ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array2, "name", true);
+            fail("expected RuntimeException due to key collision");
+        } catch (RuntimeException re) {
+            // test passed
+        }
 
-        NSDictionary<String,NSDictionary<String,String>> result4 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list2, "name", false);
+        NSDictionary<String, NSDictionary<String, String>> result4 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array2, "name", false);
 
-        Assert.assertEquals(dataOne, result4.objectForKey("Bob"));
-        Assert.assertEquals(dataThree, result4.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result4.allKeys()));
+        assertEquals(dataOne, result4.get("Bob"));
+        assertEquals(dataThree, result4.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result4.allKeys()));
 
-        NSMutableDictionary<String,Object> job1 = new NSMutableDictionary<String,Object>();
-        job1.setObjectForKey("processor", "jobTitle");
-        job1.setObjectForKey(dataOne, "employee");
+        NSMutableDictionary<String, Object> job1 = new NSMutableDictionary<>();
+        job1.put("jobTitle", "processor");
+        job1.put("employee", dataOne);
 
-        NSMutableDictionary<String,Object> job2 = new NSMutableDictionary<String,Object>();
-        job2.setObjectForKey("boss", "jobTitle");
-        job2.setObjectForKey(dataTwo, "employee");
+        NSMutableDictionary<String, Object> job2 = new NSMutableDictionary<>();
+        job2.put("jobTitle", "boss");
+        job2.put("employee", dataTwo);
 
-        NSMutableDictionary<String,Object> job3 = new NSMutableDictionary<String,Object>();
-        job3.setObjectForKey("flunky", "jobTitle");
-        job3.setObjectForKey(dataThree, "employee");
+        NSMutableDictionary<String, Object> job3 = new NSMutableDictionary<>();
+        job3.put("jobTitle", "flunky");
+        job3.put("employee", dataThree);
 
-        NSMutableArray<NSDictionary<String,Object>> list3 = new NSMutableArray<NSDictionary<String,Object>>();
-        list3.add(job1);
-        list3.add(job2);
+        NSMutableArray<NSDictionary<String, Object>> array3 = new NSMutableArray<>(job1, job2);
 
-        NSDictionary<String,NSDictionary<String,Object>> result5 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list3, "employee.name", true);
+        NSDictionary<String, NSDictionary<String, Object>> result5 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array3, "employee.name", true);
 
-        Assert.assertEquals(job1, result5.objectForKey("Bob"));
-        Assert.assertEquals(job2, result5.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result5.allKeys()));
+        assertEquals(job1, result5.get("Bob"));
+        assertEquals(job2, result5.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result5.allKeys()));
 
-        NSDictionary<String,NSDictionary<String,Object>> result6 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list3, "employee.name", false);
+        NSDictionary<String, NSDictionary<String, Object>> result6 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array3, "employee.name", false);
 
-        Assert.assertEquals(job1, result6.objectForKey("Bob"));
-        Assert.assertEquals(job2, result6.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result6.allKeys()));
+        assertEquals(job1, result6.get("Bob"));
+        assertEquals(job2, result6.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result6.allKeys()));
 
-        NSMutableArray<NSDictionary<String,Object>> list4 = new NSMutableArray<NSDictionary<String,Object>>();
-        list4.add(job1);
-        list4.add(job2);
-        list4.add(job3);
+        NSMutableArray<NSDictionary<String, Object>> array4 = new NSMutableArray<>(job1, job2, job3);
 
         try {
-            @SuppressWarnings("unused")
-			NSDictionary<String,NSDictionary<String,Object>> result7 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list4, "employee.name", true);
-            Assert.fail();
-        } catch (java.lang.RuntimeException re) { /* ok */ }
+            ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array4, "employee.name", true);
+            fail("expected RuntimeException due to key collision");
+        } catch (RuntimeException re) {
+            // test passed
+        }
 
-        NSDictionary<String,NSDictionary<String,Object>> result8 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(list4, "employee.name", false);
+        NSDictionary<String, NSDictionary<String, Object>> result8 = ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPath(array4, "employee.name", false);
 
-        Assert.assertEquals(job1, result8.objectForKey("Bob"));
-        Assert.assertEquals(job3, result8.objectForKey("Frank"));
-        Assert.assertEquals(new NSSet<String>(new String[] { "Bob", "Frank" }), new NSSet<String>(result8.allKeys()));
+        assertEquals(job1, result8.get("Bob"));
+        assertEquals(job3, result8.get("Frank"));
+        assertEquals(new NSSet<>(new String[] { "Bob", "Frank" }), new NSSet<>(result8.allKeys()));
     }
 
     public void testArrayBySelectingInstancesOfClass() {
-        // public static com.webobjects.foundation.NSArray arrayBySelectingInstancesOfClass(com.webobjects.foundation.NSArray, java.lang.Class);
+        Person p1 = new Person("Adam", 1);
+        NSArray<String> array1 = new NSArray<>("one", "two", "three");
+        NSArray<Object> array2 = new NSArray<>("one", 1, 2, p1);
+
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayBySelectingInstancesOfClass(null, null));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayBySelectingInstancesOfClass(new NSArray<>(), null));
+
+        assertEquals(array1, ERXArrayUtilities.arrayBySelectingInstancesOfClass(array1, null));
+        assertEquals(array1, ERXArrayUtilities.arrayBySelectingInstancesOfClass(array1, String.class));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayBySelectingInstancesOfClass(array1, Integer.class));
+
+        assertEquals(new NSArray<>(1, 2), ERXArrayUtilities.arrayBySelectingInstancesOfClass(array2, Integer.class));
+        assertEquals(new NSArray<>(p1), ERXArrayUtilities.arrayBySelectingInstancesOfClass(array2, Person.class));
     }
 
     public void testSortedArrayUsingComparator() {
-        // public static com.webobjects.foundation.NSArray sortedArrayUsingComparator(com.webobjects.foundation.NSArray, com.webobjects.foundation.NSComparator);
+        NSArray<String> array1 = new NSArray<>("c", "a", "d", "b");
+        NSArray<String> array2 = new NSArray<>("a");
+        NSArray<Object> array3 = new NSArray<>("c", 1, "d", "b");
+
+        assertEquals(null, ERXArrayUtilities.sortedArrayUsingComparator(null, NSComparator.AscendingStringComparator));
+        assertEquals(NSArray.emptyArray(), ERXArrayUtilities.sortedArrayUsingComparator(new NSArray<>(), NSComparator.AscendingStringComparator));
+
+        assertEquals(new NSArray<>("a", "b", "c", "d"), ERXArrayUtilities.sortedArrayUsingComparator(array1, NSComparator.AscendingStringComparator));
+        assertEquals(array2, ERXArrayUtilities.sortedArrayUsingComparator(array2, NSComparator.AscendingStringComparator));
+        
+        try {
+            ERXArrayUtilities.sortedArrayUsingComparator(array3, NSComparator.AscendingStringComparator);
+            fail("expected RuntimeException");
+        } catch (RuntimeException e) {
+            // test passed
+        }
     }
 
-    public void testArrayWithObjectsSwapped() {
-        Assert.assertEquals(new NSArray<String>(new String[] { "one", "three", "two" }),
-                            ERXArrayUtilities.arrayWithObjectsSwapped(new NSArray<String>(new String[] { "one", "two", "three" }), "two", "three"));
+    public void testSwapObjectsMutableArrayWithIndexes() {
+        NSMutableArray<String> nullArray = null;
+        NSMutableArray<String> emptyArray = new NSMutableArray<>();
+        NSMutableArray<String> array = new NSMutableArray<>("a", "b");
 
-        // public static com.webobjects.foundation.NSArray arrayWithObjectsSwapped(com.webobjects.foundation.NSArray, java.lang.Object, java.lang.Object);
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, 0, 0);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, 0, 0);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, -1, 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, 0, -1);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, array.size(), 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, 0, array.size());
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        ERXArrayUtilities.swapObjects(array, 0, 0);
+        assertEquals(array, array);
+
+        ERXArrayUtilities.swapObjects(array, 0, 1);
+        assertEquals("b", array.get(0));
+        assertEquals("a", array.get(1));
     }
 
-    public void testArrayWithObjectsAtIndexesSwapped() {
-        // public static com.webobjects.foundation.NSArray arrayWithObjectsAtIndexesSwapped(com.webobjects.foundation.NSArray, int, int);
+    public void testSwapObjectsMutableArrayWithObjectAndIndex() {
+        NSMutableArray<String> nullArray = null;
+        NSMutableArray<String> emptyArray = new NSMutableArray<>();
+        String objectA = "a";
+        String unknownObject = "d";
+        NSMutableArray<String> array = new NSMutableArray<>(objectA, "b");
+
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, objectA, 0);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, objectA, 0);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, unknownObject, 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, -1);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, array.size());
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        ERXArrayUtilities.swapObjects(array, objectA, 0);
+        assertEquals(array, array);
+
+        ERXArrayUtilities.swapObjects(array, objectA, 1);
+        assertEquals("b", array.get(0));
+        assertEquals(objectA, array.get(1));
     }
 
-    public void testSwapObjectsInArray() {
-        // public static void swapObjectsInArray(com.webobjects.foundation.NSMutableArray, java.lang.Object, java.lang.Object);
+    public void testSwapObjectsMutableArrayWithObjects() {
+        NSMutableArray<String> nullArray = null;
+        NSMutableArray<String> emptyArray = new NSMutableArray<>();
+        String objectA = "a";
+        String objectB = "b";
+        String unknownObject = "d";
+        NSMutableArray<String> array = new NSMutableArray<>(objectA, objectB);
+
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, objectA, objectB);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, objectA, objectB);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, unknownObject);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, unknownObject, objectB);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        ERXArrayUtilities.swapObjects(array, objectA, objectA);
+        assertEquals(array, array);
+
+        ERXArrayUtilities.swapObjects(array, objectA, objectB);
+        assertEquals(objectB, array.get(0));
+        assertEquals(objectA, array.get(1));
     }
 
-    public void testSwapObjectsAtIndexesInArray() {
-        // public static void swapObjectsAtIndexesInArray(com.webobjects.foundation.NSMutableArray, int, int);
+    public void testSwapObjectsArrayWithIndexes() {
+        NSArray<String> nullArray = null;
+        NSArray<String> emptyArray = new NSArray<>();
+        NSArray<String> array = new NSArray<>("a", "b");
+
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, 0, 0);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, 0, 0);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, -1, 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, 0, -1);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, array.size(), 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, 0, array.size());
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        NSArray<String> result = ERXArrayUtilities.swapObjects(array, 0, 0);
+        assertEquals(array, result);
+
+        result = ERXArrayUtilities.swapObjects(array, 0, 1);
+        assertEquals("b", result.get(0));
+        assertEquals("a", result.get(1));
     }
 
-    public void testSwapObjectWithObjectAtIndexInArray() {
-        // public static void swapObjectWithObjectAtIndexInArray(com.webobjects.foundation.NSMutableArray, java.lang.Object, int);
+    public void testSwapObjectsArrayWithObjectAndIndex() {
+        NSArray<String> nullArray = null;
+        NSArray<String> emptyArray = new NSArray<>();
+        String objectA = "a";
+        String unknownObject = "d";
+        NSArray<String> array = new NSArray<>(objectA, "b");
+
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, objectA, 0);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, objectA, 0);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, unknownObject, 0);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, -1);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, array.size());
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        NSArray<String> result = ERXArrayUtilities.swapObjects(array, objectA, 0);
+        assertEquals(array, result);
+
+        result = ERXArrayUtilities.swapObjects(array, objectA, 1);
+        assertEquals("b", result.get(0));
+        assertEquals(objectA, result.get(1));
     }
 
-    public void testdeepCloneNSArray() {
+    public void testSwapObjectsArrayWithObjects() {
+        NSArray<String> nullArray = null;
+        NSArray<String> emptyArray = new NSArray<>();
+        String objectA = "a";
+        String objectB = "b";
+        String unknownObject = "d";
+        NSArray<String> array = new NSArray<>(objectA, objectB);
+
+        try {
+            ERXArrayUtilities.swapObjects(nullArray, objectA, objectB);
+            fail("expected IllegalArgumentException for null array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(emptyArray, objectA, objectB);
+            fail("expected IllegalArgumentException for empty array");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, objectA, unknownObject);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        try {
+            ERXArrayUtilities.swapObjects(array, unknownObject, objectB);
+            fail("expected IllegalArgumentException for out of bound index");
+        } catch (IllegalArgumentException e) {
+            // test passed
+        }
+
+        NSArray<String> result = ERXArrayUtilities.swapObjects(array, objectA, objectA);
+        assertEquals(array, result);
+
+        result = ERXArrayUtilities.swapObjects(array, objectA, objectB);
+        assertEquals(objectB, result.get(0));
+        assertEquals(objectA, result.get(1));
+    }
+
+    public void testDeepClone() {
         // public static com.webobjects.foundation.NSArray deepClone(com.webobjects.foundation.NSArray, boolean);
     }
 
-    public void testdeepCloneNSSet() {
-        // public static com.webobjects.foundation.NSSet deepClone(com.webobjects.foundation.NSSet, boolean);
+    public void testArrayIsNullOrEmpty() {
+        assertTrue(ERXArrayUtilities.arrayIsNullOrEmpty(null));
+        assertTrue(ERXArrayUtilities.arrayIsNullOrEmpty(new NSArray<>()));
+        assertTrue(ERXArrayUtilities.arrayIsNullOrEmpty(new ArrayList<>()));
+        assertFalse(ERXArrayUtilities.arrayIsNullOrEmpty(new NSArray<>("1")));
+        assertFalse(ERXArrayUtilities.arrayIsNullOrEmpty(Arrays.asList("1")));
     }
-    
+
     public void testStdDev() {
     	String numKey = "num";
     	NSDictionary<String, Integer> uno = new NSDictionary<String, Integer>(Integer.valueOf(1), numKey);

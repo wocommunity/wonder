@@ -2,12 +2,16 @@ package er.extensions.foundation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -111,12 +115,12 @@ public class ERXArrayUtilities {
      * in a dictionary. If passed a null array, null is returned. If passed a null
      * keyPath, an empty dictionary is returned. This is a typesafe variant of
      * arrayGroupedByKeyPath(NSArray&lt;V&gt; objects, String keyPath).
-     *
-     * <p>See arrayGroupedByKeyPath(NSArray&lt;V&gt; objects, String keyPath) for examples.</p>
-     *
-     * <p>This method calls
-     * arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)
-     * with includeNulls set to true and valueKeyPath set to null.</p>
+     * <p>
+     * See <code>arrayGroupedByKeyPath(NSArray&lt;V&gt; objects, String keyPath)</code> for examples.
+     * <p>
+     * This method calls
+     * <code>arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)</code>
+     * with includeNulls set to true and valueKeyPath set to null.
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
@@ -125,7 +129,7 @@ public class ERXArrayUtilities {
      *          Objects for which the key path returns null will be grouped
      *          with the key {@link #NULL_GROUPING_KEY}
      */
-    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, ERXKey<K> keyPath) {
+    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(Collection<V> objects, ERXKey<K> keyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key());
     }
 
@@ -137,18 +141,18 @@ public class ERXArrayUtilities {
      * keyPath, an empty dictionary is returned.
      * <p>
      * If one starts with:
-<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+<pre><code>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
 { firstName = "Bob"; favoriteColor = "red"; },
-{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
-     * and one calls arrayGroupedByKeyPath(objects, "firstName"), one gets:
-<pre>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; }, { firstName = "Bob"; favoriteColor = "red"; } );
-"Frank" = ( { lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } ); }</pre><br>
-     * If one calls arrayGroupedByKeyPath(objects, "lastName"), one gets:
-<pre>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; } );
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</code></pre>
+     * and one calls <code>arrayGroupedByKeyPath(objects, "firstName")</code>, one gets:
+<pre><code>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; }, { firstName = "Bob"; favoriteColor = "red"; } );
+"Frank" = ( { lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } ); }</code></pre>
+     * If one calls <code>arrayGroupedByKeyPath(objects, "lastName")</code>, one gets:
+<pre><code>{ "Bob" = ( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; } );
 "Frank" = ( { lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } );
-"**** NULL GROUPING KEY ****" = ( { firstName = "Bob"; favoriteColor = "red"; } ); }</pre>
+"**** NULL GROUPING KEY ****" = ( { firstName = "Bob"; favoriteColor = "red"; } ); }</code></pre>
      * <p>
-     * This method calls arrayGroupedByKeyPath(objects, keyPath, includeNulls, valueKeyPath) with
+     * This method calls <code>arrayGroupedByKeyPath(objects, keyPath, includeNulls, valueKeyPath)</code> with
      * includeNulls set to true and valueKeyPath set to null.
      * 
      * @param objects array of objects to be grouped
@@ -158,7 +162,7 @@ public class ERXArrayUtilities {
      *		Objects for which the key path returns null will be grouped 
      *          with the key {@link #NULL_GROUPING_KEY}
      */
-    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, String keyPath) {
+    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(Collection<V> objects, String keyPath) {
         return arrayGroupedByKeyPath(objects,keyPath,true,null);
     }
 
@@ -171,9 +175,9 @@ public class ERXArrayUtilities {
      * the grouped arrays each have valueForKey called with valueKeyPath and the
      * grouped arrays are replaced with the results of those calls. This is a
      * typesafe variant of
-     * arrayGroupedByKeyPath(NSArray&lt;T&gt; objects, String keyPath, boolean includeNulls, String valueKeyPath).
+     * <code>arrayGroupedByKeyPath(NSArray&lt;T&gt; objects, String keyPath, boolean includeNulls, String valueKeyPath).</code>
      * <p>
-     * See arrayGroupedByKeyPath(NSArray&lt;T&gt; objects, String keyPath, boolean includeNulls, String valueKeyPath)
+     * See <code>arrayGroupedByKeyPath(NSArray&lt;T&gt; objects, String keyPath, boolean includeNulls, String valueKeyPath)</code>
      * for examples.
      *
      * @param objects array of objects to be grouped
@@ -188,7 +192,7 @@ public class ERXArrayUtilities {
      *          Objects for which the key path returns null will be grouped
      *          with the key {@link #NULL_GROUPING_KEY}
      */
-    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, boolean includeNulls, ERXKey<V> valueKeyPath) {
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(Collection<T> objects, ERXKey<K> keyPath, boolean includeNulls, ERXKey<V> valueKeyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), includeNulls, (valueKeyPath == null) ? null : valueKeyPath.key());
     }
 
@@ -202,15 +206,15 @@ public class ERXArrayUtilities {
      * grouped arrays are replaced with the results of those calls.
      * <p>
      * If one starts with:
-<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+<pre><code>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
 { firstName = "Bob"; favoriteColor = "red"; },
-{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
-     * and one calls arrayGroupedByKeyPath(objects, "firstName", true, "favoriteColor"), one gets:
-<pre>{Frank = ("green"); Bob = ("blue", "red");</pre>
-     * If one calls arrayGroupedByKeyPath(objects, "lastName", false, "favoriteColor"), one gets:
-<pre>{Further = ("green"); Barker = ("blue"); }</pre>
-     * If one calls arrayGroupedByKeyPath(objects, "lastName", true, "favoriteColor"), one gets:
-<pre>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</pre>
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</code></pre>
+     * and one calls <code>arrayGroupedByKeyPath(objects, "firstName", true, "favoriteColor")</code>, one gets:
+<pre><code>{Frank = ("green"); Bob = ("blue", "red");</code></pre>
+     * If one calls <code>arrayGroupedByKeyPath(objects, "lastName", false, "favoriteColor")</code>, one gets:
+<pre><code>{Further = ("green"); Barker = ("blue"); }</code></pre>
+     * If one calls <code>arrayGroupedByKeyPath(objects, "lastName", true, "favoriteColor")</code>, one gets:
+<pre><code>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</code></pre>
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
@@ -224,7 +228,7 @@ public class ERXArrayUtilities {
      *          Objects for which the key path returns null will be grouped
      *          with the key {@link #NULL_GROUPING_KEY}
      */
-    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, String keyPath, boolean includeNulls, String valueKeyPath) {
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(Collection<T> objects, String keyPath, boolean includeNulls, String valueKeyPath) {
         return arrayGroupedByKeyPath(objects, keyPath, (includeNulls) ? (K)NULL_GROUPING_KEY : null, valueKeyPath);
     }
 
@@ -237,10 +241,10 @@ public class ERXArrayUtilities {
      * the grouped arrays each have valueForKey called with valueKeyPath and the
      * grouped arrays are replaced with the results of those calls. This is a
      * typesafe variant of
-     * arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath).
-     *
-     * <p>See arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)
-     * for examples.</p>
+     * <code>arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)</code>.
+     * <p>
+     * See <code>arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath)</code>
+     * for examples.
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
@@ -255,7 +259,7 @@ public class ERXArrayUtilities {
      *          Objects for which the key path returns null will be grouped
      *          with the key {@link #NULL_GROUPING_KEY}
      */
-    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
+    public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(Collection<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
     }
     
@@ -269,15 +273,15 @@ public class ERXArrayUtilities {
      * grouped arrays are replaced with the results of that call.
      * <p>
      * If one starts with:
-<pre>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
+<pre><code>( { lastName = "Barker"; firstName = "Bob"; favoriteColor = "blue"; },
 { firstName = "Bob"; favoriteColor = "red"; },
-{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</pre>
-     * and one calls arrayGroupedByKeyPath(objects, "firstName", null, "favoriteColor"), one gets:
-<pre>{Frank = ("green"); Bob = ("blue", "red");</pre>
-     * If one calls arrayGroupedByKeyPath(objects, "lastName", "extra", "favoriteColor"), one gets:
-<pre>{Further = ("green"); Barker = ("blue"); "extra" = ("red"); }</pre>
-     * If one calls arrayGroupedByKeyPath(objects, "lastName", null, "favoriteColor"), one gets:
-<pre>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</pre>
+{ lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; } )</code></pre>
+     * and one calls <code>arrayGroupedByKeyPath(objects, "firstName", null, "favoriteColor")</code>, one gets:
+<pre><code>{Frank = ("green"); Bob = ("blue", "red");</code></pre>
+     * If one calls <code>arrayGroupedByKeyPath(objects, "lastName", "extra", "favoriteColor")</code>, one gets:
+<pre><code>{Further = ("green"); Barker = ("blue"); "extra" = ("red"); }</code></pre>
+     * If one calls <code>arrayGroupedByKeyPath(objects, "lastName", null, "favoriteColor")</code>, one gets:
+<pre><code>{Further = ("green"); Barker = ("blue"); "**** NULL GROUPING KEY ****" = ("red"); }</code></pre>
      *
      * @param objects array of objects to be grouped
      * @param keyPath path into objects used to group the objects
@@ -293,11 +297,10 @@ public class ERXArrayUtilities {
      *          with the key {@link #NULL_GROUPING_KEY}
      */
     @SuppressWarnings("unchecked")
-    public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath) {
-        if (objects == null) return null;
+    public static <T> NSDictionary arrayGroupedByKeyPath(Collection<T> objects, String keyPath, Object nullGroupingKey, String valueKeyPath) {
+        if (objects == null)return null;
         NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
-            Object eo = e.nextElement();
+        for (T eo : objects) {
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
             if (!isNullKey || nullGroupingKey != null) {
@@ -323,11 +326,11 @@ public class ERXArrayUtilities {
      * 
      * @param objects the objects to be grouped
      * @param keyPath the key to group by
-     * @param includeNulls determins if the keypaths that resolve to null should be allowed in the group
+     * @param includeNulls determines if the key paths that resolve to null should be allowed in the group
      * @return the resulting dictionary
      */
-	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(NSArray<V> objects, ERXKey<K> keyPath, boolean includeNulls) {
-    	return arrayGroupedByToManyKeyPath(objects, keyPath.key(), includeNulls);
+	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(Collection<V> objects, ERXKey<K> keyPath, boolean includeNulls) {
+    	return arrayGroupedByToManyKeyPath(objects, (keyPath == null) ? null : keyPath.key(), includeNulls);
     }
     
     /**
@@ -352,10 +355,10 @@ public class ERXArrayUtilities {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(NSArray<V> objects,
+    public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(Collection<V> objects,
             String keyPath,
             boolean includeNulls) {
-    	return arrayGroupedByToManyKeyPath(objects, keyPath,  (includeNulls) ? (K) NULL_GROUPING_KEY : null);
+    	return arrayGroupedByToManyKeyPath(objects, keyPath, includeNulls ? (K) NULL_GROUPING_KEY : null);
     }
     
     /**
@@ -370,8 +373,8 @@ public class ERXArrayUtilities {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(NSArray<V> objects, ERXKey<K> keyPath, K nullGroupingKey) {
-    	return arrayGroupedByToManyKeyPath(objects, keyPath.key(), nullGroupingKey);
+	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(Collection<V> objects, ERXKey<K> keyPath, K nullGroupingKey) {
+    	return arrayGroupedByToManyKeyPath(objects, (keyPath == null) ? null : keyPath.key(), nullGroupingKey);
     }
 
     /**
@@ -393,7 +396,7 @@ public class ERXArrayUtilities {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(NSArray<V> objects,
+	public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(Collection<V> objects,
             String keyPath,
             K nullGroupingKey) {
     	return arrayGroupedByToManyKeyPath(objects, keyPath, nullGroupingKey, null);
@@ -416,8 +419,8 @@ public class ERXArrayUtilities {
      *      characteristic. Note that if the key path returns null
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-	public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(NSArray<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
-    	return arrayGroupedByToManyKeyPath(objects, keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
+	public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByToManyKeyPath(Collection<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
+    	return arrayGroupedByToManyKeyPath(objects, (keyPath == null) ? null : keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
     }
 
     /**
@@ -445,13 +448,12 @@ public class ERXArrayUtilities {
      *      then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
     @SuppressWarnings("unchecked")
-	public static NSDictionary arrayGroupedByToManyKeyPath(NSArray objects,
+	public static <T> NSDictionary arrayGroupedByToManyKeyPath(Collection<T> objects,
             String keyPath,
             Object nullGroupingKey,
             String valueKeyPath) {
         NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=objects.objectEnumerator(); e.hasMoreElements();) {
-            Object object = e.nextElement();
+        for (T object : objects) {
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
             if (!isNullKey || nullGroupingKey != null) {
@@ -479,44 +481,29 @@ public class ERXArrayUtilities {
     /**
      * Simple comparison method to see if two array
      * objects are identical sets.
-     * @param a1 first array
-     * @param a2 second array
+     * 
+     * @param array1 first array
+     * @param array2 second array
      * @return result of comparison
      */
-    public static <T> boolean arraysAreIdenticalSets(NSArray<? super T> a1, NSArray<? super T> a2) {
-        if (a1 == null || a2 == null) {
-            return a1 == a2;
+    public static <T> boolean arraysAreIdenticalSets(Collection<? super T> array1, Collection<? super T> array2) {
+        if (array1 == null || array2 == null) {
+            return array1 == array2;
         }
     	
-        for (Enumeration<? super T> e=a1.objectEnumerator();e.hasMoreElements();) {
-            Object i=e.nextElement();
-            if (!a2.containsObject(i)) {
+        for (Object item : array1) {
+            if (!array2.contains(item)) {
                 return false;
             }
         }
         
-        for (Enumeration<? super T> e=a2.objectEnumerator();e.hasMoreElements();) {
-            Object i=e.nextElement();
-            if (!a1.containsObject(i)) {
+        for (Object item : array2) {
+            if (!array1.contains(item)) {
                 return false;
             }
         }
         
         return true;
-    }
-
-    /**
-     * Filters an array using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
-     * 
-     * @param array to be filtered
-     * @param qualifier to do the filtering
-     * @return array of filtered results.
-     */
-    public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(NSArray<T> array, EOQualifierEvaluation qualifier) {
-        if (array == null) {
-            return NSArray.EmptyArray;
-        }
-        return filteredArrayWithQualifierEvaluation(array.objectEnumerator(), qualifier);
     }
 
     /**
@@ -530,7 +517,9 @@ public class ERXArrayUtilities {
      *             and use elements() for the Vector and Hashtable
      * @param qualifier to do the filtering
      * @return array of filtered results.
+     * @deprecated use {@link #filteredArrayWithQualifierEvaluation(Iterable, EOQualifierEvaluation)} instead
      */
+    @Deprecated
     public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(Enumeration<T> enumeration, EOQualifierEvaluation qualifier) {
         NSMutableArray<T> result = new NSMutableArray<T>();
         while (enumeration.hasMoreElements()) {
@@ -542,41 +531,65 @@ public class ERXArrayUtilities {
     }
 
     /**
-     * Filters any kinds of collections that implements {@link Enumeration} 
-     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
-     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     * Filters any kinds of collections that implement {@link Iterable} 
+     * interface such as {@link NSArray} or {@link NSSet} using the
+     * {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
+     * 
+     * @param <T> class of array items
+     * @param iterable to be filtered
+     * @param qualifier to do the filtering
+     * @return array of filtered results
+     */
+    public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(Iterable<T> iterable, EOQualifierEvaluation qualifier) {
+        if (iterable == null) {
+            return NSArray.emptyArray();
+        }
+        if (iterable instanceof Collection) {
+            if (((Collection)iterable).isEmpty()) {
+                return NSArray.emptyArray();
+            }
+        }
+        NSMutableArray<T> result = new NSMutableArray<>();
+        for (T object : iterable) {
+            if (qualifier.evaluateWithObject(object)) {
+                result.add(object);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Checks if the given enumeration contains at least one match defined by the given object
+     * implementing the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
      *
-     * @param enumeration to be filtered; to obtain an enumeration, 
-     *             use objectEnumerator() for the collections in 
-     *             com.webobjects.foundation package 
-     *             and use elements() for the Vector and Hashtable
+     * @param enumeration to be tested
      * @param qualifier to do the filtering
      * @return true if there is at least one match
      */
     public static boolean enumerationHasMatchWithQualifierEvaluation(Enumeration<?> enumeration, EOQualifierEvaluation qualifier) {
         while (enumeration.hasMoreElements()) {
             Object object = enumeration.nextElement();
-            if (qualifier.evaluateWithObject(object)) 
+            if (qualifier.evaluateWithObject(object)) {
                 return true;
+            }
         }
         return false;
     }
 
     /**
-     * Filters any kinds of collections that implements {@link Iterator} 
-     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
-     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     * Checks if the given iterator contains at least one match defined by the given object
+     * implementing the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
      *
-     * @param iterator to be filtered; to obtain an iterator, 
-     *             use iterator() for the java collections
+     * @param iterator to be tested
      * @param qualifier to do the filtering
      * @return true if there is at least one match
      */
     public static boolean iteratorHasMatchWithQualifierEvaluation(Iterator<?> iterator, EOQualifierEvaluation qualifier) {
         while (iterator.hasNext()) {
             Object object = iterator.next();
-            if (qualifier.evaluateWithObject(object)) 
+            if (qualifier.evaluateWithObject(object)) {
                 return true;
+            }
         }
         return false;
     }
@@ -590,7 +603,9 @@ public class ERXArrayUtilities {
      *             an iterator from the collections
      * @param qualifier to do the filtering
      * @return array of filtered results.
+     * @deprecated use {@link #filteredArrayWithQualifierEvaluation(Iterable, EOQualifierEvaluation)} instead
      */
+    @Deprecated
     public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(Iterator<T> iterator, EOQualifierEvaluation qualifier) {
         NSMutableArray<T> result = new NSMutableArray<T>();
         while (iterator.hasNext()) {
@@ -605,19 +620,42 @@ public class ERXArrayUtilities {
      * Filters out duplicates of an array of objects
      * based on the value of the given key path off of those objects.
      * Objects with a null value will be skipped, too.
+     * 
+     * @param <T> class of array items
      * @param objects array of objects
-     * @param key keypath to be evaluated off of every object
-     * @return filter array of objects based on the value of a keypath.
+     * @param keyPath key path to be evaluated off of every object
+     * @return filter array of objects based on the value of a key path
      */
-    public static <T> NSArray<T> arrayWithoutDuplicateKeyValue(NSArray<T> objects, String key){
-        NSMutableSet<T> present = new NSMutableSet<T>();
-        NSMutableArray<T> result = new NSMutableArray<T>();
-        for(Enumeration<T> e = objects.objectEnumerator(); e.hasMoreElements(); ){
-            T o = e.nextElement();
-            T value = (T)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, key);
-            if(value != null && !present.containsObject(value)) {
-                present.addObject(value);
-                result.addObject(o);
+    public static <T> NSArray<T> arrayWithoutDuplicateKeyValue(Iterable<T> objects, ERXKey<?> keyPath) {
+    	return arrayWithoutDuplicateKeyValue(objects, (keyPath == null) ? null : keyPath.key());
+    }
+
+    /**
+     * Filters out duplicates of an array of objects
+     * based on the value of the given key path off of those objects.
+     * Objects with a null value will be skipped, too.
+     * 
+     * @param <T> class of array items
+     * @param objects array of objects
+     * @param keyPath key path to be evaluated off of every object
+     * @return filter array of objects based on the value of a key path
+     */
+    public static <T> NSArray<T> arrayWithoutDuplicateKeyValue(Iterable<T> objects, String keyPath) {
+        if (objects == null || keyPath == null) {
+            return NSArray.emptyArray();
+        }
+        if (objects instanceof Collection) {
+            if (((Collection)objects).isEmpty()) {
+                return NSArray.emptyArray();
+            }
+        }
+        Set<Object> present = new HashSet<>();
+        NSMutableArray<T> result = new NSMutableArray<>();
+        for (T object : objects){
+            Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, keyPath);
+            if (value != null && !present.contains(value)) {
+                present.add(value);
+                result.add(object);
             }
         }
         return result;
@@ -625,99 +663,119 @@ public class ERXArrayUtilities {
 
     /**
      * Subtracts the contents of one array from another.
-     * The order of the array should be preseved.
+     * The order of the array should be preserved.
      * 
-     * @param main array to have values removed from it.
+     * @param <T> class of array items
+     * @param array array to have values removed from it
      * @param minus array of values to remove from the main array
-     * @return array after performing subtraction.
+     * @return array after performing subtraction
      */
-    public static <T> NSArray<T> arrayMinusArray(NSArray<T> main, NSArray<?> minus) {
-		NSSet<Object> minusSet = new NSSet<Object>(minus);
-		NSMutableArray<T> mutableResult = new NSMutableArray<T>(main.count()); 
-		Enumeration<T> e = main.objectEnumerator();
-		while (e.hasMoreElements()) {
-			T obj = e.nextElement();
-			if (! minusSet.containsObject(obj)) 
-				mutableResult.addObject(obj);
-		}
-		return mutableResult.immutableClone();
+    public static <T> NSArray<T> arrayMinusArray(Collection<T> array, Collection<?> minus) {
+        if (array.isEmpty() || minus == null || minus.isEmpty()) {
+            if (array instanceof NSArray) {
+                return ((NSArray)array).immutableClone();
+            }
+            return new NSArray<>(array);
+        }
+        Collection<T> arrayList = new ArrayList<>(array);
+        arrayList.removeAll(minus);
+        return new NSArray<>(arrayList);
     }
-	
+
     /**
      * Subtracts a single object from an array.
-     * @param main array to have value removed from it.
+     * 
+     * @param <T> class of array items
+     * @param array array to have value removed from it
      * @param object to be removed
-     * @return array after performing subtraction.
+     * @return array after performing subtraction
      */
-    public static <T> NSArray<T> arrayMinusObject(NSArray<T> main, Object object) {
-        NSMutableArray<T> mutable = new NSMutableArray<T>(main);
-        mutable.removeObject(object);
-        return mutable.immutableClone();
+    public static <T> NSArray<T> arrayMinusObject(Collection<T> array, T object) {
+        if (object == null) {
+            return new NSArray<T>(array);
+        }
+        NSMutableArray<T> result = new NSMutableArray<>(array);
+        result.remove(object);
+        return result.immutableClone();
     }
-        
+
     /**
      * Creates an array preserving order by adding all of the
      * non-duplicate values from the second array to the first.
-     * @param a1 first array
-     * @param a2 second array
+     * 
+     * @param <T> class of array items
+     * @param array1 first array
+     * @param array2 second array
      * @return array containing all of the elements of the first
      *		array and all of the non-duplicate elements of
      *		the second array.
      */
-    public static <T> NSArray<T> arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray<? extends T> a1, NSArray<? extends T> a2) {
-        if (a2.count()==0)
-            return (NSArray<T>) a1;
+    public static <T> NSArray<T> arrayByAddingObjectsFromArrayWithoutDuplicates(Collection<? extends T> array1, Collection<? extends T> array2) {
+        if (array2 == null || array2.isEmpty()) {
+            if (array1.isEmpty()) {
+                return NSArray.emptyArray();
+            } else if (array1 instanceof NSArray) {
+                return ((NSArray)array1).immutableClone();
+            }
+            return new NSArray<>(array1);
+        }
         
-        NSMutableArray<T> result=new NSMutableArray<T>(a1);
-        addObjectsFromArrayWithoutDuplicates(result, a2);
+        NSMutableArray<T> result = new NSMutableArray<>(array1);
+        addObjectsFromArrayWithoutDuplicates(result, array2);
         return result;
     }
-    
+
     /**
      * Creates an array that has all of the objects of the parameter array
      * without the first object.
+     * 
+     * @param <T> class of array items
      * @param array the array to use to create the result
      * @return an array containing all objects but the first of the
      *         parameter array.  if null is passed, null is returned.
      *         if the parameter array is empty, an empty array is returned.
      */
     public static <T> NSArray<T> arrayByRemovingFirstObject(NSArray<T> array) {
-        NSArray<T> result = null;
-        
-        if ( array != null ) {
-            final int count = array.count();
-            
-            result = count > 1 ? array.subarrayWithRange(new NSRange(1, count-1)) : NSArray.EmptyArray;
+        if (array == null) {
+            return null;
         }
-        
-        return result;
+        if (array.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        return array.subarrayWithRange(new NSRange(1, array.size() - 1));
     }
-    
+
     /**
      * Adds the object to the mutable array if the object is not null.
+     * 
+     * @param <T> class of array items
      * @param array mutable array where non-null object will be added
      * @param object to be added to array
      */
     public static <T> void safeAddObject(NSMutableArray<T> array, T object) {
         if (array != null && object != null) {
-            array.addObject(object);
+            array.add(object);
         }
     }
- 
+
     /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
-     * @param a1 mutable array where non-duplicate objects are
+     * 
+     * @param <T> class of array items
+     * @param array1 mutable array where non-duplicate objects are
      *		added
-     * @param a2 array to be added to a1
+     * @param array2 array to be added to a1
      */
-    public static <T> void addObjectsFromArrayWithoutDuplicates(NSMutableArray<T> a1, NSArray<? extends T> a2) {
-        NSMutableSet<T> resultSet=new NSMutableSet<T>(a1);
-        for (Enumeration<? extends T> e=a2.objectEnumerator(); e.hasMoreElements();) {
-        	T elt=e.nextElement();
-        	if (!resultSet.containsObject(elt)) { 
-            	a1.addObject(elt);
-            	resultSet.addObject(elt);
+    public static <T> void addObjectsFromArrayWithoutDuplicates(NSMutableArray<T> array1, Collection<? extends T> array2) {
+        if (array2 == null || array2.isEmpty()) {
+            return;
+        }
+        Set<T> present = new HashSet<>(array1);
+        for (T object : array2) {
+            if (!present.contains(object)) { 
+                array1.add(object);
+                present.add(object);
             }
         }
     }
@@ -736,7 +794,8 @@ public class ERXArrayUtilities {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param originalArray array to be flattened
+     * 
+     * @param array array to be flattened
      * @param filterDuplicates determines if the duplicate values
      *      should be filtered
      * @return an array containing all of the elements from
@@ -744,15 +803,13 @@ public class ERXArrayUtilities {
      *      passed in. (Optionally, with duplicate elements filtered out)
      */
     @SuppressWarnings("unchecked")
-	public static NSArray flatten(NSArray<?> originalArray, boolean filterDuplicates) {
-        NSArray<?> flattenedArray = flatten(originalArray);
-        
+    public static NSArray flatten(NSArray<?> array, boolean filterDuplicates) {
+        NSArray<?> result = flatten(array);
         if (filterDuplicates) {
-            return arrayWithoutDuplicates(flattenedArray);
-        } 
-        return flattenedArray;
+            result = arrayWithoutDuplicates(result);
+        }
+        return result;
     }
-    
 
     /** 
      * Recursively flattens an array of arrays and individual
@@ -768,39 +825,40 @@ public class ERXArrayUtilities {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param originalArray array to be flattened
+     * 
+     * @param array array to be flattened
      * @return an array containing all of the elements from
      *      all of the arrays contained within the array
      *      passed in.
      */
     @SuppressWarnings("unchecked")
-	public static NSArray flatten(NSArray<?> originalArray) {
-        if (originalArray == null || originalArray.count() < 1) {
-            return originalArray;
+    public static NSArray flatten(NSArray<?> array) {
+        if (array == null || array.isEmpty()) {
+            return array;
         }
         
-        NSMutableArray<Object> newArray = null;  // Not gonna create a new array if we don't actually need to flatten
-        for (int i = 0; i < originalArray.count(); i++) {
-            Object element = originalArray.objectAtIndex(i);
+        NSMutableArray<Object> result = null;  // Not gonna create a new array if we don't actually need to flatten
+        for (int i = 0; i < array.size(); i++) {
+            Object element = array.get(i);
             if (element instanceof NSArray) {
-                if (newArray == null) {
+                if (result == null) {
                     // Turns out we actually need to flatten
-                    newArray = new NSMutableArray<Object>();
+                    result = new NSMutableArray<>();
                     for (int backfillIndex = 0; backfillIndex < i; backfillIndex++) {
                         // backfill any singles we put off copying
-                        newArray.addObject(originalArray.objectAtIndex(backfillIndex));
+                        result.add(array.get(backfillIndex));
                     }
                 }
                 
                 NSArray<?> flattenedChildArray = flatten((NSArray<?>)element);
-                newArray.addObjectsFromArray(flattenedChildArray);
-            } else if (newArray != null) {
-                newArray.addObject(element);
-            }  // Otherwise let's put off copying the elment, the backfill section above will take care of it.
+                result.addAll(flattenedChildArray);
+            } else if (result != null) {
+                result.add(element);
+            }  // Otherwise let's put off copying the element, the backfill section above will take care of it.
         }
         
         // CLEANUP: Arguably safer to return the immutable array we are declared as returning
-        return (newArray != null ? newArray : originalArray);
+        return result != null ? result : array;
     }
 
     /**
@@ -809,7 +867,7 @@ public class ERXArrayUtilities {
      * 
      * @param name name of the file or resource.
      * @param bundle NSBundle to which the resource belongs.
-     * @return NSArray de-serialized from the property list.
+     * @return NSArray deserialized from the property list.
      */
     @SuppressWarnings("unchecked")
 	public static NSArray arrayFromPropertyList(String name, NSBundle bundle) {
@@ -818,54 +876,71 @@ public class ERXArrayUtilities {
 
     /**
      * Performs multiple key-value coding calls against an array or an object.
-     * @param array collection or object to be acted upon.
-     * @param paths array of keypaths.
-     * @return for collections, returns an array containing an array of values for every keypath.
-     * For objects, returns an array containing a value for every keypath.
+     * 
+     * @param source collection or object to be acted upon.
+     * @param keyPaths array of key paths.
+     * @return for collections, returns an array containing an array of values for every key path.
+     * For objects, returns an array containing a value for every key path.
      */
-    @SuppressWarnings("unchecked")
-	public static NSArray valuesForKeyPaths(Object array, NSArray<String> paths) {
-        NSMutableArray<Object> result = new NSMutableArray<Object>();
-
-        Enumeration<String> e = paths.objectEnumerator();
-        while(e.hasMoreElements()) {
-        	Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, e.nextElement());
-            result.addObject(value != null ? value : NSKeyValueCoding.NullValue);
+	public static NSArray valuesForKeyPaths(Object source, Collection<String> keyPaths) {
+        if (keyPaths == null || keyPaths.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        NSMutableArray<Object> result = new NSMutableArray<>();
+        for (String keyPath : keyPaths) {
+            Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(source, keyPath);
+            result.add(value != null ? value : NSKeyValueCoding.NullValue);
         }
         return result;
     }
 
     /**
-     * Returns the first object of the array.  If the array is null or empty, null is returned.
-     *
-     * @param array the array to search.
-     * @return the first object in array.  null if array is empty or if array is null.
+     * Returns the first object of the array. If the array is null or empty, null is returned.
+     * 
+     * @param <T> class of array items
+     * @param array the array to search
+     * @return the first object in array. null if array is empty or null.
      */
-    public static <T> T firstObject(NSArray<T> array) {
+    public static <T> T firstObject(List<T> array) {
         T result = null;
         
-        if ( array != null && array.count() > 0 )
-            result = array.objectAtIndex(0);
+        if (array != null && !array.isEmpty()) {
+            result = array.get(0);
+        }
         
         return result;
     }
-    
+
     /**
-     * Finds the index of the first object in the array with a given value for a given keypath.
-     * Assumes that all objects in the array either are NSKeyValueCoding.NullValue or have the given keypath.
-     * @param array the array to search.
-     * @param value the value to look for.
-     * @param keyPath the keypath to use to compare to value.
-     * @return index of the first object with the qualification.  -1 if none matches.
+     * Finds the index of the first object in the array with a given value for a given key path.
+     * Assumes that all objects in the array either are NSKeyValueCoding.NullValue or have the given key path.
+     * 
+     * @param <T> class of array items
+     * @param <V> class of value from key path
+     * @param array the array to search
+     * @param value the value to look for
+     * @param keyPath the key path to use to compare to value
+     * @return index of the first object with the qualification. -1 if none matches.
      */
-    public static int indexOfFirstObjectWithValueForKeyPath(NSArray<?> array, Object value, String keyPath) {
-        final int count = array.count();
-        int result = -1;
+    public static <T, V> int indexOfFirstObjectWithValueForKeyPath(Collection<T> array, V value, ERXKey<V> keyPath) {
+    	return indexOfFirstObjectWithValueForKeyPath(array, value, (keyPath == null) ? null : keyPath.key());
+    }
+
+    /**
+     * Finds the index of the first object in the array with a given value for a given key path.
+     * Assumes that all objects in the array either are NSKeyValueCoding.NullValue or have the given key path.
+     * 
+     * @param <T> class of array items
+     * @param array the array to search
+     * @param value the value to look for
+     * @param keyPath the key path to use to compare to value
+     * @return index of the first object with the qualification. -1 if none matches.
+     */
+    public static <T> int indexOfFirstObjectWithValueForKeyPath(Collection<T> array, Object value, String keyPath) {
         int i = 0;
-        while ( i < count) {
-            Object currentObject = array.objectAtIndex(i);
-            if(currentObject != NSKeyValueCoding.NullValue) {
-                Object currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(currentObject, keyPath);
+        for (T object : array) {
+            if (object != NSKeyValueCoding.NullValue) {
+                Object currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, keyPath);
                 currentValue = (currentValue == NSKeyValueCoding.NullValue ? null : currentValue);
                 if (Objects.equals(currentValue, value)) {
                     return i;
@@ -874,88 +949,115 @@ public class ERXArrayUtilities {
             i++;
         }
         
-        return result;
+        return -1;
     }
-    
+
     /**
      * Finds the first object in the array with a given value for a given key path.
-     * @param array the array to search.
-     * @param value the value to look for.
-     * @param keyPath the keypath to use to compare to value.
-     * @return first object in the array with the qualification.  null if none matches.
+     * 
+     * @param <T> class of array items
+     * @param <V> class of value from key path
+     * @param array the array to search
+     * @param value the value to look for
+     * @param keyPath the key path to use to compare to value
+     * @return first object in the array with the qualification. null if none matches.
      */
-    public static <T> T firstObjectWithValueForKeyPath(NSArray<T> array, Object value, String keyPath) {
-        final int index = indexOfFirstObjectWithValueForKeyPath(array, value, keyPath);
+    public static <T, V> T firstObjectWithValueForKeyPath(List<T> array, V value, ERXKey<V> keyPath) {
+    	return firstObjectWithValueForKeyPath(array, value, (keyPath == null) ? null : keyPath.key());
+    }
+
+    /**
+     * Finds the first object in the array with a given value for a given key path.
+     * 
+     * @param <T> class of array items
+     * @param array the array to search
+     * @param value the value to look for
+     * @param keyPath the key path to use to compare to value
+     * @return first object in the array with the qualification. null if none matches.
+     */
+    public static <T> T firstObjectWithValueForKeyPath(List<T> array, Object value, String keyPath) {
+        int index = indexOfFirstObjectWithValueForKeyPath(array, value, keyPath);
         
-        return index >= 0 ? array.objectAtIndex(index) : null;
+        return index >= 0 ? array.get(index) : null;
     }
 
     /**
      * Walks over an array and returns an array of objects from that array that have a particular
-     * value for a particular key path.  Treats null and NSKeyValueCoding.NullValue equivalently.
-     * Any NSKeyValueCoding.NullValue objects in the array are skipped.  If array is null or empty,
+     * value for a particular key path. Treats null and NSKeyValueCoding.NullValue equivalently.
+     * Any NSKeyValueCoding.NullValue objects in the array are skipped. If array is null or empty,
      * an empty array is returned.
-     *
+     * 
+     * @param <T> class of array items
+     * @param <V> class of value from key path
      * @param array array to search
-     * @param valueToLookFor value to look for
+     * @param value value to look for
      * @param keyPath key path to apply on each object on the array to compare against valueToLookFor
      * @return an array of matching objects
      */
-    public static <T> NSArray<T> objectsWithValueForKeyPath(final NSArray<T> array, final Object valueToLookFor, final String keyPath) {
-        final boolean valueToLookForIsNull = valueToLookFor == null || valueToLookFor == NSKeyValueCoding.NullValue;
-        NSArray<T> result = null;
+    public static <T, V> NSArray<T> objectsWithValueForKeyPath(Collection<T> array, V value, ERXKey<V> keyPath) {
+        return objectsWithValueForKeyPath(array, value, (keyPath == null) ? null : keyPath.key());
+    }
 
-        if ( array != null && array.count() > 0 ) {
-            final NSMutableArray<T> a = new NSMutableArray<T>();
-            final Enumeration<T> arrayEnumerator = array.objectEnumerator();
-
-            while ( arrayEnumerator.hasMoreElements() ) {
-                final T theObject = arrayEnumerator.nextElement();
-
-                if ( theObject != NSKeyValueCoding.NullValue ) {
-                    final Object theValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
-                    final boolean theValueIsNull = theValue == null || theValue == NSKeyValueCoding.NullValue;
+    /**
+     * Walks over an array and returns an array of objects from that array that have a particular
+     * value for a particular key path. Treats null and NSKeyValueCoding.NullValue equivalently.
+     * Any NSKeyValueCoding.NullValue objects in the array are skipped. If array is null or empty,
+     * an empty array is returned.
+     * 
+     * @param <T> class of array items
+     * @param array array to search
+     * @param value value to look for
+     * @param keyPath key path to apply on each object on the array to compare against valueToLookFor
+     * @return an array of matching objects
+     */
+    public static <T> NSArray<T> objectsWithValueForKeyPath(Collection<T> array, Object value, String keyPath) {
+        if (array == null || array.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        boolean valueToLookForIsNull = value == null || value == NSKeyValueCoding.NullValue;
+        NSMutableArray<T> result = new NSMutableArray<>();
+        for (T object : array) {
+            if (object != NSKeyValueCoding.NullValue) {
+                Object keyPathValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, keyPath);
+                boolean theValueIsNull = keyPathValue == null || keyPathValue == NSKeyValueCoding.NullValue;
 
                 if ( (theValueIsNull && valueToLookForIsNull) || Objects.equals(value, keyPathValue) ) {
-                        a.addObject(theObject);
+                    result.add(object);
                 }
             }
-
-            result = a.immutableClone();
         }
-
-        return result != null ? result : NSArray.EmptyArray;
+        return result.immutableClone();
     }
+
     /**
-     * Locates an object within an array using a custom equality check provided as an ERXEqualator.  This
+     * Locates an object within an array using a custom equality check provided as an ERXEqualator. This
      * is useful if you have an array of EOs and want to find a particular EO in it without regard to editing
      * contexts.
-     * @param array the array to search.
-     * @param object the object to look for.
+     * 
+     * @param <T> class of array items
+     * @param array the array to search
+     * @param object the object to look for
      * @param equalator the equalator to use for performing the equality check between object and each object
-     *        in the array.
-     * @return index of first occuring object in the array that is defined as equal by the equalator. -1
+     *        in the array
+     * @return index of first occurring object in the array that is defined as equal by the equalator. -1
      *         if no such object is found.
      */
-    public static <T> int indexOfObjectUsingEqualator(NSArray<T> array, T object, ERXEqualator equalator) {
-        final int count = array.count();
-        int result = -1;
+    public static <T> int indexOfObjectUsingEqualator(Collection<T> array, T object, ERXEqualator equalator) {
         int i = 0;
         
-        while ( i < count && result == -1 ) {
-            final Object currentObject = array.objectAtIndex(i);
-            
-            if ( equalator.objectIsEqualToObject(currentObject, object) )
-                result = i;
-            
+        for (T item : array) {
+            if (equalator.objectIsEqualToObject(item, object)) {
+                return i;
+            }
             i++;
         }
         
-        return result;
+        return -1;
     }
 
     /**
      * Sorts a given array with a key in ascending fashion and returns a mutable clone of the result.
+     * 
      * @param array array to be sorted.
      * @param key sort key.
      * @return mutable clone of sorted array.
@@ -967,9 +1069,10 @@ public class ERXArrayUtilities {
 
     /**
      * Sorts a given array with a key in ascending fashion.
+     * 
      * @param array array to be sorted.
      * @param key sort key.
-     * @return mutable clone of sorted array.
+     * @return sorted array.
      */
     public static <T> NSArray<T> sortedArraySortedWithKey(NSArray<T> array, String key) {
         return sortedArraySortedWithKey(array, key, null);
@@ -994,6 +1097,8 @@ public class ERXArrayUtilities {
      * @param array array to be sorted.
      * @param keys sort keys
      * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
+                        a.addObject(theObject);
+                        a.addObject(theObject);
      * @return sorted array.
      */
     public static <T> NSArray<T> sortedArraySortedWithKeys(NSArray<T> array, NSArray<String> keys, NSSelector selector) {
@@ -1671,27 +1776,29 @@ public class ERXArrayUtilities {
     /**
      * Shorter name for arrayWithoutDuplicates, which I always forget the name of.
      * 
-     * @param <T> type of the array
+     * @param <T> class of array items
      * @param array the array to return distinct values from
      * @return an array of distinct elements from the input array
      */
-    public static <T> NSArray<T> distinct(NSArray<T> array) {
+    public static <T> NSArray<T> distinct(Collection<T> array) {
       return arrayWithoutDuplicates(array);
     }
-    
+
     /**
      * Filters out all of the duplicate objects in
      * a given array. Preserves the order now.
-     * @param anArray to be filtered
-     * @return filtered array.
+     * 
+     * @param <T> class of array items
+     * @param array to be filtered
+     * @return filtered array
      */
-    public static <T> NSArray<T> arrayWithoutDuplicates(NSArray<T> anArray) {
-        NSMutableArray<T> result = new NSMutableArray<T>();
-        NSMutableSet<T> already = new NSMutableSet<T>();
-        for(T object : anArray) {
-            if(!already.containsObject(object)){
-                already.addObject(object);
-                result.addObject(object);
+    public static <T> NSArray<T> arrayWithoutDuplicates(Collection<T> array) {
+        NSMutableArray<T> result = new NSMutableArray<>();
+        Set<T> present = new HashSet<>();
+        for (T object : array) {
+            if (!present.contains(object)){
+                present.add(object);
+                result.add(object);
             }
         }
         return result;
@@ -1699,22 +1806,28 @@ public class ERXArrayUtilities {
 
     /**
      * Batches an NSArray into sub-arrays of the given size.
+     * 
+     * @param <T> class of array items
      * @param array array to batch
      * @param batchSize number of items in each batch
      * @return NSArray of NSArrays, each with at most batchSize items
      */
     public static <T> NSArray<NSArray<T>> batchedArrayWithSize(NSArray<T> array, int batchSize) {
-        if(array == null || array.count() == 0)
-            return NSArray.EmptyArray;
-
-        NSMutableArray<NSArray<T>> batchedArray = new NSMutableArray<NSArray<T>>();
-        int count = array.count();
-
-        for(int i = 0; i < count; i+=batchSize) {
+        if (array == null || array.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        if (batchSize < 1) {
+            throw new IllegalArgumentException("batchSize is " + batchSize + " but must be at least 1");
+        }
+        
+        NSMutableArray<NSArray<T>> batchedArray = new NSMutableArray<>();
+        int count = array.size();
+        for (int i = 0; i < count; i += batchSize) {
             int length = batchSize;
-            if(i + length > count)
+            if (i + length > count) {
                 length = count - i;
-            batchedArray.addObject(array.subarrayWithRange(new NSRange(i, length)));
+            }
+            batchedArray.add(array.subarrayWithRange(new NSRange(i, length)));
         }
         return batchedArray;
     }
@@ -1788,8 +1901,9 @@ public class ERXArrayUtilities {
     }
     
     /**
-     * shifts a given object in an array one value to the left (index--).
+     * Shifts a given object in an array one value to the left (index--).
      *
+     * @param <T> class of array items
      * @param array array to be modified.
      * @param object the object that should be moved
      */
@@ -1803,9 +1917,10 @@ public class ERXArrayUtilities {
     }
 
     /**
-     * shifts a given object in an array one value to the right (index++).
+     * Shifts a given object in an array one value to the right (index++).
      *
-     * @param array array to be modified.
+     * @param <T> class of array items
+     * @param array array to be modified
      * @param object the object that should be moved
      */
     public static <T> void shiftObjectRight(NSMutableArray<T> array, T object) {
@@ -1820,85 +1935,106 @@ public class ERXArrayUtilities {
     /**
      * Function to determine if an array contains any of
      * the elements of another array.
-     * @param array to test if it contains any of the objects
-     * @param objects array of objects to test if the first array
+     * 
+     * @param <T> class of array items
+     * @param array1 to test if it contains any of the objects
+     * @param array2 array of objects to test if the first array
      *		contains any of
      * @return if the first array contains any elements from the second
      *		array
      */
-    public static <T> boolean arrayContainsAnyObjectFromArray(NSArray<? extends T> array, NSArray<? extends T> objects) {
-        boolean arrayContainsAnyObject = false;
-        if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
-            for (Enumeration<? extends T> e = objects.objectEnumerator(); e.hasMoreElements();) {
-                if (array.containsObject(e.nextElement())) {
-                    arrayContainsAnyObject = true; 
-                    break;
+    public static <T> boolean arrayContainsAnyObjectFromArray(Collection<? extends T> array1, Collection<? extends T> array2) {
+        if (array1 != null && array2 != null && !array1.isEmpty() && !array2.isEmpty()) {
+            Collection<? extends T> smaller, larger;
+            if (array1.size() > array2.size()) {
+                smaller = array2;
+                larger = array1;
+            } else {
+                smaller = array1;
+                larger = array2;
+            }
+            for (Object object : smaller) {
+                if (larger.contains(object)) {
+                    return true;
                 }
             }
         }
-        return arrayContainsAnyObject;
+        return false;
     }
 
     /**
      * Function to determine if an array contains all of
      * the elements of another array.
-     * @param array to test if it contains all of the objects of another array
-     * @param objects array of objects to test if the first array
+     * 
+     * @param <T> class of array items
+     * @param array1 to test if it contains all of the objects of another array
+     * @param array2 array of objects to test if the first array
      *		contains all of
      * @return if the first array contains all of the elements from the second
      *		array
      */
-    public static <T> boolean arrayContainsArray(NSArray<? extends T> array, NSArray<? extends T> objects) {
-        boolean arrayContainsAllObjects = true;
-        if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
-            for (Enumeration<? extends T> e = objects.objectEnumerator(); e.hasMoreElements();) {
-                if (!array.containsObject(e.nextElement())) {
-                    arrayContainsAllObjects = false; break;
-                }
-            }
-        } else if (array == null || array.count() == 0) {
+    public static <T> boolean arrayContainsArray(Collection<? extends T> array1, Collection<? extends T> array2) {
+        if (array1 == null || array1.isEmpty()) {
             return false;
         }
-        return arrayContainsAllObjects;        
+        if (array2 != null && !array2.isEmpty()) {
+            for (Object object : array2) {
+                if (!array1.contains(object)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
      * Intersects the elements of two arrays. This has the effect of
      * stripping out duplicates.
+     * 
+     * @param <T> class of array items
      * @param array1 the first array
      * @param array2 the second array
      * @return the intersecting elements
      */
-    public static <T> NSArray<T> intersectingElements(NSArray<? extends T> array1, NSArray<? extends T> array2) {
-        NSMutableArray<T> intersectingElements = null;
-        if (array1 != null && array1.count() > 0 && array2 != null && array2.count() > 0) {
-            intersectingElements = new NSMutableArray<T>();
-            NSArray<? extends T> bigger = array1.count() > array2.count() ? array1 : array2;
-            NSArray<? extends T> smaller = array1.count() > array2.count() ? array2 : array1;
-            for (Enumeration<? extends T> e = smaller.objectEnumerator(); e.hasMoreElements();) {
-                T object = e.nextElement();
-                if (bigger.containsObject(object) && !intersectingElements.containsObject(object))
-                    intersectingElements.addObject(object);
+    public static <T> NSArray<T> intersectingElements(Collection<? extends T> array1, Collection<? extends T> array2) {
+        if (array1 == null || array1.isEmpty() || array2 == null || array2.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        Collection<? extends T> smaller, larger;
+        if (array1.size() > array2.size()) {
+            smaller = array2;
+            larger = array1;
+        } else {
+            smaller = array1;
+            larger = array2;
+        }
+        Set<T> set = new HashSet<>(smaller);
+        NSMutableArray<T> intersectingElements = new NSMutableArray<>();
+        
+        for (T object : larger) {
+            if (set.contains(object)) {
+                intersectingElements.add(object);
+                set.remove(object);
             }
         }
-        return intersectingElements != null ? intersectingElements : NSArray.EmptyArray;
+        
+        return !intersectingElements.isEmpty() ? intersectingElements : NSArray.emptyArray();
     }
 
     /**
-     * Reverses the elements of an array
+     * Reverses the elements of an array.
+     * 
+     * @param <T> class of array items
      * @param array to be reversed
      * @return reverse ordered array
      */
-    public static <T> NSArray<T> reverse(NSArray<T> array) {
-        NSArray<T> reverse = null;
-        if (array != null && array.count() > 0) {
-            NSMutableArray<T> reverseTemp = new NSMutableArray<T>(array.count());
-            for (Enumeration<T> reverseEnumerator = array.reverseObjectEnumerator(); reverseEnumerator.hasMoreElements();) {
-                reverseTemp.addObject(reverseEnumerator.nextElement());
-            }
-            reverse = reverseTemp.immutableClone();
+    public static <T> NSArray<T> reverse(List<T> array) {
+        if (array == null || array.isEmpty()) {
+            return NSArray.emptyArray();
         }
-        return reverse != null ? reverse : NSArray.EmptyArray;
+        List<T> reverse = new ArrayList<>(array);
+        Collections.reverse(reverse);
+        return new NSArray<>(reverse);
     }
 
     /**
@@ -1978,7 +2114,7 @@ public class ERXArrayUtilities {
         int i = 0;
         for (T object : array) {
             if (!(object instanceof NSKeyValueCoding.Null)) {
-                result.addObject(target.objectAtIndex(i));
+                result.add(target.objectAtIndex(i));
             }
             i++;
         }
@@ -2016,7 +2152,7 @@ public class ERXArrayUtilities {
     public static String objectArrayToString(Object[][] array) {
         NSMutableArray<Object> result = new NSMutableArray<Object>();
         for (Object[] oa : array) {
-            result.addObject(objectArrayToString(oa));
+            result.add(objectArrayToString(oa));
         }
         return result.toString();
     }
@@ -2029,12 +2165,12 @@ public class ERXArrayUtilities {
     public static String objectArraysToString(NSArray<Object[][]> array) {
         NSMutableArray<Object> aa = new NSMutableArray<Object>();
         for (Object[][] oa : array) {
-            aa.addObject(objectArrayToString(oa));
+            aa.add(objectArrayToString(oa));
         }
         return aa.toString();
     }
 
-    /** removes all occurencies of NSKeyValueCoding.Null from the end of the array
+    /** removes all occurrences of NSKeyValueCoding.Null from the end of the array
      * @param array the array from which the values should be removed
      * @return a new NSArray which does not have NSKeyValueCoding.Null instances at the end
      */
@@ -2046,11 +2182,12 @@ public class ERXArrayUtilities {
         }
         return a;
     }
-    
-    public static String[] toStringArray(NSArray<?> a) {
-        String[] b = new String[a.count()];
-        for (int i = a.count(); i-- > 0; b[i] = a.objectAtIndex(i).toString()) {
-          // do nothing
+
+    public static String[] toStringArray(List<?> array) {
+        int size = array.size();
+        String[] b = new String[size];
+        for (int i = size; i > 0; i--) {
+            b[i] = array.get(i).toString();
         }
         return b;
     }
@@ -2059,34 +2196,38 @@ public class ERXArrayUtilities {
      * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
      * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
      * all the objects in the array. In case of duplicate entry, the new object will replace the previous one in the dictionary.
-	 *
+	 * <p>
      * This is a typesafe variant of dictionaryOfObjectsIndexedByKeyPath(NSArray&lt;V&gt; objects, String keyPath).
-     *
+     * <p>
      * Calls <code>dictionaryOfObjectsIndexedByKeyPathThrowOnCollision()</code> passing <code>false</code> for throwOnCollision.
-     *
+     * 
+     * @param <K> class of key path value
+     * @param <T> class of array items
      * @param array array to index
      * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
      *        object is not put into the resulting dictionary.
      * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
      */
-    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(final NSArray<T> array, final ERXKey<K> keyPath) {
-        return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath, false);
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(NSArray<T> array, ERXKey<K> keyPath) {
+        return dictionaryOfObjectsIndexedByKeyPath(array, keyPath, false);
     }
 
     /**
      * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
      * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
      * all the objects in the array. In case of duplicate entry, the new object will replace the previous one in the dictionary.
-     *
+     * <p>
      * Calls <code>dictionaryOfObjectsIndexedByKeyPathThrowOnCollision()</code> passing <code>false</code> for throwOnCollision.
      * 
+     * @param <K> class of key path value
+     * @param <T> class of array items
      * @param array array to index
      * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
      *        object is not put into the resulting dictionary.
      * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
      */
-    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(final NSArray<T> array, final String keyPath) {
-        return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath, false);
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(NSArray<T> array, String keyPath) {
+        return dictionaryOfObjectsIndexedByKeyPath(array, keyPath, false);
     }
 
     /**
@@ -2094,7 +2235,7 @@ public class ERXArrayUtilities {
      * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
      * all the objects in the array. In case of duplicate entry, if throwOnCollision is true, an exception is thrown, otherwise, the 
      * the new object will replace the previous one in the dictionary.
-     * 
+     * <p>
      * This is a typesafe variant of dictionaryOfObjectsIndexedByKeyPath(NSArray&lt;V&gt; objects, String keyPath, boolean throwOnCollision).
      *
      * @param array array to index
@@ -2103,9 +2244,11 @@ public class ERXArrayUtilities {
      * @param throwOnCollision if <code>true</code> and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
      *        an exception is thrown. If <code>false</code>, the last object in the array wins.
      * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     * @deprecated use {@link #dictionaryOfObjectsIndexedByKeyPath(NSArray, ERXKey, boolean)} instead
      */
+    @Deprecated
     public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(final NSArray<T> array, final ERXKey<K> keyPath, final boolean throwOnCollision) {
-    	return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath.key(), throwOnCollision);
+    	return dictionaryOfObjectsIndexedByKeyPath(array, keyPath, throwOnCollision);
     }
     
     /**
@@ -2120,91 +2263,121 @@ public class ERXArrayUtilities {
      * @param throwOnCollision if <code>true</code> and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
      *        an exception is thrown. If <code>false</code>, the last object in the array wins.
      * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     * @deprecated use {@link #dictionaryOfObjectsIndexedByKeyPath(NSArray, String, boolean)} instead
      */
+    @Deprecated
     public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(final NSArray<T> array, final String keyPath, final boolean throwOnCollision) {
-		if (array == null)
-			return NSDictionary.emptyDictionary();
-    	final NSMutableDictionary<K, T> result = new NSMutableDictionary<K, T>();
-        final Enumeration<T> e = array.objectEnumerator();
+        return dictionaryOfObjectsIndexedByKeyPath(array, keyPath, throwOnCollision);
+    }
 
-        while ( e.hasMoreElements() ) {
-            final T theObject = e.nextElement();
-            final K theKey = (K) NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
+    /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, if throwOnCollision is true, an exception is thrown, otherwise, the 
+     * the new object will replace the previous one in the dictionary.
+     * <p>
+     * This is a typesafe variant of dictionaryOfObjectsIndexedByKeyPath(NSArray&lt;V&gt; objects, String keyPath, boolean throwOnCollision).
+     * 
+     * @param <K> class of key path value
+     * @param <T> class of array items
+     * @param array array to index
+     * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
+     *        object is not put into the resulting dictionary.
+     * @param throwOnCollision if <code>true</code> and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
+     *        an exception is thrown. If <code>false</code>, the last object in the array wins.
+     * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     */
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(NSArray<T> array, ERXKey<K> keyPath, boolean throwOnCollision) {
+        return dictionaryOfObjectsIndexedByKeyPath(array, (keyPath == null) ? null : keyPath.key(), throwOnCollision);
+    }
 
-            if ( theKey != null && theKey != NSKeyValueCoding.NullValue ) {
-                final Object existingObject = throwOnCollision ? result.objectForKey(theKey) : null;
-
-                if ( existingObject != null ) {
-                    throw new RuntimeException("Collision with value ('" + theKey + "') for keyPath '" + keyPath + "'.  Initial object: '" +
-                                               existingObject + ", subsequent object: " + theObject);
+    /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array. This method assume that the value returned for the keyPath attribute will be unique for 
+     * all the objects in the array. In case of duplicate entry, if throwOnCollision is true, an exception is thrown, otherwise, the 
+     * the new object will replace the previous one in the dictionary.
+     * 
+     * @param <K> class of key path value
+     * @param <T> class of array items
+     * @param array array to index
+     * @param keyPath keyPath to index. If any object returns <code>null</code> or NSKeyValueCoding.NullValue for this keyPath, the
+     *        object is not put into the resulting dictionary.
+     * @param throwOnCollision if <code>true</code> and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
+     *        an exception is thrown. If <code>false</code>, the last object in the array wins.
+     * @return a dictionary indexing the given array. If array is <code>null</code>, an empty dictionary is returned.
+     */
+    public static <K, T> NSDictionary<K, T> dictionaryOfObjectsIndexedByKeyPath(NSArray<T> array, String keyPath, boolean throwOnCollision) {
+        if (array == null || array.isEmpty()) {
+            return NSDictionary.emptyDictionary();
+        }
+        NSMutableDictionary<K, T> result = new NSMutableDictionary<>(array.size());
+        for (T object : array) {
+            K key = (K) NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, keyPath);
+            
+            if (key != null && key != NSKeyValueCoding.NullValue) {
+                if (throwOnCollision && result.containsKey(key)) {
+                    throw new RuntimeException("Collision with value ('" + key + "') for keyPath '" + keyPath + "'. Initial object: '" +
+                            result.get(key) + ", subsequent object: " + object);
                 }
-
-                result.setObjectForKey(theObject, theKey);
+                
+                result.put(key, object);
             }
         }
-
+        
         return result.immutableClone();
     }
 
     /**
      * Prunes an array for only instances of the given class.
-     *
+     * 
+     * @param <T> class to extract
      * @param array array to process
      * @param aClass class to use.  null results in the result being a copy of the <code>array</code>.
      * @return an array which is a subset of the <code>array</code> where each object in the result is
      *         an instance of <code>aClass</code>.
      */
-    public static <T> NSArray<T> arrayBySelectingInstancesOfClass(final NSArray<?> array, final Class<T> aClass) {
-        NSArray<T> result = null;
-
-        if ( array != null && array.count() > 0 ) {
-            final NSMutableArray<T> a = new NSMutableArray<T>();
-            final Enumeration<?> e = array.objectEnumerator();
-
-            while ( e.hasMoreElements() ) {
-                final Object theObject = e.nextElement();
-
-                if ( aClass == null || aClass.isInstance(theObject) )
-                    a.addObject((T)theObject);
+    public static <T> NSArray<T> arrayBySelectingInstancesOfClass(Collection<?> array, Class<T> aClass) {
+        if (array == null || array.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        if (aClass == null) {
+            return new NSArray<>((Collection) array);
+        }
+        NSMutableArray<T> result = new NSMutableArray<>();
+        for (Object object : array) {
+            if (aClass.isInstance(object)) {
+                result.add((T)object);
             }
-
-            if ( a.count() > 0 )
-                result = a.immutableClone();
         }
 
-        return result != null ? result : NSArray.EmptyArray;
+        return result.isEmpty() ? NSArray.emptyArray() : result.immutableClone();
     }
 
     /**
-     * Just like the method {@link com.webobjects.foundation.NSArray#sortedArrayUsingComparator(NSComparator)}, 
+     * Just like the method {@link com.webobjects.foundation.NSArray#sortedArrayUsingComparator(NSComparator)},
      * except it catches the NSComparator.ComparisonException and, if thrown,
-     * it wraps it in a runtime exception.  Returns null when passed null for array.
-     * @param array 
-     * @param comparator 
-     * @param <T> 
+     * it wraps it in a runtime exception. Returns null when passed null for array.
+     * 
+     * @param <T> class of array items
+     * @param array the array to sort
+     * @param comparator the comparator
      * @return the sorted array
      */
-    public static  <T> NSArray<T> sortedArrayUsingComparator(final NSArray<T> array, final NSComparator comparator) {
+    public static <T> NSArray<T> sortedArrayUsingComparator(NSArray<T> array, NSComparator comparator) {
+        if (array == null || array.size() < 2) {
+            return array;
+        }
         NSArray<T> result = array;
-
-        if ( array != null ) {
-            if ( array.count() < 2 ) {
-                result = array;
-            }
-            else {
-                try {
-                    result = array.sortedArrayUsingComparator(comparator);
-                }
-                catch ( NSComparator.ComparisonException e ) {
-                    throw new RuntimeException(e);
-                }
-            }
+        try {
+            result = array.sortedArrayUsingComparator(comparator);
+        }
+        catch (NSComparator.ComparisonException e) {
+            throw new RuntimeException(e);
         }
 
         return result;
     }
-    
-    
+
 	/**
 	 * Swaps the two given {@link Object}s in the given {@link NSArray} and
 	 * returns a new {@link NSArray}. If one of the {@link Object}s is not
@@ -2223,7 +2396,9 @@ public class ERXArrayUtilities {
 	 * 
 	 * @throws RuntimeException
 	 *             if one of the {@link Object}s is not in the {@link NSArray}
+	 * @deprecated use {@link #swapObjects(NSArray, Object, Object)} instead
 	 */
+    @Deprecated
     public static <T> NSArray<T> arrayWithObjectsSwapped(final NSArray<T> array, final Object object1, final Object object2) {
     	int indexOfObject1 = array.indexOf(object1);
     	int indexOfObject2 = array.indexOf(object2);
@@ -2246,7 +2421,9 @@ public class ERXArrayUtilities {
 	 * @return the new {@link NSArray} with the swapped elements
 	 * 
 	 * @throws RuntimeException if one of the indexes is out of bound
+	 * @deprecated use {@link #swapObjects(NSArray, int, int)} instead
 	 */
+	@Deprecated
 	public static <T> NSArray<T> arrayWithObjectsAtIndexesSwapped(final NSArray<T> array, final int indexOfObject1, final int indexOfObject2) {
 		if (array == null || array.count() < 2) {
 			throw new RuntimeException ("Array is either null or does not have enough elements.");
@@ -2274,7 +2451,9 @@ public class ERXArrayUtilities {
 	 * @param b - second object
 	 * 
 	 * @throws RuntimeException if one or both indexes are out of bounds
+	 * @deprecated use {@link #swapObjects(NSMutableArray, Object, Object)} instead
 	 */
+	@Deprecated
 	public static <T> void swapObjectsInArray (NSMutableArray<T> array, T a, T b) {
 		if (array == null || array.count() < 2) {
 			throw new RuntimeException ("Array is either null or does not have enough elements.");
@@ -2300,7 +2479,9 @@ public class ERXArrayUtilities {
 	 * @param indexOfB - index of the second object
 	 * 
 	 * @throws RuntimeException if one or both indexes are out of bounds
+	 * @deprecated use {@link #swapObjects(NSMutableArray, int, int)} instead
 	 */
+	@Deprecated
 	public static <T> void swapObjectsAtIndexesInArray (NSMutableArray<T> array, int indexOfA, int indexOfB) {
 		try {
 			T tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
@@ -2318,7 +2499,9 @@ public class ERXArrayUtilities {
 	* @param array the array
 	* @param a - first object
 	* @param indexOfB - index of second object
+	* @deprecated use {@link #swapObjects(NSMutableArray, Object, int)} instead
 	*/
+	@Deprecated
 	public static <T> void swapObjectWithObjectAtIndexInArray(NSMutableArray<T> array, T a, int indexOfB) {
 		if (array == null || array.count() < 2) {
 			throw new RuntimeException ("Array is either null or does not have enough elements.");
@@ -2336,29 +2519,158 @@ public class ERXArrayUtilities {
 		}
 	}
 
+	/**
+	 * Swaps two objects at the given indexes in an array inplace.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param indexA index of the first object
+	 * @param indexB index of the second object
+	 */
+	public static <T> void swapObjects(NSMutableArray<T> array, int indexA, int indexB) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		if (array.isEmpty()) {
+			throw new IllegalArgumentException("array is empty");
+		}
+		int maxIndex = array.size() - 1;
+		if (indexA < 0 || indexA > maxIndex) {
+			throw new IllegalArgumentException("indexA = " + indexA + " is out of bounds [0.." + maxIndex + "]");
+		}
+		if (indexB < 0 || indexB > maxIndex) {
+			throw new IllegalArgumentException("indexB = " + indexB + " is out of bounds [0.." + maxIndex + "]");
+		}
+		if (indexA == indexB) {
+			// nothing to do
+			return;
+		}
+		try {
+			T tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexA), indexB);
+			array.replaceObjectAtIndex(tmp, indexA);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Swaps the object a with the object at the given index in an array inplace.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param a the first object
+	 * @param indexB index of the second object
+	 */
+	public static <T> void swapObjects(NSMutableArray<T> array, T a, int indexB) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		int indexA = array.indexOf(a);
+		swapObjects(array, indexA, indexB);
+	}
+
+	/**
+	 * Swaps the given objects in an array inplace.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param a the first object
+	 * @param b the second object
+	 */
+	public static <T> void swapObjects(NSMutableArray<T> array, T a, T b) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		int indexA = array.indexOf(a);
+		int indexB = array.indexOf(b);
+		swapObjects(array, indexA, indexB);
+	}
+
+	/**
+	 * Swaps two objects at the given indexes in an array and returns a new
+	 * modified array.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param indexA index of the first object
+	 * @param indexB index of the second object
+	 * @return array with swapped objects
+	 */
+	public static <T> NSArray<T> swapObjects(NSArray<T> array, int indexA, int indexB) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		if (indexA == indexB && indexA >= 0) {
+			int maxIndex = array.size() - 1;
+			if (indexA <= maxIndex) {
+				// no swapping necessary
+				return array.immutableClone();
+			}
+		}
+		NSMutableArray<T> tmpArray = array.mutableClone();
+		swapObjects(tmpArray, indexA, indexB);
+		return tmpArray.immutableClone();
+	}
+
+	/**
+	 * Swaps the object a with the object at the given index in an array and returns
+	 * a new modified array.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param a the first object
+	 * @param indexB index of the second object
+	 * @return array with swapped objects
+	 */
+	public static <T> NSArray<T> swapObjects(NSArray<T> array, T a, int indexB) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		int indexA = array.indexOf(a);
+		return swapObjects(array, indexA, indexB);
+	}
+
+	/**
+	 * Swaps the objects in an array and returns a new modified array.
+	 * 
+	 * @param <T> class of array elements
+	 * @param array an array
+	 * @param a the first object
+	 * @param b the second object
+	 * @return array with swapped objects
+	 */
+	public static <T> NSArray<T> swapObjects(NSArray<T> array, T a, T b) {
+		if (array == null) {
+			throw new IllegalArgumentException("array is null");
+		}
+		int indexA = array.indexOf(a);
+		int indexB = array.indexOf(b);
+		return swapObjects(array, indexA, indexB);
+	}
+
      /**
       * Returns a deep clone of the given array.  A deep clone will attempt 
       * to clone the values of this array as well as the array itself.
       * 
+      * @param <T> class of array elements
       * @param array the array to clone
       * @param onlyCollections if true, only collections in this array will be cloned, not individual values
       * @return a deep clone of array
       */
 	public static <T> NSArray<T> deepClone(NSArray<T> array, boolean onlyCollections) {
-		NSMutableArray<T> clonedArray = null;
-		if (array != null) {
-			clonedArray = array.mutableClone();
-			for (int i = array.count() - 1; i >= 0; i --) {
-				T value = array.objectAtIndex(i);
-				T clonedValue = ERXUtilities.deepClone(value, onlyCollections);
-				if (clonedValue != null) {
-					if (clonedValue != value) {
-						clonedArray.replaceObjectAtIndex(clonedValue, i);
-					}
+		if (array == null) {
+			return null;
+		}
+		NSMutableArray<T> clonedArray = array.mutableClone();
+		for (int i = array.size() - 1; i >= 0; i--) {
+			T value = array.get(i);
+			T clonedValue = ERXUtilities.deepClone(value, onlyCollections);
+			if (clonedValue != null) {
+				if (clonedValue != value) {
+					clonedArray.set(i, clonedValue);
 				}
-				else {
-					clonedArray.removeObjectAtIndex(i);
-				}
+			} else {
+				clonedArray.remove(i);
 			}
 		}
 		return clonedArray;
@@ -2395,61 +2707,52 @@ public class ERXArrayUtilities {
     }
 	
 	/**
-	 * <span class="en">
-	 * Check if an NSArray is null or Empty
+	 * <div class="en">
+	 * Check if an array is null or empty.
+	 * </div>
 	 * 
-	 * @param aNSArray - NSArray
+	 * <div class="ja">
+	 * 配列が null か空かをチェックします
+	 * </div>
 	 * 
-	 * @return if an NSArray is null or Empty <code>true</code> returns
-	 * </span>
-	 * 
-	 * <span class="ja">
-	 * 	配列が null か空かをチェックします
-	 * 
-	 * 	@param aNSArray - NSArray
-	 * 
-	 * 	@return 配列が null か空の場合は <code>true</code> が戻ります
-	 * </span>
+	 * @param array <div class="en">an array</div>
+	 *              <div class="ja">文字列配列</div>
+	 * @return <div class="en">true if array is either null or empty</div>
+	 *         <div class="ja">配列が null か空の場合は <code>true</code> が戻ります</div>
 	 */
-	@SuppressWarnings("javadoc")
-	public static boolean arrayIsNullOrEmpty(NSArray<?> aNSArray){
-		if(aNSArray == null)
-			return true;
-
-		if(aNSArray.isEmpty())
-			return true;
-
-		return false;
+	public static boolean arrayIsNullOrEmpty(Collection<?> array) {
+		return array == null || array.isEmpty();
 	}
 
 	/**
-	 * <span class="en">
-	 * 	To create oneLine Log for an NSArray&lt;String&gt;
+	 * <div class="en">
+	 * To create oneLine Log for an NSArray&lt;String&gt;
+	 * </div>
 	 * 
-	 * 	@param aNSArray - NSArray
+	 * <div class="ja">
+	 * NSArray 配列をログとして出力する時に複数行に渡らないで、一行で収まるように
+	 * </div>
 	 * 
-	 * 	@return change a NSArray to String
-	 * </span>
-	 * 
-	 * <span class="ja">
-	 * 	NSArray 配列をログとして出力する時に複数行に渡らないで、一行で収まるように
-	 * 
-	 * 	@param aNSArray - 文字列配列
-	 * 
-	 * 	@return NSArray を String に変換した行
-	 * </span>
+	 * @param array <div class="en">an array</div>
+	 *              <div class="ja">文字列配列</div>
+	 * @return <div class="en">change a NSArray to String</div>
+	 *         <div class="ja">NSArray を String に変換した行</div>
 	 */
-	@SuppressWarnings("javadoc")
-	public static String arrayToLogstring(NSArray<String> aNSArray){
-		String result = "( ";
-
-		for(String obj : aNSArray) {
-			result += obj + ", ";
+	public static String arrayToLogstring(Collection<String> array) {
+		if (array == null) {
+			return "()";
 		}
-		result = result.substring(0, result.length()-2);
-		result += " )";
+		StringBuilder result = new StringBuilder();
+		result.append("( ");
 
-		return result;
+		for (String obj : array) {
+			result.append(obj);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append(" )");
+
+		return result.toString();
 	}
 
 }
