@@ -69,8 +69,9 @@ public abstract class ERXEqualator {
         @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             if ( (o1 != null && ! (o1 instanceof EOEnterpriseObject)) || (o2 != null && ! (o2 instanceof EOEnterpriseObject)) ) {
-                throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects.  " +
-                                           "o1: " + o1 + " (class: " + o1.getClass() + "), o2: " + o2 + " (class: " + o2.getClass() + ").");
+                throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects. " +
+                                           "o1: " + o1 + (o1 != null ? " (class: " + o1.getClass() + ")" : "") +
+                                           ", o2: " + o2 + (o2 != null ? " (class: " + o2.getClass() + ")" : "") + ".");
             }
             final EOEnterpriseObject eo1 = (EOEnterpriseObject)o1;
             final EOEnterpriseObject eo2 = (EOEnterpriseObject)o2;
