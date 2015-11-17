@@ -7,11 +7,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
@@ -866,7 +866,7 @@ public class ERXArrayUtilities {
             if(currentObject != NSKeyValueCoding.NullValue) {
                 Object currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(currentObject, keyPath);
                 currentValue = (currentValue == NSKeyValueCoding.NullValue ? null : currentValue);
-                if(currentValue == value || (value != null && value.equals(currentValue))) {
+                if (Objects.equals(currentValue, value)) {
                     return i;
                 }
             }
@@ -915,7 +915,7 @@ public class ERXArrayUtilities {
                     final Object theValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
                     final boolean theValueIsNull = theValue == null || theValue == NSKeyValueCoding.NullValue;
 
-                    if ( (theValueIsNull && valueToLookForIsNull) || ObjectUtils.equals(valueToLookFor, theValue) )
+                if ( (theValueIsNull && valueToLookForIsNull) || Objects.equals(value, keyPathValue) ) {
                         a.addObject(theObject);
                 }
             }
