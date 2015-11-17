@@ -43,8 +43,7 @@ import er.extensions.eof.ERXKey;
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities {
-	
-	   private static Logger log = Logger.getLogger(ERXArrayUtilities.class);
+	private static final Logger log = Logger.getLogger(ERXArrayUtilities.class);
 
 	   /**
 	    * Holds the null grouping key for use when grouping objects
