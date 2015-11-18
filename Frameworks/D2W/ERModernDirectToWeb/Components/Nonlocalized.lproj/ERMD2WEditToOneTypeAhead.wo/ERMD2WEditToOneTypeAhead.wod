@@ -1,6 +1,6 @@
 ERMD2WEditToOneTypeAhead : AjaxUpdateContainer {
   id = updateContainerID;
-  class = "ToOneTypeAheadFieldUC";
+  class = "ERMD2WEditToOneTypeAhead";
 }
 
 SearchTermSelected : AjaxSubmitButton {
