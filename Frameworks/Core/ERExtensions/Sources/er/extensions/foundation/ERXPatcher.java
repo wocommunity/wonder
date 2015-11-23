@@ -49,7 +49,6 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
-import er.extensions.components._private.ERXWOFileUpload;
 import er.extensions.woextensions.WOToManyRelationship;
 import er.extensions.woextensions.WOToOneRelationship;
 
@@ -111,7 +110,6 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(DynamicElementsPatches.Browser.class, "WOBrowser");
 		ERXPatcher.setClassForName(DynamicElementsPatches.CheckBox.class, "WOCheckBox");
 		ERXPatcher.setClassForName(DynamicElementsPatches.CheckBoxList.class, "WOCheckBoxList");
-		ERXPatcher.setClassForName(DynamicElementsPatches.FileUpload.class, "WOFileUpload");
 		ERXPatcher.setClassForName(DynamicElementsPatches.HiddenField.class, "WOHiddenField");
 		ERXPatcher.setClassForName(DynamicElementsPatches.ImageButton.class, "WOImageButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.PasswordField.class, "WOPasswordField");
@@ -744,30 +742,6 @@ public class ERXPatcher {
 				return aListClass;
 			}
 
-		}
-
-		public static class FileUpload extends ERXWOFileUpload {
-
-			public FileUpload(String aName, NSDictionary associations, WOElement element) {
-				super(aName, associations, element);
-			}
-
-			@Override
-			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
-				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
-			}
-
-			@Override
-			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
-				super.appendToResponse(newResponse, wocontext);
-
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
-					woresponse.appendContentString(newResponse.contentString());
-				}
-			}
 		}
 
 		public static class HiddenField extends WOHiddenField {

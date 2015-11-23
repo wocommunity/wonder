@@ -1224,11 +1224,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 
-		Boolean useUnlocker = useEditingContextUnlocker();
+		Boolean useUnlocker = ERXEC.useUnlocker();
 		if (useUnlocker != null) {
 			ERXEC.setUseUnlocker(useUnlocker);
 		}
-		Boolean traceOpenLocks = traceOpenEditingContextLocks();
+		Boolean traceOpenLocks = ERXEC.traceOpenLocks();
 		if (traceOpenLocks != null) {
 			ERXEC.setTraceOpenLocks(traceOpenLocks);
 		}
@@ -1270,35 +1270,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
-	}
-	/**
-	 * Decides whether to use editing context unlocking.
-	 * 
-	 * @return true if ECs should be unlocked after each RR-loop
-	 * @deprecated use {@link er.extensions.eof.ERXEC#useUnlocker()}
-	 */
-	@Deprecated
-	public Boolean useEditingContextUnlocker() {
-		Boolean useUnlocker = null;
-		if (ERXProperties.stringForKey("er.extensions.ERXApplication.useEditingContextUnlocker") != null) {
-			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false));
-		}
-		return useUnlocker;
-	}
-
-	/**
-	 * Decides whether or not to keep track of open editing context locks.
-	 * 
-	 * @return true if editing context locks should be tracked
-	 * @deprecated use {@link er.extensions.eof.ERXEC#traceOpenLocks()}
-	 */
-	@Deprecated
-	public Boolean traceOpenEditingContextLocks() {
-		Boolean traceOpenLocks = null;
-		if (ERXProperties.stringForKey("er.extensions.ERXApplication.traceOpenEditingContextLocks") != null) {
-			traceOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.traceOpenEditingContextLocks", false));
-		}
-		return traceOpenLocks;
 	}
 
 	/**
@@ -1491,37 +1462,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		return new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
-	}
-
-	/**
-	 * @deprecated use {@link #createRequest(String, String, String, Map, NSData, Map)} instead
-	 */
-	@Deprecated
-	protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-		// Workaround for #3428067 (Apache Server Side Include module will feed
-		// "INCLUDED" as the HTTP version, which causes a request object not to
-		// be
-		// created by an exception.
-		if (anHTTPVersion == null || anHTTPVersion.startsWith("INCLUDED")) {
-			anHTTPVersion = "HTTP/1.0";
-		}
-		
-		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
-		// The content-type header makes the WO parser only look at the content. Which is empty.
-		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
-		// http://jira.atlassian.com/browse/JRA-13791
-		if ("GET".equalsIgnoreCase(aMethod) && someHeaders != null && someHeaders.objectForKey("content-type") != null)
-		{
-			someHeaders = someHeaders.mutableClone();
-			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
-		}
-
-		if (rewriteDirectConnectURL()) {
-			aURL = "/cgi-bin/WebObjects/" + name() + ".woa" + aURL;
-		}
-
-		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
-		return worequest;
 	}
 
 	/**
@@ -2290,17 +2230,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		return _useSessionStoreDeadlockDetection.booleanValue();
-	}
-
-	/**
-	 * Returns true if this app is running in WO 5.4.
-	 * 
-	 * @return true if this app is running in WO 5.4
-	 * @deprecated Wonder is used with WO 5.4 only
-	 */
-	@Deprecated
-	public static boolean isWO54() {
-		return true;
 	}
 
 	/**

@@ -1007,15 +1007,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
 	}
 
-	/**
-	 * @deprecated use {@link #isNewObject()}
-	 */
-	@SuppressWarnings("dep-ann")
-    @Deprecated
-	public boolean isNewEO() {
-		return isNewObject();
-	}
-
 	public boolean isNewObject() {
 		return ERXEOControlUtilities.isNewObject(this);
 	}

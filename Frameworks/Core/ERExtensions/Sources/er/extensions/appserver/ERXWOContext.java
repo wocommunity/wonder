@@ -149,32 +149,13 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	@Override
-	@Deprecated
-	public void _generateCompleteURLs() {
-		super._generateCompleteURLs();
-		_generateCompleteURLs = true; 
-	}
-
-	@Override
 	public void generateRelativeURLs() {
 		super.generateRelativeURLs();
 		_generateCompleteURLs = false;
 	}
 	
 	@Override
-	@Deprecated
-	public void _generateRelativeURLs() {
-		super._generateRelativeURLs();
-		_generateCompleteURLs = false;
-	}
-	
-	@Override
 	public boolean doesGenerateCompleteURLs() {
-		return _generateCompleteURLs;
-	}
-
-	@Deprecated
-	public boolean _generatingCompleteURLs() {
 		return _generateCompleteURLs;
 	}
 
@@ -358,71 +339,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		return result;
 	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static String _htmlCloseHeadTag() {
-		return ERXResponseRewriter._htmlCloseHeadTag(); 
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void insertInResponseBeforeTag(WOContext context, WOResponse response, String content, String tag, TagMissingBehavior tagMissingBehavior) {
-		ERXResponseRewriter.insertInResponseBeforeTag(response, context, content, tag, tagMissingBehavior);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script) {
-		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script, String scriptName) {
-		ERXResponseRewriter.addScriptCodeInHead(response, context, script, scriptName);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag);
-	}
-	
-	/**
-	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
-	 */
-	@Deprecated
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, tagMissingBehavior);
-	}
 
 	private static final String SAFE_IDENTIFIER_NAME_KEY = "ERXWOContext.safeIdentifierName";
 	/**
@@ -456,40 +372,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			safeIdentifierName = ERXStringUtilities.safeIdentifierName("e_" + context.elementID());	
 		}
 		return safeIdentifierName;
-	}
-	
-	/**
-	 * Returns a javascript-safe version of the given element ID.
-	 * 
-	 * @see er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)
-	 * @param elementID
-	 *            the element ID
-	 * @return a javascript-safe version (i.e. "_1_2_3_10")
-	 * @deprecated user {@link er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)}
-	 */
-	@Deprecated
-	public static String toSafeElementID(String elementID) {
-		return ERXStringUtilities.safeIdentifierName(elementID);
-	}
-
-	/**
-	 * Call this anywhere you would have called _directActionURL in 5.3 if you
-	 * want to be 5.4 compatible.
-	 * 
-	 * @param context
-	 *            the WOContext to operate on
-	 * @param actionName
-	 *            the name of the direct action to lookup
-	 * @param queryParams
-	 *            the query parameters to use
-	 * @param secure
-	 *            whether or not the URL should be HTTPS
-	 * @return the URL to the given direct action
-	 * @deprecated use non-static {@link #_directActionURL(String, NSDictionary, boolean, int, boolean)} instead
-	 */
-	@Deprecated
-	public static String _directActionURL(WOContext context, String actionName, NSDictionary queryParams, boolean secure) {
-		return context._directActionURL(actionName, queryParams, secure, 0, false);
 	}
 
 	/**
@@ -676,18 +558,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return ERXStringUtilities.safeIdentifierName(elementID());
 	}
 
-	/**
-	 * Workaround for missing componentActionUrl(String) in 5.3.
-	 * @param context
-	 * @return ajax action URL
-	 * @deprecated use {@link #componentActionURL(String)} instead
-	 */
-	@Deprecated
-	public static String ajaxActionUrl(WOContext context) {
-		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");
-		return url;
-	}
-	
 	@Override
 	protected String relativeURLWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString) {
 		String result = super.relativeURLWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString);

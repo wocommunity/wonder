@@ -695,25 +695,6 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Runs a given sql script and executes each of the statements in a
-	 * one transaction.
-	 * 
-	 * @param channel
-	 *            the JDBCChannel to work with
-	 * @param script
-	 *            the array of sql scripts to execute
-	 * 
-	 * @return the number of rows updated
-	 * @throws SQLException
-	 *             if there is a problem
-	 * @deprecated use {@link #executeUpdateScript(EOAdaptorChannel, String, boolean)}
-	 */
-    @Deprecated
-	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
-		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
-	}
-
-	/**
 	 * Executes a SQL script that is stored as a resource.
 	 * 
 	 * @param channel

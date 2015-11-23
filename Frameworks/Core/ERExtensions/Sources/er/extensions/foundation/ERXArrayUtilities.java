@@ -1756,22 +1756,6 @@ public class ERXArrayUtilities {
 
         return result;
     }
-    
-    /**
-     * @deprecated use {@link #filteredArrayWithEntityFetchSpecification(NSArray, String, String, NSDictionary)}
-     */
-    @Deprecated
-    public static <T> NSArray<T> filteredArrayWithFetchSpecificationNamedEntityNamedBindings(NSArray<T> array, String fetchSpec, String entity, NSDictionary<String, ?> bindings) {
-        return filteredArrayWithEntityFetchSpecification( array, entity, fetchSpec, bindings);
-    }
-
-    /**
-     * @deprecated use {@link #filteredArrayWithEntityFetchSpecification(NSArray, String, String, NSDictionary)}
-     */
-    @Deprecated
-    public static <T> NSArray<T> filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray<T> array, String fetchSpec, String entity) {
-        return filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
-    }
 
     /**
      * Filters a given array with a named fetch specification.

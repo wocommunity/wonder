@@ -111,16 +111,6 @@ public class ERXXmlRestParser implements IERXRestParser {
 		
 		return requestNode;
 	}
-
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
-		return parseRestRequest(request.contentString(), delegate, context);
-	}
-
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate, ERXRestContext context) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate, context);
-	}
 	
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;

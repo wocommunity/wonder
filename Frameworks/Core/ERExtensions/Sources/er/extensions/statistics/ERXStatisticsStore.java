@@ -368,17 +368,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 	}
 
-	/**
-	 * Returns the list of active sessions.
-	 * 
-	 * @return list of active sessions
-	 * @deprecated use {@link #activeSessions()} instead
-	 */
-	@Deprecated
-	public NSArray<WOSession> activeSession() {
-		return sessions;
-	}
-
 	public NSArray<WOSession> activeSessions() {
 		return sessions;
 	}

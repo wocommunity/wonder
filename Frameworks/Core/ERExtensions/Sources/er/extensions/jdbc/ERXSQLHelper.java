@@ -417,7 +417,7 @@ public class ERXSQLHelper {
 				String key = keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
-					if (ERXStringUtilities.isDigitsOnly(numbers)) {
+					if (StringUtils.isNumeric(numbers)) {
 						String attributeNames = (String) d.objectForKey(key);
 						if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) {
 							continue;

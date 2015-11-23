@@ -210,18 +210,6 @@ public class ERXPartial<T extends ERXGenericRecord> implements Serializable {
 	 * 
 	 * @param editingContext
 	 *            this object's {@link EOEditingContext}
-	 * @deprecated use {@link #init(EOEditingContext)} instead
-	 */
-    @Deprecated
-    public void awakeFromInsertion(EOEditingContext editingContext) {
-    	// DO NOTHING
-    }
-    
-	/**
-	 * Delegated from the base entity.
-	 * 
-	 * @param editingContext
-	 *            this object's {@link EOEditingContext}
 	 */
     public void awakeFromFetch(EOEditingContext editingContext) {
     	// DO NOTHING

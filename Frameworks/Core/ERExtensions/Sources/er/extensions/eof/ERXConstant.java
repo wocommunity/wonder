@@ -506,16 +506,4 @@ public abstract class ERXConstant {
         return (i>=0 && i<MAX_INT) ? INTEGERS[i] : Integer.valueOf(i);
     }
 
-    /**
-     * Returns an Integer for a given String
-     * @throws NumberFormatException forwarded from the
-     *		parseInt method off of Integer
-     * @return potentially cache Integer for a given String
-     * 
-     * @deprecated use {@link ERXStringUtilities#integerWithString(String)}
-     */
-    @Deprecated
-    public static Integer integerForString(String s) throws NumberFormatException {
-        return integerForInt(Integer.parseInt(s));
-    }
 }

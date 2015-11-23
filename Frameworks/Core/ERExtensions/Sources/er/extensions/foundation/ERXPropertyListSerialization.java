@@ -5283,20 +5283,6 @@ public class ERXPropertyListSerialization {
 	}
 
 	/**
-	 * Converts the property list <code>object</code> into a string and returns it as an NSData object. This method uses the platform's default character encoding to convert the result string to byte.
-	 *
-	 * @deprecated use {@link #dataFromPropertyList(Object, String)}
-	 * @param plist
-	 *            property list object
-	 * @return <code>object</code> converted to an NSData
-	 * @see #propertyListFromData(NSData, java.lang.String)
-	 */
-	@Deprecated
-	public static NSData dataFromPropertyList(Object plist) {
-		return dataFromPropertyList(plist, (String)null);
-	}
-
-	/**
 	 * Converts the property list <code>object</code> into a string using a character encoding and returns it as an NSData object.
 	 *
 	 * @param plist
@@ -5329,22 +5315,6 @@ public class ERXPropertyListSerialization {
 		_NSStreamingOutputData data = new _NSStreamingOutputData();
 		writePropertyListToStream(plist, data, type, encoding);
 		return data.dataNoCopy();
-	}
-
-	/**
-	 * Converts an NSData into a property list and returns it.
-	 * <p>
-	 * This method uses the platform's default character encoding to convert the bytes in <code>data</code> byte array to characters in a string representation.
-	 *
-	 * @deprecated use {@link #propertyListFromData(NSData, String)}
-	 * @param data
-	 *            the byte array to be converted to a property list
-	 * @return <code>data</code> as a property list
-	 * @see #dataFromPropertyList(Object, java.lang.String)
-	 */
-	@Deprecated
-	public static Object propertyListFromData(NSData data) {
-		return propertyListFromData(data, (String)null);
 	}
 
 	/**
@@ -5591,20 +5561,6 @@ public class ERXPropertyListSerialization {
 		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithURL(url);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
 	}
-
-	/**
-	 * Return NSDictionary for a valid plist when passed a binary plist stream.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return binary plists dictionary decoded as an NSDictionary or empty dictionary if invalid.
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryForBinaryStream(InputStream is) {
-		return dictionaryWithBinaryStream(is);
-	}
 	
 	/**
 	 * Return NSDictionary for a valid plist when passed a binary plist stream.
@@ -5623,19 +5579,6 @@ public class ERXPropertyListSerialization {
 		_BinaryPListParser parser = new _BinaryPListParser();
 		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
-	}
-
-	/**
-	 * Parse binary plist to XML Document
-	 *
-	 * @param url
-	 * @return Document for binary plist
-	 * @see Document
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static Document documentForBinaryPropertyListURL(URL url) {
-		return documentWithBinaryPropertyListURL(url);
 	}
 	
 	/**
@@ -5667,19 +5610,6 @@ public class ERXPropertyListSerialization {
 		_BinaryPListParser parser = new _BinaryPListParser();
 		NSArray<?> ret = (NSArray<?>)parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSArray.EmptyArray;
-	}
-
-	/**
-	 * Parse binary plist to XML Document
-	 *
-	 * @param url
-	 * @return Document for binary plist
-	 * @see Document
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static String xmlStringForBinaryPropertyListURL(URL url) {
-		return xmlStringWithBinaryPropertyListURL(url);
 	}
 		
 	/**
@@ -5786,23 +5716,6 @@ public class ERXPropertyListSerialization {
 	public static Object propertyListWithData(NSData data, PListFormat type, String encoding) {
 		return propertyListWithStream(data.stream(), type, encoding);
 	}
-
-	/**
-	 * For a specified property list format, write a plist to the provided outputstream.
-	 *
-	 * @param plist the object to write
-	 * @param out output stream for plist
-	 * @param type type of plist to generate
-	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
-	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
-	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
-	 * @see PListFormat#NSPropertyListOpenStepFormat
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static void propertyListWriteToStream(Object plist, OutputStream out, PListFormat type) {
-		writePropertyListToStream(plist, out, type, _NSStringUtilities.defaultEncoding());
-	}
 	
 	/**
 	 * For a specified property list format, write a plist to the provided outputstream.
@@ -5883,34 +5796,6 @@ public class ERXPropertyListSerialization {
 				break;
 		}
 
-	}
-
-	/**
-	 * Read a plist from an InputStream and return NSDictionary of values.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return dictionary or null if there is an error with parsing
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryForInputStream(InputStream is) {
-		return dictionaryWithInputStream(is);
-	}
-	
-	/**
-	 * Read a plist from an InputStream and return NSDictionary of values.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return dictionary or null if there is an error with parsing
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryWithInputStream(InputStream is) {
-		return dictionaryWithInputStream(is, CharEncoding.UTF_8);
 	}
 	
 	/**

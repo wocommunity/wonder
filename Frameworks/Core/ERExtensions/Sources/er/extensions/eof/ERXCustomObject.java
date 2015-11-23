@@ -621,14 +621,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
     }
 
-    /**
-        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
-     */
-    @Deprecated
-    public boolean isNewEO() {
-        return isNewObject();
-    }
-
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#isNewObject()
      */

@@ -286,14 +286,6 @@ public class ERXFileUtilities {
             bytesRead += fis.read(data, bytesRead, n - bytesRead);
         return data;
     }
-    
-    /**
-     * @deprecated use {@link #writeInputStreamToFile(InputStream, File)}
-     */
-    @Deprecated
-	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
-        writeInputStreamToFile(is, f);
-    }
 
 	/**
 	 * Writes the contents of an InputStream to a temporary file.

@@ -404,35 +404,6 @@ public class ERXMigrator {
 	protected EOEditingContext newEditingContext() {
 		return ERXEC.newEditingContext();
 	}
-	
-	/**
-	 * ModelVersion represents a particular version of an EOModel.
-	 * 
-	 * @author mschrag
-	 * @deprecated use {@link er.extensions.migration.ERXModelVersion}
-	 */
-	@Deprecated
-	public static class ModelVersion extends ERXModelVersion {
-		/**
-		 * @param model
-		 *            a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(EOModel model, int version) {
-			super(model, version);
-		}
-
-		/**
-		 * @param modelName
-		 *            the name of a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(String modelName, int version) {
-			super(modelName, version);
-		}
-	}
 
 	protected static class ERXMigrationAction extends ChannelAction {
 		private EOEditingContext _editingContext;

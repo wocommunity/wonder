@@ -2697,11 +2697,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 	}
-
-	@Deprecated
-	public static void setCommandLineArguments(String[] argv) {
-		
-	}
 	
 	/**
 	 * <div class="ja">

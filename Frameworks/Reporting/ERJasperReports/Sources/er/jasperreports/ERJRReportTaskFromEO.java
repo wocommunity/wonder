@@ -19,11 +19,10 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.concurrency.ERXTaskPercentComplete;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXAssert;
 
-public class ERJRReportTaskFromEO implements Callable<File>, ERXTaskPercentComplete {
+public class ERJRReportTaskFromEO implements Callable<File> {
 
 	private static final Logger log = Logger.getLogger(ERJRReportTaskFromEO.class);
 

@@ -38,16 +38,6 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	 */
 	protected NSDictionary _sessionDictionary = NSDictionary.EmptyDictionary;
 
-	/**
-	 * Sets the WOComponent used to render the HTML message.
-	 * 
-	 * @deprecated use {@link #setComponent(WOComponent)}
-	 */
-	@Deprecated
-	public void setWOComponentContent(WOComponent component) {
-		setComponent(component);
-	}
-
 	/** 
 	 * <div class="en">
 	 * Sets the WOComponent used to render the HTML message. 

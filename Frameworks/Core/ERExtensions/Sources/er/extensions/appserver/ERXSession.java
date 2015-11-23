@@ -64,13 +64,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   public static final Logger log = Logger.getLogger(ERXSession.class);
 
   /**
-   * Notification name that is posted after a session wakes up.
-   * 
-   * @deprecated use {@link WOSession#SessionDidRestoreNotification} instead
-   */
-  @Deprecated
-  public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
-  /**
    * Notification name that is posted when a session is about to sleep.
    */
   public static final String SessionWillSleepNotification = "SessionWillSleepNotification";
@@ -434,7 +427,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     super.awake();
     ERXSession.setSession(this);
     ERXLocalizer.setCurrentLocalizer(localizer());
-    NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
+    NSNotificationCenter.defaultCenter().postNotification(SessionDidRestoreNotification, this);
 
     WORequest request = context() != null ? context().request() : null;
     if (request != null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
