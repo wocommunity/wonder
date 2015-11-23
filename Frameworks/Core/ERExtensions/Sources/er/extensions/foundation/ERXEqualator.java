@@ -1,6 +1,6 @@
 package er.extensions.foundation;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
@@ -23,12 +23,14 @@ public abstract class ERXEqualator {
     
     /**
      * Provides a safe equality check that won't throw if one or both of the objects is null.
-     * @see er.extensions.ERXExtensions#safeEquals(Object, Object)
+     * 
+     * @see Objects#equals(Object, Object)
      */
     public static final ERXEqualator SafeEqualsEqualator = new _SafeEqualsEqualator();
     
     /**
      * Provides EO equality checks regardless of the editing context the objects are registered in.
+     * 
      * @see er.extensions.eof.ERXEOControlUtilities#eoEquals(EOEnterpriseObject, EOEnterpriseObject)
      */
     public static final ERXEqualator EOEqualsEqualator = new _EOEqualsEqualator();
@@ -41,6 +43,7 @@ public abstract class ERXEqualator {
      * Performs the equality check between o1 and o2.  What the equality check means between the
      * objects and when either object is null or when objects are of different classes is
      * the subclass's responsibility.
+     * 
      * @param o1 first object to compare.
      * @param o2 second object to compare.
      * @return true if o1 and o2 are to be considered equal, false otherwise.
@@ -56,7 +59,7 @@ public abstract class ERXEqualator {
 
         @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
-            return ObjectUtils.equals(o1, o2);
+            return Objects.equals(o1, o2);
         }
     }
     
@@ -66,8 +69,9 @@ public abstract class ERXEqualator {
         @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             if ( (o1 != null && ! (o1 instanceof EOEnterpriseObject)) || (o2 != null && ! (o2 instanceof EOEnterpriseObject)) ) {
-                throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects.  " +
-                                           "o1: " + o1 + " (class: " + o1.getClass() + "), o2: " + o2 + " (class: " + o2.getClass() + ").");
+                throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects. " +
+                                           "o1: " + o1 + (o1 != null ? " (class: " + o1.getClass() + ")" : "") +
+                                           ", o2: " + o2 + (o2 != null ? " (class: " + o2.getClass() + ")" : "") + ".");
             }
             final EOEnterpriseObject eo1 = (EOEnterpriseObject)o1;
             final EOEnterpriseObject eo2 = (EOEnterpriseObject)o2;
