@@ -1,10 +1,10 @@
 package er.jquery.support;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver._private.WOGenericContainer;
-
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -68,14 +68,14 @@ public class WXGenericContainer extends WOComponent {
     }
     
     public String ref() {
-    	return isAjax() ? ERXWOContext.ajaxActionUrl(context()) : null;
+    	return isAjax() ? context().componentActionURL(WOApplication.application().componentRequestHandlerKey()) : null;
     }
     
     public boolean omitTags() {
     	return ERXComponentUtilities.booleanValueForBinding(this, Bindings.omitTags, _omitTags);
     }
     
-    // action 
+    // action
     public WOActionResults invokeAction() {
     	context().setActionInvoked(true);
     	_setIsPage(true);
@@ -88,5 +88,5 @@ public class WXGenericContainer extends WOComponent {
     public void awake() {
     	super.awake();
     	_omitTags = false;
-    } 
+    }
 }
