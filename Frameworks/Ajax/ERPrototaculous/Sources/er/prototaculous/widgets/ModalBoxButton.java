@@ -93,7 +93,7 @@ public class ModalBoxButton extends ModalBox {
     
 	public String href() {
     	if (hasBinding(Bindings.action))
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		@SuppressWarnings("unchecked")  NSDictionary<String, Object> queryDictionary = (NSDictionary<String, Object>) valueForBinding(Bindings.queryDictionary);

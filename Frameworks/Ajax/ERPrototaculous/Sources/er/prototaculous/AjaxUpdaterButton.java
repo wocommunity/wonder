@@ -44,7 +44,7 @@ public class AjaxUpdaterButton extends AjaxUpdater {
     @Override
     protected String url() {
     	if (hasBinding(Bindings.action)) {
-    		return "'" + ERXWOContext.ajaxActionUrl(context()) + "'";
+    		return "'" + context().componentActionURL(application().ajaxRequestHandlerKey()) + "'";
     	} else return super.url();
     }
     

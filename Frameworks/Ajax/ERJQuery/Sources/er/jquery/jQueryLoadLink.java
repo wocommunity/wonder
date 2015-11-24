@@ -44,7 +44,7 @@ public class jQueryLoadLink extends jQueryLoad {
 
 	public String href() {
 		if (hasBinding(Bindings.action)) {
-    		return context().componentActionURL(WOApplication.application().componentRequestHandlerKey());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
 		} else if (hasBinding(Bindings.directActionName)) {
 			NSDictionary queryDictionary = hasBinding(Bindings.queryDictionary) ? queryDictionary() : null;
 			return context().directActionURLForActionNamed(directActionName(), queryDictionary);

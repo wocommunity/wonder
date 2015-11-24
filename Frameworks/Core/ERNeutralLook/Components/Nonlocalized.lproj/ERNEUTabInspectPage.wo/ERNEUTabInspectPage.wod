@@ -182,11 +182,11 @@ EditLink2: WOHyperlink {
 }
 
 EditLink3: WOHyperlink {
-	action = previousTab;
+	action = previousTabAction;
 }
 
 EditLink4: WOHyperlink {
-	action = nextTab;
+	action = nextTabAction;
 }
 
 Errors: ERXErrorDictionaryPanel {
@@ -405,7 +405,7 @@ SubmitChanges2: WOImageButton {
 }
 
 SubmitChanges4: WOImageButton {
-	action = nextTab;
+	action = nextTabAction;
 	alt = "Next Tab";
 	border = 0;
 	name = "Next Tab";
@@ -414,7 +414,7 @@ SubmitChanges4: WOImageButton {
 }
 
 SubmitChanges5: WOImageButton {
-	action = previousTab;
+	action = previousTabAction;
 	alt = "Previous Tab";
 	border = 0;
 	name = "Previous Tab";

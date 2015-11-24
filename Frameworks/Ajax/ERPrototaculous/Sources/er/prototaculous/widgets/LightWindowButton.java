@@ -57,7 +57,7 @@ public class LightWindowButton extends LightWindow {
     @SuppressWarnings("unchecked")
 	public String href() {
     	if (hasBinding(Bindings.action))
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);

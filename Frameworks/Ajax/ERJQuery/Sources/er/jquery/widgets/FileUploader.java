@@ -145,7 +145,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
 	private String href() {
-		return context().componentActionURL(WOApplication.application().componentRequestHandlerKey());
+		return context().componentActionURL(application().ajaxRequestHandlerKey());
 	}
 	
 	// R&R

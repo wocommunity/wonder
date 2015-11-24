@@ -54,7 +54,7 @@ public class AjaxRequestButton extends AjaxRequest {
 	@Override
 	protected String url() {
     	if (hasBinding(Bindings.action)) {
-    		return "'" + ERXWOContext.ajaxActionUrl(context()) + "'";
+    		return "'" + context().componentActionURL(application().ajaxRequestHandlerKey()) + "'";
     	} else throw new WODynamicElementCreationException("Action is a required binding");
 	}
 	

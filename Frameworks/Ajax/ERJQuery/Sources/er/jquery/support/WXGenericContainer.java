@@ -68,7 +68,7 @@ public class WXGenericContainer extends WOComponent {
     }
     
     public String ref() {
-    	return isAjax() ? context().componentActionURL(WOApplication.application().componentRequestHandlerKey()) : null;
+    	return isAjax() ? context().componentActionURL(application().ajaxRequestHandlerKey()) : null;
     }
     
     public boolean omitTags() {
