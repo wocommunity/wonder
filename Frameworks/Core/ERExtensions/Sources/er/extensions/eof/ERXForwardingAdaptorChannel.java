@@ -126,7 +126,7 @@ public class ERXForwardingAdaptorChannel extends EOAdaptorChannel {
 
 	@Override
 	public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
-		return _forwardedChannel.primaryKeyForNewRowWithEntity(entity);
+		return _forwardedChannel.primaryKeysForNewRowsWithEntity(1, entity).objectAtIndex(0);
 	}
 
 	@Override

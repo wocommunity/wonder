@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * ERXClickableContainer is a WOGenericContainer with easier support for the
  * javascript onclick event. For instance,
  * 
- * &ltwo:ERXClickableContainer action = "$someAction"&gt;
+ * &lt;wo:ERXClickableContainer action = "$someAction"&gt;
  * 
  * would create a div (by default) with an onclick action that executes the
  * given component action and replaces the page with the results.

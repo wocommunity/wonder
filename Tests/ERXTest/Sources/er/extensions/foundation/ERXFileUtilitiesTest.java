@@ -2,11 +2,10 @@ package er.extensions.foundation;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.junit.Assert;
 
 import com.webobjects.foundation.NSArray;

@@ -264,11 +264,14 @@ void ac_resetConfigTimers()
 {
    void *lockHandle;
    lockHandle = WOShmem_lock(configTimes, sizeof(ConfigTimes), 1);
-   configTimes->public_mtime = (time_t)0;
-   configTimes->private_mtime = (time_t)0;
-   configTimes->config_read_time = 0;
-   configTimes->config_servers_read_time = 0;
-   WOShmem_unlock(lockHandle);
+   if(lockHandle)
+   {
+	   configTimes->public_mtime = (time_t)0;
+	   configTimes->private_mtime = (time_t)0;
+	   configTimes->config_read_time = 0;
+	   configTimes->config_servers_read_time = 0;
+	   WOShmem_unlock(lockHandle);
+	}
 }
 
 
@@ -645,7 +648,7 @@ static int updateNumericSetting(const char *settingName, int *dest, const char *
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static void updateAppKey(const char *key, const char *value, _WOApp *app)
+static int updateAppKey(const char *key, const char *value, _WOApp *app)
 {
    int changed = 0;
    if (strcmp(key, WOSCHEDULER) == 0)
@@ -671,12 +674,14 @@ static void updateAppKey(const char *key, const char *value, _WOApp *app)
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in application config: \"%s\", value = \"%s\"", key, value);
    }
+   
+   return changed;
 }
 
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static void updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
+static int updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
 {
    int changed = 0;
 
@@ -716,6 +721,8 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);
    }
+   
+   return changed;
 }
 
 /*
@@ -1106,7 +1113,9 @@ static void readServerConfig() {
 					oneOrMoreUnModified = 1;
 				else // No response has to be treated as modification, too
 					oneOrMoreModified  = 1;
-			}
+			} else
+				buffer[i] = NULL;
+			
 		}
 	}
    
@@ -1191,9 +1200,11 @@ static net_fd _contactServer(ConfigServer *server) {
    strcat(request_str, " HTTP/1.0\n");
    req.request_str = request_str;
    req.headers = st_new(2);
-   if (server->lastModifiedTime[0]) {
-      req_addHeader(&req,HTTP_IFMODIFIEDSINCE,server->lastModifiedTime, STR_COPYVALUE|STR_FREEVALUE);
-   }
+   // Does not work due to a bug in merging unchanged config (according to this
+   //   lastModifiedField) with changed config data
+   //if (server->lastModifiedTime[0]) {
+   //   req_addHeader(&req,HTTP_IFMODIFIEDSINCE,server->lastModifiedTime, STR_COPYVALUE|STR_FREEVALUE);
+   //}
    if (req_sendRequest(&req, s) != 0) {
       transport->close_connection(s);
       s = NULL;
@@ -1221,7 +1232,7 @@ static char *_retrieveServerInfo(ConfigServer *server, net_fd s, int *len, char 
    }
    tr_close(c, AC_INVALID_HANDLE, 0);
    if (resp != NULL) {
-      *len = resp->content_length;
+      *len = (int) resp->content_length;
       *content_type = '\0';
       if (resp->status == HTTP_OK) {
          /* may be NOT_MODIFIED (or worse!) */

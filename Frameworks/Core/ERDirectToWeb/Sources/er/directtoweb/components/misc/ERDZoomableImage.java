@@ -9,11 +9,12 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * This stateless component: <p>
- *  - displays an image with a given src, width & height <br/>
- *  - allows to zoom to a given height and width.
+ * This stateless component:
+ * <ul>
+ * <li>displays an image with a given src, width and height</li>
+ * <li>allows to zoom to a given height and width</li>
+ * </ul>
  * 
- * <p>
  * @binding src - source url for the image to be displaed. mandatory for this component to work properly.
  * @binding height - height of the image to be displayed in the page. 
  * @binding width- width of the image to be displayed in the page.
@@ -24,7 +25,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding enableZoomForImage - true/false. if true, clicking on thumbnail will popup the full size image. If false, clicking is not allowed. 
  * 
  * @author rajaram
- *
  */
 public class ERDZoomableImage extends ERXStatelessComponent {
 	/**
@@ -107,7 +107,7 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
 
     public String jsToZoomImage() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if(enableZoom()) {
             sb.append ("ZoomableImage.openImageFromURL('");
             sb.append(imageSrc()); 

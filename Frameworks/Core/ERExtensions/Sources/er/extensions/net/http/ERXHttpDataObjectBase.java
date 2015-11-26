@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -20,22 +20,22 @@ import er.extensions.foundation.ERXProperties;
 /**
  * Access Sample :
  * 
- * <pre>
+ * <pre><code>
  * ERXML.Doc doc = ERXML.doc(...); // Create the Post XML Doc
  *
  * ERXHttpPostData httpData = new ERXHttpPostData(<<hostname>>);
  * httpData.setScheme(ERXHttpPostData.SCHEME_HTTP);
- * httpData.setPath(<<Path>>);
+ * httpData.setPath(&lt;&lt;Path&gt;&gt;);
  * httpData.setContentType("text/xml");
  * httpData.setSendEntity(doc.toString());
  * 
  * try {
  *  httpData.execute();
  *  
- *  if (httpData.html().startsWith("<?xml")) {
+ *  if (httpData.html().startsWith("&lt;?xml")) {
  *    ERXML.Doc parseDoc = ERXML.doc(httpData.html());
  *    ...
- * </pre>
+ * </code></pre>
  * 
  * @author ishimoto
  */
@@ -254,14 +254,14 @@ public abstract class ERXHttpDataObjectBase {
 
   protected String userAgent() {
     // assemble User-Agent header
-    StringBuffer useragent = new StringBuffer();
+    StringBuilder useragent = new StringBuilder();
     useragent.append("WebObjects/ " + ERXProperties.webObjectsVersion() + " (");
     useragent.append(System.getProperty("os.arch"));
     useragent.append("; ");
     useragent.append(System.getProperty("os.name"));
-    useragent.append(" ");
+    useragent.append(' ');
     useragent.append(System.getProperty("os.version"));
-    useragent.append(")");
+    useragent.append(')');
     return useragent.toString();
   }
 

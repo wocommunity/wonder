@@ -11,7 +11,7 @@ import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Allows editing boolean values based on radio buttons and localizable strings.<br />
+ * Allows editing boolean values based on radio buttons and localizable strings.<br>
  * Set the values via the <code>choicesNames</code> d2wcontext value, eg: ("Yes", "No") or ("Set", "Unset", "Don't care")
  * @d2wKey choicesNames
  */

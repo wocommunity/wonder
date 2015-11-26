@@ -23,7 +23,8 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Superclass for all tab and wizard pages.<br />
+ * Superclass for all tab and wizard pages.
+ * 
  * @d2wKey firstResponder
  * @d2wKey tabComponentName
  */
@@ -166,18 +167,6 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     }
     public boolean useTabSectionImages() {
         return d2wContextValueForKey("useTabSectionImages", false);
-    }
-
-
-    /** @deprecated use {@link #nextTabAction()} */
-    @Deprecated
-    public WOComponent nextTab() {
-        return nextTabAction();
-    }
-    /** @deprecated use {@link #previousTabAction()} */
-    @Deprecated
-    public WOComponent previousTab() {
-        return previousTabAction();
     }
     
     public WOComponent nextTabAction() {

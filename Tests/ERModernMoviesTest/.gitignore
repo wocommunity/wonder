@@ -1,0 +1,7 @@
+target
+bin
+build
+*.xcodeproj
+*.pbxproj
+ant.*
+phantomjsdriver.log

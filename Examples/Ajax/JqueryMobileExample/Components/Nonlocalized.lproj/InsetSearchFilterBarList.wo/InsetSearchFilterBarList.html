@@ -1,19 +1,10 @@
-<wo:ERQMHtmlTemplate title="InsetSearchFilterBarList">
-	<wo:ERQMHeaderBar string="InsetSearchFilterBarList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<wo:ERQMListView filter="true" inset="true">
-			<wo:foreach list="$talents" item="$oneTalent">
-				<wo:ERQMListViewElement action="$doShowOneTalentAction">
-					<wo:str value = "$oneTalent.firstName" /> <wo:str value = "$oneTalent.lastName" />
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Inset Search Filter Bar List">
+  <wo:ERQMListView data-inset = "true" data-filter = "true" data-filter-label = "Name" data-filter-placeholder = "Type a name">
+    <wo:foreach list = "$talents" item = "$oneTalent">
+      <wo:ERQMListViewElement action = "$doShowOneTalentAction">
+        <wo:str value = "$oneTalent.firstName" />
+        <wo:str value = "$oneTalent.lastName" />
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

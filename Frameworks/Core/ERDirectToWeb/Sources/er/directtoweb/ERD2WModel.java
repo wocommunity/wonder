@@ -233,9 +233,12 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected String descriptionForRuleSet(NSArray set) {
-        StringBuffer buffer = new StringBuffer();
-        for (Enumeration e = set.objectEnumerator(); e.hasMoreElements();)
-            buffer.append("\t" + descriptionForRule((Rule)e.nextElement()) + "\n");
+        StringBuilder buffer = new StringBuilder();
+        for (Enumeration e = set.objectEnumerator(); e.hasMoreElements();) {
+            buffer.append('\t');
+            buffer.append(descriptionForRule((Rule)e.nextElement()));
+            buffer.append('\n');
+        }
         return buffer.toString();
     }
 
@@ -475,7 +478,7 @@ public class ERD2WModel extends D2WModel {
                         delayedDependendKeysPerKey.put(rhsKey, recipientForNewKeys);
                     }
                 }
-                NSArray extraKeys=((ERDComputingAssignmentInterface)r.rhs()).dependentKeys(rhsKey);
+                NSArray extraKeys=((er.directtoweb.assignments.ERDLocalizedAssignment)r.rhs()).dependentKeys(rhsKey);
                 if (extraKeys!=null) {
                     for (Enumeration e6=extraKeys.objectEnumerator(); e6.hasMoreElements(); ) {
                         String k=(String)e6.nextElement();

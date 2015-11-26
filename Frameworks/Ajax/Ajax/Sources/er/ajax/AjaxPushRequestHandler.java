@@ -22,8 +22,8 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * You should open an Ajax.Request, implement onInteractive: and the do
  * something useful when you get new data. Changes should be pushed with
  * push(sessionID, someString);
- * <p>
- * TODO:
+ * <h3>TODO:</h3>
+ * <ul>
  * <li>currently the request stays open even when the client closed it (which is bad)
  * <li>implement a boundary scheme to tell when a "message" is complete. This
  * means we need a special Ajax.Request that does it.
@@ -31,6 +31,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * notifications).
  * <li>ask Frank about his EO layer
  * <li>use the request handler path as a "topic", so we can have more than one on a page.
+ * </ul>
  * 
  * @author ak
  */

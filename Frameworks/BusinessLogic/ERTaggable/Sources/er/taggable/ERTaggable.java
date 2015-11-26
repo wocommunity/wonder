@@ -14,14 +14,14 @@ import er.taggable.model.ERTag;
  * Typically you would provide a cover method from your EO to an 
  * instance of an ERTaggable:
  * 
- * <code><pre>
+ * <pre><code>
  * public class Person extends _Person {
  *   ...
- *   public ERTaggable<Person> taggable() {
+ *   public ERTaggable&lt;Person&gt; taggable() {
  *     return ERTaggable.taggable(this);
  *   }
  * }
- * </pre></code>
+ * </code></pre>
  * 
  * @author mschrag
  *
@@ -105,7 +105,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * This method removes tags from the target object, by parsing the tags parameter
    * into Tag object instances and removing them from the tag collection of the object if they exist.
    *
-   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to remove (String to tokenize, NSArray&lt;String&gt;, etc)
    */
   public void removeTags(Object tags) {
     NSArray<ERTag> erTags = tags();
@@ -119,7 +119,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * This method removes tags from the target object, by looking up the corresponding 
    * Tag object instances and removing them from the tag collection of the object if they exist.
    *
-   * @param tagName the tag to remove (String to tokenize, NSArray<String>, etc)
+   * @param tagName the tag to remove (String to tokenize, NSArray&lt;String&gt;, etc)
    */
   public void removeTagNamed(String tagName) {
     NSArray<ERTag> erTags = tags();
@@ -153,7 +153,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * 
    * This is equivalent to addTags(false, tags). 
    *
-   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to add (String to tokenize, NSArray&lt;String&gt;, etc)
    */
   public void addTags(Object tags) {
     addTags(false, tags);
@@ -166,7 +166,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * to the existing tag record. If it doesn't exist, it then creates a new
    * Tag record for it. 
    *
-   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to add (String to tokenize, NSArray&lt;String&gt;, etc)
    * @param clear if true, existing tags will be removed first
    */
   public void addTags(boolean clear, Object tags) {
@@ -211,7 +211,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * Clears the current tags collection and sets the tag names for this object.
    * Equivalent of calling addTags(tags, true).
    *
-   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to add (String to tokenize, NSArray&lt;String&gt;, etc)
    */
   public void setTags(Object tags) {
     addTags(true, tags);
@@ -240,7 +240,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
   /**
    * Checks to see if this object has been tagged with all the given tags.
    * 
-   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to add (String to tokenize, NSArray&lt;String&gt;, etc)
    * @return true if this eo is tagged with all of the given tag names, false otherwise
    */
   public boolean isTaggedWithAll(Object tags) {
@@ -252,7 +252,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
   /**
    * Checks to see if this object has been tagged with any of the given tags.
    * 
-   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   * @param tags the tags to add (String to tokenize, NSArray&lt;String&gt;, etc)
    * @return true if this eo is tagged with any of the given tag names, false otherwise
    */
   public boolean isTaggedWithAny(Object tags) {

@@ -10,7 +10,6 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <p>
  * A simple popup menu for language selection. The menu itself is can be
  * localized in two different ways. It allows all language names to be presented
  * in the current localized language, or each language name can be presented in
@@ -35,7 +34,6 @@ import er.extensions.localization.ERXLocalizer;
  * stick it in a form and bind the language binding to something that stores a
  * language value. For example, your WOD file might contain:
  * <code>LanguageMenu: ERXLanguageMenu { language = session.language; }</code>
- * </p>
  * 
  * @author Ramsey Gurley
  * @binding class (optional) the html class attribute string

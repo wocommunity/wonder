@@ -49,7 +49,6 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.components._private.ERXHyperlink;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
-import er.extensions.components._private.ERXWOFileUpload;
 import er.extensions.woextensions.WOToManyRelationship;
 import er.extensions.woextensions.WOToOneRelationship;
 
@@ -66,8 +65,9 @@ public class ERXPatcher {
 	}
 
 	/**
-	 * Returns the class registered for the name <code>className</code>.<br/> Uses the private WebObjects class
-	 * cache.
+	 * Returns the class registered for the name <code>className</code>.
+	 * <p>
+	 * Uses the private WebObjects class cache.
 	 * 
 	 * @param className
 	 *            class name
@@ -79,8 +79,8 @@ public class ERXPatcher {
 	}
 
 	/**
-	 * Sets the class registered for the name <code>className</code> to the given class.<br/> Changes the private
-	 * WebObjects class cache.
+	 * Sets the class registered for the name <code>className</code> to the given class.
+	 * <p>Changes the private WebObjects class cache.
 	 * 
 	 * @param clazz
 	 *            class object
@@ -110,7 +110,6 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(DynamicElementsPatches.Browser.class, "WOBrowser");
 		ERXPatcher.setClassForName(DynamicElementsPatches.CheckBox.class, "WOCheckBox");
 		ERXPatcher.setClassForName(DynamicElementsPatches.CheckBoxList.class, "WOCheckBoxList");
-		ERXPatcher.setClassForName(DynamicElementsPatches.FileUpload.class, "WOFileUpload");
 		ERXPatcher.setClassForName(DynamicElementsPatches.HiddenField.class, "WOHiddenField");
 		ERXPatcher.setClassForName(DynamicElementsPatches.ImageButton.class, "WOImageButton");
 		ERXPatcher.setClassForName(DynamicElementsPatches.PasswordField.class, "WOPasswordField");
@@ -133,10 +132,12 @@ public class ERXPatcher {
 
 	/**
 	 * This class holds patches for WebObjects dynamic elements, which have always a closing tag and all attribute
-	 * values are enclosed in quotes. The patches are automatically registered if this framework gets loaded.<br/>
+	 * values are enclosed in quotes. The patches are automatically registered if this framework gets loaded.
+	 * <p>
 	 * <b>Note</b>: <code>WOForm</code> is not replaced, because it is ok if you don't use <code>?</code>-bindings.
-	 * If you need additional parameters, just insert <code>WOHiddenField</code>s.<br/> Also
-	 * <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
+	 * If you need additional parameters, just insert <code>WOHiddenField</code>s.
+	 * <p>
+	 * Also <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
 	 */
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
@@ -743,30 +744,6 @@ public class ERXPatcher {
 
 		}
 
-		public static class FileUpload extends ERXWOFileUpload {
-
-			public FileUpload(String aName, NSDictionary associations, WOElement element) {
-				super(aName, associations, element);
-			}
-
-			@Override
-			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
-				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
-			}
-
-			@Override
-			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
-				super.appendToResponse(newResponse, wocontext);
-
-				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
-					woresponse.appendContentString(newResponse.contentString());
-				}
-			}
-		}
-
 		public static class HiddenField extends WOHiddenField {
 			protected WOAssociation _readonly;
 
@@ -1084,15 +1061,16 @@ public class ERXPatcher {
 		 * will be closed correctly, all attribute values will be quoted and attributes without a value like
 		 * <code>disabled</code> will get a quoted value. All attribute-values with uncorrectly escaped ampersands
 		 * (&amp;) will be corrected. E.g. <code>&quot;w&amp;amp;auml;hlen&quot;</code> will become
-		 * <code>&quot;w&amp;auml;hlen&quot;</code>.<br/> This method would normally be called in the following way:
-		 * 
-		 * <pre>
+		 * <code>&quot;w&amp;auml;hlen&quot;</code>.
+		 * <p>
+		 * This method would normally be called in the following way:
+		 * <pre><code>
 		 * public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		 * 	String pre = woresponse.contentString();
 		 * 	super.appendToResponse(woresponse, wocontext);
 		 * 	correctResponse(woresponse, pre.length(), pre);
 		 * }
-		 * </pre>
+		 * </code></pre>
 		 * 
 		 * @param response
 		 *            the response to be corrected.
@@ -1131,7 +1109,7 @@ public class ERXPatcher {
 		}
 
 		private static final int consumeTag(String string, int index, StringBuffer buf) {
-			StringBuffer tagName = new StringBuffer();
+			StringBuilder tagName = new StringBuilder();
 			int i = index;
 			int length = string.length();
 
@@ -1248,7 +1226,7 @@ public class ERXPatcher {
 		}
 
 		private static final int consumeAttributeName(String string, int index, StringBuffer buf) {
-			StringBuffer attName = new StringBuffer();
+			StringBuilder attName = new StringBuilder();
 			int length = string.length();
 			boolean afterWhiteSpace = false;
 			

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMInputFlipSwitch" wocomponentcontent="false">    <binding name="stringOn"/>
+        <binding name="stringOff"/>
+    <binding defaults="Boolean" name="inset"/>
+        <binding name="label"/>
+    <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+    <binding name="data-theme"/>
+    <binding defaults="Boolean" name="data-mini"/>
+    <binding name="name"/>
+    <binding name="id"/>
+    <binding name="class"/>
+        <binding name="otherTagString"/>
+        <binding name="data-role"/>
+        <binding name="data-track-theme"/>
+    <binding defaults="Boolean" name="data-corners"/>
+    <binding name="data-disabled"/>
+    </wo>
+</wodefinitions>

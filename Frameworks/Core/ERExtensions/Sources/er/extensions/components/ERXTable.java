@@ -19,8 +19,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * ability to specify an array of header images that appear
  * in the header cells of the table. Corrects a bug introduced
  * in WO 5.1 where OutOfBounds exceptions are thrown.
- * <br/>
- * Synopsis:<br/>
+ * <h3>Synopsis:</h3>
  * list=<i>anArray</i>;item=<i>aSettableObject</i>;[col=<i>aSettableNumber</i>;][index=<i>aSettableNumber</i>;][row=<i>aSettableNumber</i>;]
  * [maxColumns=<i>aNumber</i>;][tableBackgroundColor=<i>aString</i>;][border=<i>aNumber</i>;][cellpadding=<i>aNumber</i>;][cellspacing=<i>aNumber</i>;]
  * [rowBackgroundColor=<i>aString</i>;][cellBackgroundColor=<i>aString</i>;][cellAlign=<i>aNumber</i>;][cellVAlign=<i>aNumber</i>;]

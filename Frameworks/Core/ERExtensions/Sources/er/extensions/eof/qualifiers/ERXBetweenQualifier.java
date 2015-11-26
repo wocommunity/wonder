@@ -243,7 +243,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
 
                 if ( ( aKey != null ) && ( aMinimumValue != null ) && ( aMaximumValue != null ) )
                 {
-                    StringBuffer		aBuffer = new StringBuffer();
+                    StringBuilder		aBuffer = new StringBuilder();
                     EOKeyValueQualifier	aMinimumQualifier = new EOKeyValueQualifier( aKey, EOQualifier.QualifierOperatorEqual, aMinimumValue );
                     EOKeyValueQualifier	aMaximumQualifier = new EOKeyValueQualifier( aKey, EOQualifier.QualifierOperatorEqual, aMaximumValue );
 

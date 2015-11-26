@@ -34,3 +34,6 @@ ERXRest.MHost.type.alias = osType
 
 # Hide the Migrations tab.
 er.javamonitor.showMigrationsTab=false
+
+# Show the Mod_Proxy tab.
+er.javamonitor.showModProxyTab=true

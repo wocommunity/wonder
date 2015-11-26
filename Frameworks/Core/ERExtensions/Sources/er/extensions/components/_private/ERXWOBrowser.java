@@ -88,14 +88,6 @@ public class ERXWOBrowser extends WOInput {
 				.append(_selectedValues).append(" multiple: ").append(_multiple)
 				.append(" size: ").append(_size).append(" escapeHTML: ").append(_escapeHTML).append('>').toString();
 	}
-	
-	/**
-	 * @deprecated use {@link #isDisabledInContext(WOContext)} instead
-	 */
-	@Deprecated
-	public boolean disabledInComponent(WOComponent component) {
-		return isDisabledInContext(component.context());
-	}
 
 	private void _slowTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();

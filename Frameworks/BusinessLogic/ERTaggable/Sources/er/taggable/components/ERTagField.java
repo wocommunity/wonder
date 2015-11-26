@@ -107,8 +107,8 @@ public class ERTagField extends er.extensions.components.ERXComponent {
   }
 
   public String javascriptAvailableTags() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("[");
+    StringBuilder sb = new StringBuilder();
+    sb.append('[');
     NSMutableArray<String> availableTags = availableTags().mutableClone();
     int availableTagsCount = availableTags.count();
     if (availableTagsCount > 0) {
@@ -118,11 +118,11 @@ public class ERTagField extends er.extensions.components.ERXComponent {
         availableTag = ERTag.escapeTagNamed(availableTag);
         availableTags.replaceObjectAtIndex(availableTag, tagNum);
       }
-      sb.append("'");
+      sb.append('\'');
       sb.append(availableTags.componentsJoinedByString("','"));
-      sb.append("'");
+      sb.append('\'');
     }
-    sb.append("]");
+    sb.append(']');
     return sb.toString();
   }
 

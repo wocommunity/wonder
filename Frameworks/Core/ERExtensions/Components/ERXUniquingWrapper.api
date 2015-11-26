@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERXUniquingWrapper.java" wocomponentcontent="true">
+		<binding name="id"/>
+	<validation message="'id' is a required binding.">
+            <unbound name="id"/>
+        </validation>
+    </wo>
+</wodefinitions>

@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayDate;
 
 /**
- * Displays a date or a null string.<br />
+ * Displays a date or a null string.
  * 
  * @d2wKey formatter
  * @d2wKey displayValueForNull

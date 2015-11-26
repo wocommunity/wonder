@@ -309,7 +309,7 @@ public class AppConfigurePage extends MonitorComponent {
 
     /* ******** Path Wizard ******** */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath, boolean showFiles) {
-        PathWizardPage1 aPage = PathWizardPage1.create(context());
+        PathWizardPage1 aPage = PathWizardPage1.create(context(), myApplication());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackExpand("isNewInstanceSectionVisible");
         aPage.setCallbackPage(this);

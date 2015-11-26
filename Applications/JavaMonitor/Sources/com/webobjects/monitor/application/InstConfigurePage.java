@@ -47,7 +47,7 @@ public class InstConfigurePage extends MonitorComponent {
 
     /* ******** Startup Section ********* */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath) {
-        PathWizardPage1 aPage = PathWizardPage1.create(context());
+        PathWizardPage1 aPage = PathWizardPage1.create(context(), myApplication());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackPage(this);
         aPage.setShowFiles(true);

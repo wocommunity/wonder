@@ -4,11 +4,12 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
 public class BasicList extends SampleComponentBase {
 
+  private static final long serialVersionUID = 1L;
+
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
   public BasicList(WOContext aContext) {

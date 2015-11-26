@@ -22,21 +22,24 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 
 /** 
- * Designated starter class for frameworks, adds support for dependency management.<br />
+ * Designated starter class for frameworks, adds support for dependency management.
+ * <p>
  * Allows you to disregard your framework order in the class path (at least where 
- * startup is concerned, if you override actual classes you still need to take care.)<br /><br />
+ * startup is concerned, if you override actual classes you still need to take care.)
+ * <p>
  * The <code>initialize()</code> method will be called directly after your principal
- * is instantiated.<br />
+ * is instantiated.<br>
  * The <code>finishInitialization()</code> method will be called when the app finishes 
- * startup but before it will begin to process requests.<br />
- * 
+ * startup but before it will begin to process requests.
+ * <p>
  * If you define <pre><code>public static Class[] REQUIRES = Class[] {...}</code></pre>
  * all the classes (which must be assignable from this class) will get 
- * loaded before your principal.<br />
- * 
+ * loaded before your principal.
+ * <p>
  * NOTE: try to avoid putting code in static initializers. These may lead to 
  * unpredictable behaviour when launching. Use one of the methods above
- * to do what you need to do.<br /><br />
+ * to do what you need to do.
+ * <p>
  * Here is an example:<pre><code>
  * public class ExampleFrameworkPrincipal extends ERXFrameworkPrincipal {
  * 
@@ -127,7 +130,7 @@ public abstract class ERXFrameworkPrincipal {
     }
     
     /**
-     * Sets up a given framework principal class to recieve notification
+     * Sets up a given framework principal class to receive notification
      * when it is safe for the framework to be initialized.
      * @param c principal class
      */

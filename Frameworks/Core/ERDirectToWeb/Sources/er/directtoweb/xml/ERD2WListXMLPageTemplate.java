@@ -8,7 +8,8 @@ package er.directtoweb.xml;
 import com.webobjects.appserver.WOContext;
 
 /**
- * List xml template.<br />
+ * List xml template.
+ * 
  * @d2wKey resolvedUnit
  * @d2wKey componentName
  * @d2wKey showHeader

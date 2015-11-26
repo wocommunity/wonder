@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WWizardCreationPage;
 
 /**
- * A wizard inspect/edit template.<br />
+ * A wizard inspect/edit template.
+ * 
  * @d2wKey cancelButtonLabel
  * @d2wKey bannerFileName
  * @d2wKey showBanner

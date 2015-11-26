@@ -30,6 +30,7 @@ public class FrontBaseTypes {
 	}
 
 	public static int internalTypeForExternal(String externalType) {
+		externalType = externalType.toUpperCase();
 		if (externalType.equals("BOOLEAN"))
 			return FB_Boolean;
 		else if (externalType.equals("INTEGER") || externalType.equals("INT"))
@@ -74,7 +75,6 @@ public class FrontBaseTypes {
 			return FB_BLOB;
 		else if (externalType.equals("CLOB"))
 			return FB_CLOB;
-		else
-			return -1;
+		return -1;
 	}
 }

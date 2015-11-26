@@ -6,6 +6,7 @@ import er.taggable.ERTaggable;
 import er.taggable.ERTaggableEntity;
 
 public class Employee extends _Employee {
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(Employee.class);
 
   public ERTaggable<Employee> taggable() {

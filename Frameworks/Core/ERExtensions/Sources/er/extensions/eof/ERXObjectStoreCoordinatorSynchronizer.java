@@ -487,7 +487,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private CacheChangeProcessor _toManyUpdateCacheChangeProcessor = new ToManyUpdateCacheChangeProcessor();
 
 		protected ProcessChangesQueue() {
-			Thread.currentThread().setName("ProcessChangesQueue");
 		}
 
 		public void addChange(Change changes) {

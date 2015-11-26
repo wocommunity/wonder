@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMContent" wocomponentcontent="true">    <binding defaults="Boolean" name="isRoleMain"/>
+    <binding name="id"/>
+        <binding name="class"/>
+    <binding name="otherTagString"/>
+    </wo>
+</wodefinitions>

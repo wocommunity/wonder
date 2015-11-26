@@ -28,8 +28,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.text.StrTokenizer;
+import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.text.StrTokenizer;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -1511,7 +1511,7 @@ public class FilesClient
     		StringBuilder sb = new StringBuilder();
     		for (int j=0; j <= i; ++j) {
     			if (sb.length() != 0) 
-    				sb.append("/");
+    				sb.append('/');
     			sb.append(parts[j]);
     		}
     		createPath(container, sb.toString());

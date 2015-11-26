@@ -241,7 +241,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 if (j < priKeyAttributeCount - 1) {
                     statement.append(", ");
                 } else {
-                    statement.append(")");
+                    statement.append(')');
                 }
             }
             result.setStatement(statement.toString());
@@ -353,7 +353,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 					}
 				}
 			}
-			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
 		}
 		return NSArray.EmptyArray;
 	}

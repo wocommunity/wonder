@@ -1,0 +1,38 @@
+<wo:JQPageWrapper title = "Form Entries">
+  <h1>Input Form</h1>
+  <wo:form>
+    <wo:ERQMInputText id = "ID_TEXT" label = "JQMInputText" value = "$testString" inset = "true" placeholder = "Username" />
+    <wo:ERQMAjaxObserveField observeFieldID = "ID_TEXT" updateContainerID = "AUCShowValues" action = "$doUpdateAction" />
+    <wo:ERQMInputFlipSwitch id = "ID_FLIP" label = "JQMInputFlipSwitch" stringOn = "YES" stringOff = "NO" value = "$testFlip" inset = "true" />
+    <wo:ERQMAjaxObserveField observeFieldID = "ID_FLIP" updateContainerID = "AUCShowValues" action = "$doUpdateAction" />
+    <wo:ERQMCheckbox id = "ID_CHECK" label = "JQMCheckbox" checked = "$testCheckbox" inset = "true" />
+    <wo:ERQMAjaxObserveField observeFieldID = "ID_CHECK" updateContainerID = "AUCShowValues" action = "$doUpdateAction" />
+    <wo:ERQMPopUpButton id = "ID_POP1" label = "JQMPopupButton1" list = "$allPopUpList1" selection = "$testPopUpElement1" noSelectionString = "Please select ..." data-native-menu = "true" />
+    <wo:ERQMAjaxObserveField observeFieldID = "ID_POP1" updateContainerID = "AUCShowValues" action = "$doUpdateAction" />
+    <wo:ERQMPopUpButton id = "ID_POP2" label = "JQMPopupButton2" list = "$allPopUpList1" selection = "$testPopUpElement2" noSelectionString = "Please select ..." data-native-menu = "false" />
+    <wo:ERQMAjaxObserveField observeFieldID = "ID_POP2" updateContainerID = "AUCShowValues" action = "$doUpdateAction" />
+    <wo:ERQMSubmitButton action = "$doSubmitAction" updateContainerID = "AUCShowValues" value = "Submit" />
+  </wo:form>
+  <h1>Update Container</h1>
+  <wo:ERQMAjaxUpdateContainer id = "AUCShowValues" style "border:1px solid darkgray;padding:10px;">
+    <wo:str value = "$submitText" />
+    <br />
+    <br />
+    JQMInputText: 
+    <wo:string value = "$testString" valueWhenEmpty = "- not set yet -" />
+    <br />
+    JQMInputFlipSwitch: 
+    <wo:string value = "$testFlip" valueWhenEmpty = "- not set yet -" />
+    <br />
+    JQMCheckbox: 
+    <wo:string value = "$testCheckbox" valueWhenEmpty = "- not set yet -" />
+    <br />
+    JQMPopupButton1: 
+    <wo:string value = "$testPopUpElement1" valueWhenEmpty = "- not set yet -" />
+    <br />
+    JQMPopupButton2: 
+    <wo:string value = "$testPopUpElement2" valueWhenEmpty = "- not set yet -" />
+    <br />
+  </wo:ERQMAjaxUpdateContainer>
+  <wo:ERQMButton action = "$doLinkAction" updateContainerID = "AUCShowValues">This is a link to update container</wo:ERQMButton>
+</wo:JQPageWrapper>

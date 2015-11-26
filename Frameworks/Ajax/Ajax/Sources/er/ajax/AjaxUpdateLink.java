@@ -126,12 +126,12 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			onClickBuffer.append(context.contextID());
 			onClickBuffer.append('.');
 			onClickBuffer.append(context.elementID());
-			onClickBuffer.append("'");
+			onClickBuffer.append('\'');
 			// if (generateFunctionWrapper) {
 			// onClickBuffer.append(", additionalParams");
 			// }
-			onClickBuffer.append(")");
-			onClickBuffer.append(";");
+			onClickBuffer.append(')');
+			onClickBuffer.append(';');
 		}
 		else {
 			if (generateFunctionWrapper) {
@@ -203,23 +203,23 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 					if (updateContainerID == null) {
 						onClickBuffer.append("new Ajax.Request(" + actionUrl + ", ");
 						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-						onClickBuffer.append(")");
+						onClickBuffer.append(')');
 					}
 					else {
 						onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', " + actionUrl + ", ");
 						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-						onClickBuffer.append(")");
+						onClickBuffer.append(')');
 					}
 				}
 				else {
 					onClickBuffer.append("new Ajax.Updater('" + replaceID + "', " + actionUrl + ", ");
 					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-					onClickBuffer.append(")");
+					onClickBuffer.append(')');
 				}
 			}
 
 			if (onClick != null) {
-				onClickBuffer.append(";");
+				onClickBuffer.append(';');
 				onClickBuffer.append(onClick);
 			}
 
@@ -228,11 +228,11 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			}
 
 			if (onClickBefore != null) {
-				onClickBuffer.append("}");
+				onClickBuffer.append('}');
 			}
 
 			if (generateFunctionWrapper) {
-				onClickBuffer.append("}");
+				onClickBuffer.append('}');
 			}
 		}
 

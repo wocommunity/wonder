@@ -1,21 +1,13 @@
-<wo:ERQMHtmlTemplate title="Buy a Cat?">
-	<wo:ERQMHeaderBar string="Buy a Cat?"></wo:ERQMHeaderBar>
-
-	<wo:ERQMContent>
-		<wo:ERQMListView split-icon="gear" split-theme="d">
-			<wo:foreach list="$cats" item="$oneCat" index="$index">
-				<wo:ERQMListViewElement>
-					<wo:ERXHyperlinkResource linkResource="page://Main">
-						<wo:ERQMListViewImage imageResource="$fileName" alt="Cat picture"></wo:ERQMListViewImage>
-						<h3><wo:str value = "$oneCat" /></h3>
-					</wo:ERXHyperlinkResource>
-					
-					<wo:ERQMDialogLink linkResource="page://CatPurchase" isButton="false" transition="flow" ></wo:ERQMDialogLink>
-				
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar>(c) by Ken</wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Buy a Cat?">
+  <wo:ERQMListView data-split-icon = "gear" data-split-theme = "d">
+    <wo:foreach list = "$cats" item = "$oneCat" index = "$index">
+      <wo:ERQMListViewElement>
+        <wo:ERQMButton isButton = "false" data-transition = "flow" linkResource = "page://CatPurchase">
+          <wo:WOImage src = "$fileName" alt = "Cat picture" />
+          <h3><wo:str value = "$oneCat" /></h3>
+        </wo:ERQMButton>
+        <!--  -->
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

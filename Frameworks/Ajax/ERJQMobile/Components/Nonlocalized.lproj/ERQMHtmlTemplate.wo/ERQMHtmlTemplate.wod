@@ -1,0 +1,14 @@
+InHeaderContent : ERXWOComponentContent {
+	templateName = "TemplateContextForHeader";
+}
+
+ContainerContent : ERXWOComponentContent {
+	templateName = "TemplateContextForMainContainer";
+}
+
+MainComponent : WOComponentContent {}
+
+HasNoNewTemplates : WOConditional {
+	condition = hasTemplateInComponent;
+	negate = true;
+}

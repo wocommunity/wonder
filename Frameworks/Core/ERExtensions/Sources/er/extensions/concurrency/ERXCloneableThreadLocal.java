@@ -16,8 +16,8 @@ import er.extensions.foundation.ERXUtilities;
 
 /**
  * <code>ERXClonableThreadLocal</code> extends {@link InheritableThreadLocal}
- * to bequeath a cloned copy of the parent object to the child thread.<br/>
- * <br/>
+ * to bequeath a cloned copy of the parent object to the child thread.
+ * <p>
  * Note: Objects used with this thread local must implement the {@link Cloneable}
  * interface and have a public <code>clone</code> method.
  */

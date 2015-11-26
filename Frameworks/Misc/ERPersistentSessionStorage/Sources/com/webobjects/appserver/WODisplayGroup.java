@@ -1439,17 +1439,24 @@ public class WODisplayGroup implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<");
+		StringBuilder sb = new StringBuilder();
+		sb.append('<');
 		sb.append(getClass().getName());
-		sb.append(" dataSource=" + _dataSource);
-		sb.append(" delegate=" + _delegate);
-		sb.append(" sortOrdering=" + _sortOrdering);
-		sb.append(" qualifier=" + _qualifier);
-		sb.append(" localKeys=" + _localKeys);
-		sb.append(" insertedObjectDefaultValues=" + _insertedObjectDefaultValues);
-		sb.append(" numberOfObjectsPerBatch=" + _numberOfObjectsPerBatch);
-		sb.append(">");
+		sb.append(" dataSource=");
+		sb.append(_dataSource);
+		sb.append(" delegate=");
+		sb.append(_delegate);
+		sb.append(" sortOrdering=");
+		sb.append(_sortOrdering);
+		sb.append(" qualifier=");
+		sb.append(_qualifier);
+		sb.append(" localKeys=");
+		sb.append(_localKeys);
+		sb.append(" insertedObjectDefaultValues=");
+		sb.append(_insertedObjectDefaultValues);
+		sb.append(" numberOfObjectsPerBatch=");
+		sb.append(_numberOfObjectsPerBatch);
+		sb.append('>');
 		return sb.toString();
 	}
 

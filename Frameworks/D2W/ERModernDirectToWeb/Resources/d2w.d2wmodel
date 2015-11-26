@@ -3,7 +3,7 @@
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "useAjaxControls"; "value" = "true"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "displayKeyForEntity"; "value" = "entity.name"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "includeOptionalForm"; "value" = "true"; }; }, 
-    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "typeAheadMinimumCharaceterCount"; "value" = "3"; }; }, 
+    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "typeAheadMinimumCharacterCount"; "value" = "3"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "useAjaxControlsWhenEmbedded"; "value" = "false"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "typeAheadSearchTemplate"; "value" = "*@@searchValue@@*"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "pageConfiguration"; "selectorName" = "isLike"; "value" = "*Embedded*"; }; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "useAjaxControls"; "value" = "true"; }; }, 

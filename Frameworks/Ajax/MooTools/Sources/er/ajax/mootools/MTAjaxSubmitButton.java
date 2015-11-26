@@ -199,15 +199,15 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 				if(beforeEffectDuration != null || mode != null) {
 					onClickBuffer.append(", { ");
 					if(beforeEffectDuration != null) {
-						onClickBuffer.append("duration: '").append(beforeEffectDuration).append("'").append(mode != null || transition != null ? "," : "");
+						onClickBuffer.append("duration: '").append(beforeEffectDuration).append('\'').append(mode != null || transition != null ? "," : "");
 					}
 					if(mode != null) {
-						onClickBuffer.append("mode: '").append(mode).append("'").append(transition != null ? "," : "");
+						onClickBuffer.append("mode: '").append(mode).append('\'').append(transition != null ? "," : "");
 					}
 					if(transition != null) {
 						onClickBuffer.append("transition: ").append(transition);
 					}
-					onClickBuffer.append("}");
+					onClickBuffer.append('}');
 				}
 				onClickBuffer.append("); $('").append(beforeEffectID).append("').get('slide').slide").append(ERXStringUtilities.capitalize(beforeEffectProperty)).append("().chain(function() {");
 			} else if(beforeEffect.equals("highlight")) {
@@ -235,7 +235,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			onClickBuffer.append(", null");
 		}
 
-		onClickBuffer.append(",");
+		onClickBuffer.append(',');
 		NSMutableDictionary options = createAjaxOptions(component);
 
 		String effect = (String) valueForBinding("effect", component);
@@ -261,7 +261,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		}
 
 		AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-		onClickBuffer.append(")");
+		onClickBuffer.append(')');
 		String onClick = (String)valueForBinding("onClick", component);
 		if(onClick != null) {
 			onClickBuffer.append("; ").append(onClick);
@@ -272,7 +272,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		}
 
 		if(onClickBefore != null) {
-			onClickBuffer.append("}");
+			onClickBuffer.append('}');
 		}
 
 		if(functionName != null) {

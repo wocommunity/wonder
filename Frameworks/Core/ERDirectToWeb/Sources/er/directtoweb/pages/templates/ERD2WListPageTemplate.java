@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Beefed up list page.<br />
+ * Beefed up list page.
+ * 
  * @d2wKey printerButtonComponentName
  * @d2wKey emptyListComponentName
  * @d2wKey headerComponentName

@@ -1,19 +1,10 @@
-<wo:ERQMHtmlTemplate title="SearchFilterHiddenDataList">
-	<wo:ERQMHeaderBar string="SearchFilterHiddenDataList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-		<h2>Search for last Name</h2>
-		<wo:ERQMListView filter="true">
-			<wo:foreach list="$talents" item="$oneTalent">
-				<wo:ERQMListViewElement filtertext="$oneTalent.lastName" action="$doShowOneTalentAction">
-					<wo:str value = "$oneTalent.firstName" />
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Search Filter Hidden Data List">
+  <wo:ERQMListView data-filter = "true" data-filter-label = "Only Last Name" data-filter-placeholder = "Type a last name">
+    <wo:foreach list = "$talents" item = "$oneTalent">
+      <wo:ERQMListViewElement action = "$doShowOneTalentAction" data-filtertext = "$oneTalent.lastName">
+        <wo:str value = "$oneTalent.firstName" />
+        <wo:str value = "$oneTalent.lastName" />
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

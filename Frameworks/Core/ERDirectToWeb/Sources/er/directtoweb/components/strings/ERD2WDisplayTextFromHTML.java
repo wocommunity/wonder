@@ -12,8 +12,7 @@ import com.webobjects.directtoweb.D2WDisplayString;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Extracts text from html and displays the text.<br />
- * 
+ * Extracts text from html and displays the text.
  */
 
 public class ERD2WDisplayTextFromHTML extends D2WDisplayString {

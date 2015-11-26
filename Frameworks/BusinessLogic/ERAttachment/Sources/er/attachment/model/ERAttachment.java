@@ -6,11 +6,13 @@ import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOQualifier;
 
 import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 /**
  * <span class="en">
@@ -138,9 +140,14 @@ public abstract class ERAttachment extends _ERAttachment {
    * </span>
    */
   public static ERAttachment fetchRequiredAttachmentWithWebPath(EOEditingContext editingContext, String webPath) {
-    ERAttachment attachment = ERAttachment.fetchRequiredERAttachment(editingContext, ERAttachment.WEB_PATH_KEY, webPath);
+    ERAttachment attachment = ERAttachment.fetchRequiredERAttachment(editingContext, thatAreForWebPath(webPath));
     return attachment;
   }
+
+	public static EOQualifier thatAreForWebPath(String webPath) {
+		final ERXKeyValueQualifier qualifier = ERAttachment.WEB_PATH.is(webPath);
+		return qualifier;
+	}
   
   @Override
   public void didDelete(EOEditingContext ec) {

@@ -1,0 +1,23 @@
+<wo:ERQMHtmlTemplate data-title = "$application.name" id = "$id">
+  <wo:ERXWOTemplate templateName = "TemplateContextForHeader">
+    <meta name = "format-detection" content = "telephone=no" />
+    <wo:ERXStyleSheet framework = "ERJQMobile" filename = "dgnavbar/icon-pack-custom.css" />
+  </wo:ERXWOTemplate>
+  <wo:ERXWOTemplate templateName = "TemplateContextForMainContainer">
+    <wo:if condition = "$isHomepage">
+      <wo:ERQMHeaderBar data-position = "true" isNavBar = "true">
+        <h1><wo:string value = "$title" /></h1>
+      </wo:ERQMHeaderBar>
+    </wo:if>
+    <wo:else> <wo:ERQMHeaderBarSimple string = "$^title" isFixed = "true" data-theme = "a" hasBackButton = "true" backButton-title = "Back" rightButton-icon = "home" rightButton-theme = "a" rightButton-title = "Home" rightButton-linkResource = "da://default" /> </wo:else>
+    <wo:ERQMContent> <wo:ERXWOComponentContent /> </wo:ERQMContent>
+    <wo:ERQMFooterBar isFixed = "true" isNavBar = "true">
+      <wo:ERQMNavBar>
+        <wo:ERQMNavBarElement action = "$showInfo" data-icon = "info" string = "Info" />
+        <wo:if condition = "$actAsGuest"> <wo:ERQMNavBarElement action = "$login" data-icon = "user" string = "Login" /> </wo:if>
+        <wo:else> <wo:ERQMNavBarElement action = "$logout" data-icon = "lock" string = "Logout" /> </wo:else>
+        <wo:ERQMNavBarElement href = "#" data-icon = "arrow-u" string = "Top" selected = "false" class = "never-active" otherTagString = "onclick='$.mobile.silentScroll(0);setTimeout(function() {$(\".never-active\").removeClass(\"ui-btn-active\"); }, 0);return false;'" />
+      </wo:ERQMNavBar>
+    </wo:ERQMFooterBar>
+  </wo:ERXWOTemplate>
+</wo:ERQMHtmlTemplate>

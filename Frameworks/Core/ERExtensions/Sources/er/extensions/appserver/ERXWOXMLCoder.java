@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Enumeration;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.xml.WOXMLCoder;
 import com.webobjects.appserver.xml.WOXMLDecoder;
@@ -34,7 +34,7 @@ public class ERXWOXMLCoder extends WOXMLCoder {
     private _MappingModel _mappingModel;
 
     /**
-     * Quick and dirty class to en- and decode the generic xml data to full-flegded objects that 
+     * Quick and dirty class to en- and decode the generic xml data to full-fledged objects that 
      * can be bound in the edit interface.
      * 
      *

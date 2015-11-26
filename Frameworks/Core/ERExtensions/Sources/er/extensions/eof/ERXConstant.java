@@ -25,14 +25,14 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
- * bytes or strings in the DB like what you get with the factory classes. <br />
+ * bytes or strings in the DB like what you get with the factory classes.
  * If you use objects of this class, you might be able to completely remove the EOSharedEditingContext
- * (the google search term for "why does my app lock up").<br />
- * <br>
+ * (the google search term for "why does my app lock up").
+ * <p>
  * To use the Number constants, you need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link ERXEntityClassDescription}, also
- * you must enable the {@link er.extensions.jdbc.ERXJDBCAdaptor}.<br />
- * <br>
+ * you must enable the {@link er.extensions.jdbc.ERXJDBCAdaptor}.
+ * <p>
  * The String and Byte based constants can be used with a custom class type:<pre><code>
  * 
  * ERCMailMessage.plist:
@@ -78,7 +78,6 @@ import er.extensions.foundation.ERXStringUtilities;
  *     public static ERCMailState PROCESSING_STATE = new ERCMailState("proc", "Processing");
  * }
  * </code></pre>
- * <br />
  * An example would be:
  * <pre><code>
  * public class Test extends EOGenericRecord {
@@ -134,7 +133,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * // you can compare by equality
  * test.getStatus() == Test.Status.ON
- * </pre></code>
+ * </code></pre>
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant {
@@ -507,16 +506,4 @@ public abstract class ERXConstant {
         return (i>=0 && i<MAX_INT) ? INTEGERS[i] : Integer.valueOf(i);
     }
 
-    /**
-     * Returns an Integer for a given String
-     * @throws NumberFormatException forwarded from the
-     *		parseInt method off of Integer
-     * @return potentially cache Integer for a given String
-     * 
-     * @deprecated use {@link ERXStringUtilities#integerWithString(String)}
-     */
-    @Deprecated
-    public static Integer integerForString(String s) throws NumberFormatException {
-        return integerForInt(Integer.parseInt(s));
-    }
 }

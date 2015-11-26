@@ -38,7 +38,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * {@link ERSimpleEvent ERSimpleEvent}, or any other class implementing
  * {@link ERCalendarEvent the ERCalendarEvent interface}.
  *
- * @author 	Johan Carlberg <johan@oops.se>
+ * @author 	Johan Carlberg &lt;johan@oops.se&gt;
  * @version 	1.0, 2002-09-30
  */
 public class ERPublishCalendarPage extends WOComponent {

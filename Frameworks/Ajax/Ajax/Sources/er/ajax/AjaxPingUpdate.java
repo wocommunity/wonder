@@ -1,6 +1,6 @@
 package er.ajax;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;

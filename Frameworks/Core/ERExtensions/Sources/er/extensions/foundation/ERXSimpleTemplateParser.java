@@ -36,6 +36,7 @@ public class ERXSimpleTemplateParser {
     public static final String DEFAULT_DELIMITER = "@@";
 
     /** The deprecated delimiter */
+    @Deprecated
     private static final String DEPRECATED_DELIMITER = "@";
 
     /** logging support */
@@ -220,6 +221,12 @@ public class ERXSimpleTemplateParser {
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         StringBuilder sb = new StringBuilder();
+        Object objects[];
+        if (otherObject != null) {
+            objects = new Object[] {object, otherObject};
+        } else {
+            objects = new Object[] {object};
+        }
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if(!isLoggingDisabled) {
@@ -233,12 +240,6 @@ public class ERXSimpleTemplateParser {
                     throw new IllegalArgumentException("\"\" is not a valid keypath in template: " + template);
                 }
                 Object result = _undefinedKeyLabel;
-                Object objects[];
-                if(otherObject != null) {
-                    objects = new Object[] {object, otherObject};
-                } else {
-                    objects = new Object[] {object};
-                }
                 for (int i = 0; i < objects.length; i++) {
                     Object o = objects[i];
                     if(o != null && result == _undefinedKeyLabel) {

@@ -19,6 +19,8 @@ public class Application extends ERXApplication {
         setAutoOpenInBrowser(false);
     }
 
+    public static final String listenerProperty = "er.erxtest.ERXTestListener";
+
     public static Properties wobuild;
 
     static {
@@ -46,9 +48,9 @@ public class Application extends ERXApplication {
         ERXTestUtilities.fixModelsForAdaptorNamed(adaptorName);
         System.out.println("Setting EOModels to use adaptor \""+adaptorName+"\"");
 
-        String listener = System.getProperty("er.erxtest.ERXTestListener");
+        String listener = System.getProperty(listenerProperty);
         if (listener == null || listener.compareToIgnoreCase("noisy") != 0)
-            System.out.println("Invoke \"ant -Der.erxtest.ERXTestListener=Noisy tests.run\" to see verbose output.");
+            System.out.println("Invoke \"ant -D"+listenerProperty+"=Noisy tests.run\" to see verbose output.");
 
         if (!isLaunchingFromEclipse()) {
 

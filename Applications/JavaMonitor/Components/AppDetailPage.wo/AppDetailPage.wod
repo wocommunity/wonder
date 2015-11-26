@@ -282,6 +282,19 @@ TotalTransactions: WOString {
 	value = totalTransactions;
 }
 
+TotalTransactionsForActiveInstances: WOString {
+	value = totalTransactionsForActiveInstances;
+	numberformat = "#,##0";
+}
+
+ActiveSessionsForActiveInstances: WOString {
+	value = totalActiveSessionsForActiveInstances;
+	numberformat = "#,##0";	
+}
+
+
+
+
 // Start of Add Instance Stuff
 
 AddHostsLink : WOHyperlink {

@@ -24,12 +24,12 @@ public class AjaxUploadProgress extends AjaxProgress {
 	 * @param fileName the name of the file uploaded from the client
 	 * @param streamLength the total length of the stream
 	 */
-	public AjaxUploadProgress(String id, File tempFile, String fileName, int streamLength) {
+	public AjaxUploadProgress(String id, File tempFile, String fileName, long streamLength) {
 		super(id, streamLength);
 		_tempFile = tempFile;
 		_fileName = fileName;
 	}
-	
+
 	/**
 	 * Returns the name of the file the client uploaded.
 	 * 

@@ -10,8 +10,7 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
- * Small improvements to the EditPageInterface.<br />
- * 
+ * Small improvements to the EditPageInterface.
  */
 
 public interface ERDEditPageInterface extends EditPageInterface {

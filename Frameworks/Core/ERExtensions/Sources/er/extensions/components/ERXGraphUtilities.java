@@ -21,8 +21,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Utility methods useful when using GifPlot.<br />
- * 
+ * Utility methods useful when using GifPlot.
  */
 
 public class ERXGraphUtilities {

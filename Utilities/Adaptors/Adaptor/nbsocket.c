@@ -113,7 +113,7 @@ static int setBlockingState(int sd, int wantNonBlocking) {
 
 
 static int nonBlockingConnectHostent(int sd, int connectTimeout, struct hostent *hostentry, unsigned int port) {
-   int n, error, rc;
+   int n, rc;
    fd_set wset;
    struct timeval tval;
    struct sockaddr_in connect_addr;
@@ -127,7 +127,6 @@ static int nonBlockingConnectHostent(int sd, int connectTimeout, struct hostent 
       memcpy(&connect_addr.sin_addr, hostentry->h_addr_list[0], hostentry->h_length);
       connect_addr_len = sizeof(struct sockaddr_in);
 
-      error = 0;
       /* Since we're non-blocking, we expect an EINPROGRESS error. */
       if ((n = connect(sd, (struct sockaddr *)&connect_addr, connect_addr_len)) < 0) {
          int ec = WA_error();

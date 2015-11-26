@@ -1,0 +1,18 @@
+BtnSelection : WOPopUpButton {
+	list = ^list;
+	item = ^item;
+	displayString = ^displayString;
+	selection = ^selection;
+	noSelectionString = ^noSelectionString;
+	disabled =  ^disabled;
+	otherTagString = otherTagString;
+}
+BtnSelectedValue : WOPopUpButton {
+	list = ^list;
+	item = ^item;
+	displayString = ^displayString;
+	selectedValue = ^selectedValue;
+	noSelectionString = ^noSelectionString;
+	disabled =  ^disabled;
+	otherTagString = otherTagString;
+}

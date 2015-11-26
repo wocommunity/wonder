@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset = "utf-8" />
+    <meta name = "viewport" content = "width=device-width, initial-scale=1" />
+    <wo:genericElement elementName = "link" rel = "stylesheet" href = "$themeStyleSheetUrl" />
+    <wo:genericElement elementName = "link" rel = "stylesheet" href = "$iconsStyleSheetUrl" />
+    <wo:genericElement elementName = "link" rel = "stylesheet" href = "$structurceStyleSheetUrl" />
+    <wo:genericContainer elementName = "script" src = "$jQueryUrl" />
+    <wo:genericContainer elementName = "script" src = "$javascriptUrl" />
+    <wo:genericContainer elementName = "script" src = "$autocompleteUrl" />
+    <webobject name = "InHeaderContent" />
+  </head>
+  <body>
+    <wo:genericContainer elementName = "div" data-role = "page" otherTagString = "$otherTagString">
+      <webobject name = "HasNoNewTemplates"><webobject name = "MainComponent" /></webobject>
+      <webobject name = "ContainerContent" />
+    </wo:genericContainer>
+  </body>
+</html>

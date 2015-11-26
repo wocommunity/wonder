@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 //	showBrackets - Boolean, specifies if the <> should be displayed around the mailto link.
 /////////////////////////////////////////////////////////////////////////////////
 /**
- * A display mailto component with a number of bindings.<br />
+ * A display mailto component with a number of bindings.
  * 
  * @binding email
  * @binding object

@@ -48,7 +48,7 @@ public class ERXDictionaryUtilities {
 
     /**
      * Creates an NSDictionary from a resource associated with a given bundle
-     * that is in property list format.<br/>
+     * that is in property list format.
      * @param name name of the file or resource.
      * @param bundle NSBundle to which the resource belongs.
      * @return NSDictionary de-serialized from the property list.
@@ -319,13 +319,13 @@ public class ERXDictionaryUtilities {
 		if (separator == null) {
 			separator = "&";
 		}
-		StringBuffer sb = new StringBuffer(100);
+		StringBuilder sb = new StringBuilder(100);
 		if (dict != null) {
 			for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 				Object key = e.nextElement();
 				try {
 					sb.append(URLEncoder.encode(key.toString(), encoding));
-					sb.append("=");
+					sb.append('=');
 					sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 					if (e.hasMoreElements()) {
 						sb.append(separator);

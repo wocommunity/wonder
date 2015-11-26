@@ -8,6 +8,7 @@ import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.QueryStringAuthGenerator;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.attachment.upload.ERRemoteAttachment;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
@@ -24,7 +25,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author mschrag
  */
-public class ERS3Attachment extends _ERS3Attachment {
+public class ERS3Attachment extends _ERS3Attachment implements ERRemoteAttachment {
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 

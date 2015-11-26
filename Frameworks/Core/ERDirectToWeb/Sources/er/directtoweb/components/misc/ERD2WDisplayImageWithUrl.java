@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
- * Displays a url, where the object-key pair refer to a url<br />
+ * Displays a url, where the object-key pair refer to a url.
+ * 
  * @d2wKey imageWidth
  * @d2wKey imageHeight
  */

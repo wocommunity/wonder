@@ -194,7 +194,7 @@ public class Numerizer {
   }
 
   public static String andition(String str) {
-    StringBuffer anditionStr = new StringBuffer(str);
+    StringBuilder anditionStr = new StringBuilder(str);
     Matcher matcher = Numerizer.ANDITION_PATTERN.matcher(anditionStr);
     while (matcher.find()) {
       if (matcher.group(2).equalsIgnoreCase(" and ") || (matcher.group(1).length() > matcher.group(3).length() && matcher.group(1).matches("^.+0+$"))) {

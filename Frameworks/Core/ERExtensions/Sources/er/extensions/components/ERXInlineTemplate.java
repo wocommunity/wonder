@@ -19,25 +19,25 @@ import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXSimpleTemplateParser;
 
 /**
- * ERXInlineTemplate allows to specify a component's template dynamically. <br />
+ * ERXInlineTemplate allows to specify a component's template dynamically.
+ * <p>
  * The content which would usually go into the ".html" file within a WOComponent's bundle, is specified using the "html"
- * binding, the ".wod" part is pecified by the "wod" binding. <br />
- * <br />
+ * binding, the ".wod" part is specified by the "wod" binding.
+ * <p>
  * When using {@link WOOgnl} with "ognl.helperFunctions = true" and "ognl.inlineBindings = true", you can leave out the
- * WOD part. <br />
- * <br />
+ * WOD part.
+ * <p>
  * When keys are accessed, the component first determines the first element of the path (e.g. key "foo" for path
- * "foo.bar") and looks, if there is a binding with that key. <br />
+ * "foo.bar") and looks, if there is a binding with that key.
  * If there is such a binding, the value is retrieved and the rest of the keyPath applied to it
- * (valueForBinding("foo").valueForKeyPath("bar")). <br />
- * If there is no binding with that name and "proxyParent" is true, the keyPath is resolved against the parent component.<br />
- * Otherwise, dynamicBindings ({@link ERXComponent#dynamicBindings()}) are used. <br />
+ * (valueForBinding("foo").valueForKeyPath("bar")).
+ * If there is no binding with that name and "proxyParent" is true, the keyPath is resolved against the parent component.
+ * Otherwise, dynamicBindings ({@link ERXComponent#dynamicBindings()}) are used.
  * You can switch off the usage of dynamicBindings by setting the binding "defaultToDynamicBindings" to false. 
- * Then a warning will be logged for unknown keys.<br />
- * <br />
+ * Then a warning will be logged for unknown keys.
+ * <p>
  * When an error occurs, an error message is displayed. The message can be altered using the "errorTemplate" binding.
- * <br />
- * <br />
+ * <p>
  * Optionally, a "cacheKey" (String) can be specified, under which the parsed WOElement will be cached. To allow
  * updating, a "cacheVersion" (Object) is available. When the version changes, the value is recalculated.
  * 
@@ -51,7 +51,6 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding defaultToDynamicBindings whether to use dynamicBindings for unknown keys (default is true)
  * 
  * @author th
- * 
  */
 public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	/**

@@ -25,12 +25,26 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	NSTimestamp _expires;
 	int _timeout;
 	boolean _isHttpOnly;
+	@Deprecated
 	static final SimpleDateFormat TheDateFormat;
 
 	static {
 		TheDateFormat = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", new DateFormatSymbols(Locale.US));
 		TheDateFormat.setTimeZone(NSTimeZone.timeZoneWithName("GMT", true));
 	}
+	
+	/**
+	 * Formatter to use when handling timestamp columns. Each thread has its own
+	 * copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			SimpleDateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", new DateFormatSymbols(Locale.US));
+			formatter.setTimeZone(NSTimeZone.timeZoneWithName("GMT", true));
+			return formatter;
+		}
+	};
 
 	@Deprecated
 	public static WOCookie cookieWithName(final String name, final String value, final String path,
@@ -96,14 +110,14 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 
 	@Override
 	public String toString() {
-		String expiresString = _expires != null ? (new StringBuilder()).append(" expires=")
-				.append(TheDateFormat.format(_expires)).toString() : "";
-		String expires = _timeout < 0 ? "" : (new StringBuilder()).append(" max-age=").append(_timeout).toString();
+		String expiresString = _expires != null ? new StringBuilder().append(" expires=")
+				.append(TIMESTAMP_FORMATTER.get().format(_expires)).toString() : "";
+		String expires = _timeout < 0 ? "" : new StringBuilder().append(" max-age=").append(_timeout).toString();
 
-		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name=").append(_name)
+		return new StringBuilder().append('<').append(getClass().getName()).append(" name=").append(_name)
 				.append(" value=").append(_value).append(" path=").append(_path).append(" domain=").append(_domain)
-				.append(expiresString).append(expires).append(" isSecure=").append(_isSecure ? "true" : "false")
-				.append(" isHttpOnly=").append(_isHttpOnly ? "true" : "false").append(">").toString();
+				.append(expiresString).append(expires).append(" isSecure=").append(_isSecure)
+				.append(" isHttpOnly=").append(_isHttpOnly).append('>').toString();
 	}
 
 	public String headerString() {
@@ -119,7 +133,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			header.append(_value);
 			header.append("\"");
 		} else if (_value == null) {
-			header.append(" ");
+			header.append(' ');
 		} else {
 			header.append(_value);
 		}
@@ -138,7 +152,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			}
 			if (_expires != null) {
 				header.append("; expires=");
-				header.append(TheDateFormat.format(localExpires));
+				header.append(TIMESTAMP_FORMATTER.get().format(localExpires));
 			}
 			if (_path != null) {
 				header.append("; path=");

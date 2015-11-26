@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.extensions.formatters.ERXNumberFormatter;
 
 /**
- * Same as ERDDisplayNumberWithUnit only subclass is different.  This should be cleaned up.<br />
+ * Same as ERDDisplayNumberWithUnit only subclass is different.  This should be cleaned up.
  * 
  * @binding key
  * @binding object

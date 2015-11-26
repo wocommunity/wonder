@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+        <wo class="ERQMAutoComplete.java" wocomponentcontent="true">
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="type"/>
+        <binding defaults="Boolean" name="data-clear-btn"/>
+        <binding name="data-clear-btn-text"/>
+        <binding defaults="Boolean" name="data-mini"/>
+        <binding name="data-role"/>
+        <binding name="data-theme"/>
+        <binding defaults="Boolean" name="data-disabled"/>
+        <binding name="label"/>
+        <binding name="placeholder"/>
+        <binding defaults="Boolean" name="inset"/>
+        <binding defaults="Boolean" name="hideLabel"/>
+        <binding name="value"/>
+        <binding name="otherTagStringLabel"/>
+        <binding name="otherTagString"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+        <validation message="'label' is a required binding.">
+            <unbound name="label"/>
+        </validation>
+    <binding name="data-wrapper-class"/>
+    <binding defaults="Boolean" name="data-corners"/>
+    <binding name="list-data-icon"/>
+        
+    
+    <binding name="jsonAction"/>
+        <binding name="jsonActionClass"/>
+        <binding name="jsonDirectActionName"/>
+        <binding name="jsonQueryDictionary"/>
+        <binding name="jsonComplex"/>
+        <binding name="autosubmit"/>
+        <binding name="minLength"/>
+    <binding name="otherTagStringList"/>
+    <binding name="list-inset"/>
+    </wo>
+</wodefinitions>

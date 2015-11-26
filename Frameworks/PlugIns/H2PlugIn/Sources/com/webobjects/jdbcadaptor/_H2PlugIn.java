@@ -11,13 +11,13 @@ import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
@@ -25,6 +25,7 @@ import com.webobjects.eoaccess.synchronization.EOSchemaSynchronization;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -48,6 +49,28 @@ import com.webobjects.foundation._NSStringUtilities;
 public class _H2PlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 	protected static NSMutableDictionary<String, String> sequenceNameOverrides = new NSMutableDictionary<String, String>();
+
+	/**
+	 * Formatter to use when handling date columns. Each thread has its own
+	 * copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd");
+		}
+	};
+
+	/**
+	 * Formatter to use when handling timestamp columns. Each thread has its own
+	 * copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		}
+	};
 
 	protected static String quoteTableName(String name) {
 		String result = null;
@@ -75,7 +98,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 		if (string == null) {
 			return null;
 		}
-		return new StringBuilder("'").append(string).append("'").toString();
+		return new StringBuilder('\'').append(string).append('\'').toString();
 	}
 	
 	/**
@@ -147,6 +170,11 @@ public class _H2PlugIn extends JDBCPlugIn {
 
 	public static class H2Expression extends JDBCExpression {
 		/**
+		 * Holds array of join clauses.
+		 */
+		private NSMutableArray<JoinClause> _alreadyJoined = new NSMutableArray<JoinClause>();
+
+		/**
 		 * Fetch spec limit ivar
 		 */
 		private int _fetchLimit;
@@ -206,10 +234,10 @@ public class _H2PlugIn extends JDBCPlugIn {
 				result = sqlStringForData((NSData) value);
 			}
 			else if (value instanceof NSTimestamp && isTimestampAttribute(eoattribute)) {
-				result = singleQuotedString(timestampFormatter().format(value));
+				result = singleQuotedString(TIMESTAMP_FORMATTER.get().format(value));
 			}
 			else if (value instanceof NSTimestamp && isDateAttribute(eoattribute)) {
-				result = singleQuotedString(dateFormatter().format(value));
+				result = singleQuotedString(DATE_FORMATTER.get().format(value));
 			}
 			else if (value instanceof String) {
 				result = formatStringValue((String) value);
@@ -358,63 +386,303 @@ public class _H2PlugIn extends JDBCPlugIn {
 			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
 		}
 
+	    /**
+		 * Overridden to handle correct placements of join conditions and 
+		 * to handle DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
+		 *
+		 * @param attributes    the attributes to select
+		 * @param lock  flag for locking rows in the database
+		 * @param qualifier the qualifier to restrict the selection
+		 * @param fetchOrder    specifies the fetch order
+		 * @param columnList    the SQL columns to be fetched
+		 * @param tableList the the SQL tables to be fetched
+		 * @param whereClause   the SQL where clause
+		 * @param joinClause    the SQL join clause
+		 * @param orderByClause the SQL sort order clause
+		 * @param lockClause    the SQL lock clause
+		 * @return  the select statement
+		 */
 		@Override
-		public String assembleSelectStatementWithAttributes(NSArray attributes, boolean lock, EOQualifier qualifier, NSArray fetchOrder, String selectString, String columnList, String tableList, String whereClause, String joinClause, String orderByClause, String lockClause) {
-			int size = selectString.length() + columnList.length() + tableList.length() + 7;
-			if (lockClause != null && lockClause.length() != 0) {
-				size += lockClause.length() + 1;
-			}
-			if (whereClause != null && whereClause.length() != 0) {
-				size += whereClause.length() + 7;
-			}
-			if (joinClause != null && joinClause.length() != 0) {
-				size += joinClause.length() + 7;
-			}
-			if (orderByClause != null && orderByClause.length() != 0) {
-				size += orderByClause.length() + 10;
-			}
-			StringBuilder sb = new StringBuilder(size);
-			sb.append(selectString);
-			sb.append(columnList);
-			sb.append(" FROM ");
-			sb.append(tableList);
-			
-			if (whereClause != null && whereClause.length() != 0) {
-				sb.append(" WHERE ");
-				sb.append(whereClause);
-			}
-			if (joinClause != null && joinClause.length() != 0) {
-				if (whereClause != null && whereClause.length() != 0) {
-					sb.append(" AND ");
-				} else {
-					sb.append(" WHERE ");
-				}
-				sb.append(joinClause);
-			}
-			
-			if (orderByClause != null && orderByClause.length() != 0) {
-				sb.append(" ORDER BY ");
-				sb.append(orderByClause);
-			}
-			
-			// fetchRange overrides fetchLimit
-			if (_fetchRange != null) {
-				sb.append(" LIMIT ");
-				sb.append(_fetchRange.length());
-				sb.append(" OFFSET ");
-				sb.append(_fetchRange.location());
-			} else if (_fetchLimit != 0) {
-				sb.append(" LIMIT ");
-				sb.append(_fetchLimit);
-			}
-			
-			if (lockClause != null && lockClause.length() != 0) {
-				sb.append(' ');
-				sb.append(lockClause);
-			}
-			
-			return sb.toString();
+		public String assembleSelectStatementWithAttributes(NSArray attributes,
+		                                                    boolean lock,
+		                                                    EOQualifier qualifier,
+		                                                    NSArray fetchOrder,
+		                                                    String selectString,
+		                                                    String columnList,
+		                                                    String tableList,
+		                                                    String whereClause,
+		                                                    String joinClause,
+		                                                    String orderByClause,
+		                                                    String lockClause) {
+		    StringBuilder sb = new StringBuilder();
+		    sb.append(selectString);
+		    sb.append(columnList);
+		    // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not also present in the columns list...
+		    // This implementation sucks, but should be good enough for the normal case
+		    if(selectString.indexOf(" DISTINCT") != -1) {
+		        String [] columns = orderByClause.split(",");
+		        for(int i = 0; i < columns.length; i++) {
+		            String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*", "");
+		            if(columnList.indexOf(column) == -1) {
+		                sb.append(", ");
+		                sb.append(column);
+		            }
+		        }
+		    }
+		    sb.append(" FROM ");
+		    String fieldString;
+		    if (_alreadyJoined.count() > 0) {
+		        fieldString = joinClauseString();
+		    } else {
+		        fieldString = tableList;
+		    }
+		    sb.append(fieldString);
+		    if ((whereClause != null && whereClause.length() > 0) ||
+		        (joinClause != null && joinClause.length() > 0)) {
+		        sb.append(" WHERE ");
+		        if (joinClause != null && joinClause.length() > 0) {
+		            sb.append(joinClause);
+		            if (whereClause != null && whereClause.length() > 0)
+		                sb.append(" AND ");
+		        }
+		        
+		        if (whereClause != null && whereClause.length() > 0) {
+		            sb.append(whereClause);
+		        }
+		    }
+		    if (orderByClause != null && orderByClause.length() > 0) {
+		        sb.append(" ORDER BY ");
+		        sb.append(orderByClause);
+		    }
+		    if (lockClause != null && lockClause.length() > 0) {
+		        sb.append(' ');
+		        sb.append(lockClause);
+		    }
+		    // fetchRange overrides fetchLimit
+		    if (_fetchRange != null) {
+		        sb.append(" LIMIT ");
+		        sb.append(_fetchRange.length());
+		        sb.append(" OFFSET ");
+		        sb.append(_fetchRange.location());
+		    } else if (_fetchLimit != 0) {
+		        sb.append(" LIMIT ");
+		        sb.append(_fetchLimit);
+		    }
+		    return sb.toString();
 		}
+
+		/**
+		 * Utility that traverses a key path to find the last destination entity
+		 *
+		 * @param keyPath   the key path
+		 * @return  the entity at the end of the keypath
+		 */
+		private EOEntity entityForKeyPath(String keyPath) {
+		    NSArray<String> keys = NSArray.componentsSeparatedByString(keyPath, ".");
+		    EOEntity ent = entity();
+		    
+		    for (int i = 0; i < keys.count(); i++) {
+		        String k = keys.objectAtIndex(i);
+		        EORelationship rel = ent.anyRelationshipNamed(k);
+		        if (rel == null) {
+		            // it may be an attribute 
+		            if (ent.anyAttributeNamed(k) != null) {
+		                break;
+		            }
+		            throw new IllegalArgumentException("relationship " + keyPath + " generated null");
+		        }
+		        ent = rel.destinationEntity();
+		    }
+		    return ent;
+		}
+
+		/**
+		 * Helper class that stores a join definition and
+		 * helps <code>H2Expression</code> to assemble
+		 * the correct join clause.
+		 */
+		public static class JoinClause {
+		    String table1;
+		    String op;
+		    String table2;
+		    String joinCondition;
+			String sortKey;
+		    
+			@Override
+		    public String toString() {
+		        return table1 + op + table2 + joinCondition;
+		    }
+		    
+		    @Override
+		    public boolean equals(Object obj) {
+		        if (obj == null || !(obj instanceof JoinClause)) {
+		            return false;
+		        }
+		        return toString().equals(obj.toString());
+		    }
+		    
+			public void setTable1(String leftTable, String leftAlias) {
+				table1 = leftTable + " " + leftAlias;
+				sortKey = leftAlias.substring(1);
+				if (sortKey.length() < 2) {
+					// add padding for cases with >9 joins
+					sortKey = " " + sortKey;
+				}
+			}
+		
+		    /**
+		     * Property that makes this class "sortable". 
+		     * Needed to correctly assemble a join clause.
+		     */
+		    public String sortKey() {
+		    	return sortKey;
+		    }
+		}
+
+		/**
+		 * Overrides the parent implementation to compose the final string
+		 * expression for the join clauses.
+		 */
+		@Override
+		public String joinClauseString() {
+		    NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
+		    StringBuilder sb = new StringBuilder();
+		    JoinClause jc;
+		    EOSortOrdering.sortArrayUsingKeyOrderArray
+		        ( _alreadyJoined, new NSArray<EOSortOrdering>( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
+		    if (_alreadyJoined.count() > 0) {
+		        jc = _alreadyJoined.objectAtIndex(0);
+		        
+		        sb.append(jc);
+		        seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+		        seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+		    }
+		    
+		    for (int i = 1; i < _alreadyJoined.count(); i++) {
+		        jc = _alreadyJoined.objectAtIndex(i);
+		        
+		        sb.append(jc.op);
+		        if (seenIt.objectForKey(jc.table1) == null) {
+		            sb.append(jc.table1);
+		            seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+		        }
+		        else if (seenIt.objectForKey(jc.table2) == null) {
+		            sb.append(jc.table2);
+		            seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+		        }
+		        sb.append(jc.joinCondition);
+		    }
+		    return sb.toString();
+		}
+
+		/**
+		 * Overridden to not call the super implementation.
+		 * 
+		 * @param leftName  the table name on the left side of the clause
+		 * @param rightName the table name on the right side of the clause
+		 * @param semantic  the join semantic
+		 */
+		@Override
+		public void addJoinClause(String leftName,
+		                          String rightName,
+		                          int semantic) {
+		    assembleJoinClause(leftName, rightName, semantic);
+		}
+
+		/**
+		 * Overridden to construct a valid SQL92 JOIN clause as opposed to
+		 * the Oracle-like SQL the superclass produces.
+		 *
+		 * @param leftName  the table name on the left side of the clause
+		 * @param rightName the table name on the right side of the clause
+		 * @param semantic  the join semantic
+		 * @return  the join clause
+		 */
+		@Override
+		public String assembleJoinClause(String leftName,
+		                                 String rightName,
+		                                 int semantic) {
+		    if (!useAliases()) {
+		    	System.out.println("_H2PlugIn.H2Expression.assembleJoinClause: calling super!");
+		        return super.assembleJoinClause(leftName, rightName, semantic);
+		    }
+		    
+		    String leftAlias = leftName.substring(0, leftName.indexOf("."));
+		    String rightAlias = rightName.substring(0, rightName.indexOf("."));
+		    
+		    NSArray<String> k;
+		    EOEntity rightEntity;
+		    EOEntity leftEntity;
+		    String relationshipKey = null;
+		    EORelationship r;
+		    
+		    if (leftAlias.equals("t0")) {
+		        leftEntity = entity();
+		    } else {
+		        k = aliasesByRelationshipPath().allKeysForObject(leftAlias);
+		        relationshipKey = k.count()>0? (String)k.lastObject() : "";
+		        leftEntity = entityForKeyPath(relationshipKey);
+		    }
+		    
+		    if (rightAlias.equals("t0")) {
+		        rightEntity = entity();
+		    } else {
+		        k = aliasesByRelationshipPath().allKeysForObject(rightAlias);
+		        relationshipKey = k.count()>0? (String)k.lastObject() : "";
+		        rightEntity = entityForKeyPath(relationshipKey);
+		    }
+		    if (relationshipKey == null) {
+		    	throw new IllegalStateException("Could not determine relationship for join.");
+		    }
+		    int dotIndex = relationshipKey.indexOf( "." );
+		    relationshipKey = dotIndex == -1
+		        ? relationshipKey
+		        : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
+		    r = rightEntity.anyRelationshipNamed( relationshipKey );
+		    // fix from Michael Müller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+		    if( r == null || r.destinationEntity() != leftEntity ) {
+		        r = leftEntity.anyRelationshipNamed( relationshipKey );
+		    }
+		
+		    String rightTable = rightEntity.externalName(); 
+		    String leftTable = leftEntity.externalName(); 
+		    
+		    JoinClause jc = new JoinClause();	        
+		    jc.setTable1(leftTable, leftAlias);
+		    
+		    switch (semantic) {
+		        case EORelationship.LeftOuterJoin:
+		            jc.op = " LEFT OUTER JOIN ";
+		            break;
+		        case EORelationship.RightOuterJoin:
+		            jc.op = " RIGHT OUTER JOIN ";
+		            break;
+		        case EORelationship.FullOuterJoin:
+		            jc.op = " FULL OUTER JOIN ";
+		            break;
+		        case EORelationship.InnerJoin:
+		            jc.op = " INNER JOIN ";
+		            break;
+		    }
+		    
+		    jc.table2 = rightTable + " " + rightAlias;
+		    NSArray<EOJoin> joins = r.joins();
+		    int joinsCount = joins.count();
+		    NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
+		    for( int i = 0; i < joinsCount; i++ ) {
+		        EOJoin currentJoin = joins.objectAtIndex(i);
+		        String left = leftAlias +"."+currentJoin.sourceAttribute().columnName();
+		        String right = rightAlias +"."+currentJoin.destinationAttribute().columnName();
+		        joinStrings.addObject( left + " = " + right);
+		    }
+		    jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
+		    if( !_alreadyJoined.containsObject( jc ) ) {
+		        _alreadyJoined.insertObjectAtIndex(jc, 0);
+		        return jc.toString();
+		    }
+		    return null;
+		}
+
 	}
 
 	public static class H2SynchronizationFactory extends EOSchemaSynchronizationFactory {
@@ -499,7 +767,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -509,7 +777,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				}
 
 				fkSql.append(") REFERENCES ");
-				constraint.append("_");
+				constraint.append('_');
 
 				String referencedExternalName = formatTableName(relationship.destinationEntity().externalName());
 				fkSql.append(referencedExternalName);
@@ -520,7 +788,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -532,7 +800,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
 				constraint.append('"');
 
-				fkSql.append(")");
+				fkSql.append(')');
 				// BOO
 				//fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
@@ -565,7 +833,7 @@ public class _H2PlugIn extends JDBCPlugIn {
                     String attributeName = result.sqlStringForAttribute(priKeyAttribute);
                     String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-                    sql = "CREATE SEQUENCE " + sequenceName + " START WITH (SELECT MAX(" + attributeName + ") FROM " + tableName + ")";
+                    sql = "CREATE SEQUENCE " + sequenceName + " START WITH (SELECT MAX(" + attributeName + ") + 1 FROM " + tableName + ")";
                     results.addObject(createExpression(entity, sql));
 
                     sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + attributeName + " SET DEFAULT nextval('" + sequenceName + "')";
@@ -648,20 +916,6 @@ public class _H2PlugIn extends JDBCPlugIn {
 	private static final String DRIVER_NAME = "H2";
 
 	/**
-	 * formatter to use when handling date columns
-	 */
-	private static Format dateFormatter() {
-		return new SimpleDateFormat("yyyy-MM-dd");
-	}
-
-	/**
-	 * formatter to use when handling timestamps
-	 */
-	private static Format timestampFormatter() {
-		return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-	}
-
-	/**
 	 * flag for whether jdbcInfo should be written out has been tested.
 	 */
 	private volatile boolean testedJdbcInfo;
@@ -686,7 +940,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return H2Expression.class;
 	}
 
@@ -844,37 +1098,58 @@ public class _H2PlugIn extends JDBCPlugIn {
 				} catch (JDBCAdaptorException e) {
 					// jw check if H2 has already a sequence with a different name
 					String tableName = entity.externalName().toUpperCase();
+					String columnName = attribute.columnName().toUpperCase();
 					int dotIndex = tableName.indexOf(".");
 					if (dotIndex == -1) {
-						expression.setStatement("select SQL from INFORMATION_SCHEMA.TABLES where TABLE_NAME = '"+ tableName + "'");
+						expression.setStatement("select SEQUENCE_NAME, COLUMN_DEFAULT from INFORMATION_SCHEMA.COLUMNS where UPPER(TABLE_NAME) = '"
+								+ tableName + "' and UPPER(COLUMN_NAME) = '" + columnName + "'");
 					} else {
 						String schemaName = tableName.substring(0, dotIndex);
 						String tableNameOnly = tableName.substring(dotIndex + 1);
-						expression.setStatement("select SQL from INFORMATION_SCHEMA.TABLES where TABLE_NAME = '"+ tableNameOnly
-								+ "' and TABLE_SCHEMA = '" + schemaName + "'");
+						expression.setStatement("select SEQUENCE_NAME, COLUMN_DEFAULT from INFORMATION_SCHEMA.COLUMNS where UPPER(TABLE_NAME) = '"
+								+ tableNameOnly + "' and UPPER(COLUMN_NAME) = '" + columnName + "' and UPPER(TABLE_SCHEMA) = '"
+								+ schemaName + "'");
 					}
 					channel.evaluateExpression(expression);
 					NSDictionary<String, Object> row;
 					try {
 						row = channel.fetchRow();
+						if (row != null) {
+							Object obj = row.objectForKey("SEQUENCE_NAME");
+							String h2SequenceName = obj == NSKeyValueCoding.NullValue ? null : (String) obj;
+							if (h2SequenceName == null) {
+								obj = row.objectForKey("COLUMN_DEFAULT");
+								String defaultValue = obj == NSKeyValueCoding.NullValue ? null : (String) obj;
+								if (defaultValue != null) {
+									final String NEXT_VAL = "NEXTVAL('";
+									int startPos = defaultValue.indexOf(NEXT_VAL);
+									if (startPos != -1) {
+										int endPos = defaultValue.indexOf("')");
+										h2SequenceName = defaultValue.substring(startPos + NEXT_VAL.length(), endPos);
+									} else {
+										final String NEXT_FOR = "NEXT VALUE FOR ";
+										startPos = defaultValue.indexOf(NEXT_FOR);
+										if (startPos != -1) {
+											int dotPos = defaultValue.indexOf(".", startPos) + NEXT_FOR.length();
+											if (dotPos != -1) {
+												startPos = dotPos;
+											}
+											h2SequenceName = defaultValue.substring(startPos + 1, defaultValue.length() - 1);
+										}
+									}
+								}
+							}
+							if (h2SequenceName != null) {
+								// store sequence name mapping as H2 does not yet support renaming of sequences
+								setSequenceNameOverride(sequenceName, h2SequenceName);
+								sequenceName = h2SequenceName;
+								continue;
+							}
+						}
+					} catch (IllegalArgumentException iae) {
+						// failed to retrieve alternative sequence name
 					} finally {
 						channel.cancelFetch();
-					}
-					if (row != null && row.containsKey("SQL")) {
-						String tableSql = (String) row.objectForKey("SQL");
-						int pkStart = tableSql.indexOf(attribute.columnName().toUpperCase());
-						final String SEQ_START_STRING = " NULL_TO_DEFAULT SEQUENCE ";
-						int start = tableSql.indexOf(SEQ_START_STRING, pkStart);
-						if (start != -1) {
-							start += SEQ_START_STRING.length();
-							int end = tableSql.indexOf(",", start);
-							String h2SequenceName = tableSql.substring(start, end);
-							
-							// store sequence name mapping as H2 does not yet support renaming of sequences
-							setSequenceNameOverride(sequenceName, h2SequenceName);
-							sequenceName = h2SequenceName;
-							continue;
-						}
 					}
 					//timc 2006-11-06 Check if sequence name contains schema name
 					dotIndex = sequenceName.indexOf(".");

@@ -2,6 +2,6 @@
 <wodefinitions>
     <wo class="ERQMBackButton" wocomponentcontent="false">    <binding name="string"/>
         <binding name="theme"/>
-    <binding name=" mini"/>
+    <binding name="mini"/>
     </wo>
 </wodefinitions>

@@ -1,40 +1,14 @@
-<wo:ERQMHtmlTemplate title="FormEntries">
-
-	<wo:ERQMHeaderBar string="FormEntries" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-		<wo:form>
-			<wo:ERQMInputString string="ERQMInputString" value="$testString" inset="true" placeholder="Username" theme="a" />
-			<wo:ERQMInputPassword string="ERQMInputPassword" value="$testPassword" inset="true" placeholder="Password"  theme="b" />
-			<wo:ERQMInputNumber string="ERQMInputNumber" value="$testNumber" inset="true" placeholder="Number" theme="c" />
-			<wo:ERQMInputMail string="ERQMInputMail" value="$testMail" inset="true" placeholder="Mail" theme="d" />
-			<wo:ERQMInputTel string="ERQMInputTel" value="$testTel" inset="true" placeholder="Tel" theme="e" />
-			<wo:ERQMInputUrl string="ERQMInputUrl" value="$testUrl" inset="true" placeholder="Url" theme="f" />
-			<wo:ERQMInputDate string="ERQMInputDate" value="$testDate" inset="true" />
-			<wo:ERQMInputTime string="ERQMInputTime" value="$testTime" inset="true" />
-			<wo:ERQMInputMonth string="ERQMInputMonth" value="$testMonth" inset="true" />
-			<wo:ERQMInputDateTime string="ERQMInputDateTime" value="$testDT" inset="true" />
-			<wo:ERQMInputDateTimeLocal string="ERQMInputDateTimeLocal" value="$testDTL" inset="true" />
-			<wo:ERQMInputWeek string="ERQMInputWeek" value="$testWeek" inset="true" />
-			<wo:ERQMInputColor string="ERQMInputColor" value="$testColor" inset="true" />
-			<wo:ERQMInputText string="ERQMInputText" value="$testText" inset="true" placeholder="Text" />
-			<wo:ERQMInputRange string="ERQMInputRange" value="$testRange" inset="true" min="5" max="95" theme="a" themeTrack="c"></wo:ERQMInputRange>
-			<wo:ERQMInputSearch string="ERQMInputSearch" value="$testsearch" inset="true" />
-			<wo:ERQMInputFlipSwitch string="ERQMInputFlipSwitch" stringOn="YES" stringOff="NO" value="$testFlip" inset="true" theme="a" />
-			<wo:ERQMCheckbox string="ERQMCheckbox" checked="$testCheckbox" inset="true" theme="b" />
-			<wo:ERQMSubmitButton action="$doTestAction" value="Submit" theme="a" />
-		</wo:form>		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar>
-		<wo:ERQMButtonGroup isHorizontal="true">
-			<wo:ERQMButton icon="delete" string="Remove" linkResource="page://Main" />
-			<wo:ERQMButton icon="plus" string="Add" linkResource="page://Main" />
-			<wo:ERQMButton icon="arrow-u" string="Up" linkResource="page://Main" />
-			<wo:ERQMButton icon="arrow-d" string="Down" linkResource="page://Main" />
-			<wo:ERQMButton icon="home" string="Home" linkResource="page://Main" />
-		</wo:ERQMButtonGroup>
-	</wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Form Entries">
+  <wo:form>
+    <wo:ERQMInputText label = "JQMInputText" value = "$testString" inset = "true" placeholder = "Username" data-theme = "a" />
+    <wo:ERQMPasswordField label = "JQMInputPassword" value = "$testPassword" inset = "true" placeholder = "Password" data-theme = "b" />
+    <wo:ERQMInputEmail label = "JQMInputEmail" value = "$testMail" inset = "true" placeholder = "Mail" data-theme = "d" />
+    <wo:ERQMInputTel label = "JQMInputTel" value = "$testTel" inset = "true" placeholder = "Tel" data-theme = "e" />
+    <wo:ERQMInputUrl label = "JQMInputUrl" value = "$testUrl" inset = "true" placeholder = "Url" data-theme = "f" />
+    <wo:ERQMInputText label = "JQMInputText" value = "$testText" inset = "true" placeholder = "Text" />
+    <wo:ERQMInputSearch label = "JQMInputSearch" value = "$testsearch" inset = "true" />
+    <wo:ERQMInputFlipSwitch label = "JQMInputFlipSwitch" stringOn = "YES" stringOff = "NO" value = "$testFlip" inset = "true" data-theme = "a" />
+    <wo:ERQMCheckbox label = "JQMCheckbox" checked = "$testCheckbox" inset = "true" data-theme = "b" />
+    <wo:ERQMSubmitButton action = "$doTestAction" value = "Submit" data-theme = "a" />
+  </wo:form>
+</wo:JQPageWrapper>

@@ -256,7 +256,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<");
+		sb.append('<');
 		sb.append(getClass().getName());
 		sb.append(" scriptFile=" + _scriptFile);
 		sb.append(" scriptString=" + _scriptString);
@@ -266,7 +266,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		sb.append(" filename=" + _filename);
 		sb.append(" hideInComment=" + _hideInComment);
 		sb.append(" language=" + _language);
-		sb.append(">");
+		sb.append('>');
 		return sb.toString();
 	}
 }

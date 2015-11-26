@@ -17,11 +17,9 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <p>
  * The delayed non-null conditional is a way to provide a branching result from
  * a rule resolution. The value of this assignment must be a dictionary that has
  * the following keys:
- * </p>
  * <dl>
  * <dt>dictionary key "nonNullKeyPath":</dt>
  * <dd>key path to be tested for nullability off of the current D2W context.</dd>
@@ -38,8 +36,6 @@ import er.extensions.localization.ERXLocalizer;
  * Because this assignment is a delayed assignment the above condition will be
  * evaluated every time that the D2W fired rule cache resolves to a rule of this
  * class.
- * </p>
- * 
  * <p>
  * Example usage. Let's imagine that a User has a relationship called
  * <code>toOwnedHouse</code> this relationship is only set if the User is a home
@@ -54,15 +50,14 @@ import er.extensions.localization.ERXLocalizer;
  * to be different for each of these page configurations. However by using a
  * DelayedNonNullConditionalAssignment we will only have to use a single page
  * configuration. Using this rule:
- * </p>
- * 
- * pageConfguration = 'InspectUser' AND propertyKey = 'residence' =>
- * displayNameForProperty =</br><code> 
- * {</br>
- * 	nonNullKeyPath = "object.toOwnedHouse";</br>
- * 	trueValue = "Owned House";</br>
- * 	falseValue = "Rented House";</br>
- * }<br/></code>
+ * <pre><code>
+ * pageConfguration = 'InspectUser' AND propertyKey = 'residence' =&gt;
+ * displayNameForProperty =
+ * {
+ * 	nonNullKeyPath = "object.toOwnedHouse";
+ * 	trueValue = "Owned House";
+ * 	falseValue = "Rented House";
+ * }</code></pre>
  */
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 	/**

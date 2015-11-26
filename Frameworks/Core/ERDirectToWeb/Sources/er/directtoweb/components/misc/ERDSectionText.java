@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDCustomComponent;
 
 /**
- * Used to display sections as text.<br />
+ * Used to display sections as text.
  * 
  * @binding displayNameForSectionKey
  */

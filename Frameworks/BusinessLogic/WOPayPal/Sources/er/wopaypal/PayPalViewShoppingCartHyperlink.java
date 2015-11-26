@@ -46,7 +46,7 @@ public class PayPalViewShoppingCartHyperlink extends PayPalSingleItemHyperlink {
      * @return String that contains the JavaScript code for the viewShoppingCart link
      */
     public String onClickString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("window.open('");
         sb.append(viewShoppingCartHref());

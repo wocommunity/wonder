@@ -33,19 +33,6 @@ public class ERXChainedQualifierUtils {
 	}
 
 	/**
-	 * Returns a new qualifier that represents the original qualifier not'd.
-	 * 
-	 * @param originalQualifier
-	 *            the qualifier to negate
-	 * @return an ERXNotQualifier
-	 * @deprecated use {@link er.extensions.eof.ERXQ#not(EOQualifier)} instead
-	 */
-	@Deprecated
-	public static ERXNotQualifier not(EOQualifier originalQualifier) {
-		return new ERXNotQualifier(originalQualifier);
-	}
-
-	/**
 	 * Returns a new qualifier that represents the original qualifier or'd to
 	 * the given list of qualifiers.
 	 * 

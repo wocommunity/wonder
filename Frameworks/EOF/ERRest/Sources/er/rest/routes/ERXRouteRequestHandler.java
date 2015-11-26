@@ -3,7 +3,7 @@ package er.rest.routes;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAction;
@@ -138,6 +138,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * A NameFormat that behaves like WO -- singular entities, singular routes, lowercase camel names (namesLikeThis).
 	 */
 	public static NameFormat WO_LOWER = new NameFormat(false, false, NameFormat.Case.LowerCamelCase);
+	public static NameFormat EMBER = new NameFormat(true, true, NameFormat.Case.LowerCamelCase);
 
 	/**
 	 * NameFormat specifies how routes and controller names should be capitalized by default.

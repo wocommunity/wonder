@@ -1,4 +1,7 @@
 ##  Properies Info
+
+java.net.preferIPv4Stack=true
+
 er.extensions.load.Properties.framework.ERJGroupsSynchronizer=load
 er.extensions.ERJGroupsSynchronizer.hasLocalization=false
 

@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSLocking;
  * is *not* deleted, so you have to do this yourself.<br>
  * Additionally, you can't use it reliably on an NFS server. The lock otherwise behaves like an
  * NSRecursiveLock in that the same thread can re-lock as often as he wants.
- * <code><pre>
+ * <pre><code>
  * App1:
  * NSLocking lock = ERXGlobalLock.lockForName("test");
  * lock.lock();
@@ -22,7 +22,7 @@ import com.webobjects.foundation.NSLocking;
  * lock.lock();
  * ...
  * lock.unlock();
- * </pre></code>
+ * </code></pre>
  * @author ak
  */
 public class ERXGlobalLock implements NSLocking {

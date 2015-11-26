@@ -37,9 +37,9 @@ typedef struct _HTTPResponse {
         /* These Strings get freed along with the response. */
         String *responseStrings;
         void *content;
-        unsigned content_length;
+        unsigned long content_length;
         unsigned content_buffer_size;
-        unsigned content_read; /* total amount of data read from the instance */
+        unsigned long content_read; /* total amount of data read from the instance */
         unsigned content_valid; /* amount of valid data in content buffer */
         int (*getMoreContent)(struct _HTTPResponse *resp, void *buffer, int bufferSize);
         

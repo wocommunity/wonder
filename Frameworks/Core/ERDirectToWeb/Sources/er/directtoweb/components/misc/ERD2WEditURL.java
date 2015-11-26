@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditString;
 
 /**
- * Used for editing urls.<br />
+ * Used for editing urls.
+ * 
  * @d2wKey length
  * @d2wKey maxLength
  */

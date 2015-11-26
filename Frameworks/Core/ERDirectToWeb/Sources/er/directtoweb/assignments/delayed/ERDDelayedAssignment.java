@@ -14,8 +14,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 //	cache the assignment instead of the value it returns.
 //	Interesting subclasses are DelayedBooleanAssignment and DelayedConditionalAssignment
 /**
- * Crazy assignment used when you actually don't want the computed value cached.<br />
- * 
+ * Crazy assignment used when you actually don't want the computed value cached.
  */
 
 public abstract class ERDDelayedAssignment extends Assignment  {

@@ -69,12 +69,6 @@ There are many ways to use this script:
          <!-- project.type, either "global.application" or "global.framework" -->
          <antcall target="global.application.${build.action}" >
 
-            <!-- princical class if the framework or Application class -->
-            <param name="project.principal.class" value="com.company.Application" />
-
-            <!-- Name of the framework or application -->
-            <param name="project.name" value="SomeNewProject" />
-
             <!-- Path where the project resides, can be absolute -->
             <param name="project.dir" value="/path/to/your/project" />
         </antcall>
@@ -90,9 +84,6 @@ There are many ways to use this script:
     </target>
     
     <target name="generic.build">
-        <condition property="project.principal.class" value="${principalClass}">
-            <and><isset property="principalClass" /><not><isset property="project.principal.class" /></not></and>
-        </condition>
         <antcall target="global.${project.type}.build" >
             <param name="project.principal.class" value="${project.principal.class}" />
             <param name="project.name" value="${project.name}" />
@@ -118,7 +109,7 @@ There are many ways to use this script:
    
    <target name="global.environment">
         <property name="wonder.root" value="${basedir}" />
-        <property file="${wonder.root}/build.properties" />
+        <property file="${project.dir}/build.properties" />
         <property file="${user.home}/Library/Application Support/WOLips/wolips.properties" />
         <property file="${wonder.root}/Build/build/default.properties" />
 
@@ -140,7 +131,7 @@ There are many ways to use this script:
         <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
         <property name="wo.external.root" value="${build.root}" />
         <property name="wo.external.frameworks" value="${wo.external.root}" />
-        <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML" />
+        <property name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaWebServicesSupport" />
         <property name="wo.system.root.bundles.embed" value="false" />
         <property name="wo.external.root.bundles.embed" value="false" />
         <property name="wo.local.root.bundles.embed" value="false" />
@@ -216,16 +207,12 @@ There are many ways to use this script:
 
         <mkdir dir="${project.source.dir}/Documentation" />
         <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Documentation" />
         </copy>
 
         <mkdir dir="${project.source.dir}/Support" />
         <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}/Support" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Support" />
         </copy>
     </target>
 
@@ -247,16 +234,12 @@ There are many ways to use this script:
 
         <mkdir dir="${project.source.dir}/Documentation" />
         <copy todir="${dist.dir}/Documentation/Applications/${project}" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Documentation" />
         </copy>
 
         <mkdir dir="${project.source.dir}/Support" />
         <copy todir="${dist.dir}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
-            <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/*" />
-            </fileset>
+            <fileset dir="${project.source.dir}/Support" />
         </copy>
     </target>
 
@@ -372,8 +355,7 @@ There are many ways to use this script:
         </unzip>
     </target>
 
-    <target name="global.framework.build" depends="global.properties,global.compile,global.unjar">
-
+    <target name="global.framework.build" depends="global.properties, global.compile, global.unjar">
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>
@@ -415,8 +397,6 @@ There are many ways to use this script:
                 <include name="**/*" />
                 <exclude name="**/*.class" />
                 <exclude name="**/*.java" />
-                <exclude name="**/.svn" />
-                <exclude name="**/CVS" />
             </classes>
             <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
@@ -481,15 +461,11 @@ There are many ways to use this script:
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
-                <exclude name=".svn" />
-                <exclude name=".CVS" />
             </classes>
             <classes dir="${project.sources.dir}">
                 <include name="**/*" />
                 <exclude name="**/*.java" />
                 <exclude name="**/*.class" />
-                <exclude name="**/.svn" />
-                <exclude name="**/CVS" />
             </classes>
             <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
@@ -541,13 +517,6 @@ There are many ways to use this script:
             <arg line="a+x ${project.name}" />
         </exec>
     </target>
-    
-    <!-- compatibility with prior scripts -->
-    <target name="global.framework" depends="global.framework.build">
-    </target>
-    <target name="global.application" depends="global.application.build">
-    </target>
-    <!-- /compatibility -->
     
     <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${web.framework.install.root}/${project.name}.framework" />

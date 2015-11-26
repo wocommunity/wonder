@@ -18,11 +18,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation._NSDictionaryUtilities;
 
 /**
- * ERXHyperlinkResource is very simular to WOHyperlink action Binding are the some,
+ * ERXHyperlinkResource is very similar to WOHyperlink action Binding are the some,
  * but there is one big difference. There is a "linkResource" Binding.
  * 
  * Like the ERXStaticResource this Object creates a URL just in Time for 
- * your URL with a new Syntax :
+ * your URL with a new Syntax:
  * 
  * href
  *    http://{url}
@@ -51,10 +51,10 @@ import com.webobjects.foundation._NSDictionaryUtilities;
  * 
  * Reason 1 : Bindings
  * normal way
- *    <wo:hyperlink actionClass="{actionClass}" directActionName="{directActionName}" ... />
+ *    &lt;wo:hyperlink actionClass="{actionClass}" directActionName="{directActionName}" ... /&gt;
  * 
  * HyperlinkResource
- *    <wo:ERXHyperlinkResource linkResource="da://{actionClass}:{directActionName}" ... />
+ *    &lt;wo:ERXHyperlinkResource linkResource="da://{actionClass}:{directActionName}" ... /&gt;
  * 
  * Reason 2 : CMS
  * HyperlinkResource Object makes it easy to create Objects in CMS Systems.

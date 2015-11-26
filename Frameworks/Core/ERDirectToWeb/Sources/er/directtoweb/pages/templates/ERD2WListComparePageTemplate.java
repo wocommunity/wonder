@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListComparePage;
 
 /**
- * Basicly a list page flipped vertical.  Useful for comparing from a left to right fashion.<br />
+ * Basicly a list page flipped vertical.  Useful for comparing from a left to right fashion.
+ * 
  * @d2wKey componentName
  * @d2wKey hasPrinterFriendlyVersion
  * @d2wKey bannerFileName

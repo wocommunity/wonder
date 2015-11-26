@@ -22,7 +22,7 @@ import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * Common superclass of all ER's edit number components.<br />
+ * Common superclass of all ER's edit number components.
  * 
  * @d2wKey name
  * @d2wKey smartAttribute

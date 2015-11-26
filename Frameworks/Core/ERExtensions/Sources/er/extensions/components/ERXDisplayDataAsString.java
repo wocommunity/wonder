@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSData;
 
 /**
- * Displays a byte array of data as a String.<br />
+ * Displays a byte array of data as a String.
  * 
  * @binding data
  */

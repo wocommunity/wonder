@@ -338,7 +338,7 @@ public class JSONRPCBridge implements Serializable
     {
       if (i > 0)
       {
-        buf.append(",");
+        buf.append(',');
       }
       Object jso;
 
@@ -391,7 +391,7 @@ public class JSONRPCBridge implements Serializable
     {
       if (i > 0)
       {
-        buf.append(",");
+        buf.append(',');
       }
       buf.append(param[i].getName());
     }

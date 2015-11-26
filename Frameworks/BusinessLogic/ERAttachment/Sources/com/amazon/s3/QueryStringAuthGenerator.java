@@ -140,8 +140,8 @@ public class QueryStringAuthGenerator {
         } else {
             buffer.append("http://");
         }
-        buffer.append(server).append(":").append(port).append("/").append(bucket);
-        buffer.append("/").append(Utils.urlencode(key));
+        buffer.append(server).append(':').append(port).append('/').append(bucket);
+        buffer.append('/').append(Utils.urlencode(key));
 
         return buffer.toString();
     }
@@ -169,14 +169,14 @@ public class QueryStringAuthGenerator {
             buffer.append("http://");
         }
 
-        buffer.append(server).append(":").append(port).append("/").append(path);
+        buffer.append(server).append(':').append(port).append('/').append(path);
 
         if (path.indexOf('?') == -1) {
             // no other query parameters
-            buffer.append("?");
+            buffer.append('?');
         } else {
             // there exist other query parameters
-            buffer.append("&");
+            buffer.append('&');
         }
 
         buffer.append("Signature=").append(encodedCanonical);

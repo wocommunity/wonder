@@ -12,8 +12,7 @@ import com.webobjects.foundation.NSData;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Displays an image if it exists.<br />
- * 
+ * Displays an image if it exists.
  */
 
 public class ERDDisplayImageIfExists extends ERDCustomEditComponent {
