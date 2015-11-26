@@ -5,12 +5,12 @@ import com.webobjects.appserver.WOContext;
 /**
  * Nested list component, copied over from WXNestedList, better html output. Place actual display in
  * content.
+ * 
  * @binding list list of items
  * @binding item current item, gets pushed to parent
  * @binding isOrdered  when true, uses a OL, otherwise a UL
  * @binding sublist should return the sublist for the current item.
  * @binding level level if the current item
- *
  */
 public class ERXNestedList extends ERXStatelessComponent {
 	/**
@@ -65,7 +65,6 @@ public class ERXNestedList extends ERXStatelessComponent {
      * By the time the value get to the root, it reflects the total number of levels
      * between the top and bottom.
      */
-     
     public void setCurrentLevel(Number aChildLevel)  {
         setValueForBinding(Integer.valueOf(aChildLevel.intValue() + 1) , "level");
     }
@@ -73,11 +72,10 @@ public class ERXNestedList extends ERXStatelessComponent {
 
     /**
      * Method to return the tag name for the list.  If the 'isOrdered' binding is
-     * present, the list is an ORDERED-LIST (<OL>), otherwise the list is an
-     * UNORDERED LIST (<UL>).  This information populates the elementName of the
+     * present, the list is an ORDERED-LIST (&lt;ol&gt;), otherwise the list is an
+     * UNORDERED LIST (&lt;ul&gt;).  This information populates the elementName of the
      * generic element for the list.
      */
-     
     public String listTagName()  {
         if ( valueForBinding( "isOrdered" ) != null ) {
             return "ol";

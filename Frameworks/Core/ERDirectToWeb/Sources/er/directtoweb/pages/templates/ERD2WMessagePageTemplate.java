@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WMessagePage;
 
 /**
- * Used to present a message to the user with only one option, usually "OK".<br />
+ * Used to present a message to the user with only one option, usually "OK".
+ * 
  * @d2wKey okButtonLabel
  * @d2wKey cancelButtonLabel
  * @d2wKey pageWrapperName

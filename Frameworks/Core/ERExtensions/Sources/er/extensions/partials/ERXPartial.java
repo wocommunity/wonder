@@ -1,5 +1,7 @@
 package er.extensions.partials;
 
+import java.io.Serializable;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -11,11 +13,8 @@ import com.webobjects.foundation.NSValidation.ValidationException;
 import er.extensions.eof.ERXGenericRecord;
 
 /**
- * <p>
  * For overview information on partials, read the {@code package.html} in
  * {@code er.extensions.partials}.
- * </p>
- * 
  * <p>
  * {@code ERXPartial} is the superclass of all partial entity implementations.
  * {@code ERXPartial} is not itself an EO, but is acts as a partial typesafe
@@ -23,13 +22,10 @@ import er.extensions.eof.ERXGenericRecord;
  * {@link ERXPartialGenericRecord}). For instance, the base entity might be
  * {@code Person}, but the partial may be {@code CalendarPerson} which might
  * expose methods like {@code calendarPerson.scheduledEvents()}.
- * </p>
- * 
  * <p>
  * To obtain a partial, you request an instance from a base EO. Take the
  * {@code Person} example from above. You can access the interface of the
  * {@code CalendarPerson} partial in two ways:
- * 
  * <pre>
  * <code>Person person = ...;
  * CalendarPerson calendarPerson = person.partialForClass(CalendarPerson.class);</code>
@@ -44,13 +40,17 @@ import er.extensions.eof.ERXGenericRecord;
  * 
  * which allows easy use of the partial entities in component bindings, like
  * {@code person.@CalendarPerson.scheduledEvents}.
- * </p>
  * 
  * @author mschrag
  * @param <T>
  *            the EO class that this is a partial of
  */
-public class ERXPartial<T extends ERXGenericRecord> {
+public class ERXPartial<T extends ERXGenericRecord> implements Serializable {
+	/**
+	 * Serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * This partial's primary EO
 	 */
@@ -211,16 +211,6 @@ public class ERXPartial<T extends ERXGenericRecord> {
 	 * @param editingContext
 	 *            this object's {@link EOEditingContext}
 	 */
-    public void awakeFromInsertion(EOEditingContext editingContext) {
-    	// DO NOTHING
-    }
-    
-	/**
-	 * Delegated from the base entity.
-	 * 
-	 * @param editingContext
-	 *            this object's {@link EOEditingContext}
-	 */
     public void awakeFromFetch(EOEditingContext editingContext) {
     	// DO NOTHING
     }
@@ -367,5 +357,16 @@ public class ERXPartial<T extends ERXGenericRecord> {
 		catch (com.webobjects.foundation.NSValidation.ValidationException exception) {
 			throw exception.exceptionWithObjectAndKey(this, key);
 		}
+	}
+
+	/**
+	 * Delegated from the base entity. A partial entity can override this method
+	 * to perform object initialisation. It will be called when the base
+	 * entity's {@code init()} method is called.
+	 * 
+	 * @param editingContext
+	 *            this object's {@link EOEditingContext}
+	 */
+	protected void init(EOEditingContext editingContext) {
 	}
 }

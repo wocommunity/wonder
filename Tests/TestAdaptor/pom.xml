@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.tests</groupId>
 		<artifactId>tests</artifactId>
-		<version>6.0-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -10,6 +10,22 @@
 	<artifactId>TestAdaptor</artifactId>
 	<name>TestAdaptor Application</name>
 	<packaging>woapplication</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.woadaptors</groupId>
+			<artifactId>ERWOAdaptor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>

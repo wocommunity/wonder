@@ -288,7 +288,7 @@ int WOReadKeyFromConfiguration(const char *keyName, char *buffer, int bufferSize
                          &maxValueNameLength, &maxValueDataLength,
                          &securityDescriptor, &fileTime );
         memset(buffer,0,bufferSize);
-        result = RegQueryValueEx(newHandle, keyName, 0, &type, buffer, (LPDWORD)&bufferSize);
+        result = RegQueryValueEx(newHandle, keyName, 0, &type, (LPBYTE)buffer, (LPDWORD)&bufferSize);
         RegCloseKey( HKEY_LOCAL_MACHINE );	/* close the registry */
     }
 
@@ -324,7 +324,7 @@ const char *root()
     return _root;
 }
 
-#ifndef NSAPI_PUBLIC
+#if !defined(NSAPI_PUBLIC) && !defined(MINGW)
 /*
  * Provide our own strcasecmp unless we are building NSAPI.
  */

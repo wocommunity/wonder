@@ -382,7 +382,7 @@ public class PostgresqlExpression extends JDBCExpression {
             sb.append(orderByClause);
         }
         if (lockClause != null && lockClause.length() > 0) {
-            sb.append(" ");
+            sb.append(' ');
             sb.append(lockClause);
         }
         // fetchRange overrides fetchLimit
@@ -690,9 +690,9 @@ public class PostgresqlExpression extends JDBCExpression {
 		EOModel sourceModel = entity.model();
 		EOModel destModel = relationship.destinationEntity().model();
 		if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
-			throw new IllegalArgumentException((new StringBuilder()).append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
+			throw new IllegalArgumentException(new StringBuilder().append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
 		} 
-		setStatement((new StringBuilder())
+		setStatement(new StringBuilder()
 				.append("ALTER TABLE ")
 				.append(sqlStringForSchemaObjectName(entity.externalName()))
 				.append(" ADD CONSTRAINT ")
@@ -925,11 +925,12 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overrides the parent implementation to:
      * <ul>
      * <li>add typecasts after the value, i.e. '2'::char,
-     * which is required with certain PostgreSQL versions (<=7.4.x) for the correct query processing, 
+     * which is required with certain PostgreSQL versions (&lt;=7.4.x) for the correct query processing, 
      * particularly with index usage. 
      * <li>quotes values if bind variables are disabled on this attribute. 
      * </ul>
-     * NULL values are excluded from casting. <br/>
+     * NULL values are excluded from casting.
+     * <p>
      * You can set the System default <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code>
      * to true to disable both fixes (the former you might want to disable when PG says it can't cast a certain value and
      * the second when you have values with a greater resolution already in the DB).

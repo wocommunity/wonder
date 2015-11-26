@@ -9,7 +9,6 @@
 <project name="Wonder" default="all" basedir="../..">
 
     <import file="generic.xml" />
-    <property name="wonder.patch" value="54" />
 
     <property name="frameworks.wonder.jars"  value="ERJars" />
     <property name="frameworks.wonder.core"  value="${frameworks.wonder.jars}/ERExtensions/JavaWOExtensions" />
@@ -19,19 +18,23 @@
              value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />
     <property name="frameworks.system.d2w" value="${frameworks.system.core}/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />
 
-    <property name="framework.erjars.commons.cli" value="commons-cli-1.2.jar" />
-    <property name="framework.erjars.commons.codec" value="commons-codec-1.6.jar" />
-    <property name="framework.erjars.commons.io" value="commons-io-2.2.jar" />
+    <property name="framework.erjars.commons.cli" value="commons-cli-1.3.1.jar" />
+    <property name="framework.erjars.commons.codec" value="commons-codec-1.10.jar" />
+    <property name="framework.erjars.commons.io" value="commons-io-2.4.jar" />
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
-    <property name="framework.erjars.httpclient" value="httpclient-4.2.5.jar" />
-    <property name="framework.erjars.httpcore" value="httpcore-4.2.4.jar" />
+    <property name="framework.erjars.commons.lang3" value="commons-lang3-3.4.jar" />
+    <property name="framework.erjars.fluent-hc" value="fluent-hc-4.3.6.jar" />
+    <property name="framework.erjars.httpclient" value="httpclient-4.3.6.jar" />
+    <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.3.6.jar" />
+    <property name="framework.erjars.httpcore" value="httpcore-4.3.3.jar" />
+    <property name="framework.erjars.httpmime" value="httpmime-4.3.6.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
-    <property name="framework.erjars.joda" value="joda-time-2.2.jar" />
+    <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
-    <property name="framework.erjars.ognl" value="ognl-2.6.7.jar" />
-    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.5.jar" />
-    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.5.jar" />
+    <property name="framework.erjars.ognl" value="ognl-3.1.jar" />
+    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.12.jar" />
+    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.12.jar" />
 
     <target name="ERJars.all">
         <fail message="Please check versions of jar files included in ERJars project. See properties in Build/build//build.xml.">
@@ -42,8 +45,12 @@
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.codec}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.io}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang3}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.fluent-hc}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient-cache}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpcore}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpmime}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.icu4j}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.joda}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.junit}" />
@@ -55,178 +62,149 @@
                 </not>
             </condition>
         </fail>
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERJars" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/ERJars" />
         </antcall>
     </target>
 
     <target name="EROraclePlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.oracle.EROraclePlugInPrincipal" />
-            <param name="project.name" value="EROraclePlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/EROraclePlugIn" />
         </antcall>
     </target>
 
     <target name="WOOgnl.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
-            <param name="project.name" value="WOOgnl" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/WOOgnl" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}" />
         </antcall>
     </target>
 
     <target name="JavaWOExtensions.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="JavaWOExtensions" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/JavaWOExtensions" />
         </antcall>
     </target>
 
     <target name="ERCaptcha.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERCaptcha" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERCaptcha" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERProfiling.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERProfiling" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERProfiling" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERSelenium.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.selenium.ERSelenium" />
-            <param name="project.name" value="ERSelenium" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERSelenium" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERRest.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERRest" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/EOF/ERRest" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERAttachment.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.attachment.ERAttachmentPrincipal" />
-            <param name="project.name" value="ERAttachment" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERAttachment" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
        </antcall>
     </target>
 
     <target name="ERMoviesLogic.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="webobjectsexamples.businesslogic.ERMoviesLogic" />
-            <param name="project.name" value="ERMoviesLogic" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERMoviesLogic" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERAttachment/ERTaggable" />
        </antcall>
     </target>
 
     <target name="ERTaggable.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.taggable.ERTaggablePrincipal" />
-            <param name="project.name" value="ERTaggable" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERTaggable" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERIUI.all">
-        <antcall target="global.framework.${build.action}" >
-          <param name="project.principal.class" value="er.iui.ERIUI" />
-          <param name="project.name" value="ERIUI" />
+        <antcall target="global.framework.${build.action}">
           <param name="project.dir" value="Frameworks/Ajax/ERIUI" />
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
      </antcall>
   </target>
 
   <target name="GoogleChart.all">
-      <antcall target="global.framework.${build.action}" >
-          <param name="project.principal.class" value="er.googlechart.GCGoogleChart" />
-          <param name="project.name" value="GoogleChart" />
+      <antcall target="global.framework.${build.action}">
           <param name="project.dir" value="Frameworks/Ajax/GoogleChart" />
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
      </antcall>
   </target>
 
     <target name="ERCoolComponents.all">
-      <antcall target="global.framework.${build.action}" >
-          <param name="project.principal.class" value="er.coolcomponents.ERCoolComponents" />
-          <param name="project.name" value="ERCoolComponents" />
+      <antcall target="global.framework.${build.action}">
           <param name="project.dir" value="Frameworks/Ajax/ERCoolComponents" />
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
      </antcall>
     </target>
 
+    <target name="ERJaxWS.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Misc/ERJaxWS" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="EROpenID.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="EROpenID" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/EROpenID" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERPDFGeneration.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERPDFGeneration" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERPDFGeneration" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERJGroupsSynchronizer.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERJGroupsSynchronizer" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/EOF/ERJGroupsSynchronizer" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="WOLips.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="WOLips" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/WOLips" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
        </antcall>
     </target>
 
     <target name="WOJRebel.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.wojrebel.WOJRebel" />
-            <param name="project.name" value="WOJRebel" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/WOJRebel" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
-    <target name="ERExtensions.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.extensions.ERXExtensions" />
-            <param name="project.name" value="ERExtensions" />
+    <target name="ERExtensions.all" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+        <path id="maven-ant-tasks.classpath" path="${basedir}/Build/lib/maven-ant-tasks-2.1.3.jar" />
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+
+        <artifact:pom id="wonder-version" file="pom.xml" />
+        <antcall target="global.framework.${build.action}">
+            <param name="project.version" value="${wonder-version.version}" />
             <param name="project.dir" value="Frameworks/Core/ERExtensions" />
             <!-- kind of cheating here...-->
             <param name="classes.exclude.0" value="${erx.class.exclude.0}" />
@@ -237,9 +215,7 @@
     </target>
 
     <target name="ERDirectToWeb.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
-            <param name="project.name" value="ERDirectToWeb" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/ERDirectToWeb" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
@@ -248,28 +224,29 @@
     </target>
 
     <target name="ERPrototypes.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.prototypes.ERPrototypes" />
-            <param name="project.name" value="ERPrototypes" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/ERPrototypes" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
+    <target name="ERCMail.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Mail/ERCMail" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="ERJavaMail.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.javamail.ERJavaMail" />
-            <param name="project.name" value="ERJavaMail" />
-            <param name="project.dir" value="Frameworks/Core/ERJavaMail" />
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Mail/ERJavaMail" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERChronic.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERChronic" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERChronic" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
             <param name="test.className" value="er.chronic.ChronicTestSuite" />
@@ -278,36 +255,48 @@
 
     <target name="ERCaching.all">
         <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.caching.ERCaching" />
-            <param name="project.name" value="ERCaching" />
             <param name="project.dir" value="Frameworks/EOF/ERCaching" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
+    <target name="WebService_Created.all">
+        <antcall target="global.application.${build.action}">
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Created" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
+    <target name="WebService_Imported.all">
+        <antcall target="global.application.${build.action}">
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Imported" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
+    <target name="WebService_Stateful.all">
+        <antcall target="global.application.${build.action}">
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Stateful" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
     <target name="ERXPartialBaseModel.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.name" value="ERXPartialBaseModel" />
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Examples/ERXPartials/ERXPartialBaseModel" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERXPartialsExampleModel.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.name" value="ERXPartialsExampleModel" />
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Examples/ERXPartials/ERXPartialsExampleModel" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERXPartialBaseModel" />
        </antcall>
     </target>
 
     <target name="ERXPartialsExampleApp.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.example.erxpartials.Application" />
-            <param name="project.name" value="ERXPartialsExampleApp" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/ERXPartials/ERXPartialsExampleApp" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERXPartialBaseModel/ERXPartialBaseModel" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
@@ -315,48 +304,43 @@
     </target>
 
     <target name="ERXTest.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.erxtest.Application" />
-            <param name="project.name" value="ERXTest" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Tests/ERXTest" />
-            <param name="wo.external.root.bundles"
-                   value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic/ExcelGenerator" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic/ExcelGenerator" />
         </antcall>
     </target>
 
     <target name="PluginTest.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.plugintest.Application" />
-            <param name="project.name" value="PluginTest" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Tests/PluginTest" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/DB2Plugin" />
         </antcall>
     </target>
 
-	<target name="JavaNeo4JAdaptorTest.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.name" value="JavaNeo4JAdaptorTest" />
+    <target name="JavaNeo4JAdaptorTest.all">
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Tests/JavaNeo4JAdaptorTest" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/JavaNeo4JAdaptor" />
         </antcall>
     </target>
 
+    <target name="LuceneExample.all">
+        <antcall target="global.application.${build.action}">
+            <param name="project.dir" value="Examples/Misc/LuceneExample" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/JavaLuceneAdaptor" />
+        </antcall>
+    </target>
+
     <target name="ERIndexing.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERIndexing" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/EOF/ERIndexing" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes" />
        </antcall>
     </target>
     
     <target name="ERIndexingExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="er.indexing.example.Application" />
-            <param name="project.name" value="ERIndexingExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERIndexingExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERPrototypes/ERIndexing" />
@@ -365,9 +349,7 @@
 
     <target name="ERRestRouteExample.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="er.rest.example.Application" />
-            <param name="project.name" value="ERRestRouteExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERRestRouteExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/ERPrototypes/WOOgnl/Ajax/ERRest/JavaMemoryAdaptor" />
@@ -377,18 +359,14 @@
     </target>
 
     <target name="ERPlot.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.plot.ERPlot" />
-            <param name="project.name" value="ERPlot" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Reporting/ERPlot" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
     
 	<target name="ERJasperReports.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERJasperReports" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Reporting/ERJasperReports" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
@@ -396,9 +374,7 @@
     
 	<target name="ERJasperReportsExample.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="er.jrexample.appserver.Application" />
-            <param name="project.name" value="ERJasperReportsExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Reporting/ERJasperReportsExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJasperReports/ERPrototypes/WOOgnl/ERMoviesLogic/Ajax/ERTaggable/ERAttachment/ERCoolComponents/H2PlugIn" />
@@ -409,9 +385,7 @@
 
 	<target name="ERPDFExamples.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="er.pdfexamples.Application" />
-            <param name="project.name" value="ERPDFExamples" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Reporting/ERPDFExamples" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPDFGeneration" />
@@ -422,9 +396,7 @@
     
 	<target name="BackgroundTasks.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="wowodc.background.appserver.Application" />
-            <param name="project.name" value="BackgroundTasks" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/BackgroundTasks" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/WOOgnl/ERCoolComponents/Ajax/MySQLPlugIn/H2PlugIn/ERRest" />
@@ -434,18 +406,14 @@
     </target>
     
 	<target name="ERAttributeExtension.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.attributeextension.ERAttributeExtension" />
-            <param name="project.name" value="ERAttributeExtension" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/EOF/ERAttributeExtension" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
 
     <target name="ERExcelLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.directtoweb.excel.ERExcelLook" />
-            <param name="project.name" value="ERExcelLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Excel/ERExcelLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
@@ -453,55 +421,40 @@
     </target>
 
     <target name="ERCoreBusinessLogic.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
-            <param name="project.name" value="ERCoreBusinessLogic" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERCoreBusinessLogic" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERJavaMail" />
         </antcall>
     </target>
 
     <target name="ERChangeNotificationJMS.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.changenotification.ERCNNotificationCoordinator" />
-            <param name="project.name" value="ERChangeNotificationJMS" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/EOF/ERChangeNotificationJMS" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="ERNeutralLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERNeutralLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Core/ERNeutralLook" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}" />
         </antcall>
     </target>
 
     <target name="BTBusinessLogic.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
-            <param name="project.name" value="BTBusinessLogic" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/BTBusinessLogic" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
         </antcall>
     </target>
 
     <target name="BugTracker.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.bugtracker.Application" />
-            <param name="project.name" value="BugTracker" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/BugTracker" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
@@ -510,12 +463,8 @@
     </target>
 
     <target name="ERMailer.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.javamail.mailer.Application" />
-            <param name="project.name" value="ERMailer" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/ERMailer" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/ERJavaMail" />
        </antcall>
@@ -523,12 +472,8 @@
 
     <target name="Uber.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.uber.Application" />
-            <param name="project.name" value="Uber" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/Uber" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment/JavaMemoryAdaptor/H2PlugIn/WOLips" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
@@ -538,12 +483,8 @@
 
     <target name="SecretPal.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="com.secretpal.Application" />
-            <param name="project.name" value="SecretPal" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/SecretPal" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment/JavaMemoryAdaptor/H2PlugIn/FrontBasePlugIn/WOLips/ERCaptcha/ERCoolComponents/ERModernDefaultSkin/ERModernLook/ERModernDirectToWeb" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
@@ -552,21 +493,14 @@
     </target>
 
     <target name="ERSeleniumExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.seleniumexample.Application" />
-            <param name="project.name" value="ERSeleniumExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERSeleniumExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERSelenium" />
        </antcall>
     </target>
 
      <target name="TickTockMan.all">
-         <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.ticktock.Application" />
-            <param name="project.name" value="TickTockMan" />
+         <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/TickTockMan" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
        </antcall>
@@ -574,10 +508,7 @@
 
      <target name="WOTested.all" depends="wotested.embed.check">
 		<property name="wonder.wotested.embed.jars" value="false" />
-         <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="org.ganymede.Application" />
-            <param name="project.name" value="WOTested" />
+         <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/WOTested" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/PostgresqlPlugIn" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.wotested.embed.jars}" />
@@ -586,20 +517,14 @@
     </target>
 
     <target name="ERCayenneExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.cayenne.example.Application" />
-            <param name="project.name" value="ERCayenneExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERCayenneExample" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/ERCayenne/ERPrototypes" />
         </antcall>
     </target>
 
     <target name="ERDistributionExampleServer.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.distribution.example.server.Application" />
-            <param name="project.name" value="ERDistributionExampleServer" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERDistributionExampleServer" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/ERPrototypes/DerbyPlugIn/ERDistribution/ERDistributionExampleModel" />
@@ -613,10 +538,7 @@
     </target>
     
     <target name="ERDistributionExampleClient.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.distribution.example.client.Application" />
-            <param name="project.name" value="ERDistributionExampleClient" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERDistributionExampleClient" />
             <param name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaXML/JavaEODistribution" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}/ERExtensions/ERDistribution/ERDistributionExampleModel" />
@@ -627,10 +549,7 @@
     </target>
     
     <target name="Movies.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.movies.Application" />
-            <param name="project.name" value="Movies" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/Movies" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERMoviesLogic/ERAttachment/H2PlugIn" />
         </antcall>
@@ -638,10 +557,7 @@
 
     <target name="ERMovies.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.examples.movies.Application" />
-            <param name="project.name" value="ERMovies" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/D2W/ERMovies" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium/ERAttachment/ERTaggable" />
@@ -651,10 +567,7 @@
     </target>
     
     <target name="TextSearchDemo.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.examples.textsearchdemo.Application" />
-            <param name="project.name" value="TextSearchDemo" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/TextSearchDemo" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/H2PlugIn/ERMoviesLogic/ERTaggable/Ajax/ERIndexing" />
@@ -662,94 +575,68 @@
     </target>    
 
     <target name="D2WComponentTour.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="D2WComponentTour" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/D2W/D2WComponentTour" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
          </antcall>
     </target>
 
     <target name="ERComponentTour.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.examples.Application" />
-            <param name="project.name" value="ERComponentTour" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERComponentTour" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPlot/ExcelGenerator/ERCaptcha/GoogleChart" />
          </antcall>
     </target>
 
     <target name="WOPayPal.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.wopaypal.WOPayPal" />
-            <param name="project.name" value="WOPayPal" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/WOPayPal" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="DRGrouping.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="DRGrouping" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Reporting/DRGrouping" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
         </antcall>
     </target>
 
     <target name="WRReporting.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="WRReporting" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Reporting/WRReporting" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/DRGrouping" />
         </antcall>
     </target>
 
     <target name="DocsByExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.reporting.examples.Application" />
-            <param name="project.name" value="DocsByExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Reporting/DocsByExample" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
     <target name="DynaReporter.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.reporting.examples.Application" />
-            <param name="project.name" value="DynaReporter" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Reporting/DynaReporter" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
     <target name="DRGroupingTest.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.grouping.examples.Application" />
-            <param name="project.name" value="DRGroupingTest" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Reporting/DRGroupingTest" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
     <target name="Validity.all">
-        <antcall target="global.framework.${build.action}" >
+        <antcall target="global.framework.${build.action}">
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="Validity" />
             <param name="project.dir" value="Frameworks/EOF/Validity" />
         </antcall>
     </target>
@@ -762,59 +649,42 @@
     </target>
 
     <target name="ValidityModeler.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ValidityModeler" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Archives/Applications/ValidityModeler" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity" />
         </antcall>
     </target>
 
     <target name="ValidityExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.validexample.Application" />
-            <param name="project.name" value="ValidityExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ValidityExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity/ERSelenium" />
         </antcall>
     </target>
 	
     <target name="DevStudio.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="ag.kcmedia.Application" />
-            <param name="project.name" value="DevStudio" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/DevStudio" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
          </antcall>
     </target>
 
     <target name="ERCalendar.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERCalendar" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERCalendar" />
         </antcall>
     </target>
 
     <target name="ERCayenne.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.cayenne.CayennePrincipal" />
-            <param name="project.name" value="ERCayenne" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERCayenne" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     
     <target name="ERDistribution.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.distribution.ERDistributionPrincipal" />
-            <param name="project.name" value="ERDistribution" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERDistribution" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
@@ -822,8 +692,7 @@
     </target>
 
     <target name="ERDistributionExampleModel.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.name" value="ERDistributionExampleModel" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERDistributionExampleModel" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
@@ -831,45 +700,30 @@
     </target>
     
     <target name="ExcelGenerator.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ExcelGenerator" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Excel/ExcelGenerator" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="EROpenIDExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="EROpenIDExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Archives/Examples/EROpenIDExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/EROpenID" />
         </antcall>
     </target>
 
     <target name="JavaRESTAdaptorExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.restadaptorexample.Application" />
-            <param name="project.name" value="JavaRESTAdaptorExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/JavaRESTAdaptorExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/JavaRESTAdaptor" />
         </antcall>
     </target>
 
     <target name="AjaxExample.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="AjaxExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Ajax/AjaxExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor/ERSelenium" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
@@ -878,12 +732,8 @@
 
     <target name="AjaxExample2.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-	      <antcall target="global.application.${build.action}" >
-	          <param name="project.type" value="application" />
-	          <param name="project.principal.class" value="er.ajax.example2.Application" />
-	          <param name="project.name" value="AjaxExample2" />
-	          <param name="project.dir" value="Examples/Ajax/AjaxExample2" />
-	
+	      <antcall target="global.application.${build.action}">
+	          <param name="project.dir" value="Examples/Ajax/AjaxExample2" />	
 	          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/WOOgnl/WOLips/ERSelenium" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
@@ -891,26 +741,20 @@
 	  </target>
 
     <target name="ERIUIExample.all">
-      <antcall target="global.application.${build.action}" >
-          <param name="project.type" value="application" />
-          <param name="project.principal.class" value="er.iui.example.Application" />
-          <param name="project.name" value="ERIUIExample" />
+      <antcall target="global.application.${build.action}">
           <param name="project.dir" value="Archives/Examples/ERIUIExample" />
-
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERIUI/Ajax/WOOgnl" />
       </antcall>
     </target>
 
     <target name="Ajax.pre.build">
-      	<exec dir="Frameworks/Ajax/Ajax/Support" executable="/bin/sh" os="Mac OS X" >
+      	<exec dir="Frameworks/Ajax/Ajax/Support" executable="/bin/sh" os="Mac OS X">
             <arg line="compress.sh" />
         </exec>
     </target>
 
     <target name="Ajax.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.ajax.Ajax" />
-            <param name="project.name" value="Ajax" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/Ajax" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
       		<param name="before.build" value="Ajax.pre.build" />
@@ -918,43 +762,29 @@
     </target>
 
     <target name="YUIExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="YUIExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Ajax/YUIExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI" />
         </antcall>
     </target>
 
     <target name="YUI.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.type" value="framework" />
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="YUI" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/YUI" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
         </antcall>
     </target>
 
     <target name="AjaxLookExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="AjaxLookExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Ajax/AjaxLookExample" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI/YUILook" />
         </antcall>
     </target>
 
     <target name="AjaxLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="AjaxLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/AjaxLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/YUI" />
@@ -962,9 +792,7 @@
     </target>
     
     <target name="ERJQuery.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERJQuery" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/ERJQuery" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
@@ -972,9 +800,7 @@
     </target>
 
     <target name="ERPrototaculous.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERPrototaculous" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/ERPrototaculous" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
@@ -982,9 +808,7 @@
     </target>
 
     <target name="ERDivaLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERDivaLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/ERDivaLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERAttachment" />
@@ -992,21 +816,15 @@
     </target>
 
     <target name="ERDivaLookExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="ERDivaLookExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Archives/Examples/ERDivaLookExample" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
     <target name="ERDivaliteLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERDivaliteLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERDivaliteLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERAttachment" />
@@ -1014,12 +832,8 @@
     </target>
 
     <target name="ERDivaliteExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.divalite.example.Application" />
-            <param name="project.name" value="ERDivaliteExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Archives/Examples/ERDivaliteExample" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERDivaliteLook/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
@@ -1027,12 +841,8 @@
     
     <target name="ERModernMoviesDemo.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.modern.movies.demo.Application" />
-            <param name="project.name" value="ERModernMoviesDemo" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/D2W/ERModernMoviesDemo" />
-
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
@@ -1041,9 +851,7 @@
     </target>
 
     <target name="ERModernLook.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERModernLook" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/D2W/ERModernLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernDirectToWeb" />
@@ -1051,9 +859,7 @@
     </target>
     
     <target name="ERModernDirectToWeb.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERModernDirectToWeb" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/D2W/ERModernDirectToWeb" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERCoolComponents" />
@@ -1061,9 +867,7 @@
     </target>
     
     <target name="ERModernDefaultSkin.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERModernDefaultSkin" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/D2W/ERModernDefaultSkin" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
@@ -1071,177 +875,136 @@
     </target>
 
     <target name="ERIMAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERIMAdaptor" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/WOAdaptors/ERIMAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     
     <target name="ERWOAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERWOAdaptor" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/WOAdaptors/ERWOAdaptor" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     
     <target name="ERWebSocketExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.websocketexample.Application" />
-            <param name="project.name" value="ERWebSocketExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Misc/ERWebSocketExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERWOAdaptor" />
         </antcall>
     </target>
 
     <target name="JavaMemoryAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.memoryadaptor.ERMemoryAdaptor&lt;/string&gt;"/>
-            <param name="project.name" value="JavaMemoryAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaMemoryAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="JavaNeo4JAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.neo4jadaptor.Neo4JAdaptor&lt;/string&gt;"/>
-            <param name="project.name" value="JavaNeo4JAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaNeo4JAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>    
 
-    <target name="JavaFSAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.FSAdaptor&lt;/string&gt;"/>
-            <param name="project.name" value="JavaFSAdaptor" />
-            <param name="project.dir" value="Frameworks/EOAdaptors/JavaFSAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
+    <target name="JavaLuceneAdaptor.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.luceneadaptor.ERLuceneAdaptor&lt;/string&gt;"/>
+            <param name="project.dir" value="Frameworks/EOAdaptors/JavaLuceneAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>   
 
+    <target name="JavaFSAdaptor.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.fsadaptor.FSAdaptor&lt;/string&gt;"/>
+            <param name="project.dir" value="Frameworks/EOAdaptors/JavaFSAdaptor" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="JavaRESTAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.restadaptor.ERRESTAdaptor&lt;/string&gt;"/>
-            <param name="project.name" value="JavaRESTAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaRESTAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="JavaERJDBCAdaptor.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.jdbcadaptor.ERJDBCAdaptor&lt;/string&gt;"/>
-            <param name="project.name" value="JavaERJDBCAdaptor" />
             <param name="project.dir" value="Frameworks/EOAdaptors/JavaERJDBCAdaptor" />
-            <param name = "compiler.target" value = "1.5" />
-            <param name = "compiler.source" value = "1.5" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="ERWorkerChannel.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERWorkerChannel" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERWorkerChannel" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 	
 	<target name="PostgresqlPlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
-            <param name="project.name" value="PostgresqlPlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/PostgresqlPlugIn" />
         </antcall>
     </target>
 
     <target name="DerbyPlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.DerbyPlugIn" />
-            <param name="project.name" value="DerbyPlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/DerbyPlugIn" />
         </antcall>
     </target>
 
     <target name="FrontBasePlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.frontbase.FrontBasePlugInPrincipal" />
-            <param name="project.name" value="FrontBasePlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/FrontBasePlugIn" />
         </antcall>
     </target>
 
 	<target name="H2PlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.h2.ERH2PlugInPrincipal" />
-            <param name="project.name" value="H2PlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/H2PlugIn" />
         </antcall>
     </target>
 
 	<target name="DB2PlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.DB2PlugIn" />
-            <param name="project.name" value="DB2PlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/DB2PlugIn" />
         </antcall>
     </target>
 
     <target name="MySQLPlugIn.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.MySQLPlugIn" />
-            <param name="project.name" value="MySQLPlugIn" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/MySQLPlugIn" />
         </antcall>
     </target>
 
     <target name="MooTools.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.ajax.Ajax" />
-            <param name="project.name" value="MooTools" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/MooTools" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERAttachment" />
         </antcall>
     </target>
 
+    <target name="ERMootoolsDirectToWeb.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/D2W/ERMootoolsDirectToWeb" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernDirectToWeb" />
+        </antcall>
+    </target>
+
     <target name="MooToolsExample.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.ajax.mootools.example.app.Application" />
-            <param name="project.name" value="MooToolsExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Ajax/MooToolsExample" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor/MooTools" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
@@ -1249,9 +1012,7 @@
     </target>    
 
     <target name="ERJQueryMobile.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.jquerymobile.ERJQueryMobile" />
-            <param name="project.name" value="ERJQueryMobile" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Ajax/ERJQueryMobile" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERAttachment" />
         </antcall>
@@ -1259,31 +1020,30 @@
 
     <target name="JqueryMobileExample.all" depends="examples.embed.check">
     	<property name="wonder.examples.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.jquerymobile.exampleapp.Application" />
-            <param name="project.name" value="JqueryMobileExample" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Examples/Ajax/JqueryMobileExample" />
-
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJQueryMobile/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/ERJQMobile/H2PlugIn/WOOgnl" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
         </antcall>
     </target>
 
+    <target name="ERJQMobile.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Ajax/ERJQMobile" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+        </antcall>
+    </target>    
+
     <target name="ERQuartzScheduler.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERQuartzScheduler" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERQuartzScheduler" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJavaMail" />
         </antcall>
     </target>        
 
     <target name="ERXiss.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERXiss" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERXiss" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
@@ -1303,10 +1063,7 @@
 
     <target name="JavaMonitor.all" depends="deployment.embed.check">
         <property name="wonder.deployment.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
-            <param name="project.name" value="JavaMonitor" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/JavaMonitor" />
       		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/ERRest/JavaWOExtensions/JavaMonitorFramework/Ajax" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
@@ -1321,10 +1078,7 @@
 
     <target name="wotaskd.all" depends="deployment.embed.check">
         <property name="wonder.deployment.embed.jars" value="false" />
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="com.webobjects.monitor.wotaskd.Application" />
-            <param name="project.name" value="wotaskd" />
+        <antcall target="global.application.${build.action}">
             <param name="project.dir" value="Applications/wotaskd" />
       		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/ERRest" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
@@ -1334,37 +1088,28 @@
     </target>
 
     <target name="JavaMonitorFramework.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="JavaMonitorFramework" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/JavaMonitorFramework" />
-
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
 
     <target name="SnapshotExplorer.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="SnapshotExplorer" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/SnapshotExplorer" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERRest" />
        </antcall>
     </target>
 
     <target name="ERPersistentSessionStorage.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="er.persistentsessionstorage.ERPersistentSessionStorage" />
-            <param name="project.name" value="ERPersistentSessionStorage" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERPersistentSessionStorage" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
     
     <target name="ERFirebug.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERFirebug" />
+        <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/Misc/ERFirebug" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
@@ -1375,21 +1120,21 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERCMail.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaLuceneAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
     
-	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all" />
+	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, LuceneExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all, WebService_Created.all, WebService_Imported.all, WebService_Stateful.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERPrototaculous.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.frameworks.all" depends="GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERJQueryMobile.all, ERJQMobile.all, ERPrototaculous.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all, ERMootoolsDirectToWeb.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, ERModernMoviesDemo.all" />
 
-    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all,MySQLPlugIn.all,DB2PlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all, FrontBasePlugIn.all, DerbyPlugIn.all, EROraclePlugIn.all, H2PlugIn.all, MySQLPlugIn.all, DB2PlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
@@ -1402,25 +1147,9 @@
     <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
 
-    <target name="patch.frameworks.5431">
-       <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
-       <property name="include.source" value="true" />
-       <antcall target="_frameworks.all">
-	</antcall>
-    </target>
-
-    <target name="patch.frameworks.54">
-       <property name="include.source" value="true" />
-       <antcall target="_frameworks.all" />
-    </target>
-
-    <target name="patch.frameworks.53">
-       <property name="include.source" value="true" />
-       <antcall target="_frameworks.all" />
-    </target>
-
      <target name="frameworks.all">
-        <antcall target="patch.frameworks.${wonder.patch}" />
+       <property name="include.source" value="true" />
+       <antcall target="_frameworks.all" />
      </target>
 
     <target name="applications.all" depends="common.applications.all, JavaMonitor.all, wotaskd.all"/>
@@ -1433,7 +1162,7 @@
 
     <target name="dist">
         <!-- do dist target on known frameworks -->
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="dist.base" value="${dist.base}" />
             <param name="project.version" value="${project.version}" />
             <param name="dist.dir" value="${dist.base}/wonder-${project.version}"/>
@@ -1448,7 +1177,6 @@
                 <exclude name="**/Roots/**" />
                 <exclude name="**/null*" />
                 <exclude name="**/.git/**" />
-                <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
              	<exclude name="**/bin/**"/>
              	<exclude name="**/build/**"/>
@@ -1466,47 +1194,24 @@
             zipfile="${dist.base}/Wonder-src-${project.version}.tgz"/>
 
         <delete file="${dist.base}/Wonder-src-${project.version}.tar"/>
-        <!-- zip destfile="${dist.base}/Wonder-${project.version}.zip"
-            basedir="${dist.base}/wonder-${project.version}"
-            excludes="**/CVS/*, **/dist/**" / -->
-    </target>
-
-
-    <target name="patch.5431">
-        <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
-        <property name="include.source" value="true" />
-        <antcall target="all.run" >
-            <param name="build.action" value="build" />
-        </antcall>
-    </target>
-
-    <target name="patch.54">
-        <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
-        <property name="include.source" value="true" />
-        <antcall target="all.run" >
-            <param name="build.action" value="build" />
-        </antcall>
-    </target>
-
-    <target name="patch.53">
-        <property name="include.source" value="true" />
-        <antcall target="all.run" >
-            <param name="build.action" value="build" />
-        </antcall>
     </target>
 
     <target name="build">
-        <antcall target="patch.${wonder.patch}" ></antcall>
+        <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
+        <property name="include.source" value="true" />
+        <antcall target="all.run">
+            <param name="build.action" value="build" />
+        </antcall>
     </target>
 
     <target name="install">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="install" />
         </antcall>
     </target>
 
     <target name="web">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="web" />
         </antcall>
     </target>
@@ -1558,6 +1263,7 @@
                 <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
                 <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang3}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERFoundation.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERJars.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERWebObjects.jar" />
@@ -1584,7 +1290,7 @@
     </target>
 
     <target name="clean">
-        <antcall target="all.run" >
+        <antcall target="all.run">
             <param name="build.action" value="clean" />
         </antcall>
     </target>

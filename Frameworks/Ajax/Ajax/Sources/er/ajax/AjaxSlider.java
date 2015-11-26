@@ -91,14 +91,14 @@ public class AjaxSlider extends AjaxComponent {
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {
           StringBuilder valuesBuffer = new StringBuilder();
-          valuesBuffer.append("[");
+          valuesBuffer.append('[');
           for (int i = min.intValue(); i <= max.intValue(); i ++ ) {
             valuesBuffer.append(i);
             if (i < max.intValue()) {
-              valuesBuffer.append(",");
+              valuesBuffer.append(',');
             }
           }
-          valuesBuffer.append("]");
+          valuesBuffer.append(']');
         	options.setObjectForKey(valuesBuffer.toString(), "values");
         }
 

@@ -1,3 +1,6 @@
 {
 	"svg" = "image/svg+xml";
+	"eot" = "application/vnd.ms-fontobject";
+	"ttf" = "application/octet-stream";
+	"woff" = "application/font-woff";
 }

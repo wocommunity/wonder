@@ -176,7 +176,16 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 	public void awakeFromInsertion(EOEditingContext editingContext) {
 		super.awakeFromInsertion(editingContext);
 		for (ERXPartial partial : _partials()) {
-			partial.awakeFromInsertion(editingContext);
+			partial.init(editingContext);
+		}
+	}
+
+	@Override
+	protected void init(EOEditingContext editingContext) {
+		super.init(editingContext);
+		// Call init() on all partial entities
+		for (ERXPartial partial : _partials()) {
+			partial.init(editingContext);
 		}
 	}
 

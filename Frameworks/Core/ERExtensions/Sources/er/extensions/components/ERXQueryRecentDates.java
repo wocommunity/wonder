@@ -18,7 +18,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXTimestampUtilities;
 
 /**
- * Nice for adjusting the query specs for dates on a display group.<br />
+ * Nice for adjusting the query specs for dates on a display group.
  * 
  * @binding displayGroup
  * @binding key

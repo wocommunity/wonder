@@ -338,10 +338,10 @@ public abstract class GCAbstractChart extends WODynamicElement {
       chartUrl.setQueryParameter("chg", (String) _gridLines.valueInComponent(component));
     }
     else if (_gridXStep != null || _gridYStep != null || _gridLineSize != null || _gridBlankSize != null) {
-      StringBuffer chg = new StringBuffer();
+      StringBuilder chg = new StringBuilder();
       if (_gridXStep != null && _gridYStep != null) {
         chg.append(_gridXStep.valueInComponent(component));
-        chg.append(",");
+        chg.append(',');
         chg.append(_gridYStep.valueInComponent(component));
       }
 
@@ -351,7 +351,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
         }
 
         if (_gridLineSize != null) {
-          chg.append(",");
+          chg.append(',');
           chg.append(_gridLineSize.valueInComponent(component));
         }
 
@@ -359,14 +359,14 @@ public abstract class GCAbstractChart extends WODynamicElement {
           if (_gridLineSize == null) {
             chg.append(",5");
           }
-          chg.append(",");
+          chg.append(',');
           chg.append(_gridBlankSize.valueInComponent(component));
         }
       }
       chartUrl.setQueryParameter("chg", chg.toString());
     }
 
-    StringBuffer fill = new StringBuffer();
+    StringBuilder fill = new StringBuilder();
 
     String backgroundStyle = "solid";
     if (_backgroundStyle != null) {
@@ -375,7 +375,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
     if (_background != null) {
       fill.append("bg,");
       fill.append(styleKey(backgroundStyle));
-      fill.append(",");
+      fill.append(',');
       fill.append(_background.valueInComponent(component));
     }
 
@@ -385,18 +385,18 @@ public abstract class GCAbstractChart extends WODynamicElement {
     }
     if (_chartBackground != null) {
       if (fill.length() > 0) {
-        fill.append("|");
+        fill.append('|');
       }
       fill.append("c,");
       fill.append(styleKey(chartBackgroundStyle));
-      fill.append(",");
+      fill.append(',');
       fill.append(_chartBackground.valueInComponent(component));
     }
 
     if (_chartBackground != null || _transparency != null) {
       if (_transparency != null) {
         if (fill.length() > 0) {
-          fill.append("|");
+          fill.append('|');
         }
         fill.append("a,s,");
         fill.append(_transparency.valueInComponent(component));
@@ -419,11 +419,11 @@ public abstract class GCAbstractChart extends WODynamicElement {
 
     NSArray<Object> axisLabels = AjaxUtils.arrayValueForAssociation(component, _axisLabels);
     if (axisLabels != null) {
-      StringBuffer axisLabelsStr = new StringBuffer();
+      StringBuilder axisLabelsStr = new StringBuilder();
       for (int i = 0; i < axisLabels.count(); i++) {
         Object singleAxisLabels = axisLabels.objectAtIndex(i);
         if (i > 0) {
-          axisLabelsStr.append("|");
+          axisLabelsStr.append('|');
         }
         axisLabelsStr.append(i + ":|");
         if (singleAxisLabels instanceof Object[]) {

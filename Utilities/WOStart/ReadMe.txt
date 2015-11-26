@@ -10,15 +10,14 @@ Using this has some advandages
 - No problems due to classpath length
 
 As with java.exe the current VM is read from registry. For now, this works
-up to Java7.
+up to Java8.
 
 
 
 - Compiling
 
-Makefile and make.config are prepared for compiling using Mingw32 and Mingw64
-under windows (for mingw64 you might have to create a symbolic link using
-"ln -s x86_64-w64-mingw32-strip.exe strip.exe").
+Makefile and make.config are prepared for compiling using Mingw (32 and 64 Bit)
+under windows.
 To get it compiled with Mingw under Linux you might have to tweak make.config
 a little bit.
 

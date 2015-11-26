@@ -15,7 +15,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Radio button list with lots of more options.<br />
+ * Radio button list with lots of more options.
  * 
  * @binding list
  * @binding uniqueID

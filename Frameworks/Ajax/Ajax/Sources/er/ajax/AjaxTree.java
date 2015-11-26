@@ -302,7 +302,7 @@ public class AjaxTree extends WOComponent {
 				nodeItem.append("\"");
 			}
 		}
-		nodeItem.append(">");
+		nodeItem.append('>');
 		return nodeItem.toString();
 	}
 	

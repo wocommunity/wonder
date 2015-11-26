@@ -167,7 +167,7 @@ public class ERXMigrator {
 	@SuppressWarnings("unchecked")
 	public void migrateToLatest() {
 		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
-		NSArray<String> modelNames;
+		NSArray<String> modelNames = NSArray.EmptyArray;
 		String modelNamesStr = ERXProperties.stringForKey("er.migration.modelNames");
 		if (modelNamesStr == null) {
 			ERXMigrator.log.warn("er.migration.modelNames is not set, defaulting to modelGroup.models() order instead.");
@@ -272,7 +272,7 @@ public class ERXMigrator {
 					if (model == null) {
 						throw new IllegalArgumentException("There is no model named '" + modelName + "' in this model group.");
 					}
-					_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations);
+					_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations, skipModelNames);
 				}
 			}
 
@@ -289,7 +289,7 @@ public class ERXMigrator {
 						EOEntity parentEntity = entity.parentEntity();
 						if (parentEntity != null && !parentEntity.model().equals(model)) {
 							EOModel parentModel = parentEntity.model();
-							_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations);
+							_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations, skipModelNames);
 						}
 						Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
 						while (relationshipsEnum.hasMoreElements()) {
@@ -297,11 +297,11 @@ public class ERXMigrator {
 							EOEntity destinationEntity = relationship.destinationEntity();
 							if (destinationEntity != null && !destinationEntity.model().equals(model)) {
 								EOModel destinationModel = destinationEntity.model();
-								_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations);
+								_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations, skipModelNames);
 							}
 						}
 					}
-					_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations);
+					_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations, skipModelNames);
 					processedModelNames.add(modelName);
 				}
 				pendingModelNames.addAll(versions.keySet());
@@ -335,12 +335,17 @@ public class ERXMigrator {
 		return false;
 	}
 	
-	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations) throws InstantiationException, IllegalAccessException {
+	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations,  NSArray<String> skipModelNames) throws InstantiationException, IllegalAccessException {
 		if (!canMigrateModel(model)) {
 			return;
 		}
 		
 		String modelName = model.name();
+
+		if (skipModelNames.containsObject(modelName)) {
+			log.error(modelName + " was in skipModelNames, but got passed to the _buildDependenciesForModel anyway...");
+			return;
+		}
 
 		Integer migratorVersion = versions.get(modelName);
 		if (migratorVersion == null) {
@@ -374,7 +379,7 @@ public class ERXMigrator {
 							ERXModelVersion modelVersion = migrationDependenciesEnum.nextElement();
 							EOModel dependsOnModel = modelVersion.model();
 							int dependsOnVersion = modelVersion.version();
-							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
+							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations,  skipModelNames);
 						}
 					}
 
@@ -398,35 +403,6 @@ public class ERXMigrator {
 	 */
 	protected EOEditingContext newEditingContext() {
 		return ERXEC.newEditingContext();
-	}
-	
-	/**
-	 * ModelVersion represents a particular version of an EOModel.
-	 * 
-	 * @author mschrag
-	 * @deprecated use {@link er.extensions.migration.ERXModelVersion}
-	 */
-	@Deprecated
-	public static class ModelVersion extends ERXModelVersion {
-		/**
-		 * @param model
-		 *            a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(EOModel model, int version) {
-			super(model, version);
-		}
-
-		/**
-		 * @param modelName
-		 *            the name of a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(String modelName, int version) {
-			super(modelName, version);
-		}
 	}
 
 	protected static class ERXMigrationAction extends ChannelAction {

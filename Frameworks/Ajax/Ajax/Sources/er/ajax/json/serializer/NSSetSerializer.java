@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSSet;
 /**
  * Transforms NSSets between JavaScript and Java.
  * 
- * @author Jean-François Veillette <jfveillette@os.ca>
+ * @author Jean-François Veillette &lt;jfveillette@os.ca&gt;
  * @version $, $Date $ <br>
  *          &copy; 2005 OS Communications Informatiques, inc. Tous droits réservés.
  */

@@ -7,7 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -60,7 +60,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
         DecimalFormat currencyFormatter = new DecimalFormat("##0.00", new DecimalFormatSymbols(Locale.US));
         DecimalFormat taxFormatter = new DecimalFormat("##0.000", new DecimalFormatSymbols(Locale.US));
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("&business=" + urlEncode(payPalBusinessName) ); // required!!!
         if (userDefinableQuantity!=null) {
             sb.append("&undefined_quantity=" + (userDefinableQuantity.booleanValue() ? "1" : "0") );  

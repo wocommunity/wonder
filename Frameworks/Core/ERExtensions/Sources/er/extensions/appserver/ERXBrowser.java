@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 /** 
- * <span class="en">
+ * <div class="en">
  * ERXBrowser is an abstract class that defines browser object. 
  * A browser object represents the web browser that the current 
  * request-response loop is dealing with. It holds the information 
@@ -21,55 +21,55 @@ import com.webobjects.foundation.NSKeyValueCoding;
  * compatible version and platform (OS). Also, a browser object 
  * can answer boolean questions such as <code>isIE</code>, 
  * <code>isOmniWeb</code>, <code>isVersion5</code> and 
- * <code>isMozilla40Compatible</code>. <br>
- * 
+ * <code>isMozilla40Compatible</code>.
+ * <p>
  * ERXBrowser is immutable and shared by different sessions and
  * direct actions. 
  * The shared instances are managed by ERXBrowserFactory which 
  * is also responsible to parse "user-agent" header in a WORequest 
- * object and to get an appropriate browser object. <br>
- * 
+ * object and to get an appropriate browser object.
+ * <p>
  * One concrete browser, ERXBasicBrowser, is defined in the 
  * ERExtensions framework. It not only implements the basic 
  * questions defined by ERXBrowser, but also more specific 
  * questions like <code>isIFrameSupported</code> and 
- * <code>willRenderNestedTablesFast</code>. <br>
- * 
+ * <code>willRenderNestedTablesFast</code>.
+ * <p>
  * You can extend ERXBrowser or its concrete subclass 
  * ERXBasicBrowser to implement more specific questions for 
  * your application. One good example will be to have a question 
  * <code>isSupportedBrowser</code> that checks if the client 
- * is using one of the supported browsers for your application. <br>
- * 
+ * is using one of the supported browsers for your application.
+ * <p>
  * ERXSession holds a browser object that represent the web 
  * browser for that session and <code>browser</code> method 
  * returns the object. 
  * 
  * To access ERXBrowser's boolean questions from WOConditionals 
  * on a web component, set the key path like "session.brower.isIFrameSupported" 
- * to their condition bindings. <br>
- * 
+ * to their condition bindings.
+ * <p>
  * ERXDirectAction also holds a browser object for the current request. 
  * Use its <code>browser</code> method to access the object from a 
- * session-less direct action. <br>
- * </span>
+ * session-less direct action.
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * ERXBrowser はブラウザ・オブジェクトを表現する抽象的なクラスです。
  * ブラウザ・オブジェクトはカレント・リクエスト・レスポンス・ループの Webブラウザを表現しています。
  * HTTPリクエスト "user-agent" より情報を取得し、 Webブラウザ名、バージョン番号、プラットフォームと
  * Mozilla バージョン番号等々を含みます。他には boolean で <code>isIE</code>,
  * <code>isOmniWeb</code>, <code>isVersion5</code> と 
- * <code>isMozilla40Compatible</code>の情報を簡単にアクセスできます。 <br>
- * 
+ * <code>isMozilla40Compatible</code>の情報を簡単にアクセスできます。
+ * <p>
  * ERXBrowser は不変で、他のセッションとダイレクト・アクションで共有されています。
  * 共有インスタンスは ERXBrowserFactory で管理されています。他には ERXBrowserFactory が
- * WORequest の "user-agent" パースとブラウザ・オブジェクトの作成を担当しています。<br>
- * 
+ * WORequest の "user-agent" パースとブラウザ・オブジェクトの作成を担当しています。
+ * <p>
  * ERExtensions フレームワークには ERXBasicBrowser ブラウザ・オブジェクトが明確にされている。
  * ERXBrowser の基本な調査メソッドのみではなく、もっと確実な <code>isIFrameSupported</code>
- * と <code>willRenderNestedTablesFast</code> を回答します。<br>
- * 
+ * と <code>willRenderNestedTablesFast</code> を回答します。
+ * <p>
  * 自分のアプリケーションの為に ERXBrowser や ERXBasicBrowser のサブクラスをつくることができます。
  * 例：アプリケーションでサポートされているブラウザかどうかの <code>isSupportedBrowser</code> を追加できます。<br>
  * 
@@ -80,8 +80,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
  * 次のようなキーパス "session.brower.isIFrameSupported" をバインディングします。<br>
  * 
  * ERXDirectAction もカレント・リクエストのブラウザ・オブジェクトを保持します。
- * オブジェクトをアクセスするには <code>browser</code> メソッドを使用します。<br>
- * </span>
+ * オブジェクトをアクセスするには <code>browser</code> メソッドを使用します。
+ * </div>
  */  
 public abstract class ERXBrowser implements NSKeyValueCoding {
 
@@ -113,35 +113,31 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String NO_GECKO = "No Gecko";
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser name string
+     * </div>
      * 
-     * @return what type of browser
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザ名を戻します
+     * </div>
      * 
-     * @return ブラウザ名
-     * </span>
+     * @return <div class="en">what type of browser</div>
+     *         <div class="ja">ブラウザ名</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract String browserName();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Version string
+     * </div>
      * 
-     * @return what version of browser
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザのバージョンアップを戻します
+     * </div>
      * 
-     * @return ブラウザのバージョンアップ
-     * </span>
+     * @return <div class="en">what version of browser</div>
+     *         <div class="ja">ブラウザのバージョンアップ</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract String version();
     
     /**
@@ -152,236 +148,209 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract Integer majorVersion();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * MozillaVersion string
+     * </div>
      * 
-     * @return what Mozilla version equivement to the browser's version
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザの Mozilla バージョンを戻します
+     * </div>
      * 
-     * @return ブラウザの Mozilla バージョン
-     * </span>
+     * @return <div class="en">Mozilla version equivalent to the browser's version</div>
+     *         <div class="ja">ブラウザの Mozilla バージョン</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract String mozillaVersion();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * The revision of the gecko rendering engine. 1.0.2 and up support xslt.
+     * </div>
      * 
-     * @return what gecko revision equivement to the browser's version
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * gecko レンダリング・エンジンのバージョンを戻します
+     * </div>
      * 
-     * @return gecko レンダリング・エンジンのバージョンを戻します
-     * </span>
+     * @return <div class="en">gecko revision equivalent to the browser's version</div>
+     *         <div class="ja">gecko レンダリング・エンジンのバージョンを戻します</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract String geckoRevision();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Platform string
+     * </div>
      * 
-     * @return what platform that the browser is running on
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * プラットフォームを戻します
+     * </div>
      * 
-     * @return プラットフォーム
-     * </span>
+     * @return <div class="en">what platform that the browser is running on</div>
+     *         <div class="ja">プラットフォーム</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract String platform();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * UserInfo dictionary
+     * </div>
      * 
-     * @return what type of browser
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * UserInfo ディクショナリーを戻します
+     * </div>
      * 
-     * @return UserInfo ディクショナリー
-     * </span>
+     * @return <div class="en">the user info</div>
+     *         <div class="ja">UserInfo ディクショナリー</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract NSDictionary userInfo();
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * 未知のブラウザ？
+     * </div>
      * 
-     * @return 未知のブラウザの場合は true が戻ります
-     * </span>
+     * @return <div class="en">true if browser type is unknown</div>
+     *         <div class="ja">未知のブラウザの場合は true が戻ります</div>
      */
     public abstract boolean isUnknownBrowser();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is isRobot?
+     * </div>
      * 
-     * @return true if browser is robot.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザはロボットですか？
+     * </div>
      * 
-     * @return ロボットの場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is robot.</div>
+     *         <div class="ja">ロボットの場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isRobot();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is iCab?
-     * 
-     * @return true if browser is iCab.
-     * </span>
+     * </div>
      
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは iCab ですか？
+     * </div>
      * 
-     * @return iCab の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is iCab.</div>
+     *         <div class="ja">iCab の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isICab();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Internet Explorer?
+     * </div>
      * 
-     * @return true if browser is IE.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Internet Explorer ですか？
+     * </div>
      * 
-     * @return IE の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is IE.</div>
+     *         <div class="ja">IE の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isIE();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Netscape?
+     * </div>
      * 
-     * @return true if browser is Netscape.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Netscape ですか？
+     * </div>
      * 
-     * @return Netscape の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is Netscape.</div>
+     *         <div class="ja">Netscape の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isNetscape();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is not Netscape?
+     * </div>
      * 
-     * @return true if browser is not Netscape.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Netscape ではないか？
+     * </div>
      * 
-     * @return Netscape でない場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is not Netscape.</div>
+     *         <div class="ja">Netscape でない場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isNotNetscape();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is OmniWeb?
+     * </div>
      * 
-     * @return true if browser is OmniWeb.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは OmniWeb ですか？
+     * </div>
      * 
-     * @return OmniWeb の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is OmniWeb.</div>
+     *         <div class="ja">OmniWeb の場合には true が戻ります</div>
      */
-     @SuppressWarnings("javadoc")
    public abstract boolean isOmniWeb();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Opera?
+     * </div>
      * 
-     * @return true if browser is Opera.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Opera ですか？
+     * </div>
      * 
-     * @return Opera の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is Opera.</div>
+     *         <div class="ja">Opera の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isOpera();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Safari?
+     * </div>
      * 
-     * @return true if browser is Safari.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Safari ですか？
+     * </div>
      * 
-     * @return Safari の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is Safari.</div>
+     *         <div class="ja">Safari の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isSafari();
     
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Firefox?
+     * </div>
      * 
-     * @return true if browser is Firefox.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Firefox ですか？
+     * </div>
      * 
-     * @return Firefox の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is Firefox.</div>
+     *         <div class="ja">Firefox の場合には true が戻ります</div>
      */
-     @SuppressWarnings("javadoc")
    public abstract boolean isFirefox();
     
     /**
-     * <span class="en">
+     * <div class="en">
      * Browser is Chrome?
+     * </div>
      * 
-     * @return true if browser is Chrome.
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザは Chrome ですか？
+     * </div>
      * 
-     * @return Chrome の場合には true が戻ります
-     * </span>
+     * @return <div class="en">true if browser is Chrome.</div>
+     *         <div class="ja">Chrome の場合には true が戻ります</div>
      */
-    @SuppressWarnings("javadoc")
     public abstract boolean isChrome();
 
     public abstract boolean isMozilla50Compatible();
@@ -413,94 +382,81 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isIPad();
     
     /**
-     * <span class="en">
+     * <div class="en">
      * Gets the message encoding for a given request. Default implementation
      * gets the message encoding for all of the browserLanguages off of
      * the request.
-     * @param request - to get the message encoding for
-     
-     * @return message encoding
-     * </span>
+     * </div>
      * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定のリクエストのメッセージ・エンコーディング方法を戻します。
      * デフォルト実装ではリクエストの全てのブラウザ言語のエンコーディング方法を取得します。
+     * </div>
      * 
-     * @param request - リクエスト WORequest
-     * 
-     * @return メッセージ・エンコーディング方法
-     * </span>
+     * @param request <div class="en">to get the message encoding for</div>
+     *                <div class="ja">リクエスト WORequest</div>
+     * @return <div class="en">message encoding</div>
+     *         <div class="ja">メッセージ・エンコーディング方法</div>
      */
-    @SuppressWarnings("javadoc")
     public ERXMessageEncoding messageEncodingForRequest(WORequest request) {
         return messageEncodingForLanguages(request.browserLanguages());
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Gets the message encoding for a given array of languages.
-     
-     * @param languages - array to get the correct encoding for
-     
-     * @return message encoding
-     * </span>
+     * </div>
      * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定の言語配列のメッセージ・エンコーディング方法を戻します。
+     * </div>
      * 
-     * @param languages - メッセージ・エンコーディング方法を取得したい言語配列
-     * 
-     * @return メッセージ・エンコーディング方法
-     * </span>
-     */    
-    @SuppressWarnings("javadoc")
+     * @param languages <div class="en">array to get the correct encoding for</div>
+     *                  <div class="ja">メッセージ・エンコーディング方法を取得したい言語配列</div>
+     * @return <div class="en">message encoding</div>
+     *         <div class="ja">メッセージ・エンコーディング方法</div>
+     */
     public ERXMessageEncoding messageEncodingForLanguages(NSArray languages) {
         return new ERXMessageEncoding(languages);
     }
     
     /**
-     * <span class="en">
+     * <div class="en">
      * Gets the message encoding for a given language.
+     * </div>
      * 
-     * @param language - to get the encoding for
-     * 
-     * @return message encoding
-     * </span>
-     * 
-     * <span class="en">
+     * <div class="en">
      * 指定の言語のメッセージ・エンコーディング方法を戻します。
+     * </div>
      * 
-     * @param language - メッセージ・エンコーディング方法を取得したい言語
-     * 
-     * @return メッセージ・エンコーディング方法
-     * </span>
-     */    
-    @SuppressWarnings("javadoc")
+     * @param language <div class="en">to get the encoding for</div>
+     *                 <div class="ja">メッセージ・エンコーディング方法を取得したい言語</div>
+     * @return <div class="en">message encoding</div>
+     *         <div class="ja">メッセージ・エンコーディング方法</div>
+     */
     public ERXMessageEncoding messageEncodingForLanguage(String language) {
         return new ERXMessageEncoding(language);
     }    
 
     /**
-     * <span class="en">
+     * <div class="en">
      * If using ERXRequest objects allows one to override on a per browser basis
      * what form value encoding to use. Default implementation defaults to null
      * Note that you will need to enable the property:
      * er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
      * in order for the actual over ride to happen.
+     * </div>
      * 
-     * @return form value encoding to use for this particular user-agent.
-     * <span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ERXRequest オブジェクトを使用すると、各ブラウザのエンコーディング方法をオーバライドすることができます。
      * デフォルト実装では null を戻します。
      * オーバライドを使用する為には、次のプロパティーをセットする必要があります。
      * er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+     * </div>
      * 
-     * @return 指定 user-agent のフォーム・バリューのエンコーディング方法
-     * <span>
+     * @return <div class="en">form value encoding to use for this particular user-agent.</div>
+     *         <div class="ja">指定 user-agent のフォーム・バリューのエンコーディング方法</div>
      */
-    @SuppressWarnings("javadoc")
     public String formValueEncoding() {
         return null;
     }

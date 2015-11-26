@@ -2,7 +2,7 @@
 include ../make.config
 include ../Adaptor/make.preamble
 
-CFLAGS += -O2 -Wall -I../Adaptor -DMULTITHREADED_ADAPTOR -D$(OS) -DIIS
+CFLAGS += -O2 -Wall -I../Adaptor $(DEBUG_FLAG) -DMULTITHREADED_ADAPTOR -D$(OS) -DIIS
 
 all: WebObjects.dll
 

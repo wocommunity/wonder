@@ -1,0 +1,23 @@
+LnkAction : ERXHyperlinkResource {
+	action = ^action;
+	string = ^string;
+	otherTagString = otherTagString;
+	queryDictionary = ^queryDictionary;
+	target = ^target;
+}
+
+LnkResource : ERXHyperlinkResource {
+	linkResource = ^linkResource;
+	string = ^string;
+	otherTagString = otherTagString;
+	queryDictionary = ^queryDictionary;
+	target = ^target;
+}
+
+LnkLnk : WOHyperlink {
+	href = href;
+	string = ^string;
+	otherTagString = otherTagString;
+	queryDictionary = ^queryDictionary;
+	target = ^target;
+}

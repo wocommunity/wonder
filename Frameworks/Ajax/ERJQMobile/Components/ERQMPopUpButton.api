@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMPopUpButton" wocomponentcontent="false">    <binding name="label"/>
+    <binding name="list"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+    <binding name="selection"/>
+        
+    <binding defaults="Boolean" name="data-native-menu"/>
+    <binding defaults="Boolean" name="data-mini"/>
+    <binding defaults="Boolean" name="inset"/>
+    <binding name="item"/>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+    <binding name="displayString"/>
+    <binding defaults="Boolean" name="disabled"/>
+    <binding name="noSelectionString"/>
+    <binding name="id"/>
+    <binding name="selectedValue"/>
+    <binding name="data-divider-theme"/>
+    <binding name="data-icon"/>
+        <binding name="data-iconpos"/>
+    <binding name="data-inline"/>
+    <binding name="data-overlay-theme"/>
+    <binding name="data-role"/>
+    <binding name="data-theme"/>
+		<validation message="'selection' or 'selectedValue' must be bound">
+			<and>
+				<unbound name="selectedValue"/>
+				<unbound name="selection"/>
+			</and>
+		</validation>
+    <binding defaults="Boolean" name="filterable"/>
+    </wo>
+</wodefinitions>

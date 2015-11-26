@@ -56,7 +56,8 @@ import er.extensions.validation.ERXValidationFactory;
  * updated for you automagically, so that you don't need to call
  * <code>other.addToBars(eo)</code> or <code>other.setBar(eo)</code>. Doing so doesn't hurt, though.
  * Giving a <code>null</code> value of removing the object from a to-many will result in the inverse 
- * relationship getting cleared. <br />
+ * relationship getting cleared.
+ * <p>
  * This feature should greatly help readability and reduce the number errors you make when you
  * forget to update an inverse relationship. To turn this feature on, you must set the system default 
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
@@ -64,7 +65,6 @@ import er.extensions.validation.ERXValidationFactory;
  * @property ERDebuggingEnabled
  * @property er.extensions.ERXCustomObject.shouldTrimSpaces
  */
-
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -575,7 +575,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * provide a slightly less verbose output. A typical
      * output for an object mapped to the class com.foo.User
      * with a primary key of 50 would look like:
-     * <com.foo.User pk:"50">
+     * &lt;com.foo.User pk:"50"&gt;
      * EOGenericRecord's implementation is preserved in the
      * method <code>toLongString</code>. To restore the original
      * verbose logging in your subclasses override this method and
@@ -619,14 +619,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         EOGlobalID gid = __globalID();
         boolean isDeleted = (editingContext() == null && (gid != null && !gid.isTemporary()));
         return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
-    }
-
-    /**
-        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
-     */
-    @Deprecated
-    public boolean isNewEO() {
-        return isNewObject();
     }
 
     /* (non-Javadoc)

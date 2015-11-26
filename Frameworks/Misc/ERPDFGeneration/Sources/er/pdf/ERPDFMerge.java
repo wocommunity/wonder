@@ -68,7 +68,7 @@ public class ERPDFMerge {
 	 * @see com.lowagie.text.Document iText Document class
 	 * @see com.lowagie.text.PageSize Page Size class in iText
 	 * 
-	 * @author Larry Mills-Gahl &ltlmg@webfarm.com&gt;
+	 * @author Larry Mills-Gahl &lt;lmg@webfarm.com&gt;
 	 */
 
 	public static void concatPDFs(List<InputStream> streamOfPDFFiles, OutputStream outputStream, Document document, boolean paginate) {

@@ -20,26 +20,26 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * <p>A delegate class for validating user inputs before a query is executed.  Validation rules are derived from the D2W
- * context.</p>
- *
- * <p>To disallow a query with no user inputs, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' => allowsEmptyQueryValue = "false" (BooleanAssignment)</code></p>
- *
- * <p>To define a validation for a propertyKey, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => allowsEmptyQueryValue = "false" (BooleanAssignment)</code></p>
- *
- * <p>To define a minimum length validation for a (String) propertyKey, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => minimumInputLength = "3" (Assignment)</code></p>
- *
- * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
+ * A delegate class for validating user inputs before a query is executed.  Validation rules are derived from the D2W
+ * context.
+ * <p>
+ * To disallow a query with no user inputs, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' =&gt; allowsEmptyQueryValue = "false" (BooleanAssignment)</code>
+ * <p>
+ * To define a validation for a propertyKey, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' and propertyKey = 'bar' =&gt; allowsEmptyQueryValue = "false" (BooleanAssignment)</code>
+ * <p>
+ * To define a minimum length validation for a (String) propertyKey, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' and propertyKey = 'bar' =&gt; minimumInputLength = "3" (Assignment)</code>
+ * <p>
+ * Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
  * The implementation should catch validation exceptions and invoke
  * {@link er.directtoweb.pages.ERD2WPage#validationFailedWithException(Throwable, Object, String)} with any caught exceptions.  To customize
  * behavior, while retaining the default checks, extend {@link ERDQueryValidationDelegate.DefaultQueryValidationDelegate}
- * to perform custom validations and then call {@link #validateQueryValues} on the superclass.</p>
+ * to perform custom validations and then call {@link #validateQueryValues} on the superclass.
  *
  * @author Travis Cripps
  * @d2wKey displayPropertyKeys
@@ -243,9 +243,6 @@ public abstract class ERDQueryValidationDelegate {
 
         private ERD2WQueryPage queryPage;
 
-        /**
-         * @inheritDoc
-         */
         @Override
         public void validateQueryValues(ERD2WQueryPage sender) {
             queryPage = sender;

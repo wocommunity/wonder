@@ -29,7 +29,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Button used to apply one modification to a bunch of objects.<br />
+ * Button used to apply one modification to a bunch of objects.
  * 
  * @binding d2wContext
  * @binding list

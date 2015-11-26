@@ -144,7 +144,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	private Boolean coalesceAutoLocks;
 
-	/** if > 0, there is an autolock on this editingContext */ 
+	/** if &gt; 0, there is an autolock on this editingContext */ 
 	private int autoLocked;
 
 	/**
@@ -1419,19 +1419,6 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** @deprecated use {@link #saveChanges()} */
-    @Override
-    @Deprecated
-	public void saveChanges(Object obj) {
-		boolean wasAutoLocked = autoLock("saveChanges");
-		try {
-			saveChanges();
-		}
-		finally {
-			autoUnlock(wasAutoLocked);
-		}
-	}
-
     @Override
 	public void refreshObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("refreshObject");
@@ -1906,9 +1893,6 @@ public class ERXEC extends EOEditingContext {
 			ERXEC erxec = (ERXEC) ec;
 			erxec.saveChangesTolerantly(doesRetry, mergesChanges);
 		}
-		else {
-			ERXTolerantSaver.save(ec, doesRetry, mergesChanges);
-		}
 	}
 
 	public static void saveChangesTolerantly(EOEditingContext ec) {
@@ -1921,7 +1905,9 @@ public class ERXEC extends EOEditingContext {
 	 * flag passed in. This method is useful when creating nested editing
 	 * contexts. After creating the editing context the default delegate is set
 	 * on the editing context if validation is enabled or the default no
-	 * validation delegate is set if validation is disabled.<br/> <br/> Note:
+	 * validation delegate is set if validation is disabled.
+	 * <p>
+	 * Note:
 	 * an {@link com.webobjects.eocontrol.EOEditingContext EOEditingContext} is
 	 * a subclass of EOObjectStore so passing in another editing context to this
 	 * method is completely kosher.
@@ -1958,7 +1944,9 @@ public class ERXEC extends EOEditingContext {
 	 * Creates a new editing context with the specified object store as the
 	 * parent object store. This method is useful when creating nested editing
 	 * contexts. After creating the editing context the default delegate is set
-	 * on the editing context.<br/> <br/> Note: an {@link EOEditingContext} is
+	 * on the editing context.
+	 * <p>
+	 * Note: an {@link EOEditingContext} is
 	 * a subclass of EOObjectStore so passing in another editing context to this
 	 * method is completely kosher.
 	 * 

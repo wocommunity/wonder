@@ -1,6 +1,6 @@
 package er.modern.look.pages;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -15,7 +15,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * A modernized tab inspect/edit template.<br />
+ * A modernized tab inspect/edit template.
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName

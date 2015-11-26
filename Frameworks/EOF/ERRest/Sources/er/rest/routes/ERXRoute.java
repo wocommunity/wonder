@@ -192,7 +192,7 @@ public class ERXRoute {
 		_keys = new NSMutableArray<ERXRoute.Key>();
 		StringBuffer routeRegex = new StringBuffer();
 		if (!urlPattern.startsWith("^")) {
-			routeRegex.append("^");
+			routeRegex.append('^');
 		}
 		while (keyMatcher.find()) {
 			String keyStr = keyMatcher.group(1);
@@ -230,7 +230,7 @@ public class ERXRoute {
 			if (routeRegex.lastIndexOf(".") == -1) {
 				routeRegex.append("/?(\\..*)?");
 			}
-			routeRegex.append("$");
+			routeRegex.append('$');
 		}
 		_routePattern = Pattern.compile(routeRegex.toString());
 	}

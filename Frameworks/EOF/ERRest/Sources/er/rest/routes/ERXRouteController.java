@@ -48,6 +48,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationException;
+import er.rest.ERXBasicAuthenticationException;
 import er.rest.ERXNotAllowedException;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
@@ -1589,8 +1590,13 @@ public class ERXRouteController extends WODirectAction {
 		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException || meaningfulThrowble instanceof NoSuchElementException) {
 			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.NOT_FOUND);
 		}
+		else if (meaningfulThrowble instanceof ERXBasicAuthenticationException) {
+			WOResponse response = (WOResponse) errorResponse(meaningfulThrowble, ERXHttpStatusCodes.UNAUTHORIZED);
+			response.setHeader("Basic realm=\"" +  ((ERXBasicAuthenticationException) meaningfulThrowble).realm() +  "\"", "WWW-Authenticate");
+			results = response;
+		}
 		else if (meaningfulThrowble instanceof SecurityException) {
-			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.STATUS_FORBIDDEN);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.FORBIDDEN);
 		}
 		else if (meaningfulThrowble instanceof ERXNotAllowedException) {
 			results = errorResponse(ERXHttpStatusCodes.METHOD_NOT_ALLOWED);
@@ -1822,6 +1828,10 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public void dispose() {
 		if (_shouldDisposeEditingContext && _editingContext != null) {
+			if(_editingContext instanceof ERXEC && ((ERXEC) _editingContext).isAutoLocked()) {
+				_editingContext.unlock();
+			}
+
 			_editingContext.dispose();
 			_editingContext = null;
 		}

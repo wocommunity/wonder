@@ -95,7 +95,7 @@ HTTPResponse *resp_errorResponse(const char *msg, int status)
    resp->content = html_msg->text;
    resp_addStringToResponse(resp, html_msg);
    resp->flags |= RESP_DONT_FREE_CONTENT;
-   sprintf(buf,"%d",resp->content_length);
+   sprintf(buf, "%lu", resp->content_length);
    st_add(resp->headers, CONTENT_LENGTH, buf, STR_COPYVALUE|STR_FREEVALUE);
    return resp;
 }
@@ -174,8 +174,8 @@ void resp_addHeader(HTTPResponse *resp, String *rawhdr)
       // 2009/06/10: an explicit content-length value is available.
       //             Update response flag information:
       resp->flags |= RESP_LENGTH_EXPLICIT;
-      resp->content_length = atoi(value);
-      WOLog(WO_INFO,"content-length was set expl.: %d", resp->content_length);
+      resp->content_length = atol(value);
+      WOLog(WO_INFO, "content-length was set expl.: %lu", resp->content_length);
    }
 
    if (((strcasecmp(CONTENT_TYPE,key) == 0) || strcasecmp("content_type", key) == 0))
@@ -235,7 +235,7 @@ HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstan
          //             can be found in the adaptor source code.  Therefore, we
          //             should better use INT_MAX!
          resp->content_length = INT_MAX;
-         WOLog(WO_WARN, "Response doesn't specify a content-length: assuming %u bytes!",
+         WOLog(WO_WARN, "Response doesn't specify a content-length: assuming %lu bytes!",
                resp->content_length);
       }
    }
@@ -254,7 +254,7 @@ int resp_getResponseContent(HTTPResponse *resp, int allowStreaming)
 {
    int ret = 0;
    if (resp->content_length) {
-      int count, amountToRead;
+      long count, amountToRead;
 
       if (resp->content == NULL)
       {

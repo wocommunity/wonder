@@ -16,7 +16,7 @@ import com.webobjects.appserver.WOContext;
  * @binding feedOwnerName this tag contains information that will be used to contact the owner of the podcast for communication specifically about their podcast
  * @binding feedOwnerEmail this tag contains information that will be used to contact the owner of the podcast for communication specifically about their podcast
  * @binding feedImageUrl this tag specifies the artwork for your podcast. Put the URL to the image in the href attribute. 
- * @binding feedCategory use a top level <itunes:category> to specify the browse category
+ * @binding feedCategory use a top level &lt;itunes:category&gt; to specify the browse category
  * @binding list the list of items to show in the feed
  * @binding item the repetition item binding for the feed items
  * @binding itemGuid the GUID of the current item

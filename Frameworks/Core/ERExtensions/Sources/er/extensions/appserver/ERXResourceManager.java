@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
@@ -306,6 +307,18 @@ public class ERXResourceManager extends WOResourceManager {
 			wourlvaluedelementdata = cachedDataForKey(key);
 		}
 		return wourlvaluedelementdata;
+	}
+
+	/**
+	 * Overrides the original implementation appending the additionalMimeTypes to the content types dictionary.
+	 *
+	 * @return a dictionary containing the original mime types supported along with the additional mime types
+	 * contributed by this class.
+	 * @see com.webobjects.appserver.WOResourceManager#_contentTypesDictionary()
+	 */
+	@Override
+	public NSDictionary _contentTypesDictionary() {
+		return ERXDictionaryUtilities.dictionaryWithDictionaryAndDictionary(_mimeTypes, super._contentTypesDictionary());
 	}
 
 	/**

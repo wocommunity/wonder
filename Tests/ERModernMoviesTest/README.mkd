@@ -1,0 +1,38 @@
+What is ERModernMoviesTest?
+----------------------------
+
+ERModernMoviesTest is a basic integration test application, based on ERModernMoviesDemo.
+It depends on maven to build and run the app, then run junit tests which in turn use 
+selenium webdriver to exercise the app via phantomjs or firefox. Unlike ERModernMoviesDemo, 
+the H2 database is run in-memory and populated from scratch via migrations.
+
+How to run the tests
+--------------------
+
+* *Via maven*: Just issue:
+
+        mvn verify
+      		 
+  You'll need a configured maven environment and your path has to contain the [phantomjs binary](http://phantomjs.org/download.html). On OS X, you can use homebrew to install it via:
+
+      brew install phantomjs
+      		 
+* *From eclipse*: In your launch configuration, remove the entry for WOPort, so that the WOPort setting from the Properties file will get used. Launch the application and then click right on the project folder and choose "Run As > JUnit Test".
+
+* *From eclipse, without a maven environment*: As before, plus add the [selenium server jar](http://www.seleniumhq.org/download/) to the classpath.
+
+Instead of phantomjs, you can use Firefox by commenting out the following line in er.modern.movies.test.AbstractSelenideIT:
+
+      System.setProperty("browser", "phantomjs");
+
+
+How to add tests
+----------------
+
+Glad you asked! You can add tests using either the low-level [selenium webdriver API](http://www.seleniumhq.org/docs/03_webdriver.jsp) 
+or [selenide](http://selenide.org/documentation.html), which provides a high-level wrapper.
+
+Known bugs
+----------
+
+* When run from maven, the loading of images referenced via relative URLs from within CSS files fails. This should be strictly cosmetic.

@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSDictionary;
  * can be used in two different manner. The first is by just
  * specifing the class name as a string, ie "foo.bar.MyClass". This
  * will create an instance of the MyClass object. The second form
- * allows one to specify the object to be created in a dictionary format:<code><pre>
+ * allows one to specify the object to be created in a dictionary format:<pre><code>
  * {
  * 	className = "foo.bar.MyClass";
  *	arguments = ( {
@@ -30,7 +30,7 @@ import com.webobjects.foundation.NSDictionary;
  *			className = "java.lang.String";
  *			contextKey = "propertyKey";
  * 		});
- * }</pre></code>
+ * }</code></pre>
  *
  * This will create an object of type MyClass using the constructor:
  * MyClass(WOSession session, String key), using the arguments found

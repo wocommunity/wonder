@@ -59,7 +59,7 @@ import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Provides KVC access to localization.
  * 
  * Monitors a set of files in all loaded frameworks and returns a string given a key for a language. These types of keys
@@ -80,7 +80,8 @@ import er.extensions.validation.ERXValidationFactory;
  * </code></pre>
  * 
  * Note that if you only call for <code>unittest</code>, you'll get a dictionary not a string. So you can localize
- * more complex objects than strings. <br />
+ * more complex objects than strings.
+ * <p>
  * If you set the base class of your session to ERXSession, you can then use this code in your components:
  * 
  * <pre><code>
@@ -105,7 +106,7 @@ import er.extensions.validation.ERXValidationFactory;
  *  er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
  * </code></pre>
  * 
- * There are also methods that pluralize using normal english pluralizing rules (y->ies, x -> xes etc). You can provide
+ * There are also methods that pluralize using normal English pluralizing rules (y -&gt; ies, x -&gt; xes etc). You can provide
  * your own plural strings by using a dict entry:
  * 
  * <pre><code>
@@ -119,10 +120,10 @@ import er.extensions.validation.ERXValidationFactory;
  * in your Localizable.strings. <code>Table.0</code> meaning no "Table", <code>Table.1</code> one table and
  * <code>Table</code> any other number. <b>Note:</b> unlike all other keys, you need to give the translated value
  * ("Tisch" for "Table" in German) as the key, not the untranslated one. This is because this method is mainly called
- * via d2wContext.displayNameForProperty which is already localized. <br />
- * </span>
+ * via d2wContext.displayNameForProperty which is already localized.
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * ローカライズ用の KVC アクセスを実現します。
  * 
  * すべてのフレームワーク内のファイルセットをモニタし、指定キーと言語に従って String を戻します。
@@ -169,7 +170,7 @@ import er.extensions.validation.ERXValidationFactory;
  *  er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
  * </code></pre>
  * 
- * 言語体系の英語複数形処理のメソッドもあります。(y->ies, x -> xes など)
+ * 言語体系の英語複数形処理のメソッドもあります。(y -&gt; ies, x -&gt; xes など)
  * dict に追加することで、自分の複数形処理ルールを設定できます。
  * 
  * <pre><code>
@@ -184,7 +185,7 @@ import er.extensions.validation.ERXValidationFactory;
  * <code>Table</code> はそれ以外の数のことです。 <b>メモ:</b> 他のすべてのキーと違って、翻訳済み値をキーとして使用します。
  * (ドイツ語では "Table" の替わりに "Tisch" を使います)
  * なぜなら、このメソッドは良くd2wContext.displayNameForPropertyのようなメソッドより呼ばれ、既に翻訳済みなのです。
- * </span>
+ * </div>
  */
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 
@@ -206,7 +207,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	private static Observer observer = new Observer();
 
-  /** <span class="ja">モニタ中のファイル・リスト</span> */
+  /** <div class="ja">モニタ中のファイル・リスト</div> */
 	private static NSMutableArray<URL> monitoredFiles = new NSMutableArray<URL>();
 	
 	private static final char _localizerMethodIndicatorCharacter = '@';
@@ -226,7 +227,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">初期化を行います</span>
+   * <div class="ja">初期化を行います</div>
    */
 	public static void initialize() {
 		if (!isInitialized) {
@@ -236,44 +237,43 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ可能かどうかを戻します
    * 
    * @return boolean - true 可能
-   * </span>
+   * </div>
    */
 	public static boolean isLocalizationEnabled() {
 		return isLocalizationEnabled;
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ可能かどうかをセットします
    * 
    * @param value - true 可能
-   * </span>
+   * </div>
    */
 	public static void setIsLocalizationEnabled(boolean value) {
 		isLocalizationEnabled = value;
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the current localizer for the current thread. Note that the localizer for a given session is pushed onto
 	 * the thread when a session awakes and is nulled out when a session sleeps. In case there is no localizer set, it tries to
 	 * pull it from the current WOContext or the default language.
+	 * </div>
 	 * 
-	 * @return the current localizer that has been pushed into thread storage.
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
    * カレント・スレッドのカレント・ローカライザーを戻します。
    * メモ：指定 session が awake 時にローカライザーをスレッドにプッシュし、session が sleep 時に null されます
    * 
    * ローカライザーが設定されていない場合、カレント WOContext より取得を試し、駄目の場合はデフォルト言語を使用する
-   * 
-   * @return カレント・ローカライザー
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">the current localizer that has been pushed into thread storage.</div>
+	 *         <div class="ja">カレント・ローカライザー</div>
 	 */
 	public static ERXLocalizer currentLocalizer() {
 		ERXLocalizer current = (ERXLocalizer) ERXThreadStorage.valueForKey("localizer");
@@ -295,74 +295,71 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Sets a localizer for the current thread. This is accomplished by using the object {@link ERXThreadStorage}
+	 * </div>
 	 * 
-	 * @param currentLocalizer
-	 *            to set in thread storage for the current thread.
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
    * カレント・スレッドのローカライザーをセットします。 {@link ERXThreadStorage} を参照
+   * </div>
    * 
-   * @param currentLocalizer - スレッドにセットするローカライザー
-   * </span>
+	 * @param currentLocalizer <div class="en">to set in thread storage for the current thread.</div>
+	 *                         <div class="ja">スレッドにセットするローカライザー</div>
 	 */
 	public static void setCurrentLocalizer(ERXLocalizer currentLocalizer) {
 		ERXThreadStorage.takeValueForKey(currentLocalizer, "localizer");
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Gets the localizer for the default language.
+	 * </div>
 	 * 
-	 * @return localizer for the default language
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
    * デフォルト言語のローカライザーを戻します
-   * 
-   * @return ローカライザー
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">localizer for the default language</div>
+	 *         <div class="ja">ローカライザー</div>
 	 */
 	public static ERXLocalizer defaultLocalizer() {
 		return localizerForLanguage(defaultLanguage());
 	}
 	
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 英語のローカライザーを戻します
    * 
    * @return 英語のローカライザー
-   * </span>
+   * </div>
    */
 	public static ERXLocalizer englishLocalizer() {
 		return localizerForLanguage("English");
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ブラウザー・リクエスト言語のローカライザーを戻します
    * 
    * @param request - WORequest
    * 
    * @return ローカライザー
-   * </span>
+   * </div>
    */
 	public static ERXLocalizer localizerForRequest(WORequest request) {
 		return localizerForLanguages(request.browserLanguages());
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Resets the localizer cache. If WOCaching is enabled then after being reinitialize all of the localizers will be
 	 * reloaded.
-	 * </span>
+	 * </div>
 	 * 
-   * <span class="ja">
+   * <div class="ja">
    * ローカライザー・キャシュをリセットする
    * WOCaching が使用可能な場合、リセットする時にすべてのローカライザーをリロードします
-   * </span>
+   * </div>
 	 */
 	public static void resetCache() {
 		initialize();
@@ -378,12 +375,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * キー・リストに追加します
    * 
    * @param value - オブジェクト
    * @param key - キー
-   * </span>
+   * </div>
    */
 	protected void addToCreatedKeys(Object value, String key) {
 		if (key != null && value != null) {
@@ -395,20 +392,18 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Gets the best localizer for a set of languages.
+	 * </div>
 	 * 
-	 * @param languages
-	 * @return localizer
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * 言語配列に一番適用ローカライザーを戻します
-   * 
-   * @param languages - 言語配列セット
-   * 
-   * @return ローカライザー
-   * </span>
+   * </div>
+	 * 
+	 * @param languages <div class="en"></div>
+	 *                  <div class="ja">言語配列セット</div>
+	 * @return <div class="en"></div>
+	 *         <div class="ja">ローカライザー</div>
 	 */
 	public static ERXLocalizer localizerForLanguages(NSArray<String> languages) {
 		if (!isLocalizationEnabled)
@@ -443,22 +438,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<String>(new String[] { "Japanese" });
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Get a localizer for a specific language. If none could be found or language
 	 * is <code>null</code> a localizer for the {@link #defaultLanguage()} is returned.
+	 * </div>
 	 * 
-	 * @param language name of the requested language
-	 * @return localizer
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * 指定言語のローカライザーを戻します。language が null 又は見つからない場合には
    * {@link #defaultLanguage()} が戻ります。
-   * 
-   * @param language - 言語
-   * 
-   * @return ローカライザー
-   * </span>
+   * </div>
+	 * 
+	 * @param language <div class="en">name of the requested language</div>
+	 *                 <div class="ja">言語</div>
+	 * @return <div class="en"></div>
+	 *         <div class="ja">ローカライザー</div>
 	 */
 	public static ERXLocalizer localizerForLanguage(String language) {
 		if (!isLocalizationEnabled)
@@ -492,20 +485,19 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the default language (English) or the contents of the
 	 * <code>er.extensions.ERXLocalizer.defaultLanguage</code> property.
+	 * </div>
 	 * 
-	 * @return default language name
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * デフォルト言語(English) や
    * <code>er.extensions.ERXLocalizer.defaultLanguage</code>プロパティー
    * を戻します
-   * 
-   * @return デフォルト言語
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">default language name</div>
+	 *         <div class="ja">デフォルト言語</div>
 	 */
 	public static String defaultLanguage() {
 		if (defaultLanguage == null) {
@@ -515,17 +507,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Sets the default language.
+	 * </div>
 	 * 
-	 * @param value
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * デフォルト言語をセットします
-   * 
-   * @param value - デフォルト言語
-   * </span>
+   * </div>
+	 * 
+	 * @param value <div class="en"></div>
+	 *              <div class="ja">デフォルト言語</div>
 	 */
 	public static void setDefaultLanguage(String value) {
 		defaultLanguage = value;
@@ -533,11 +524,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ウォッチするファイル名配列を戻します
    * 
    * @return NSAray - ファイル名配列
-   * </span>
+   * </div>
    */
 	public static NSArray<String> fileNamesToWatch() {
 		if (fileNamesToWatch == null) {
@@ -549,11 +540,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ウォッチするファイル名をセットします
    * 
    * @param value - ファイル配列
-   * </span>
+   * </div>
    */
 	public static void setFileNamesToWatch(NSArray<String> value) {
 		fileNamesToWatch = value;
@@ -561,11 +552,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 使用可能な言語を配列として戻します
    * 
    * @return 使用可能な言語のNSArray
-   * </span>
+   * </div>
    */
 	public static NSArray<String> availableLanguages() {
 		if (availableLanguages == null) {
@@ -577,11 +568,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 使用可能な言語を配列でセットする
    * 
    * @param value - 使用可能な言語のNSArray
-   * </span>
+   * </div>
    */
 	public static void setAvailableLanguages(NSArray<String> value) {
 		availableLanguages = value;
@@ -589,11 +580,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * フレームワーク検索パスの配列を戻します
    * 
    * @return フレームワーク検索パスの配列
-   * </span>
+   * </div>
    */
 	public static NSArray<String> frameworkSearchPath() {
 		if (frameworkSearchPath == null) {
@@ -630,11 +621,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * フレームワーク検索パスをセットします
    * 
    * @param value - フレームワーク検索
-   * </span>
+   * </div>
    */
 	public static void setFrameworkSearchPath(NSArray<String> value) {
 		frameworkSearchPath = value;
@@ -642,31 +633,27 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Creates a localizer for a given language and with an indication if the language supports plural forms. To provide
 	 * your own subclass of an ERXLocalizer you can set the system property
 	 * <code>er.extensions.ERXLocalizer.pluralFormClassName</code> or
 	 * <code>er.extensions.ERXLocalizer.nonPluralFormClassName</code>.
+	 * </div>
 	 * 
-	 * @param language
-	 *            name to construct the localizer for
-	 * @param pluralForm
-	 *            denotes if the language supports the plural form
-	 * @return a localizer for the given language
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * 指定言語のローカライザーを作成します。さらに言語体系が複数を持つかどうかのフラグを持っています。
    * 自分専用のクラスを作成する為にプロパティーで設定が可能です。
    * 
    * <code>er.extensions.ERXLocalizer.pluralFormClassName</code> or
    * <code>er.extensions.ERXLocalizer.nonPluralFormClassName</code>.
-   * 
-   * @param language - 言語
-   * @param pluralForm - true 言語体系が複数を使用している場合
-   * 
-   * @return ローカライザー
-   * </span>
+   * </div>
+	 * 
+	 * @param language <div class="en">name to construct the localizer for</div>
+	 *                 <div class="ja">言語</div>
+	 * @param pluralForm <div class="en">denotes if the language supports the plural form</div>
+	 *                   <div class="ja">true 言語体系が複数を使用している場合</div>
+	 * @return <div class="en">a localizer for the given language</div>
+	 *         <div class="ja">ローカライザー</div>
 	 */
 	protected static ERXLocalizer createLocalizerForLanguage(String language, boolean pluralForm) {
 		ERXLocalizer localizer = null;
@@ -695,12 +682,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ローカライザーをセットします
    * 
    * @param l - ERXLocalizer ローカライザー
    * @param language - 言語
-   * </span>
+   * </div>
    */
 	public static void setLocalizerForLanguage(ERXLocalizer l, String language) {
 		localizers.setObjectForKey(l, language);
@@ -755,17 +742,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * キャシュを戻します
    * 
    * @return NSDictionaryキャシュ
-   * </span>
+   * </div>
    */
 	public NSDictionary<String, Object> cache() {
 		return cache;
 	}
 
-  /** <span class="ja">ローカライザーのロード作業</span> */
+  /** <div class="ja">ローカライザーのロード作業</div> */
 	public void load() {
 		cache.removeAllObjects();
 		createdKeys.removeAllObjects();
@@ -825,43 +812,42 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the plurify rules for the current language.  This first checks for a property of the form:
 	 * 
-	 * <code>
+	 * <pre><code>
 	 * er.extensions.ERXLocalizer.en.plurifyRules=(.*)person$=$1people:(.*)man$=$1men
-	 * </code>
+	 * </code></pre>
 	 * 
 	 * which is
 	 * 
-	 * <code>
+	 * <pre><code>
 	 * er.extensions.ERXLocalizer.en.plurifyRules=pattern1=replacement1:pattern2=replacement2:etc
-	 * </code>
+	 * </code></pre>
 	 * 
 	 * In the absence of a rule set for a particular language, the default rules are English and ported
 	 * from the pluralizer in Rails.
+	 * </div>
 	 * 
-	 * @return the plurify rules for the current language
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * カレント言語の複数形ルールを戻します。
    * 最初はプロパティーをチェックします。
    * 
-   * <code>
+   * <pre><code>
    * er.extensions.ERXLocalizer.en.plurifyRules=(.*)person$=$1people:(.*)man$=$1men
-   * </code>
+   * </code></pre>
    * 
    * が次のように
    * 
-   * <code>
+   * <pre><code>
    * er.extensions.ERXLocalizerr.en.plurifyRules=pattern1=replacement1:pattern2=replacement2:etc
-   * </code>
+   * </code></pre>
    * 
    * 各言語のルール不足分で、デフォルト・ルールは英語です。
-   * 
-   * @return カレント言語の複数形ルールを戻します。
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">the plurify rules for the current language</div>
+	 *         <div class="ja">カレント言語の複数形ルールを戻します。</div>
 	 */
 	protected Map<Pattern, String> plurifyRules() {
 		Map<Pattern, String> plurifyRules;
@@ -882,21 +868,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 	
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the default plurify rules for this language.  The default implementation is 
 	 * English and ported from the plurify code in Ruby on Rails.  The returned Map should
 	 * have regex Pattern objects as keys mapping to the replacement String to apply to
-	 * that pattern. 
+	 * that pattern 
+	 * </div>
 	 * 
-	 * @return the default plurify rules
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * デフォルト複数形ルールを戻します。
    * デフォルト実装は英語です。 戻り値のマップは regex パターンのキー・マッピングです。
-   * 
-   * @return デフォルト複数形ルールを戻します
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">the default plurify rules</div>
+	 *         <div class="ja">デフォルト複数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultPlurifyRules() {
 		Map<Pattern, String> defaultPlurifyRules = new LinkedHashMap<Pattern, String>();
@@ -938,43 +923,42 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the singularify rules for the current language.  This first checks for a property of the form:
 	 * 
-	 * <code>
+	 * <pre><code>
 	 * er.extensions.ERXLocalizer.en.singularifyRules=(.*)person$=$1people:(.*)man$=$1men
-	 * </code>
+	 * </code></pre>
 	 * 
 	 * which is
 	 * 
-	 * <code>
+	 * <pre><code>
 	 * er.extensions.ERXLocalizer.en.singularifyRules=pattern1=replacement1:pattern2=replacement2:etc
-	 * </code>
+	 * </code></pre>
 	 * 
 	 * In the absence of a rule set for a particular language, the default rules are English and ported
 	 * from the singularizer in Rails.
+	 * </div>
 	 * 
-	 * @return the singularify rules for the current language
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * カレント言語の単数形ルールを戻します。
    * 最初はプロパティーをチェックします。
    * 
-   * <code>
+   * <pre><code>
    * er.extensions.ERXLocalizer.en.singularifyRules=(.*)person$=$1people:(.*)man$=$1men
-   * </code>
+   * </code></pre>
    * 
    * が次のように
    * 
-   * <code>
+   * <pre><code>
    * er.extensions.ERXLocalizer.en.singularifyRules=pattern1=replacement1:pattern2=replacement2:etc
-   * </code>
+   * </code></pre>
    * 
    * 各言語のルール不足分で、デフォルト・ルールは英語です。
-   * 
-   * @return カレント言語の単数形ルールを戻します。
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">the singularify rules for the current language</div>
+	 *         <div class="ja">カレント言語の単数形ルールを戻します。</div>
 	 */
 	protected Map<Pattern, String> singularifyRules() {
 		Map<Pattern, String> singularifyRules;
@@ -995,21 +979,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 	
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the default singularify rules for this language.  The default implementation is 
 	 * English and ported from the singularize code in Ruby on Rails.  The returned Map should
 	 * have regex Pattern objects as keys mapping to the replacement String to apply to
 	 * that pattern. 
+	 * </div>
 	 * 
-	 * @return the default singularify rules
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * デフォルト単数形ルールを戻します。
    * デフォルト実装は英語です。 戻り値のマップは regex パターンのキー・マッピングです。
-   * 
-   * @return デフォルト単数形ルールを戻します
-   * </span>
+   * </div>
+	 * 
+	 * @return <div class="en">the default singularify rules</div>
+	 *         <div class="ja">デフォルト単数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultSingularifyRules() {
 		Map<Pattern, String> defaultSingularifyRules = new LinkedHashMap<Pattern, String>();
@@ -1089,7 +1072,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * Cover method that calls <code>localizedStringForKey</code>.
 	 * 
 	 * @param key
-	 *            to resolve a localized varient of
+	 *            to resolve a localized variant of
 	 * @return localized string for the given key
 	 */
 	public Object valueForKey(String key) {
@@ -1146,27 +1129,27 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /** 
-   * <span class="ja">言語を戻します</span> 
+   * <div class="ja">言語を戻します</div> 
    */
 	public String language() {
 		return language;
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 作成されているキーをdictionaryとして戻します
    * 
    * @return NSDictionary
-   * </span>
+   * </div>
    */
 	public NSDictionary<String, Object> createdKeys() {
 		return createdKeys;
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * キー・リストをダンプします
-   * </span>
+   * </div>
    */
 	public void dumpCreatedKeys() {
 	  if(log.isInfoEnabled())
@@ -1174,14 +1157,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * キーを使って、ローカライズ・オブジェクトを戻します
    * {@literal @} キーパス <code>session.localizer.{@literal @}locale.getLanguage</code> で
    * キーファイルを探すかわりに ERXLocalizer メソッドを実行します。
    * @param key - キー
    * 
    * @return ローカライズ済みオブジェクト又は @ キーパス
-   * </span>
+   * </div>
    */
 	public Object localizedValueForKeyWithDefault(String key) {
 		if (key == null) {
@@ -1201,23 +1184,23 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns the localized value for a key. An {@literal @} keypath such as 
 	 * <code>session.localizer.{@literal @}locale.getLanguage</code> indicates that
 	 * the methods on ERXLocalizer itself should be called instead of
 	 * searching the strings file for a '{@literal @}locale.getLanguage' key.
-	 * @param key the keyPath string
-	 * @return a localized string value or the object value of the @ keyPath
-	 * </span>
+	 * </div>
 	 * 
-   * <span class="ja">
+   * <div class="ja">
    * キーを使って、ローカライズ・オブジェクトを戻します
    * {@literal @} キーパス <code>session.localizer.@locale.getLanguage</code> で
    * キーファイルを探すかわりに ERXLocalicer メソッドを実行します。
-   * @param key - キー
-   * 
-   * @return ローカライズ済みオブジェクト又は @ キーパス
-   * </span>
+   * </div>
+	 * 
+	 * @param key <div class="en">the keyPath string</div>
+	 *            <div class="ja">キー</div>
+	 * @return <div class="en">a localized string value or the object value of the @ keyPath</div>
+	 *         <div class="ja">ローカライズ済みオブジェクト又は @ キーパス</div>
 	 */
 	public Object localizedValueForKey(String key) {
 		if(!ERXStringUtilities.stringIsNullOrEmpty(key) && _localizerMethodIndicatorCharacter == key.charAt(0)) {
@@ -1259,26 +1242,26 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 指定キーのローカライズ済みの文字列を戻します
    * 
    * @param key - キー
    * 
    * @return ローカライズ済み String
-   * </span>
+   * </div>
    */
 	public String localizedStringForKeyWithDefault(String key) {
 		return (String) localizedValueForKeyWithDefault(key);
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 指定キーのローカライズ済みの文字列を戻します
    * 
    * @param key - キー
    * 
    * @return ローカライズ済み String
-   * </span>
+   * </div>
    */
 	public String localizedStringForKey(String key) {
 		return (String) localizedValueForKey(key);
@@ -1289,33 +1272,31 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns a localized string for the given prefix and keyPath, inserting it "prefix.keyPath" = "Key Path"; Also
 	 * tries to find "Key Path"
+	 * </div>
 	 * 
-	 * @param prefix
-	 * @param key
+   * <div class="ja">
+   * 指定の prefix と key のローカライズ済みの文字列を戻します。<br>
+   * 例えば、
+   * <pre><code>
+   * s = &lt;ERXLocalizer&gt;.localizedDisplayNameForKey( "Tester", "samplekey" );
+   * </code></pre>
+   * Tester.samplekey になります<br>
+   * 　　あれば、そのローカライズ済み String が戻ります<br>
+   * 　　なければ、ERXStringUtilities.displayNameForKey処理が行われ、<br>
+   * Tester.samplekey -&gt; Samplekey になり、再度ローカライザーへ問い合わせが行きます。<br>
+   * 　　あれば、そのローカライズ済み String が戻ります<br>
+   * 　　なければ、キーが戻ります。
+   * </div>
 	 * 
-	 * @return the localized string
-	 * </span>
-	 * 
-   * <span class="ja">
-   * 指定の prefix と key のローカライズ済みの文字列を戻します。<br />
-   * 例えば、 <br />
-   * s = <<ERXLocalizer>>.localizedDisplayNameForKey( "Tester", "samplekey" )<br />
-   * <br />
-   * Tester.samplekey になります<br />
-   * 　　あれば、そのローカライズ済み String が戻ります<br />
-   * 　　なければ、ERXStringUtilities.displayNameForKey処理が行われ、<br />
-   * Tester.samplekey -> Samplekey になり、再度ローカライザーへ問い合わせが行きます。<br />
-   * 　　あれば、そのローカライズ済み String が戻ります<br />
-   * 　　なければ、キーが戻ります。<br />
-   * 
-   * @param prefix - 
-   * @param key - キー
-   * 
-   * @return　ローカライズ済み String
-   * </span>
+	 * @param prefix <div class="en"></div>
+	 *               <div class="ja"></div>
+	 * @param key <div class="en"></div>
+	 *            <div class="ja">キー</div>
+	 * @return <div class="en">the localized string</div>
+	 *         <div class="ja">ローカライズ済み String</div>
 	 */
 	public String localizedDisplayNameForKey(String prefix, String key) {
 		String localizerKey = prefix + "." + key;
@@ -1359,21 +1340,21 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 指定のキーのローカライズ済み文字列を取得し、ERXSimpleTemplateParserに処理させてから戻します
    * 
    * @param key - キー
    * @param o1 - オブジェクト
    * 
    * @return ERXSimpleTemplateParser処理されているローカライズ済み文字列
-   * </span>
+   * </div>
    */
 	public String localizedTemplateStringForKeyWithObject(String key, Object o1) {
 		return localizedTemplateStringForKeyWithObjectOtherObject(key, o1, null);
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 指定のキーのローカライズ済み文字列を取得し、ERXSimpleTemplateParserに処理させてから戻します
    * 
    * @param key - キー
@@ -1381,7 +1362,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * @param o2 - オブジェクト
    * 
    * @return ERXSimpleTemplateParser処理されているローカライズ済み文字列
-   * </span>
+   * </div>
    */
 	public String localizedTemplateStringForKeyWithObjectOtherObject(String key, Object o1, Object o2) {
 		if (key != null) {
@@ -1448,23 +1429,21 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 	
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns a plurified string.
+	 * </div>
 	 * 
-	 * @param name the string to plurify
-	 * @param count number to determine the plural form
-	 * 
-	 * @return plurified string
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * 複数形処理されている文字列を戻します
-   * 
-   * @param name - 名称
-   * @param count - カウント
-   * 
-   * @return 複数形処理されている文字列
-   * </span>
+   * </div>
+	 * 
+	 * @param name <div class="en">the string to plurify</div>
+	 *             <div class="ja">名称</div>
+	 * @param count <div class="en">number to determine the plural form</div>
+	 *              <div class="ja">カウント</div>
+	 * 
+	 * @return <div class="en">plurified string</div>
+	 *         <div class="ja">複数形処理されている文字列</div>
 	 */
 	public String plurifiedString(String name, int count) {
 		if (name != null) {
@@ -1483,21 +1462,19 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns a singularified string
+	 * </div>
 	 * 
-	 * @param value
-	 *            the value to singularify
-	 * @return a singularified string
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * 単数形処理されている文字列を戻します
-   * 
-   * @param value - 単数にする String
-   * 
-   * @return 単数形処理されている文字列
-   * </span>
+   * </div>
+	 * 
+	 * @param value <div class="en">the value to singularify</div>
+	 *              <div class="ja">単数にする String</div>
+	 * 
+	 * @return <div class="en">a singularified string</div>
+	 *         <div class="ja">単数形処理されている文字列</div>
 	 */
 	public String singularifiedString(String value) {
 		if (value != null) {
@@ -1513,11 +1490,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * このクラスの文字列表現
    * 
    * @return 文字列表現
-   * </span>
+   * </div>
    */
 	@Override
 	public String toString() {
@@ -1525,21 +1502,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns a localized date formatter for the given key.
+	 * </div>
 	 * 
-	 * @param formatString
-	 * @return the formatter object
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ済み NumberFormatter を指定キーを使って戻します。
    * Localizable.strings 内でキーとパターンを定義することもできます。
-   * 
-   * @param formatString - フォーマット表記
-   * 
-   * @return フォーマット・オブジェクト
-   * </span>
+   * </div>
+	 * 
+	 * @param formatString <div class="en"></div>
+	 *                     <div class="ja">フォーマット表記</div>
+	 * 
+	 * @return <div class="en">the formatter object</div>
+	 *         <div class="ja">フォーマット・オブジェクト</div>
 	 */
 	public Format localizedDateFormatForKey(String formatString) {
 		formatString = formatString == null ? ERXTimestampFormatter.DEFAULT_PATTERN : formatString;
@@ -1555,22 +1531,21 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Returns a localized number formatter for the given key. Also, can localize units to, just define in your
 	 * Localizable.strings a suitable key, with the appropriate pattern.
+	 * </div>
 	 * 
-	 * @param formatString
-	 * @return the formatter object
-	 * </span>
-	 * 
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ済み NumberFormatter を指定キーを使って戻します。
    * Localizable.strings 内でキーとパターンを定義することもできます。
-   * 
-   * @param formatString - フォーマット表記
-   * 
-   * @return フォーマット・オブジェクト
-   * </span>
+   * </div>
+	 * 
+	 * @param formatString <div class="en"></div>
+	 *                     <div class="ja">フォーマット表記</div>
+	 * 
+	 * @return <div class="en">the formatter object</div>
+	 *         <div class="ja">フォーマット・オブジェクト</div>
 	 */
 	public Format localizedNumberFormatForKey(String formatString) {
 		formatString = formatString == null ? "#,##0.00;-(#,##0.00)" : formatString;
@@ -1589,59 +1564,57 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * <span class="en">
-	 * @param formatter
-	 * @param pattern
-	 * </span>
+	 * <div class="en">
+	 * </div>
 	 * 
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ済み NumberFormatter を保存します。
-   * 
-   * @param formatter - フォーマット
-   * @param pattern - パターン
-   * </span>
+   * </div>
+	 * @param formatter <div class="en"></div>
+	 *                  <div class="ja">フォーマット</div>
+	 * @param pattern <div class="en"></div>
+	 *                <div class="ja">パターン</div>
 	 */
 	public void setLocalizedNumberFormatForKey(Format formatter, String pattern) {
 		_numberFormatters.put(pattern, formatter);
 	}
 
   /** 
-   * <span class="ja">ロケールをセット</span>
+   * <div class="ja">ロケールをセット</div>
    */
 	public Locale locale() {
 		return locale;
 	}
 
   /** 
-   * <span class="ja">ロケールをゲット</span>
+   * <div class="ja">ロケールをゲット</div>
    */
 	public void setLocale(Locale value) {
 		locale = value;
 	}
 
 	/**
-	 * <span class="en">
-	 * @param formatter
-	 * @param pattern
-	 * </span>
+	 * <div class="en">
+	 * </div>
 	 * 
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ済み TimestampFormatter を保存します。
-   * 
-   * @param formatter - フォーマット
-   * @param pattern - パターン
-   * </span>
+   * </div>
+	 * @param formatter <div class="en"></div>
+	 *                  <div class="ja">フォーマット</div>
+	 * @param pattern <div class="en"></div>
+	 *                <div class="ja">パターン</div>
 	 */
 	public void setLocalizedDateFormatForKey(NSTimestampFormatter formatter, String pattern) {
 		_dateFormatters.put(pattern, formatter);
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * ローカライズ・フォーマッタを使用するかどうかを戻します
    * 
    * @return <code>true</code> ローカライズ・フォーマッタを使用する場合
-   * </span>
+   * </div>
    */
 	public static boolean useLocalizedFormatters() {
 		if (_useLocalizedFormatters == null) {
@@ -1651,22 +1624,22 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
   /**
-   * <span class="ja">
+   * <div class="ja">
    * 言語コードを戻します
    * 
    * @return 言語コード
-   * </span>
+   * </div>
    */
 	public String languageCode() {
 		return locale().getLanguage();
 	}
 	
   /**
-   * <span class="ja">
+   * <div class="ja">
    * デフォルト言語に戻ります。
    * 
    * @return true の場合にはデフォルト言語に戻ります、
-   * </span>
+   * </div>
    */
 	public static boolean fallbackToDefaultLanguage() {
 		if (_fallbackToDefaultLanguage == null) {

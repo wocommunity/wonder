@@ -307,7 +307,13 @@ public class MSiteConfig extends MObject {
     /********** Password Methods **********/
     private static Random _randomGenerator = new Random();
 
-    static public long myrand() { return Math.abs(_randomGenerator.nextLong()); }
+    static public long myrand() {
+        long nextLong = _randomGenerator.nextLong();
+        while (nextLong == Long.MIN_VALUE) {
+            nextLong = _randomGenerator.nextLong();
+        }
+        return Math.abs(nextLong);
+    }
 
     public String encryptStringWithKey(String to_be_encrypted, String aKey) {
         String encrypted_value = "";
@@ -787,6 +793,11 @@ public class MSiteConfig extends MObject {
     /**********/
     
 
+    /**
+     * This method should be removed, because it is only used by the deprecated MigrationPage in JavaMonitor.
+     * @return 
+     */
+    @Deprecated
 	public String generateHttpWebObjectsConfig(){
 		StringBuilder result = new StringBuilder();
 		result.append("ProxyRequests On\nProxyMaxForwards 10000\nProxyVia Full\n");
@@ -882,14 +893,26 @@ public class MSiteConfig extends MObject {
 //                            sb.append(recvBufSize.toString());
 //                        }
                         
-						final String route = anApp.name() + "_" + host + "_" + port + "_" + id;
-						result.append("\tBalancerMember http://" + host + ":" + port + "/cgi-bin/WebObjects/" + anApp.name() + ".woa route=" + route + "\n");
+                        final String route = anApp.name() + "_" + host + "_" + port + "_" + id;
+                        result.append("\tBalancerMember http://");
+                        result.append(host);
+                        result.append(':');
+                        result.append(port);
+                        result.append("/cgi-bin/WebObjects/");
+                        result.append(anApp.name());
+                        result.append(".woa route=");
+                        result.append(route);
+                        result.append('\n');
                     } // end if (!(onlyIncludeRunningInstances && !anInst.isRunning()));
 //                }
 
                 result.append("</Proxy>\n");
-				result.append("ProxyPass /cgi-bin/WebObjects/" + anApp.name() + ".woa balancer://" + anApp.name() + ".woa stickysession=woclusteragentid nofailover=On\n");
-				result.append("\n");
+				result.append("ProxyPass /cgi-bin/WebObjects/");
+				result.append(anApp.name());
+				result.append(".woa balancer://");
+				result.append(anApp.name());
+				result.append(".woa stickysession=woclusteragentid nofailover=On\n");
+				result.append('\n');
 //            } // end if (!(onlyIncludeRunningInstances && anApp.isRunning()))
         } // end Application Enumeration
 
@@ -903,7 +926,7 @@ public class MSiteConfig extends MObject {
 //                }
 //            }
 //        }
-		result.append("\n");
+		result.append('\n');
 		return result.toString();	
 	}
 	

@@ -18,17 +18,17 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.appserver.ERXApplication;
+import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
  * Caches instances of one entity by a given key(path). Typically you'd have an "identifier" property 
- * and you'd fetch values by:<code><pre>
+ * and you'd fetch values by:<pre><code>
  * ERXEnterpriseObjectCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectCache&lt;HelpText&gt;("HelpText", "pageConfiguration");
  * ...
  * HelpText helpText = helpTextCache.objectForKey(ec, "ListHelpText");
- * </pre></code>
+ * </code></pre>
  * 
  * You can supply a timeout after which individual objects (or all objects if fetchInitialValues
  * is <code>true</code>) get cleared and re-fetched. This implementation can cache either only the global IDs, 
@@ -88,9 +88,10 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     private boolean _returnUnsavedObjects;
     
     /** If <code>false</code>, the cache is not allowed to fetch values as migrations may not have been processed yet.
-     * @see ERXApplication#ApplicationDidFinishInitializationNotification
+     * @see ERXExtensions#didFinishInitialization()
+     * @see #setApplicationDidFinishInitialization(boolean)
      */
-    private boolean _applicationDidFinishInitialization;
+    private static boolean _applicationDidFinishInitialization;
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
@@ -159,7 +160,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _qualifier = qualifier;
         _resetOnChange = true; // MS: for backwards compatibility
         _fetchInitialValues = true; // MS: for backwards compatibility
-        _applicationDidFinishInitialization = false;
         start();
     }
 
@@ -205,7 +205,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _timeout = timeout;
         _qualifier = qualifier;
         _returnUnsavedObjects = shouldReturnUnsavedObjects;
-        _applicationDidFinishInitialization = false;
         setRetainObjects(shouldRetainObjects);
         setResetOnChange(false);
         setFetchInitialValues(shouldFetchInitialValues);
@@ -218,13 +217,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	 * @see #stop()
      */
 	public void start() {
-		// Catch this to disable caching before application did finish to start (and most importantly processed migrations)
-		NSSelector selector = ERXSelectorUtilities.notificationSelector("enableFetchingOfInitialValues");
-		NSNotificationCenter.defaultCenter().addObserver(this, selector, 
-		        ERXApplication.ApplicationDidFinishInitializationNotification, null);
-		
 		// Catch this to update the cache when an object is changed
-		selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
+        NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
         
@@ -239,16 +233,25 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
 	
     /**
-     * Call this to stop cache updating.  
+     * Call this to stop cache updating.
 	 * @see #start()
      */
 	public void stop() {
-		NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidFinishInitializationNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, ERXEnterpriseObjectCache.ClearCachesNotification, null);
     	_cache.stopBackgroundExpiration();
 	}
-    
+
+	/**
+	 * Called from {@link ERXExtensions#finishInitialization()} to enable fetches. This is to ensure that
+	 * migrations have run prior first fetch from this class.
+	 * 
+	 * @param didFinish indicator if application did finish initialization phase
+	 */
+	public static void setApplicationDidFinishInitialization(boolean didFinish) {
+		_applicationDidFinishInitialization = didFinish;
+	}
+
 	/**
 	 * Returns the editing context that holds object that are in this cache. If _reuseEditingContext is false, 
 	 * a new editing context instance is returned each time. The returned editing context is autolocking.
@@ -277,7 +280,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * Helper to check a dictionary of objects from an EOF notification and return any that are for the
      * entity that we are caching.
      * 
-     * @param dict dictionary of key to NSArray<EOEnterpriseObject>
+     * @param dict dictionary of key to {@literal NSArray<EOEnterpriseObject>}
      * @param key key into dict indicating which list to process
      * @return objects from the list that are of the entity we are caching, or an empty array if there are no matches
      */
@@ -298,7 +301,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Handler for the editingContextDidSaveChanges notification. If <code>_resetOnChange</code> is <code>true</code>, this
-     * calls reset() to discard the entire cache contents if an object of the given entity has been changed.  
+     * calls reset() to discard the entire cache contents if an object of the given entity has been changed.
      * If <code>_resetOnChange</code> is <code>false</code>, this updates the cache to reflect the added/changed/removed
      * objects.
      * 
@@ -338,25 +341,17 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Handler for the clearCaches notification. Calls reset if n.object is the name of the entity we are caching.
      * Other code can send this notification if it needs to have this cache discard all of the objects.
-     * @param n
+     * 
+     * @see #ClearCachesNotification
+     * 
+     * @param n NSNotification with an entity name
      */
     public void clearCaches(NSNotification n) {
     	if(n.object() == null || entityName().equals(n.object())) {
     		reset();
     	}
     }
-    
-    /**
-    * Handler for the ApplicationDidFinishInitializationNotification notification. Enables the fetching of initial
-    * values and such ensure that any migrations have been processed before.
-    * @param n notification that is fired in ERXApplication.finishInitialization
-    */
-    public void enableFetchingOfInitialValues(NSNotification n) {
-        _applicationDidFinishInitialization = true;
-        NSNotificationCenter.defaultCenter().removeObserver(this,
-				ERXApplication.ApplicationDidFinishInitializationNotification, null);
-    }
-    
+
     /**
      * @return the name of the EOEntity this cache is for
      */

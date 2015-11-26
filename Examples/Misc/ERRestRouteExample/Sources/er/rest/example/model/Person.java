@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.foundation.NSTimestamp;
 
 public class Person extends _Person {
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(Person.class);
   
   /**

@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
- * Displays a string with escape html set to false.<br />
- * 
+ * Displays a string with escape html set to false.
  */
 
 public class ERD2WDisplayHTML extends D2WDisplayString {

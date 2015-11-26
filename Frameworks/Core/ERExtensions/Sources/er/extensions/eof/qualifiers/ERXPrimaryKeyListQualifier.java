@@ -24,11 +24,11 @@ import er.extensions.eof.ERXEOAccessUtilities;
  * a qualifier that can be used to filter a result set
  * for a given set of primary keys. Note that this uses
  * the IN expression and as such may not work with some
- * databases. <br/>
- * <br/>
+ * databases.
+ * <p>
  * Given a list of EOs, this generates a query looking like
  *
- *   ...  t0.ID in (< the list of primary Keys for EOs in the list>) ..
+ *   ...  t0.ID in (&lt; the list of primary Keys for EOs in the list &gt;) ..
  *
  * this is useful for pre-fetching type uses.
  */

@@ -172,7 +172,10 @@ static int shouldLog()
    if (statTime < now) {
       struct stat statbuf;
       statTime = now + STATINTERVAL;		/* reset timer */
-      _shouldLog = ( (stat(logFlag,&statbuf) == 0) && (statbuf.st_uid == 0) );
+      _shouldLog = (stat(logFlag,&statbuf) == 0);
+      #ifndef WIN32
+      _shouldLog = _shouldLog && (statbuf.st_uid == 0);  // requesting root ownership does not make sense under Win32
+      #endif
    }
    WA_unlock(logMutex);
    return _shouldLog;

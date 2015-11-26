@@ -18,11 +18,7 @@ public class ERXTestCase extends TestCase {
 		super(name);
 	}
 
-	public static void assertEquals(Object[] arg0, Object[] arg1) {
-		if (Arrays.equals(arg0, arg1))
-			return;
-		TestCase.assertEquals(arg0, arg1);
-	}
+	public static void assertEquals(Object[] arg0, Object[] arg1) { Arrays.equals(arg0, arg1); }
 
 	public static String adaptorName() {
 		return com.webobjects.eoaccess.EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).adaptorName();

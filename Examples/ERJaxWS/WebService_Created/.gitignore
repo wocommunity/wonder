@@ -1,0 +1,6 @@
+target
+bin
+build
+*.xcodeproj
+*.pbxproj
+ant.*

@@ -1,67 +1,75 @@
-<wo:ERQMHtmlTemplate title="PageTransitions">
-	<wo:ERQMHeaderBar string="PageTransitions" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-		<style>
-			table { width:100%; border-bottom:1px solid #ccc; border-collapse: collapse; }
-			th { text-align:left; }
-			th h3 { margin:.6em 0; }
-			th, td { vertical-align:top; border-top:1px solid #ccc; padding: 1px 3px; }
-			td .ui-btn { margin:.4em 0 .5em 0; }
-			td .ui-btn-inner { padding: .4em 15px; }
-		</style>
-
-		<table margin="0">
-			<tr>
-				<th><h3>fade</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="fade" string="Dialog" inline="true" theme="e" icon="home" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" theme="a" icon="home" transition="fade" /></td>
-			</tr>
-			<tr>
-				<th><h3>pop</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="pop" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="pop" /></td>
-			</tr>
-			<tr>
-				<th><h3>flip</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="flip" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="flip" /></td>
-			</tr>
-			<tr>
-				<th><h3>turn (v1.1)</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="turn" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="turn" /></td>
-			</tr>
-			<tr>
-				<th><h3>flow (v1.1)</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="flow" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="flow" /></td>
-			</tr>
-			<tr>
-				<th><h3>slide</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="slide" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="slide" /></td>
-			</tr>
-			<tr>
-				<th><h3>slideup</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="slideup" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="slideup" /></td>
-			</tr>
-			<tr>
-				<th><h3>slidedown</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="slidedown" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="slidedown" /></td>
-			</tr>
-			<tr>
-				<th><h3>none</h3></th>
-				<td><wo:ERQMDialogLink linkResource="page://SampleDialog" transition="none" string="Dialog" inline="true" /></td>
-				<td><wo:ERQMButton linkResource="page://FormEntries" string="Page" inline="true" transition="none" /></td>
-			</tr>
-		</table>
-
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Page Transitions">
+  <style>
+    table { width:100%; border-bottom:1px solid #ccc; border-collapse: collapse; }
+    th { text-align:left; }
+    th h3 { margin:.6em 0; }
+    th, td { vertical-align:top; border-top:1px solid #ccc; padding: 1px 3px; }
+    td .ui-btn { margin:.4em 0 .5em 0; }
+    td .ui-btn-inner { padding: .4em 15px; }
+  </style>
+  <table margin = "0">
+    <tr>
+      <th>
+        <h3>fade</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "fade" string = "Dialog" data-inline = "true" data-theme = "e" data-icon = "home" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-theme = "a" data-icon = "home" data-transition = "fade" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>pop</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "pop" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "pop" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>flip</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "flip" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "flip" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>turn (v1.1)</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "turn" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "turn" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>flow (v1.1)</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "flow" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "flow" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>slide</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "slide" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "slide" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>slideup</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "slideup" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "slideup" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>slidedown</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "slidedown" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "slidedown" /></td>
+    </tr>
+    <tr>
+      <th>
+        <h3>none</h3>
+      </th>
+      <td><wo:ERQMButton linkResource = "page://SampleDialog" data-transition = "none" string = "Dialog" data-inline = "true" /></td>
+      <td><wo:ERQMButton linkResource = "page://FormEntries" string = "Page" data-inline = "true" data-transition = "none" /></td>
+    </tr>
+  </table>
+</wo:JQPageWrapper>

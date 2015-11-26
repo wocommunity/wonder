@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -147,7 +147,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
-	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
+	protected boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
 	
 	/**
 	 * Notification that is sent when the model group was created form the bundle loading.
@@ -183,7 +183,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
 		NSMutableArray<String> modelNames = new NSMutableArray<String>();
-		NSMutableArray<NSBundle> bundles = new NSMutableArray<NSBundle>();
+		NSMutableSet<NSBundle> bundles = new NSMutableSet<NSBundle>();
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(frameworkBundles);
 
@@ -464,7 +464,8 @@ public class ERXModelGroup extends EOModelGroup {
 	 * <code>EOModelPrototypes</code>, <code>EOJDBCModelPrototypes</code> or
 	 * <code>EOJDBC&lt;PluginName&gt;ModelPrototypes</code> in your model. These are loaded after the normal models,
 	 * so you can override things here. Of course EOModeler knows nothing of them, so you may need to copy all
-	 * attributes over to a <code>EOPrototypes</code> entity that is present only once in your model group. <br />
+	 * attributes over to a <code>EOPrototypes</code> entity that is present only once in your model group.
+	 * <p>
 	 * This class is used by the runtime when the property
 	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code>.
 	 * 
@@ -652,7 +653,7 @@ public class ERXModelGroup extends EOModelGroup {
 		resetConnectionDictionaryInModel(model);
 	}
 
-	private static String getProperty(String key, String alternateKey, String defaultValue) {
+	protected static String getProperty(String key, String alternateKey, String defaultValue) {
 		String value = ERXProperties.stringForKey(key);
 		if (value == null) {
 			value = ERXProperties.stringForKey(alternateKey);
@@ -663,11 +664,11 @@ public class ERXModelGroup extends EOModelGroup {
 		return value;
 	}
 
-	private static String getProperty(String key, String alternateKey) {
+	protected static String getProperty(String key, String alternateKey) {
 		return getProperty(key, alternateKey, null);
 	}
 
-	private static String decryptProperty(String key, String alternateKey) {
+	protected static String decryptProperty(String key, String alternateKey) {
 		String value = ERXProperties.decryptedStringForKey(key);
 		if (value == null) {
 			value = ERXProperties.decryptedStringForKey(alternateKey);

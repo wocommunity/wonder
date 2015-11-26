@@ -10,9 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 import java.util.Vector;
 /**
- * <span class="en">
+ * <div class="en">
  * Bugfix reimplementation of NSMutableArray. To be able to use this class, the framework this class resides in must be
- * before JavaFoundation.framework in your classpath. <br />
+ * before JavaFoundation.framework in your classpath.
+ * <p>
  * It fixes a lot of issues:
  * <ul>
  * <li>implements the correct Collection methods, so you can <code>anArray.add(anObject)</code>
@@ -22,15 +23,13 @@ import java.util.Vector;
  * </ul>
  * 
  * Once these issues are resolved in a WO distribution, this class will go away and the Apple 
- * supplied will will be used again without changes in code on your side. <br />
+ * supplied will will be used again without changes in code on your side. 
+ * </div>
  * 
- * @param <E> type of array contents
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * NSMutableArray のバッグフィックス再実装。
- * このクラスを使用する為には現フレームワークのクラスパスが JavaFoundation.framework の前にある必要があります。<br>
- * 
+ * このクラスを使用する為には現フレームワークのクラスパスが JavaFoundation.framework の前にある必要があります。
+ * <p>
  * 次の問題を対応しています:
  * <ul>
  * <li>正しいコレクション・メソッドの実装：<code>anArray.add(anObject)</code> が可能
@@ -38,9 +37,9 @@ import java.util.Vector;
  * <li>実際のオブジェクトが replaceObjectAtIndex() の外で処理されるバッグフィックス
  * <li><code>_EOCheapCopyMutableArray</code> でのフォルトはトリーガされない問題のバッグフィックス
  * </ul>
+ * </div>
  * 
  * @param <E> type of array contents
- * </span>
  * 
  * @author ak
  */
@@ -799,6 +798,11 @@ class SubList<E> extends NSMutableArray<E> {
     }
 
     @Override
+    public int count() {
+        return size();
+    }
+
+    @Override
     public boolean add(E element) {
     	add(size(), element);
     	return true;
@@ -940,6 +944,16 @@ class SubList<E> extends NSMutableArray<E> {
         return new SubList<E>(this, fromIndex, toIndex);
     }
 
+    @Override
+    public Object[] toArray() {
+        int count = count();
+        Object[] objects = new Object[count];
+        if (count > 0) {
+            System.arraycopy(l.objectsNoCopy(), offset, objects, 0, count);
+        }
+        return objects;
+    }
+
     private void rangeCheck(int index) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index + ",Size: "
@@ -951,6 +965,30 @@ class SubList<E> extends NSMutableArray<E> {
             throw new ConcurrentModificationException();
     }
 
+    @Override
+    public String toString() {
+        int count = count();
+        if (count == 0) {
+            return "()";
+        }
+        StringBuilder sb = new StringBuilder(128);
+        sb.append('(');
+        for (int i = 0; i < count; i++) {
+            Object object = l.get(i + offset);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            if (object instanceof String) {
+                sb.append('"');
+                sb.append(object);
+                sb.append('"');
+            } else {
+                sb.append(object == this ? "THIS" : object);
+            }
+        }
+        sb.append(')');
+        return sb.toString();
+    }
 }
 
 class RandomAccessSubList<E> extends SubList<E> implements RandomAccess {

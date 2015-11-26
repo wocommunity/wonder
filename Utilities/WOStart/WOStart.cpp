@@ -14,7 +14,7 @@ string getNextRoot();
 string getNextLocal();
 
 #define APPNAME "WOStart"
-#define VERSION "1.0"
+#define VERSION "1.1"
 
 extern "C" {
   int Java_Main(int argc, char ** argv, char *javaCommand);
@@ -28,10 +28,10 @@ string g_currentDirectory;
 string g_appRoot;
 
 // Path to WebObjects installation
-string g_WORoot(getNextRoot());
+string g_WORoot;
 
 // Path to WebObjects Local directory
-string g_localRoot(getNextLocal());
+string g_localRoot;
 
 // Path to Home Root (what does this mean in this context?)
 string g_homeRoot("C:\\");
@@ -44,6 +44,8 @@ string g_jvmCommand("java");
 
 // JVM options
 string g_jvmOptions("");
+
+static bool debugoutput = false;
 
 // Report fatal error and exit
 //
@@ -116,6 +118,7 @@ string getNextRoot() {
 		{
 	  		DWORD  bufLen = _MAX_PATH;
 			char buf[_MAX_PATH];
+			buf[0] = 0;
 
 			RegQueryValueEx(hKey, "NEXT_ROOT", NULL, NULL,
 							(LPBYTE) buf, &bufLen);
@@ -124,8 +127,12 @@ string getNextRoot() {
 			normalisePath(root);
 		}
 		
-		if (root.length() > 0)
+		if (root.length() > 0) {
+			if (debugoutput) {
+				cout << "WORoot found in Registry: " << root.c_str() << endl;
+			}
 			return root;
+		}
 
 //		cerr << "Warning: Unable to locate WOROOT/NEXT_ROOT using registry" << endl;
 
@@ -168,6 +175,10 @@ string getNextRoot() {
 			DWORD fattr = GetFileAttributes(root.c_str());
 			if (fattr != INVALID_FILE_ATTRIBUTES &&
 				fattr & FILE_ATTRIBUTE_DIRECTORY) {
+					if (debugoutput) {
+						cout << "WORoot found on drive: " << root.c_str() << endl;
+					}
+				
 					return root;
 			}
 
@@ -438,6 +449,14 @@ int wostart_main(int argc, TCHAR* argv[])
 		// tell the world about ourselves;
 		cout << APPNAME << " " << VERSION << endl;
 
+		if (getenv("_JAVA_LAUNCHER_DEBUG") != 0) {
+			debugoutput = true;
+		}
+
+		g_WORoot = getNextRoot();
+		g_localRoot = getNextLocal();
+
+		
 		// where are we being launched from?
 		g_currentDirectory = getAppDirectory();
 
@@ -457,9 +476,21 @@ int wostart_main(int argc, TCHAR* argv[])
 		int js = jargs.size();
 		char *new_argv[1000];
 
-		cout << "Arguments" << endl;
+		//
+		// remove suffixes from command (remove .32.exe, .64.exe, .exe)
+		//
+		cout << "Command" << endl;
+		string command = argv[0];
+		size_t found = command.find('.');
+		if(found != string::npos) {
+			string substr = command.substr(0, found);
+			command.assign(substr);
+		}
 
-		new_argv[0] = argv[0];
+		new_argv[0] = (char *)command.c_str();
+		cout << " " << new_argv[0] << endl;
+		
+		cout << "Arguments" << endl;
 		int ii;
 		for(ii=0; ii < js; ii++)
 		{

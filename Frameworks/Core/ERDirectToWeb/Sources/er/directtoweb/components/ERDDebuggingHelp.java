@@ -26,7 +26,7 @@ import er.extensions.components.ERXDebugMarker;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Little help component useful for debugging.<br />
+ * Little help component useful for debugging.
  * 
  * @binding d2wContext
  * @binding condition default=Boolean

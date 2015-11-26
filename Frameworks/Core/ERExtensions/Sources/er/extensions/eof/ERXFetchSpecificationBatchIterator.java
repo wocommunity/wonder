@@ -9,7 +9,7 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -43,8 +43,10 @@ import er.extensions.jdbc.ERXSQLHelper;
  * objects requested from the database at once, and may differ from the number
  * of objects returned by <b>nextBatch()</b>, for instance if the batch size is
  * changed after fetching, or if <b>filtersBatches()</b> is set to true.
+ * 
+ * @param <E> the type of elements returned by this iterator
  */
-public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration {
+public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enumeration<E> {
 
 	/** holds the default batch size, any bigger than this an Oracle has a fit */
     public static final int DefaultBatchSize = 250;
@@ -65,7 +67,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
     protected NSArray primaryKeys;
     
     /** holds array of fetched but not-yet-returned objects; used by the Iterator and Enumeration interfaces */
-    protected NSMutableArray cachedBatch;
+    protected NSMutableArray<E> cachedBatch;
     /** holds the number of objects fetched */
     protected int currentObjectFetchCount;
     /** determines whether we should re-apply the original qualifier to each batch of objects fetched */
@@ -123,12 +125,12 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
         super();
 
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
-        NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+        NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
         if (primaryKeyAttributes.count() > 1) {
             throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
         }
 
-        primaryKeyAttributeName = ((EOAttribute)primaryKeyAttributes.lastObject()).name();
+        primaryKeyAttributeName = primaryKeyAttributes.lastObject().name();
         this.fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
         primaryKeys = pkeys;
         setEditingContext(ec != null ? ec : ERXEC.newEditingContext());
@@ -276,9 +278,9 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * time they were fetched.)
      * @return batch of enterprise objects
      */
-    public NSArray nextBatch() {
+    public NSArray<E> nextBatch() {
         if(cachedBatch != null) {
-            NSArray nextBatch = cachedBatch;
+            NSArray<E> nextBatch = cachedBatch;
             cachedBatch = null;
             return nextBatch;
         }
@@ -292,10 +294,10 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * automatic support for the Iterator and Enumeration interfaces. 
      * @return next batch
      */
-    protected NSArray _fetchNextBatch() {
+    protected NSArray<E> _fetchNextBatch() {
         if (hasNextBatch()) {
             NSRange range = _rangeForOffset(currentObjectFetchCount);
-            NSArray nextBatch = batchWithRange(range);
+            NSArray<E> nextBatch = batchWithRange(range);
             currentObjectFetchCount += range.length();
             return nextBatch;
         }
@@ -328,7 +330,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param index index of batch to retrieve
      * @return batch of enterprise objects
      */
-    public NSArray batchWithIndex(int index) {
+    public NSArray<E> batchWithIndex(int index) {
         NSRange range = _rangeForBatchIndex(index);
         return batchWithRange(range);
     }
@@ -347,13 +349,13 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @param requestedRange range of batch to retrieve
      * @return batch of enterprise objects
      */
-    public NSArray batchWithRange(NSRange requestedRange) {
+    public NSArray<E> batchWithRange(NSRange requestedRange) {
         EOEditingContext ec = editingContext();
         if ( ec == null) {
             throw new IllegalStateException("ERXFetchSpecificationBatchIterator: Calling nextBatch with a null editing context!");
         }
 
-        NSArray nextBatch = null;
+        NSArray<E> nextBatch = null;
         NSRange range = requestedRange.rangeByIntersectingRange( new NSRange(0, count()) ); //intersect with legal range
         if ( range.length() > 0 ) {
             NSArray primaryKeys = primaryKeys();
@@ -456,16 +458,16 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 	/**
 	 * Implementation of the Iterator interface
 	 */
-	public Object next() {
+	public E next() {
         if( cachedBatch == null) {
-            NSArray nextBatch = _fetchNextBatch(); //will raise if no more batches, which is expected behavior if next() is called w/o first checking hasNext()
+            NSArray<E> nextBatch = _fetchNextBatch(); //will raise if no more batches, which is expected behavior if next() is called w/o first checking hasNext()
             while(nextBatch.count() == 0 && hasNextBatch()) { //if filtersBatches, we can get empty batches, so repeat until we get something, or run out
                 nextBatch = _fetchNextBatch();
             }
             cachedBatch = nextBatch.mutableClone();
 		}
 
-        Object nextObject = null;
+        E nextObject = null;
         if( cachedBatch.count() > 0 ) {
             nextObject = cachedBatch.removeObjectAtIndex(0);
         }
@@ -492,7 +494,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 	/**
 	 * Implementation of the Enumeration interface
 	 */
-	public Object nextElement() {
+	public E nextElement() {
 		return next();
 	}
 	

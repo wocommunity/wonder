@@ -16,10 +16,10 @@ import java.sql.Statement;
 import java.util.Enumeration;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 import org.apache.log4j.Logger;
 
-import com.sun.rowset.CachedRowSetImpl;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -232,11 +232,13 @@ public class ERXJDBCUtilities {
 			String[] columnNamesWithoutQuotes = columnsFromAttributes(attributes, false);
 
 			// build the select statement, this selects -all- rows
-			StringBuffer selectBuf = new StringBuffer();
+			StringBuilder selectBuf = new StringBuilder();
 			selectBuf.append("select ");
 			selectBuf.append(columnsFromAttributesAsArray(attributes, _quoteSource).componentsJoinedByString(", ")).append(" from ");
 			if (_quoteSource) {
-				selectBuf.append("\"" + tableName + "\"");
+				selectBuf.append('"');
+				selectBuf.append(tableName);
+				selectBuf.append('"');
 			}
 			else {
 				selectBuf.append(tableName);
@@ -250,21 +252,23 @@ public class ERXJDBCUtilities {
 				String sqlString = EOQualifierSQLGeneration.Support._sqlStringForSQLExpression(qualifier, sqlExpression);
 				selectBuf.append(" where ").append(sqlString);
 			}
-			selectBuf.append(";");
+			selectBuf.append(';');
 			String sql = selectBuf.toString();
 			Statement stmt = _source.createStatement();
 
-			StringBuffer insertBuf = new StringBuffer();
+			StringBuilder insertBuf = new StringBuilder();
 			insertBuf.append("insert into ");
 			if (_quoteDestination) {
-				insertBuf.append("\"" + tableName + "\"");
+				insertBuf.append('"');
+				insertBuf.append(tableName);
+				insertBuf.append('"');
 			}
 			else {
 				insertBuf.append(tableName);
 			}
 			insertBuf.append(" (").append(columnsFromAttributesAsArray(attributes, _quoteDestination).componentsJoinedByString(", ")).append(") values (");
 			for (int i = columnNames.length; i-- > 0;) {
-				insertBuf.append("?");
+				insertBuf.append('?');
 				if (i > 0) {
 					insertBuf.append(", ");
 				}
@@ -370,8 +374,8 @@ public class ERXJDBCUtilities {
 	}
 
 	public static String jdbcTimestamp(NSTimestamp t) {
-		StringBuffer b = new StringBuffer();
-		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append("'");
+		StringBuilder b = new StringBuilder();
+		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append('\'');
 		return b.toString();
 	}
 
@@ -691,25 +695,6 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Runs a given sql script and executes each of the statements in a
-	 * one transaction.
-	 * 
-	 * @param channel
-	 *            the JDBCChannel to work with
-	 * @param script
-	 *            the array of sql scripts to execute
-	 * 
-	 * @return the number of rows updated
-	 * @throws SQLException
-	 *             if there is a problem
-	 * @deprecated use {@link #executeUpdateScript(EOAdaptorChannel, String, boolean)}
-	 */
-    @Deprecated
-	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
-		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
-	}
-
-	/**
 	 * Executes a SQL script that is stored as a resource.
 	 * 
 	 * @param channel
@@ -943,7 +928,7 @@ public class ERXJDBCUtilities {
 	 *             if something goes wrong
 	 */
 	public static CachedRowSet fetchRowSet(EOAdaptorChannel adaptorChannel, String query) throws Exception {
-		final CachedRowSetImpl rowSet = new CachedRowSetImpl();
+		final CachedRowSet rowSet = RowSetProvider.newFactory().createCachedRowSet();
 		ERXJDBCUtilities.executeQuery(adaptorChannel, query, new IResultSetDelegate() {
 			public void processResultSet(EOAdaptorChannel innerAdaptorChannel, ResultSet rs) throws Exception {
 				rowSet.populate(rs);

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -156,7 +156,7 @@ public class ERXML {
   }
 
   /**
-   * Declaration represents an XML declaration (the &lt? ... ?&gt; part of the XML document).
+   * Declaration represents an XML declaration (the &lt;? ... ?&gt; part of the XML document).
    * 
    * @author mschrag
    */

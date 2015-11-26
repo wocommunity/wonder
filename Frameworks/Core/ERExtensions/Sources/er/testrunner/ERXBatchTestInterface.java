@@ -16,8 +16,7 @@ import junit.runner.BaseTestRunner;
 import org.apache.log4j.Logger;
 
 /**
- * Used for running a batch of tests.<br />
- * 
+ * Used for running a batch of tests.
  */
 
 public class ERXBatchTestInterface implements ERXTestListener {

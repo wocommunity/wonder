@@ -15,9 +15,8 @@ package er.extensions.crypting;
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import java.io.UnsupportedEncodingException;
-import java.security.SecureRandom;
 
-import org.apache.commons.lang.CharEncoding;
+import java.security.SecureRandom;
 
 /**
  * BCrypt implements OpenBSD-style Blowfish password hashing using
@@ -57,10 +56,10 @@ import org.apache.commons.lang.CharEncoding;
  * <p>
  * The amount of work increases exponentially (2**log_rounds), so 
  * each increment is twice as much work. The default log_rounds is
- * 10, and the valid range is 4 to 31.
+ * 10, and the valid range is 4 to 30.
  *
  * @author Damien Miller
- * @version 0.3
+ * @version 0.4
  */
 public class BCrypt {
 	// BCrypt parameters
@@ -337,7 +336,9 @@ public class BCrypt {
 		0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
 	};
 
-	// bcrypt IV: "OrpheanBeholderScryDoubt"
+	// bcrypt IV: "OrpheanBeholderScryDoubt". The C implementation calls
+	// this "ciphertext", but it is really plaintext or an IV. We keep
+	// the name to make code comparison easier.
 	static private final int bf_crypt_ciphertext[] = {
 		0x4f727068, 0x65616e42, 0x65686f6c,
 		0x64657253, 0x63727944, 0x6f756274
@@ -424,9 +425,9 @@ public class BCrypt {
 	 * @return	the decoded value of x
 	 */
 	private static byte char64(char x) {
-		if (x < 0 || x > index_64.length)
+		if ((int)x < 0 || (int)x > index_64.length)
 			return -1;
-		return index_64[x];
+		return index_64[(int)x];
 	}
 
 	/**
@@ -533,8 +534,8 @@ public class BCrypt {
 	 * Initialize the Blowfish key schedule
 	 */
 	private void init_key() {
-		P = P_orig.clone();
-		S = S_orig.clone();
+		P = (int[])P_orig.clone();
+		S = (int[])S_orig.clone();
 	}
 
 	/**
@@ -603,15 +604,16 @@ public class BCrypt {
 	 * @param salt	the binary salt to hash with the password
 	 * @param log_rounds	the binary logarithm of the number
 	 * of rounds of hashing to apply
+	 * @param cdata         the plaintext to encrypt
 	 * @return	an array containing the binary hashed password
 	 */
-	private byte[] crypt_raw(byte password[], byte salt[], int log_rounds) {
+	public byte[] crypt_raw(byte password[], byte salt[], int log_rounds,
+	    int cdata[]) {
 		int rounds, i, j;
-		int cdata[] = bf_crypt_ciphertext.clone();
 		int clen = cdata.length;
 		byte ret[];
 
-		if (log_rounds < 4 || log_rounds > 31)
+		if (log_rounds < 4 || log_rounds > 30)
 			throw new IllegalArgumentException ("Bad number of rounds");
 		rounds = 1 << log_rounds;
 		if (salt.length != BCRYPT_SALT_LEN)
@@ -619,7 +621,7 @@ public class BCrypt {
 
 		init_key();
 		ekskey(salt, password);
-		for (i = 0; i < rounds; i++) {
+		for (i = 0; i != rounds; i++) {
 			key(password);
 			key(salt);
 		}
@@ -672,7 +674,7 @@ public class BCrypt {
 
 		real_salt = salt.substring(off + 3, off + 25);
 		try {
-			passwordb = (password + (minor >= 'a' ? "\000" : "")).getBytes(CharEncoding.UTF_8);
+			passwordb = (password + (minor >= 'a' ? "\000" : "")).getBytes("UTF-8");
 		} catch (UnsupportedEncodingException uee) {
 			throw new AssertionError("UTF-8 is not supported");
 		}
@@ -680,7 +682,8 @@ public class BCrypt {
 		saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
 
 		B = new BCrypt();
-		hashed = B.crypt_raw(passwordb, saltb, rounds);
+		hashed = B.crypt_raw(passwordb, saltb, rounds,
+		    (int[])bf_crypt_ciphertext.clone());
 
 		rs.append("$2");
 		if (minor >= 'a')
@@ -688,6 +691,10 @@ public class BCrypt {
 		rs.append("$");
 		if (rounds < 10)
 			rs.append("0");
+		if (rounds > 30) {
+			throw new IllegalArgumentException(
+			    "rounds exceeds maximum (30)");
+		}
 		rs.append(Integer.toString(rounds));
 		rs.append("$");
 		rs.append(encode_base64(saltb, saltb.length));
@@ -713,6 +720,10 @@ public class BCrypt {
 		rs.append("$2a$");
 		if (log_rounds < 10)
 			rs.append("0");
+		if (log_rounds > 30) {
+			throw new IllegalArgumentException(
+			    "log_rounds exceeds maximum (30)");
+		}
 		rs.append(Integer.toString(log_rounds));
 		rs.append("$");
 		rs.append(encode_base64(rnd, rnd.length));
@@ -748,6 +759,20 @@ public class BCrypt {
 	 * @return	true if the passwords match, false otherwise
 	 */
 	public static boolean checkpw(String plaintext, String hashed) {
-		return (hashed.compareTo(hashpw(plaintext, hashed)) == 0);
+		byte hashed_bytes[];
+		byte try_bytes[];
+		try {
+			String try_pw = hashpw(plaintext, hashed);
+			hashed_bytes = hashed.getBytes("UTF-8");
+			try_bytes = try_pw.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException uee) {
+			return false;
+		}
+		if (hashed_bytes.length != try_bytes.length)
+			return false;
+		byte ret = 0;
+		for (int i = 0; i < try_bytes.length; i++)
+			ret |= hashed_bytes[i] ^ try_bytes[i];
+		return ret == 0;
 	}
 }

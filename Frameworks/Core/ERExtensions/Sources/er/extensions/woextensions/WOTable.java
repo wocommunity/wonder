@@ -36,8 +36,7 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.eof.ERXConstant;
 
 /**
- * (Back port from WO 5 WOExtensions)<br />
- * 
+ * (Back port from WO 5 WOExtensions)
  */
 @Deprecated
 public class WOTable extends WOComponent {

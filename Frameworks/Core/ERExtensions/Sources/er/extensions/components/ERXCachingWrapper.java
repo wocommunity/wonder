@@ -23,7 +23,8 @@ import er.extensions.foundation.ERXAssert;
 
 /**
  * Wrapper that caches its content based on a set of bindings. Use this component to wrap
- * parts of your HTML whose generation is costly. <br />
+ * parts of your HTML whose generation is costly.
+ * <p>
  * Valid keys would be for example:
  * <ul>
  *   <li><code>parent.isEnabled</code>, where isEnabled would be some method on the parent.
@@ -66,7 +67,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 
     	@Override
     	public Object get(Object key) {
-    		Entry result = (Entry) super.get(key);
+    		CacheEntry result = (CacheEntry) super.get(key);
     		if(result != null) {
     			if(!result.isActive()) {
     				remove(key);
@@ -78,7 +79,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     });
     
     /** Simply cache entry class. It caches a string for a duration and can replace the session ID on retrieval. */
-    protected static class Entry implements Serializable{
+    protected static class CacheEntry implements Serializable{
     	/**
     	 * Do I need to update serialVersionUID?
     	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -91,7 +92,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	private String content;
     	private String sessionID;
     	
-    	public Entry(String aContent, long aDuration, String aSessionID) {
+    	public CacheEntry(String aContent, long aDuration, String aSessionID) {
     		insertTime = System.currentTimeMillis();
     		content = aContent;
     		duration = aDuration;
@@ -113,7 +114,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     protected NSArray keys;
     protected String entryName;
     protected Long cacheDuration;
-    protected Entry entry;
+    protected CacheEntry entry;
     protected NSDictionary values;
     
     /**
@@ -131,7 +132,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	entryName = null;
     	cacheDuration = null;
     	values = null;
-     	entry = (Entry) cache.get(values());
+     	entry = (CacheEntry) cache.get(values());
     }
     
     protected NSArray keys() {
@@ -241,7 +242,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 			newResponse.setUserInfo(response.userInfo());
 			super.appendToResponse(newResponse, context);
 			String content = newResponse.contentString();
-			entry = new Entry(content, cacheDuration(), (context.hasSession() ? context.session().sessionID() : null));
+			entry = new CacheEntry(content, cacheDuration(), (context.hasSession() ? context.session().sessionID() : null));
 			cache.put(values(), entry);
 		}
 		String content = entry.content(context);

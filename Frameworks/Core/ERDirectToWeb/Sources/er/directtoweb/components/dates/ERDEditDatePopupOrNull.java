@@ -14,8 +14,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 /**
- * Allows the choice to not specify a date.<br />
- * 
+ * Allows the choice to not specify a date.
  */
 public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 	/**

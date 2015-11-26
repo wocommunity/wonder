@@ -38,7 +38,7 @@ table#calendar_control td.day_letter {
 }
 
 table#calendar_control td.day_number {
-  width: 22px;
+  width: 23px;
   height: 20px;
   font-size: 12px;
   color: #333333;

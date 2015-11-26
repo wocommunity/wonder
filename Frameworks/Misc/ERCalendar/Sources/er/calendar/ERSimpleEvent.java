@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSTimestamp;
  * <p>
  * Subclass ERSimpleEvent if more advanced features are needed.
  *
- * @author 	Johan Carlberg <johan@oops.se>
+ * @author 	Johan Carlberg &lt;johan@oops.se&gt;
  * @version 	1.0, 2002-09-30
  */
 

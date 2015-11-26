@@ -1,0 +1,12 @@
+<wo:if condition = "$inset">
+  <wo:ERQMGroupFieldset inset = "$true" legend = "$^legend">
+    <wo:if condition = "$hasChecked"><webobject name = "CBChecked" /></wo:if>
+    <wo:else><webobject name = "CBValue" /></wo:else>
+    <wo:genericContainer elementName = "label" for = "$javaScriptElementID"> <wo:str value = "$label" /> </wo:genericContainer>
+  </wo:ERQMGroupFieldset>
+</wo:if>
+<wo:else>
+  <wo:if condition = "$hasChecked"><webobject name = "CBChecked" /></wo:if>
+  <wo:else><webobject name = "CBValue" /></wo:else>
+  <wo:genericContainer elementName = "label" for = "$javaScriptElementID"> <wo:str value = "$label" /> </wo:genericContainer>
+</wo:else>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMNavBar" wocomponentcontent="true">    <binding name="id"/>
+    <binding name="data-iconpos"/>
+        <binding name="class"/>
+        <binding name="otherTagString"/>
+    </wo>
+</wodefinitions>

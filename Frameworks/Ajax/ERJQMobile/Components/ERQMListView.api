@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMListView" wocomponentcontent="true">    <binding defaults="Boolean" name="isNumberedList"/>
+    <binding name="data-theme"/>
+    <binding defaults="Boolean" name="data-inset"/>
+    <binding defaults="Boolean" name="data-filter"/>
+    
+    <binding name="data-split-icon"/>
+    <binding name="data-split-theme"/>
+    <binding name="data-divider-theme"/>
+    <binding name="data-filter-placeholder"/>
+    <binding name="data-count-theme"/>
+    <binding name="id"/>
+        <binding name="class"/>
+        <binding name="otherTagString"/>
+    <binding defaults="Boolean" name="data-autodividers"/>
+    <binding name="data-header-theme"/>
+        <binding name="data-filter-theme"/>
+        <binding name="data-icon"/>
+    <binding name="data-filter-label"/>
+        <binding defaults="Boolean" name="data-filter-hidelabel"/>
+        <binding defaults="Boolean" name="data-filter-mini"/>
+    <binding defaults="Boolean" name="data-disabled"/>
+    <binding name="filterFieldId"/>
+    </wo>
+</wodefinitions>

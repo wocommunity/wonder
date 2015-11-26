@@ -18,6 +18,15 @@ RadioButtonDisabled: WOGenericElement {
     disabled = true;
 }
 
+RadioButtonIsDisabled: WOConditional {
+	condition = disabled;
+}
+
+RadioButtonIsEnabled: WOConditional {
+	condition = disabled;
+	negate = true;
+}
+
 RadioButtonRepetition: ERXTable {
 	cellpadding = cellpadding;
 	cellspacing = cellspacing;

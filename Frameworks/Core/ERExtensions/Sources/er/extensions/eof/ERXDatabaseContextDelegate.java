@@ -58,10 +58,15 @@ import er.extensions.statistics.ERXStats.Group;
  * exception when a toOne relationship object is not found in the database and adds
  * debugging abilities to tracking down when faults are fired. It also supports a cache for
  * array fault that is checked before they are fetched from the database.
+ * 
+ * @property er.extensions.ERXDatabaseContextDelegate.Exceptions.regex regular expression to
+ *           check the exception test for if database connection should be reopened
  */
 public class ERXDatabaseContextDelegate {
 	
 	public static final String DatabaseContextFailedToFetchObject = "DatabaseContextFailedToFetchObject";
+	public static final String ERX_ADAPTOR_EXCEPTIONS_REGEX = "er.extensions.ERXDatabaseContextDelegate.Exceptions.regex";
+	public static final String ERX_ADAPTOR_EXCEPTIONS_REGEX_DEFAULT = ".*_obtainOpenChannel.*|.*Closed Connection.*|.*No more data to read from socket.*";
 	
     public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
     	/**
@@ -191,7 +196,8 @@ public class ERXDatabaseContextDelegate {
 				databaseContext.rollbackChanges();
 				throw e;
 			}
-			if(!handled && throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
+			String exceptionsRegex = ERXProperties.stringForKeyWithDefault(ERX_ADAPTOR_EXCEPTIONS_REGEX, ERX_ADAPTOR_EXCEPTIONS_REGEX_DEFAULT);
+			if(!handled && throwable.getMessage() != null && throwable.getMessage().matches(exceptionsRegex)) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
 					EOModel model = (EOModel)e.nextElement();

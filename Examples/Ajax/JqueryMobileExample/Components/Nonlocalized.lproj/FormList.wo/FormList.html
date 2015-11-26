@@ -1,68 +1,32 @@
-<wo:ERQMHtmlTemplate title="FormList">
-	<wo:ERQMHeaderBar string="FormList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="Zurück" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<wo:form action="$doSaveAction">
-			<wo:ERQMListView>
-	
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMInputString value="$stringField" string="String Input:" />
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMInputText value="$textField" string="Textarea:" />
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMInputSearch value="$searchField" string="Search Input:" />
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMInputFlipSwitch value="$flipSwitch" string="Flip switch:" stringOff="OFF" stringOn="ON" />
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMInputRange value="$range" string="Range:" min="0" max="100"/>
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMCheckboxList string="Choose Your Favorite:" list="$allCheckboxList1" item="$oneStringObject" selections="$selectedCheckboxList1"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
-				</wo:ERQMListViewElement>
-			
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMCheckboxList string="Font styling:" list="$allCheckboxList2" item="$oneStringObject" selections="$selectedCheckboxList2" isHorizontal="true"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
-				</wo:ERQMListViewElement>
-				
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMRadioList string="Choose a pet:" list="$allRadioList1" item="$oneStringObject" selection="$selectedRadioElement1"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
-				</wo:ERQMListViewElement>
-			
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMRadioList string="Layout view:" list="$allRadioList2" item="$oneStringObject" selection="$selectedRadioElement2" isHorizontal="true"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
-				</wo:ERQMListViewElement>
-
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMPopUpButton string="Choose shipping method:" list="$allPopUpList1" selection="$selectedPopUpElement1" />
-				</wo:ERQMListViewElement>
-
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMPopUpButton string="Custom Menu :" list="$allPopUpList1" selection="$selectedPopUpElement2" isPopUpWindow="true" />
-				</wo:ERQMListViewElement>
-
-				<wo:ERQMListViewElement isInputContainer="true">
-					<wo:ERQMGrid columnCount="2">
-						<wo:ERQMGridBlock blockNumber="1"><wo:ERQMButton linkResource="da://default" string="Cancel" theme="a" /></wo:ERQMGridBlock>
-						<wo:ERQMGridBlock blockNumber="2"><webobject name="SAVE_ACTION" /></wo:ERQMGridBlock>
-			    	</wo:ERQMGrid>
-				</wo:ERQMListViewElement>
-			
-			</wo:ERQMListView>
-		</wo:form>
-				
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "Form List">
+  <wo:form action = "$doSaveAction">
+    <wo:ERQMListView data-inset = "true">
+      <wo:ERQMListViewElement> <wo:ERQMInputText label = "String Input:" value = "$stringField" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputText value = "$textField" label = "Textarea:" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputSearch value = "$searchField" label = "Search Input:" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputFlipSwitch value = "$flipSwitch" label = "Flip switch:" stringOff = "OFF" stringOn = "ON" /> </wo:ERQMListViewElement>
+      <!--  -->
+      <wo:ERQMListViewElement>
+        <wo:ERQMCheckboxList string = "Choose Your Favorite:" list = "$allCheckboxList1" item = "$oneStringObject" selections = "$selectedCheckboxList1"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMCheckboxList string = "Font styling:" list = "$allCheckboxList2" item = "$oneStringObject" selections = "$selectedCheckboxList2" isHorizontal = "true"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMRadioList string = "Choose a pet:" list = "$allRadioList1" item = "$oneStringObject" selection = "$selectedRadioElement1"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMRadioList string = "Layout view:" list = "$allRadioList2" item = "$oneStringObject" selection = "$selectedRadioElement2" isHorizontal = "true"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton label = "Choose shipping method:" list = "$allPopUpList1" selection = "$selectedPopUpElement1" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton label = "Custom Menu :" list = "$allPopUpList1" selection = "$selectedPopUpElement2" data-native-menu = "true" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton label = "JQM Style Menu :" list = "$allPopUpList1" selection = "$selectedPopUpElement3" data-native-menu = "false" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMGrid columnCount = "2">
+          <wo:ERQMGridBlock blockNumber = "1"><wo:ERQMButton linkResource = "da://default" string = "Cancel" data-theme = "a" data-icon = "delete" /></wo:ERQMGridBlock>
+          <wo:ERQMGridBlock blockNumber = "2"><wo:ERQMSubmitButton action = "$doSaveAction" value = "Submit" data-theme = "b" data-icon = "check" /></wo:ERQMGridBlock>
+        </wo:ERQMGrid>
+      </wo:ERQMListViewElement>
+    </wo:ERQMListView>
+  </wo:form>
+</wo:JQPageWrapper>

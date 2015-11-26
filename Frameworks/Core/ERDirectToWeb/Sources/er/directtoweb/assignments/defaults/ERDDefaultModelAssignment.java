@@ -27,7 +27,7 @@ import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
- * A bunch of methods used for pulling default values from EOModels.<br />
+ * A bunch of methods used for pulling default values from EOModels.<br>
  * Provides defaults for the following keys:
  * <ul>
  * <li><code>smartAttribute</code></li>
@@ -134,14 +134,14 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     /**
      * Resolves the {@link EOAttribute} in a smarter manner using
      * the current object from the context as well as the propertyKey
-     * to determine the current attribute. Works even with inheirtance.
+     * to determine the current attribute. Works even with inheritance.
      * Works around the following problem:
      * An entity A has a relationship b to an entity B, which has a
      * subentity B1. B1 has an attribute k, which B does not have.
      * If in an inspect page for entity A, you use b.k as a display
      * key, then the D2W rules which are based on d2wContext.attribute
      * will not fire properly. This is because attribute is null, instead
-     * of containing <EOAttribute entity=B1 name=k>. The reason D2W does
+     * of containing &lt;EOAttribute entity=B1 name=k&gt;. The reason D2W does
      * not find it is that it uses the Model to find out the EOAttribute
      * and starts from A. Following the relationship b, gives a B, and
      * asking B for an attribute named k returns nil and you lose.
@@ -168,7 +168,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
             }
         }
         if (result==null) {
-            // default to the basic attribute if the above didnt' work
+            // default to the basic attribute if the above didn't work
             if (propertyKey!=null) result=c.attribute();
         }
         return result;
@@ -178,14 +178,14 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
      * Resolves the {@link EORelationship} in a smarter manner using
      * the current object from the context as well as the propertyKey
      * to determine the current relationship. Works even with inheritance.
-     * Works around the following problem:</br>
+     * Works around the following problem:<br>
      * An entity A has a relationship b to an entity B, which
      * has a subentity B1. B1 has a relationship k, which B does
      * not have. If in an inspect page for entity A, you use b.k
      * as a display key, then the D2W rules which are based on
      * d2wContext.relationship will not fire properly. This is
      * because relationship is null, instead of containing
-     * <EORelationship entity=B1 name=k>. The reason D2W does not
+     * &lt;EORelationship entity=B1 name=k&gt;. The reason D2W does not
      * find it is that it uses the Model to find out the EORelationship
      * and starts from A. Following the relationship b, gives a B, and
      * asking B for a relationship named k returns null and you lose.

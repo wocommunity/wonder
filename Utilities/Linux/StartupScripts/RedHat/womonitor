@@ -1,44 +1,76 @@
-#!/bin/bash
- 
-# chkconfig: - 90 20
-# description: Provides JavaMonitor service
- 
-# Source function library.
-. /etc/rc.d/init.d/functions
- 
+#! /bin/bash
+
+# chkconfig: 90 20
+# description: Provides womonitor service
+
+### BEGIN INIT INFO
+# Provides:          womonitor
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     3 5 6
+# Default-Stop:      0 1 2 6
+# Short-Description: Starts the WebObjects Monitor
+# Description:       Starts the WebObjects Monitor which is necessary to run
+#       WebObjects Applications and control them via multiple hosts.
+### END INIT INFO
+
+USER=wouser
 NEXT_ROOT="/opt"
 export NEXT_ROOT
- 
-PATH="/bin:/usr/bin:/usr/java/latest/bin"
-export PATH
- 
-USER=appserver
- 
+TIME="[`date +%d.%m.%Y\ %H:%M:%S`]:"
+
+###############################################################################
+
+# Create Logfile if not already exists and setup permissions.
+if [ ! -e "/var/log/womonitor.log" ]; then
+    touch "/var/log/womonitor.log"
+    chown $USER "/var/log/womonitor.log"
+    chgrp root "/var/log/womonitor.log"
+    chmod 640 "/var/log/womonitor.log"
+fi
+
+# Create Logroate Job if available.
+if [ -e "/etc/logrotate.d" ] && [ ! -e "/etc/logrotate.d/womonitor" ]; then
+    echo '/var/log/womonitor.log {' >> /etc/logrotate.d/womonitor
+    echo '    daily'                >> /etc/logrotate.d/womonitor
+    echo '    rotate 5'             >> /etc/logrotate.d/womonitor
+    echo '    compress'             >> /etc/logrotate.d/womonitor
+    echo '    delaycompress'        >> /etc/logrotate.d/womonitor
+    echo '    missingok'            >> /etc/logrotate.d/womonitor
+    echo '    notifempty'           >> /etc/logrotate.d/womonitor
+    echo '}'                        >> /etc/logrotate.d/womonitor
+fi
+
+###############################################################################
+
 # See how we were called.
 case "$1" in
+    status)
+        WOMONITOR_PID=`ps aux | awk '/WOPort 1086/ && !/awk/ {print $2}'`
+        if [ "$WOMONITOR_PID" != "" ]; then
+            echo "$TIME Service is running with PID $WOMONITOR_PID" 2>&1 | tee -a /var/log/womonitor.log
+        else
+            echo "$TIME Service is not running" 2>&1 | tee -a /var/log/womonitor.log
+        fi
+        ;;
     start)
-        echo -n "Starting JavaMonitor: "
-		su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 56789 &"
-        echo
+        echo "$TIME Starting womonitor: " 2>&1 | tee -a /var/log/womonitor.log
+        su $USER -c -l "$NEXT_ROOT/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 1086 2>&1 | tee -ai /var/log/womonitor.log &"
         ;;
     stop)
-		echo -n "Shutting down JavaMonitor: "
-		MONITOR_PID=`ps aux | awk '/WOPort 56789/ && !/awk/ {print $2}'`
-		kill $MONITOR_PID
-        echo
+        echo "$TIME Shutting down womonitor: " 2>&1 | tee -a /var/log/womonitor.log
+        WOMONITOR_PID=`ps aux | awk '/WOPort 1086/ && !/awk/ {print $2}'`
+        kill $WOMONITOR_PID
         ;;
     restart)
         $0 stop
         $0 start
         ;;
-    *)
-        echo -n "Usage: $0 {start|stop|restart}"
-        exit 1
 esac
- 
+
 if [ $# -gt 1 ]; then
     shift
     $0 $*
 fi
- 
+
 exit 0

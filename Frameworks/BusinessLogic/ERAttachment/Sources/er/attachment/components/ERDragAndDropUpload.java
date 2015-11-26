@@ -130,7 +130,7 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 					File uploadedFile = File.createTempFile("DragAndDropUpload-", ".tmp");
 					os = new FileOutputStream(uploadedFile);
 					data.writeToStream(os);
-					ERAttachment upload = ERAttachmentProcessor.processorForType(storageType()).process(editingContext(), uploadedFile, filename, mimetype, storageType(), null);
+					ERAttachment upload = ERAttachmentProcessor.processorForType(storageType()).process(editingContext(), uploadedFile, filename, mimetype, configurationName(), null);
 					setValueForBinding(upload, "attachment");
 					invokeAction = true;
 					FileUtils.deleteQuietly(uploadedFile);

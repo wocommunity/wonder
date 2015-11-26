@@ -98,7 +98,7 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
 					+ _address.valueInComponent(context.component()) + "\" ");
 		}
     	
-    	if((_lng!=null) && (_lng!=null)) {
+    	if (_lng != null && _lat != null) {
     		response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
     		response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
     	}

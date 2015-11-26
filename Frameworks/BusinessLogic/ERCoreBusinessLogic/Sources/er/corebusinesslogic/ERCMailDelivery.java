@@ -68,7 +68,7 @@ public class ERCMailDelivery {
      * @return comma separated and cleaned up list of email addresses
      */
     public static String commaSeparatedListFromArray(NSArray a) {
-        StringBuffer result=new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (a!=null) {
             for (Enumeration e=a.objectEnumerator(); e.hasMoreElements(); ) {
                 String address=(String)e.nextElement();

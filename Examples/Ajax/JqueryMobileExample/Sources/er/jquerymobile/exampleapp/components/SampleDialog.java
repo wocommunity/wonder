@@ -1,17 +1,19 @@
 package er.jquerymobile.exampleapp.components;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-@SuppressWarnings("serial")
-public class SampleDialog extends WOComponent {
+import er.extensions.components.ERXComponent;
 
-  //********************************************************************
-  //  Constructor
-  //********************************************************************
+public class SampleDialog extends ERXComponent {
 
-  public SampleDialog(WOContext aContext) {
-    super(aContext);
-  }
+	private static final long serialVersionUID = 1L;
+
+	//********************************************************************
+	//  Constructor : コンストラクタ
+	//********************************************************************
+
+	public SampleDialog(WOContext aContext) {
+		super(aContext);
+	}
 
 }

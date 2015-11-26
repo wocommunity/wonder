@@ -5,11 +5,12 @@ import com.webobjects.appserver.WOContext;
 
 import er.jquerymobile.exampleapp.businessLogic.SampleComponentBase;
 
-@SuppressWarnings("serial")
 public class FormEntries extends SampleComponentBase {
 
+  private static final long serialVersionUID = 1L;
+
   //********************************************************************
-  //  Constructor
+  //  Constructor : コンストラクタ
   //********************************************************************
 
   public FormEntries(WOContext aContext) {
@@ -17,7 +18,7 @@ public class FormEntries extends SampleComponentBase {
   }
 
   //********************************************************************
-  //  Methods
+  //  Methods : メソッド
   //********************************************************************
 
   public String _testString = null;
@@ -47,7 +48,7 @@ public class FormEntries extends SampleComponentBase {
   public Boolean testCheckbox = Boolean.FALSE;
 
   //********************************************************************
-  //  Action
+  //  Actions : アクション
   //********************************************************************
 
   public WOActionResults doTestAction() {

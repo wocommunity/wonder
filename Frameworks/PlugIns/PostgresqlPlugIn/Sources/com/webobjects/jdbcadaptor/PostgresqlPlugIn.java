@@ -3,7 +3,8 @@ package com.webobjects.jdbcadaptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -72,7 +73,8 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     boolean shouldUseBundledJdbcInfo = false;
     String url = connectionURL();
     if (url != null) {
-      shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*(\\?|\\?.*&)" + PostgresqlPlugIn.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)(\\&|$)");
+      Matcher matcher = Pattern.compile(PostgresqlPlugIn.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)").matcher(url.toLowerCase());
+      shouldUseBundledJdbcInfo = matcher.find();
     }
     return shouldUseBundledJdbcInfo;
   }
@@ -147,15 +149,15 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     }
   }
 
-  /**                                                                                                                                                         
-   * Expression class to create. We have custom code, so we need our own class.                                                                               
+  /**
+   * Expression class to create. We have custom code, so we need our own class.
    */
   @Override
-  public Class defaultExpressionClass() {
+  public Class<? extends JDBCExpression> defaultExpressionClass() {
     return PostgresqlExpression.class;
   }
 
-  /** 
+  /**
    * Overrides the parent implementation to provide a more efficient mechanism for generating primary keys,
    * while generating the primary key support on the fly.
    *
@@ -210,7 +212,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
                   pk = Long.valueOf(pkObj.longValue());
                 }
                 results.addObject(new NSDictionary<String, Object>(pk, attrName));
-              }            
+              }
             }
           }
           finally {
@@ -273,7 +275,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return  the name of the sequence
    */
   protected static String _sequenceNameForEntity(EOEntity entity) {
-    /* timc 2006-11-06 
+    /* timc 2006-11-06
      * This used to say ... + "_SEQ";
      * _SEQ would get converted to _seq because postgresql converts all unquoted identifiers to lower case.
     * In the future we may use enableIdentifierQuoting for sequence names so we need to set the correct case here in the first place

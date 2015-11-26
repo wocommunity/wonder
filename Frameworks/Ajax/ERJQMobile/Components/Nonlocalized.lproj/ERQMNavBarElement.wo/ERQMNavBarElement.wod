@@ -1,0 +1,17 @@
+LnkAction : ERXHyperlinkResource {
+	action = ^action;
+	string = ^string;
+	otherTagString = otherTagString;
+}
+
+LnkResource : ERXHyperlinkResource {
+	linkResource = ^linkResource;
+	string = ^string;
+	otherTagString = otherTagString;
+}
+
+LnkLnk : WOHyperlink {
+	href = ^href;
+	string = ^string;
+	otherTagString = otherTagString;
+}

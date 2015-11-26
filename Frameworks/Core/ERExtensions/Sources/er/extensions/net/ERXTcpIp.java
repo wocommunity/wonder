@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
@@ -20,10 +21,10 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * <span class="ja">
+ * <div class="ja">
  * 	ネットワーク関連のツール類
  * 	特に TCP/IP
- * </span>
+ * </div>
  */
 public class ERXTcpIp {
 
@@ -34,56 +35,56 @@ public class ERXTcpIp {
 	//********************************************************************
 
 	/**
-	 * <span class="ja">Internet Protocol バージョン 4 (IPv4) アドレスエラー値 -> -1</span>
+	 * <div class="ja">Internet Protocol バージョン 4 (IPv4) アドレスエラー値 -&gt; -1</div>
 	 */
 	public static final long INET4_IPADDRESS_ERROR_LONG	= -1;
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	Internet Protocol バージョン 4 (IPv4) アドレスを数字(long)にしたときの最小値
 	 * 	0.0.0.0 = 0*256*256*256 + 0*256*256 + 0*256 + 0 = 0
-	 * </span>
+	 * </div>
 	 */
 	public static final long INET4_IPADDRESS_MINIMUM_LONG = 0;
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	Internet Protocol バージョン 4 (IPv4) アドレスを数字(long)にしたときの最大値
 	 * 	255.255.255.255 = 255*256*256*256 + 255*256*256 + 255*256 + 255 = 4294967295
-	 * </span>
+	 * </div>
 	 */
 	public static final long INET4_IPADDRESS_MAXIMUM_LONG = 255L*256L*256L*256L + 255L*256L*256L + 255L*256L + 255L;
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	Internet Protocol バージョン 4 (IPv4) アドレス正規表現パターン
 	 * 「0.0.0.0」
 	 *  "[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}"
-	 * </span>
+	 * </div>
 	 */
 	public static final String	INET4_IPADDRESS_PATTERN_STR	= "([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})";
 	public static final Pattern	INET4_IPADDRESS_PATTERN	= Pattern.compile(INET4_IPADDRESS_PATTERN_STR);
 
 	/** 
-	 * <span class="ja">INET : ローカル・アドレス<span>
+	 * <div class="ja">INET : ローカル・アドレス</div>
 	 */
 	public static final String LOCAL_IP_ADDRESS = "127.0.0.1";
 
 	/**
-	 * <span class="ja">ET定数:. (ドット) </span>
+	 * <div class="ja">ET定数:. (ドット) </div>
 	 */
 	private static final String	_DOT = ".";
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	特殊記号やコントロールコードなど基本的な定数
 	 *	『 _ 』：_ アンダーバー
-	 * </span>
+	 * </div>
 	 */
 	public static final String UNDER_BAR = "_";
 
 	/** 
-	 * <span class="ja">NET定数:"000" IPアドレス数字フォーマット </span>
+	 * <div class="ja">NET定数:"000" IPアドレス数字フォーマット </div>
 	 */
 	private static final DecimalFormat _3DIGIT_FORMAT = new DecimalFormat("000");
 
@@ -92,7 +93,7 @@ public class ERXTcpIp {
 	//********************************************************************
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	Internet Protocol バージョン 4 (IPv4) アドレス(文字列)をフォーマット。
 	 *  入力値の各IP値(0〜255)の桁数を0で埋めた3文字にフォーマットする。
 	 *　　入力値: 0.0.0.0
@@ -101,7 +102,7 @@ public class ERXTcpIp {
 	 * 	@param aIPstr - IPアドレスの文字列形式は「0.0.0.0」〜「255.255.255.255」のみ。
 	 * 
 	 *  @return Stringフォーマット後の文字列。 null:IPアドレスが正しくないとき
-	 * </span>
+	 * </div>
 	 */
 	public static String inet4IpAddressTo3digitFromat(String aIPstr){
 		if(inet4IpAddressToLong(aIPstr) == INET4_IPADDRESS_ERROR_LONG) return null;
@@ -130,14 +131,14 @@ public class ERXTcpIp {
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	Internet Protocol バージョン 4 (IPv4) アドレス(文字列)を数字(long)に変換。
 	 *   各桁が「0〜255」の範囲外なら-1:IPアドレスの指定ミスを返す。
 	 *
 	 * 	@param aIPstr - IPアドレスの文字列形式は「0.0.0.0」〜「255.255.255.255」のみ。
 	 * 
 	 * 	@return long 変換後のIPアドレス数値。-1:IPアドレスの指定ミス。
-	 * </span>
+	 * </div>
 	 */
 	public static long inet4IpAddressToLong(String aIPstr){
 		long ip = INET4_IPADDRESS_ERROR_LONG;
@@ -169,49 +170,49 @@ public class ERXTcpIp {
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	指定したInternet Protocol バージョン 4 (IPv4) アドレス(long)が範囲内かの判断。
 	 *  判断ロジック
-	 *   ((INET4_IPADDRESS_MINIMUM_LONG <= ipl) && (ipl <= INET4_IPADDRESS_MAXIIMUM_LONG))
+	 *   ((INET4_IPADDRESS_MINIMUM_LONG &lt;= ipl) &amp;&amp; (ipl &lt;= INET4_IPADDRESS_MAXIIMUM_LONG))
 	 *
 	 * 	@param ipl - IPアドレスの数値。
 	 * 
 	 * 	@return boolean	true:範囲内のIPアドレス
-	 * </span>
+	 * </div>
 	 */
 	public static boolean isInet4IPAddressRange( long ipl ){
 		return ((INET4_IPADDRESS_MINIMUM_LONG <= ipl) && (ipl <= INET4_IPADDRESS_MAXIMUM_LONG));
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	指定したInternet Protocol バージョン 4 (IPv4) アドレス(文字列)が範囲内かの判断。
 	 *  判断ロジック
-	 *   ((INET4_IPADDRESS_MINIMUM_LONG <= ipl) && (ipl <= INET4_IPADDRESS_MAXIIMUM_LONG))
+	 *   ((INET4_IPADDRESS_MINIMUM_LONG &lt;= ipl) &amp;&amp; (ipl &lt;= INET4_IPADDRESS_MAXIIMUM_LONG))
 	 *
 	 * 	@param ipStr - IPアドレスの文字列。「0.0.0.0」〜「255.255.255.255」のみ。
 	 * 	@return boolean true:範囲内のIPアドレス
-	 * </span>
+	 * </div>
 	 */
 	public static boolean isInet4IPAddressRange( String ipStr ){
 		return isInet4IPAddressRange(inet4IpAddressToLong(ipStr));
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	指定したInternet Protocol バージョン 4 (IPv4) アドレス(long)が指定した範囲内かの判断。
 	 *  判断ロジック
 	 *   次の場合には直ぐに範囲外
 	 *　　　ipStartが範囲外 or ipが範囲外 or ipが範囲外
 	 *   3つの指定IPが範囲内の時に次の判断を実施
-	 *   ((ipStart <= ip) && (ip <= ipEnd))
+	 *   ((ipStart &lt;= ip) &amp;&amp; (ip &lt;= ipEnd))
 	 *
 	 * 	@param ipStart - IPアドレス-開始。
 	 * 	@param ip - IPアドレス-比較。
 	 * 	@param ipEnd - IPアドレス-終了。
 	 * 
 	 * 	@return boolean	true:範囲内のIPアドレス
-	 * </span>
+	 * </div>
 	 */
 	public static boolean isInet4IPAddressWithinRange( long ipStart, long ip, long ipEnd ){
 		if(!isInet4IPAddressRange(ipStart) || !isInet4IPAddressRange(ip) || !isInet4IPAddressRange(ip)) return false;
@@ -219,20 +220,20 @@ public class ERXTcpIp {
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	指定したInternet Protocol バージョン 4 (IPv4) アドレス(文字列)が指定した範囲内かの判断。
 	 *  判断ロジック
 	 *   次の場合には直ぐに範囲外
 	 *　　　ipStrStartが範囲外 or ipStrが範囲外 or ipEndが範囲外
 	 *   3つの指定IPが範囲内の時に次の判断を実施
-	 *   ((ipStrStart <= ipStr) && (ipStr <= ipStrEnd))
+	 *   ((ipStrStart &lt;= ipStr) &amp;&amp; (ipStr &lt;= ipStrEnd))
 	 *
 	 * @param ipStrStart -	IPアドレスの文字列-開始。「0.0.0.0」〜「255.255.255.255」のみ。
 	 * @param ipStr - IPアドレスの文字列-比較。「0.0.0.0」〜「255.255.255.255」のみ。
 	 * @param ipStrEnd - IPアドレスの文字列-終了。「0.0.0.0」〜「255.255.255.255」のみ。
 	 * 
 	 * @return boolean true:範囲内のIPアドレス
-	 * </span>
+	 * </div>
 	 */
 	public static boolean isInet4IPAddressWithinRange( String ipStrStart, String ipStr, String ipStrEnd ){
 		long ipStart	= inet4IpAddressToLong(ipStrStart);
@@ -242,12 +243,12 @@ public class ERXTcpIp {
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	マシンで設定されているIPリストを取得します。
 	 * 	環境設定については： A10Properties. InIpRangeOperatorを参照
 	 * 
 	 * 	@return IP 配列が戻ります
-	 * </span>
+	 * </div>
 	 */
 	public static NSArray<String> machineIpList() {
 
@@ -298,18 +299,18 @@ public class ERXTcpIp {
 	}
 
 	/** 
-	 * <span class="ja">動作マシンが所有しているIPアドレス保持用変数：キャシュ用</span>
+	 * <div class="ja">動作マシンが所有しているIPアドレス保持用変数：キャシュ用</div>
 	 */
 	private static NSArray<String> _machineIpList = NSArray.EmptyArray;
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 *  ネットワークインアーフェースからIP一覧を得る
 	 *  
 	 * 	@return 動作マシンのネットワーク設定が所有しているIPアドレス配列
 	 * 
 	 * 	@exception Exception
-	 * </span>
+	 * </div>
 	 */
 	private static NSArray<String> _machineIpList() throws Exception {
 		// ワーク用
@@ -358,7 +359,7 @@ public class ERXTcpIp {
 	}
 
 	/**
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 	ドメイン又は ip リストを全件表示するドメイン又は ip リストに変換します
 	 * 
 	 * 	例：
@@ -366,10 +367,10 @@ public class ERXTcpIp {
 	 * 	1.2.3.4 はそのままで戻る
 	 * 	1.2.3.4-6 は (1.2.3.4, 1.2.3.5, 1.2.3.6) として戻る
 	 * 
-	 * 	@param data - NSArray<String> ドメイン又は ip リスト
+	 * 	@param data - NSArray&lt;String&gt; ドメイン又は ip リスト
 	 * 
 	 * 	@return 全件のドメイン又は ip リスト
-	 * </span>
+	 * </div>
 	 */
 	public static NSArray<String> fullDomainIpList(NSArray<String> data) {
 		NSMutableArray<String> results = new NSMutableArray<String>(data.count());
@@ -380,7 +381,7 @@ public class ERXTcpIp {
 
 			// 文字で始まるドメイン
 			char firstLetter = string.charAt(0);  
-			if(!ERXStringUtilities.isDigitsOnly("" + firstLetter)) {
+			if(!StringUtils.isNumeric("" + firstLetter)) {
 				results.addObject(string);
 
 				// IP を調査し追加すること

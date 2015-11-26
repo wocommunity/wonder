@@ -27,6 +27,7 @@ public class ERXRestFormat {
 	public static final String XML_KEY = "xml";
 	public static final String FORM_KEY = "form";
 	public static final String BINARY_PLIST_KEY = "bplist";
+	public static final String EMBER_KEY = "ember";
 
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 	
@@ -41,33 +42,13 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.HTML_KEY, "text/html");
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, false, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
 		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
+		ERXRestFormat.registerFormatNamed(new ERXEmberRestParser(), new ERXEmberRestWriter(), new ERXEmberFormatDelegate("id", "type", "nil", true, true, false, false), ERXRestFormat.EMBER_KEY, "application/json");
 	}
 
 	private final String _name;
 	private final IERXRestParser _parser;
 	private final IERXRestWriter _writer;
-	private final ERXRestFormat.Delegate _delegate;
-
-	// These are going to be killed soon ...
-	@Deprecated
-	public static final ERXRestFormat JSON = json();
-	@Deprecated
-	public static final ERXRestFormat JS = ERXRestFormat.formatNamed(ERXRestFormat.JS_KEY);
-	@Deprecated
-	public static final ERXRestFormat PLIST = plist();
-	@Deprecated
-	public static final ERXRestFormat RAILS = ERXRestFormat.formatNamed(ERXRestFormat.RAILS_KEY);
-	@Deprecated
-	public static final ERXRestFormat XML = xml();
-	@Deprecated
-	public static final ERXRestFormat HTML = html();
-	@Deprecated
-	public static final ERXRestFormat GIANDUIA_JSON = ERXRestFormat.formatNamed("gndj");
-	@Deprecated
-	public static final ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.formatNamed("gndp");
-	@Deprecated
-	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
-	
+	private final ERXRestFormat.Delegate _delegate;	
 	    
 	/**
 	 * Returns the registered html form format.

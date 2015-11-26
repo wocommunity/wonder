@@ -22,9 +22,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERCloudFilesAttachment;
-import er.extensions.concurrency.ERXAsyncQueue;
-import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXExceptionUtilities;
+import er.attachment.upload.ERAttachmentUploadQueue;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -49,7 +47,7 @@ public class ERCloudFilesAttachmentProcessor extends
 	private ERCloudFilesUploadQueue _queue;
 
 	public ERCloudFilesAttachmentProcessor() {
-		_queue = new ERCloudFilesUploadQueue();
+		_queue = new ERCloudFilesUploadQueue("ERCloudFilesAsyncQueue", this);
 		_queue.start();
 	}
 
@@ -232,115 +230,33 @@ public class ERCloudFilesAttachmentProcessor extends
 
 	}
 
-	public class ERCloudFilesQueueEntry {
-		private File _uploadedFile;
-		private ERCloudFilesAttachment _attachment;
-
-		public ERCloudFilesQueueEntry(File uploadedFile, ERCloudFilesAttachment attachment) {
-			_uploadedFile = uploadedFile;
-			_attachment = attachment;
-		}
-
-		public File uploadedFile() {
-			return _uploadedFile;
-		}
-
-		public ERCloudFilesAttachment attachment() {
-			return _attachment;
-		}
-	}
-
-	public class ERCloudFilesUploadQueue extends ERXAsyncQueue<ERCloudFilesQueueEntry> {
-		private EOEditingContext _editingContext;
-
-		public ERCloudFilesUploadQueue() {
-			super("ERS3AsyncQueue");
-			_editingContext = ERXEC.newEditingContext();
-		}
-
-		public void enqueue(ERCloudFilesAttachment attachment) {
-			_editingContext.lock();
-			try {
-			  ERCloudFilesAttachment localAttachment = attachment
-						.localInstanceIn(_editingContext);
-				ERCloudFilesQueueEntry entry = new ERCloudFilesQueueEntry(
-						attachment._pendingUploadFile(), localAttachment);
-				enqueue(entry);
-			} finally {
-				_editingContext.unlock();
-			}
+	public class ERCloudFilesUploadQueue extends ERAttachmentUploadQueue<ERCloudFilesAttachment> {
+		public ERCloudFilesUploadQueue(String name, ERAttachmentProcessor<ERCloudFilesAttachment> processor) {
+			super(name, processor);
 		}
 
 		@Override
-		public void process(ERCloudFilesQueueEntry object) {
-		  ERCloudFilesAttachment attachment = object.attachment();
+		protected void performUpload(EOEditingContext editingContext, ERCloudFilesAttachment attachment, File uploadedFile) throws Exception {
+			String bucket;
+			String key;
+			String mimeType;
+			String originalFileName = null;
 
-			File uploadedFile = object.uploadedFile();
-			if (uploadedFile != null && uploadedFile.exists()) {
-				String bucket;
-				String key;
-				String mimeType;
-				String configurationName;
-				String originalFileName = null;
+			editingContext.lock();
 
-				_editingContext.lock();
-				try {
-					bucket = attachment.container();
-					key = attachment.key();
-					mimeType = attachment.mimeType();
-					configurationName = attachment.configurationName();
-					if (proxyAsAttachment(attachment)) {
-						originalFileName = attachment.originalFileName();
-					}
-				} finally {
-					_editingContext.unlock();
+			try {
+				bucket = attachment.container();
+				key = attachment.key();
+				mimeType = attachment.mimeType();
+
+				if (proxyAsAttachment(attachment)) {
+					originalFileName = attachment.originalFileName();
 				}
-
-				try {
-					performUpload(uploadedFile, originalFileName,
-									bucket, key, mimeType, attachment);
-
-					_editingContext.lock();
-					try {
-						attachment.setAvailable(Boolean.TRUE);
-						_editingContext.saveChanges();
-					} finally {
-						_editingContext.unlock();
-					}
-					if (delegate() != null) {
-						delegate()
-								.attachmentAvailable(
-										ERCloudFilesAttachmentProcessor.this,
-										attachment);
-					}
-				} catch (Throwable t) {
-					if (delegate() != null) {
-						delegate()
-								.attachmentNotAvailable(
-										ERCloudFilesAttachmentProcessor.this,
-										attachment,
-										ERXExceptionUtilities.toParagraph(t));
-					}
-					ERAttachmentProcessor.log.error("Failed to upload '"
-							+ uploadedFile + "' to CloudFiles.", t);
-				} finally {
-					if (attachment._isPendingDelete()) {
-						uploadedFile.delete();
-					}
-				}
-			} else {
-				if (delegate() != null) {
-					delegate()
-							.attachmentNotAvailable(
-									ERCloudFilesAttachmentProcessor.this,
-									attachment,
-									"Missing attachment file '" + uploadedFile
-											+ "'.");
-				}
-				ERAttachmentProcessor.log.error("Missing attachment file '"
-						+ uploadedFile + "'.");
+			} finally {
+				editingContext.unlock();
 			}
+
+			((ERCloudFilesAttachmentProcessor)_processor).performUpload(uploadedFile, originalFileName, bucket, key, mimeType, attachment);
 		}
 	}
-
 }

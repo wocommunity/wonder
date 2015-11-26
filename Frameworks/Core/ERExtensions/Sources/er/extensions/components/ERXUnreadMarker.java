@@ -13,7 +13,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Nice for denoting that something has not been viewed. Extended in look frameworks.<br />
+ * Nice for denoting that something has not been viewed. Extended in look frameworks.
  * 
  * @binding item
  * @binding list

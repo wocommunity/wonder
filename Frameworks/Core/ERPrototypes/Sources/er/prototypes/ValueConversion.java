@@ -4,9 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
@@ -31,40 +29,27 @@ import er.extensions.foundation.ERXMutableDictionary;
 public class ValueConversion {
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ValueConversion.class);
-	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	
+    
 	public static Date jodaLocalTime(LocalTime value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.set(Calendar.HOUR_OF_DAY, value.getHourOfDay());
-		gc.set(Calendar.MINUTE, value.getMinuteOfHour());
-		gc.set(Calendar.SECOND, value.getSecondOfMinute());
-		gc.set(Calendar.MILLISECOND, value.getMillisOfSecond());
-		return gc.getTime();
+		Date javaTime = value.toDateTimeToday().toDate();
+		return javaTime;
 	}
 
 	public static Date jodaLocalDate(LocalDate value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.set(Calendar.YEAR, value.getYear());
-		gc.set(Calendar.MONTH, value.getMonthOfYear() -1);
-		gc.set(Calendar.DAY_OF_MONTH, value.getDayOfMonth());
-		return gc.getTime();
+		Date javaDate = value.toDate();
+		return javaDate;
 	}
 	
 	public static Date jodaLocalDateTime(LocalDateTime value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.set(Calendar.YEAR, value.getYear());
-		gc.set(Calendar.MONTH, value.getMonthOfYear() -1);
-		gc.set(Calendar.DAY_OF_MONTH, value.getDayOfMonth());
-		gc.set(Calendar.HOUR_OF_DAY, value.getHourOfDay());
-		gc.set(Calendar.MINUTE, value.getMinuteOfHour());
-		gc.set(Calendar.SECOND, value.getSecondOfMinute());
-		gc.set(Calendar.MILLISECOND, value.getMillisOfSecond());
-		return gc.getTime();
+		Date javaDate = value.toDate();
+		return javaDate;
 	}
 
 	public static Date jodaDateTime(DateTime value) {
-		Date d = new Date(value.getMillis());
-		return d;
+		long dateInMillis = value.toInstant().getMillis();
+		int offset = TimeZone.getDefault().getOffset(dateInMillis);
+		Date javaDate = new Date(dateInMillis - offset);
+		return javaDate;
 	}
 	
 	@SuppressWarnings("rawtypes")

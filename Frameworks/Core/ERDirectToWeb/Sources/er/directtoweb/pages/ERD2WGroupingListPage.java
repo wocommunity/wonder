@@ -11,7 +11,8 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Displays a groups of objects grouped by a key.<br />
+ * Displays a groups of objects grouped by a key.
+ * 
  * @d2wKey groupingKey
  * @d2wKey groupingComponentName
  * @d2wKey groupingItemKey

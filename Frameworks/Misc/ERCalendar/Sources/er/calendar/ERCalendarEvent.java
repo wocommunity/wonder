@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSTimestamp;
  * {@link ERSimpleEvent ERSimpleEvent}, or any other class implementing
  * this interface.
  *
- * @author 	Johan Carlberg <johan@oops.se>
+ * @author 	Johan Carlberg &lt;johan@oops.se&gt;
  * @version 	1.0, 2002-09-30
  */
 

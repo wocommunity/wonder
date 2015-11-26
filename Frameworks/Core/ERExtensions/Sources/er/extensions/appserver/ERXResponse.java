@@ -38,8 +38,10 @@ public class ERXResponse extends WOResponse {
 	private LinkedHashMap<String, Integer> marks;
 	private Stack<Object> _contentStack;
 	private WOContext _context;
+	private boolean _allowClientCaching;
 
 	public ERXResponse() {
+		_allowClientCaching = false;
 	}
 
 	/**
@@ -207,7 +209,7 @@ public class ERXResponse extends WOResponse {
 
 	/**
 	 * Overridden to <b>not</b> call super if trying to download an attachment
-	 * to IE.
+	 * to IE or if allowClientCaching is <code>true</code>.
 	 * 
 	 * @see com.webobjects.appserver.WOResponse#disableClientCaching()
 	 * 
@@ -215,13 +217,32 @@ public class ERXResponse extends WOResponse {
 	@Override
 	public void disableClientCaching() {
 		boolean isIEDownloadingAttachment = isIE() && isAttachment() && !isHTML();
-		if (!isIEDownloadingAttachment) {
+		if (!isIEDownloadingAttachment && !_allowClientCaching) {
 			//NSLog.out.appendln("Disabling client caching");
 			super.disableClientCaching();
 		}
 		else {
 			//NSLog.out.appendln("Allowing IE client caching");
 		}
+	}
+	
+	/**
+	 * Can be used to enable client-side caching of the response content,
+	 * for example if the response contains a static image.
+	 * Normally it will be prevented by {@link #disableClientCaching()}.
+	 * Note that additionally you might need to set the cache-control header.
+	 * 
+	 * @param allowClientCaching <code>true</code> prevents calling {@link #disableClientCaching()}
+	 */
+	public void setAllowClientCaching(boolean allowClientCaching) {
+		this._allowClientCaching = allowClientCaching;
+	}
+
+	/**
+	 * @return <code>true</code> if client-side caching shall be allowed
+	 */
+	public boolean allowClientCaching() {
+		return _allowClientCaching;
 	}
 
 	/**

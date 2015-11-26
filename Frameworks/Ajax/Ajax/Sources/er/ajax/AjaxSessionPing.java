@@ -49,9 +49,9 @@ public class AjaxSessionPing extends AjaxDynamicElement {
         response.appendContentString("<script>var AjaxSessionPinger = new Ajax.ActivePeriodicalUpdater('AjaxSessionPinger', '");
 
         if (booleanValueForBinding("keepSessionAlive", false, component)) {
-            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSessionAndKeepAlive", null));
+            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSessionAndKeepAlive", null, context.secureMode(), false));
         } else {
-            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSession", null));
+            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSession", null, context.secureMode(), false));
         }
 
         response.appendContentString("', ");

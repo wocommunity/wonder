@@ -22,23 +22,24 @@ import er.extensions.eof.ERXEOEncodingUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * This component can be used for two things:<br/>
- * 1) Generating direct action urls for use in
- * components that are being e-mailed to people.
- * 2) Support for encoding enterprise objects in
+ * This component can be used for two things:
+ * <ol>
+ * <li>Generating direct action urls for use in
+ * components that are being e-mailed to people.</li>
+ * <li>Support for encoding enterprise objects in
  * the form values of generated urls.
  * At the moment this component still contains some
  * custy code that needs to be cleaned up before it
- * can really be used, like adding the .wo and .api files ;0.<br/>
- * <br/>
- * Synopsis:<br/>
+ * can really be used, like adding the .wo and .api files ;0.</li>
+ * </ol>
+ * <h3>Synopsis:</h3>
  * [actionClass=<i>anActionClass</i>];directActionName=<i>aDirectActionName</i>;[entityNameSeparator=<i>aSeparator</i>;]
  * [relative=<i>aBoolean</i>;][shouldEncryptObjectFormValues=<i>aBoolean</i>;][objectsForFormValues=<i>anArray</i>;]
  * [bindingDictionary=<i>aDictionary</i>;][unencryptedBindingDictionary=<i>aDictionary</i>;]
  *
  * @binding actionClass direct action class to be used
  * @binding directActionName direct action name
- * @binding entityNameSeparator separator used when constructiong urls with encoded enterprise objects
+ * @binding entityNameSeparator separator used when constructing urls with encoded enterprise objects
  * @binding relative generates relative or absolute url
  * @binding shouldEncryptObjectFormValues boolean flag that tells if the primary keys
  *		of the enterprise objects should be encrypted using blowfish
@@ -172,7 +173,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         // Typically, something like "DirectActionClass/actionMethod".
         // Keep consistency with directActionName semantics as it is defined in directActionHref static method
         if(hasBinding("actionClass")) {
-            StringBuffer daBuffer = new StringBuffer();
+            StringBuilder daBuffer = new StringBuilder();
             daBuffer.append(valueForBinding("actionClass"));
             daBuffer.append('/');
             daBuffer.append(valueForBinding("directActionName"));
@@ -248,7 +249,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = encryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
@@ -260,7 +261,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = unencryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(value);
             }
         }

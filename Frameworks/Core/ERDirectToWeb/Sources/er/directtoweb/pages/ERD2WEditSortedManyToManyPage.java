@@ -495,7 +495,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     @Override
     public void appendToResponse(WOResponse r, WOContext c){
         if(((ERXSession)session()).javaScriptEnabled()){
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                 e.hasMoreElements();){
                 result.append(e.nextElement().hashCode()+",");

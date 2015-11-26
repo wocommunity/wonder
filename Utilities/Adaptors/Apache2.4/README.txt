@@ -49,6 +49,20 @@ IMPORTANT NOTE ON USE WITH SSL
 
 You cannot use an adaptor module build with -DAPACHE_SECURITY_ENABLED if you don't have your server compiled with SSL support.  mod_ssl is now Apache's standard way to do SSL. If you're not using SSL, change the ENABLE_SSL_SUPPORT flag in the Makefile to reflect that fact.
 
+COMPILING FOR APACHE ON WINDOWS
+
+Use the binaries supplied by http://www.apachelounge.com/
+axps is not supplied with Windows binaries, but its not really needed.
+Makefile and NMakefile have been modified to compile the module without axps.
+
+1. If you prefer MingW (32 bit or 64 bit editing)
+   a) configure make.config: ADAPTOR_OS=MINGW, APACHE path etc...
+   b) for 64bit Apache, patch %APACHE%/include/apr.h to additionally #include <ws2tcpip.h>
+   c) for 32bit and 64bit Apache, patch %APACHE%/include/apr_config.h to NOT #include "ap_config_auto.h"
+
+2. If you use VisualStudio for compiling
+   a) open VS command line 
+   b) use supplied NMakefile
 
 KNOWN ISSUES
 

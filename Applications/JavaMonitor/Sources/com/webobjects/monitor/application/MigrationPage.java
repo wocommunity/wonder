@@ -23,6 +23,11 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSData;
 
+/*
+ * This page should be removed, because it looks like an experiment which never get finished.
+ */
+
+@Deprecated
 public class MigrationPage extends MonitorComponent {
     /**
      * serialVersionUID

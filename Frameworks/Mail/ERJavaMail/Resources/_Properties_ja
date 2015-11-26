@@ -1,0 +1,74 @@
+## ONLY FOR DOCUMENTATION
+##
+## 実際は Properties ファイルを使用して設定を行います。
+## このファイルは説明用です。
+## 忘れずに：er.javamail.defaultEncoding=UTF-8 を設定してください。
+##=================================================================
+
+## SMTP 送信に認証が必要かどうかをセットします。
+## true の場合には下記のユーザとパスワード情報もセットする必要があります。
+# er.javamail.smtpAuth=false
+
+## SMTP サーバへの認証ログインのユーザ名
+# er.javamail.smtpUser=smtpusername
+
+## SMTP サーバへの認証ログインのパスワード
+# er.javamail.smtpPassword=smtppassword
+
+## メッセージ・コンテントに使用するデフォルト・エンコーディング
+er.javamail.defaultEncoding = iso-8859-1
+
+##　すべてのメールを wodka.javamail.adminEmail ユーザに送信します。(デバッグ中に便利)
+er.javamail.centralize = true
+
+## メール・デバッグ情報を表示するかどうか。プロトコル・レベル情報を含む
+## SMTP 設定時に問題がある場合、これを true するといいのです。
+er.javamail.debugEnabled = false
+
+##　必須項目："centralize" メールの送り先メール・アドレス
+#er.javamail.adminEmail = user@domain.com
+
+## SMTP 送信ホスト
+## セットされててない場合には WOHost へ送信が行われる
+#er.javamail.smtpHost = smtp.domain.com
+
+## 検証に使用する ERJavaMailメール・パタン。 null の場合には内部のパタンが使用される
+#er.javamail.emailPattern = ^.*?@.*$
+
+## 送信キューが保持できるメッセージ・サイズ
+## セットされていない場合には 50 が使用されます。
+er.javamail.senderQueue.size = 50
+
+## 送信キューが一杯時に待つミリ秒。デフォルトは 6000
+er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
+
+## すべての送信メッセージに追加する X-Mailer header
+#er.javamail.mailer.XMailerHeader = 
+
+## ホワイト＆ブラック・リスト・メールアドレス・パタン
+## 例えば、テスト中で *@mycompany.com にしかメールを送信したい場合
+## コンマ区切りされているメールアドレス・パタンのホワイト・リスト
+## セットされている場合にはホワイト・リストに含まれるメールしか送信されません。
+## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
+## この場合には次の様に追加します：
+# er.javamail.WhiteListEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
+
+## 送信したくないアドレスがある場合にはブラック・リストを使用できます。
+## コンマ区切りされているメールアドレス・パタンのブラック・リスト
+## セットされているアドレスへはメール送信されません。
+## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
+## ブラック・リスト・パタンは最後に処理されるので、ホワイト・リストよりも優先です。
+# er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+
+## SMTP 送信ポート
+## セットされていない場合には 25 が使用されます。
+#er.javamail.smtpPort = 25
+
+# Sometimes when sending big masses of emails, the java virtual machine
+# doesn't collects correctly the garbage and needs a little delay
+# between each message sending.  Use this option if you have problem with
+# memory management
+er.javamail.useSenderDelay = false
+
+# This delay is set to 15 milliseconds
+er.javamail.senderDelayMillis = 15

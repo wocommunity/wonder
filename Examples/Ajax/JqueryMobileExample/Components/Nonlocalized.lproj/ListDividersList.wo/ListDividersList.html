@@ -1,19 +1,7 @@
-<wo:ERQMHtmlTemplate title="ListDividersList">
-	<wo:ERQMHeaderBar string="ListDividersList" isFixed="true" theme="a" 
-		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
-		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
-
-	<wo:ERQMContent>
-	
-		<wo:ERQMListView>
-			<wo:foreach list="$talents" item="$oneTalent">
-				<wo:ERQMListViewElement action="$doShowOneTalentAction" filtertext="$oneTalent.firstName" automaticDivider="true">
-					<wo:str value = "$oneTalent.firstName" /> <wo:str value = "$oneTalent.lastName" />
-				</wo:ERQMListViewElement>
-			</wo:foreach>
-		</wo:ERQMListView>
-		
-	</wo:ERQMContent>
-
-	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
-</wo:ERQMHtmlTemplate>
+<wo:JQPageWrapper title = "List Dividers List">
+  <wo:ERQMListView data-autodividers = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement data-filtertext = "$oneMovie.title" action = "$doShowOneMovieAction"> <wo:str value = "$oneMovie.title" /> </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

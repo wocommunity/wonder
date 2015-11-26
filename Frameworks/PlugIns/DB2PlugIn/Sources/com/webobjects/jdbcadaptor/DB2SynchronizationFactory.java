@@ -186,7 +186,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
             // timc 2006-11-06 check for enableIdentifierQuoting
             String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
             NSArray columnNames = ((NSArray) relationship.sourceAttributes().valueForKey("columnName"));
-            StringBuffer sbColumnNames = new StringBuffer();
+            StringBuilder sbColumnNames = new StringBuilder();
             for (int j = 0; j < columnNames.count(); j++) {
                 sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String) columnNames.objectAtIndex(j)));
             }
@@ -238,7 +238,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
             String constraintName = result.sqlStringForSchemaObjectName(externalNameForEntityWithoutSchema(entity) + "_pk");
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-            StringBuffer statement = new StringBuffer("ALTER TABLE ");
+            StringBuilder statement = new StringBuilder("ALTER TABLE ");
             statement.append(tableName);
             statement.append(" ADD CONSTRAINT ");
             statement.append(constraintName);
@@ -252,7 +252,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
                 if (j < priKeyAttributeCount - 1) {
                     statement.append(", ");
                 } else {
-                    statement.append(")");
+                    statement.append(')');
                 }
             }
             result.setStatement(statement.toString());
@@ -364,7 +364,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
 					}
 				}
 			}
-			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
 		}
 		return new NSArray();
 	}
@@ -384,7 +384,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while (begin < length) {

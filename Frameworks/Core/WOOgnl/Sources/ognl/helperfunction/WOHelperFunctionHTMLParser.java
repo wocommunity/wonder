@@ -214,7 +214,7 @@ public class WOHelperFunctionHTMLParser {
 			else if (!token.startsWith("</") && _stackDict.containsKey(tokenPart)) {
 				// standard opening tag
 				Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
-				if (_stackDict != null && stack != null) {
+				if (stack != null) {
 					stack.push(tokenPart);
 					_stackDict.setObjectForKey(stack, tokenPart);
 				}

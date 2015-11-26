@@ -46,7 +46,7 @@ public class AjaxUpdaterForm extends AjaxUpdater {
 	public boolean _omitTags;
     
     public String href() {    // action
-		return ERXWOContext.ajaxActionUrl(context());
+		return context().componentActionURL(application().ajaxRequestHandlerKey());
     }
     
     public String classString() {

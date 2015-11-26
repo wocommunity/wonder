@@ -60,7 +60,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     @Override
     public WOResponse handleRequest(WORequest request) {
         if(!ERSelenium.testsEnabled()) {
-            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
  
     	NSArray pathElements = request.requestHandlerPathArray();
@@ -70,7 +70,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     	while (iter.hasNext()) {
     		builder.append(iter.next());
     		if (iter.hasNext())
-    			builder.append("/");
+    			builder.append('/');
     	}
     	
 		String filePath = builder.toString();

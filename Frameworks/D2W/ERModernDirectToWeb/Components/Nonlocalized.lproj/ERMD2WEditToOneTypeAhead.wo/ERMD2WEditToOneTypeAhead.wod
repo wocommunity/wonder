@@ -1,3 +1,8 @@
+ERMD2WEditToOneTypeAhead : AjaxUpdateContainer {
+  id = updateContainerID;
+  class = "ERMD2WEditToOneTypeAhead";
+}
+
 SearchTermSelected : AjaxSubmitButton {
   updateContainerID = d2wContext.idForMainContainer;
   functionName = searchTermSelectedFunctionName;

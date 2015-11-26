@@ -94,12 +94,6 @@ public class ERXEOEncodingUtilities {
         }
         return EntityNameSeparator;
     }
-
-    /** @deprecated use {@link #decodeEnterpriseObjectsFromFormValues(EOEditingContext, NSDictionary)} */
-    @Deprecated
-    public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
-        return decodeEnterpriseObjectsFromFormValues(ec, formValues);
-    }
     
     /**
      * Returns enterprise objects grouped by entity name. 
@@ -269,32 +263,31 @@ public class ERXEOEncodingUtilities {
      * name key will be able to tell if the value is an encrypted key or
      * not. In this way given a key value pair the object can be fetched
      * from an editing context given that at point you will know the entity
-     * name and the primary key.<br/>
-     * <br/>
+     * name and the primary key.
+     * <p>
      * For example imagine that an array containing two User objects(pk 13 and 24)
      * and one Company object(pk 56) are passed to this method, null is passed in
      * for the separator which means the default seperator will be used which is
      * '_' and false is passed for encryption. Then the url that would be generated
-     * would be: sep=_&User_1=13&User_2=24&Company_3=56<br/>
-     * <br/>
+     * would be: sep=_&amp;User_1=13&amp;User_2=24&amp;Company_3=56
+     * <p>
      * If on the other hand let's say you use the _ character in entity names and you
      * want the primary keys encrypted then passing in the same array up above but with
      * "##" specified as the separator and true for the encrypt boolean would yield:
-     * sep=##&User##E1=SOMEGARBAGE8723&User##E2=SOMEGARBAGE23W&Company##E3=SOMEGARBAGE8723
-     * <br/>
+     * sep=##&amp;User##E1=SOMEGARBAGE8723&amp;User##E2=SOMEGARBAGE23W&amp;Company##E3=SOMEGARBAGE8723
+     * <p>
      * Note that in the above encoding the seperator is always passed and the upper case
      * E specifies if the corresponding value should be decrypted.
      * Compound primary keys are supported, giving the following url:
-     * sep=_&EntityName_1=1.1&EntityName_2=1.2
+     * sep=_&amp;EntityName_1=1.1&amp;EntityName_2=1.2
      * where <code>1.1</code> and <code>1.2</code> are the primary key values. Key values 
      * follow alphabetical  order for their attribute names, just like 
      * <code>ERXEOControlUtilities.primaryKeyArrayForObject</code>.
      * Note: At the moment the attribute value separator cannot be changed.
-     * <br/>
-     * <b>EncodedEntityName</b><br/>
+     * <h3>EncodedEntityName</h3>
      * You can specify an abbreviation for the encoded entityName.
      * This is very useful when you don't want to disclose the internals of your application
-     * or simply because the entity name is rather long.<br/>
+     * or simply because the entity name is rather long.
      * To do this:
      * <ul>
      * <li>open EOModeler,</li>
@@ -303,6 +296,7 @@ public class ERXEOEncodingUtilities {
      * <li>go to the "User Info" tab (the last tab represented by a book)</li>
      * <li>add a key named <b>EncodedEntityName</b> with the value you want</li>
      * </ul>
+     * 
      * @param eos array of enterprise objects to be encoded in the url
      * @param separator to be used between the entity name and a sequence number
      * @param encrypt indicates if the primary keys of the objects should be encrypted

@@ -39,15 +39,18 @@ public  class ERXRequest extends WORequest {
     public static final String UNKNOWN_HOST = "UNKNOWN";
 
     public static final String X_FORWARDED_PROTO_FOR_SSL = ERXProperties.stringForKeyWithDefault("er.extensions.appserver.ERXRequest.xForwardedProtoForSsl", "https");
+    public static final String X_FORWARDED_PROTO_HEADER_KEY_FOR_SSL = ERXProperties.stringForKeyWithDefault("er.extensions.appserver.ERXRequest.xForwardedProtoHeaderKeyForSsl", "x-forwarded-proto");
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
-    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
+    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"x-forwarded-for", "pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
 
     // 'Host' is the official HTTP 1.1 header for the host name in the request URL, so this should be checked first.
     // @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.23
+    // when the app is behind a reverse proxy 'Host' will contain the proxy address instead of the requested one so check first for 'x-forwarded-host'
+    // @see http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#x-headers
     // Fallback headers such as server_name will screw up your complete URL generation for secure domains that have wildcard subdomains since it returns sth like *.domain.com for host name
-    protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"Host", "x-forwarded-host",  "x-webobjects-server-name", "server_name", "http_host"});
+    protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"x-forwarded-host", "Host", "x-webobjects-server-name", "server_name", "http_host"});
     
     /** NSArray to keep browserLanguages in. */
     protected NSArray<String> _browserLanguages;
@@ -335,7 +338,7 @@ public  class ERXRequest extends WORequest {
 	        
 	        // Check if we've got an x-forwarded-proto header which is typically sent by a load balancer that is 
 	        // implementing ssl termination to indicate the request on the public side of the load balancer is secure.
-	        else if (X_FORWARDED_PROTO_FOR_SSL.equals(request.headerForKey("x-forwarded-proto"))) {
+	        else if (X_FORWARDED_PROTO_FOR_SSL.equals(request.headerForKey(X_FORWARDED_PROTO_HEADER_KEY_FOR_SSL))) {
 	    		isRequestSecure = true;
 	        }
         }
@@ -491,15 +494,6 @@ public  class ERXRequest extends WORequest {
         byte[] bytes = up.getBytes();
         String encodedString = Base64.encodeBase64String(bytes);
         setHeader("Basic " +  encodedString, "authorization");
-    }
-    
-    /**
-     * @return remote client host address
-     * @deprecated use {@link #remoteHostAddress()}
-     */
-    @Deprecated
-	public String remoteHost() {
-    	return remoteHostAddress();
     }
 
     /**

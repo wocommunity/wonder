@@ -26,7 +26,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.<br />
+ * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.
  * 
  * @binding dataSource
  * @binding destinationDisplayKey
@@ -118,7 +118,7 @@ public class ERXFakeRelationship extends WOComponent {
 
     public static void setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
 	if(objects.count() > 0) {
-	    StringBuffer newValue = new StringBuffer();
+	    StringBuilder newValue = new StringBuilder();
 	    Enumeration e = objects.objectEnumerator();
 
 	    while(e.hasMoreElements()) {

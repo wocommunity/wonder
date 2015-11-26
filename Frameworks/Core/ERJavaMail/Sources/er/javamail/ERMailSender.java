@@ -30,22 +30,22 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 /**
- * <span class="en">
+ * <div class="en">
  * This class is used to send mails in a threaded way.
  *
  * This is needed in WebObjects because if sending 20 mails takes 40 seconds, then the user must wait 40 seconds before
  * attempting to use the application.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * このクラスはメール送信をスレッド系で送信します。
  * WebObjects には必要な方法です。なぜなら、メール 20通が約 40秒かかるとユーザが 40秒もアプリケーションが使えるようになるまでに
  * 待つ必要が発生します。
- * </span>
+ * </div>
  * 
- * @author Camille Troillard <tuscland@mac.com>
- * @author Tatsuya Kawano <tatsuyak@mac.com>
- * @author Max Muller <maxmuller@mac.com>
+ * @author Camille Troillard &lt;tuscland@mac.com&gt;
+ * @author Tatsuya Kawano &lt;tatsuyak@mac.com&gt;
+ * @author Max Muller &lt;maxmuller@mac.com&gt;
  */
 public class ERMailSender implements Runnable {
 
@@ -66,13 +66,13 @@ public class ERMailSender implements Runnable {
 	private Thread _senderThread;
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Exception class for alerting about a stack overflow
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * オーバフローの例外発生クラス
-	 * </span>
+	 * </div>
 	 */
 	public static class SizeOverflowException extends Exception {
 		private static final long serialVersionUID = 1L;
@@ -96,13 +96,8 @@ public class ERMailSender implements Runnable {
 	}
 
 	/** 
-	 * <span class="en">
-	 * @return the shared instance of the singleton ERMailSender object 
-	 * </span>
-	 * 
-	 * <span class="ja">
-	 * @return ERMailSender シングルトン・オブジェクトを戻します。
-	 * </span>
+	 * @return <div class="en">the shared instance of the singleton ERMailSender object</div>
+	 *         <div class="ja">ERMailSender シングルトン・オブジェクトを戻します。</div>
 	 */
 	public static synchronized ERMailSender sharedMailSender() {
 		if (_sharedMailSender == null) {
@@ -112,29 +107,24 @@ public class ERMailSender implements Runnable {
 	}
 
 	/** 
-	 * <span class="en">
-	 * @return the stats associated with this ERMailSender object
-	 * </span>
-	 * 
-	 * <span class="ja">
-	 * @return ERMailSender オブジェクトと関連されている統計を戻します 
-	 * </span>
+	 * @return <div class="en">the stats associated with this ERMailSender object</div>
+	 *         <div class="ja">ERMailSender オブジェクトと関連されている統計を戻します</div>
 	 */
 	public Stats stats() {
 		return _stats;
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Sends a message in a non-blocking way.
 	 *
 	 * This means that the thread won't be blocked, but the message will be queued before being delivered.
 	 * 
-	 * </span>
-	 * <span class="ja">
+	 * </div>
+	 * <div class="ja">
 	 * メッセージをブロックされない形で送信します。<br>
 	 * スレッドはブロックされませんが、メッセージは送信する前にキューに入れられます。
-	 * </span>
+	 * </div>
 	 */
 	public void sendMessageDeffered(ERMessage message) throws ERMailSender.SizeOverflowException {
 		try {
@@ -173,16 +163,16 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Sends a message immediately.
 	 *
 	 * This means that the thread could be blocked if the message takes time to be delivered.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * メッセージを直ちに送信する<br>
 	 * メッセージが送信に時間がかかりすぎるとスレッドがブロックされる可能性があります。
-	 * </span>
+	 * </div>
 	 */
 	public void sendMessageNow(ERMessage message) {
 		Transport transport = null;
@@ -215,8 +205,8 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * <span class="en">
-	 * Common method used by 'sendMessageNow' and 'sendMessageDeffered' (actully the 'run' method when the thread is
+	 * <div class="en">
+	 * Common method used by 'sendMessageNow' and 'sendMessageDeffered' (actually the 'run' method when the thread is
 	 * running) to send a message.
 	 *
 	 * This method sends the message and increments the processed mail count. If an exception occurs while sending the
@@ -224,15 +214,15 @@ public class ERMailSender implements Runnable {
 	 * If a MessagingException is thrown, then the exception is catched and rethrown immediately, thus letting us to
 	 * process another callbacks or not. For example, This is used when sendMessageNow is used, the MessagingException
 	 * is encapsulated in a ERMailSender.ForwardException, and thrown to the user.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 'sendMessageNow' と 'sendMessageDeffered' (実際は 'run' メソッド) のメール送信共通メソッドです。<br>
 	 * このメソッドはメッセージを送信し、メール送信カウンターを進みます。メール送信中に例外が発生するとコールバック指定があれば、
 	 * notifyInvalidEmails メソッドがコールされます。<br>
 	 * MessagingException が発生すると例外がキャチュされ、再度発生させます。他のコールバックを対応できるようになります。
 	 * 例えば、sendMessageNow が使用されている時 MessagingException は ERMailSender.ForwardException 内にカプセル化されます。
-	 * </span>
+	 * </div>
 	 */
 	protected void _sendMessageNow(ERMessage message, Transport transport) throws MessagingException {
 		boolean debug = log.isDebugEnabled();
@@ -303,14 +293,14 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Utility method that gets the SMTP Transport method for a session and connects the Transport before returning it.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * セッションの SMTP トランスポート方法を取得するユーティリティー・メソッド。
 	 * 戻す前にトランスポートへの接続を開始します。
-	 * </span>
+	 * </div>
 	 */
 	protected Transport _connectedTransportForSession(javax.mail.Session session, String smtpProtocol, boolean _throwExceptionIfConnectionFails) throws MessagingException {
 		Transport transport = null;
@@ -339,14 +329,14 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Don't call this method, this is the thread run loop and is automatically called.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * このメソッドをコールしないでください。
 	 * これはスレッド実行ループで自動的に処理されます。
-	 * </span>
+	 * </div>
 	 */
 	public void run() {
 		try {
@@ -449,13 +439,13 @@ public class ERMailSender implements Runnable {
 	}
 	
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Executes the callback method to notify the calling application of any invalid emails.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * メール送信失敗のアプリケーションのコールバックを実行します。
-	 * </span>
+	 * </div>
 	 */
 	protected void notifyInvalidEmails(NSArray<String> invalidEmails) {
 		NSNotification notification = new NSNotification(InvalidEmailNotification, invalidEmails);
@@ -463,13 +453,13 @@ public class ERMailSender implements Runnable {
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * This class is about logging mail event for stats purposes. More stats to come in the future.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * このクラスはメール・イベントを統計のためにログします。
-	 * </span>
+	 * </div>
 	 */
 	public class Stats {
 		private NSTimestamp lastResetTime = new NSTimestamp();
@@ -487,13 +477,13 @@ public class ERMailSender implements Runnable {
 		}
 
 		/** 
-		 * <span class="en">
+		 * <div class="en">
 		 * Resets statistics information 
-		 * </span>
+		 * </div>
 		 * 
-		 * <span class="ja">
+		 * <div class="ja">
 		 * 統計情報のリセット
-		 * </span>
+		 * </div>
 		 */
 		public synchronized void reset() {
 			String savedStatsString = toString();
@@ -507,41 +497,41 @@ public class ERMailSender implements Runnable {
 		}
 
 		/** 
-		 * <span class="en">
+		 * <div class="en">
 		 * @return the number of errors that were encountered during mail sending process 
-		 * </span>
+		 * </div>
 		 * 
-		 * <span class="ja">
+		 * <div class="ja">
 		 * @return メール送信中に発生されているエラー・カウントを戻します。
-		 * </span>
+		 * </div>
 		 */
 		public synchronized int errorCount() {
 			return errorCount;
 		}
 
 		/**
-		 * <span class="en">
+		 * <div class="en">
 		 * @return the total count of mails being sent. This number does not take in accordance the number of errors. To
 		 *         get the actual count of mail sent without error use 'errorCount - mailCount'.
-		 * </span>
+		 * </div>
 		 * 
-		 * <span class="ja">
+		 * <div class="ja">
 		 * @return 送信メールの合計を戻します。エラー・メールを含む「'errorCount - mailCount'　=　送信成功メール」
-		 * </span>
+		 * </div>
 		 */
 		public synchronized int mailCount() {
 			return mailCount;
 		}
 
 		/**
-		 * <span class="en">
+		 * <div class="en">
 		 * @return the current queue size. This method is useful for simplistic load balancing between apps that are
 		 *         supposed to send mails
-		 * </span>
+		 * </div>
 		 * 
-		 * <span class="ja">
+		 * <div class="ja">
 		 *　@return カレント・キュー・サイズを戻します。複数のアプリケーションのロード・バランスに最適です。
-		 * </span>
+		 * </div>
 		 */
 		public synchronized int currentQueueSize() {
 			return _messages.size();
@@ -556,13 +546,8 @@ public class ERMailSender implements Runnable {
 		}
 
 		/** 
-		 * <span class="en">
-		 * @return the timestamp that respresents when the stats object was reset. 
-		 * </span>
-		 * 
-		 * <span class="ja">
-		 * @return 統計オブジェクトがリセットされているタイムスタンプ
-		 * </span>
+		 * @return <div class="en">the timestamp that represents when the stats object was reset.</div>
+		 *         <div class="ja">統計オブジェクトがリセットされているタイムスタンプ</div>
 		 */
 		public NSTimestamp lastResetTime() {
 			return lastResetTime;
@@ -594,13 +579,8 @@ public class ERMailSender implements Runnable {
 		}
 
 		/** 
-		 * <span class="en">
-		 * @return a string representation of the Stats object.
-		 * </span>
-		 * 
-		 * <span class="ja">
-		 * @return 統計オブジェクトの文字列表記
-		 * </span>
+		 * @return <div class="en">a string representation of the Stats object.</div>
+		 *         <div class="ja">統計オブジェクトの文字列表記</div>
 		 */
 		@Override
 		public String toString() {

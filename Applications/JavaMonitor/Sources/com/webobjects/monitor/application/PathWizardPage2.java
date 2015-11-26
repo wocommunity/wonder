@@ -14,7 +14,10 @@ package com.webobjects.monitor.application;
  */
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
+
+import er.extensions.foundation.ERXStringUtilities;
 
 public class PathWizardPage2 extends MonitorComponent {
     /**
@@ -44,6 +47,10 @@ public class PathWizardPage2 extends MonitorComponent {
 
     public void setCallbackKeypath(String aValue) {
         callbackKeypath = aValue;
+        if (myApplication() != null) {
+            String key = ERXStringUtilities.lastPropertyKeyInKeyPath(callbackKeypath);
+            aPath = (String) myApplication().valueForKey(key);
+         }
     }
 
     public void setCallbackExpand(String aValue) {
@@ -73,7 +80,9 @@ public class PathWizardPage2 extends MonitorComponent {
         return aPage;
     }
 
-	public static PathWizardPage2 create(WOContext context) {
-		return (PathWizardPage2) context.page().pageWithName(PathWizardPage2.class.getName());
-	}
+    public static PathWizardPage2 create(WOContext context, MApplication application) {
+        PathWizardPage2 aPage = (PathWizardPage2) context.page().pageWithName(PathWizardPage2.class.getName());
+        aPage.setMyApplication(application);
+        return aPage;
+    }
 }

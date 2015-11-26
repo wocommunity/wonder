@@ -5,7 +5,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.printerfriendly.ERD2WGroupingPrinterFriendlyListPageTemplate;
 
 /**
- * Printer friendly version.<br />
+ * Printer friendly version.
+ * 
  * @d2wKey justification
  * @d2wKey componentName
  * @d2wKey propertyKey

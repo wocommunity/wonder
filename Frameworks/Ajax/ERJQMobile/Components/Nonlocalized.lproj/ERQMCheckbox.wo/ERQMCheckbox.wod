@@ -1,0 +1,11 @@
+CBChecked : WOCheckBox {
+	checked = ^checked;
+	name = ^name;
+	otherTagString = otherTagString;
+}
+CBValue : WOCheckBox {
+	selection = ^selection;
+	value = ^value;
+	name = ^name;
+	otherTagString = otherTagString;
+}

@@ -22,26 +22,30 @@ import com.webobjects.monitor._private.String_Extensions;
 
 public class ApplicationsPage extends MonitorComponent {
 
+    private static final long serialVersionUID = -2523319756655905750L;
+
+	private int _totalInstancesConfigured = 0;
+	private int _totalInstancesRunning = 0;
+	
+	
     public ApplicationsPage(WOContext aWocontext) {
         super(aWocontext);
         handler().updateForPage(name());
     }
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -2523319756655905750L;
+ 
 
     public MApplication currentApplication;
 
     public String newApplicationName;
 
     public NSArray<MApplication> applications() {
-    	NSMutableArray<MApplication> result = new NSMutableArray<MApplication>();
-    	result.addObjectsFromArray(mySession().siteConfig().applicationArray());
+    	NSMutableArray<MApplication> applications = new NSMutableArray<MApplication>();
+    	applications.addObjectsFromArray(mySession().siteConfig().applicationArray());
     	EOSortOrdering order= new EOSortOrdering("name", EOSortOrdering.CompareAscending);
-    	EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
-     	return result;
+    	EOSortOrdering.sortArrayUsingKeyOrderArray(applications, new NSArray(order));
+    	
+    	calculateTotals(applications);
+     	return applications;
     }
     
     public String hrefToApp() {
@@ -125,7 +129,8 @@ public class ApplicationsPage extends MonitorComponent {
 	    });
     }
 
-
+	
+	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -137,5 +142,58 @@ public class ApplicationsPage extends MonitorComponent {
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
+    
+    
+    /**
+     * Calculates and sets the {@link #totalInstancesConfigured()} and {@link #totalInstancesRunning()}
+     * for the given array of applications
+     * 
+     * @param applications
+     */
+    public void calculateTotals(NSMutableArray<MApplication> applications){
+    	int totalRunningInstances = 0;
+    	int totalConfiguredInstances = 0;
+    	
+    	// use for-loop to preserve compile-time error-checking instead of using valueForKey("runningInstancesCount.@sum")
+    	for (MApplication mApplication : applications) {
+    		totalRunningInstances = totalRunningInstances + mApplication.runningInstancesCount();
+    		totalConfiguredInstances = totalConfiguredInstances +  mApplication.instanceArray().count();
+		}
+    	setTotalInstancesConfigured(totalConfiguredInstances);
+    	setTotalInstancesRunning(totalRunningInstances);
+    }
 
+    
+	/**
+	 * @return the total number of instances configured for all applications
+	 */
+	public int totalInstancesConfigured() {
+		return _totalInstancesConfigured;
+	}
+
+	/**
+	 * Sets the total number of instances configured for all applications
+	 * @param totalInstancesConfigured 
+	 */
+	public void setTotalInstancesConfigured(int totalInstancesConfigured) {
+		_totalInstancesConfigured = totalInstancesConfigured;
+	}
+
+	/**
+	 * @return the total number of running instances for all applications
+	 */
+	public int totalInstancesRunning() {
+		return _totalInstancesRunning;
+	}
+
+	/**
+	 * Sets the total number of running instances for all applications
+	 * @param totalInstancesRunning
+	 */
+	public void setTotalInstancesRunning(int totalInstancesRunning) {
+		_totalInstancesRunning = totalInstancesRunning;
+	}
+
+    
+    
 }

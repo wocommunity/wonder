@@ -8,7 +8,8 @@ import java.io.IOException;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 
-import com.sun.xml.internal.ws.util.ByteArrayBuffer;
+//import com.sun.xml.internal.ws.util.ByteArrayBuffer;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
@@ -19,7 +20,7 @@ import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
+//import com.webobjects.foundation.NSForwardException;
 
 /**
  * ERLuceneAdaptorContext provides the transaction support for the adaptor.
@@ -45,19 +46,19 @@ public class ERLuceneAdaptorContext extends EOAdaptorContext {
 		String className = pkAttribute.className();
 		String valueType = pkAttribute.valueType();
 		if ("com.webobjects.foundation.NSData".equals(className)) {
-			if(true==false) {
-				ByteArrayBuffer buf = new ByteArrayBuffer();
-				try {
-					buf.write(entity.externalName().getBytes());
-					buf.write('.');
-					buf.write(new EOTemporaryGlobalID()._rawBytes());
-					pkValue = new NSData(buf.getRawData());
-				} catch (IOException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-			} else {
+//			if(true==false) {
+//				ByteArrayBuffer buf = new ByteArrayBuffer();
+//				try {
+//					buf.write(entity.externalName().getBytes());
+//					buf.write('.');
+//					buf.write(new EOTemporaryGlobalID()._rawBytes());
+//					pkValue = new NSData(buf.getRawData());
+//				} catch (IOException e) {
+//					throw NSForwardException._runtimeExceptionForThrowable(e);
+//				}
+//			} else {
 				pkValue = new NSData(new EOTemporaryGlobalID()._rawBytes());
-			}
+//			}
 		} else {
 			throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
 		}

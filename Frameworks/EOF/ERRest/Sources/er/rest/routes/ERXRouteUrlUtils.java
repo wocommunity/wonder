@@ -41,24 +41,24 @@ public class ERXRouteUrlUtils {
 	}
 
 	public static String actionUrlPathForEntity(String entityName, Object entityID, String action, String format) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		ERXRouteRequestHandler requestHandler = (ERXRouteRequestHandler) WOApplication.application().requestHandlerForKey(ERXRouteRequestHandler.Key);
 		sb.append(requestHandler.controllerPathForEntityNamed(entityName));
 		if (entityID != null) {
-			sb.append("/");
+			sb.append('/');
 			sb.append(ERXStringUtilities.escapeNonXMLChars(String.valueOf(entityID)));
 			if (action != null && !"show".equals(action)) {
-				sb.append("/");
+				sb.append('/');
 				sb.append(action);
 			}
 		}
 		else if (action != null && !"index".equals(action)) {
 			if ((entityName != null) && (entityName.length() > 0)) {
-				sb.append("/");				
+				sb.append('/');				
 			}
 			sb.append(action);
 		}
-		sb.append(".");
+		sb.append('.');
 		if (format == null) {
 			sb.append("html");
 		}

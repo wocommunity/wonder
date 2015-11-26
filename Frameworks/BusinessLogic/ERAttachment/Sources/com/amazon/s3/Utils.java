@@ -23,7 +23,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -107,7 +107,7 @@ public class Utils {
             } else {
                 buf.append(interestingHeaders.get(key));
             }
-            buf.append("\n");
+            buf.append('\n');
         }
 
         // don't include the query parameters...
@@ -172,7 +172,7 @@ public class Utils {
 
     static String pathForListOptions(String bucket, String prefix, String marker, Integer maxKeys) {
     	StringBuilder path = new StringBuilder(bucket);
-        path.append("?");
+        path.append('?');
 
         // these two params must be url encoded
         if (prefix != null) path.append("prefix=" + urlencode(prefix) + "&");
@@ -218,7 +218,7 @@ public class Utils {
         for (int i = 0, size = values.size(); i < size; ++ i) {
             buf.append(((String)values.get(i)).replaceAll("\n", "").trim());
             if (i != (size - 1)) {
-                buf.append(",");
+                buf.append(',');
             }
         }
         return buf.toString();

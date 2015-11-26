@@ -26,8 +26,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Description forthcoming.<br />
- * 
+ * Description forthcoming.
  */
 //DELETEME This looks like a pick page?
 public class ERDEditList extends ERDCustomEditComponent {

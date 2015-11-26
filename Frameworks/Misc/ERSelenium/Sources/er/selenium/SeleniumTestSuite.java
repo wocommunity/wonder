@@ -23,6 +23,8 @@
 
 package er.selenium;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -48,14 +50,14 @@ public class SeleniumTestSuite extends WODirectAction {
 	@Override
 	public WOActionResults performActionNamed(String anActionName) {
 	    if(!ERSelenium.testsEnabled()) {
-	        return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+	        return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
 	    }
 	    if (anActionName.equals("default")) {
 	        return defaultAction();
 	    }
 
 	    SeleniumTestSuitePage page = (SeleniumTestSuitePage)pageWithName(SeleniumTestSuitePage.class.getName());
-	    page.setTestPath(ERXStringUtilities.replaceStringByStringInString(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
+	    page.setTestPath(StringUtils.replace(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
 	    return page;
 	}
 }

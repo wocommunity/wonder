@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -43,9 +46,9 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 
 		@Override
 		public void addCreateClauseForAttribute(final EOAttribute attribute) {
-			StringBuffer sql = new StringBuffer();
+			StringBuilder sql = new StringBuilder();
 			sql.append(attribute.columnName());
-			sql.append(" ");
+			sql.append(' ');
 			sql.append(columnTypeStringForAttribute(attribute));
 
 			NSDictionary userInfo = attribute.userInfo();
@@ -60,7 +63,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 				}
 			}
 
-			sql.append(" ");
+			sql.append(' ');
 			sql.append(allowsNullClauseForConstraint(attribute.allowsNull()));
 
 			appendItemToListString(sql.toString(), _listString());
@@ -244,21 +247,21 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 		@Override
 		public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
-				StringBuffer sql = new StringBuffer();
+				StringBuilder sql = new StringBuilder();
 				String tableName = relationship.entity().externalName();
 
 				sql.append("ALTER TABLE ");
 				sql.append(quoteTableName(tableName.toUpperCase()));
 				sql.append(" ADD");
 
-				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
+				StringBuilder constraint = new StringBuilder(" CONSTRAINT \"FOREIGN_KEY_");
 				constraint.append(tableName);
 
-				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
+				StringBuilder fkSql = new StringBuilder(" FOREIGN KEY (");
 				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -270,7 +273,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 				}
 
 				fkSql.append(") REFERENCES ");
-				constraint.append("_");
+				constraint.append('_');
 
 				String referencedExternalName = relationship.destinationEntity().externalName();
 				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
@@ -281,7 +284,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -295,9 +298,8 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
 				constraint.append("\"");
 
-				fkSql.append(")");
-				// BOO
-				//fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
+				// New with version 10.11, by default constraint are now immediate
+				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
 				if (USE_NAMED_CONSTRAINTS)
 					sql.append(constraint);
@@ -376,8 +378,23 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class defaultExpressionClass() {
+	public Class<? extends JDBCExpression> defaultExpressionClass() {
 		return DerbyExpression.class;
+	}
+
+	@Override
+	public Object fetchCLOB(ResultSet resultSet, int column, EOAttribute attribute, boolean materialize) throws SQLException {
+		Clob clob = resultSet.getClob(column);
+
+		if (clob == null) {
+	      return null;
+	    }
+
+	    if (!materialize) {
+	      return clob;
+	    }
+
+	    return clob.getSubString(1L, (int)clob.length());
 	}
 
 	/**

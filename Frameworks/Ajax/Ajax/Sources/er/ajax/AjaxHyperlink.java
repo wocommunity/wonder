@@ -55,14 +55,14 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		sb.append(actionUrl);
 		sb.append("', ");
 		AjaxOptions.appendToBuffer(options, sb, context);
-		sb.append(")");
+		sb.append(')');
 		String onClick = (String) valueForBinding("onClick", context.component());
 		if (onClick != null) {
-			sb.append(";");
+			sb.append(';');
 			sb.append(onClick);
 		}
 		if (onClickBefore != null) {
-			sb.append("}");
+			sb.append('}');
 		}
 		return sb.toString();
 	}

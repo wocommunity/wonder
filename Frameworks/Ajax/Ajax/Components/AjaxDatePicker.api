@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
    <wo class="AjaxDatePicker.java" wocomponentcontent="false">
 
@@ -34,5 +34,7 @@
     <binding defaults="Boolean" name="disabled"/>
     
     <binding name="locale"/>
+    <binding name="startDay"/>
+    <binding defaults="Boolean" name="showYearControls"/>
     </wo>
 </wodefinitions>
