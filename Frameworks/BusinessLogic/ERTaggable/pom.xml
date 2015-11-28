@@ -20,6 +20,10 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>ERCoolComponents</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOAccess</artifactId>
 		</dependency>

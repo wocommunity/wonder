@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="CCTagEditor" wocomponentcontent="false">
+        <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+        <binding name="id"/>
+        <binding name="formValueName"/>
+        <binding name="action"/>
+        <binding defaults="Boolean" name="delete"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="availableTags"/>
+    </wo>
+</wodefinitions>
