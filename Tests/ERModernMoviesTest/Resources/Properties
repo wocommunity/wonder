@@ -4,6 +4,8 @@ ognl.inlineBindings=true
 
 # Misc
 er.extensions.stackTrace.cleanup=true
+er.extensions.ERXApplication.DefaultEncoding=UTF-8
+er.extensions.ERXApplication.DefaultMessageEncoding=UTF-8
 
 # EOF
 er.extensions.ERXEC.safeLocking=true

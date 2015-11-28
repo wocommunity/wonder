@@ -1,0 +1,5 @@
+CCTagEditor : CCTagEditor {
+  value = tags;
+  id = ^id;
+  availableTags = javascriptAvailableTags;
+}

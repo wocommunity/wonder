@@ -1504,3 +1504,23 @@ div.RtActionCell li {
 	opacity: 0.6;
 	-moz-opacity:0.6;
 }
+
+/* ERD2WEditTags */
+
+.nsg-editor {
+	padding-left: 0;
+}
+
+.nsg-tag {
+	border-color: #aaa;
+}
+
+.sey-item:hover {
+	background-color:#e6e9ef;
+	color:#000;
+}
+
+.sey-selected {
+	background-color:#e6e9ef;
+	color:#000;
+}
