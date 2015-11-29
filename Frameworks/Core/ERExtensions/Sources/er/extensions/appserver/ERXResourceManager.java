@@ -3,6 +3,7 @@ package er.extensions.appserver;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Enumeration;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
@@ -16,8 +17,11 @@ import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.appserver._private.WOURLValuedElementData;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
@@ -42,11 +46,13 @@ public class ERXResourceManager extends WOResourceManager {
 	protected static Logger log = Logger.getLogger(ERXResourceManager.class);
 	private WODeployedBundle TheAppProjectBundle;
 	private _NSThreadsafeMutableDictionary<String, WOURLValuedElementData> _urlValuedElementsData;
-	private IVersionManager _versionManager;
+	private IVersionManager _versionManager;	
+	private final _NSThreadsafeMutableDictionary _myFrameworkProjectBundles = new _NSThreadsafeMutableDictionary(new NSMutableDictionary(128));
 	private static final NSDictionary<String, String> _mimeTypes = _additionalMimeTypes();
 
 	protected ERXResourceManager() {
 		TheAppProjectBundle = _initAppBundle();
+		_initFrameworkProjectBundles();
 		try {
 			Field field = WOResourceManager.class.getDeclaredField("_urlValuedElementsData");
 			field.setAccessible(true);
@@ -104,6 +110,15 @@ public class ERXResourceManager extends WOResourceManager {
 		return _versionManager;
 	}
 
+    private void _initFrameworkProjectBundles()
+    {
+        NSBundle aBundle = null;
+        NSArray aFrameworkBundleList = NSBundle.frameworkBundles();
+        for(Enumeration aBundleEnumerator = aFrameworkBundleList.objectEnumerator(); aBundleEnumerator.hasMoreElements(); _erxCachedBundleForFrameworkNamed(aBundle.name()))
+            aBundle = (NSBundle)aBundleEnumerator.nextElement();
+
+    }
+
 	private static WODeployedBundle _initAppBundle() {
 		Object obj = null;
 		try {
@@ -123,10 +138,64 @@ public class ERXResourceManager extends WOResourceManager {
 		return (WODeployedBundle) obj;
 	}
 
-	private String _cachedURLForResource(String name, String bundleName, NSArray<String> languages, WORequest request) {
+	
+    private static WODeployedBundle _locateBundleForFrameworkNamed(String aFrameworkName)
+    {
+        WODeployedBundle aBundle = null;
+        aBundle = ERXDeployedBundle.deployedBundleForFrameworkNamed(aFrameworkName);
+        if(aBundle == null)
+        {
+            NSBundle nsBundle = NSBundle.bundleForName(aFrameworkName);
+            if(nsBundle != null)
+                aBundle = _bundleWithNSBundle(nsBundle);
+        }
+        return aBundle;
+    }
+
+    private static WODeployedBundle _bundleWithNSBundle(NSBundle nsBundle)
+    {
+        WODeployedBundle aBundle = null;
+        WODeployedBundle aDeployedBundle = ERXDeployedBundle.bundleWithNSBundle(nsBundle);
+        WODeployedBundle aProjectBundle = aDeployedBundle.projectBundle();
+        if(aProjectBundle != null)
+        {
+            if(WOApplication._isDebuggingEnabled())
+                NSLog.debug.appendln((new StringBuilder()).append("Framework project found: Will locate resources in '").append(aProjectBundle.bundlePath()).append("' rather than '").append(aDeployedBundle.bundlePath()).append("' .").toString());
+            aBundle = aProjectBundle;
+        } else
+        {
+            aBundle = aDeployedBundle;
+        }
+        return aBundle;
+    }
+
+    public NSArray _frameworkProjectBundles()
+    {
+        return _myFrameworkProjectBundles.immutableClone().allValues();
+    }
+
+    public WODeployedBundle _erxCachedBundleForFrameworkNamed(String aFrameworkName)
+    {
+        WODeployedBundle aBundle = null;
+        if(aFrameworkName != null)
+        {
+            aBundle = (WODeployedBundle)_myFrameworkProjectBundles.objectForKey(aFrameworkName);
+            if(aBundle == null)
+            {
+                aBundle = _locateBundleForFrameworkNamed(aFrameworkName);
+                if(aBundle != null)
+                    _myFrameworkProjectBundles.setObjectForKey(aBundle, aFrameworkName);
+            }
+        }
+        if(aBundle == null)
+            aBundle = TheAppProjectBundle;
+        return aBundle;
+    }
+	
+	private String _cachedURLForResource(String name, String bundleName, NSArray languages, WORequest request) {
 		String result = null;
 		if (bundleName != null) {
-			WODeployedBundle wodeployedbundle = _cachedBundleForFrameworkNamed(bundleName);
+			WODeployedBundle wodeployedbundle = _erxCachedBundleForFrameworkNamed(bundleName);
 			if (wodeployedbundle != null) {
 				result = wodeployedbundle.urlForResource(name, languages);
 			}
