@@ -953,7 +953,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
             ERXStats.markEnd("D2W", statsKey);
             
-            d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
             String currentTabKey = (String) d2wContext().valueForKey(Keys.tabKey);
             for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
@@ -977,6 +976,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     protected void clearTabSectionsContents() {
     	_tabSectionsContents = null;
+    	_currentTab = null;
     }
 
     /** Dummy denoting to sections. */
@@ -992,14 +992,16 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Returns the {@link er.directtoweb.ERD2WContainer} defining the current tab. */
     public ERD2WContainer currentTab() {
-        if (_currentTab == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
-            //If firstTab is not null, then try to find the tab named firstTab
-        	Integer tabIndex = (Integer) d2wContext().valueForKey(Keys.tabIndex);
-            if(tabIndex!=null && tabIndex.intValue() <= tabSectionsContents().count()){
-                setCurrentTab(tabSectionsContents().objectAtIndex(tabIndex.intValue()));
-            }
-            if(_currentTab==null)
-                setCurrentTab(tabSectionsContents().objectAtIndex(0));
+        String tabName = (String) d2wContext().valueForKey(Keys.tabKey); 
+        if (_currentTab == null && !ERXStringUtilities.stringIsNullOrEmpty(tabName)) {
+           for (ERD2WContainer aTab : tabSectionsContents()) {
+               if (tabName.equals(aTab.name)) {
+                   setCurrentTab(aTab);
+               }
+           }
+        }
+        if (_currentTab == null) {
+            _currentTab = tabSectionsContents().objectAtIndex(0);
         }
         return _currentTab;
     }
