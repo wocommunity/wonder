@@ -124,7 +124,7 @@
     <target name="ERMoviesLogic.all">
         <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERMoviesLogic" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERAttachment/ERTaggable" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERCoreBusinessLogic/ERAttachment/ERTaggable" />
        </antcall>
     </target>
 
