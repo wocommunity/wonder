@@ -35,6 +35,12 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>wonder.businesslogic</groupId>
+			<artifactId>ERCoreBusinessLogic</artifactId>
+			<version>7.0.0-SNAPSHOT</version>
+			<type>woframework</type>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>

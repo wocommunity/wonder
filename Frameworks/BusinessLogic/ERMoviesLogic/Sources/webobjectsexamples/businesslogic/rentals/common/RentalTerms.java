@@ -12,91 +12,20 @@
 
 package webobjectsexamples.businesslogic.rentals.common;
 
-import java.math.BigDecimal;
-
-import com.webobjects.eocontrol.EOCustomObject;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.foundation.NSArray;
 
-// RentalTerms inherits from EOCustomObject as an example of not inheriting from EOGenericRecord
-public class RentalTerms extends EOCustomObject {
-	private static final long		serialVersionUID			= 4273410078165804242L;
+public class RentalTerms extends _RentalTerms {
 
-	public static final String		RentalTermsEntityName		= "RentalTerms";
+    private static final long serialVersionUID = 1L;
 
-	public static final String		RentalTermsIDKey			= "rentalTermsID";
+    public static RentalTerms defaultRentalTerms(EOEditingContext editingContext) {
+        // default rental terms are the object with primary key = 1
+        return (RentalTerms) EOUtilities.objectWithPrimaryKeyValue(editingContext,
+                ENTITY_NAME, 1);
+    }
 
-	private transient Number		_checkOutLength;
-
-	private transient BigDecimal	_cost;
-
-	private transient BigDecimal	_depositAmount;
-
-	private transient String		_name;
-
-	private static EOGlobalID		_defaultRentalTermsGlobalID	= null;
-
-	private static EOGlobalID _globalIDForPrimaryKey(int primaryKey, EOEditingContext editingContext) {
-		EOFetchSpecification fetchSpecification = new EOFetchSpecification(RentalTermsEntityName,
-				new EOKeyValueQualifier(RentalTermsIDKey, EOQualifier.QualifierOperatorEqual, Integer.valueOf(primaryKey)), null);
-		NSArray objects = editingContext.objectsWithFetchSpecification(fetchSpecification);
-		return (objects.count() > 0) ? editingContext.globalIDForObject((EOEnterpriseObject) (objects.objectAtIndex(0))) : null;
-	}
-
-	public static RentalTerms defaultRentalTerms(EOEditingContext editingContext) {
-		if (_defaultRentalTermsGlobalID == null) {
-			// default rental terms are the object with primary key = 1
-			_defaultRentalTermsGlobalID = _globalIDForPrimaryKey(1, editingContext);
-		}
-		return (_defaultRentalTermsGlobalID != null) ? (RentalTerms) (editingContext.faultForGlobalID(_defaultRentalTermsGlobalID, editingContext)) : null;
-	}
-
-	public RentalTerms() {
-		super();
-	}
-
-	public Number checkOutLength() {
-		willRead();
-		return _checkOutLength;
-	}
-
-	public void setCheckOutLength(Number value) {
-		willChange();
-		_checkOutLength = value;
-	}
-
-	public BigDecimal cost() {
-		willRead();
-		return _cost;
-	}
-
-	public void setCost(BigDecimal value) {
-		willChange();
-		_cost = value;
-	}
-
-	public BigDecimal depositAmount() {
-		willRead();
-		return _depositAmount;
-	}
-
-	public void setDepositAmount(BigDecimal value) {
-		willChange();
-		_depositAmount = value;
-	}
-
-	public String name() {
-		willRead();
-		return _name;
-	}
-
-	public void setName(String value) {
-		willChange();
-		_name = value;
-	}
+    public RentalTerms() {
+        super();
+    }
 }
