@@ -1,5 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -177,13 +179,13 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         NSArray<EOSQLExpression> superResults = super.foreignKeyConstraintStatementsForRelationship(relationship);
         for (EOSQLExpression expression : superResults) {
             String s = expression.statement();
-            s = replaceStringByStringInString(") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED", s);
+            s = StringUtils.replace(s, ") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED");
             expression.setStatement(s);
             results.addObject(expression);
             // timc 2006-11-06 check for enableIdentifierQuoting
             String tableNameWithoutSchemaName = externalNameForEntityWithoutSchema(relationship.entity());
             String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
-            s = replaceStringByStringInString("ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName, s);
+            s = StringUtils.replace(s, "ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName);
             expression.setStatement(s);
             NSArray<String> columnNames = ((NSArray<String>) relationship.sourceAttributes().valueForKey("columnName"));
             StringBuilder sbColumnNames = new StringBuilder();
@@ -368,6 +370,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 	 * @param buffer
 	 *            string to have the replacement done on it
 	 * @return string after having all of the replacement done.
+	 * @deprecated use {@link StringUtils#replace(String, String, String)} instead
 	 */
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;

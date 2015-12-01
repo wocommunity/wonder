@@ -953,6 +953,7 @@
 	<target name="PostgresqlPlugIn.all">
         <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/PlugIns/PostgresqlPlugIn" />
+      		<param name="wo.external.root.bundles" value="ERJars" />
         </antcall>
     </target>
 

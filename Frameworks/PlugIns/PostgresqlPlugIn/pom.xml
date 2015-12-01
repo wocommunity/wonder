@@ -26,6 +26,10 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
