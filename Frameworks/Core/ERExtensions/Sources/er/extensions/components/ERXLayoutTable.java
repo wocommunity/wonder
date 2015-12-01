@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Table that can handle cell with row and colspans. Very useful with D2W to make more advance layouts.<br />
+ * Table that can handle cell with row and colspans. Very useful with D2W to make more advance layouts.
  * 
  * @binding col
  * @binding index

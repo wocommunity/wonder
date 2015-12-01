@@ -96,7 +96,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
-     * DirectToWeb. Example: "ListAllStudios"=>Studio
+     * DirectToWeb. Example: "ListAllStudios" =&gt; Studio
      * 
      * @param ec
      *            editing context
@@ -685,19 +685,20 @@ public class ERXEOAccessUtilities {
 
     /** 
      * Oracle 9 has a maximum length of 30 characters for table names, column names and constraint names.
-     * Foreign key constraint names are defined like this from the plugin:<br/><br/>
-     * 
-     * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
-     * 
-     * The whole statement looks like this:<br/><br/>
-     * 
+     * Foreign key constraint names are defined like this from the plugin:
+     * <p>
+     * TABLENAME_FOEREIGNKEYNAME_FK
+     * <p>
+     * The whole statement looks like this:
+     * <p>
      * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY DEFERRED
-     * 
+     * <p>
      * THIS means that the tablename and the columnname together cannot
-     * be longer than 26 characters.<br/><br/>
-     * 
+     * be longer than 26 characters.
+     * <p>
      * This method checks each foreign key constraint name and if it is longer than 30 characters it is replaced
      * with a unique name.
+     * 
      * @param entities
 	 *            a NSArray containing the entities for which create table
 	 *            statements should be generated or <code>null</code> if all entities in the
@@ -716,7 +717,7 @@ public class ERXEOAccessUtilities {
     }
     
     /**
-     * creates SQL to create tables for the specified Entities. This can be used
+     * Creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
      * 
      * @param entities
@@ -736,9 +737,8 @@ public class ERXEOAccessUtilities {
      *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
      *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
      *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
-     *            </ul>
      *            <li>EOSchemaGeneration.DropDatabaseKey</li>
-     *            <br/><br>
+     *            </ul>
      *            Possible values are <code>YES</code> and <code>NO</code>
      * 
      * @return a <code>String</code> containing SQL statements to create
@@ -774,7 +774,7 @@ public class ERXEOAccessUtilities {
      *            statements should be generated or null if all entities in the
      *            model should be used.
      * @param modelName
-     *            the name of the EOModel <br/><br/>This method uses the
+     *            the name of the EOModel<p>This method uses the
      *            following defaults options:
      *            <ul>
      *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
@@ -786,7 +786,6 @@ public class ERXEOAccessUtilities {
      *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
      *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
      *            </ul>
-     *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
      * 
      * @return a <code>String</code> containing SQL statements to create

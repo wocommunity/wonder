@@ -7,19 +7,19 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Localizes the value it is bound to. Can handle both <code>loc:value="SomeKey"</code> and
  * <code>loc:value=someReturnValue</code> syntax.
- * Install with <br /><br /><code> WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code>
- * </span>
+ * Install with<pre><code>WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code></pre>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * バインディングされている値をローカライズします。
  * 次の記述に対応しています：
  * <code>loc:value="SomeKey"</code>　と <code>loc:value=someReturnValue</code>
- * <br>
- * インストール<br /><br /><code>WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code>
- * </span>
+ * <p>
+ * インストール<pre><code>WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code></pre>
+ * </div>
  * 
  * @author ak
  */

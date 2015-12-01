@@ -925,11 +925,12 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overrides the parent implementation to:
      * <ul>
      * <li>add typecasts after the value, i.e. '2'::char,
-     * which is required with certain PostgreSQL versions (<=7.4.x) for the correct query processing, 
+     * which is required with certain PostgreSQL versions (&lt;=7.4.x) for the correct query processing, 
      * particularly with index usage. 
      * <li>quotes values if bind variables are disabled on this attribute. 
      * </ul>
-     * NULL values are excluded from casting. <br/>
+     * NULL values are excluded from casting.
+     * <p>
      * You can set the System default <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code>
      * to true to disable both fixes (the former you might want to disable when PG says it can't cast a certain value and
      * the second when you have values with a greater resolution already in the DB).

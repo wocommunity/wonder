@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.junit.Assert;
 
 import com.webobjects.foundation.NSArray;

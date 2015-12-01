@@ -10,8 +10,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WEditableListPage;
 
 /**
- * List page for editing all items in the list.<br />
- * See {@link ERD2WEditableListPage}
+ * List page for editing all items in the list.
+ * @see ERD2WEditableListPage
  * 
  * @binding backAction
  * @binding dataSource

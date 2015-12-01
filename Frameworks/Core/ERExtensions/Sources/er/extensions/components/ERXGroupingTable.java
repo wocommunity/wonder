@@ -9,7 +9,7 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Table implementation of a grouping repetition.<br />
+ * Table implementation of a grouping repetition.
  * 
  * @binding list NSArray
  * @binding item An object coming from the list

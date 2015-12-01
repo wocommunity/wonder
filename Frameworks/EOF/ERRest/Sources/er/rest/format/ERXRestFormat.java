@@ -48,28 +48,7 @@ public class ERXRestFormat {
 	private final String _name;
 	private final IERXRestParser _parser;
 	private final IERXRestWriter _writer;
-	private final ERXRestFormat.Delegate _delegate;
-
-	// These are going to be killed soon ...
-	@Deprecated
-	public static final ERXRestFormat JSON = json();
-	@Deprecated
-	public static final ERXRestFormat JS = ERXRestFormat.formatNamed(ERXRestFormat.JS_KEY);
-	@Deprecated
-	public static final ERXRestFormat PLIST = plist();
-	@Deprecated
-	public static final ERXRestFormat RAILS = ERXRestFormat.formatNamed(ERXRestFormat.RAILS_KEY);
-	@Deprecated
-	public static final ERXRestFormat XML = xml();
-	@Deprecated
-	public static final ERXRestFormat HTML = html();
-	@Deprecated
-	public static final ERXRestFormat GIANDUIA_JSON = ERXRestFormat.formatNamed("gndj");
-	@Deprecated
-	public static final ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.formatNamed("gndp");
-	@Deprecated
-	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
-	
+	private final ERXRestFormat.Delegate _delegate;	
 	    
 	/**
 	 * Returns the registered html form format.

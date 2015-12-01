@@ -46,7 +46,7 @@ import er.extensions.appserver.ERXWOContext;
  * @binding style CSS style for the link
  *
  * @see AjaxModalDialog
- * @see <a href="http://www.wildbit.com/labs/modalbox"/>Modalbox Page</a>
+ * @see <a href="http://www.wildbit.com/labs/modalbox">Modalbox Page</a>
  * @see <a href="http://code.google.com/p/modalbox/">Google Group</a>
  * @author chill
  */

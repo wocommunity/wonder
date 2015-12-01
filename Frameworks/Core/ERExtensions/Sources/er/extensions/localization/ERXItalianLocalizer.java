@@ -11,17 +11,18 @@ package er.extensions.localization;
 import org.apache.log4j.Logger;
 
 /**
- * <span class="en">
- *  ERXItalianLocalizer is a subclass of {@link ERXLocalizer}.<br/>
- *  <br/>
+ * <div class="en">
+ *  ERXItalianLocalizer is a subclass of {@link ERXLocalizer}.
+ *  <p>
  *  Overrides <code>plurify</code> from its super class 
  *  and tries to pluralize the string according to italian grammar rules.
- * </span>
+ * </div>
  * 
- * <span class="ja">
- * ERXItalianLocalizer は ERXLocalizer のサブクラスです。<br>
+ * <div class="ja">
+ * ERXItalianLocalizer は ERXLocalizer のサブクラスです。
+ * <p>
  * スーパー・クラスの <code>plurify</code> をオーバライドし、複数の文法ルールを試します。
- * </span>
+ * </div>
  */
 public class ERXItalianLocalizer extends ERXLocalizer {
   
@@ -32,14 +33,14 @@ public class ERXItalianLocalizer extends ERXLocalizer {
     }
     
     /**
-     * <span class="ja">
+     * <div class="ja">
      * 複数形の文字列を戻します (スーパークラス参照) 
      * 
      * @param name - 翻訳対象キー
      * @param count - 数
      * 
      * @return ローカライズ済み文字列
-     * </span>
+     * </div>
      */
     @Override
     protected String plurify(String name, int count) {

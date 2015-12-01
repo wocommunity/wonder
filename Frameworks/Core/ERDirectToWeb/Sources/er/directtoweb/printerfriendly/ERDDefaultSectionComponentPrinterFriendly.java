@@ -11,8 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDDefaultSectionComponent;
 
 /**
- * Displays section name as a string for printer friendly version of the pages.<br />
- * 
+ * Displays section name as a string for printer friendly version of the pages.
  */
 
 public class ERDDefaultSectionComponentPrinterFriendly extends ERDDefaultSectionComponent {

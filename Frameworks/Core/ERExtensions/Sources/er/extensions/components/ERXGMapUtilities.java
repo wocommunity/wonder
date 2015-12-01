@@ -3,7 +3,7 @@ package er.extensions.components;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;

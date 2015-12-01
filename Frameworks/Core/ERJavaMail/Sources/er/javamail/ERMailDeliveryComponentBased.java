@@ -10,15 +10,15 @@ import com.webobjects.appserver.WOMessage;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * <span class="en">
+ * <div class="en">
  * This abstract class is the basis for all WOComponetn based deliverers.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * この抽選クラスは WOComponent のメール対応のスーパー・クラスになります。
- * </span>
+ * </div>
  * 
- * @author Camille Troillard <tuscland@mac.com>
+ * @author Camille Troillard &lt;tuscland@mac.com&gt;
  */
 public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	/** WOComponent used to render the HTML message. */
@@ -26,36 +26,26 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	protected WOComponent _alternativeComponent;
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Variable that stores the state of the session. In the case the component was instanciated with
 	 * ERMailUtils.instanciatePage, the session may be new and hence, would lack its dictionary properties.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * セッション情報を保持する変数です。例えば、ERMailUtils.instanciatePage でインスタンス化されているコンポーネント
 	 * ではセッションが新しく、必要な情報がないことになります。
-	 * </span>
+	 * </div>
 	 */
 	protected NSDictionary _sessionDictionary = NSDictionary.EmptyDictionary;
 
-	/**
-	 * Sets the WOComponent used to render the HTML message.
-	 * 
-	 * @deprecated use {@link #setComponent(WOComponent)}
-	 */
-	@Deprecated
-	public void setWOComponentContent(WOComponent component) {
-		setComponent(component);
-	}
-
 	/** 
-	 * <span class="en">
+	 * <div class="en">
 	 * Sets the WOComponent used to render the HTML message. 
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * HTML メッセージに使用される WOComponent をセットします。
-	 * </span>
+	 * </div>
 	 */
 	public void setComponent(WOComponent component) {
 		_component = component;
@@ -66,13 +56,13 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	}
 	
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Sets the alternative view component for rendering a different mime type (text/plain, etc)
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 他の mime タイプ (text/plain, 等) のレンダリングに使用するコンポーネント
-	 * </span>
+	 * </div>
 	 */
 	public void setAlternativeComponent(WOComponent alternativeComponent) {
 		_alternativeComponent = alternativeComponent;
@@ -93,38 +83,38 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	}
 
 	/** 
-	 * <span class="en">
+	 * <div class="en">
 	 * Generates the output string used in messages
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * メッセージで使用されている出力結果を生成します
-	 * </span>
+	 * </div>
 	 */
 	protected String componentContentString() {
 		return _componentContentString(component());
 	}
 
 	/** 
-	 * <span class="en">
+	 * <div class="en">
 	 * Generates the output string used in messages 
-	 * </span>
-	 * <span class="ja">
+	 * </div>
+	 * <div class="ja">
 	 * メッセージで使用されている出力結果を生成します
-	 * </span>
+	 * </div>
 	 */
 	protected String alternativeComponentContentString() {
 		return _componentContentString(alternativeComponent());
 	}
 
 	/** 
-	 * <span class="en">
+	 * <div class="en">
 	 * Generates the output string used in messages 
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * メッセージで使用されている出力結果を生成します
-	 * </span>
+	 * </div>
 	 */
 	protected String _componentContentString(WOComponent component) {
 		String contentString = null;

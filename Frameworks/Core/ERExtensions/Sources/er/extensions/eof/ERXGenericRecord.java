@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -53,10 +53,10 @@ import er.extensions.validation.ERXValidationFactory;
  * willUpdate</code>
  * and <code>didDelete</code> and a bunch of handy utility methods like
  * <code>committedSnapshotValueForKey
- * </code>.
+ * </code>.</li>
  * <li> At the moment it is required that those wishing to take advantage of
  * templatized and localized validation exceptions need to subclass this class.
- * Hopefully in the future we can get rid of this requirement. <br />
+ * Hopefully in the future we can get rid of this requirement.</li>
  * </ul>
  * Also, this class supports auto-updating of inverse relationships. You can
  * simply call <code>eo.setFoo(other), eo.takeValueForKey(other),
@@ -66,7 +66,8 @@ import er.extensions.validation.ERXValidationFactory;
  * <code>other.addToBars(eo)</code> or <code>other.setBar(eo)</code>. Doing
  * so doesn't hurt, though. Giving a <code>null</code> value of removing the
  * object from a to-many will result in the inverse relationship getting
- * cleared. <br />
+ * cleared.
+ * <p>
  * If you *do* call addToBars(), you need to use
  * includeObjectIntoPropertyWithKey() in this method.<br>
  * This feature should greatly help readability and reduce the number errors you
@@ -967,8 +968,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	/**
 	 * Overrides the EOGenericRecord's implementation to provide a slightly less
 	 * verbose output. A typical output for an object mapped to the class
-	 * com.foo.User with a primary key of 50 would look like: <com.foo.User
-	 * pk:"50"> EOGenericRecord's implementation is preserved in the method
+	 * com.foo.User with a primary key of 50 would look like: &lt;com.foo.User
+	 * pk:"50"&gt; EOGenericRecord's implementation is preserved in the method
 	 * <code>toLongString</code>. To restore the original verbose logging in
 	 * your subclasses override this method and return toLongString.
 	 * 
@@ -1004,15 +1005,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		EOGlobalID gid = __globalID();
 		boolean isDeleted = (editingContext() == null && (gid != null && !gid.isTemporary()));
 		return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
-	}
-
-	/**
-	 * @deprecated use {@link #isNewObject()}
-	 */
-	@SuppressWarnings("dep-ann")
-    @Deprecated
-	public boolean isNewEO() {
-		return isNewObject();
 	}
 
 	public boolean isNewObject() {

@@ -495,15 +495,6 @@ public  class ERXRequest extends WORequest {
         String encodedString = Base64.encodeBase64String(bytes);
         setHeader("Basic " +  encodedString, "authorization");
     }
-    
-    /**
-     * @return remote client host address
-     * @deprecated use {@link #remoteHostAddress()}
-     */
-    @Deprecated
-	public String remoteHost() {
-    	return remoteHostAddress();
-    }
 
     /**
      * Returns the remote client host address. Works in various setups, like

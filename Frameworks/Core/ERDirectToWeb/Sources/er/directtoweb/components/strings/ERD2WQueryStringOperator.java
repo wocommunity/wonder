@@ -16,18 +16,18 @@ import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <span class="en">
- * @d2wKey name
- * @d2wKey qualifierOperators
- * </span>
+ * <div class="en">
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * このプロパティ・レベル・コンポーネントは string のクエリをビルドします。
  * 例：("starts with" 又は "contains")
+ * </div>
  * 
- * @d2wKey name - テキストフィールドの name タグ
- * @d2wKey qualifierOperators - 指定 qualifier (NSArray<String>)
- * </span>
+ * @d2wKey name <div class="en"></div>
+ *              <div class="ja">テキストフィールドの name タグ</div>
+ * @d2wKey qualifierOperators <div class="en"></div>
+ *                            <div class="ja">指定 qualifier (NSArray&lt;String&gt;)</div>
  */
 public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
 	/**

@@ -676,28 +676,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	}
 	
 	/**
-	 * Utility to return string value for binding or default value if no value is found
-	 * only really needed to support < WO5.4
-	 * @param key
-	 * @param defaultValue
-	 * @return value for binding or defaultValue
-	 */
-	private String stringValueForBinding(String key, String defaultValue) {
-		String result = (String) valueForBinding(key);
-		if (result == null) {
-			result = defaultValue;
-		}
-		return result;
-	}
-	
-	/**
 	 * Utility to return localized value from stringValueForBinding
 	 * @param key
 	 * @param defaultValue
 	 * @return localized value of binding key or defaultValue
 	 */
 	private String localizedStringForBinding(String key, String defaultValue) {
-		return localizedString(stringValueForBinding(key, defaultValue));
+		return localizedString(valueForStringBinding(key, defaultValue));
 	}
 	
 	/**
@@ -756,7 +741,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String selectFileButtonClass() {
 		if (_selectFileButtonClass == null) {
-			_selectFileButtonClass = stringValueForBinding(Keys.selectFileButtonClass, "Button ObjButton SelectFileObjButton");
+			_selectFileButtonClass = valueForStringBinding(Keys.selectFileButtonClass, "Button ObjButton SelectFileObjButton");
 		}
 		return _selectFileButtonClass;
 	}
@@ -768,7 +753,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String uploadButtonClass() {
 		if (_uploadButtonClass == null) {
-			_uploadButtonClass = stringValueForBinding(Keys.uploadButtonClass, "Button ObjButton UploadFileObjButton");
+			_uploadButtonClass = valueForStringBinding(Keys.uploadButtonClass, "Button ObjButton UploadFileObjButton");
 		}
 		return _uploadButtonClass;
 	}
@@ -780,7 +765,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String cancelButtonClass() {
 		if (_cancelButtonClass == null) {
-			_cancelButtonClass = stringValueForBinding(Keys.cancelButtonClass, "Button ObjButton CancelUploadObjButton");
+			_cancelButtonClass = valueForStringBinding(Keys.cancelButtonClass, "Button ObjButton CancelUploadObjButton");
 		}
 		return _cancelButtonClass;
 	}
@@ -792,7 +777,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String clearButtonClass() {
 		if (_clearButtonClass == null) {
-			_clearButtonClass = stringValueForBinding(Keys.clearButtonClass, "Button ObjButton ClearUploadObjButton");
+			_clearButtonClass = valueForStringBinding(Keys.clearButtonClass, "Button ObjButton ClearUploadObjButton");
 		}
 		return _clearButtonClass;
 	}

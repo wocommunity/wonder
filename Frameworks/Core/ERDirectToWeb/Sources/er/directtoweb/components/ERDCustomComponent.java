@@ -22,13 +22,14 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.validation.ERXExceptionHolder;
 
 /**
- * <span class="en">
- * Base class of many custom components.<br />
+ * <div class="en">
+ * Base class of many custom components.
+ * <p>
  * Has a lot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@link ERXNonSynchronizingComponent}.
  * Subclasses should be able to run stand alone without a D2W context. This is achieved by pulling values first from the bindings, then from the d2wContext and finally from an "extraBindings" binding.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * たくさんのカスタム・コンポーネントのベース・クラスである
  * 
  * ルール・システムへのバインディングや {@link ERXNonSynchronizingComponent} の値バインディング取得機能等の必要な処理をたくさん含みます。
@@ -41,7 +42,7 @@ import er.extensions.validation.ERXExceptionHolder;
  * @d2wKey key - プロパティ・キー
  * @d2wKey extraBindings - オプション・バインディング
  * @d2wKey propertyKey - プロパティ・キー
- * </span>
+ * </div>
  */
 public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent implements ERXExceptionHolder {
 	/**

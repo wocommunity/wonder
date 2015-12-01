@@ -13,8 +13,7 @@ import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomQueryComponent;
 
 /**
- * Custom query component that let's the user select from a set of shared eos.<br />
- * 
+ * Custom query component that let's the user select from a set of shared eos.
  */
 public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
 	/**

@@ -18,11 +18,11 @@
              value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaWOJSPServlet/JavaJDBCAdaptor/JavaXML/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />
     <property name="frameworks.system.d2w" value="${frameworks.system.core}/JavaDirectToWeb/JavaEOProject/JavaDTWGeneration" />
 
-    <property name="framework.erjars.commons.cli" value="commons-cli-1.2.jar" />
-    <property name="framework.erjars.commons.codec" value="commons-codec-1.6.jar" />
-    <property name="framework.erjars.commons.io" value="commons-io-2.2.jar" />
+    <property name="framework.erjars.commons.cli" value="commons-cli-1.3.1.jar" />
+    <property name="framework.erjars.commons.codec" value="commons-codec-1.10.jar" />
+    <property name="framework.erjars.commons.io" value="commons-io-2.4.jar" />
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
-    <property name="framework.erjars.commons.lang3" value="commons-lang3-3.1.jar" />
+    <property name="framework.erjars.commons.lang3" value="commons-lang3-3.4.jar" />
     <property name="framework.erjars.fluent-hc" value="fluent-hc-4.3.6.jar" />
     <property name="framework.erjars.httpclient" value="httpclient-4.3.6.jar" />
     <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.3.6.jar" />
@@ -32,7 +32,7 @@
     <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
-    <property name="framework.erjars.ognl" value="ognl-2.6.7.jar" />
+    <property name="framework.erjars.ognl" value="ognl-3.1.jar" />
     <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.12.jar" />
     <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.12.jar" />
 
@@ -124,7 +124,7 @@
     <target name="ERMoviesLogic.all">
         <antcall target="global.framework.${build.action}">
             <param name="project.dir" value="Frameworks/BusinessLogic/ERMoviesLogic" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERAttachment/ERTaggable" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERCoreBusinessLogic/ERAttachment/ERTaggable" />
        </antcall>
     </target>
 
@@ -231,9 +231,16 @@
         </antcall>
     </target>
 
+    <target name="ERCMail.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Mail/ERCMail" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
     <target name="ERJavaMail.all">
         <antcall target="global.framework.${build.action}">
-            <param name="project.dir" value="Frameworks/Core/ERJavaMail" />
+            <param name="project.dir" value="Frameworks/Mail/ERJavaMail" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
@@ -1113,7 +1120,7 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaLuceneAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERCMail.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaLuceneAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
     

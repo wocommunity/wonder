@@ -13,8 +13,9 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Same as original except allows display of noSelectionString if relationship is null.<br />
+ * Same as original except allows display of noSelectionString if relationship is null.
  * Also, links are disabled if no object exists.
+ * 
  * @d2wKey noSelectionString
  * @d2wKey disabled
  */

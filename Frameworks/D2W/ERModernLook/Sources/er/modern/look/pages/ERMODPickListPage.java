@@ -6,7 +6,7 @@ import er.directtoweb.pages.templates.ERD2WPickListPageTemplate;
 
 /**
  * A basic list but adding the ability to choose an arbitrary number of eos.  
- * Useful as a user-friendly replacement of the edit relationship page.<br />
+ * Useful as a user-friendly replacement of the edit relationship page.
  * 
  * @d2wKey hasPrinterFriendlyVersion
  * @d2wKey bannerFileName

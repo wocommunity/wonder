@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -90,6 +90,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	private EODataSource _dataSource;
 	private EODataSource _selectDataSource;
 	private WODisplayGroup _relationshipDisplayGroup;
+    private Integer _batchSize = null;
 	public boolean isRelationshipToMany;
 	public WOComponent nextPage;
 	public NextPageDelegate nextPageDelegate;
@@ -437,6 +438,28 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public boolean userPreferencesCanSpecifySorting() {
 		return !"printerFriendly".equals(d2wContext().valueForKey(Keys.subTask));
 	}
+	
+	// BATCH SIZE
+	
+    /**
+     * @return the batch size as set via ERCPreference or the rules
+     */
+    public int numberOfObjectsPerBatch() {
+        if (_batchSize == null) {
+            Integer batchSize = ERXValueUtilities.IntegerValueWithDefault(d2wContext()
+                    .valueForKey("defaultBatchSize"), 5);
+            Object batchSizePref = userPreferencesValueForPageConfigurationKey("batchSize");
+            if (batchSizePref != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Found batch size in user prefs " + batchSizePref);
+                }
+                batchSize = ERXValueUtilities.IntegerValueWithDefault(batchSizePref,
+                        batchSize);
+            }
+            _batchSize = batchSize;
+        }
+        return _batchSize.intValue();
+    }
     
     // ACCESSORS
     
@@ -494,12 +517,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public WODisplayGroup relationshipDisplayGroup() {
 		if (_relationshipDisplayGroup == null) {
 			_relationshipDisplayGroup = new WODisplayGroup();
-			String count = (String)d2wContext().valueForKey("defaultBatchSize");
-			if (count != null) {
-				int intCount = Integer.parseInt(count);
-				_relationshipDisplayGroup.setNumberOfObjectsPerBatch(intCount);
-			}
-			
+			_relationshipDisplayGroup.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
 		}
 		return _relationshipDisplayGroup;
 	}

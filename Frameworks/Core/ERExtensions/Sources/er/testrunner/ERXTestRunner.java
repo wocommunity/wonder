@@ -16,8 +16,7 @@ import org.apache.log4j.Logger;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * runs tests with ERTestListeners.<br />
- * 
+ * runs tests with ERTestListeners.
  */
 
 public class ERXTestRunner extends BaseTestRunner {

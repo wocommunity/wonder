@@ -22,7 +22,7 @@ import er.directtoweb.delegates.ERDBranchDelegateInterface;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Used to select multiple items from a list.<br />
+ * Used to select multiple items from a list.
  * 
  * @binding dataSource
  * @binding list

@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
+import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.interfaces.ERDEditPageInterface;
 import er.directtoweb.interfaces.ERDFollowPageInterface;
@@ -34,7 +35,8 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Superclass for all inspecting/editing ERD2W templates.<br />
+ * Superclass for all inspecting/editing ERD2W templates.
+ * 
  * @d2wKey inspectConfirmConfigurationName
  * @d2wKey object
  * @d2wKey editConfigurationName
@@ -135,6 +137,15 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
 	    	editPage.setObject(object);
             editPage.setNextPage(nextPage());
+	    	if (currentTab() != null && editPage instanceof ERD2WPage) {
+	    	    // try to keep the current tab selection
+	    	    ERD2WPage tabPage = (ERD2WPage) editPage;
+	    	    for (ERD2WContainer aTab : tabPage.tabSectionsContents()) {
+	    	        if (aTab.equals(currentTab())) {
+	    	            tabPage.setCurrentTab(aTab);
+	    	        }
+	    	    }
+	    	}
             returnPage = (WOComponent)editPage;
         }
         return returnPage != null ? returnPage : previousPage();

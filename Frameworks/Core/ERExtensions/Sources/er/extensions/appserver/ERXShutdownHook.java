@@ -13,37 +13,36 @@ import er.extensions.appserver.ERXApplication;
 
 
 /**
- * <p>Use this to register shutdown hooks instead of directly using Runtime.addShutdownHook().
+ * Use this to register shutdown hooks instead of directly using Runtime.addShutdownHook().
  * The net effect is that there will be a specific log file entry AFTER all other shutdown
  * hooks have completed, notifying a watching user that shutdown of the application has
- * indeed completed, which says:</p>
- * 
+ * indeed completed, which says:
+ * <p>
  * <tt>APPLICATION SHUTDOWN SEQUENCE COMPLETE</tt>
- * 
- * <p>on a single line. After you see this line in the application's log file, you can be
+ * <p>
+ * on a single line. After you see this line in the application's log file, you can be
  * pretty sure that the process is indeed terminated. This notification works even if
  * there are no other shutdown hooks registered, if you ensure that this class is
  * loaded at all, e.g. by calling the no-op {@link #useMe()} method somewhere
- * ({@link ERXApplication} does this for you if you extend that).</p>
- * 
- * <p>Usage (e.g. in your Application class constructor):</p>
- * 
- * <p><blockquote><pre>
+ * ({@link ERXApplication} does this for you if you extend that).
+ * <p>
+ * Usage (e.g. in your Application class constructor):
+ * <pre><code>
  * new ERXShutdownHook() {
  *     {@literal @}Override
  *     public void hook() {
  *         // do something
  *     }
  * };
- * </pre></blockquote></p>
+ * </code></pre>
  *
- * <b>CAUTION</b><br><br>
+ * <h3>CAUTION</h3>
  * You should not use this class when deploying the application as a J2EE servlet as it may interfere with other servlets running in the same VM. 
  * To disable this feature you have to provide the following start parameter to the java VM:
  * 
  * <code>
  * -Der.extensions.ERXApplication.enableERXShutdownHook=false
- * </code><br>
+ * </code>
  *
  * @author Maik Musall, maik@selbstdenker.ag
  *

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -330,7 +330,9 @@ public class ERXSQLHelper {
 	 * @param create
 	 *            add create statements
 	 * @param drop
-	 *            add drop statements <br/><br/>This method uses the following
+	 *            add drop statements
+	 *            <p>
+	 *            This method uses the following
 	 *            defaults options:
 	 *            <ul>
 	 *            <li>EOSchemaGeneration.DropTablesKey=YES if drop</li>
@@ -343,7 +345,6 @@ public class ERXSQLHelper {
 	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
 	 *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
 	 *            </ul>
-	 *            <br/><br>
 	 *            Possible values are <code>YES</code> and <code>NO</code>
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create
@@ -416,7 +417,7 @@ public class ERXSQLHelper {
 				String key = keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
-					if (ERXStringUtilities.isDigitsOnly(numbers)) {
+					if (StringUtils.isNumeric(numbers)) {
 						String attributeNames = (String) d.objectForKey(key);
 						if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) {
 							continue;
@@ -819,7 +820,7 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Adds a " having count(*) > x" clause to a group by expression.
+	 * Adds a " having count(*) &gt; x" clause to a group by expression.
 	 * 
 	 * @param selector
 	 *            the comparison selector -- just like EOKeyValueQualifier
@@ -1697,19 +1698,19 @@ public class ERXSQLHelper {
 		/**
 		 * oracle 9 has a maximum length of 30 characters for table names,
 		 * column names and constraint names Foreign key constraint names are
-		 * defined like this from the plugin:<br/><br/>
+		 * defined like this from the plugin:
 		 * 
-		 * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
+		 * <pre><code>TABLENAME_FOEREIGNKEYNAME_FK</code></pre>
 		 * 
-		 * The whole statement looks like this:<br/><br/>
+		 * The whole statement looks like this:
 		 * 
-		 * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY
+		 * <pre><code>ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY
 		 * ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY
-		 * DEFERRED
+		 * DEFERRED</code></pre>
 		 * 
 		 * THIS means that the tablename and the columnname together cannot be
-		 * longer than 26 characters.<br/><br/>
-		 * 
+		 * longer than 26 characters.
+		 * <p>
 		 * This method checks each foreign key constraint name and if it is
 		 * longer than 30 characters its replaced with a unique name.
 		 * 
@@ -2153,14 +2154,14 @@ public class ERXSQLHelper {
 		}
 		
 		/**
-		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:<br/>
-		 * SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...<br/>
-		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:<br/>
-		 * SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...
+		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:
+		 * <pre><code>SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...</code></pre>
+		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:
+		 * <pre><code>SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...</code></pre>
 		 * executes in less than a tenth of the time with less high CPU load.  Collapse all the ORs and INs into one and it is faster
 		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
 		 * theoretical maximum is.
-		 * 
+		 * <p>
 		 * But... It looks to like the query optimizer will choose to NOT use an index if the number of elements in the IN gets close to, 
 		 * or exceeds, the number of rows (as in the case of a select based on FK with a large number of keys that don't match any rows).  In 
 		 * this case it seems to fall back to table scanning (or something dreadfully slow).  This only seems to have an impact when the number

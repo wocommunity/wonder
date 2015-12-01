@@ -24,17 +24,17 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXThreadStorage;
 
 /**
- * Better batch navigation bar to page thtough display groups.<br />
+ * Better batch navigation bar to page through display groups.
  * <ul>
  * <li>User typing null for either number of objects per batch or the page number</li>
  * <li>When resetting the number of items per batch the page first page displayed would be the last page.</li>
  * <li>Broadcasts a notification when the batch size changes</li>
- * <li>Has go first/go last methods/li>
+ * <li>Has go first/go last methods</li>
  * <li>Has option to not clear the selection when paging, which WODisplayGroup does when calling displayNext()/displayPrevious()</li>
  * <li>Broadcasts a notification when the batch size changes</li>
- * <li>Can be used inside or outside of a <code>form</code>
- * <li>Graphics can be easily configured
- * <li>Has localization support, both for static texts and the object count.
+ * <li>Can be used inside or outside of a <code>form</code></li>
+ * <li>Graphics can be easily configured</li>
+ * <li>Has localization support, both for static texts and the object count.</li>
  * </ul>
  * 
  * @binding d2wContext the D2W context that this component is in

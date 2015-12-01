@@ -6,14 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Sets a key value when the hyperlink is clicked.<br />
+ * Sets a key value when the hyperlink is clicked.
  * 
  * @binding value The value to set when the hyperlink is set
  * @binding binding The method to call to set the value

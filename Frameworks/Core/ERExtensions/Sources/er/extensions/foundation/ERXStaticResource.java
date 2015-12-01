@@ -7,49 +7,48 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Static Resource Object
- * This Object creates a URL just in Time for your URL with a new Syntax :
- * 
+ * This Object creates a URL just in Time for your URL with a new Syntax:
+ * <pre><code>
  * static://{framework}:{filename}
  * http://{url}
  * https://{url}
- * 
- * Reason 1 : Properties File
- * normal way
- *    er.xxx.xxx.framework = {framework}
- *    er.xxx.xxx.filename = {filename}
- * or
- *    er.xxx.xxx.href = http://{url}
- *       
- * static resource
- *    er.xxx.xxx.location = static://{framework}:{filename}
- * or 
- *    er.xxx.xxx.location = http://{url}
- * 
- * Reason 2 : Bindings
- * normal way
- *    <wo:xxxx framework="{Framework}" filename="{filename}" ... />
- * 
- * static resource
- *    <wo:xxxx location="static://{framework}:{filename}" ... />
- * 
- * Reason 3 : CMS
+ * </code></pre>
+ * <h3>Reason 1 : Properties File</h3>
+ * <dl>
+ * <dt>normal way</dt>
+ * <dd>er.xxx.xxx.framework = {framework}<br>
+ * er.xxx.xxx.filename = {filename}</dd>
+ * <dt>or</dt>
+ * <dd>er.xxx.xxx.href = http://{url}</dd>
+ * <dt>static resource</dt>
+ * <dd>er.xxx.xxx.location = static://{framework}:{filename}</dd>
+ * <dt>or</dt>
+ * <dd>er.xxx.xxx.location = http://{url}</dd>
+ * </dl>
+ * <h3>Reason 2 : Bindings</h3>
+ * <dl>
+ * <dt>normal way</dt>
+ * <dd>&lt;wo:xxxx framework="{Framework}" filename="{filename}" ... /&gt;</dd>
+ * <dt>static resource</dt>
+ * <dd>&lt;wo:xxxx location="static://{framework}:{filename}" ... /&gt;</dd>
+ * </dl>
+ * <h3>Reason 3 : CMS</h3>
  * Static Resource Object makes it easy to create Objects in CMS Systems.
  * It will also heavily used in SnoWOman and other coming Frameworks.
  * It is easy to write a URL into the Database and retrieve the Link
  * via this Object.
  * 
- * Reason 4 : D2W
- * It makes it also easy to write Rules, because sometimes you need only one Rule insteed of two.
+ * <h3>Reason 4 : D2W</h3>
+ * It makes it also easy to write Rules, because sometimes you need only one Rule instead of two.
  * Will be used in the D2W Framework.
+ * </div>
  * 
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * リソース・オブジェクト
  * フレームワークとファイル名をオブジェクト化します
- * </span>
+ * </div>
  */
 public class ERXStaticResource {
 
@@ -101,41 +100,35 @@ public class ERXStaticResource {
 	//********************************************************************
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Create a Compete URL
+	 * </div>
 	 * 
-	 * @return complete URL
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 完全な URL を作成して戻します。
+	 * </div>
 	 * 
-	 * @return 完全な URL を戻す
-	 * </span>
+	 * @return <div class="en">complete URL</div>
+	 *         <div class="ja">完全な URL を戻す</div>
 	 */
-	@SuppressWarnings("javadoc")
 	public String urlForResourceNamed() {
 		return urlForResourceNamed(context);
 	}
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Create a Compete URL
+	 * </div>
 	 * 
-	 * @param aWOContext - WOContext
-	 * 
-	 * @return complete URL
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 完全な URL を作成して戻します。
+	 * </div>
 	 * 
-	 * @param aWOContext - コンテキスト
-	 * 
-	 * @return 完全な URL を戻す
-	 * </span>
+	 * @param aWOContext <div class="en">WOContext</div>
+	 *                   <div class="ja">コンテキスト</div>
+	 * @return <div class="en">complete URL</div>
+	 *         <div class="ja">完全な URL を戻す</div>
 	 */
-	@SuppressWarnings("javadoc")
 	public String urlForResourceNamed(WOContext aWOContext) {
 
 		// href ある？
@@ -185,8 +178,8 @@ public class ERXStaticResource {
 	private String _href = null;
 
 	/** 
-	 * <span class="en">Sometimes it is Nice for Binding Reasons to have the Context inside</span>
-	 * <span class="ja">バインディングできる為にコンテキストを保存する</span>
+	 * <div class="en">Sometimes it is Nice for Binding Reasons to have the Context inside</div>
+	 * <div class="ja">バインディングできる為にコンテキストを保存する</div>
 	 */
 	private WOContext context = null;
 
@@ -195,27 +188,23 @@ public class ERXStaticResource {
 	//********************************************************************
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Create a URL from a staticResourceUrl String
 	 * without creating a Class.
+	 * </div>
 	 * 
-	 * @param context - Context
-	 * @param url - parameter like a URL
-	 * 
-	 * @return URL
-	 * </span>
-	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 完全な URL を作成して戻します。
 	 * クラスを作る必要ないバージョン
+	 * </div>
 	 * 
-	 * @param context - コンテキスト
-	 * @param url - URL 形式の引数
-	 * 
-	 * @return 完全な URL を戻す
-	 * </span>
+	 * @param context <div class="en">Context</div>
+	 *                <div class="ja">コンテキスト</div>
+	 * @param url <div class="en">parameter like a URL</div>
+	 *            <div class="ja">URL 形式の引数</div>
+	 * @return <div class="en">URL</div>
+	 *         <div class="ja">完全な URL を戻す</div>
 	 */
-	@SuppressWarnings("javadoc")
 	public static String urlForResourceNamed(WOContext context, String url) {
 
 		if(!ERXStringUtilities.stringIsNullOrEmpty(url)) {

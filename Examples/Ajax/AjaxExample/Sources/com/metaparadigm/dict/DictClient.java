@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 public class DictClient implements Serializable
 {

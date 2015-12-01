@@ -12,9 +12,8 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.validation.ERXExceptionHolder;
 
-// Stateless version of D2WCustomComponentWithArgs
 /**
- * Stateless version of D2WCustomComponentWithArgs.<br />
+ * Stateless version of D2WCustomComponentWithArgs.
  * @d2wKey customComponentName
  * @d2wKey propertyKey
  * @d2wKey extraBindings

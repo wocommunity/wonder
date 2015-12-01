@@ -1,6 +1,6 @@
 package er.modern.look.pages;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -8,14 +8,13 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.templates.ERD2WTabInspectPageTemplate;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * A modernized tab inspect/edit template.<br />
+ * A modernized tab inspect/edit template.
  * 
  * @d2wKey cancelButtonLabel
  * @d2wKey printerButtonComponentName
@@ -114,11 +113,7 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 	 */
 	@Override
 	public void setObject(EOEnterpriseObject eoenterpriseobject) {
-		// If we are getting a new EO, then reset the current step.
-		if (eoenterpriseobject != null && !eoenterpriseobject.equals(object())) {
-			ERD2WContainer tab = tabSectionsContents().objectAtIndex(0);
-			setTabByName(tab.name);
-		}
+	    clearTabSectionsContents();
 		super.setObject(eoenterpriseobject);
 	}
 	

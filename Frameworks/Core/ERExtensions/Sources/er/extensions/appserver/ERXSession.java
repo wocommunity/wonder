@@ -64,13 +64,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   public static final Logger log = Logger.getLogger(ERXSession.class);
 
   /**
-   * Notification name that is posted after a session wakes up.
-   * 
-   * @deprecated use {@link WOSession#SessionDidRestoreNotification} instead
-   */
-  @Deprecated
-  public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
-  /**
    * Notification name that is posted when a session is about to sleep.
    */
   public static final String SessionWillSleepNotification = "SessionWillSleepNotification";
@@ -434,7 +427,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     super.awake();
     ERXSession.setSession(this);
     ERXLocalizer.setCurrentLocalizer(localizer());
-    NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
+    NSNotificationCenter.defaultCenter().postNotification(SessionDidRestoreNotification, this);
 
     WORequest request = context() != null ? context().request() : null;
     if (request != null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
@@ -729,7 +722,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * will be sent over HTTP.  So if someone manages to do an HTTP injection that causes an HTTP 
    * request to be made, they can compromise your session id. For example, if you have a CMS on 
    * https://www.mycms.com and you set a session id, and I hack in and trick your site and manage to 
-   * do an injection where i do an <img src="http://www.mycms.com/whatever"/> in the content, like I post 
+   * do an injection where i do an &lt;img src="http://www.mycms.com/whatever"/&gt; in the content, like I post 
    * in a comment and you don't strip out HTML tags.  secure-only just gives you peace-of-mind.  If you 
    * intended the cookies to only be behind HTTPS, secure-only makes it actually true and enforced.
    * 
@@ -835,7 +828,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * set the current Look for this Session
    * 
    * <pre>
-   * 90 : *true* => look = "session.currentD2WLook" 
+   * 90 : *true* =&gt; look = "session.currentD2WLook" 
    *    [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment]
    * </pre>
    * 

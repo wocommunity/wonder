@@ -19,8 +19,8 @@ import er.extensions.woextensions.WOToManyRelationship;
 
 /**
  * Better layout options that the {@link WOToManyRelationship}, in addition you can set a 
- * qualifier on the dataSource if you passed any.<br />
- * * 
+ * qualifier on the dataSource if you passed any.
+ * 
  * @binding dataSource
  * @binding destinationDisplayKey
  * @binding isMandatory
@@ -39,7 +39,6 @@ import er.extensions.woextensions.WOToManyRelationship;
  * @binding localizeDisplayKeys
  * @binding sortCaseInsensitive
  */
-
 public class ERXToManyRelationship extends WOToManyRelationship {
 	/**
 	 * Do I need to update serialVersionUID?

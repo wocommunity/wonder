@@ -42,7 +42,7 @@ public class PayPalAction extends WODirectAction {
 
     /** Processor for Instant Payment Notifications
      * 
-     * The class takes the request and constructs a response that it then echoes back to PayPal, with the additional value "&cmd=_notify-validate.
+     * The class takes the request and constructs a response that it then echoes back to PayPal, with the additional value "&amp;cmd=_notify-validate.
      * 
      * PayPal will then send a one word code for the status of the transaction.  This method then parses for that word and sends the appropriate notification for the result, with the original WORequest object from PayPal attached to it (as the notification's object).
      * 

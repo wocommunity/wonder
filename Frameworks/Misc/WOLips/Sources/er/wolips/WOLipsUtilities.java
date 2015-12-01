@@ -3,7 +3,7 @@ package er.wolips;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;

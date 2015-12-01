@@ -23,7 +23,7 @@ import er.extensions.foundation.ERXMutableInteger;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * <span class="en">
+ * <div class="en">
  * All WebObjects applications have exactly one <code>ERXBrowserFactory</code> 
  * instance. Its primary role is to manage {@link ERXBrowser} objects. 
  * It provides facility to parse <code>"user-agent"</code> HTTP header and to 
@@ -40,7 +40,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * as the parameter and returns a shared instance of browser object. 
  * You actually wouldn't have to call this function by yourself 
  * because <code>ERXSession</code> and <code>ERXDirectAction</code> 
- * provide {@link ERXSession#browser() browser}</code> method 
+ * provide {@link ERXSession#browser() browser} method 
  * that returns a browser object for the current request for you.
  * <p>
  * Note that <code>ERXSession</code> and <code>ERXDirectAction</code> 
@@ -97,12 +97,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * Netscape 6.2.3   Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
  * Netscape 4.79    Mozilla/4.79 [en] (Windows NT 5.0; U)
  * Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
- *
  * </pre>
+ * </div>
  *
- * </span>
- *
- * <span class="ja">
+ * <div class="ja">
  * 全 WebObjects アプリケーションは一つの <code>ERXBrowserFactory</code> インスタンスを持っている。
  * このメソッドは {@link ERXBrowser} オブジェクトを管理する責任があります。
  * 
@@ -163,9 +161,8 @@ import er.extensions.foundation.ERXStringUtilities;
  * Netscape 6.2.3   Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
  * Netscape 4.79    Mozilla/4.79 [en] (Windows NT 5.0; U)
  * Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
- *
  * </pre>
- * </span>
+ * </div>
  *
  * @property er.extensions.ERXBrowserFactory.FactoryClassName
  * @property er.extensions.ERXBrowserFactory.BrowserClassName (default ERXBasicBrowser)
@@ -176,43 +173,41 @@ public class ERXBrowserFactory {
     protected static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
 
     /** 
-     * <span class="en">holds the default browser class name</span>
-     * <span class="ja">デフォルト・ブラウザ・クラス名を保持</span>
+     * <div class="en">holds the default browser class name</div>
+     * <div class="ja">デフォルト・ブラウザ・クラス名を保持</div>
      */
     private static final String _DEFAULT_BROWSER_CLASS_NAME = ERXBasicBrowser.class.getName();
 
     /** 
-     * <span class="en">Caches a reference to the browser factory</span>
-     * <span class="ja">ブラウザ・ファクトリーへのリファレンス：キャシュ用</span>
+     * <div class="en">Caches a reference to the browser factory</div>
+     * <div class="ja">ブラウザ・ファクトリーへのリファレンス：キャシュ用</div>
      */
     private static ERXBrowserFactory _factory;
 
     /** 
-     * <span class="en">Expressions that define a robot</span>
-     * <span class="ja">ロボットを認識できる定義：キャシュ用</span>
+     * <div class="en">Expressions that define a robot</div>
+     * <div class="ja">ロボットを認識できる定義：キャシュ用</div>
      */
     private static final NSMutableArray<Pattern> robotExpressions = new NSMutableArray();
 
     /** 
-     * <span class="en">Mapping of UAs to browsers</span>
-     * <span class="ja">ブラウザと user-agent マップ：キャシュ用</span>
+     * <div class="en">Mapping of UAs to browsers</div>
+     * <div class="ja">ブラウザと user-agent マップ：キャシュ用</div>
      */
     private static final NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Gets the singleton browser factory object.
+     * </div>
      * 
-     * @return browser factory
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * singleton ブラウザ・ファクトリー・オブジェクトを取得します
+     * </div>
      * 
-     * @return ブラウザ・ファクトリー
-     * </span>
+     * @return <div class="en">browser factory</div>
+     *         <div class="ja">ブラウザ・ファクトリー</div>
      */
-    @SuppressWarnings("javadoc")
     public static ERXBrowserFactory factory() {
         if (_factory == null) {
             String browserFactoryClass = System.getProperty("er.extensions.ERXBrowserFactory.FactoryClassName");
@@ -234,63 +229,59 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Sets the browser factory used to create browser objects.
+     * </div>
      * 
-     * @param newFactory new browser factory
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザ・オブジェクトを作成するブラウザ・ファクトリーをセットします
+     * </div>
      * 
-     * @param newFactory - 新しいブラウザ・ファクトリー
-     * </span>
+     * @param newFactory <div class="en">new browser factory</div>
+     *                   <div class="ja">新しいブラウザ・ファクトリー</div>
      */
     public static void setFactory(ERXBrowserFactory newFactory) { _factory = newFactory; }
 
     /** 
-     * <span class="en">Caches the browser class name</span>
-     * <span class="ja">ブラウザ・クラス名：キャシュ用</span>
+     * <div class="en">Caches the browser class name</div>
+     * <div class="ja">ブラウザ・クラス名：キャシュ用</div>
      */
     protected String _browserClassName;
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Returns the name of the {@link ERXBrowser} subclass. 
      * The default value is <code>"er.extensions.appserver.ERXBasicBrowser"</code>.
+     * </div>
      * 
-     * @return	the name of the ERXBrowser subclass; default to 
-     *          <code>"er.extensions.appserver.ERXBasicBrowser"</code>
-     * <span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * {@link ERXBrowser} サブクラスの名前を戻します。
      * 
      * デフォルト値は <code>"er.extensions.appserver.ERXBasicBrowser"</code>.
-     * 
-     * @return ERXBrowser サブクラスの名前; デフォルト <code>"er.extensions.appserver.ERXBasicBrowser"</code>
-     * </span>
+     * </div>
      * 
      * @see	#setBrowserClassName
+     * 
+     * @return <div class="en">the name of the ERXBrowser subclass; default to 
+     *          <code>"er.extensions.appserver.ERXBasicBrowser"</code></div>
+     *         <div class="ja">ERXBrowser サブクラスの名前; デフォルト <code>"er.extensions.appserver.ERXBasicBrowser"</code></div>
      */
-    @SuppressWarnings("javadoc")
     public String browserClassName() { return _browserClassName; }
     
     /**
-     * <span class="en">
+     * <div class="en">
      * Sets the name of the {@link ERXBrowser} subclass.
+     * </div>
      * 
-     * @param name	the name of the ERXBrowser subclass; ignored if null
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * ERXBrowser サブクラスの名前をセットします
+     * </div>
      * 
-     * @param name - ERXBrowser サブクラスの名前; null の場合は無視
-     * </span>
+     * @param name <div class="en">the name of the ERXBrowser subclass; ignored if null</div>
+     *             <div class="ja">ERXBrowser サブクラスの名前; null の場合は無視</div>
      * 
-     * @see		#browserClassName
-     * @see		#createBrowser
+     * @see #browserClassName
+     * @see #createBrowser
      */
     public void setBrowserClassName(String name) { 
         if (name != null  &&  name.length() > 0) 
@@ -307,7 +298,7 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * <span class="en">
+     * <div class="en">
      * Gets a shared browser object for given request. 
      * Parses <code>"user-agent"</code> string in the request and gets 
      * the appropriate browser object. 
@@ -319,29 +310,23 @@ public class ERXBrowserFactory {
      * <p>
      * You are also required to call {@link #releaseBrowser releaseBrowser} 
      * to release the browser from the pool when it is no longer needed. 
+     * </div>
      * 
-     * @param request - WORequest
-     * 
-     * @return 		a shared browser object
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定 WORequest より共有ブラウザ・オブジェクトを取得します。
      * リクエスト内の <code>"user-agent"</code> 文字列をパースし、適切なブラウザ・オブジェクトを取得します。
      * <p>
      * アプリケーション・ロジックより呼ばれるメイン・メソッドになります。
      * ブラウザ・オブジェクトを取得した後、ブラウザ・オブジェクトをブラウザ・プールに登録する
      * retainBrowser メソッドの呼び出しは開発者の責任です。
-     * </p>
      * <p>
      * 他にもオブジェクトが不必要になった場合には releaseBrowser を呼ばなければなりません。
-     * </p>
-     * @param request - WORequest
+     * </div>
      * 
-     * @return 共有ブラウザ・オブジェクト
-     * </span>
+     * @param request - WORequest
+     * @return <div class="en">a shared browser object</div>
+     *         <div class="ja">共有ブラウザ・オブジェクト</div>
      */
-    @SuppressWarnings("javadoc")
     public ERXBrowser browserMatchingRequest(WORequest request) {
         if (request == null) {
         	throw new IllegalArgumentException("Request can't be null.");
@@ -370,35 +355,32 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * <span class="en">
+     * <div class="en">
      * Gets a shared browser object from browser pool. If such browser 
      * object does not exist, this method will create one by using 
      * {@link #createBrowser createBrowser} method.
+     * </div>
      * 
-     * @param browserName - string
-     * @param version - string
-     * @param mozillaVersion - string
-     * @param platform - string
-     * @param userInfo - dictionary
-     * 
-     * @return a shared browser object
-     * </span>
-     * 
-     * <span class="en">
+     * <div class="en">
      * ブラウザ・プールより共有ブラウザ・オブジェクトを戻します。
      * このようなブラウザ・オブジェクトがなければ、
      * このメソッドは {@link #createBrowser createBrowser} メソッドを使って作成します。
+     * </div>
      * 
-     * @param browserName - ブラウザ名
-     * @param version - バージョン
-     * @param mozillaVersion - mozillaの対応バージョン
-     * @param platform - プラットフォーム
-     * @param userInfo - ユーザ情報を持つディクショナリー
+     * @param browserName <div class="en">string</div>
+     *                    <div class="ja">ブラウザ名</div>
+     * @param version <div class="en">string</div>
+     *                <div class="ja">バージョン</div>
+     * @param mozillaVersion <div class="en">string</div>
+     *                       <div class="ja">mozillaの対応バージョン</div>
+     * @param platform <div class="en">string</div>
+     *                 <div class="ja">プラットフォーム</div>
+     * @param userInfo <div class="en">string</div>
+     *                 <div class="ja">ユーザ情報を持つディクショナリー</div>
      * 
-     * @return 共有ブラウザ・オブジェクト
-     * </span>
+     * @return <div class="en">a shared browser object</div>
+     *         <div class="ja">共有ブラウザ・オブジェクト</div>
      */
-     @SuppressWarnings("javadoc")
     public synchronized ERXBrowser getBrowserInstance(String browserName, String version, String mozillaVersion, 
                                                 String platform, NSDictionary userInfo) {
         String key = _computeKey(browserName, version, mozillaVersion, platform, userInfo);
@@ -409,42 +391,39 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * <span class="en">
+     * <div class="en">
      * Creates a new browser object for given parameters. Override this 
      * method if you need to provide your own subclass of {@link ERXBrowser}. 
      * If you override it, your implementation should not call <code>super</code>.
      * <p>
      * Alternatively, use {@link #setBrowserClassName} and {@link #browserClassName}.
-     *
-     * @param browserName - string
-     * @param version - string
-     * @param mozillaVersion - string
-     * @param platform - string
-     * @param userInfo - dictionary
+     * </div>
      * 
-     * @return new browser object that is a concrete subclass of <code>ERXBrowser</code>
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定パラメータを使って、新しいブラウザ・オブジェクトを作成します。
      * 独自のサブクラスが必要な場合にはこのメソッドをオーバライドすると良いのです。
      * オーバライドをした場合の実装が <code>super</code> を呼ばないこと。
      * <p>
      * 他には {@link #setBrowserClassName} と {@link #browserClassName} を使用できます。
-     *
-     * @param browserName - ブラウザ名
-     * @param version - バージョン
-     * @param mozillaVersion - mozillaの対応バージョン
-     * @param platform - プラットフォーム
-     * @param userInfo - ユーザ情報を持つディクショナリー
-     * 
-     * @return <code>ERXBrowser</code> を明確なサブクラスとして持つ新規ブラウザ・オブジェクト
-     * </span>
+     * </div>
      * 
      * @see	#setBrowserClassName
      * @see	#browserClassName
+     * 
+     * @param browserName <div class="en">string</div>
+     *                    <div class="ja">ブラウザ名</div>
+     * @param version <div class="en">string</div>
+     *                <div class="ja">バージョン</div>
+     * @param mozillaVersion <div class="en">string</div>
+     *                       <div class="ja">mozillaの対応バージョン</div>
+     * @param platform <div class="en">string</div>
+     *                 <div class="ja">プラットフォーム</div>
+     * @param userInfo <div class="en">string</div>
+     *                 <div class="ja">ユーザ情報を持つディクショナリー</div>
+     * 
+     * @return <div class="en">new browser object that is a concrete subclass of <code>ERXBrowser</code></div>
+     *         <div class="ja"><code>ERXBrowser</code> を明確なサブクラスとして持つ新規ブラウザ・オブジェクト</div>
      */
-    @SuppressWarnings("javadoc")
     public synchronized ERXBrowser createBrowser(String browserName, String version, String mozillaVersion,
                                                 String platform, NSDictionary userInfo) {
         ERXBrowser browser = null;
@@ -473,7 +452,7 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * <span class="ja">
+     * <div class="ja">
      * クラス名を使って、ERXBrowserオブジェクトを作成します 
      * 
      * @param className - クラス名
@@ -482,15 +461,16 @@ public class ERXBrowserFactory {
      * @param mozillaVersion - Mozilla バージョン
      * @param platform - プラットフォーム
      * @param userInfo - ユーザ・ディクショナリー
+     * </div>
      * 
-     * @return ERXBrowser オブジェクト
+     * @return <div class="en"></div>
+     *         <div class="ja">ERXBrowser オブジェクト</div>
      * 
+     * @throws java.lang.reflect.InvocationTargetException 
      * @throws ClassNotFoundException 
      * @throws NoSuchMethodException 
      * @throws InstantiationException 
      * @throws IllegalAccessException 
-     * @throws java.lang.reflect.InvocationTargetException 
-     * </span>
      */
     private ERXBrowser _createBrowserWithClassName(String className, String browserName, String version, 
                                             String mozillaVersion, String platform, NSDictionary userInfo) 
@@ -512,17 +492,16 @@ public class ERXBrowserFactory {
         
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Retains a given browser object.
+     * </div>
      * 
-     * @param browser to be retained
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定ブラウザ・オブジェクトをブラウザ・プールに登録します
+     * </div>
      * 
-     * @param browser - ブラウザ・プールに登録するブラウザ・オブジェクト
-     * </span>
+     * @param browser <div class="en">to be retained</div>
+     *                <div class="ja">ブラウザ・プールに登録するブラウザ・オブジェクト</div>
      */
     public synchronized void retainBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
@@ -531,18 +510,17 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Decrements the retain count for a given
      * browser object.
+     * </div>
      * 
-     * @param browser - to be released
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * 指定ブラウザ・オブジェクトをブラウザ・プールの登録から解除します
+     * </div>
      * 
-     * @param browser - ブラウザ・プールの登録から解除するブラウザ・オブジェクト
-     * </span>
+     * @param browser <div class="en">to be released</div>
+     *                <div class="ja">ブラウザ・プールの登録から解除するブラウザ・オブジェクト</div>
      */
     public synchronized void releaseBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
@@ -557,36 +535,32 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="en">
+     * <div class="en">
      * Adds the option to use multiple different ERXBrowser subclasses
      * depending on the name of the browser.
+     * </div>
      * 
-     * @param browserName - name of the browser
-     * 
-     * @return ERXBrowser subclass class name
-     * </span>
-     * 
-     * <span class="ja">
+     * <div class="ja">
      * 複数の ERXBrowser サブクラスを使用できる様にブラウザ名を渡します
+     * </div>
      * 
-     * @param browserName - ブラウザ名
-     * 
-     * @return ERXBrowser サブクラス名
-     * </span>
+     * @param browserName <div class="en">name of the browser</div>
+     *                    <div class="ja">ブラウザ名</div>
+     * @return <div class="en">ERXBrowser subclass class name</div>
+     *         <div class="ja">ERXBrowser サブクラス名</div>
      */
-    @SuppressWarnings("javadoc")
     public String browserClassNameForBrowserNamed(String browserName) {
         return browserClassName();
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * ブラウザ名をパースします
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return ブラウザ名
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">ブラウザ名</div>
      */
     public String parseBrowserName(String userAgent) {
         String browserString = _browserString(userAgent);
@@ -610,14 +584,14 @@ public class ERXBrowserFactory {
     }
     
     /**
-     * <span class="ja">
+     * <div class="ja">
      * ロボットかどうかを調べる
      * [Resources内：robots.txtを必須]
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return ロボットの場合は true が戻ります
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">ロボットの場合は true が戻ります</div>
      */
     private boolean isRobot(String userAgent) {
     	synchronized (robotExpressions) {
@@ -642,13 +616,12 @@ public class ERXBrowserFactory {
     }
     
     /**
-     * <span class="ja">
+     * <div class="ja">
      * GeckoVersionをパースします
+     * </div>
      * 
      * @param userAgent
-     * 
      * @return GeckoVersion
-     * </span>
      */
     public String parseGeckoVersion(String userAgent) {
     	if (userAgent.indexOf("Gecko") >= 0) {
@@ -667,13 +640,13 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * バージョン番号をパースします
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return バージョン番号
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">バージョン番号</div>
      */
     public String parseVersion(String userAgent) {
         String versionString = _versionString(userAgent);
@@ -707,13 +680,13 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * Mozillaバージョンをパースします
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return Mozillaバージョン
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">Mozillaバージョン</div>
      */
     public String parseMozillaVersion(String userAgent) {
         final String mozilla = "Mozilla/";
@@ -728,13 +701,13 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * プラットフォームをパースします
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return プラットフォーム
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">プラットフォーム</div>
      */
     public String parsePlatform(String userAgent) {
         String platform = ERXBrowser.UNKNOWN_PLATFORM;
@@ -747,13 +720,12 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * CPUをパースします
+     * </div>
      * 
      * @param userAgent
-     * 
      * @return CPU
-     * </span>
      */
     public String parseCPU(String userAgent) {
         String cpu = ERXBrowser.UNKNOWN_CPU;
@@ -763,13 +735,13 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * userAgent よりブラウザ文字列を戻します
+     * </div>
      * 
      * @param userAgent
-     * 
-     * @return　ブラウザ文字列
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">ブラウザ文字列</div>
      */
     private String _browserString(String userAgent) {
         int startpos;
@@ -824,7 +796,7 @@ public class ERXBrowserFactory {
         return userAgent;
     }
 
-    /** <span class="ja">ブラウザ・プール</span> */
+    /** <div class="ja">ブラウザ・プール</div> */
     private NSMutableDictionary _browserPool;
     private NSMutableDictionary _browserPool() { 
         if (_browserPool == null) 
@@ -832,7 +804,7 @@ public class ERXBrowserFactory {
         return _browserPool;
     }
 
-    /** <span class="ja">リファレンス・カウント・プール</span> */
+    /** <div class="ja">リファレンス・カウント・プール</div> */
     private NSMutableDictionary _referenceCounters;
     private NSMutableDictionary _referenceCounters() {
         if (_referenceCounters == null)
@@ -841,13 +813,14 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * key を使って、_referenceCounters ディクショナリー内のカウンターに１を足すこと
      * 
      * @param key - カウンターを足す key
+     * </div>
      * 
-     * @return 新しいカウンターの値を戻します
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">新しいカウンターの値を戻します</div>
      */
     private ERXMutableInteger _incrementReferenceCounterForKey(String key) {
         ERXMutableInteger count = (ERXMutableInteger)_referenceCounters().objectForKey(key);
@@ -863,13 +836,14 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * key を使って、_referenceCounters ディクショナリー内のカウンターに１を減らすこと
      * 
      * @param key - カウンターを減らす key
+     * <div>
      * 
-     * @return 新しいカウンターの値を戻します
-     * <span>
+     * @return <div class="en"></div>
+     *         <div class="ja">新しいカウンターの値を戻します</div>
      */
     private ERXMutableInteger _decrementReferenceCounterForKey(String key) {
         ERXMutableInteger count = (ERXMutableInteger)_referenceCounters().objectForKey(key);
@@ -882,13 +856,14 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * 下記の引数を使って、合計されている文字列キーを戻します。
      * 
      * @param browser - ブラウザ・オブジェクト
+     * </div>
      * 
-     * @return 合計されている文字列キー
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">合計されている文字列キー</div>
      */
     private String _computeKey(ERXBrowser browser) {
         return browser.browserName() + "." + browser.version() + "." + browser.mozillaVersion() + "."
@@ -896,7 +871,7 @@ public class ERXBrowserFactory {
     }
 
     /**
-     * <span class="ja">
+     * <div class="ja">
      * 下記の引数を使って、合計されている文字列キーを戻します。
      * 
      * @param browserName - ブラウザ名
@@ -904,9 +879,10 @@ public class ERXBrowserFactory {
      * @param mozillaVersion - mozillaバージョン
      * @param platform - プラットフォーム
      * @param userInfo - ユーザ情報ディクショナリー
+     * </div>
      * 
-     * @return 合計されている文字列キー
-     * </span>
+     * @return <div class="en"></div>
+     *         <div class="ja">合計されている文字列キー</div>
      */
     private String _computeKey(String browserName, String version, String mozillaVersion, 
                                                                 String platform, NSDictionary userInfo) {

@@ -21,7 +21,7 @@ import er.neo4jadaptor.query.expression.sentence.operators.ComparisonOperator;
  * 
  * @author Jedrzej Sobanski
  * 
- * <ClauseType> query clause type
+ * @param <ClauseType> query clause type
  */
 public abstract class QueryConverter <ClauseType> {
 

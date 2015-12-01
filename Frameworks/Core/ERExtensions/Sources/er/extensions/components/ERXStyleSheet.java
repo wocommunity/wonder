@@ -1,6 +1,6 @@
 package er.extensions.components;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -172,7 +172,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * Appends the &ltlink&gt; tag, either by using the style sheet name and
+	 * Appends the &lt;link&gt; tag, either by using the style sheet name and
 	 * framework or by using the component content and then generating a link to
 	 * it.
 	 */

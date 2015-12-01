@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WMessagePage;
 
 /**
- * More robust confirm messaging.  Still a work in progress.<br />
+ * More robust confirm messaging.  Still a work in progress.
  * 
  * @d2wKey pageWrapperName
  * @d2wKey confirmMessageManditory

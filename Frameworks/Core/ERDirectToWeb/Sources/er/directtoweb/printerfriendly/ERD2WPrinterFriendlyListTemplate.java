@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Printer friendly list page.<br />
+ * Printer friendly list page.
+ * 
  * @d2wKey componentName
  * @d2wKey propertyKey
  * @d2wKey displayPropertyKeys

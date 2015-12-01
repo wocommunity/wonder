@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.woextensions.WOCollapsibleComponentContent;
 
 /**
- * Better collapsible component content.<br />
+ * Better collapsible component content.
  * 
  * @binding closedImageFileName" defaults="Resources
  * @binding closedLabel

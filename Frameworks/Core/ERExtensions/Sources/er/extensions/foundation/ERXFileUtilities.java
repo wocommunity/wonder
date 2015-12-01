@@ -39,7 +39,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -285,14 +285,6 @@ public class ERXFileUtilities {
         while (bytesRead < n)
             bytesRead += fis.read(data, bytesRead, n - bytesRead);
         return data;
-    }
-    
-    /**
-     * @deprecated use {@link #writeInputStreamToFile(InputStream, File)}
-     */
-    @Deprecated
-	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
-        writeInputStreamToFile(is, f);
     }
 
 	/**
@@ -1481,7 +1473,7 @@ public class ERXFileUtilities {
         return length;
     }
     
-    /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
+    /** shortens a filename, for example aVeryLongFileName.java -&gt; aVer...Name.java
      * @param name the name to modify
      * @param maxLength the maximum length of the name.
      * <code>maxLength</code> values under 4 have no effect, the returned string is

@@ -259,6 +259,10 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         if (canGetValueForBinding(Keys.Selections)) {
             NSArray result = (NSArray)valueForBinding(Keys.Selections);
             if(result != null) {
+            	if (hasBinding(Keys.SortKey)) {
+            		String sortKey = stringValueForBinding(Keys.SortKey);
+            		result = ERXArrayUtilities.sortedArraySortedWithKey(result, sortKey);
+            	}
             	return result;
             }
         }
