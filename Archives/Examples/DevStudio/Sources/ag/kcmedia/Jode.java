@@ -21,6 +21,7 @@ import jode.decompiler.Decompiler;
 import jode.type.Type;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -28,7 +29,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 public class Jode extends Object {
@@ -271,7 +271,7 @@ public class Jode extends Object {
             } catch (Exception ex) {
                 log.error(ex);
             }
-            sourceCode = ERXStringUtilities.replaceStringByStringInString("\n\n", "<br>", sourceCode);
+            sourceCode = StringUtils.replace(sourceCode, "\n\n", "<br>");
             return sourceCode;
         }
 
