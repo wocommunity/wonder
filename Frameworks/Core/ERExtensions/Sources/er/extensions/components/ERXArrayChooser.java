@@ -29,12 +29,15 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
 
 /**
- * This is an effort to consolidate the WOToOneRelationship, WOToManyRelationship and descendant components. <br />
+ * This is an effort to consolidate the WOToOneRelationship, WOToManyRelationship and descendant components.
+ * <p>
  * As most of the code between the two is shared anyway, it makes sense to provide a base class and only
  * handle the differences in the descendants. One core difference if that this component can handle POJOs both as the
- * source and the destination objects. You can't instantiate one of these yourself.<br />
+ * source and the destination objects. You can't instantiate one of these yourself.
+ * <p>
  * This class can handle to-one, to-many and simple attribute selections. You can can set the list via 
- * possibleChoices, dataSource, destinationEntityName or via sourceEntityName and relationshipKey.<br />
+ * possibleChoices, dataSource, destinationEntityName or via sourceEntityName and relationshipKey.
+ * <p>
  * The main difference between this component and the former WOToOne/WOToMany is that it is non-synchronizing. So if
  * you have custom subclasses of WOToOne/WOToMany you need to take this into account.
  * Also adds the values that are not included in the restricted-choice list. These items are marked by [name of item]. 
@@ -43,7 +46,6 @@ import er.extensions.foundation.ERXUtilities;
  * NOTE: currently "includeUnmatchedValues" is set to false
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
-
 public abstract class ERXArrayChooser extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?

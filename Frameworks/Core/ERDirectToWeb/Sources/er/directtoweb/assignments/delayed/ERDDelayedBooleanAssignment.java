@@ -24,8 +24,7 @@ import er.extensions.foundation.ERXValueUtilities;
 //	falseValue - the value used if the condition returns false
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * Takes a condition and evalutaes this condition everytime the rule is asked for.<br />
- * 
+ * Takes a condition and evalutaes this condition everytime the rule is asked for.
  */
 
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {

@@ -7,11 +7,12 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Allows you to store a large amount of files and folders without the hassles
  * of directory size limitations. The files are stored by an abstract 
- * "key" which is by default a {@link ERXRandomGUID}.<br />
+ * "key" which is by default a {@link ERXRandomGUID}.
+ * <p>
  * It uses a factory to create the folder structure under the root
  * directory. With the default factory there will be directories for the first 
  * two characters and under these again directories for the next two characters 
- * of the GUID. <br />
+ * of the GUID. 
  * 
  * @author ak (original version by Dominik Westner)
  *
@@ -71,17 +72,6 @@ public class ERXFileRepository {
 	 * Holds the repositories.
 	 */
 	private static final NSMutableDictionary _repositories = ERXMutableDictionary.synchronizedDictionary();
-
-	/**
-	 * Returns the repository that is registered under the given name.
-	 * @param name the name under which the respository is registered
-	 * @return the repository that is registered under the given name or null
-	 * @deprecated use {@link #repository(String)} instead
-	 */
-	@Deprecated
-	public static ERXFileRepository respository(String name) {
-		return (ERXFileRepository) _repositories.objectForKey(name);
-	}
 
 	/**
 	 * Returns the repository that is registered under the given name.

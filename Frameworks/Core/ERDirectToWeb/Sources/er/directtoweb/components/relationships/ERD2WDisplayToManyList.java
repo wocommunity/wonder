@@ -10,7 +10,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToManyTable;
 
 /**
- * Improved toMany display compononent, uses ERListDisplay.<br />
+ * Improved toMany display compononent, uses ERListDisplay.
+ * 
  * @d2wKey emptyArrayDisplayString
  * @d2wKey separator
  * @d2wKey finalSeperator

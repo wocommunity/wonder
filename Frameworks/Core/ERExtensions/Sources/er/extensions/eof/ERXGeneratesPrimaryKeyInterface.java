@@ -12,8 +12,8 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * Enterprise objects that need to generate their own primary keys
  * should implement this interface. This interface works in conjunction
- * with the {@link ERXDatabaseContextDelegate}.<br/>
- * <br/>
+ * with the {@link ERXDatabaseContextDelegate}.
+ * <p>
  * Note that {@link ERXGenericRecord} implements a default implementation
  * of this interface.
  */

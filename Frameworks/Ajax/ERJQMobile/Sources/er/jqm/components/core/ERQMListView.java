@@ -14,8 +14,8 @@ import er.jqm.components.ERQMComponentBase;
  * List view (data-role="listview")
  * 
  * <pre>
- * isNumberedList true -> OL
- *                false -> UL
+ * isNumberedList true -&gt; OL
+ *                false -&gt; UL
  * 
  * id
  * filterFieldId

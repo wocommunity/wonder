@@ -17,8 +17,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 // Simple class that extends the ObjectSaveDelegate to provide a confirm page before saving.
 /**
- * Extends ObjectSaverDelegate to provide a confirm page.<br />
- * 
+ * Extends ObjectSaverDelegate to provide a confirm page.
  */
 
 public class ERDConfirmObjectDelegate implements NextPageDelegate {

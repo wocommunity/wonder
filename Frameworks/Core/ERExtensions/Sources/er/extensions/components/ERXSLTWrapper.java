@@ -49,11 +49,13 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * This is pretty usefull in conjunction with DynaReporter when you want to use one of the 
  * zillion PDF libs. You can generate the content via DynaReporter and then transform the content
  * to a form that the PDF lib understands. Most likely this will be much easier than trying to re-generate
- * the report with XML. <br />
+ * the report with XML.
+ * <p>
  * Other uses include a simple transformation of the generated front end code to privide for "skinning".
  * As there is only so much you can do with CSS, you might need to structurally change the generated HTML prior
- * to handing it to the client.<br />
- * Note that XSLT engines vary <emp>greatly</emp> in speed. The default case of using Xalan which is included by WO
+ * to handing it to the client.
+ * <p>
+ * Note that XSLT engines vary <em>greatly</em> in speed. The default case of using Xalan which is included by WO
  * is probably not the best choice for a site with a little bit of traffic. 
  * Therefore there is an option where you can set the transformer factory name to use, you also need to include the 
  * corresponding jar into the classpath.

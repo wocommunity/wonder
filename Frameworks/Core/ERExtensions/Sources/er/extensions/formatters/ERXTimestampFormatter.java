@@ -10,8 +10,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Provides localization to timestamp formatters.<br />
- * 
+ * Provides localization to timestamp formatters.
  */
 
 public class ERXTimestampFormatter extends NSTimestampFormatter {

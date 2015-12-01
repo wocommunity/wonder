@@ -14,24 +14,16 @@ package webobjectsexamples.businesslogic.rentals.common;
 import java.math.BigDecimal;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Fee extends EOGenericRecord {
-	private static final long	serialVersionUID	= -6593943328561415279L;
+public class Fee extends _Fee {
+	
+    private static final long serialVersionUID = 1L;
 
-	public static final String	AmountKey			= "amount";
-
-	public static final String	DatePaidKey			= "datePaid";
-
-	public static final String	FeeTypeKey			= "feeType";
-
-	public static final String	RentalKey			= "rental";
-
-	private static final String	_CostKeyPath		= "rental.unit.video.rentalTerms.cost";
-
-	public static final int		LateFeeAmountPerDay	= 3;
+    private static final String _CostKeyPath        = "rental.unit.video.rentalTerms.cost";
+    
+    public static final int		LateFeeAmountPerDay	= 3;
 
 	public Fee() {
 		super();
@@ -48,8 +40,8 @@ public class Fee extends EOGenericRecord {
 	}
 
 	@Override
-	public void awakeFromInsertion(EOEditingContext editingContext) {
-		super.awakeFromInsertion(editingContext);
+	public void init(EOEditingContext editingContext) {
+		super.init(editingContext);
 		if (amount() == null) {
 			setAmount((BigDecimal) (valueForKeyPath(_CostKeyPath)));
 		}
@@ -66,36 +58,8 @@ public class Fee extends EOGenericRecord {
 		super.validateForDelete();
 	}
 
-	public BigDecimal amount() {
-		return (BigDecimal) (storedValueForKey(AmountKey));
-	}
-
-	public void setAmount(BigDecimal value) {
-		takeStoredValueForKey(value, AmountKey);
-	}
-
-	public NSTimestamp datePaid() {
-		return (NSTimestamp) (storedValueForKey(DatePaidKey));
-	}
-
-	public void setDatePaid(NSTimestamp value) {
-		takeStoredValueForKey(value, DatePaidKey);
-	}
-
-	public FeeType feeType() {
-		return (FeeType) (storedValueForKey(FeeTypeKey));
-	}
-
-	public void setFeeType(FeeType value) {
-		takeStoredValueForKey(value, FeeTypeKey);
-	}
-
-	public Rental rental() {
-		return (Rental) (storedValueForKey(RentalKey));
-	}
-
 	public void setRental(Rental value) {
-		takeStoredValueForKey(value, RentalKey);
+	    super.setRental(value);
 		if (amount() == null) {
 			setAmount((BigDecimal) (valueForKeyPath(_CostKeyPath)));
 		}

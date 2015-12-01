@@ -22,9 +22,9 @@ import er.extensions.appserver.ERXWOContext;
  * see the MooTools documentation here: http://mootools.net/docs/more/Drag/Slider
  * 
  * The HTML for the slider will be written like this:
- *  &gt;div id="_1Element" class="element"&lt;
- *		&gt;div id="_2Knob" class="knob">&gt;/div&lt;
- *	&gt;/div&lt;
+ *  &lt;div id="_1Element" class="element"&gt;
+ *		&lt;div id="_2Knob" class="knob"&gt;&lt;/div&gt;
+ *	&lt;/div&gt;
  * 
  * @binding id - the identifer for the slider's JS var.
  * @binding element the identifier to be used for the slider's container

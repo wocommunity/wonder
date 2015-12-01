@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSSet;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
- * Works around a webscript bug.<br />
+ * Works around a webscript bug.
  * 
  * @binding list
  * @binding item

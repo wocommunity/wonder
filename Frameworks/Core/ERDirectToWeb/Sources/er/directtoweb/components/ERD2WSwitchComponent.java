@@ -35,8 +35,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 // the right way to go is probably to use EOSwitchComponent
 /**
  * Rewrite of D2WSwitchComponent to not cache the D2WContext. Useful for nesting
- * configurations. <br />
- *  
+ * configurations.
  */
 
 public class ERD2WSwitchComponent extends D2WSwitchComponent {

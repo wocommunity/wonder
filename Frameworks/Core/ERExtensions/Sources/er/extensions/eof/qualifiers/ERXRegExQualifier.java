@@ -14,7 +14,8 @@ import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 /**
  * Provides regular expression matching of attributes. You can also bind a WODisplayGroup queryOperator to 
- * <code>matches</code> and yoiu should be able to have qualifier strings with "foo matches bar". <br />
+ * <code>matches</code> and you should be able to have qualifier strings with "foo matches bar".
+ * <p>
  * This class does not do any conversion of the regular expression, so you'd need to have your syntax in 
  * a way that is understood by both the java code and the DB.
  * 

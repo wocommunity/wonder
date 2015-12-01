@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -464,7 +464,8 @@ public class ERXModelGroup extends EOModelGroup {
 	 * <code>EOModelPrototypes</code>, <code>EOJDBCModelPrototypes</code> or
 	 * <code>EOJDBC&lt;PluginName&gt;ModelPrototypes</code> in your model. These are loaded after the normal models,
 	 * so you can override things here. Of course EOModeler knows nothing of them, so you may need to copy all
-	 * attributes over to a <code>EOPrototypes</code> entity that is present only once in your model group. <br />
+	 * attributes over to a <code>EOPrototypes</code> entity that is present only once in your model group.
+	 * <p>
 	 * This class is used by the runtime when the property
 	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code>.
 	 * 

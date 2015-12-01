@@ -488,13 +488,6 @@ public class ERXValidationFactory {
     public String templateDelimiter() { return _delimiter; }
     
     /**
-     * @param delimiter to be set
-     * @deprecated use {@link #setTemplateDelimiter(String)} instead
-     */
-    @Deprecated
-    public void setDelimiter(String delimiter) { _delimiter = delimiter; }
-
-    /**
      * Sets the template delimiter to be used
      * when parsing templates for creating validation
      * exception messages.

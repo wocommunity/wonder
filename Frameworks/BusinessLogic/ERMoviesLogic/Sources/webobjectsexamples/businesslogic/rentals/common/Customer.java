@@ -15,8 +15,6 @@ package webobjectsexamples.businesslogic.rentals.common;
 import java.math.BigDecimal;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -25,30 +23,11 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Customer extends EOGenericRecord {
-	private static final long		serialVersionUID		= -1996155567059278076L;
+public class Customer extends _Customer {
 
-	public static final String		CityKey					= "city";
+    private static final long serialVersionUID = 1L;
 
-	public static final String		CreditCardKey			= "creditCard";
-
-	public static final String		FirstNameKey			= "firstName";
-
-	public static final String		LastNameKey				= "lastName";
-
-	public static final String		MemberSinceKey			= "memberSince";
-
-	public static final String		PhoneKey				= "phone";
-
-	public static final String		RentalsKey				= "rentals";
-
-	public static final String		StateKey				= "state";
-
-	public static final String		StreetAddressKey		= "streetAddress";
-
-	public static final String		ZipKey					= "zip";
-
-	private static final String		_DepositAmountKeyPath	= "unit.video.rentalTerms.depositAmount";
+    private static final String		_DepositAmountKeyPath	= "unit.video.rentalTerms.depositAmount";
 
 	public static final BigDecimal	DefaultCostRestriction	= new BigDecimal(50);
 
@@ -57,8 +36,8 @@ public class Customer extends EOGenericRecord {
 	}
 
 	@Override
-	public void awakeFromInsertion(EOEditingContext editingContext) {
-		super.awakeFromInsertion(editingContext);
+	public void init(EOEditingContext editingContext) {
+		super.init(editingContext);
 		if (memberSince() == null) {
 			setMemberSince(new NSTimestamp());
 		}
@@ -68,10 +47,10 @@ public class Customer extends EOGenericRecord {
 	public void validateForSave() throws NSValidation.ValidationException {
 		// calculate deposit
 		BigDecimal deposit = new BigDecimal(0);
-		NSArray outRentals = outRentals();
+		NSArray<Rental> outRentals = outRentals();
 		int count = outRentals.count();
 		for (int i = 0; i < count; i++) {
-			BigDecimal amount = (BigDecimal) (((EOEnterpriseObject) (outRentals.objectAtIndex(i))).valueForKeyPath(_DepositAmountKeyPath));
+			BigDecimal amount = (BigDecimal) ((outRentals.objectAtIndex(i)).valueForKeyPath(_DepositAmountKeyPath));
 			if (amount != null) {
 				deposit = deposit.add(amount);
 			}
@@ -83,38 +62,6 @@ public class Customer extends EOGenericRecord {
 			throw new NSValidation.ValidationException("The total value of the rented videos (" + deposit + ") exceed limitations (" + maxDeposit + ") of " + fullName() + "!");
 		}
 		super.validateForSave();
-	}
-
-	public CreditCard creditCard() {
-		return (CreditCard) (storedValueForKey(CreditCardKey));
-	}
-
-	public String firstName() {
-		return (String) (storedValueForKey(FirstNameKey));
-	}
-
-	public void setFirstName(String value) {
-		takeStoredValueForKey(value, FirstNameKey);
-	}
-
-	public String lastName() {
-		return (String) (storedValueForKey(LastNameKey));
-	}
-
-	public void setLastName(String value) {
-		takeStoredValueForKey(value, LastNameKey);
-	}
-
-	public NSTimestamp memberSince() {
-		return (NSTimestamp) (storedValueForKey(MemberSinceKey));
-	}
-
-	public void setMemberSince(NSTimestamp value) {
-		takeStoredValueForKey(value, MemberSinceKey);
-	}
-
-	public NSArray rentals() {
-		return (NSArray) (storedValueForKey(RentalsKey));
 	}
 
 	public BigDecimal costRestriction() {
@@ -130,14 +77,13 @@ public class Customer extends EOGenericRecord {
 		return buffer.toString();
 	}
 
-	@SuppressWarnings("unchecked")
-	public NSArray allFees() {
-		NSMutableArray<Object> allFees = new NSMutableArray<Object>();
-		NSArray rentals = rentals();
+	public NSArray<Fee> allFees() {
+		NSMutableArray<Fee> allFees = new NSMutableArray<Fee>();
+		NSArray<Rental> rentals = rentals();
 		if (rentals != null) {
 			int count = rentals.count();
 			for (int i = 0; i < count; i++) {
-				NSArray fees = ((Rental) (rentals.objectAtIndex(i))).fees();
+				NSArray<Fee> fees = rentals.objectAtIndex(i).fees();
 				if (fees != null) {
 					allFees.addObjectsFromArray(fees);
 				}
@@ -150,8 +96,8 @@ public class Customer extends EOGenericRecord {
 		return Integer.valueOf(allFees().count());
 	}
 
-	public NSArray unpaidFees() {
-		EOQualifier qualifier = new EOKeyValueQualifier(Fee.DatePaidKey, EOQualifier.QualifierOperatorEqual, NSKeyValueCoding.NullValue);
+	public NSArray<Fee> unpaidFees() {
+		EOQualifier qualifier = new EOKeyValueQualifier(Fee.DATE_PAID_KEY, EOQualifier.QualifierOperatorEqual, NSKeyValueCoding.NullValue);
 		return EOQualifier.filteredArrayWithQualifier(allFees(), qualifier);
 	}
 
@@ -163,16 +109,16 @@ public class Customer extends EOGenericRecord {
 		return (unpaidFees().count() > 0);
 	}
 
-	public NSArray allRentals() {
-		NSArray rentals = rentals();
-		return (rentals != null) ? rentals : new NSArray();
+	public NSArray<Rental> allRentals() {
+		NSArray<Rental> rentals = rentals();
+        return (rentals != null) ? rentals : new NSArray<Rental>();
 	}
 
 	public Number numberOfAllRentals() {
 		return Integer.valueOf(allRentals().count());
 	}
 
-	public NSArray outRentals() {
+	public NSArray<Rental> outRentals() {
 		EOQualifier qualifier = new EOKeyValueQualifier(Rental.IsOutKey, EOQualifier.QualifierOperatorEqual, Boolean.TRUE);
 		return EOQualifier.filteredArrayWithQualifier(allRentals(), qualifier);
 	}
@@ -185,7 +131,7 @@ public class Customer extends EOGenericRecord {
 		return (outRentals().count() > 0);
 	}
 
-	public NSArray overdueRentals() {
+	public NSArray<Rental> overdueRentals() {
 		EOQualifier qualifier = new EOKeyValueQualifier(Rental.IsOverdueKey, EOQualifier.QualifierOperatorEqual, Boolean.TRUE);
 		return EOQualifier.filteredArrayWithQualifier(allRentals(), qualifier);
 	}
@@ -211,8 +157,8 @@ public class Customer extends EOGenericRecord {
 		editingContext.insertObject(fee);
 		editingContext.insertObject(rental);
 		// manipulate relationships after inserting objects
-		rental.addObjectToBothSidesOfRelationshipWithKey(unit, Rental.UnitKey);
-		rental.addObjectToBothSidesOfRelationshipWithKey(fee, Rental.FeesKey);
-		addObjectToBothSidesOfRelationshipWithKey(rental, RentalsKey);
+		rental.addObjectToBothSidesOfRelationshipWithKey(unit, Rental.UNIT_KEY);
+		rental.addObjectToBothSidesOfRelationshipWithKey(fee, Rental.FEES_KEY);
+		addObjectToBothSidesOfRelationshipWithKey(rental, RENTALS_KEY);
 	}
 }

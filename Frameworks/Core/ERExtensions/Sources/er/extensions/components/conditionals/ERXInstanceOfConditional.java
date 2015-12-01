@@ -18,10 +18,8 @@ import er.extensions.foundation.ERXPatcher;
 /**
  * Conditional component that tests if an object can be cast to the given class or interface without causing a ClassCastException.
  *
- * <p>
- * Synopsis:
+ * <h3>Synopsis:</h3>
  * <blockquote>object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]</blockquote>
- * </p>
  *
  * @binding object object to test
  * @binding className class or interface name

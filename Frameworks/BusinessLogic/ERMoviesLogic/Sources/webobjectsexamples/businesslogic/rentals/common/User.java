@@ -13,20 +13,16 @@
 package webobjectsexamples.businesslogic.rentals.common;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
-public class User extends EOGenericRecord {
-	private static final long	serialVersionUID			= -4880721435398743375L;
+import er.corebusinesslogic.ERCoreUserInterface;
 
-	public static final String	AccessLevelKey				= "accessLevel";
+public class User extends _User implements ERCoreUserInterface {
 
-	public static final String	CustomerKey					= "customer";
+    private static final long serialVersionUID = 1L;
 
-	public static final String	PasswordKey					= "password";
-
-	public static final String	UsernameKey					= "username";
-
-	public static final int		NoAccessLevel				= 4;
+    public static final int		NoAccessLevel				= 4;
 
 	public static final int		CustomerAccessLevel			= 3;
 
@@ -46,14 +42,6 @@ public class User extends EOGenericRecord {
 		}
 	}
 
-	public Number accessLevel() {
-		return (Number) (storedValueForKey(AccessLevelKey));
-	}
-
-	public void setAccessLevel(Number value) {
-		takeStoredValueForKey(value, AccessLevelKey);
-	}
-
 	private boolean _hasAccessLevel(int level) {
 		Number accessLevel = accessLevel();
 		return ((accessLevel != null) && (accessLevel.intValue() <= level));
@@ -70,4 +58,24 @@ public class User extends EOGenericRecord {
 	public boolean hasCustomerAccessLevel() {
 		return _hasAccessLevel(CustomerAccessLevel);
 	}
+
+    /*
+     * ERCore user interface implementation
+     */
+
+    @Override
+    public void newPreference(EOEnterpriseObject pref) {
+        addObjectToBothSidesOfRelationshipWithKey(pref, "preferences");
+    }
+
+    @Override
+    public void setPreferences(NSArray array) {
+        takeStoredValueForKey(array.mutableClone(), "preferences");
+    }
+
+    @Override
+    public NSArray preferences() {
+        return (NSArray) storedValueForKey("preferences");
+    }
+
 }

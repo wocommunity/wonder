@@ -68,11 +68,11 @@ import er.extensions.validation.ERXValidationFactory;
  * the method <code>registerDescription</code>. This method
  * is called when the principal class of this framework is
  * loaded. This happens really early so you shouldn't have
- * to worry about this at all.<br/>
- * <br />
+ * to worry about this at all.
+ * <p>
  * Additionally, this class allows for model driven validations in a "poor-mans-Validity-way":
  * add a <code>ERXValidation</code> user info entry on your entity.
- * This is an example:<code><pre>
+ * This is an example:<pre><code>
  * "ERXValidation" = {
  *     // these keys are evaluated on validateForSave, they don't correspond to properties
  *     additionalValidationKeys = ("validateEmailPassword");
@@ -94,7 +94,7 @@ import er.extensions.validation.ERXValidationFactory;
  *              
  *              // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated 
  *              // and an exception is thrown if the evaluation returns false
- *              qualifier = "(value.length >= 5) AND (value.length < 50)";
+ *              qualifier = "(value.length &gt;= 5) AND (value.length &lt; 50)";
  *          },
  *          {
  *              // again, this is the message code into ValidationStrings.plist
@@ -116,7 +116,7 @@ import er.extensions.validation.ERXValidationFactory;
  *              //		  = (ERXEntityClassDescription.ValidationObjectValue)o;
  *              //		EOEnterpriseObject eo = val.object();
  *              //		String value = (String)val.value();
- *              //		return value.length() >= minLength && value.length() <= maxLength;
+ *              //		return value.length() &gt;= minLength &amp;&amp; value.length() &lt;= maxLength;
  *              //	}
  *              // }
  *
@@ -137,7 +137,7 @@ import er.extensions.validation.ERXValidationFactory;
  *                  //   User.email,password.stupidTestWithEmailAndPassword = "Stupid test failed";
  *                  keyPaths = "email,password";
  *                  
- *                  qualifier = "(object.email.length >= object.password.length)";
+ *                  qualifier = "(object.email.length &gt;= object.password.length)";
  *              }
  *              );
  *     };
@@ -154,19 +154,20 @@ import er.extensions.validation.ERXValidationFactory;
  *              qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
  *          }
  *          );
- * }</pre></code>
+ * }</code></pre>
  * This code is mainly a quick-and-dirty rewrite from PRValidation by Proteon.
- * <br/>
+ * <p>
  * Additionally, this class adds a concept of "Default" values that get pushed into the object at creation time.
- * Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that contains key-value-pairs for every default you want to set. Alternately, you can set a "default" key on each of the relationship or attrbute's userInfo<br />
- * Example:<pre><code>
+ * Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that contains key-value-pairs for every default you want to set. Alternately, you can set a "default" key on each of the relationship or attribute's userInfo.
+ * <h3>Example:</h3>
+ * <pre><code>
  * "ERXDefaultValues" = {
  *
  *     // Example for simple values.
  *     isAdmin = N;
  *     isEditor = Y;
  *
- *     // Example for a related object (->Languages(pk,displayName)). You need to enter the primary key value.
+ *     // Example for a related object (-&gt;Languages(pk,displayName)). You need to enter the primary key value.
  *     language = "de";
  *
  *     // Example for an NSArray of related objects
@@ -179,8 +180,7 @@ import er.extensions.validation.ERXValidationFactory;
  *     created = "@now";
  *     updatePassword = "@tomorrow";
  *
- * }</pre></code>
- * <br/>
+ * }</code></pre>
  * If you wish to provide your own class description subclass
  * see the documentation associated with the Factory inner class.
  */

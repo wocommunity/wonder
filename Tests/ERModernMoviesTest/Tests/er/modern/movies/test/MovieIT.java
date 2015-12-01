@@ -127,6 +127,10 @@ public class MovieIT extends AbstractSelenideIT {
         $(By.linkText("Find")).click();
         // there should be only one match
         $$(".ListMovieObjRow").shouldHaveSize(1);
+        // delete the movie
+        $(".ListMovieObjRow").find(".DeleteObjButton").click();
+        $(By.linkText("Delete")).click();
+        $(".ERMDEmptyListMessage").shouldHave(text("No matching Movie records found."));
     }
 
 }

@@ -18,14 +18,13 @@ import com.webobjects.foundation.NSRange;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**
- * Not very generic right now, but will be in the future. Nice for mantaining a
+ * Not very generic right now, but will be in the future. Nice for maintaining a
  * stack based navigation system, ie drilling down pushes nav state onto the
- * stack and backing up pops state off the stack.<br />
- * Please read "Documentation/Navigation.html" to fnd out how to use the
+ * stack and backing up pops state off the stack.
+ * <p>
+ * Please read "Documentation/Navigation.html" to find out how to use the
  * navigation components.
- * 
  */
-
 public class ERXNavigation {
 
     /** logging support */

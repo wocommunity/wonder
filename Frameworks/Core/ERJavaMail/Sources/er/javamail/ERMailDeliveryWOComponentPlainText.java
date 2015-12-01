@@ -7,26 +7,26 @@ package er.javamail;
 import javax.activation.DataHandler;
 
 /**
- * <span class="en">
+ * <div class="en">
  * This ERMailDelivery subclass is specifically crafted for plain text messages using a WOComponent as rendering device.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * レンダリングに WOComponent を使用する場合の標準テキスト・メッセージの ERMailDelivery サブクラス
- * </span>
+ * </div>
  * 
- * @author Camille Troillard <tuscland@mac.com>
+ * @author Camille Troillard &lt;tuscland@mac.com&gt;
  */
 public class ERMailDeliveryWOComponentPlainText extends ERMailDeliveryComponentBased {
 
 	/**
-	 * <span class="en">
+	 * <div class="en">
 	 * Pre-processes the mail before it gets sent.
-	 * </span>
+	 * </div>
 	 * 
-	 * <span class="ja">
+	 * <div class="ja">
 	 * 送信前に前処理を行います。
-	 * </span>
+	 * </div>
 	 * 
 	 * @see ERMailDelivery#prepareMail()
 	 */

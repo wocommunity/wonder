@@ -18,7 +18,8 @@ import er.extensions.components.ERXStatelessComponent;
  * Keeps a session open by continuously calling a direct action.
  * Drop this into the page wrapper of your app if you want your users
  * to be able to just keep their browser window open without fear of
- * having their next save trigger a session timeout. <br />
+ * having their next save trigger a session timeout.
+ * <p>
  * You can set an interval in seconds at which the action is triggered,
  * by default it is half the session timeout.
  * @author ak

@@ -1,9 +1,10 @@
 package er.extensions.components.javascript;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXStringUtilities;
 
 public class ERXJSFlyOver extends ERXStatelessComponent {
 	/**
@@ -28,7 +29,7 @@ public class ERXJSFlyOver extends ERXStatelessComponent {
     }
    
     public String id() {
-        return ERXStringUtilities.replaceStringByStringInString(".", "_", context().elementID());
+        return StringUtils.replace(context().elementID(), ".", "_");
     }
     
     public String alignString() {

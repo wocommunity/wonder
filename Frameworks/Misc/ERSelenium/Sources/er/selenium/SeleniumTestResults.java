@@ -26,7 +26,7 @@ package er.selenium;
 import java.io.File;
 import java.util.Iterator;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -101,7 +101,7 @@ public class SeleniumTestResults extends WODirectAction {
     @Override
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
         if (actionName.equals("default"))
             return defaultAction();

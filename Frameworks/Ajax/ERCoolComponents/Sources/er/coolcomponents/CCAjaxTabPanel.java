@@ -3,7 +3,7 @@ package er.coolcomponents;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Tab panel that uses ajax update when switching tabs. Allows denial of tab switching. Useful when validation failures occur.<br />
+ * Tab panel that uses ajax update when switching tabs. Allows denial of tab switching. Useful when validation failures occur.
  * 
  * @binding tabs a list of objects representing the tabs
  * @binding tabNameKey a string containing a key to apply to tabs to get the title of the tab

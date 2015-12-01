@@ -13,9 +13,8 @@
 package webobjectsexamples.businesslogic.rentals.common;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 
-public class Video extends EOGenericRecord {
+public class Video extends _Video {
 	private static final long	serialVersionUID	= -729666207038859697L;
 
 	public static final String	MovieKey			= "movie";
@@ -36,11 +35,4 @@ public class Video extends EOGenericRecord {
 		}
 	}
 
-	public RentalTerms rentalTerms() {
-		return (RentalTerms) (storedValueForKey(RentalTermsKey));
-	}
-
-	public void setRentalTerms(RentalTerms value) {
-		takeStoredValueForKey(value, RentalTermsKey);
-	}
 }

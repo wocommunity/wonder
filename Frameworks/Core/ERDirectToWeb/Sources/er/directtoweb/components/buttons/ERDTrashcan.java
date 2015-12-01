@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * A better trashcan.  As this component is named inconsistently with the
- * other buttons that operate on lists, {@link ERDDeleteButton} should be used instead.<br />
+ * other buttons that operate on lists, {@link ERDDeleteButton} should be used instead.
  * 
  * @binding object
  * @binding dataSource

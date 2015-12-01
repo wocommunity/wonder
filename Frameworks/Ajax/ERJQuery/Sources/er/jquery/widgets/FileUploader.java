@@ -18,27 +18,26 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponseRewriter;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Encapsulation of @see <a href="http://valums.com/ajax-upload/">Ajax Upload</a>			
- * @binding			onChange			
- * @binding			onSubmit			
- * @binding			onComplete		
- * @binding			allowedExtensions           E.g: "['jpg', 'jpeg', 'png', 'gif']"	
+ * Encapsulation of @see <a href="http://valums.com/ajax-upload/">Ajax Upload</a>
+ * @binding			onChange
+ * @binding			onSubmit
+ * @binding			onComplete
+ * @binding			allowedExtensions           E.g: "['jpg', 'jpeg', 'png', 'gif']"
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
  * @property 		WOFileUpload.sizeLimit		Max file upload size permitted
  * 
  * @author mendis
  * 
- * NOTES: 
+ * NOTES:
  * 
- * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
+ * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may
  * need to use an alternative WOAdaptor. e.g: ERWOAdaptor
  * 
  * 2. Use of ERXSession breaks IE6-8 compatibility. Use WOSession instead.
@@ -86,7 +85,7 @@ public abstract class FileUploader extends WOComponent {
 		return false;
 	}
 
-	// accessors	
+	// accessors
 	public String id() {
 		return _id() == null ? "fu" + ERXStringUtilities.safeIdentifierName(context().elementID()) : _id();
 	}
@@ -146,7 +145,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
 	private String href() {
-		return ERXWOContext.ajaxActionUrl(context());
+		return context().componentActionURL(application().ajaxRequestHandlerKey());
 	}
 	
 	// R&R
@@ -161,7 +160,7 @@ public abstract class FileUploader extends WOComponent {
     }
     
     @Override
-    public WOActionResults invokeAction(WORequest request, WOContext context) {         
+    public WOActionResults invokeAction(WORequest request, WOContext context) {
     	if (context.senderID().equals(context.elementID())) {
         	WOResponse response = WOApplication.application().createResponseInContext(context);
 
@@ -204,7 +203,7 @@ public abstract class FileUploader extends WOComponent {
 					setData(request.content());
 
 			} else {
-				if (aFileName != null && aFileName.length() > 0) {					
+				if (aFileName != null && aFileName.length() > 0) {
 					if (hasBinding(Bindings.inputStream)) {
 						setValueForBinding(anInputStream, Bindings.inputStream);
 					} else {
@@ -225,7 +224,7 @@ public abstract class FileUploader extends WOComponent {
 							if (hasBinding(Bindings.finalFilePath)) {
 								localFilePath = finalFilePath();
 								setValueForBinding(null, Bindings.finalFilePath);
-							} 
+							}
 							try {
 								tempFile = ERXFileUtilities.writeInputStreamToTempFile(anInputStream, context.session().sessionID(), ".tmp");
 							} catch (IOException e) {

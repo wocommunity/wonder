@@ -19,7 +19,7 @@ import er.extensions.eof.ERXGuardedObjectInterface;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Nice edit button for editing a toMany relationship in another page.<br />
+ * Nice edit button for editing a toMany relationship in another page.
  * @d2wKey useNestedEditingContext
  * @d2wKey isEntityEditable
  */

@@ -9,7 +9,8 @@ package er.directtoweb.components.relationships;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Allows custom components to be used to display the eos from a toMany.<br />
+ * Allows custom components to be used to display the eos from a toMany.
+ * 
  * @d2wKey customComponentName
  * @d2wKey componentBorder
  * @d2wKey numCols

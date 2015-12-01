@@ -26,8 +26,7 @@ import er.extensions.localization.ERXLocalizer;
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Common superclass for date editing components.<br />
- * 
+ * Common superclass for date editing components.
  */
 
 public class ERDEditDatePopupCommon extends ERDCustomEditComponent {

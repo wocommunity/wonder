@@ -15,25 +15,13 @@ package webobjectsexamples.businesslogic.rentals.common;
 import java.math.BigDecimal;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSTimestamp;
 
-public class CreditCard extends EOGenericRecord {
-	private static final long		serialVersionUID		= 8148546767562117626L;
+public class CreditCard extends _CreditCard {
 
-	public static final String		AuthorizationDateKey	= "authorizationDate";
+    private static final long serialVersionUID = 1L;
 
-	public static final String		AuthorizationNumKey		= "authorizationNum";
-
-	public static final String		CardNumberKey			= "cardNumber";
-
-	public static final String		CustomerKey				= "customer";
-
-	public static final String		ExpirationDateKey		= "expirationDate";
-
-	public static final String		LimitKey				= "limit";
-
-	public static final BigDecimal	DefaultLimit			= new BigDecimal(150);
+    public static final BigDecimal	DefaultLimit			= new BigDecimal(150);
 
 	public CreditCard() {
 		super();
@@ -50,19 +38,4 @@ public class CreditCard extends EOGenericRecord {
 		}
 	}
 
-	public NSTimestamp authorizationDate() {
-		return (NSTimestamp) (storedValueForKey(AuthorizationDateKey));
-	}
-
-	public void setAuthorizationDate(NSTimestamp value) {
-		takeStoredValueForKey(value, AuthorizationDateKey);
-	}
-
-	public BigDecimal limit() {
-		return (BigDecimal) (storedValueForKey(LimitKey));
-	}
-
-	public void setLimit(BigDecimal value) {
-		takeStoredValueForKey(value, LimitKey);
-	}
 }

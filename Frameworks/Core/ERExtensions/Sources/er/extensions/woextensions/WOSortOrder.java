@@ -36,7 +36,8 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.components.ERXStatelessComponent;
 
 /**
- * Almost direct port of WOSortOrder from WO 5's WOExtensions<br />
+ * Almost direct port of WOSortOrder from WO 5's WOExtensions
+ * 
  * @binding caseInsensitive is ordering case sensitive or not
  */
 

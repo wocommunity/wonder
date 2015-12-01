@@ -16,7 +16,7 @@ import er.extensions.validation.ERXValidationFactory;
 
 /**
  * <span class="en">
- * Allows specifing the maxLength for a WOTextField.<br />
+ * Allows specifing the maxLength for a WOTextField.
  * 
  * @d2wKey id
  * @d2wKey title

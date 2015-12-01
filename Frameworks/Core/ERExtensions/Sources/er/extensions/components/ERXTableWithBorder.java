@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Allows turning the border on and off of a table. Useful for Netscape which doesn't handle nested tables very well.<br />
+ * Allows turning the border on and off of a table. Useful for Netscape which doesn't handle nested tables very well.
  * 
  * @binding color
  * @binding width

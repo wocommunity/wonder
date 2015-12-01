@@ -45,11 +45,6 @@ public class AjaxProgress {
 		this("AjaxProgress" + System.currentTimeMillis(), maximum);
 	}
 
-	@Deprecated
-	public AjaxProgress(int maximum) {
-		this((long) maximum);
-	}
-
 	/**
 	 * Construct an AjaxProgress
 	 *
@@ -59,11 +54,6 @@ public class AjaxProgress {
 	public AjaxProgress(String id, long maximum) {
 		_id = id;
 		_maximum = maximum;
-	}
-
-	@Deprecated
-	public AjaxProgress(String id, int maximum) {
-		this(id, (long) maximum);
 	}
 
 	/**

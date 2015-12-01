@@ -13,7 +13,7 @@ public class ERQMJavascriptAppender
 {
 	/**
 	 * Adds a script tag with a correct resource URL on the current position of the response if it isn't already present in the response. This is needed because jQueryMobile reads
-	 * and execute only stuff in <div data-role='...'>
+	 * and execute only stuff in &lt;div data-role='...'&gt;
 	 * 
 	 * @param response the response
 	 * @param context the context

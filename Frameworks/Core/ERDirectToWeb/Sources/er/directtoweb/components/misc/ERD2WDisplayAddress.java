@@ -12,8 +12,7 @@ import er.directtoweb.components.ERD2WStatelessComponent;
 
 // FIXME: This depends on NS specific keypaths for an address.
 /**
- * Displays an address.  Needs some cleanup to be more generic.<br />
- * 
+ * Displays an address.  Needs some cleanup to be more generic.
  */
 
 public class ERD2WDisplayAddress extends ERD2WStatelessComponent {

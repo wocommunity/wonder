@@ -1,0 +1,27 @@
+{
+    attributes = (
+        {columnName = "FILE_PATH"; name = filePath; prototypeName = varchar1000; }, 
+        {columnName = ID; name = id; prototypeName = id; }, 
+        {columnName = "MAIL_MESSAG_ID"; name = mailMessageId; prototypeName = id; }, 
+        {columnName = "MIME_TYPE"; name = mimeType; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (filePath, id, mailMessageId); 
+    className = "er.corebusinesslogic.ERCMessageAttachment"; 
+    classProperties = (filePath, mailMessage, mimeType); 
+    externalName = "ERCMESSAG_ATTACH"; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCMessageAttachment; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERCMailMessage; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = mailMessageId; }); 
+            name = mailMessage; 
+            userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+        }
+    ); 
+    userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+}

@@ -16,10 +16,10 @@ import java.sql.Statement;
 import java.util.Enumeration;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 import org.apache.log4j.Logger;
 
-import com.sun.rowset.CachedRowSetImpl;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -695,25 +695,6 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Runs a given sql script and executes each of the statements in a
-	 * one transaction.
-	 * 
-	 * @param channel
-	 *            the JDBCChannel to work with
-	 * @param script
-	 *            the array of sql scripts to execute
-	 * 
-	 * @return the number of rows updated
-	 * @throws SQLException
-	 *             if there is a problem
-	 * @deprecated use {@link #executeUpdateScript(EOAdaptorChannel, String, boolean)}
-	 */
-    @Deprecated
-	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
-		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
-	}
-
-	/**
 	 * Executes a SQL script that is stored as a resource.
 	 * 
 	 * @param channel
@@ -947,7 +928,7 @@ public class ERXJDBCUtilities {
 	 *             if something goes wrong
 	 */
 	public static CachedRowSet fetchRowSet(EOAdaptorChannel adaptorChannel, String query) throws Exception {
-		final CachedRowSetImpl rowSet = new CachedRowSetImpl();
+		final CachedRowSet rowSet = RowSetProvider.newFactory().createCachedRowSet();
 		ERXJDBCUtilities.executeQuery(adaptorChannel, query, new IResultSetDelegate() {
 			public void processResultSet(EOAdaptorChannel innerAdaptorChannel, ResultSet rs) throws Exception {
 				rowSet.populate(rs);

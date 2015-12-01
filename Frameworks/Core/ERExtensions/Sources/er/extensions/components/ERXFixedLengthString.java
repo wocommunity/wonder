@@ -18,13 +18,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * string, then using this component you could bind the given
  * string to the 'value' binding, 10 to the 'length' binding
  * and the string '...' to the 'suffixWhenTrimmed' binding.
- * When rendering this would display:<br/>
+ * When rendering this would display:<br>
  * The brown ...
- * <br/>
+ * <br>
  * This component can also be used to pad whitespace onto the
  * end of strings that are shorter than the given length.
- * <br/>
- * Synopsis:<br/>
+ * <h3>Synopsis:</h3>
  * value=<i>aString</i>;length=<i>aNumber</i>;[shouldPadToLength=<i>aBoolean</i>;][suffixWhenTrimmed=<i>aString</i>;][escapeHTML=<i>aBoolean</i>;]
  *
  * @binding value string that is passed in to display in a fixed

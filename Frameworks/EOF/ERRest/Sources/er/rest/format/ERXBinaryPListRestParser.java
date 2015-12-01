@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import er.extensions.foundation.ERXPropertyListSerialization;
 import er.rest.ERXRestContext;

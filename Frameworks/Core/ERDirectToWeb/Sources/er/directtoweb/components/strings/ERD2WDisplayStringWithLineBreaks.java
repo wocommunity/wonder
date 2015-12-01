@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
- * Displays string with line breaks.<br />
- * 
+ * Displays string with line breaks.
  */
 
 public class ERD2WDisplayStringWithLineBreaks extends D2WDisplayString {

@@ -559,7 +559,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     /**
      * Cover method to return <code>toString</code>.
      * @return the results of calling toString.
-     * @deprecated use {@link #toString()} instead
+     * @deprecated use toString() instead
      */
     @Deprecated
     public abstract String description();
@@ -614,22 +614,6 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     @Deprecated
     public abstract void checkConsistency()
             throws NSValidation.ValidationException;
-
-    /**
-     * This method is very similar to the <code>checkConsistency</code> method
-     * except that this method is only called from an outside process, usually
-     * a batch process, to verify that the data this object holds is consistent.
-     * JUnit tests are great for testing that all of the methods of a single
-     * object function correctly, batch checking of consistency is a good way
-     * of checking that all of the data in a given database is consistent. Hopefully
-     * in the future we will add a batch check consistency application to demonstrate
-     * the use of this method.
-     * @throws NSValidation.ValidationException if the object fails consistency
-     */
-    @Deprecated
-    public abstract void batchCheckConsistency()
-            throws NSValidation.ValidationException;
-
 	
     /**
      * Toggles whether or not inverse relationships should be updates.  This is

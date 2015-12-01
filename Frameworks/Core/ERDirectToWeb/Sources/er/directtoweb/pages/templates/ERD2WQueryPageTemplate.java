@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WQueryPage;
 
 /**
- * Beefed up query page.<br />
+ * Beefed up query page.
+ * 
  * @d2wKey headerComponentName
  * @d2wKey showListInSamePage
  * @d2wKey listConfigurationName

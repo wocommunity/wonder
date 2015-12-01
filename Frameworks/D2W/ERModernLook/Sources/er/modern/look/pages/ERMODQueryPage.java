@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Modernized query page.<br />
+ * Modernized query page.
  * 
  * @d2wKey headerComponentName
  * @d2wKey showListInSamePage

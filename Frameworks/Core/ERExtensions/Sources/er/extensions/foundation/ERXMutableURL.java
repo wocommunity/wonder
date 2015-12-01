@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -267,7 +267,7 @@ public class ERXMutableURL {
 	}
 
 	/**
-	 * Replaces the query parameters of this URL with the given k=v&k2=v2 format
+	 * Replaces the query parameters of this URL with the given k=v&amp;k2=v2 format
 	 * string.
 	 * 
 	 * @param queryParameters
@@ -281,7 +281,7 @@ public class ERXMutableURL {
 	}
 	
 	/**
-	 * Appends the query parameters of this URL with the given k=v&k2=v2 format
+	 * Appends the query parameters of this URL with the given k=v&amp;k2=v2 format
 	 * string.
 	 * 
 	 * @param queryParameters
@@ -574,7 +574,7 @@ public class ERXMutableURL {
 	}
 
 	/**
-	 * Returns the query parameters of this URL as a String (in x=y&a=b syntax).
+	 * Returns the query parameters of this URL as a String (in x=y&amp;a=b syntax).
 	 * 
 	 * @return the query parameters of this URL as a String
 	 */

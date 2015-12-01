@@ -27,8 +27,10 @@
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
-	<classpathentry kind="lib" path="Libraries/selenide-2.17.jar"/>
 	<classpathentry kind="lib" path="Libraries/selenium-java-2.45.0.jar"/>
+	<classpathentry kind="con" path="WOFramework/ERCoreBusinessLogic"/>
+	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
+	<classpathentry kind="lib" path="Libraries/selenide-2.23.jar"/>
 	<classpathentry kind="lib" path="Libraries/guava-18.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

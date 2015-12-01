@@ -7,21 +7,21 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
- * <span class="en">
+ * <div class="en">
  * NSSet reimplementation to support JDK 1.5 templates. Use with
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * JDK 1.5 テンプレートをサポートする為の再実装。使用は
- * </span>
+ * </div>
  * 
- * <pre>
+ * <pre>{@code
  * NSMutableSet<E> set = new NSMutableSet<E>();
  * set.put(new E())
  * 
  * for (E t : set)
  *     logger.debug(t);
- * </pre>
+ * }</pre>
  * 
  * @param <E> - type of set contents
  */

@@ -60,9 +60,9 @@ Ant should be found in /usr/share/ant/bin/ant
 
 4. Invoke ant -projecthelp, but normally you would do for WO:
 
-  ant clean frameworks; sudo ant frameworks.install
-  ant applications; sudo ant applications.install
-  ant examples; sudo ant examples.install
+  ant clean frameworks; sudo ant -Duser.home=$HOME frameworks.install
+  ant applications; sudo ant -Duser.home=$HOME applications.install
+  ant examples; sudo ant -Duser.home=$HOME examples.install
 
 If you have write privileges in /Library/Frameworks, /Library/WebObjects/JavaApplications, and
 /Library/WebServer/Documents/WebObjects/Frameworks, you may do without the "sudo".

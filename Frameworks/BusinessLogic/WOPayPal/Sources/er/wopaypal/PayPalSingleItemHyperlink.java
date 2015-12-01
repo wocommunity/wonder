@@ -7,7 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;

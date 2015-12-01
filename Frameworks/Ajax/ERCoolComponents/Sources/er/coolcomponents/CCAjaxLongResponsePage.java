@@ -50,7 +50,6 @@ import er.extensions.foundation.IERXStatus;
 
  * </code>
  * </pre>
- * <p>
  * <h3>Usage:</h3>
  * <ol>
  * <li>

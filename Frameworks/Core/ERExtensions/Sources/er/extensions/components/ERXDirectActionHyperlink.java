@@ -22,23 +22,24 @@ import er.extensions.eof.ERXEOEncodingUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * This component can be used for two things:<br/>
- * 1) Generating direct action urls for use in
- * components that are being e-mailed to people.
- * 2) Support for encoding enterprise objects in
+ * This component can be used for two things:
+ * <ol>
+ * <li>Generating direct action urls for use in
+ * components that are being e-mailed to people.</li>
+ * <li>Support for encoding enterprise objects in
  * the form values of generated urls.
  * At the moment this component still contains some
  * custy code that needs to be cleaned up before it
- * can really be used, like adding the .wo and .api files ;0.<br/>
- * <br/>
- * Synopsis:<br/>
+ * can really be used, like adding the .wo and .api files ;0.</li>
+ * </ol>
+ * <h3>Synopsis:</h3>
  * [actionClass=<i>anActionClass</i>];directActionName=<i>aDirectActionName</i>;[entityNameSeparator=<i>aSeparator</i>;]
  * [relative=<i>aBoolean</i>;][shouldEncryptObjectFormValues=<i>aBoolean</i>;][objectsForFormValues=<i>anArray</i>;]
  * [bindingDictionary=<i>aDictionary</i>;][unencryptedBindingDictionary=<i>aDictionary</i>;]
  *
  * @binding actionClass direct action class to be used
  * @binding directActionName direct action name
- * @binding entityNameSeparator separator used when constructiong urls with encoded enterprise objects
+ * @binding entityNameSeparator separator used when constructing urls with encoded enterprise objects
  * @binding relative generates relative or absolute url
  * @binding shouldEncryptObjectFormValues boolean flag that tells if the primary keys
  *		of the enterprise objects should be encrypted using blowfish

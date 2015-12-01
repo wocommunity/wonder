@@ -1,7 +1,7 @@
 package er.extensions.eof;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -164,7 +164,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 	
 	/**
-	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
+	 * ERXSortOrderings is an NSMutableArray&lt;EOSortOrdering&gt; that
 	 * provides methods for chaining.
 	 * 
 	 * @author mschrag

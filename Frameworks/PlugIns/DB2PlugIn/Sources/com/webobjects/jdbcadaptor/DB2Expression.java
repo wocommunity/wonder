@@ -850,6 +850,7 @@ public class DB2Expression extends JDBCExpression {
      * @param newString to be inserted
      * @param buffer string to have the replacement done on it
      * @return string after having all of the replacement done.
+     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
      */
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;

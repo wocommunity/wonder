@@ -19,8 +19,8 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -489,13 +489,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
    }
 
     /**
-     * @deprecated Please use ERXStringUtilities.removeHTMLTagsFromString(String) directly
-     */
-    public static String removeHTMLTagsFromString(String s) {
-    	return ERXStringUtilities.removeHTMLTagsFromString(s);
-    }
-
-    /**
      * Forces the garbage collector to run. The
      * max loop parameter determines the maximum
      * number of times to run the garbage collector
@@ -504,8 +497,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * this method with the parameter 1. If called
      * with the parameter 0 the garbage collector
      * will continue to run until no more free memory
-     * is available to collect. <br/>
-     * <br/>
+     * is available to collect.
+     * <p>
      * Note: This can be a very costly operation and
      * should only be used in extreme circumstances.
      * @param maxLoop maximum times to run the garbage
@@ -529,130 +522,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Capitalizes the given string.
-     * @param s string to capitalize
-     * @return capitalized string if the first char is a
-     *		lowercase character.
-     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#capitalize(String)}
-     */
-    @Deprecated
-    public static String capitalize(String s) {
-        return ERXStringUtilities.capitalize(s);
-    }
-
-    /**
-     * Pluralizes a given string for a given language.
-     * See {@link ERXLocalizer} for more information.
-     * @param s string to pluralize
-     * @param howMany number of its
-     * @param language target language
-     * @return plurified string
-     * @deprecated use {@link er.extensions.localization.ERXLocalizer#localizerForLanguage(String)} then {@link er.extensions.localization.ERXLocalizer#plurifiedString(String, int)}
-     */
-    @Deprecated
-    public static String plurify(String s, int howMany, String language) {
-        return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
-    }
-
-    /**
-     * A safe comparison method that first checks to see
-     * if either of the objects are <code>null</code> before comparing
-     * them with the <code>equals</code> method.<br/>
-     * <br/>
-     * Note that if both objects are <code>null</code> then they will
-     * be considered equal.
-     * @param v1 first object
-     * @param v2 second object
-     * @return <code>true</code> if they are equal, <code>false</code> if not
-     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
-     */
-    @Deprecated
-    public static boolean safeEquals(Object v1, Object v2) {
-        return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
-    }
-
-    /**
-     * A safe different comparison method that first checks to see
-     * if either of the objects are <code>null</code> before comparing
-     * them with the <code>equals</code> method.<br/>
-     * <br/>
-     * Note that if both objects are <code>null</code> then they will
-     * be considered equal.
-     * @param v1 first object
-     * @param v2 second object
-     * @return <code>true</code> if they are not equal, <code>false</code> if they are
-     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
-     */
-    @Deprecated
-    public static boolean safeDifferent(Object v1, Object v2) {
-        return v1 != v2 && (v1 == null || v2 == null || !v1.equals(v2));
-    }
-
-    /**
-     * Tests if a given string object can be parsed into
-     * an integer.
-     * @param s string to be parsed
-     * @return if the string can be parsed into an int
-     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#stringIsParseableInteger(String)}
-     */
-    @Deprecated
-    public static boolean stringIsParseableInteger(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Returns an integer from a parsable string. If the
-     * string can not be parsed then 0 is returned.
-     * @param s string to be parsed.
-     * @return int from the string or 0 if un-parsable.
-     * @deprecated use {@link er.extensions.foundation.ERXValueUtilities#intValue(Object)}
-     */
-    @Deprecated
-    public static int intFromParseableIntegerString(String s) {
-        try {
-            int x = Integer.parseInt(s);
-            return x;
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    /**
-     * Replaces a given string by another string in a string.
-     * @param s1 string to be replaced
-     * @param s2 to be inserted
-     * @param s string to have the replacement done on it
-     * @return string after having all of the replacement done.
-     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
-     */
-    @Deprecated
-    public static String substituteStringByStringInString(String s1, String s2, String s) {
-        NSArray a=NSArray.componentsSeparatedByString(s,s1);
-        return a!=null ? a.componentsJoinedByString(s2) : s;
-    }
-
-    /**
-     * Method used to retrieve the shared instance of the
-     * html formatter.
-     * @return shared instance of the html formatter
-     * @deprecated use {@link er.extensions.formatters.ERXSimpleHTMLFormatter#formatter()}
-     */
-    @Deprecated
-    public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
-
-    /**
      * This method handles 3 different cases
      *
      * 1. keyPath is a single key and represents a relationship
-     *		--> addObjectToBothSidesOfRelationshipWithKey
+     *		--&gt; addObjectToBothSidesOfRelationshipWithKey
      * 2. keyPath is a single key and does NOT represents a relationship
      * 3. keyPath is a real key path: break it up, navigate to the last atom
-     *		--> back to 1. or 2.
+     *		--&gt; back to 1. or 2.
      * @param to enterprise object that is having objects added to it
      * @param from enterprise object that is providing the objects
      * @param keyPath that specifies the relationship on the to object
@@ -678,93 +554,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 from.takeValueForKeyPath(to,keyPath);
         }
     }
-    
-    /**
-     * Returns the byte array for a given file.
-     * @param f file to get the bytes from
-     * @throws IOException if things go wrong
-     * @return byte array of the file.
-     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#bytesFromFile(File)}
-     */
-    @Deprecated
-    public static byte[] bytesFromFile(File f) throws IOException {
-        return ERXFileUtilities.bytesFromFile(f);
-    }
-
-    /**
-     * Returns a string from the file using the default
-     * encoding.
-     * @param f file to read
-     * @throws IOException if things go wrong
-     * @return string representation of that file.
-     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File)}
-     */
-    @Deprecated
-    public static String stringFromFile(File f) throws IOException {
-        return ERXFileUtilities.stringFromFile(f);
-    }
-    /**
-     * Returns a string from the file using the specified
-     * encoding.
-     * @param f file to read
-     * @param encoding to be used, null will use the default
-     * @throws IOException if things go wrong
-     * @return string representation of the file.
-     * @deprecated user {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File, String)}
-     */
-    @Deprecated
-    public static String stringFromFile(File f, String encoding) throws IOException {
-        return ERXFileUtilities.stringFromFile(f, encoding);
-    }
-
-    /**
-     * Determines the last modification date for a given file
-     * in a framework. Note that this method will only test for
-     * the global resource not the localized resources.
-     * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
-     *		for the application bundle
-     * @return the <code>lastModified</code> method of the file object
-     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
-     */
-    @Deprecated
-    public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
-        return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
-    }
-
-    /**
-     * Reads a file in from the file system and parses it as if it were a property list.
-     * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
-     *		'app' for the application bundle.
-     * @return de-serialized object from the plist formatted file
-     *		specified.
-     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
-     */
-    @Deprecated
-    public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
-        return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
-    }
-
-    /**
-     * Reads a file in from the file system for the given set
-     * of languages and parses the file as if it were a property list.
-     * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
-     *		'app' for the application bundle.
-     * @param languageList language list search order
-     * @return de-serialized object from the plist formatted file
-     *		specified.
-     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
-     */
-    @Deprecated
-    public static Object readPropertyListFromFileInFramework(String fileName,
-                                                             String aFrameWorkName,
-                                                             NSArray languageList) {
-        return ERXFileUtilities.readPropertyListFromFileInFramework(fileName,
-                                                             aFrameWorkName,
-                                                             languageList);
-    }
 
     /**
      * For a given enterprise object and key path, will return what
@@ -772,13 +561,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * last property of the key path's EOAttribute or EORelationship.
      * The userInfo dictionary can be edited via EOModeler, it is that
      * open book looking icon when looking at either an attribute or
-     * relationship.<br/>
-     * <br/>
+     * relationship.
+     * <p>
      * For example if the userInfo dictionary or the attribute 'speed' on the
      * entity Car contained the key-value pair unit=mph, then this method
-     * would be able to resolve that unit given either of these keypaths:<br/>
-     * <code>userInfoUnit(aCar, "speed");<br/>
-     * userInfoUnit(aDrive, "toCar.speed");</code></br>
+     * would be able to resolve that unit given either of these keypaths:
+     * <pre><code>userInfoUnit(aCar, "speed");
+     *userInfoUnit(aDrive, "toCar.speed");</code></pre>
      * Units can be very useful for adding meta information to particular
      * attributes and relationships in models. The ERDirectToWeb framework
      * adds support for displaying units.
@@ -831,7 +620,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * keys. These keys need to start with the '@@' symbol. For instance
      * if you have the user info value '@unit' off of an attribute for the
      * entity Movie, then you can either pass in a Movie object or a
-     * different object with a prefix key path to a movie object.<br/>
+     * different object with a prefix key path to a movie object.
+     * 
      * @param userInfoUnitString string to be resolved, needs to start with
      *		'@@'. This keypath will be evaluated against either the object
      *		if no prefixKeyPath is specified or the object returned by
@@ -938,7 +728,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
-     * adding the parameter [? | &]r=random_number to the end of the
+     * adding the parameter [? | &amp;]r=random_number to the end of the
      * url.
      * @param daURL a url to add the randomization to.
      * @return url with the addition of the randomization key
@@ -954,7 +744,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
-     * adding the parameter [? | &]r=random_number to the end of the
+     * adding the parameter [? | &amp;]r=random_number to the end of the
      * url.
      * @param daURL a url to add the randomization to.
      */
@@ -972,18 +762,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    daURL.append("r=");
 	    daURL.append(r);
 	}
-    }
-    
-    /**
-     * Adds the session ID for a given session to a given URL. 
-     * @param url URL string to add session ID form value to.
-     * @param session session object
-     * @return URL with the addition of session ID form value
-     * @deprecated use {@link #addSessionIdFormValue(String, WOSession)}
-     */
-    @Deprecated
-    public static String addWosidFormValue(String url, WOSession session) {
-        return addSessionIdFormValue(url, session);
     }
     
     /**
@@ -1013,16 +791,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		}
     	
     	return urlString;
-    }
-
-    /**
-     * @deprecated Use {@link er.extensions.foundation.ERXStringUtilities#cleanString}
-     * @param newString 
-     * @param toBeCleaneds 
-     * @return results of ERXStringUtilities.cleanString
-     */
-    public static String cleanString(String newString, NSArray<String> toBeCleaneds) {
-    	return ERXStringUtilities.cleanString(newString, toBeCleaneds);
     }
 
     /**
@@ -1061,27 +829,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                                                                 String key,
                                                                 boolean defaultValue) {
         return s.objectForKey(key) != null ? ERXValueUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
-    }
-
-    /**
-     * Sets the current session for this thread. This is called
-     * from {@link ERXSession}'s awake and sleep methods.
-     * @param session that is currently active for this thread.
-     * @deprecated use  ERXSession.setSession(session) instead
-     */
-    @Deprecated
-    public synchronized static void setSession(ERXSession session) {
-    	 ERXSession.setSession(session);
-    }
-
-    /**
-     * Returns the current session object for this thread.
-     * @return current session object for this thread
-     * @deprecated use  ERXSession.session() instead
-     */
-    @Deprecated
-    public synchronized static ERXSession session() {
-        return  ERXSession.session();
     }
 
     /**

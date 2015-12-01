@@ -57,7 +57,7 @@ public class AjaxUpdaterLink extends AjaxUpdater {
     
     public String href() {
     	if (hasBinding(Bindings.action)) {
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	} else if (hasBinding(Bindings.directActionName)) {
     		NSDictionary queryDictionary = hasBinding(Bindings.queryDictionary) ? queryDictionary() : null;
     		return context().directActionURLForActionNamed(directActionName(), queryDictionary);

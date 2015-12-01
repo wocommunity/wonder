@@ -145,7 +145,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		/**
 		 * Overriding to 
 		 * <ul>
-		 * <li>add LIMIT clause if _fetchLimit > 0</li>
+		 * <li>add LIMIT clause if _fetchLimit &gt; 0</li>
 		 * <li>support MySQL JOIN syntax (similar syntax to what PostgreSQL PlugIn generates)</li>
 		 * </ul>
 		 *

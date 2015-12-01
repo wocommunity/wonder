@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaFoundation"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="WOFramework/ERJars"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

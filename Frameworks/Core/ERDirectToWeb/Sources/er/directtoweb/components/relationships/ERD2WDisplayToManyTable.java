@@ -13,7 +13,8 @@ import com.webobjects.directtoweb.D2WDisplayToManyTable;
 import com.webobjects.directtoweb.InspectPageInterface;
 
 /**
- * Cleaned up some of the formatting on the original toMany table.<br />
+ * Cleaned up some of the formatting on the original toMany table.
+ * 
  * @d2wKey disabled
  * @d2wKey componentBorder
  * @d2wKey numCols
