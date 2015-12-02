@@ -543,14 +543,31 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      *      the raw rows key paths to fetch.
      * @return fetch specification that can be used to fetch primary keys for 
      *     a given qualifier and sort orderings.
+     * @deprecated use {@link #primaryKeyFetchSpecificationForEntity(EOQualifier, NSArray, NSArray)} instead
      */
-    // FIXME: The ec parameter is not needed, nor used.
+    @Deprecated
     public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
+        return primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, additionalKeys);
+    }
+
+    /**
+     * Constructs a fetch specification that will only fetch the primary
+     * keys for a given qualifier.
+     * 
+     * @param qualifier to construct the fetch spec with
+     * @param sortOrderings array of sort orderings to sort the result 
+     *     set with.
+     * @param additionalKeys array of additional key paths to construct
+     *      the raw rows key paths to fetch.
+     * @return fetch specification that can be used to fetch primary keys for 
+     *     a given qualifier and sort orderings.
+     */
+    public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, NSArray<String> additionalKeys) {
         String entityName = entityName();
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, sortOrderings);
         fs.setFetchesRawRows(true);
-        EOEntity entity = entity(ec);
-        NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
+        EOEntity entity = entity();
+        NSMutableArray<String> keys = new NSMutableArray<>(entity.primaryKeyAttributeNames());
         if(additionalKeys != null) {
             keys.addObjectsFromArray(additionalKeys);
         }
@@ -575,7 +592,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of primary keys matching a given qualifier
      */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
+        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, null);
         //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
         return nsarray;

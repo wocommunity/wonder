@@ -324,7 +324,7 @@ public class ERXEOEncodingUtilities {
             // Get the primary key of the object
             NSArray pkValues = ERXEOControlUtilities.primaryKeyArrayForObject(eo);
             if( pkValues == null && eo instanceof ERXGeneratesPrimaryKeyInterface) {
-                NSDictionary pkDict = ((ERXGeneratesPrimaryKeyInterface)eo).primaryKeyDictionary(false);
+                NSDictionary<String, Object> pkDict = ((ERXGeneratesPrimaryKeyInterface)eo).rawPrimaryKeyDictionary(false);
                 if( pkDict != null )
                     pkValues = pkDict.allValues();
             }

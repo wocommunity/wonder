@@ -420,8 +420,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public Object rawPrimaryKeyInTransaction() {
         Object result = rawPrimaryKey();
         if (result == null) {
-            NSDictionary pk = primaryKeyDictionary(false);
-            NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
+            NSDictionary<String, Object> pk = rawPrimaryKeyDictionary(false);
+            NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
             result = ERXArrayUtilities.valuesForKeyPaths(pk, primaryKeyAttributeNames);
             if(((NSArray)result).count() == 1) result = ((NSArray)result).lastObject();
         }
@@ -469,7 +469,33 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
 
     
     /** caches the primary key dictionary for the given object */
-    private NSDictionary _primaryKeyDictionary;
+    private NSDictionary<String, Object> _primaryKeyDictionary;
+
+    /**
+     * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
+     * This implementation operates in the following fashion. If it is called
+     * passing in 'false' and it has not yet been saved to the database, meaning
+     * this object does not yet have a primary key assigned, then it will have the
+     * adaptor channel generate a primary key for it. Then when the object is saved
+     * to the database it will use the previously generated primary key instead of
+     * having the adaptor channel generate another primary key. If 'true' is passed in
+     * then this method will either return the previously generated primaryKey
+     * dictionary or null if it does not have one. Typically you should only call
+     * this method with the 'false' parameter seeing as unless you are doing something
+     * really funky you won't be dealing with this object when it is in the middle of
+     * a transaction. The delegate {@link ERXDatabaseContextDelegate} is the only class
+     * that should be calling this method and passing in 'true'.
+     * @param inTransaction boolean flag to tell the object if it is currently in the
+     *      middle of a transaction.
+     * @return primary key dictionary for the current object, if the object does not have
+     *      a primary key assigned yet and is not in the middle of a transaction then
+     *      a new primary key dictionary is created, cached and returned.
+     * @deprecated use {@link #rawPrimaryKeyDictionary(boolean)} instead
+     */
+    @Deprecated
+    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+        return rawPrimaryKeyDictionary(inTransaction);
+    }
 
     /**
      * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
@@ -491,16 +517,15 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      *      a primary key assigned yet and is not in the middle of a transaction then
      *      a new primary key dictionary is created, cached and returned.
      */
-    // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
-    @SuppressWarnings("unchecked")
-	public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+    @Override
+    public NSDictionary<String, Object> rawPrimaryKeyDictionary(boolean inTransaction) {
         if(_primaryKeyDictionary == null) {
             if (!inTransaction) {
                 Object rawPK = rawPrimaryKey();
                 if (rawPK != null) {
                     if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPK);
-                    NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-                    _primaryKeyDictionary = new NSDictionary(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray(rawPK), primaryKeyAttributeNames);
+                    NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
+                    _primaryKeyDictionary = new NSDictionary<>(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray<>(rawPK), primaryKeyAttributeNames);
                 } else {
                     if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
                     _primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
@@ -509,7 +534,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         }
         return _primaryKeyDictionary;
     }
-    
+
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#committedSnapshotValueForKey(java.lang.String)
      */
@@ -559,7 +584,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public ERXEnterpriseObject refetchObjectFromDBinEditingContext(EOEditingContext ec){
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName());
-        EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
+        EOQualifier qual = entity.qualifierForPrimaryKey(rawPrimaryKeyDictionary(false));
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName(), qual, null);
         fetchSpec.setRefreshesRefetchedObjects(true);
         NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
