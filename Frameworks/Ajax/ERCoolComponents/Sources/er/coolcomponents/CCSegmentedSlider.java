@@ -1,6 +1,6 @@
 package er.coolcomponents;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -109,7 +109,7 @@ public class CCSegmentedSlider extends ERXComponent {
 	public boolean isChecked() {
 		Object selection = valueForBinding("selection");
 		Object item = valueForBinding("item");
-		return ObjectUtils.equals(selection, item);
+		return Objects.equals(selection, item);
 	}
 
 

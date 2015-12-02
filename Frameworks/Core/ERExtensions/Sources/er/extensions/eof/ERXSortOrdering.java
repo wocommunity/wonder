@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -127,7 +128,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public boolean equals(Object obj) {
 		if (obj instanceof ERXSortOrdering) {
 			ERXSortOrdering other = (ERXSortOrdering)obj;
-			return ObjectUtils.equals(key(), other.key()) && ObjectUtils.equals(selector(), other.selector());
+			return Objects.equals(key(), other.key()) && Objects.equals(selector(), other.selector());
 		}
 		return false;
 	}

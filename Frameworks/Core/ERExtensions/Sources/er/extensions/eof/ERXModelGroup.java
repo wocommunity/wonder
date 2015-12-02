@@ -14,8 +14,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -547,7 +547,7 @@ public class ERXModelGroup extends EOModelGroup {
 						EOAttribute sourceAttribute = join.sourceAttribute();
 						EOAttribute destinationAttribute = join.destinationAttribute();
 						if (sourceAttribute != null && destinationAttribute != null) {
-							if (ObjectUtils.notEqual(sourceAttribute.className(), destinationAttribute.className()) || ObjectUtils.notEqual(sourceAttribute.valueType(), destinationAttribute.valueType())) {
+							if (!Objects.equals(sourceAttribute.className(), destinationAttribute.className()) || !Objects.equals(sourceAttribute.valueType(), destinationAttribute.valueType())) {
 								if (!ERXProperties.booleanForKey("er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch")) {
 									throw new RuntimeException("The attribute " + sourceAttribute.name() + " in " + sourceAttribute.entity().name() + " (" + sourceAttribute.className() + ", " + sourceAttribute.valueType() + ") is a foreign key to " + destinationAttribute.name() + " in " + destinationAttribute.entity().name() + " (" + destinationAttribute.className() + ", " + destinationAttribute.valueType() + ") but their class names or value types do not match.  If this is actually OK, you can set er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch=true in your Properties file.");
 								}
@@ -889,7 +889,7 @@ public class ERXModelGroup extends EOModelGroup {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
 			if (otherModel != model) {
 				NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
-				if (otherConnectionDictionary != null && ObjectUtils.equals(newConnectionDictionary.objectForKey("adaptorName"), otherConnectionDictionary.objectForKey("adaptorName"))) {
+				if (otherConnectionDictionary != null && Objects.equals(newConnectionDictionary.objectForKey("adaptorName"), otherConnectionDictionary.objectForKey("adaptorName"))) {
 					boolean valuesThatMatterMatch = true;
 					for (int keyNum = 0; valuesThatMatterMatch && keyNum < keysThatMatter.length; keyNum ++) {
 						String thisValue = (String)newConnectionDictionary.objectForKey(keysThatMatter[keyNum]);

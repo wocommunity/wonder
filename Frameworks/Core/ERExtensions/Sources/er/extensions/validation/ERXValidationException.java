@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.validation;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOMessage;
@@ -438,8 +439,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
-            return ObjectUtils.equals(type(), ex.type()) && ObjectUtils.equals(key(), ex.key()) && ObjectUtils.equals(object(), ex.object())
-                && ObjectUtils.equals(value(), ex.value()) && ObjectUtils.equals(additionalExceptions(), ex.additionalExceptions());
+            return Objects.equals(type(), ex.type()) && Objects.equals(key(), ex.key()) && Objects.equals(object(), ex.object())
+                && Objects.equals(value(), ex.value()) && Objects.equals(additionalExceptions(), ex.additionalExceptions());
         }
         return super.equals(anotherObject);
     }
