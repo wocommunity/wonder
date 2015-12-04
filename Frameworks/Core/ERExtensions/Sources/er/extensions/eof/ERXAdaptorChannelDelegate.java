@@ -23,16 +23,17 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * and the entity name matches the regular expression
  * <code>er.extensions.ERXSQLExpressionTracker.trace.entityMatchPattern</code>
  * then the SQL expression is logged together with the time used and the
- * parameters. <br />
+ * parameters.
+ * <p>
  * NOTE: To get patched into EOF, this class registers itself for the
  * <code>EODatabaseContext.DatabaseChannelNeededNotification</code>
  * notification and creates a new channel. If you would like to handle creation
  * of the channel yourself *and* you need the logging feature, you need to:
  * <ul>
  * <li>set the er.extensions.ERXAdaptorChannelDelegate.enabled=false in your
- * properties, which will prevent creation of the channel here
+ * properties, which will prevent creation of the channel here</li>
  * <li>create the channel yourself and set the delegate to
- * {@link new ERXAdaptorChannelDelegate()}
+ * {@link new ERXAdaptorChannelDelegate()}</li>
  * </ul>
  * otherwise you just need to set
  * er.extensions.ERXAdaptorChannelDelegate.enabled=true

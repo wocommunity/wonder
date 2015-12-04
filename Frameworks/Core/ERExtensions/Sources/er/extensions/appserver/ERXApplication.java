@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -175,6 +175,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static final Logger startupLog = Logger.getLogger("er.extensions.ERXApplication.Startup");
 
 	private static boolean wasERXApplicationMainInvoked = false;
+
+	/** empty array for adaptorExtensions */
+    private static String[] myAppExtensions = {};
 
 	/**
 	 * Notification to get posted when we get an OutOfMemoryError or when memory passes
@@ -1224,11 +1227,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 
-		Boolean useUnlocker = useEditingContextUnlocker();
+		Boolean useUnlocker = ERXEC.useUnlocker();
 		if (useUnlocker != null) {
 			ERXEC.setUseUnlocker(useUnlocker);
 		}
-		Boolean traceOpenLocks = traceOpenEditingContextLocks();
+		Boolean traceOpenLocks = ERXEC.traceOpenLocks();
 		if (traceOpenLocks != null) {
 			ERXEC.setTraceOpenLocks(traceOpenLocks);
 		}
@@ -1271,39 +1274,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
-	/**
-	 * Decides whether to use editing context unlocking.
-	 * 
-	 * @return true if ECs should be unlocked after each RR-loop
-	 * @deprecated use {@link er.extensions.eof.ERXEC#useUnlocker()}
-	 */
-	@Deprecated
-	public Boolean useEditingContextUnlocker() {
-		Boolean useUnlocker = null;
-		if (ERXProperties.stringForKey("er.extensions.ERXApplication.useEditingContextUnlocker") != null) {
-			useUnlocker = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false));
-		}
-		return useUnlocker;
-	}
-
-	/**
-	 * Decides whether or not to keep track of open editing context locks.
-	 * 
-	 * @return true if editing context locks should be tracked
-	 * @deprecated use {@link er.extensions.eof.ERXEC#traceOpenLocks()}
-	 */
-	@Deprecated
-	public Boolean traceOpenEditingContextLocks() {
-		Boolean traceOpenLocks = null;
-		if (ERXProperties.stringForKey("er.extensions.ERXApplication.traceOpenEditingContextLocks") != null) {
-			traceOpenLocks = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.traceOpenEditingContextLocks", false));
-		}
-		return traceOpenLocks;
-	}
 
 	/**
 	 * Configures the statistics logging for a given application. By default
-	 * will log to a file <base log directory>/<WOApp Name>-<host>-<port>.log
+	 * will log to a file &lt;base log directory&gt;/&lt;WOApp Name&gt;-&lt;host&gt;-&lt;port&gt;.log
 	 * if the base log path is defined. The base log path is defined by the
 	 * property <code>er.extensions.ERXApplication.StatisticsBaseLogPath</code>
 	 * The default log rotation frequency is 24 hours, but can be changed by
@@ -1413,16 +1387,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Adds support for automatic application cycling. Applications can be
-	 * configured to cycle in two ways:<br/> <br/> The first way is by setting
+	 * configured to cycle in two ways:
+	 * <p>
+	 * The first way is by setting
 	 * the System property <b>ERTimeToLive</b> to the number of seconds (+ a
 	 * random interval of 10 minutes) that the application should be up before
 	 * terminating. Note that when the application's time to live is up it will
-	 * quit calling the method <code>killInstance</code>.<br/> <br/> The
+	 * quit calling the method <code>killInstance</code>.
+	 * <p>The
 	 * second way is by setting the System property <b>ERTimeToDie</b> to the
 	 * time in seconds after midnight when the app should be starting to refuse
 	 * new sessions. In this case when the application starts to refuse new
 	 * sessions it will also register a kill timer that will terminate the
-	 * application between 0 minutes and 1:00 minutes.<br/>
+	 * application between 0 minutes and 1:00 minutes.
 	 */
 	@Override
 	public void run() {
@@ -1488,37 +1465,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		return new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
-	}
-
-	/**
-	 * @deprecated use {@link #createRequest(String, String, String, Map, NSData, Map)} instead
-	 */
-	@Deprecated
-	protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-		// Workaround for #3428067 (Apache Server Side Include module will feed
-		// "INCLUDED" as the HTTP version, which causes a request object not to
-		// be
-		// created by an exception.
-		if (anHTTPVersion == null || anHTTPVersion.startsWith("INCLUDED")) {
-			anHTTPVersion = "HTTP/1.0";
-		}
-		
-		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
-		// The content-type header makes the WO parser only look at the content. Which is empty.
-		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
-		// http://jira.atlassian.com/browse/JRA-13791
-		if ("GET".equalsIgnoreCase(aMethod) && someHeaders != null && someHeaders.objectForKey("content-type") != null)
-		{
-			someHeaders = someHeaders.mutableClone();
-			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
-		}
-
-		if (rewriteDirectConnectURL()) {
-			aURL = "/cgi-bin/WebObjects/" + name() + ".woa" + aURL;
-		}
-
-		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
-		return worequest;
 	}
 
 	/**
@@ -1743,11 +1689,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * The name suffix is appended to the current name of the application. This
 	 * adds the ability to add a useful suffix to differentiate between
-	 * different sets of applications on the same machine.<br/> <br/> The name
-	 * suffix is set via the System property <b>ERApplicationNameSuffix</b>.<br/>
-	 * <br/> For example if the name of an application is Buyer and you want to
+	 * different sets of applications on the same machine.
+	 * <p>
+	 * The name suffix is set via the System property <b>ERApplicationNameSuffix</b>.
+	 * For example if the name of an application is Buyer and you want to
 	 * have a training instance appear with the name BuyerTraining then you
-	 * would set the ERApplicationNameSuffix to Training.<br/> <br/>
+	 * would set the ERApplicationNameSuffix to Training.
 	 * 
 	 * @return the System property <b>ERApplicationNameSuffix</b> or
 	 *         <code>null</code>
@@ -1767,7 +1714,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Adds the ability to completely change the applications name by setting
 	 * the System property <b>ERApplicationName</b>. Will also append the
-	 * <code>nameSuffix</code> if one is set.<br/> <br/>
+	 * <code>nameSuffix</code> if one is set.
 	 * 
 	 * @return the computed name of the application.
 	 */
@@ -1787,7 +1734,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * This method returns {@link WOApplication}'s <code>name</code> method.<br/>
+	 * This method returns {@link WOApplication}'s <code>name</code> method.
 	 * 
 	 * @return the name of the application executable.
 	 */
@@ -1798,7 +1745,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Puts together a dictionary with a bunch of useful information relative to
 	 * the current state when the exception occurred. Potentially added
-	 * information:<br/>
+	 * information:
 	 * <ol>
 	 * <li>the current page name</li>
 	 * <li>the current component</li>
@@ -1808,7 +1755,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * <li>the previous page list (from the WOStatisticsStore)</li>
 	 * </ol>
 	 * Also, in case the top-level exception was a EOGeneralAdaptorException,
-	 * then you also get the failed ops and the sql exception. <br/>
+	 * then you also get the failed ops and the sql exception.
 	 * 
 	 * @param e exception
 	 * @param context the current context
@@ -2286,17 +2233,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		return _useSessionStoreDeadlockDetection.booleanValue();
-	}
-
-	/**
-	 * Returns true if this app is running in WO 5.4.
-	 * 
-	 * @return true if this app is running in WO 5.4
-	 * @deprecated Wonder is used with WO 5.4 only
-	 */
-	@Deprecated
-	public static boolean isWO54() {
-		return true;
 	}
 
 	/**
@@ -2878,7 +2814,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Workaround for method missing in 5.3. Misnamed because static methods can't override client methods. 
 	 * @return the request handler key for ajax.
+	 * @deprecated use {@link #ajaxRequestHandlerKey()} instead
 	 */
+	@Deprecated
 	public static String erAjaxRequestHandlerKey() {
 		return "ja";
 	}
@@ -2891,4 +2829,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().postNotification(ApplicationWillTerminateNotification, this);
 		super.terminate();
 	}
+	
+	/**
+	 * Override default implementation that returns {".dll", ".exe"} and therefor prohibits IIS
+	 * as WebServer.
+	 */
+	@Override
+    public String[] adaptorExtensions() {
+        return myAppExtensions;
+    }
 }

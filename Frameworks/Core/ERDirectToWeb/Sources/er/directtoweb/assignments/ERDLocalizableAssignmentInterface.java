@@ -7,8 +7,7 @@
 package er.directtoweb.assignments;
 
 /**
- * For localized assignments<br />
- * 
+ * For localized assignments.
  */
 
 public interface ERDLocalizableAssignmentInterface {

@@ -1,5 +1,6 @@
 package er.imadaptor.components;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -94,7 +95,7 @@ public class IMPickListAction extends WOComponent {
 			NSArray list = (NSArray) valueForBinding("list");
 			NSArray selectedObjects;
 			Object selectedObject;
-			if (ERXStringUtilities.isDigitsOnly(message)) {
+			if (StringUtils.isNumeric(message)) {
 				int selectionIndex = Integer.parseInt(message) - 1;
 				if (selectionIndex >= 0 && selectionIndex < list.count()) {
 					selectedObject = list.objectAtIndex(selectionIndex);

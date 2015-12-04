@@ -17,10 +17,7 @@ import er.neo4jadaptor.ersatz.lucene.LuceneTranslator.Coder;
 
 
 /**
- * <p>
  * Encodes and decodes java types as {@link String} values with the intention to be used for Lucene.
- * </p>
- * 
  * <p>
  * Numbers are padded with zeros so that textual representation of a lower number would be alphanumerically
  * lower then textual representation of a higher number:
@@ -30,11 +27,8 @@ import er.neo4jadaptor.ersatz.lucene.LuceneTranslator.Coder;
  * // which translates to...
  * "00000000000000000010".compareTo("00000000000000000002") &lt; 0
  * </pre>
- * </p>
- * 
  * <p>
  * <b>TODO: Floating point types are not correctly represented</b>
- * </p>
  * 
  * @author Jedrzej Sobanski
  */

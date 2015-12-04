@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with
  * their case bound to a value.
- <code><pre>
+ <pre><code>
  ==========================
  Example.wo/Example.html (modern syntax)
  ==========================

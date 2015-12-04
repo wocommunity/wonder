@@ -32,26 +32,31 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * <h4>Adds class-level inheritance to EOF.</h4>
- * <p>In Java, static methods are similar to class methods in Objective-C, but
+ * <h3>Adds class-level inheritance to EOF.</h3>
+ * In Java, static methods are similar to class methods in Objective-C, but
  * one cannot use static methods in interfaces and static methods cannot be overridden 
- * by a subclass. Using the clazz pattern removes those limitations.</p>
- * <p>Instead of using a static method, we can use a static inner class (a clazz) 
+ * by a subclass. Using the clazz pattern removes those limitations.
+ * <p>
+ * Instead of using a static method, we can use a static inner class (a clazz) 
  * instead. This allows for the methods on the clazz to be available statically to 
  * the class. The advantage is that static utility methods don't need to be 
  * generated for every subclass of an EOEnterpriseObject. It is generally sufficient to
- * simply use the utility methods available on the EOEnterpriseObjectClazz.</p>
- * <p>Every subclass of this class will get their own "ClazzObject" instance, so it's
+ * simply use the utility methods available on the EOEnterpriseObjectClazz.
+ * <p>
+ * Every subclass of this class will get their own "ClazzObject" instance, so it's
  * OK to store things which might be different in superclasses. That is, the "User"'s
  * implementation can override the "Person"'s and because Person.clazz() will get
- * it's own instance, it will do only "Person" things.</p>
- * <p>Use subclasses of EOEnterpriseObjectClazz as inner classes in your EO subclasses
+ * it's own instance, it will do only "Person" things.
+ * <p>
+ * Use subclasses of EOEnterpriseObjectClazz as inner classes in your EO subclasses
  * to work around the missing class object inheritance of java. They <b>must</b>
- * be named XX.XXClazz to work.</p>
- * <p>The methods from EOUtilities are mirrored here so you don't have to import EOAccess
+ * be named XX.XXClazz to work.
+ * <p>
+ * The methods from EOUtilities are mirrored here so you don't have to import EOAccess
  * in your subclasses, which is not legal for client-side classes. The implementation
  * for a client-side class could then be easily switched to use the server-side EOUtilites
- * implementation.</p>
+ * implementation.
+ * 
  * @param <T> 
  */
 public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
@@ -538,14 +543,31 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      *      the raw rows key paths to fetch.
      * @return fetch specification that can be used to fetch primary keys for 
      *     a given qualifier and sort orderings.
+     * @deprecated use {@link #primaryKeyFetchSpecificationForEntity(EOQualifier, NSArray, NSArray)} instead
      */
-    // FIXME: The ec parameter is not needed, nor used.
+    @Deprecated
     public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
+        return primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, additionalKeys);
+    }
+
+    /**
+     * Constructs a fetch specification that will only fetch the primary
+     * keys for a given qualifier.
+     * 
+     * @param qualifier to construct the fetch spec with
+     * @param sortOrderings array of sort orderings to sort the result 
+     *     set with.
+     * @param additionalKeys array of additional key paths to construct
+     *      the raw rows key paths to fetch.
+     * @return fetch specification that can be used to fetch primary keys for 
+     *     a given qualifier and sort orderings.
+     */
+    public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, NSArray<String> additionalKeys) {
         String entityName = entityName();
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, sortOrderings);
         fs.setFetchesRawRows(true);
-        EOEntity entity = entity(ec);
-        NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
+        EOEntity entity = entity();
+        NSMutableArray<String> keys = new NSMutableArray<>(entity.primaryKeyAttributeNames());
         if(additionalKeys != null) {
             keys.addObjectsFromArray(additionalKeys);
         }
@@ -570,7 +592,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of primary keys matching a given qualifier
      */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
+        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, null);
         //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
         return nsarray;
@@ -682,7 +704,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
         /**
          * Creates a clazz object for a given entity.
          * Will look for a clazz object with the name:
-         * <entity name>$<entity name>Clazz.
+         * &lt;entity name&gt;$&lt;entity name&gt;Clazz.
          * @param entity to generate the clazz for
          * @return clazz object for the given entity
          */

@@ -24,46 +24,33 @@ import er.extensions.eof.ERXQ;
 import er.extensions.eof.ERXS;
 
 /**
- * <p>
  * ERXRestFetchSpecification provides a wrapper around fetching objects with batching, sort orderings, and (optionally)
  * qualifiers configured in the WORequest.
- * </p>
- * 
  * <p>
  * Example query string parameters:
- * </p>
  * <ul>
  * <li>sort=lastName|asc,firstName|desc</li>
- * <li>batchSize=25&batch=1 (Note that batch number is a zero-based index)</li>
+ * <li>batchSize=25&amp;batch=1 (Note that batch number is a zero-based index)</li>
  * <li>qualifier=firstName%3D'Mike'</li>
  * <li>Range=items%3D10-19 (Note that the index values for Range items are zero-based)</li>
  * </ul>
- * 
- * <p>
  * Because request EOQualifiers could possibly pose a security risk, you must explicitly enable request qualifiers by
  * calling enableRequestQualifiers(baseQualifier) or by using the longer constructor that takes an optional base
  * qualifier. A base qualifier is prepended (AND'd) to whatever qualifier is passed on the query string to restrict the
  * results of the user's query.
- * </p>
- * 
  * <p>
  * An example use:
- * </p>
- * 
- * <pre>
+ * <pre><code>
  * public WOActionResults indexAction() throws Throwable {
  * 	ERXRestFetchSpecification&lt;Task&gt; fetchSpec = new ERXRestFetchSpecification&lt;Task&gt;(Task.ENTITY_NAME, null, null, queryFilter(), Task.CREATION_DATE.descs(), 25);
  * 	NSArray&lt;Task&gt; tasks = fetchSpec.objects(editingContext(), options());
  * 	return response(editingContext(), Task.ENTITY_NAME, tasks, showFilter());
  * }
- * </pre>
- * 
- * <p>
+ * </code></pre>
  * In this example, we are fetching the "Task" entity, sorted by creation date, with a default batch size of 25, and
  * with request qualifiers enable (meaning, we allow users to pass in a qualifier in the query string), filtering the
  * qualifier with the ERXKeyFilter returned by the queryFilter() method. We then fetch the resulting tasks and return
  * the response to the user.
- * </p>
  * 
  * @author mschrag
  * 

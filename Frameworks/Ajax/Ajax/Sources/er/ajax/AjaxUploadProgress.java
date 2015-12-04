@@ -30,11 +30,6 @@ public class AjaxUploadProgress extends AjaxProgress {
 		_fileName = fileName;
 	}
 
-	@Deprecated
-	public AjaxUploadProgress(String id, File tempFile, String fileName, int streamLength) {
-		this(id, tempFile, fileName, (long) streamLength);
-	}
-
 	/**
 	 * Returns the name of the file the client uploaded.
 	 * 

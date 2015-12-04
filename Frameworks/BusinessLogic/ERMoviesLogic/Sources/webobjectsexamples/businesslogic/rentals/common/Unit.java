@@ -13,25 +13,15 @@
 package webobjectsexamples.businesslogic.rentals.common;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Unit extends EOGenericRecord {
-	private static final long	serialVersionUID	= -1282298842109267336L;
+public class Unit extends _Unit {
 
-	public static final String	DateAcquiredKey		= "dateAcquired";
+    private static final long serialVersionUID = 1L;
 
-	public static final String	NotesKey			= "notes";
-
-	public static final String	RentalsKey			= "rentals";
-
-	public static final String	UnitIDKey			= "unitID";
-
-	public static final String	VideoKey			= "video";
-
-	public Unit() {
+    public Unit() {
 		super();
 	}
 
@@ -46,7 +36,7 @@ public class Unit extends EOGenericRecord {
 	@Override
 	public void validateForSave() throws NSValidation.ValidationException {
 		int rentalsOut = 0;
-		NSArray rentals = rentals();
+		NSArray<Rental> rentals = rentals();
 		if (rentals != null) {
 			int count = rentals.count();
 			for (int i = 0; i < count; i++) {
@@ -62,24 +52,8 @@ public class Unit extends EOGenericRecord {
 		super.validateForSave();
 	}
 
-	public Number unitID() {
-		return (Number) (storedValueForKey(UnitIDKey));
-	}
-
-	public NSTimestamp dateAcquired() {
-		return (NSTimestamp) (storedValueForKey(DateAcquiredKey));
-	}
-
-	public void setDateAcquired(NSTimestamp value) {
-		takeStoredValueForKey(value, DateAcquiredKey);
-	}
-
-	public NSArray rentals() {
-		return (NSArray) (storedValueForKey(RentalsKey));
-	}
-
 	public boolean isAvailableForRent() {
-		NSArray rentals = rentals();
+		NSArray<Rental> rentals = rentals();
 		if (rentals != null) {
 			int count = rentals.count();
 			for (int i = 0; i < count; i++) {

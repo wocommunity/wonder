@@ -13,8 +13,7 @@ import com.webobjects.foundation.NSArray;
 
 // PickPageInterface - Used for selecting multiple objects from a select page.
 /**
- * Formal interface for multiple object selection.<br />
- * 
+ * Formal interface for multiple object selection.
  */
 
 public interface ERDPickPageInterface {

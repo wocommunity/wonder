@@ -231,8 +231,8 @@ public class ERXDatabaseContextDelegate {
      * @param entity the entity of the object
      * @return primary key dictionary to be used or null if a primary key should be generated for the object.
      */
-    public NSDictionary databaseContextNewPrimaryKey(EODatabaseContext databaseContext, Object object, EOEntity entity) {
-        return object instanceof ERXGeneratesPrimaryKeyInterface ? ((ERXGeneratesPrimaryKeyInterface)object).primaryKeyDictionary(true) : null;
+    public NSDictionary<String, Object> databaseContextNewPrimaryKey(EODatabaseContext databaseContext, Object object, EOEntity entity) {
+        return object instanceof ERXGeneratesPrimaryKeyInterface ? ((ERXGeneratesPrimaryKeyInterface)object).rawPrimaryKeyDictionary(true) : null;
     }
 
     /**

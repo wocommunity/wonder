@@ -24,11 +24,11 @@ import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
  * Caches instances of one entity by a given key(path). Typically you'd have an "identifier" property 
- * and you'd fetch values by:<code><pre>
+ * and you'd fetch values by:<pre><code>
  * ERXEnterpriseObjectCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectCache&lt;HelpText&gt;("HelpText", "pageConfiguration");
  * ...
  * HelpText helpText = helpTextCache.objectForKey(ec, "ListHelpText");
- * </pre></code>
+ * </code></pre>
  * 
  * You can supply a timeout after which individual objects (or all objects if fetchInitialValues
  * is <code>true</code>) get cleared and re-fetched. This implementation can cache either only the global IDs, 

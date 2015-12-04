@@ -1,6 +1,7 @@
 package er.extensions.components;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -84,7 +85,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			WOResponse response = ERXStyleSheet.cache( session() ).objectForKey( name );
 			String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
 			String queryMd5 = response.headerForKey( "checksum" );
-			if (ObjectUtils.equals(md5, queryMd5)) {
+			if (Objects.equals(md5, queryMd5)) {
 				//TODO check for last-whatever time and return not modified if not changed
 			}
 			return response;
@@ -172,7 +173,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * Appends the &ltlink&gt; tag, either by using the style sheet name and
+	 * Appends the &lt;link&gt; tag, either by using the style sheet name and
 	 * framework or by using the component content and then generating a link to
 	 * it.
 	 */

@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -64,15 +64,16 @@ import er.extensions.validation.ERXValidationException;
 
 /**
  * Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage).
- * Has tons of extra functionality:<br />
- * <li>Debugging support.<br />
- * Special handlers add extra info in the request-response loop
- * <li>Workflow extensions.<br />
+ * Has tons of extra functionality:
+ * <ul>
+ * <li>Debugging support.<br>
+ * Special handlers add extra info in the request-response loop</li>
+ * <li>Workflow extensions.<br>
  * If your NextPageDelegate is a {@link ERDBranchDelegate}, then all of the
- * code for actions can be handled in your delegate.
+ * code for actions can be handled in your delegate.</li>
  * <li>Display key extensions. We support tab and sectioned pages via the
- * d2wContext array.<br />
- * 
+ * d2wContext array.</li>
+ * </ul>
  * In the case of a non-tab page, we expect d2wContext.sectionsContents to
  * return one of the three following formats: (( section1, key1, key2, key4 ), (
  * section2, key76, key 5, ..) .. ) OR with the sections enclosed in "()" - this
@@ -84,7 +85,7 @@ import er.extensions.validation.ERXValidationException;
  * In the case of a TAB page, we expect d2wContext.tabSectionsContents to return
  * one of the two following formats: ( ( tab1, key1, key2, key4 ), ( tab2,
  * key76, key 5, ..) .. ) OR with sections ( ( tab1, ( section1, key1, key2 ..),
- * (section3, key4, key..) ), ... ) OR with the alternate syntax, which ist most
+ * (section3, key4, key..) ), ... ) OR with the alternate syntax, which is most
  * useful with the WebAssistant ( "[tab1]", "(section1)", key1, key2, ...
  * "[tab2]", "(section3)", key4, key..... )
  * @d2wKey object
@@ -952,7 +953,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
             ERXStats.markEnd("D2W", statsKey);
             
-            d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
             String currentTabKey = (String) d2wContext().valueForKey(Keys.tabKey);
             for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
@@ -976,6 +976,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     protected void clearTabSectionsContents() {
     	_tabSectionsContents = null;
+    	_currentTab = null;
     }
 
     /** Dummy denoting to sections. */
@@ -991,14 +992,16 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Returns the {@link er.directtoweb.ERD2WContainer} defining the current tab. */
     public ERD2WContainer currentTab() {
-        if (_currentTab == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
-            //If firstTab is not null, then try to find the tab named firstTab
-        	Integer tabIndex = (Integer) d2wContext().valueForKey(Keys.tabIndex);
-            if(tabIndex!=null && tabIndex.intValue() <= tabSectionsContents().count()){
-                setCurrentTab(tabSectionsContents().objectAtIndex(tabIndex.intValue()));
-            }
-            if(_currentTab==null)
-                setCurrentTab(tabSectionsContents().objectAtIndex(0));
+        String tabName = (String) d2wContext().valueForKey(Keys.tabKey); 
+        if (_currentTab == null && !ERXStringUtilities.stringIsNullOrEmpty(tabName)) {
+           for (ERD2WContainer aTab : tabSectionsContents()) {
+               if (tabName.equals(aTab.name)) {
+                   setCurrentTab(aTab);
+               }
+           }
+        }
+        if (_currentTab == null) {
+            _currentTab = tabSectionsContents().objectAtIndex(0);
         }
         return _currentTab;
     }
@@ -1167,11 +1170,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Returns the pageController for this page. If there is none given yet,
      * tries to create one by querying the key "pageController" from the
      * d2wContext. The most convenient way to set and use a pageController is
-     * via the rule system:<code><pre>
+     * via the rule system:<pre><code>
      *  100: (entity.name='WebSite') and (task = 'list') =&gt; pageController = &quot;ListWebSiteController&quot; [er.directtoweb.ERDDelayedObjectCreationAssignment]
      *  100: (entity.name='WebSite') =&gt; actions = {left = (editAction, controllerAction);}
      *  100: (propertyKey = 'controllerAction') =&gt; componentName = &quot;ERDControllerButton&quot;
-     * </pre></code> Then ListWebSiteController would be:<code><pre>
+     * </code></pre> Then ListWebSiteController would be:<pre><code>
      * public class ListWebSiteController extends ERDBranchDelegate {
      * 
      *     private WOComponent _sender;
@@ -1206,7 +1209,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      *        return result;
      *     }
      * }
-     * </pre></code> The nice thing about this is that this allows you to keep your
+     * </code></pre> The nice thing about this is that this allows you to keep your
      * logic confined to just a handful of classes, without the need to
      * constantly create new components that just handle one action.
      * 

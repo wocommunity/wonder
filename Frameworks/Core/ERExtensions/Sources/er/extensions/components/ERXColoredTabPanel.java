@@ -9,7 +9,7 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Tab panel with color backgrounds.<br />
+ * Tab panel with color backgrounds.
  * 
  * @binding tabs
  * @binding selectedTab

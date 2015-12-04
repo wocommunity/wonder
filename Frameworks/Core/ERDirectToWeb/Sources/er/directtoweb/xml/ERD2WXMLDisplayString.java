@@ -10,8 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
- * xml display component for strings<br />
- * 
+ * xml display component for strings
  */
 
 public class ERD2WXMLDisplayString extends D2WDisplayString {

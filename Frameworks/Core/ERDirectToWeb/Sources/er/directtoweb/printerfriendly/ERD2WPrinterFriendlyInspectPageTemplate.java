@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WInspectPage;
 
 /**
- * Printer friendly inspect page.<br />
+ * Printer friendly inspect page.
+ * 
  * @d2wKey displayNameForEntity
  * @d2wKey repetitionComponentName
  * @d2wKey pageWrapperName

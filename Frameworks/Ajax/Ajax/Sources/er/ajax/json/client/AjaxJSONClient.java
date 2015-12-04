@@ -9,7 +9,7 @@ import er.extensions.foundation.ERXRandomGUID;
  * there is one).
  * 
  * <code>
- * var jsonClient = <wo:AjaxJSONClient/>;
+ * var jsonClient = &lt;wo:AjaxJSONClient/&gt;;
  * </code>
  * 
  * @author mschrag

@@ -37,7 +37,7 @@ import er.extensions.components._private.ERXWOForm;
  * <ul>
  * <li>the label binding</li>
  * <li>an in-line ERXWOTemplate named "link".  This allows for images etc to be used to open the dialog</li>
- * </ul></p>
+ * </ul>
  *
  * <p>The contents for the modal dialog can come from four sources:
  * <ul>
@@ -45,7 +45,7 @@ import er.extensions.components._private.ERXWOForm;
  * <li>externally from an in-line WOComponent</li>
  * <li>externally from an action method (see action binding)</li>
  * <li>externally from an named WOcomponent (see pageName binding)</li>
- * </ul></p>
+ * </ul>
  * 
  * <p>To cause the dialog to be closed in an Ajax action method, use this:
  * <code>
@@ -60,7 +60,7 @@ import er.extensions.components._private.ERXWOForm;
  * </p>
  * 
  * <p>The modal dialog is opened by calling a JavaScript function.  While this is normally done from an onclick
- * handler, you can call it directly.  The function name is openAMD_<ID>():
+ * handler, you can call it directly.  The function name is openAMD_&lt;ID&gt;():
  * <code>
  * openAMD_MyDialogId();
  * </code>
@@ -127,7 +127,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onUpdate client side method, fires on updating the content of ModalBox (on call of Modalbox.show method from active ModalBox instance).
  * 
  * @see AjaxModalDialogOpener
- * @see <a href="http://www.wildbit.com/labs/modalbox"/>Modalbox Page</a>
+ * @see <a href="http://www.wildbit.com/labs/modalbox">Modalbox Page</a>
  * @see <a href="http://code.google.com/p/modalbox/">Google Group</a>
  * @author chill
  * 
@@ -254,32 +254,6 @@ public class AjaxModalDialog extends AjaxComponent {
 		// Register the id of this component on the page in the request so that when 
 		// it comes time to cache the context, it knows that this area is an Ajax updating area
 		AjaxUtils.setPageReplacementCacheKey(context, currentDialog._containerID(context));
-	}
-
-	/**
-	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog
-	 * without updating the title.
-	 * 
-	 * @see #update(WOContext, String)
-	 * @param context the current WOContext
-	 * @deprecated use {@link #update(WOContext, String)}
-	 */
-	@Deprecated
-	public static void update(WOContext context) {
-		update(context, null);
-	}
-	
-	/**
-	 * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
-	 * 
-	 * @see #update(WOContext, String)
-	 * @param context the current WOContext
-	 * @param title the new title for the dialog window
-	 * @deprecated use {@link #update(WOContext, String)}
-	 */
-	@Deprecated
-	public static void setTitle(WOContext context, String title) {
-		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
 	}
 
 	public void setCurrentDialogInPageIfNecessary(WOActionResults results, WORequest request, WOContext context) {

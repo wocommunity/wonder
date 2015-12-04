@@ -1,7 +1,7 @@
 package er.extensions.appserver;
 
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -32,7 +32,6 @@ import er.extensions.eof.ERXEC;
  * error results only logged by this delegate.
  * 
  * @author kieran
- *
  */
 public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction implements IERXPerformWOActionForResult {
 	private static final Logger log = Logger.getLogger(ERXNextPageForResultWOAction.class);

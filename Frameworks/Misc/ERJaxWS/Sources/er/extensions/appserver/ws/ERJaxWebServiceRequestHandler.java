@@ -10,20 +10,19 @@ import com.webobjects.foundation.NSMutableDictionary;
  * The WebObject request handler that maps a WORequest to a JaxWS request.
  * This class uses the existing JaxWS mechanism for handling Servlet requests.
  *  
- *
- *  to register your own WebServices, you have to instanciate this class in your
+ * To register your own WebServices, you have to instantiate this class in your
  *  Application and bind this to a request handler key:
  *  
- *  <pre>
+ *  <pre><code>
  *  ERJaxWebServiceRequestHandler wsHandler = new ERJaxWebServiceRequestHandler()
  *  registerRequestHandler(wsHandler, this.webServiceRequestHandlerKey());
- *  </pre>
+ *  </code></pre>
  *  
  *  To this ERJaxWebServiceRequestHandler you can bind single WebServices, for example:
  *  
- *  <pre>
- *  wsHandler.registerWebService("TestWS", new ERJaxWebService<TestWSImpl>(TestWSImpl.class));
- *  </pre>
+ *  <pre><code>
+ *  wsHandler.registerWebService("TestWS", new ERJaxWebService&lt;TestWSImpl&gt;(TestWSImpl.class));
+ *  </code></pre>
  *  
  *  This binds the implementation "TestWSImpl" to the given service name.
  *  
@@ -34,7 +33,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  *  </pre>
  *  
  *  Appending the parameter "?wsdl" will return the full WSDL for this WebService.
- *  
  */
 public class ERJaxWebServiceRequestHandler
     extends WODirectActionRequestHandler

@@ -13,11 +13,11 @@ import er.extensions.appserver.ERXWOContext;
  * <p>
  * In order to use this, the form elements(i.e WOTextField, etc) need to have their name attribute bound to concrete values.
  * The Prototype Ajax.Updater form is parametized using these names. WOElements won't correctly take form values otherwise.
- * Also Prototype/WO integration requires the use of &lt;button&gt; rather than &lt;input&gt; WOSubmitButtons. 
- * </p><p>
+ * Also Prototype/WO integration requires the use of &lt;button&gt; rather than &lt;input&gt; WOSubmitButtons.
+ * <p>
  * So set:
  * <blockquote>er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true</blockquote>
- * </p>
+ * 
  * @see AjaxUpdater
  * @author mendis
  */
@@ -44,7 +44,7 @@ public class AjaxUpdaterButton extends AjaxUpdater {
     @Override
     protected String url() {
     	if (hasBinding(Bindings.action)) {
-    		return "'" + ERXWOContext.ajaxActionUrl(context()) + "'";
+    		return "'" + context().componentActionURL(application().ajaxRequestHandlerKey()) + "'";
     	} else return super.url();
     }
     

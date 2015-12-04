@@ -52,28 +52,33 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * <blockquote>
  * Eg:<code>&lt;div&gt;&lt;table 1&gt;&lt;table 2&gt;...&lt;/div&gt;</code>
  * </blockquote>
- * <p>You <emp>must</emp> take care that your content is XML readable.
+ * <p>
+ * You <em>must</em> take care that your content is XML readable.
  * There is support for a CSS-like style tagging. Either supply
  * font and style dictionaries in the constructor or via &lt;style&gt; and &lt;font&gt; tags.
  * The tags are shown in the example, but mainly the attributes are named the same as the properties
  * of the {@link org.apache.poi.hssf.usermodel.HSSFCellStyle HSSFCellStyle} and {@link org.apache.poi.hssf.usermodel.HSSFFont HSSFFont}
  * objects. The symbolic names from theses classes (eg. <code>ALIGN_RIGHT</code>) are also supported.
- * In addition, the tags <emp>must</emp> have an <code>id</code> attribute and can specify an
+ * In addition, the tags <em>must</em> have an <code>id</code> attribute and can specify an
  * <code>extends</code> attribute that contains the ID of the style that is extended - all properties from this
- * style and it's predecessors are copied to the current style.</p>
- * <p>In addition, you can specify an attribute in any &lt;table&gt;, &lt;tr&gt;, &lt;th&gt; and &lt;td&gt; tag.
+ * style and it's predecessors are copied to the current style.
+ * <p>
+ * In addition, you can specify an attribute in any &lt;table&gt;, &lt;tr&gt;, &lt;th&gt; and &lt;td&gt; tag.
  * When this happens a new style is created and it applies to the contents of this tag.
  * The value is copied as text from the cell's content, so you better take care that it is parsable
- * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.</p> 
- * <p>The parser also supports the <code>some-name</code> attribute names in addition to 
+ * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.
+ * <p>
+ * The parser also supports the <code>some-name</code> attribute names in addition to 
  * <code>someName</code> as using the <b>Reformat</b> command in WOBuilder messes up the case 
  * of the tags. When used in .wod files, the attributes must be enclosed in quotes 
  * (<code>"cell-type"=foo;</code>). Some care must be taken when the attributes in the current node override the ones 
- * from the parent as this is not thoroughly tested.</p>
- * <p>A client would use this class like: <pre><code>
+ * from the parent as this is not thoroughly tested.
+ * <p>
+ * A client would use this class like:
+ * <pre><code>
  * EGSimpleTableParser parser = new EGSimpleTableParser(new ByteArrayInputStream(someContentString));
  * NSData result = parser.data();
- * </code></pre></p>
+ * </code></pre>
  * @author ak
  */
 public class EGSimpleTableParser {

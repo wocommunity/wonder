@@ -11,23 +11,26 @@ import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
- * <span class="en">
- * Full blown display string with all the bells and whistles.<br />
+ * <div class="en">
+ * Full blown display string with all the bells and whistles.
  * Of the value displayed is an EO, uses the userPresentableDescription()
+ * </div>
  * 
- * @d2wKey class
- * @d2wKey omitTags
- * @d2wKey keyWhenRelationship
- * </span>
- * 
- * <span class="ja">
+ * <div class="ja">
  * このプロパティ・レベル・コンポーネントは文字列表示を担当します。
  * EO の場合には、keyWhenRelationship 又は未設定の場合には userPresentableDescription() を使用します。
+ * </div>
  * 
- * @d2wKey valueWhenEmpty - null 値の場合に表示する値
- * @d2wKey escapeHTML - HTML をエスケープするかどうか
- * @d2wKey keyWhenRelationship - EO の場合のリレーションシップ・キー
- * </span>
+ * @d2wKey class <div class="en"></div>
+ *               <div class="ja"></div>
+ * @d2wKey escapeHTML <div class="en"></div>
+ *                    <div class="ja">HTML をエスケープするかどうか</div>
+ * @d2wKey keyWhenRelationship <div class="en"></div>
+ *                             <div class="ja">EO の場合のリレーションシップ・キー</div>
+ * @d2wKey omitTags <div class="en"></div>
+ *                  <div class="ja"></div>
+ * @d2wKey valueWhenEmpty <div class="en"></div>
+ *                        <div class="ja">null 値の場合に表示する値</div>
  */
 public class ERD2WDisplayString extends D2WDisplayString {
 	/**

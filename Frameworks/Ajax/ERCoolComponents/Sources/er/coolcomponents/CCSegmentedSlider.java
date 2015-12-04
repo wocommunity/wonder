@@ -1,6 +1,6 @@
 package er.coolcomponents;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -17,7 +17,7 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are
  * similar to a WOPopUpButton. For a bunch of example uses and example CSS modifications, check out <a
- * href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page<a>.
+ * href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page</a>.
  * 
  * @binding id the id of the segmented slider (or one will be generated)
  * @binding list the list of options
@@ -109,7 +109,7 @@ public class CCSegmentedSlider extends ERXComponent {
 	public boolean isChecked() {
 		Object selection = valueForBinding("selection");
 		Object item = valueForBinding("item");
-		return ObjectUtils.equals(selection, item);
+		return Objects.equals(selection, item);
 	}
 
 

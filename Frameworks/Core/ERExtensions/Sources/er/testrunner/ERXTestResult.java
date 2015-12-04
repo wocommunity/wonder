@@ -16,8 +16,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * extensions to hold multiple errors and failures.<br />
- * 
+ * extensions to hold multiple errors and failures.
  */
 
 public class ERXTestResult extends TestResult {

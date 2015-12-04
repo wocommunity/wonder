@@ -130,8 +130,7 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 
 /**
- * Can upload and download files from ftp servers<br />
- * 
+ * Can upload and download files from ftp servers
  */
 
 public class ERXLinlyn {

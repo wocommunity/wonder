@@ -14,7 +14,7 @@ import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.<br />
+ * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.
  * 
  * @binding tabs a list of objects representing the tabs
  * @binding tabNameKey a string containing a key to apply to tabs to get the title of the tab

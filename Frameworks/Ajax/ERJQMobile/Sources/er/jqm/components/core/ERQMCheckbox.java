@@ -15,7 +15,7 @@ import er.jqm.components.ERQMComponentBase;
  * value
  * otherTagString
  * inset
- * isFlipswitch -> data-role="flipswitch"
+ * isFlipswitch -&gt; data-role="flipswitch"
  * 
  * data-corners	<strong>true</strong> | false
  * data-mini	true | <strong>false</strong> - Compact sized version

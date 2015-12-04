@@ -1596,7 +1596,7 @@ public class ERXRouteController extends WODirectAction {
 			results = response;
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {
-			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.STATUS_FORBIDDEN);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.FORBIDDEN);
 		}
 		else if (meaningfulThrowble instanceof ERXNotAllowedException) {
 			results = errorResponse(ERXHttpStatusCodes.METHOD_NOT_ALLOWED);

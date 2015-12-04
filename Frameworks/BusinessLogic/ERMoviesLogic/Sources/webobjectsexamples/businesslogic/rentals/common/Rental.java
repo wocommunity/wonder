@@ -13,29 +13,19 @@
 package webobjectsexamples.businesslogic.rentals.common;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Rental extends EOGenericRecord {
-	private static final long	serialVersionUID		= -6572273760378405850L;
+public class Rental extends _Rental {
 
-	public static final String	CustomerKey				= "customer";
+    private static final long serialVersionUID = 1L;
 
-	public static final String	DateOutKey				= "dateOut";
+    public static final String  IsOutKey                = "isOut";
 
-	public static final String	DateReturnedKey			= "dateReturned";
+    public static final String  IsOverdueKey            = "isOverdue";
 
-	public static final String	FeesKey					= "fees";
-
-	public static final String	UnitKey					= "unit";
-
-	public static final String	IsOutKey				= "isOut";
-
-	public static final String	IsOverdueKey			= "isOverdue";
-
-	private static final String	_CheckOutLengthKeyPath	= "unit.video.rentalTerms.checkOutLength";
+    private static final String	_CheckOutLengthKeyPath	= "unit.video.rentalTerms.checkOutLength";
 
 	public Rental() {
 		super();
@@ -56,30 +46,6 @@ public class Rental extends EOGenericRecord {
 			customer.validateForSave();
 		}
 		super.validateForSave();
-	}
-
-	public Customer customer() {
-		return (Customer) (storedValueForKey(CustomerKey));
-	}
-
-	public NSTimestamp dateOut() {
-		return (NSTimestamp) (storedValueForKey(DateOutKey));
-	}
-
-	public void setDateOut(NSTimestamp value) {
-		takeStoredValueForKey(value, DateOutKey);
-	}
-
-	public NSTimestamp dateReturned() {
-		return (NSTimestamp) (storedValueForKey(DateReturnedKey));
-	}
-
-	public void setDateReturned(NSTimestamp value) {
-		takeStoredValueForKey(value, DateReturnedKey);
-	}
-
-	public NSArray fees() {
-		return (NSArray) (storedValueForKey(FeesKey));
 	}
 
 	public NSTimestamp dateDue() {
@@ -113,7 +79,7 @@ public class Rental extends EOGenericRecord {
 
 	public void feePaid() {
 		if (dateReturned() != null) {
-			NSArray fees = fees();
+			NSArray<Fee> fees = fees();
 			if (fees != null) {
 				int count = fees.count();
 				for (int i = 0; i < count; i++) {
@@ -137,7 +103,7 @@ public class Rental extends EOGenericRecord {
 			Fee fee = new Fee(dateDue(), editingContext);
 			editingContext.insertObject(fee);
 			// manipulate relationship after inserting object
-			addObjectToBothSidesOfRelationshipWithKey(fee, FeesKey);
+			addObjectToBothSidesOfRelationshipWithKey(fee, FEES_KEY);
 		}
 	}
 }

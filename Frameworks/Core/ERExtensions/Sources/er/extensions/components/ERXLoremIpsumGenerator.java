@@ -5,13 +5,13 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang.math.RandomUtils;
 
 /**
- * <span class="en">
+ * <div class="en">
  * Provides a generator for Lorem Ipsum text.
- * </span>
+ * </div>
  * 
- * <span class="ja">
+ * <div class="ja">
  * Lorem Ipsum テキストを生成します
- * </span>
+ * </div>
  * 
  * @author Brooks Hollar
  */
@@ -31,17 +31,16 @@ public class ERXLoremIpsumGenerator {
 			"Cras sed ante. Phasellus in massa. Curabitur dolor eros, gravida et, hendrerit ac, cursus non, massa. Aliquam lorem. In hac habitasse platea dictumst. Cras eu mauris. Quisque lacus. Donec ipsum. Nullam vitae sem at nunc pharetra ultricies. Vivamus elit eros, ullamcorper a, adipiscing sit amet, porttitor ut, nibh. Maecenas adipiscing mollis massa. Nunc ut dui eget nulla venenatis aliquet. Sed luctus posuere justo. Cras vehicula varius turpis. Vivamus eros metus, tristique sit amet, molestie dignissim, malesuada et, urna.", "Cras dictum. Maecenas ut turpis. In vitae erat ac orci dignissim eleifend. Nunc quis justo. Sed vel ipsum in purus tincidunt pharetra. Sed pulvinar, felis id consectetuer malesuada, enim nisl mattis elit, a facilisis tortor nibh quis leo. Sed augue lacus, pretium vitae, molestie eget, rhoncus quis, elit. Donec in augue. Fusce orci wisi, ornare id, mollis vel, lacinia vel, massa." };
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns the entire Lorem text.
-	 * 
-	 * @return a string of all ten paragraphs of Lorem
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum の全テキストを戻します。
+   * </div>
    * 
-   * @return Lorem Ipsum の全テキスト
-   * </span>
+	 * @return <div class="en">a string of all ten paragraphs of Lorem</div>
+	 *         <div class="ja">Lorem Ipsum の全テキスト</div>
 	 */
 	public static String all() {
 		StringBuilder sb = new StringBuilder();
@@ -53,30 +52,29 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns the first paragraph from Lorem Ipsum text.
-	 * 
-	 * @return a string of the first paragraph of Lorem
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum の最初の段落を戻します。
+   * </div>
    * 
-   * @return Lorem Ipsum の最初の段落
-   * </span>
+	 * @return <div class="en">a string of the first paragraph of Lorem</div>
+	 *         <div class="ja">Lorem Ipsum の最初の段落</div>
 	 */
 	public static String firstParagraph() {
 		return _paragraphs[0];
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns the first sentence of the first paragraph from Lorem text.
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum の最初の段落の最初の文を戻します。
-   * </span>
+   * </div>
 	 * 
    * @return "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
 	 */
@@ -85,45 +83,38 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a list of single sentences from the Lorem text.
-	 * 
-	 * @param size
-	 *            the number of items to insert into the list
-	 * @return an array of strings of single sentences
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより文のリストを戻します。
-   * 
-   * @param size - リストに挿入するアイテム数
-   * 
-   * @return 文の文字列配列
-   * </span>
+   * </div>
+	 * 
+	 * @param size <div class="en">the number of items to insert into the list</div>
+	 *             <div class="ja">リストに挿入するアイテム数</div>
+	 * @return <div class="en">an array of strings of single sentences</div>
+	 *         <div class="ja">文の文字列配列</div>
 	 */
 	public static String[] list(int size) {
 		return list(size, 1);
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a list of a given number of sentences from the Lorem text.
-	 * 
-	 * @param size
-	 *            the number of items to insert into the list
-	 * @param numberOfSentences
-	 *            the number of sentences per item
-	 * @return an array of strings of sentences
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより文のリストを戻します。
-   * 
-   * @param size - リストに挿入するアイテム数
-   * @param numberOfSentences - 文の番号
-   * 
-   * @return 文の文字列配列
-   * </span>
+   * </div>
+	 * 
+	 * @param size <div class="en">the number of items to insert into the list</div>
+	 *             <div class="ja">リストに挿入するアイテム数</div>
+	 * @param numberOfSentences <div class="en">the number of sentences per item</div>
+	 *                          <div class="ja">文の番号</div>
+	 * @return <div class="en">an array of strings of sentences</div>
+	 *         <div class="ja">文の文字列配列</div>
 	 */
 	public static String[] list(int size, int numberOfSentences) {
 		String[] list = new String[size];
@@ -134,38 +125,34 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a random paragraph of Lorem text.
-	 * 
-	 * @return a string of one random paragraph of Lorem
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより段落を一つ戻します。
+   * </div>
    * 
-   * @return Lorem Ipsum テキストより段落
-   * </span>
+	 * @return <div class="en">a string of one random paragraph of Lorem</div>
+	 *         <div class="ja">Lorem Ipsum テキストより段落</div>
 	 */
 	public static String paragraph() {
 		return _paragraphs[RandomUtils.nextInt(_paragraphs.length)];
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a particular paragraph from Lorem text.
-	 * 
-	 * @param numberOfParagraphs
-	 *            the paragraph number to return, should be between 0 and 9
-	 * @return a string of a particular Lorem paragraph
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより指定段落を戻します。
-   * 
-   * @param numberOfParagraphs - 欲しい段落の番号。数値 0-9 間
-   * 
-   * @return Lorem Ipsum テキストより段落
-   * </span>
+   * </div>
+	 * 
+	 * @param numberOfParagraphs <div class="en">the paragraph number to return, should be between 0 and 9</div>
+	 *                           <div class="ja">欲しい段落の番号。数値 0-9 間</div>
+	 * @return <div class="en">a string of a particular paragraph of Lorem</div>
+	 *         <div class="ja">Lorem Ipsum テキストより段落</div>
 	 */
 	public static String paragraph(int numberOfParagraphs) {
 		if (numberOfParagraphs > 9 || numberOfParagraphs < 0) {
@@ -175,21 +162,18 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns any number of random paragraphs of Lorem text.
-	 * 
-	 * @param numberOfParagraphs
-	 *            the number of paragraphs to return
-	 * @return a string of a number of Lorem paragraphs, each seperated by a blank line.
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより指定個数文のランダム段落を戻します。
-   * 
-   * @param numberOfParagraphs - 指定個数文の段落
-   * 
-   * @return Lorem Ipsum テキストより複数の段落、書く段落は空行で区切られる
-   * </span>
+   * </div>
+	 * 
+	 * @param numberOfParagraphs <div class="en">the number of paragraphs to return</div>
+	 *                           <div class="ja">指定個数文の段落</div>
+	 * @return <div class="en">a string of a number of Lorem paragraphs, each seperated by a blank line.</div>
+	 *         <div class="ja">Lorem Ipsum テキストより複数の段落、書く段落は空行で区切られる</div>
 	 */
 	public static String paragraphs(int numberOfParagraphs) {
 		StringBuilder sb = new StringBuilder();
@@ -201,63 +185,38 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a random sentence from the Lorem text.
-	 * 
-	 * @return a string of a random sentence
-   * </span>
+   * </div>
    * 
-   * <span class="ja">>
+   * <div class="ja">
    * Lorem Ipsum テキストよりランダム文を戻します。
+   * </div>
    * 
-   * @return Lorem Ipsum テキストよりランダム文
-   * </span>
+	 * @return <div class="en">a string of a random sentence</div>
+	 *         <div class="ja">Lorem Ipsum テキストよりランダム文</div>
 	 */
 	public static String sentence() {
 		return sentence(paragraph(), RandomUtils.nextInt(20) + 1);
 	}
 
 	/**
-   * <span class="en">
-	 * Returns a random sentence from the Lorem text.
-	 * 
-	 * @return a string of a random sentence
-   * </span>
-   * 
-   * <span class="ja">>
-   * Lorem Ipsum テキストよりランダム文を戻します。
-   * 
-   * @return Lorem Ipsum テキストよりランダム文
-   * </span>
-   * 
-	 * @deprecated use {@link #sentence()} instead
-	 */
-	@Deprecated
-	public static String randomSentence() {
-		return sentence();
-	}
-
-	/**
-   * <span class="en">
+   * <div class="en">
 	 * Selects a particular sentence from a particular paragraph. If the <b>sentenceNumber</b> is greater than the
 	 * number of sentences in the paragraph, it "wraps" around.
-	 * 
-	 * @param paragraph
-	 *            the paragraph to pull from
-	 * @param numberOfSentences
-	 *            the sentence number to extrapolate
-	 * @return a string of a particular sentence from a given paragraph
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * 指定段落 paragraph より、指定の文番号 sentenceNumber の文を戻します。
    * <b>sentenceNumber</b> が段落の文数より、大きい場合は最初に戻って計算される。
-   * 
-   * @param paragraph - 段落
-   * @param numberOfSentences - 文番号
-   * 
-   * @return 指定段落 paragraph より、指定の文番号 sentenceNumber の文
-   * </span>
+   * </div>
+	 * 
+	 * @param paragraph <div class="en">the paragraph to pull from</div>
+	 *                  <div class="ja">段落</div>
+	 * @param numberOfSentences <div class="en">the sentence number to extrapolate</div>
+	 *                          <div class="ja">文番号</div>
+	 * @return <div class="en">a string of a particular sentence from a given paragraph</div>
+	 *         <div class="ja">指定段落 paragraph より、指定の文番号 sentenceNumber の文</div>
 	 */
 	private static String sentence(String paragraph, int numberOfSentences) {
 		String token = null;
@@ -275,21 +234,18 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a given number of random sentences from the Lorem text.
-	 * 
-	 * @param numberOfSentences
-	 *            the number of sentences to select
-	 * @return a string of a given number of randomly chosen sentences.
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより指定 numberSentences 番号の文を戻します
+   * </div>
    * 
-   * @param numberOfSentences - 選択される文
-   * 
-   * @return Lorem Ipsum テキストより指定 numberSentences 番号の文
-   * </span>
+	 * @param numberOfSentences <div class="en">the number of sentences to select</div>
+	 *                          <div class="ja">選択される文</div>
+	 * @return <div class="en">a string of a given number of randomly chosen sentences.</div>
+	 *         <div class="ja">Lorem Ipsum テキストより指定 numberSentences 番号の文</div>
 	 */
 	public static String sentences(int numberOfSentences) {
 		StringBuilder sb = new StringBuilder();
@@ -300,17 +256,16 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a single, randomly chosen, lowercase word from Lorem text.
-	 * 
-	 * @return a string of a single, random word
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより小文字で始まるランダム・ワードを戻します
+   * </div>
    * 
-   * @return 小文字で始まるランダム・ワード
-   * </span>
+	 * @return <div class="en">a string of a single, random word</div>
+	 *         <div class="ja">小文字で始まるランダム・ワード</div>
 	 */
 	public static String word() {
 		String paragraph = paragraph();
@@ -320,21 +275,18 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a specific number of random, lowercase, space-delimited words from Lorem text.
-	 * 
-	 * @param numberOfWords
-	 *            the number of words to return
-	 * @return a string of space-delimited words
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより小文字で始まるランダム・ワードを numWords 数戻します。（スペース句切れ）
+   * </div>
    * 
-   * @param numberOfWords - ワード数
-   * 
-   * @return スペース句切れの数ワード
-   * </span>
+	 * @param numberOfWords <div class="en">the number of words to return</div>
+	 *                      <div class="ja">ワード数</div>
+	 * @return <div class="en">a string of space-delimited words</div>
+	 *         <div class="ja">スペース句切れの数ワード</div>
 	 */
 	public static String words(int numberOfWords) {
 		StringBuilder sb = new StringBuilder();
@@ -345,27 +297,22 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a number of random, lowercase, space-delimited words between <b>min</b> and <b>max</b>.
-	 * 
-	 * @param min
-	 *            the minimum number of words
-	 * @param max
-	 *            the maximum number of words
-	 * @param maxLength
-	 * 			  the string will be truncated to this length, if longer
-	 * @return a string of space-delimited, randomly chosen words where length() <= maxLength
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより小文字で始まるランダム・ワードを <b>min</b> と <b>max</b> 間を戻します。（スペース句切れ）
+   * </div>
    * 
-   * @param min - ワードの最小数
-   * @param max - ワードの最大数
-   * @param maxLength - 文字列の最大長、必要な場合には切り取られ
-   * 
-   * @return スペース句切れの数ワード length() <= maxLength
-   * </span>
+	 * @param min <div class="en">the minimum number of words</div>
+	 *            <div class="ja">ワードの最小数</div>
+	 * @param max <div class="en">the maximum number of words</div>
+	 *            <div class="ja">ワードの最大数</div>
+	 * @param maxLength <div class="en">the string will be truncated to this length, if longer</div>
+	 *                  <div class="ja">文字列の最大長、必要な場合には切り取られ</div>
+	 * @return <div class="en">a string of space-delimited, randomly chosen words where length() &lt;= maxLength</div>
+	 *         <div class="ja">スペース句切れの数ワード length() &lt;= maxLength</div>
 	 */
 	public static String words(int min, int max, int maxLength) {
 		String words = words(min, max);
@@ -374,24 +321,20 @@ public class ERXLoremIpsumGenerator {
 	}
 	
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Returns a number of random, lowercase, space-delimited words between <b>min</b> and <b>max</b>.
-	 * 
-	 * @param min
-	 *            the minimum number of words
-	 * @param max
-	 *            the maximum number of words
-	 * @return a string of space-delimited, randomly chosen words
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストより小文字で始まるランダム・ワードを <b>min</b> と <b>max</b> 間を戻します。（スペース句切れ）
+   * </div>
    * 
-   * @param min - ワードの最小数
-   * @param max - ワードの最大数
-   * 
-   * @return スペース句切れの数ワード
-   * </span>
+	 * @param min <div class="en">the minimum number of words</div>
+	 *            <div class="ja">ワードの最小数</div>
+	 * @param max <div class="en">the maximum number of words</div>
+	 *            <div class="ja">ワードの最大数</div>
+	 * @return <div class="en">a string of space-delimited, randomly chosen words</div>
+	 *         <div class="ja">スペース句切れの数ワード</div>
 	 */
 	public static String words(int min, int max) {
 		if (min < 0) {
@@ -404,24 +347,20 @@ public class ERXLoremIpsumGenerator {
 	}
 
 	/**
-   * <span class="en">
+   * <div class="en">
 	 * Generates Lorem text using an enumerated type.
-	 * 
-	 * @param type
-	 *            "paragraph", "sentence", or "word"
-	 * @param count
-	 *            the number of the type to generate
-	 * @return Lorem text
-   * </span>
+   * </div>
    * 
-   * <span class="ja">
+   * <div class="ja">
    * Lorem Ipsum テキストを enumeratedタイプ で生成します。
+   * </div>
    * 
-   * @param type - "paragraph", "sentence", or "word"
-   * @param count - 生成する数
-   * 
-   * @return Lorem Ipsum テキスト
-   * </span>
+	 * @param type <div class="en">"paragraph", "sentence", or "word"</div>
+	 *             <div class="ja">"paragraph", "sentence", or "word"</div>
+	 * @param count <div class="en">the number of the type to generate</div>
+	 *              <div class="ja">生成する数</div>
+	 * @return <div class="en">Lorem text</div>
+	 *         <div class="ja">Lorem Ipsum テキスト</div>
 	 */
 	public static String generate(String type, int count) {
 		String loremIpsum = null;

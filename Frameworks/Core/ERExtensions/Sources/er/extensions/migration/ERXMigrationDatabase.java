@@ -65,7 +65,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * Another more complex case is that you are introducing an entirely new table
  * that has a foreign key to some existing table:
  * </p>
- * <code><pre>
+ * <pre><code>
  * ERXMigrationDatabase database = ERXMigrationDatabase.database(channel);
  * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson");
  * table.newStringColumn("FirstName", 100, false);
@@ -81,7 +81,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * table.newIntegerColumn("CompanyID", false);
  * table.create();
  * table.addForeignKey(table.existingColumnNamed("CompanyID"), database.existingTableNamed("Company").existingColumnNamed("companyID"));
- * </pre></code>
+ * </code></pre>
  * 
  * <p>
  * In the above examples, database.existingTableNamed and

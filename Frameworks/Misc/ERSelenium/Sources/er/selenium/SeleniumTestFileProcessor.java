@@ -2,7 +2,7 @@ package er.selenium;
 
 import java.io.File;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import er.extensions.foundation.ERXFileUtilities;

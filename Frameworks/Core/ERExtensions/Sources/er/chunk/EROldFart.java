@@ -2,7 +2,7 @@ package er.chunk;
 
 import java.util.Random;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.LocalDate;
 
 import com.webobjects.foundation.NSKeyValueCoding;

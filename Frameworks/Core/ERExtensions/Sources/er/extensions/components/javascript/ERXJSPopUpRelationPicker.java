@@ -11,7 +11,7 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -28,12 +28,14 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say 
- * states and depending on which state is picked the second popup might reflect all of the cities of that state.<br />
+ * states and depending on which state is picked the second popup might reflect all of the cities of that state.
+ * <p>
  * This WOComponent displays two pop-up buttons. One pop-up displays a list of what can be thought of as parent entities. 
  * The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in 
  * the parent list, the child list is instantly modified to reflect the children entities available to the user 
  * through that parent. This is done through client-side Javascript. Also handles to-many selections both on the 
- * parent and the children.<br />
+ * parent and the children.
+ * <p>
  * For example:
 <pre><code>
 parent1(child1,child2,child3)

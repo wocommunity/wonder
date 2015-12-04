@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.CharUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -83,135 +83,6 @@ public class ERXStringUtilities {
      */
     private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
 
-	/**
-	 * Returns the <a
-	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
-	 * distance</a> between {@code a} and {@code b} as a {@code double}. (This
-	 * method is being retained for backwards compatibility, and will be removed
-	 * at some future point. New code should use
-	 * {@link #levenshteinDistance(String, String)}.)
-	 * 
-	 * @param a
-	 *            first string
-	 * @param b
-	 *            second string
-	 * @return Levenshtein distance between {@code a} and {@code b}
-	 * @deprecated Use {@link #levenshteinDistance(String, String)}, which
-	 *             correctly returns an {@code int} result
-	 */
-    @Deprecated
-    public static double distance(String a, String b) {
-    	return levenshteinDistance(a, b);
-    }
-
-	/**
-	 * <p>
-	 * Returns the <a
-	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
-	 * distance</a> between {@code a} and {@code b}. This code is based on <a
-	 * href
-	 * ="http://mail.python.org/pipermail/python-list/1999-August/006031.html"
-	 * >some Python code posted to a mailing list</a> by Magnus L. Hetland
-	 * &lt;mlh@idt.ntnu.no&gt;, and assumed to be in the public domain.
-	 * </p>
-	 * 
-	 * <h3>Algorithm</h3>
-	 * 
-	 * <pre>
-	 * <code>def distance(a,b):
-	 *   c = {}
-	 *   n = len(a); m = len(b)
-	 * 
-	 *   for i in range(0,n+1):
-	 *     c[i,0] = i
-	 *   for j in range(0,m+1):
-	 *     c[0,j] = j
-	 * 
-	 *   for i in range(1,n+1):
-	 *     for j in range(1,m+1):
-	 *       x = c[i-1,j]+1
-	 *       y = c[i,j-1]+1
-	 *       if a[i-1] == b[j-1]:
-	 *         z = c[i-1,j-1]
-	 *       else:
-	 *         z = c[i-1,j-1]+1
-	 *       c[i,j] = min(x,y,z)
-	 *   return c[n,m]</code>
-	 * </pre>
-	 * 
-	 * <p>
-	 * It calculates the following: Given two strings, {@code a} and {@code b},
-	 * and three operations, adding, subtracting and exchanging single
-	 * characters, what is the minimal number of steps needed to translate
-	 * {@code a} into {@code b}? The method is based on the following idea. We
-	 * want to find the distance between {@code a[:x]} and {@code b[:y]}. To do
-	 * this, we first calculate:
-	 * </p>
-	 * 
-	 * <ol>
-	 * <li>the distance between {@code a[:x-1]} and {@code b[:y]}, adding the
-	 * cost of a subtract-operation, used to get from {@code a[:x]} to
-	 * {@code a[:z-1]};</li>
-	 * <li>the distance between {@code a[:x]} and {@code b[:y-1]}, adding the
-	 * cost of an addition-operation, used to get from {@code b[:y-1]} to
-	 * {@code b[:y]};</li>
-	 * <li>the distance between {@code a[:x-1]} and {@code b[:y-1]}, adding the
-	 * cost of a <em>possible</em> exchange of the letter {@code b[y]} (with
-	 * {@code a[x]}).</li>
-	 * </ol>
-	 * 
-	 * <p>
-	 * The cost of the subtraction and addition operations are 1, while the
-	 * exchange operation has a cost of 1 if {@code a[x]} and {@code b[y]} are
-	 * different, and 0 otherwise. After calculating these costs, we choose the
-	 * least one of them (since we want to use the best solution.)
-	 * </p>
-	 * 
-	 * <p>
-	 * Instead of doing this recursively, i.e. calculating ourselves "back" from
-	 * the final value, we build a cost-matrix {@code c} containing the optimal
-	 * costs, so we can reuse them when calculating the later values. The costs
-	 * {@code c[i,0]} (from string of length {@code n} to empty string) are all
-	 * {@code i}, and correspondingly all {@code c[0,j]} (from empty string to
-	 * string of length {@code j}) are {@code j}. Finally, the cost of
-	 * translating between the full strings {@code a} and {@code b} (
-	 * {@code c[n,m]}) is returned.
-	 * </p>
-	 * 
-	 * @param a
-	 *            first string
-	 * @param b
-	 *            second string
-	 * @return the distance between the two strings
-	 * @deprecated use {@link StringUtils#getLevenshteinDistance(String, String)} instead
-	 */
-	@Deprecated
-	public static int levenshteinDistance(String a, String b) {
-		int n = a.length();
-		int m = b.length();
-		int c[][] = new int[n + 1][m + 1];
-		for (int i = 0; i <= n; i++) {
-			c[i][0] = i;
-		}
-		for (int j = 0; j <= m; j++) {
-			c[0][j] = j;
-		}
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= m; j++) {
-				int x = c[i - 1][j] + 1;
-				int y = c[i][j - 1] + 1;
-				int z = 0;
-				if (a.charAt(i - 1) == b.charAt(j - 1))
-					z = c[i - 1][j - 1];
-				else
-					z = c[i - 1][j - 1] + 1;
-				int temp = Math.min(x, y);
-				c[i][j] = Math.min(z, temp);
-			}
-		}
-		return c[n][m];
-	}
-    
     /** holds the base adjustment for fuzzy matching */
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
@@ -279,11 +150,11 @@ public class ERXStringUtilities {
             if( value!=null && value instanceof String){
                 String comparedString = ((String)value).toUpperCase();
                 String cleanedComparedString = cleaner.cleanStringForFuzzyMatching(comparedString);
-                if( (levenshteinDistance(name, comparedString) <=
+                if( (StringUtils.getLevenshteinDistance(name, comparedString) <=
                      Math.min((double)name.length(), (double)comparedString.length())*adjustement ) ||
-                    (levenshteinDistance(cleanedName, cleanedComparedString) <=
+                    (StringUtils.getLevenshteinDistance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
-                    dico.setObjectForKey( Double.valueOf(levenshteinDistance(name, comparedString)), _DISTANCE );
+                    dico.setObjectForKey( Double.valueOf(StringUtils.getLevenshteinDistance(name, comparedString)), _DISTANCE );
                     NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
@@ -298,11 +169,11 @@ public class ERXStringUtilities {
                     Vector v = (Vector)plist;
                     for(int i = 0; i< v.size(); i++){
                         String comparedString = ((String)v.elementAt(i)).toUpperCase();
-                        if((levenshteinDistance(name, comparedString) <=
+                        if((StringUtils.getLevenshteinDistance(name, comparedString) <=
                             Math.min((double)name.length(), (double)comparedString.length())*adjustement) ||
-                           (levenshteinDistance(cleanedName, comparedString) <=
+                           (StringUtils.getLevenshteinDistance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
-                            dico.setObjectForKey( Double.valueOf(levenshteinDistance(name, comparedString)), _DISTANCE );
+                            dico.setObjectForKey( Double.valueOf(StringUtils.getLevenshteinDistance(name, comparedString)), _DISTANCE );
                             NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );
@@ -316,34 +187,6 @@ public class ERXStringUtilities {
             results = (NSMutableArray<NSMutableDictionary<String, Object>>) EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
         return (NSArray) results.valueForKey( eoKey );
-    }
-    
-    /**
-     * @param name
-     * @param entityName
-     * @param propertyKey
-     * @param synonymsKey
-     * @param ec
-     * @param cleaner
-     * @param comparisonString
-     * @return an array of objects that match in a fuzzy manner the name passed in.
-     * @deprecated use {@link #fuzzyMatch(String, String, String, String, EOEditingContext, ERXFuzzyMatchCleaner, NSArray)}
-     */
-    @Deprecated
-    public static NSArray fuzzyMatch(String name,
-                                     String entityName,
-                                     String propertyKey,
-                                     String synonymsKey,
-                                     EOEditingContext ec,
-                                     ERXFuzzyMatchCleaner cleaner,
-                                     String comparisonString){
-        NSArray sortOrderings = null;
-            if("asc".equals(comparisonString)){
-                sortOrderings = SORT_ASCENDING;
-            }else if ("desc".equals(comparisonString)){
-                sortOrderings = SORT_DESCENDING;
-            }
-        return fuzzyMatch( name, entityName, propertyKey, synonymsKey, ec, cleaner, sortOrderings );
     }
 
     /**
@@ -647,7 +490,7 @@ public class ERXStringUtilities {
      * Utility method to append a character to a
      * StringBuffer if the last character is not
      * a certain character. Useful for determining
-     * if you need to add an '&' to the end of a
+     * if you need to add an '&amp;' to the end of a
      * form value string.
      * @param separator character to potentially
      *		add to the StringBuffer.
@@ -665,7 +508,7 @@ public class ERXStringUtilities {
      * Utility method to append a character to a
      * StringBuilder if the last character is not
      * a certain character. Useful for determining
-     * if you need to add an '&' to the end of a
+     * if you need to add an '&amp;' to the end of a
      * form value string.
      * @param separator character to potentially
      *		add to the StringBuilder.
@@ -677,87 +520,6 @@ public class ERXStringUtilities {
     public static void appendSeparatorIfLastNot(char separator, char not, StringBuilder sb) {
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
             sb.append(separator);
-    }
-
-    /**
-     * Replaces a given string by another string in a string.
-     * @param old string to be replaced
-     * @param newString to be inserted
-     * @param buffer string to have the replacement done on it
-     * @return string after having all of the replacement done.
-     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
-     */
-    @Deprecated
-    public static String replaceStringByStringInString(String old, String newString, String buffer) {
-        int begin, end;
-        int oldLength = old.length();
-        int length = buffer.length();
-        StringBuilder convertedString = new StringBuilder(length + 100);
-
-        begin = 0;
-        while(begin < length)
-        {
-            end = buffer.indexOf(old, begin);
-            if(end == -1)
-            {
-                convertedString.append(buffer.substring(begin));
-                break;
-            }
-            if(end == 0)
-                convertedString.append(newString);
-            else {
-                convertedString.append(buffer.substring(begin, end));
-                convertedString.append(newString);
-            }
-            begin = end+oldLength;
-        }
-        return convertedString.toString();
-    }
-    
-    /**
-     * Replaces the first occurrence of a string with another string in a string.
-     *
-     * @param sourceString string to use on which to perform the replacement
-     * @param stringToReplace string to replace in sourceString if it exists.
-     * @param replacementString the string with which to replace stringToReplace.
-     * @return sourceString with stringToReplace replaced with replacementString if it
-     *         existed in sourceString.  otherwise, sourceString is returned.
-     * @deprecated use {@link StringUtils#replaceOnce(String, String, String)} instead
-     */
-    @Deprecated
-    public static String stringByReplacingFirstOccurrenceOfStringWithString(final String sourceString, final String stringToReplace, final String replacementString) {
-        final int indexOfMatch = sourceString.indexOf(stringToReplace);
-        final String result;
-        
-        if ( indexOfMatch >= 0 ) {
-            final int sourceStringLength = sourceString.length();
-            final int stringToReplaceLength = stringToReplace.length();
-            final int replacementStringLength = replacementString.length();
-            final StringBuilder buffer = new StringBuilder(sourceStringLength - stringToReplaceLength + replacementStringLength);
-            
-            buffer.append(sourceString.substring(0, indexOfMatch));
-            buffer.append(replacementString);
-            buffer.append(sourceString.substring(indexOfMatch + stringToReplaceLength, sourceStringLength));
-            
-            result = buffer.toString();
-        }
-        else {
-            result = sourceString;
-        }
-        
-        return result;
-    }
-
-    /**
-     * Removes the spaces in a given string.
-     * 
-     * @param aString string to remove spaces from
-     * @return string without spaces
-     * @deprecated use {@link #removeSpaces(String)} instead
-     */
-    @Deprecated
-    public static String escapeSpace(String aString) {
-        return removeSpaces(aString);
     }
 
     /**
@@ -1497,36 +1259,6 @@ public class ERXStringUtilities {
             log.debug("stringByTruncatingStringToByteLengthInEncoding: result='" + result + "'");
         
         return result;
-    }    
-
-    /** checks if the specified String contains only digits. 
-     * 
-     * @param aString the string to check
-     * @return true if the string contains only digits, false otherwise
-     * @deprecated use {@link StringUtils#isNumeric(String)} instead
-     */
-    @Deprecated
-    public static boolean isDigitsOnly(String aString) {
-        for (int i = aString.length(); i-- > 0;) {
-            char c = aString.charAt(i);
-            if (!Character.isDigit(c)) return false;
-        }
-        return true;
-    }
-
-    /** checks if the specified String contains only Letters. 
-     * 
-     * @param aString the string to check
-     * @return true if the string contains only Letters, false otherwise
-     * @deprecated use {@link StringUtils#isAlpha(String)} instead
-     */
-    @Deprecated
-    public static boolean isLettersOnly(String aString) {
-        for (int i = aString.length(); i-- > 0;) {
-            char c = aString.charAt(i);
-            if (!Character.isLetter(c)) return false;
-        }
-        return true;
     }
 
     /** checks if the String contains a character that has a special meaning
@@ -1734,7 +1466,6 @@ public class ERXStringUtilities {
    * @param str the string to hash
    * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
    * @return the MD5 sum of the bytes
-   * @exception IOException
    */
   public static byte[] md5(String str, String encoding) {
 	byte[] bytes;
@@ -1764,7 +1495,6 @@ public class ERXStringUtilities {
    * @param str the string to hash
    * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
    * @return the MD5 sum of the bytes in a hex string
-   * @exception IOException
    */
   public static String md5Hex(String str, String encoding) {
 	  String hexStr;
@@ -2432,14 +2162,6 @@ public class ERXStringUtilities {
         }
         return result.toString();
     }
-
-	/**
-	 * @deprecated use {@link #stripHtml(String, boolean)}
-	 */
-	@Deprecated
-	public static String stripHtml(String str) {
-		return stripHtml(str, false);
-	}
 
 	/**
 	 * Attempts to convert string values for attributes into the appropriate

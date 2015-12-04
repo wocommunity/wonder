@@ -16,7 +16,8 @@ import er.directtoweb.pages.ERD2WGroupingListPage;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Displays a grouped list of eos in an xml template.<br />
+ * Displays a grouped list of eos in an xml template.
+ * 
  * @d2wKey resolvedUnit
  * @d2wKey componentName
  * @d2wKey wrap

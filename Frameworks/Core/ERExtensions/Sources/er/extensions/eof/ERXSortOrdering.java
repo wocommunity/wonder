@@ -1,7 +1,8 @@
 package er.extensions.eof;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Objects;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -127,7 +128,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public boolean equals(Object obj) {
 		if (obj instanceof ERXSortOrdering) {
 			ERXSortOrdering other = (ERXSortOrdering)obj;
-			return ObjectUtils.equals(key(), other.key()) && ObjectUtils.equals(selector(), other.selector());
+			return Objects.equals(key(), other.key()) && Objects.equals(selector(), other.selector());
 		}
 		return false;
 	}
@@ -164,7 +165,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 	
 	/**
-	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
+	 * ERXSortOrderings is an NSMutableArray&lt;EOSortOrdering&gt; that
 	 * provides methods for chaining.
 	 * 
 	 * @author mschrag
