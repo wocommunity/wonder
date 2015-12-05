@@ -4,7 +4,9 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/iText-2.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ujac-1.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-xerces-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/core-renderer-20101006.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/flying-saucer-core-9.0.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/flying-saucer-pdf-9.0.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/flying-saucer-swt-9.0.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/fop-hyph.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/fop.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/avalon-framework-4.2.0.jar"/>
