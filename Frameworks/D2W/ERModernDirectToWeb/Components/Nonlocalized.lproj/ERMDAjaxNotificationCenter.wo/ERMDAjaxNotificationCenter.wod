@@ -1,0 +1,8 @@
+AjaxUpdateContainer: AjaxUpdateContainer {
+	id = id;
+}
+
+AjaxUpdateTrigger: AjaxUpdateTrigger {
+	updateContainerIDs = updateContainerIDs;
+	resetAfterUpdate = true;
+}
