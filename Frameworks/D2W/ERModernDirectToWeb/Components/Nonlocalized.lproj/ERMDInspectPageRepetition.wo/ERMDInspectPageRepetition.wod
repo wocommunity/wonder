@@ -15,15 +15,18 @@ IsNotOmitted : WOConditional {
 	negate = true;
 }
 
+
 AttributeValue: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	localContext = d2wContext;
 	object = object;
 }
 
-LineDiv : WOGenericContainer {
-	elementName = "div";
+LineDiv : WOSwitchComponent {
+	WOComponentName = lineDivComponentName;
+	id = lineDivId;
 	class = lineDivClass;
+	elementName = "div";
 }
 
 EmptyLabelSpan : WOGenericContainer {
@@ -61,6 +64,20 @@ PropertyName: WOSwitchComponent {
 
 SafeWrapper : D2WEmptyWrapper {
 	
+}
+
+shouldObserve : WOConditional {
+	condition = shouldObserve;
+}
+
+shouldNotObserve : WOConditional {
+	condition = shouldObserve;
+	negate = true;
+}
+
+AjaxObserveField: AjaxObserveField {
+	action = postChangeNotification;
+	updateContainerID = d2wContext.ajaxNotificationCenterID;
 }
 
 Section: WOSwitchComponent {
