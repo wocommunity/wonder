@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.SelectPageInterface;
@@ -40,7 +41,9 @@ import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
+import er.modern.directtoweb.components.ERMDAjaxNotificationCenter;
 import er.modern.directtoweb.components.buttons.ERMDActionButton;
+import er.modern.directtoweb.components.repetitions.ERMDInspectPageRepetition;
 import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
 
 /**
@@ -163,7 +166,9 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 				relationshipDisplayGroup().displayBatchContainingSelectedObject();
 			}
 		}
- 		setInlineTaskSafely(null);	
+		setInlineTaskSafely(null);	
+        // support for ERMDAjaxNotificationCenter
+        postChangeNotification();
 		return null;
 	}
 	
@@ -182,6 +187,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 			relationshipDisplayGroup().displayBatchContainingSelectedObject();
 		}
 		
+        // support for ERMDAjaxNotificationCenter
+        postChangeNotification();
 		return null;
 	}
 	
@@ -200,6 +207,9 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 
 		result = (WOComponent)D2W.factory().editPageForEntityNamed(masterObject().entityName(), session());
 		((EditPageInterface)result).setObject(masterObject());
+
+        // support for ERMDAjaxNotificationCenter
+        postChangeNotification();
 		return result;
 	}
 	
@@ -217,8 +227,23 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 				relationshipDisplayGroup().fetch();
 			}
 		}
+        if (notif.userInfo().valueForKey("ajaxNotificationCenterId") == null) {
+            // the change notification was not sent from ERMDAjaxNotificationCenter
+            postChangeNotification();
+        }
 	}
-	
+	   
+    private void postChangeNotification() {
+        ERMDInspectPageRepetition parent = ERD2WUtilities.enclosingComponentOfClass(this,
+                ERMDInspectPageRepetition.class);
+        if (ERXValueUtilities.booleanValueWithDefault(
+                parent.valueForKeyPath("d2wContext.shouldObserve"), false)) {
+            NSNotificationCenter.defaultCenter().postNotification(
+                    ERMDAjaxNotificationCenter.PropertyChangedNotification,
+                    parent.valueForKeyPath("d2wContext"));
+        }
+    }
+    
 	// COMPONENT DISPLAY CONTROLS
 	
 	/**
