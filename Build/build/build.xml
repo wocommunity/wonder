@@ -30,7 +30,7 @@
     <property name="framework.erjars.httpcore" value="httpcore-4.3.3.jar" />
     <property name="framework.erjars.httpmime" value="httpmime-4.3.6.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
-    <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
+    <property name="framework.erjars.joda" value="joda-time-2.9.1.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
     <property name="framework.erjars.ognl" value="ognl-2.6.7.jar" />
