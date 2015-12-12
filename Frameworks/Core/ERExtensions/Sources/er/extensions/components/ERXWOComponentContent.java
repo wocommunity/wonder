@@ -149,7 +149,7 @@ public class ERXWOComponentContent extends WODynamicElement {
     	WOElement content =  component._childTemplate();
     	WOElement result = null;
     	String templateName = (_templateName == null) ? null : (String) _templateName.valueInComponent(component);
-    	if (content instanceof WODynamicGroup) {
+    	if (content.getClass() == WODynamicGroup.class) {
 			WODynamicGroup group = (WODynamicGroup) content;
 			if (templateName == null) {
 				// MS: If you don't set a template name, then let's construct all the children of 
@@ -185,7 +185,7 @@ public class ERXWOComponentContent extends WODynamicElement {
     		if(name.equals(templateName)) {
     			result = template;
     		}
-		} else if (content instanceof WOHTMLBareString && templateName == null) {
+		} else if (templateName == null) {
 			result=content;
 		}
     	return result;
