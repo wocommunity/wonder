@@ -333,6 +333,30 @@ public class ERXBrowserFactory {
         }
 
         String ua = request.headerForKey("user-agent");
+        return browserMatchingUserAgent(ua);
+    }
+
+    /** 
+     * <div class="en">
+     * Returns a shared browser object for a given <code>user-agent</code>
+     * string by parsing the string and retrieving the appropriate browser 
+     * object, creating it if necessary. 
+     * <p>
+     * Use this method to retrieve a browser instance from an existing
+     * user-agent string rather than a request object (e.g. you're 
+     * recreating a browser instance from a past user-agent string). Once 
+     * you get the browser object, you are responsible for calling {@link 
+     * #retainBrowser retainBrowser} to keep it in the browser pool. 
+     * <p>
+     * You are also required to call {@link #releaseBrowser releaseBrowser} 
+     * to release the browser from the pool when it is no longer needed. 
+     * </div>
+     * 
+     * @param ua - user agent string (e.g. from request headers)
+     * @return <div class="en">a shared browser object</div>
+     *         <div class="ja">共有ブラウザ・オブジェクト</div>
+     */
+    public ERXBrowser browserMatchingUserAgent(String ua) {
         if (ua == null) {
             return getBrowserInstance(ERXBrowser.UNKNOWN_BROWSER, ERXBrowser.UNKNOWN_VERSION, 
             		ERXBrowser.UNKNOWN_VERSION, ERXBrowser.UNKNOWN_PLATFORM, null);
