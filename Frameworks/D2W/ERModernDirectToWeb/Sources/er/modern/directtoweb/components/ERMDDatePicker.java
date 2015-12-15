@@ -9,7 +9,13 @@ import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * D2WEditComponent based on CCDatePicker.
+ * D2WEditComponent based on CCDatePicker. To use localized date formats, define the 
+ * patterns in your Localizable.strings, e.g. "defaultDateFormat" = "%d.%m.%Y". Then
+ * add one or more sets of rules like these:
+ * <pre>
+ * 60 : true => defaultDateFormat = "D2W.defaultDateFormat" [er.directtoweb.ERDDelayedLocalizedAssignment]
+ * 60 : smartAttribute.prototypeName = 'dateTime' => formatter = "defaultDateFormat" [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment]
+ * </pre>
  * 
  * @d2wKey formatter - string - date format string
  * @d2wKey datePickerDragDisabled - boolean - disable dragging on date picker
@@ -34,6 +40,8 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 public class ERMDDatePicker extends ERDCustomEditComponent {
 	
+    private static final long serialVersionUID = 1L;
+
     private String _formatter;
     private String _dateReadableDescription;
     
