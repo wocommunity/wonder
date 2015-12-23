@@ -10,4 +10,6 @@ public interface IERXRestResponse {
 	public void appendContentString(String _str);
 	
 	public void appendContentData(NSData data);
+
+	default public void setContentEncoding(String encoding) {};
 }
