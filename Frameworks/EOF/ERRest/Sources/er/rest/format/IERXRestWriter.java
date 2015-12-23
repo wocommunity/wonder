@@ -16,6 +16,8 @@ public interface IERXRestWriter {
 	 *            the node to render
 	 * @param response
 	 *            the response to write into
+	 * @param context
+	 *            the REST context
 	 */
 	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context);
 	
@@ -26,6 +28,10 @@ public interface IERXRestWriter {
 	 *            the node to render
 	 * @param response
 	 *            the response to write into
+	 * @param delegate
+	 *            the REST delegate
+	 * @param context
+	 *            the REST context
 	 */
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context);
 }
