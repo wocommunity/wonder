@@ -720,7 +720,12 @@ public class ERXArrayUtilities {
             return new NSArray<>(array1);
         }
         
-        NSMutableArray<T> result = new NSMutableArray<>(array1);
+        NSMutableArray<T> result;
+        if (array1 == null) {
+        	result = new NSMutableArray<>();
+        } else {
+        	result = new NSMutableArray<>(array1);
+        }
         addObjectsFromArrayWithoutDuplicates(result, array2);
         return result;
     }
