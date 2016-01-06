@@ -195,12 +195,10 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     			EORelationship relationship = masterEntity.relationshipNamed(dds.detailKey());
     			EORelationship reverseRelationship = relationship.inverseRelationship();
     			if(isRemoveable && !relationship.ownsDestination()) {
-                    if (!relationship.ownsDestination()) {
-                        if (reverseRelationship == null) {
-                            _showRemoveButton = Boolean.TRUE;
-                        } else {
-                            _showRemoveButton = !reverseRelationship.isMandatory();
-                        }
+                    if (reverseRelationship == null) {
+                        _showRemoveButton = Boolean.TRUE;
+                    } else {
+                        _showRemoveButton = !reverseRelationship.isMandatory();
                     }
     			} else {
     				_showRemoveButton = Boolean.FALSE;
