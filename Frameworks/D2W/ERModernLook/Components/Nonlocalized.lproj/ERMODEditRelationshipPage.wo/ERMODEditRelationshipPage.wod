@@ -219,5 +219,5 @@ ListNotEmpty: WOConditional {
 }
 
 ShowFind: WOConditional {
-	condition = d2wContext.shouldShowQueryRelatedButton;
+	condition = shouldShowQueryRelatedButton;
 }
