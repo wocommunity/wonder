@@ -257,6 +257,19 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 
 	/**
+	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog.
+	 *
+	 * @param context the current WOContext
+	 * @param newContent the new content for the updated dialog
+	 * @param title optional new title for the updated dialog
+	 */
+	public static void update(WOContext context, WOComponent newContent, String title) {
+		AjaxModalDialog currentDialog = currentDialog(context);
+		currentDialog._actionResults = newContent;
+		update(context, title);
+	}
+
+	/**
 	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog
 	 * without updating the title.
 	 * 
