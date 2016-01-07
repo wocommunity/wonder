@@ -42,7 +42,7 @@ public class AjaxUtils {
 	 * @return the quoted value or "null"
 	 */
 	public static String quote(String value) {
-		return value == null ? "null" : "'" + value + "'";
+		return value == null ? "null" : "'" + value.replaceAll("'", "\\\\'") + "'";
 	}
 
 	/**
