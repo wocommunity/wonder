@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.appserver.ERXApplication.BuildType;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -40,6 +41,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author mstoll
  */
+
 public class ERXDeployedBundle extends WODeployedBundle {
 
     private final NSMutableDictionary _myURLs;
@@ -53,7 +55,8 @@ public class ERXDeployedBundle extends WODeployedBundle {
      * 
      * @param nsb the given NSBundle
      */
-    public ERXDeployedBundle(NSBundle nsb)
+	@SuppressWarnings("deprecation")
+	public ERXDeployedBundle(NSBundle nsb)
     {
     	super(nsb);
 
@@ -95,25 +98,27 @@ public class ERXDeployedBundle extends WODeployedBundle {
             {
                 String aBaseURL = null;
                 if(isFramework())
-                	if(isEmbeddedFramework)
-                	{
-            			String embeddedFrameworkBaseUrl = ERXProperties.stringForKey("WOEmbeddedFrameworksBaseURL");
-            			if(embeddedFrameworkBaseUrl == null)
-            			{
-                			if(ERXProperties.booleanForKeyWithDefault("ERXDeployedBundle.MavenBuild", false))
-                			{
+                    if(isEmbeddedFramework)
+                    {
+                        String embeddedFrameworkBaseUrl = ERXProperties.stringForKey("WOEmbeddedFrameworksBaseURL");
+                        if(embeddedFrameworkBaseUrl == null)
+                        {
+                            BuildType automaticBuildType = ((ERXApplication)WOApplication.application()).buildType();
+                            
+                            if(ERXProperties.booleanForKeyWithDefault("ERXDeployedBundle.MavenBuild", automaticBuildType == BuildType.Maven))
+                            {
                                 aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/Contents/Frameworks";
-                			} else
-                			{
+                            } else
+                            {
                                 aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/Frameworks";
-                			}
-            			} else
-            			{
-            				aBaseURL = embeddedFrameworkBaseUrl;
-            			}
-                	}
-                	else
-                		aBaseURL = WOApplication.application().frameworksBaseURL();
+                            }
+                        } else
+                        {
+                            aBaseURL = embeddedFrameworkBaseUrl;
+                        }
+                    }
+                    else
+                        aBaseURL = WOApplication.application().frameworksBaseURL();
                 else
                     aBaseURL = WOApplication.application().applicationBaseURL();
                 String aWrapperName = wrapperName();
@@ -162,6 +167,7 @@ public class ERXDeployedBundle extends WODeployedBundle {
         return (WODeployedBundle)aBundle;
     }
     
+    @SuppressWarnings("deprecation")
     public static synchronized WODeployedBundle deployedBundleForFrameworkNamed(String aFrameworkName)
     {
         WODeployedBundle aBundle = null;
