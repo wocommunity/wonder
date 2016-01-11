@@ -28,6 +28,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.eof.ERXCustomSQLSortOrdering;
 import er.extensions.eof.ERXSortNullHandling;
 import er.extensions.eof.ERXSortOrdering;
 
@@ -1139,11 +1140,17 @@ public class PostgresqlExpression extends JDBCExpression {
 		NSSelector selector = sortOrdering.selector();
 		String attributePath = sortOrdering.key();
 
-		String attributeSQL = sqlStringForAttributeNamed(attributePath);
-		if (attributeSQL == null) {
-			throw new IllegalStateException("addOrderByAttributeOrdering: attempt to generate SQL for "
-					+ sortOrdering.getClass().getName() + " " + sortOrdering + " failed because attribute identified by key '"
-					+ sortOrdering.key() + "' was not reachable from from entity '" + this._entity.name() + "'");
+		String attributeSQL;
+		if (sortOrdering instanceof ERXCustomSQLSortOrdering) {
+			attributeSQL = ((ERXCustomSQLSortOrdering) sortOrdering).sqlStringForSQLExpression(this);
+		} else {
+			attributeSQL = sqlStringForAttributeNamed(attributePath);
+			if (attributeSQL == null) {
+				throw new IllegalStateException(
+						"addOrderByAttributeOrdering: attempt to generate SQL for " + sortOrdering.getClass().getName()
+								+ " " + sortOrdering + " failed because attribute identified by key '"
+								+ sortOrdering.key() + "' was not reachable from from entity '" + _entity.name() + "'");
+			}
 		}
 
 		StringBuilder orderBy = new StringBuilder();
