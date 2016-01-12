@@ -115,35 +115,25 @@ function input_keypress(evt) {
   return true;
 }
 
-// Gets the [x,y] position on the page of the element.
-function get_xy(el) {
-  var result = [document.viewport.getScrollOffsets().left - $(el).cumulativeScrollOffset().left, document.viewport.getScrollOffsets().top - $(el).cumulativeScrollOffset().top]; 
-  while (el) {
-    result[0] += el.offsetLeft;
-	result[1] += el.offsetTop;
-
-    // CH: If you use position:relative on a span around an input, Safari copies the offset values
-    //     to the contained input resulting in the calendar popup being offset to the right and bottom 
-    //     To work around this, detect this situation and skip the containing span.
-	if (Prototype.Browser.WebKit && el.tagName == "INPUT" && 
-	    el.offsetParent && el.offsetParent.tagName == "SPAN" && 
-	    el.offsetParent.getStyle('position').toLowerCase() == 'relative') {
-      el = el.offsetParent;
-    }
-
-    el = el.offsetParent;
-  }
-  return result;
-}
-
 // Return X coord of element.
 function left(el) {
-  return get_xy(el)[0];
+  return el.cumulativeOffset().left;
 }
 
 // Return Y coord of element.
 function top(el) {
-  return get_xy(el)[1];
+  return el.cumulativeOffset().top;
+}
+
+// Check if element is inside a Modal dialog or other fixed div.
+function isInsideModal(el) {
+  while (el) {
+	if (el.getStyle('position').toLowerCase() == 'fixed') {
+      return true;
+    }
+    el = el.offsetParent;
+  }
+  return false;
 }
   
 // Pad number or string to the left with pad character to a width of width characters.
@@ -310,6 +300,9 @@ function calendar_prev_year() {
 
 function calendar_show() {
   calendar.element.style.display = '';
+  if (Modalbox && Modalbox.MBoverlay) {
+  	Modalbox.MBoverlay.observe("click", calendar_hide);
+  }
 }
 
 function calendar_hide() {
@@ -319,6 +312,9 @@ function calendar_hide() {
   if ($('ieShim'))
   {
     $('ieShim').style.display = 'none';  
+  }
+  if (Modalbox && Modalbox.MBoverlay) {
+  	Modalbox.MBoverlay.stopObserving("click", calendar_hide);
   }
 }
 
@@ -470,8 +466,19 @@ function calendar_open(input_element, options) {
   }
   
   // Position calendar by input element.
-  calendar.element.style.left = left(input_element) + 'px';
-  calendar.element.style.top = (top(input_element) + input_element.offsetHeight) + 'px';
+  if ( isInsideModal(input_element) ) {
+  	left = input_element.viewportOffset().left;
+  	top = input_element.viewportOffset().top;
+  	calendar.element.style.position = "fixed";    
+  }
+  else {
+  	left = input_element.cumulativeOffset().left;
+  	top = input_element.cumulativeOffset().top;
+  	calendar.element.style.position = "absolute";
+  }
+  
+  calendar.element.style.left = left + 'px';
+  calendar.element.style.top = (top + input_element.offsetHeight) + 'px';  
   calendar_show();
   // Parse input date.
   var date = string_to_date(input_element.value);
@@ -537,8 +544,6 @@ function build_calendar(input_element) {
 	  	
    		$(document.body).insert({'top': calendarControl});
 		calendar.element = get_element('calendar_control');
-		
-		
 	}
 }
 
