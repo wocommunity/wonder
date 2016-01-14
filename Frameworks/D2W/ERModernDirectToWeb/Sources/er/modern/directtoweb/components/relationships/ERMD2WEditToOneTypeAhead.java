@@ -36,6 +36,8 @@ import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.modern.directtoweb.components.ERMDAjaxNotificationCenter;
 import er.modern.directtoweb.components.buttons.ERMDActionButton;
+import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate;
+import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate.ERMD2WQueryComponent;
 
 /**
  * <p>A to-one relationship edit component that allows a user to select from a list by typing in the text field</p>
@@ -62,11 +64,12 @@ import er.modern.directtoweb.components.buttons.ERMDActionButton;
  * @d2wKey createConfigurationName
  * @d2wKey keyWhenRelationship
  * @d2wKey newButtonLabel
+ * @d2wKey searchKey
  * 
  * @author davidleber
  */
 
-public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
+public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent implements ERMD2WQueryComponent{
 	
     private static final long serialVersionUID = 1L;
 
@@ -76,6 +79,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		public static final String pageConfiguration = "pageConfiguration";
 		public static final String createConfigurationName = "createConfigurationName";
 		public static final String propertyKey = "propertyKey";
+		public static final String searchKey = "searchKey";
 		public static final String sortKey = "sortKey";
 		public static final String destinationEntityName = "destinationEntityName";
 		public static final String restrictedChoiceKey = "restrictedChoiceKey";
@@ -197,7 +201,8 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
     		if (searchTemplate() != null) {
     			value = ERXSimpleTemplateParser.parseTemplatedStringWithObject(searchTemplate(), this);
     		}
-    		EOQualifier qual = ERXQ.likeInsensitive(keyWhenRelationship(), value);
+            EOQualifier qual = ERMD2WAttributeQueryDelegate.instance
+                    .buildQualifier(this);
     		result = destinationObjectsWithQualifier(qual);
     	}
     	return result;
@@ -460,4 +465,5 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext()
 				.valueForKey("isDestinationEntityInspectable"), true);
 	}
+
 }
