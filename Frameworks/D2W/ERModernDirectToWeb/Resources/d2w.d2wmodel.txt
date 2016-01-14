@@ -7,6 +7,7 @@
     0 : *true* => typeAheadSearchTemplate = "*@@searchValue@@*" [com.webobjects.directtoweb.Assignment],
     0 : pageConfiguration like '*Embedded*' => useAjaxControls = "true" [com.webobjects.directtoweb.BooleanAssignment],
     10 : *true* => allowInlineEditing = "false" [com.webobjects.directtoweb.BooleanAssignment],
+    10 : *true* => id = "idForPropertyContainer" [er.directtoweb.ERDDelayedKeyValueAssignment],
     10 : *true* => busyIndicatorImageFramework = "Ajax" [com.webobjects.directtoweb.Assignment],
     10 : *true* => includeBusyIndicator = "true" [com.webobjects.directtoweb.BooleanAssignment],
     10 : *true* => busyIndicatorImageName = "busyBigSpinner.gif" [com.webobjects.directtoweb.Assignment],
