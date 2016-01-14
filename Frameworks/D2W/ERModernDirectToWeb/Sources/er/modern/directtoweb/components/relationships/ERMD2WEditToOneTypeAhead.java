@@ -34,6 +34,7 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
+import er.modern.directtoweb.components.ERMDAjaxNotificationCenter;
 import er.modern.directtoweb.components.buttons.ERMDActionButton;
 
 /**
@@ -226,6 +227,12 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 				object().removeObjectFromBothSidesOfRelationshipWithKey(existingObj, propertyKey());
 			}
 		}
+        // support for ERMDAjaxNotificationCenter
+        if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldObserve"), false)) {
+            NSNotificationCenter.defaultCenter().postNotification(
+                    ERMDAjaxNotificationCenter.PropertyChangedNotification,
+                    parent().valueForKeyPath("d2wContext"));
+        }
 //		NSLog.out.appendln("Select Object Called: " + object().valueForKey(propertyKey()) + " " + searchValue());
 		return null;
 	}
