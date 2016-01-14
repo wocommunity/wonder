@@ -34,6 +34,14 @@ import er.extensions.eof.ERXS;
  * <li>allows you to add qualifiers to the final query qualifier (as opposed to just min/equals/max with the keys)</li>
  * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.</li>
  * </ul>
+ * <h2>Selections and usage with Datasource</h2>
+ * If you are using the display group with a datasource and changing the selection by {@link #setSelectedObjects(NSArray)}
+ * only matching objects in the displayed objects will be selected and the events <i>displayGroupShouldChangeSelectionToIndexes</i>,
+ * <i>displayGroupDidChangeSelectedObjects</i> and <i>displayGroupDidChangeSelection</i> will be triggered.
+ * <h2>Selections and usage without Datasource</h2>
+ * If you are using plain arrays to fill your display group and set a selection by {@link #setSelectedObjects(NSArray)} you won't
+ * get related events as with a datasource. Also the selection is not matched against the displayed objects but set directly. 
+ * 
  * @author ak
  * @param <T> data type of the displaygroup's objects
  */
