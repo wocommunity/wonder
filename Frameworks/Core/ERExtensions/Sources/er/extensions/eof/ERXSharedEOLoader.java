@@ -28,7 +28,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXRetainer;
-import er.extensions.foundation.ERXUtilities;
 
 // Note: This is a direct port of Kelly Hawks' ObjC SharedEOLoader.  Only enhanced it to use the log4j system.
 //

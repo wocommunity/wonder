@@ -13,8 +13,6 @@ import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 
-import er.extensions.eof.ERXKey;
-import er.extensions.eof.ERXQ;
 
 public class ERXQTest extends TestCase {
 

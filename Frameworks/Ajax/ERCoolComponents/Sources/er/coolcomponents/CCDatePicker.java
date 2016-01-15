@@ -6,9 +6,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-//import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSValidation.ValidationException;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponseRewriter;

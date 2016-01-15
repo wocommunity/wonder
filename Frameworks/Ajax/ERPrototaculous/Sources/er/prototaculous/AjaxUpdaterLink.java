@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * An Ajax.Updater as a link
  * @see AjaxUpdater

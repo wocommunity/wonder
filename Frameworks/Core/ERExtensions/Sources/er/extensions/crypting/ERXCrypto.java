@@ -7,7 +7,6 @@
 package er.extensions.crypting;
 
 import java.io.IOException;
-import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

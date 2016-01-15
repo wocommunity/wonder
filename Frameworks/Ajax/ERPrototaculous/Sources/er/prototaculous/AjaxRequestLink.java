@@ -6,8 +6,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * An Ajax.Request as a link
  * @see AjaxRequest

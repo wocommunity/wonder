@@ -17,7 +17,6 @@ import er.extensions.appserver.ERXDirectAction;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 

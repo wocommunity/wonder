@@ -28,7 +28,6 @@ import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXUtilities;
 import er.javamail.ERMailDelivery;
 import er.javamail.ERMailDeliveryHTML;
 import er.javamail.ERMailDeliveryPlainText;

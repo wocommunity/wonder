@@ -6,7 +6,6 @@
 //
 package er.extensions.appserver.ajax;
 
-import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.jspservlet.WOServletContext;
 

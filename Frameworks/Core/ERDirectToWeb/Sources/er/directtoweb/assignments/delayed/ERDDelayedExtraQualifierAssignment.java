@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;

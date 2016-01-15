@@ -25,7 +25,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say 

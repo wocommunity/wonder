@@ -7,8 +7,6 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * An Ajax.Request as a button (that also submits the form and form values)
  * 

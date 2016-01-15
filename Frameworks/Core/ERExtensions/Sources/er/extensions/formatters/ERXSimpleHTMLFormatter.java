@@ -11,8 +11,6 @@ import java.text.ParsePosition;
 
 import org.apache.commons.lang3.StringUtils;
 
-import er.extensions.foundation.ERXStringUtilities;
-
 /**
  * This is a simple class for converting ASCII strings to HTML and vice versa.
  * In the current implementation, all this class does is convert newlines to HTML breaks and

@@ -8,12 +8,28 @@ package com.openbase.webobjects.qualifiers;
 //  Copyright (c) 2005 __MyCompanyName__. All rights reserved.
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
+import java.lang.reflect.Constructor;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
 
-import java.util.*;
-import java.lang.reflect.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableSet;
 
 public class InSubqueryQualifier extends EOQualifier implements EOQualifierEvaluation, Cloneable {
     private static final String	InKeyword = " IN ";

@@ -9,10 +9,6 @@ import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import er.jasperreports.ERJRFoundationDataSource;
-import er.jasperreports.ERJRReportTaskFromEO;
-import er.jasperreports.ERJRUtilities;
-
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;

@@ -15,7 +15,6 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.formatters.ERXTimestampFormatter;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**

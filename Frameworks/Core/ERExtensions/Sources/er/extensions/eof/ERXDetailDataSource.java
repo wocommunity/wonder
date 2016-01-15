@@ -1,5 +1,6 @@
 package er.extensions.eof;
 
+import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EODetailDataSource;

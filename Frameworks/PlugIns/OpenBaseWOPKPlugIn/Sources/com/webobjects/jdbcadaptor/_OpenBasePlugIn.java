@@ -5,23 +5,30 @@
 //
 package com.webobjects.jdbcadaptor;
 
+import java.sql.SQLException;
+import java.util.Enumeration;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.synchronization.EOSchemaGeneration;
 import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronization;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationColumnChanges;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationModelChanges;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import java.util.*;
-import java.sql.*;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSStringUtilities;
 
 public class _OpenBasePlugIn extends JDBCPlugIn {
 	

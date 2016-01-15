@@ -7,8 +7,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  *

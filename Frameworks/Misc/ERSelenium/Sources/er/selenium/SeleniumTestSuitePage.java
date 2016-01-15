@@ -35,7 +35,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXUtilities;
 import er.selenium.filters.SeleniumCompositeTestFilter;
 import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;

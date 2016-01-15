@@ -13,10 +13,29 @@ package com.openbase.webobjects.qualifiers;
 //  Copyright (c) 2005 __MyCompanyName__. All rights reserved.
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOQualifierVariable;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
 
 public class InQualifier extends EOKeyValueQualifier implements EOQualifierEvaluation, Cloneable {
     private static final String	InKeyword = " IN ";

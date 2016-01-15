@@ -5,7 +5,6 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.components.ERDCustomEditComponent;
-import er.directtoweb.components.relationships.ERDList;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
