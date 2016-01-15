@@ -10,7 +10,8 @@ package er.extensions.appserver.navigation;
 
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -26,9 +27,7 @@ import com.webobjects.foundation.NSRange;
  * navigation components.
  */
 public class ERXNavigation {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigation.class);
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;
@@ -46,8 +45,7 @@ public class ERXNavigation {
     }
 
     public void setAdditionalNavigationState(NSArray value) {
-        if (log.isDebugEnabled())
-            log.debug("Setting additional navigation state: " + value);
+        log.debug("Setting additional navigation state: {}", value);
         _additionalNavigationState = value;
     }
     // Not used.
@@ -76,18 +74,17 @@ public class ERXNavigation {
             int index = currentNavigationLevel - 1;
             int length = navCount - currentNavigationLevel + 1;
             NSRange range = new NSRange(index, length);
-            log.debug("Range: " + range + " current: " + currentNavigationLevel + " navCount: " + navCount);
+            log.debug("Range: {} current: {} navCount: {}", range, currentNavigationLevel, navCount);
             itmesToBeShown = navigationState().subarrayWithRange(range);
             
         }
-        log.debug("Nav state: " + navigationState() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
+        log.debug("Nav state: {} current nav level: {} items: {}", navigationState(), currentNavigationLevel, itmesToBeShown);
         return itmesToBeShown != null ? itmesToBeShown : NSArray.EmptyArray;
     }
     
     // Anytime we are setting the absolute we reset the relative.
     public void setNavigationState(NSArray navigationState) {
-        if (log.isDebugEnabled())
-            log.debug("Setting Navigation State: " + navigationState);
+        log.debug("Setting Navigation State: {}", navigationState);
         _navigationState = navigationState;
         _additionalNavigationState = null;
     }

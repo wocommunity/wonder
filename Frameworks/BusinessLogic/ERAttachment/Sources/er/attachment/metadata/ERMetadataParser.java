@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXExceptionUtilities;
 
 public class ERMetadataParser {
-  public static final Logger log = Logger.getLogger(ERMetadataParser.class);
+  private static final Logger log = LoggerFactory.getLogger(ERMetadataParser.class);
 
   private static ERMetadataParser _metadataParser;
 
@@ -40,7 +41,7 @@ public class ERMetadataParser {
         }
         catch (Throwable t) {
           // ... failure in the constructor means the lib doesn't exist
-          log.warn("Cannot use ImageIOMetadataParser: " + ERXExceptionUtilities.toParagraph(t));
+          log.warn("Cannot use ImageIOMetadataParser: {}", ERXExceptionUtilities.toParagraph(t));
         }
 
         // Try ImageMagick ...
@@ -49,7 +50,7 @@ public class ERMetadataParser {
             metadataParser = ImageMagickCommandlineMetadataParser.imageMagickMetadataParser();
           }
           catch (Throwable t) {
-            log.warn("Cannot use ImageMagickCommandlineMetadataParser: " + ERXExceptionUtilities.toParagraph(t));
+            log.warn("Cannot use ImageMagickCommandlineMetadataParser: {}", ERXExceptionUtilities.toParagraph(t));
           }
         }
 
@@ -111,7 +112,7 @@ public class ERMetadataParser {
     }
 
     if (fullMetadataDirectorySet.isEmpty()) {
-      log.info("No metadata handler for '" + importFile.getAbsolutePath() + "'.");
+      log.info("No metadata handler for '{}'.", importFile.getAbsolutePath());
     }
     else {
       for (IERMetadataDirectoryParser metadataDirectoryParser : _metadataDirectoryParsers) {
@@ -120,7 +121,7 @@ public class ERMetadataParser {
       List<IERMetadataDirectory> unparsedMetadataDirectories = fullMetadataDirectorySet.removeUnparsedDirectories();
       if (!unparsedMetadataDirectories.isEmpty()) {
         for (IERMetadataDirectory unparsedMetadataDirectory : unparsedMetadataDirectories) {
-          log.info("No metadata handler for '" + unparsedMetadataDirectory.getDirectoryName() + " in '" + importFile.getAbsolutePath() + "'.");
+          log.info("No metadata handler for '{}' in '{}'.", unparsedMetadataDirectory.getDirectoryName(), importFile.getAbsolutePath());
         }
       }
     }

@@ -12,7 +12,8 @@ package er.extensions.components.javascript;
 import java.util.Enumeration;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -80,9 +81,8 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         super(aContext);
     }
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXJSPopUpRelationPicker.class);
-    public final static Logger jsLog = Logger.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
+    private final static Logger log = LoggerFactory.getLogger(ERXJSPopUpRelationPicker.class);
+    private final static Logger jsLog = LoggerFactory.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
 
     protected Integer _size;
     protected String _childDisplayValueName;
@@ -166,7 +166,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                     return sortedChildren(parent).objectAtIndex(offset);
                 }
             } else {
-                log.info("Child ID not valid: " + id);
+                log.info("Child ID not valid: {}", id);
             }
         }
         return null;
@@ -273,7 +273,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         // This Javascript string builds an array of Entity objects on the browser end.
         returnString.append(objectArrayCreationString());
         returnString.append('\n');
-        if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
+        jsLog.debug("JSPopUpRelationPicker jsString  returnString is {}", returnString);
         return returnString.toString();
     }
 
@@ -298,7 +298,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         +");\n"
         + (parentPopUpStringForAll() == null ? pickerName + ".parentChanged("+childToSelect+");"	: "")
         +"\n</script>");
-        log.debug(returnString);
+        log.debug("{}", returnString);
 		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
 		// we are editing a new object
         return returnString.toString();
@@ -360,7 +360,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         }
 
         returnString.append("</select>\n");
-        if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
+        jsLog.debug("JSPopUpRelationPicker childPopUpString  returnString is {}", returnString);
         return returnString.toString();
     }
     

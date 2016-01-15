@@ -16,7 +16,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOHTTPConnection;
@@ -35,8 +36,7 @@ import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXProperties;
 
 public class MHost extends MObject {
-    
-    private static final Logger log = Logger.getLogger(MHost.class);
+    private static final Logger log = LoggerFactory.getLogger(MHost.class);
     
     private final int _receiveTimeout = ERXProperties.intForKeyWithDefault("JavaMonitor.receiveTimeout", 10000);
 
@@ -105,7 +105,7 @@ public class MHost extends MObject {
                 // AK: From *my* POV, we should check if this is the localhost and exit if it is,
                 // as I had this happen when you set -WOHost something and DNS isn't available.
                 // As it stands now, wotaskd will launch, but not really register and app (or get weirdo exceptions)
-                log.error("Error getting address for Host: " + name());
+                log.error("Error getting address for Host: {}", name());
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {

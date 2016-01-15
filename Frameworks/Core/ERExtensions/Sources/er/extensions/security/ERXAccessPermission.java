@@ -1,6 +1,7 @@
 package er.extensions.security;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AccessPermission
@@ -14,8 +15,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class ERXAccessPermission implements IERXAccessPermissionInterface {
-
-  private static final Logger log = Logger.getLogger(ERXAccessPermission.class);
+  private static final Logger log = LoggerFactory.getLogger(ERXAccessPermission.class);
 
   //********************************************************************
   //  Singleton
@@ -57,7 +57,7 @@ public class ERXAccessPermission implements IERXAccessPermissionInterface {
       return defaultValue;
     }
     
-    log.warn("No Delegate is set. Result for '" + key + "' is false.");
+    log.warn("No Delegate is set. Result for '{}' is false.", key);
     return false;
   }
 

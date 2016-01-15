@@ -7,7 +7,8 @@
 package er.extensions.appserver.navigation;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -33,8 +34,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXNavigationMenuItem.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigationMenuItem.class);
     
     protected ERXNavigationItem _navigationItem;
     protected ERXNavigationState _navigationState;
@@ -169,7 +169,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
                 if(name != null) {
                     _navigationItem = ERXNavigationManager.manager().navigationItemForName(name);
                 } else {
-                    log.warn("Navigation unset: " + name);
+                    log.warn("Navigation unset: {}", name);
                     _navigationItem = ERXNavigationManager.manager().newNavigationItem(new NSDictionary(name, "name"));
                 }
             }
@@ -243,7 +243,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     			if(localizedValue == null) {
     				localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(name);
     				if(localizedValue != null) {
-    					log.info("Found old-style entry: " + localizerKey + "->" + localizedValue);
+    					log.info("Found old-style entry: {}->{}", localizerKey, localizedValue);
     					ERXLocalizer.currentLocalizer().takeValueForKey(localizedValue, localizerKey);
     					name = localizedValue;
     				}

@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -32,8 +33,7 @@ public class ERXJSPopupSelector extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXJSPopupSelector.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJSPopupSelector.class);
 
 	public ERXJSPopupSelector(WOContext aContext) {
 		super(aContext);
@@ -52,7 +52,7 @@ public class ERXJSPopupSelector extends WOComponent {
 		if (list != null && item != null) {
 			int index = list.indexOfObject(item);
 			if (index == -1) {
-				log.info(item + " could not be found in " + list);
+				log.info("{} could not be found in {}", item, list);
 			}
 			// by default we assume that there is one more item on top of the
 			// list (i.e. - none - or - pick one -)

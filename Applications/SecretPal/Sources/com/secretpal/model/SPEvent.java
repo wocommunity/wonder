@@ -2,7 +2,8 @@ package com.secretpal.model;
 
 import java.security.SecureRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -12,7 +13,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class SPEvent extends _SPEvent {
-	private static Logger log = Logger.getLogger(SPEvent.class);
+	private static Logger log = LoggerFactory.getLogger(SPEvent.class);
 
 	public boolean hasAssignedSecretPals() {
 		return secretPals().count() > 0;
@@ -31,7 +32,7 @@ public class SPEvent extends _SPEvent {
 		NSArray<SPPerson> eligibleGivers = _eligibleGivers(allPeople);
 		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<SPPerson>();
 		
-		log.info(eligibleGivers.count() + " eligible givers out of " + allPeople.count() + " people");
+		log.info("{} eligible givers out of {} people", eligibleGivers.count(), allPeople.count());
 
     SecureRandom random = new SecureRandom();
 		long a = System.currentTimeMillis();
@@ -39,7 +40,7 @@ public class SPEvent extends _SPEvent {
 		int maxNumberOfAttempts = 100;
 		boolean doneWithSecretPals = false;
 		while (!doneWithSecretPals && numberOfAttempts < maxNumberOfAttempts) {
-			log.info("attempt #" + numberOfAttempts + " of " + maxNumberOfAttempts);
+			log.info("attempt #{} of {}", numberOfAttempts, maxNumberOfAttempts);
 			EOEditingContext nestedEditingContext = ERXEC.newEditingContext(editingContext());
 			nestedEditingContext.lock();
 			SPEvent localEvent = localInstanceIn(nestedEditingContext);
@@ -51,7 +52,7 @@ public class SPEvent extends _SPEvent {
 	        }
           int selectedReceiverNum = Math.abs(random.nextInt()) % eligibleReceivers.count();
           SPPerson selectedReceiver = eligibleReceivers.objectAtIndex(selectedReceiverNum);
-          log.info("   " + selectedGiver.name() + "=>" + selectedReceiver.name() + ", " +selectedGiver + "," + selectedReceiver);
+          log.info("   {}=>{}, {}, {}", selectedGiver.name(), selectedReceiver.name(), selectedGiver, selectedReceiver);
           SPSecretPal.createSPSecretPal(nestedEditingContext, localEvent, selectedGiver.localInstanceIn(nestedEditingContext), selectedReceiver.localInstanceIn(nestedEditingContext));
           consumedReceivers.addObject(selectedReceiver);
 			  }
@@ -66,7 +67,7 @@ public class SPEvent extends _SPEvent {
 				nestedEditingContext.dispose();
 			}
 		}
-		log.info("done in " + (System.currentTimeMillis() - a) + "ms");
+		log.info("done in {}ms", System.currentTimeMillis() - a);
 		if (!doneWithSecretPals) {
 			throw new IllegalStateException("Failed to assign secret pals after " + numberOfAttempts + " attempts.");
 		}

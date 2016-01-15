@@ -9,7 +9,8 @@ package er.extensions.components._private;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -102,7 +103,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author Mike Schrag (idea to secure binding)
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicElement {
-	static final Logger log = Logger.getLogger(ERXWOForm.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXWOForm.class);
 
 	WOAssociation _formName;
 	WOAssociation _enctype;
@@ -275,13 +276,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			boolean wasFormSubmitted = context.wasFormSubmitted();
 			_enterFormInContext(context);
-			// log.info(this._formName + "->" + this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
+			// log.info("{}->{}", _formName, toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
 			String previousFormName = _setFormName(context, wasInForm);
 			try {
 				super.takeValuesFromRequest(request, context);
 			}
 			finally {
-				// log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
+				// log.info("{}->{}->{}", context.elementID(), context.senderID(), context._wasFormSubmitted());
 				_exitFormInContext(context, wasInForm, wasFormSubmitted);
 				_clearFormName(context, previousFormName, wasInForm);
 			}
@@ -437,9 +438,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		else {
 			if (!_disabled(context)) {
-				log.warn("This form is embedded inside another form, so the inner form with these bindings is being omitted: " + toString());
-				log.warn("    page: " + context.page());
-				log.warn("    component: " + context.component());
+				log.warn("This form is embedded inside another form, so the inner form with these bindings is being omitted: {}", this);
+				log.warn("    page: {}", context.page());
+				log.warn("    component: {}", context.component());
 			}
 			appendChildrenToResponse(response, context);
 		}

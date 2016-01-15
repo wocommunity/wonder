@@ -6,7 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker.components;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -21,7 +23,7 @@ import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 
 public class PageWrapper extends WOComponent {
-    static final Logger log = Logger.getLogger(PageWrapper.class);
+    private static final Logger log = LoggerFactory.getLogger(PageWrapper.class);
 
     public PageWrapper(WOContext aContext) {
         super(aContext);
@@ -71,10 +73,8 @@ public class PageWrapper extends WOComponent {
             session().setObjectForKey(context, "navigationContext");
         }
         ERXNavigationState state = ERXNavigationManager.manager().navigationStateForSession(session());
-        log.debug("NavigationState:" + state + "," + state.state() + "," + state.stateAsString());
-        //log.info("navigationContext:" + session().objectForKey("navigationContext"));
+        log.debug("NavigationState: {}, {}, {}", state, state.state(), state.stateAsString());
+        //log.info("navigationContext: {}", session().objectForKey("navigationContext"));
         return context;
     }
 }
-
-

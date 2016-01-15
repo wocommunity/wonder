@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -25,6 +24,8 @@ import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.simpl.SimpleClassLoadHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObjectStore;
@@ -59,7 +60,7 @@ import er.quartzscheduler.foundation.ERQSMySupervisor;
 public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFrameworkPrincipal 
 {
 	public static final String INSTANCE_KEY = "COInstanceKey";
-	protected static final Logger log = Logger.getLogger(ERQSSchedulerServiceFrameworkPrincipal.class);
+	private static final Logger log = LoggerFactory.getLogger(ERQSSchedulerServiceFrameworkPrincipal.class);
 	private static ERQSSchedulerServiceFrameworkPrincipal sharedInstance;
 	private volatile Scheduler quartzSheduler;
 
@@ -139,7 +140,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 	public void finishInitialization() 
 	{
 		if (log.isInfoEnabled())
-			log.info("method: finishInitialization: ENTER: isSchedulerMustRun: " + schedulerMustRun());
+			log.info("method: finishInitialization: ENTER: isSchedulerMustRun: {}", schedulerMustRun());
 		setSharedInstance(this);
 		if (schedulerMustRun())
 		{
@@ -155,16 +156,14 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 					if (shouldJobsBePausedAtLaunch)
 						getScheduler().pauseAll();
 				}
-				if (log.isInfoEnabled())
-					log.info("method: finishInitialization: DONE." + (scheduler == null ? "The scheduler is not running." : "The scheduler has been successfully launched."));
+				log.info("method: finishInitialization: DONE. {}", scheduler == null ? "The scheduler is not running." : "The scheduler has been successfully launched.");
 			} catch (SchedulerException e) 
 			{
-				log.error("method: finishInitialization: error message: " + e.getMessage(), e);
+				log.error("method: finishInitialization: error message: {}", e.getMessage(), e);
 			}
 		}
 		else
-			if (log.isInfoEnabled())
-				log.info("method: finishInitialization: DONE. The scheduler is not running.");
+			log.info("method: finishInitialization: DONE. The scheduler is not running.");
 	}
 
 	/**
@@ -216,7 +215,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 					if (bundle != null)
 						propFileURL = bundle.pathURLForResourcePath(propFileName);
 					if (propFileURL == null)
-						log.error("method: getScheduler: unable to get the path to the properties file: " + propFileName + " in the framework: " + propFramework + ".\nThe Quartz scheduler is not launched.");
+						log.error("method: getScheduler: unable to get the path to the properties file: {} in the framework: {}.\nThe Quartz scheduler is not launched.", propFileName, propFramework);
 					else
 					{
 						filePath = propFileURL.getFile();
@@ -292,7 +291,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 			return getScheduler().getTriggerState(aTrigger.getKey());
 		} catch (SchedulerException e) 
 		{
-			log.error("method: getTriggerState: error for JobKey: " + aJobKey, e);
+			log.error("method: getTriggerState: error for JobKey: {}", aJobKey, e);
 		}
 		return Trigger.TriggerState.NONE;
 	}
@@ -305,7 +304,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 	    		return getScheduler().getTriggersOfJob(aJobKey).get(0);
 		} catch (SchedulerException e) 
 		{
-			log.error("method: getTriggerOfJob: error for JobKey: " + aJobKey, e);
+			log.error("method: getTriggerOfJob: error for JobKey: {}", aJobKey, e);
 		}
 		return null;
 	}
@@ -328,7 +327,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 				supervisorClass = (Class<? extends Job>) loader.loadClass(supervisorClassPath);
 			} catch (ClassNotFoundException e) 
 			{
-				log.error("method: instantiateJobSupervisor: load class error for supervisorClass: " + supervisorClassPath, e);
+				log.error("method: instantiateJobSupervisor: load class error for supervisorClass: {}", supervisorClassPath, e);
 			}
 		}
 
@@ -393,7 +392,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 				jobListenerClass = (Class<? extends JobListener>) loader.loadClass(jobListenerClassPath);
 			} catch (ClassNotFoundException e) 
 			{
-				log.error("method: getDefaultJobListener: load class error for jobListenerClass: " + jobListenerClassPath, e);
+				log.error("method: getDefaultJobListener: load class error for jobListenerClass: {}", jobListenerClassPath, e);
 			}
 		}
 		
@@ -459,7 +458,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 			getScheduler().shutdown();
 		} catch (SchedulerException e) 
 		{
-			log.error("method: stopScheduler: exception: " + e.getMessage(), e);
+			log.error("method: stopScheduler: exception: {}", e.getMessage(), e);
 		}
 	}
 }

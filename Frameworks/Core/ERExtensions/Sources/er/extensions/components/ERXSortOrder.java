@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -56,8 +57,7 @@ public class ERXSortOrder extends WOSortOrder {
         super(context);
     }
     
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXSortOrder.class);
+    private final static Logger log = LoggerFactory.getLogger(ERXSortOrder.class);
 
     //////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
     public final static String SortOrderingChanged = "SortOrderingChanged";
@@ -175,11 +175,12 @@ public class ERXSortOrder extends WOSortOrder {
     @Override
     public WOComponent toggleClicked() {
         super.toggleClicked();
-        if (log.isDebugEnabled()) log.debug("toggleClicked "+valueForBinding("d2wContext"));
-        if (valueForBinding("d2wContext") != null) {
+        Object context = valueForBinding("d2wContext");
+        log.debug("toggleClicked {}", context);
+        if (context != null) {
             NSNotificationCenter.defaultCenter().postNotification(SortOrderingChanged,
                                                                   displayGroup().sortOrderings(),
-                                                                  new NSDictionary(valueForBinding("d2wContext"), "d2wContext"));
+                                                                  new NSDictionary(context, "d2wContext"));
         }
         return null;
     }

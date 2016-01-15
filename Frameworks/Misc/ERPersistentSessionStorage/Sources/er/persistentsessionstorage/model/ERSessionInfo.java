@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -21,7 +22,7 @@ public class ERSessionInfo extends er.persistentsessionstorage.model.eogen._ERSe
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ERSessionInfo.class);
+	private static final Logger log = LoggerFactory.getLogger(ERSessionInfo.class);
 
 	public static final ERSessionInfoClazz<ERSessionInfo> clazz = new ERSessionInfoClazz<ERSessionInfo>();
 
@@ -69,7 +70,7 @@ public class ERSessionInfo extends er.persistentsessionstorage.model.eogen._ERSe
 				try {
 					oos.close();
 				} catch (IOException e) {
-					log.warn(e);
+					log.warn("Could not close stream.", e);
 				}
 			}
 		}
@@ -95,7 +96,7 @@ public class ERSessionInfo extends er.persistentsessionstorage.model.eogen._ERSe
 				try {
 					ois.close();
 				} catch (IOException e) {
-					log.warn(e);
+					log.warn("Could not close stream.", e);
 				}
 			}
 		}

@@ -3,7 +3,8 @@ package er.extensions.foundation;
 import java.util.UUID;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
@@ -24,7 +25,7 @@ import er.extensions.appserver.ERXWOContext;
  *            the type of the lazy value
  */
 public class ERXLazyValue<T> {
-	public static Logger log = Logger.getLogger(ERXLazyValue.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLazyValue.class);
 
 	private ERXLazyValue.Source<T> _dataSource;
 	private ERXLazyValue.Invalidator _invalidator;
@@ -100,9 +101,7 @@ public class ERXLazyValue<T> {
 	 */
 	public synchronized T value() {
 		if (!_valueCached || _invalidator.shouldInvalidate()) {
-			if (ERXLazyValue.log.isDebugEnabled()) {
-				ERXLazyValue.log.debug("Fetching from " + _dataSource + " with invalidator " + _invalidator + " ...");
-			}
+			log.debug("Fetching from {} with invalidator {} ...", _dataSource, _invalidator);
 			_value = _dataSource.value();
 			_invalidator.fetchedValue(_value);
 			_valueCached = true;

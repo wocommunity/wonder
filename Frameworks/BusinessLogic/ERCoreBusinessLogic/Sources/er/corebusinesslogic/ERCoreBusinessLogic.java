@@ -10,7 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -57,8 +58,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     //	Class constant(s)
     //	---------------------------------------------------------------------------    
     
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCoreBusinessLogic.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCoreBusinessLogic.class);
     
     /** property key that holds the email domain of the generated from email */
     public static final String ProblemEmailDomainPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain";
@@ -102,8 +102,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * @param actor current user for this thread
      */
     public static void setActor(EOEnterpriseObject actor) {
-        if (log.isDebugEnabled())
-            log.debug("Setting actor to : "+actor);
+        log.debug("Setting actor to: {}", actor);
         if (actor != null) {
             ERXThreadStorage.takeValueForKey(actor, "actor");
         } else {
@@ -131,7 +130,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             			((ERCoreUserInterface)localActor).setPreferences(prefs);
             		}
                 } catch(RuntimeException ex) {
-                	log.error("Error while setting getting actor's preferences: " + ex, ex);
+                	log.error("Error while setting getting actor's preferences: ", actor, ex);
             	}
         		actor = localActor;
             } finally {
@@ -378,13 +377,13 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             if (!WOApplication.application().isCachingEnabled() ||
                 !ERCMailDelivery.usesMail() ||
                 !shouldMailReportedExceptions()) {
-                log.error(s.toString());
+                log.error("{}", s);
             } else {
                 // Usually the Mail appender is set to Threshold ERROR
-                log.warn(s.toString());
+                log.warn("{}", s);
                 if (emailsForProblemRecipients().count() == 0 || problemEmailDomain() == null) {
-                    log.error("Unable to log problem due to misconfiguration: recipients: "
-                              + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
+                    log.error("Unable to log problem due to misconfiguration: recipients: {}"
+                              + " email domain: {}", emailsForProblemRecipients(), problemEmailDomain());
                 } else {
                     ERCMailableExceptionPage standardExceptionPage = (ERCMailableExceptionPage)ERXApplication.instantiatePage("ERCMailableExceptionPage");
                     standardExceptionPage.setException(exception);
@@ -426,7 +425,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                 s.append("** Second exception ");
                 s.append(ERXUtilities.stackTrace(u));
                 NSLog.err.appendln(s.toString());
-                log.error(s.toString());
+                log.error("{}", s);
             } catch (Throwable u2) {} // WE DON'T WANT ANYTHING TO GO WRONG IN HERE as it would cause the app to instantly exit
         }
     }

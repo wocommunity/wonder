@@ -7,7 +7,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -60,7 +61,7 @@ public class ERXLongPrimaryKeyFactory {
 	private static final int		HOST_CODE_LENGTH = 10;
 	private static final String    HOST_CODE_KEY = "er.extensions.ERXLongPrimaryKeyFactory.hostCode";
 
-	private static final Logger log          = Logger.getLogger(ERXLongPrimaryKeyFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLongPrimaryKeyFactory.class);
 	private static long            MAX_PK_VALUE = (long) Math.pow(2, 48);
 	private  Boolean         encodeEntityInPkValue;
 	private  Boolean         encodeHostInPkValue;
@@ -84,7 +85,7 @@ public class ERXLongPrimaryKeyFactory {
 			// now add the hostCode
 			realPk = realPk | hostCode();
 			if (log.isDebugEnabled()) {
-				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+				log.debug("new pk value for {}({}), db value = {}, new value = {}", ename, ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename), pk, realPk);
 			}
 			pk = Long.valueOf(realPk);
 		}
@@ -101,7 +102,7 @@ public class ERXLongPrimaryKeyFactory {
 			// now add the entity code
 			realPk = realPk | ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename);
 			if (log.isDebugEnabled()) {
-				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+				log.debug("new pk value for {}({}), db value = {}, new value = {}", ename, ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename), pk, realPk);
 			}
 			pk = Long.valueOf(realPk);
 		}
@@ -246,7 +247,7 @@ public class ERXLongPrimaryKeyFactory {
 					con.setAutoCommit(false);
 					con.setReadOnly(false);
 				} catch (SQLException e) {
-					log.error(e, e);
+					log.error("Database error.", e);
 				}
 
 				for(int tries = 0; tries < count; tries++) {
@@ -322,8 +323,7 @@ public class ERXLongPrimaryKeyFactory {
 			long v = 1l;
 			if (hasNext) {
 				v = resultSet.getLong(1);
-				if (log.isDebugEnabled())
-					log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
+				log.debug("received max id from table {}, setting value in PK_TABLE to {}", tableName, v);
 				if(encodeEntityInPkValue()) {
 					v = v >> CODE_LENGTH;
 				}
@@ -334,7 +334,7 @@ public class ERXLongPrimaryKeyFactory {
 			return v + 1;
 
 		} catch (SQLException e) {
-			log.error("could not call database with sql " + sql, e);
+			log.error("could not call database with sql {}", sql, e);
 			throw new IllegalStateException("could not get value from " + sql);
 		} finally {
 			broker.freeConnection(con);
@@ -395,7 +395,7 @@ public class ERXLongPrimaryKeyFactory {
 	private void fillPkCache(Stack s, String ename) {
 		Long pkValueStart = getNextPkValueForEntityIncreaseBy(ename, 10, increaseBy());
 		long value = pkValueStart.longValue();
-		log.debug("filling pkCache for " + ename + ", starting at " + value);
+		log.debug("filling pkCache for {}, starting at {}", ename, value);
 		for (int i = increaseBy(); i > 0;  i--) {
 			s.push(Long.valueOf(i + value));
 		}

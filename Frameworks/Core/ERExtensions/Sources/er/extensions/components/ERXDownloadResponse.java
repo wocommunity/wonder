@@ -6,7 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -43,7 +44,7 @@ public class ERXDownloadResponse extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ERXDownloadResponse.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDownloadResponse.class);
 
 	private String _downloadFilename;
 	private long _streamingContentSize = 0L;
@@ -153,8 +154,7 @@ public class ERXDownloadResponse extends WOComponent {
 		aResponse.setHeader(contentType(), "content-type");
 		aResponse.setHeader(contentDisposition(), "content-disposition");
 
-		if (log.isDebugEnabled())
-			log.debug("DownloadResponse = " + this);
+		log.debug("DownloadResponse = {}", this);
 	}
 
 	private String _contentDisposition;

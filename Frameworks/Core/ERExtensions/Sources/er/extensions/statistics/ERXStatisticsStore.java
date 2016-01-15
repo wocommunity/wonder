@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -54,7 +55,7 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
-	protected static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXStatisticsStore.class);
 	private final StopWatchTimer _timer = new StopWatchTimer();
 	protected static Field initMemoryField;
 
@@ -63,7 +64,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			initMemoryField = WOStatisticsStore.class.getDeclaredField("_initializationMemory");
 			initMemoryField.setAccessible(true);
 		} catch (Exception e) {
-			log.warn("Could not access private field WOStatisticsStore._initializationMemory. ", e);
+			log.warn("Could not access private field WOStatisticsStore._initializationMemory.", e);
 		}
 	}
 
@@ -161,18 +162,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
                 IERXRequestDescription requestDescription = descriptionObjectForContext(aContext, aString);
                 listener.log(requestTime, requestDescription);
 				if (requestTime > _maximumRequestFatalTime) {
-					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.error("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 				else if (requestTime > _maximumRequestErrorTime) {
-					log.error("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.error("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 				else if (requestTime > _maximumRequestWarnTime) {
-					log.warn("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.warn("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 			}
 			catch (Exception ex) {
 				// AK: pretty important we don't mess up here
-				log.error(ex, ex);
+				log.error("Error", ex);
 			}
 		}
 
@@ -254,7 +255,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
                     return new ERXNormalRequestDescription(componentName, requestHandler, additionalInfo);
                 }
                 catch (RuntimeException e) {
-                    log.error("Cannot get context description since received exception " + e, e);
+                    log.error("Cannot get context description since received exception.", e);
                 }
             }
             return new ERXEmptyRequestDescription(string);
@@ -318,7 +319,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							sb.append(ERXEC.outstandingLockDescription());
 							sb.append("OSC info:\n");
 							sb.append(ERXObjectStoreCoordinator.outstandingLockDescription());
-							log.fatal(sb.toString());
+							log.error(sb.toString());
                             deadlocksCount++;
 						}
 					}

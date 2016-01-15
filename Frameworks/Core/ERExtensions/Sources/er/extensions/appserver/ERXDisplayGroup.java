@@ -4,7 +4,8 @@ import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -58,8 +59,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** Logging support */
-	private static final Logger log = Logger.getLogger(ERXDisplayGroup.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDisplayGroup.class);
 
 	public ERXDisplayGroup() {
 		super();
@@ -174,7 +174,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public Object fetch() {
 		if(log.isDebugEnabled()) {
-			log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
+			log.debug("Fetching: {}", this, new RuntimeException("Dummy for Stacktrace"));
 		}
 		Object result;
 		// ak: we need to transform localized keys (foo.name->foo.name_de)
@@ -225,7 +225,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public NSArray<T> selectedObjects() {
 		if(log.isDebugEnabled()) {
-			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
+			log.debug("selectedObjects@{}:{}", hashCode(), super.selectedObjects().count());
 		}
 		return super.selectedObjects();
 	}
@@ -233,7 +233,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public void setSelectedObjects(NSArray objects) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + (objects != null ? objects.count() : "0"));
+			log.debug("setSelectedObjects@{}:{}", hashCode(), (objects != null ? objects.count() : "0"));
 		}
 		if (this instanceof ERXBatchingDisplayGroup || dataSource() == null) {
 			// keep previous behavior
@@ -262,7 +262,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectionIndexes@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"),
+			log.debug("setSelectionIndexes@{}:{}", hashCode(), (nsarray != null ? nsarray.count() : "0"),
 					new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
@@ -390,9 +390,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
 		super.setSortOrderings(sortOrderings);
 		if (sortOrderings != null && sortOrderings.count() > 1) {
-			if (log.isDebugEnabled()) {
-				log.debug("More than one sort order: " + sortOrderings);
-			}
+			log.debug("More than one sort order: {}", sortOrderings);
 		}
 	}
 

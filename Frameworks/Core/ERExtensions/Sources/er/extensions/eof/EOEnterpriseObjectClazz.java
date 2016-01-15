@@ -8,7 +8,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -60,10 +61,7 @@ import er.extensions.foundation.ERXPatcher;
  * @param <T> 
  */
 public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
-    /**
-     * logging support
-     */
-    public static final Logger log = Logger.getLogger(EOEnterpriseObjectClazz.class);
+    private static final Logger log = LoggerFactory.getLogger(EOEnterpriseObjectClazz.class);
     
     /**
      * caches the clazz objects
@@ -147,7 +145,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
 					EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
 					NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
 					if(candidates.count() > 1) {
-						log.warn("More than one entity found: " + candidates);
+						log.warn("More than one entity found: {}", candidates);
 					}
 					EOEntity entity = (EOEntity) candidates.lastObject();
 					if(entity != null) {
@@ -232,7 +230,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
             clazz.setEntityName(entityName);
         }
         if(log.isDebugEnabled()) {
-            log.debug("clazzForEntityNamed '" +entityName+ "': " + clazz.getClass().getName());
+            log.debug("clazzForEntityNamed '{}': {}", entityName, clazz.getClass());
         }
         return clazz;
     }

@@ -1,6 +1,7 @@
 package wowodc.background.controllers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 
@@ -16,15 +17,14 @@ import er.extensions.appserver.IERXPerformWOActionForResult;
  * @author kieran
  */
 public class CustomNextPageForErrorResultController implements IERXPerformWOActionForResult {
-	private static final Logger log = Logger.getLogger(CustomNextPageForErrorResultController.class);
+	private static final Logger log = LoggerFactory.getLogger(CustomNextPageForErrorResultController.class);
 	
 	private Exception _result = null;
 	private final WOComponent _nextPage;
 	
 	public CustomNextPageForErrorResultController(WOComponent pageThatInitiatedTheTask) {
 		_nextPage = pageThatInitiatedTheTask;
-		if (log.isDebugEnabled())
-			log.debug("Constructor called with WOComponent argument = " + pageThatInitiatedTheTask);
+		log.debug("Constructor called with WOComponent argument = {}", pageThatInitiatedTheTask);
 	}
 	
 	public WOActionResults performAction() {

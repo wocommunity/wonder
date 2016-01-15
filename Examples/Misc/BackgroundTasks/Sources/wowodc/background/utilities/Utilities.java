@@ -2,7 +2,8 @@ package wowodc.background.utilities;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSMutableArray;
 
@@ -14,8 +15,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * @author kieran
  */
 public class Utilities {
-	
-	private static final Logger log = Logger.getLogger(Utilities.class);
+	private static final Logger log = LoggerFactory.getLogger(Utilities.class);
 	public static final String ERRORS_KEY = "_ERRORS_KEY";
 	
 	// Random number generator shared instance
@@ -50,20 +50,17 @@ public class Utilities {
 		// than the square root will not fit.
 		for (checkValue = 2; checkValue * checkValue < aNumber; checkValue++) {
 			remainder = aNumber % checkValue;
-			if (log.isDebugEnabled())
-				log.debug("aNumber = " + aNumber + "; checkValue = " + checkValue + "; remainder = " + remainder);
+			log.debug("aNumber = {}; checkValue = {}; remainder = {}", aNumber, checkValue, remainder);
 			if (remainder == 0) {
 				// aNumber can be divided evenly by checkValue, so it is not prime
 				result = false;
-				if (log.isDebugEnabled())
-					log.debug(aNumber + " is NOT a prime number. It is a composite number!");
+				log.debug("{} is NOT a prime number. It is a composite number!", aNumber);
 				break;
 			}
 		}
 		
 		if (result) {
-			if (log.isDebugEnabled())
-				log.debug(aNumber + " IS prime!");
+			log.debug("{} IS prime!", aNumber);
 		}
 		
 		return result;

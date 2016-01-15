@@ -14,7 +14,8 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -27,7 +28,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @author mschrag
  */
 public class ERXDESCrypter implements ERXCrypterInterface {
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXCrypto.class);
 
 	private Key _secretDESKey;
 	private String _secretKeyPathFramework;

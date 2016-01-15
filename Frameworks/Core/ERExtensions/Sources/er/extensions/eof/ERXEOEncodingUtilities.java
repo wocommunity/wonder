@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -30,9 +31,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL
  */
 public class ERXEOEncodingUtilities {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXEOEncodingUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXEOEncodingUtilities.class);
 
     /**
      * Holds the default entity name separator
@@ -124,7 +123,7 @@ public class ERXEOEncodingUtilities {
     public static EOEnterpriseObject enterpriseObjectForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSArray entityGroup = enterpriseObjectsForEntityNamedFromFormValues(ec, entityName, formValues);
         if (entityGroup.count() > 1)
-            log.warn("Multiple objects for entity name: " + entityName + " expecting one. objects: " + entityGroup);
+            log.warn("Multiple objects for entity name: {} expecting one. objects: {}", entityName, entityGroup);
         return entityGroup.count() > 0 ? (EOEnterpriseObject)entityGroup.lastObject() : null;
     }
     
@@ -363,7 +362,7 @@ public class ERXEOEncodingUtilities {
             throw new IllegalArgumentException("Attempting to decode enterprise objects with null editing context.");
         if (values == null )
             throw new IllegalArgumentException("Attempting to decode enterprise objects with null form values.");
-        if(log.isDebugEnabled()) log.debug("values = "+values);
+        log.debug("values = {}", values);
         NSMutableArray result = new NSMutableArray();
 
         String separator = values.objectForKey( "sep" ) != null ? (String) values.objectForKey( "sep" ) : entityNameSeparator();
@@ -382,7 +381,7 @@ public class ERXEOEncodingUtilities {
                         result.addObject
                             ( EOUtilities.objectWithPrimaryKey(ec, entity.name(), pk) );
                     } else {                    
-                        log.warn("Unable to find entity for name: " + entityName);
+                        log.warn("Unable to find entity for name: {}", entityName);
                 }
             }
         }
@@ -405,7 +404,7 @@ public class ERXEOEncodingUtilities {
             pkAttributeNames = pkAttributeNames.sortedArrayUsingComparator
             ( NSComparator.AscendingStringComparator );
         } catch( NSComparator.ComparisonException ex ) {
-            log.error( "Unable to sort attribute names: "+ ex );
+            log.error( "Unable to sort attribute names.", ex);
             throw new NSForwardException(ex);
         }
         NSArray values = isEncrypted
@@ -423,7 +422,7 @@ public class ERXEOEncodingUtilities {
                     try {
                         currentValue = tsf.parseObject( (String) currentValue );    
                     } catch( java.text.ParseException ex ) {
-                        log.error( "Error while trying to parse: "+currentValue );
+                        log.error("Error while trying to parse: {}", currentValue);
                         throw new NSForwardException( ex );
                     }
                     case 1:

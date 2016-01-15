@@ -2,6 +2,9 @@ package er.extensions.partials;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -37,6 +40,8 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class ERXPartialInitializer {
+	private static final Logger log = LoggerFactory.getLogger(ERXModelGroup.class);
+
 	private static final ERXPartialInitializer _initializer = new ERXPartialInitializer();
 
 	private NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>> _partialsForEntity = new NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>>();
@@ -108,7 +113,8 @@ public class ERXPartialInitializer {
 								partialEntity.addAttribute(primaryAttribute);
 							}
 							else {
-								ERXModelGroup.log.debug("Skipping partial attribute " + partialExtensionEntity.name() + "." + partialAttribute.name() + " because " + partialEntity.name() + " already has an attribute of the same name.");
+								log.debug("Skipping partial attribute {}.{} because {} already has an attribute of the same name.",
+										partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
 							}
 						}
 
@@ -124,7 +130,8 @@ public class ERXPartialInitializer {
 								partialEntity.addRelationship(primaryRelationship);
 							}
 							else {
-								ERXModelGroup.log.debug("Skipping partial relationship " + partialExtensionEntity.name() + "." + partialRelationship.name() + " because " + partialEntity.name() + " already has a relationship of the same name.");
+								log.debug("Skipping partial relationship {}.{} because {} already has a relationship of the same name.",
+										partialExtensionEntity.name(), partialRelationship.name(), partialEntity.name());
 							}
 						}
 

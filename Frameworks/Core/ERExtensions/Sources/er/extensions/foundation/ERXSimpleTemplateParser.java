@@ -8,7 +8,8 @@ package er.extensions.foundation;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -40,7 +41,7 @@ public class ERXSimpleTemplateParser {
     private static final String DEPRECATED_DELIMITER = "@";
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERXSimpleTemplateParser.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ERXSimpleTemplateParser.class.getName());
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;
@@ -137,8 +138,8 @@ public class ERXSimpleTemplateParser {
             delimiter = DEFAULT_DELIMITER;
         }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
-        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
-            log.debug("Components: " + components);
+        if (! isLoggingDisabled) {
+            log.debug("Components: {}", components);
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
@@ -203,21 +204,21 @@ public class ERXSimpleTemplateParser {
         if (delimiter == null) {
             delimiter = DEFAULT_DELIMITER;
         }
-        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
-            log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
-            log.debug("Template: " + template);
-            log.debug("Delim: " + delimiter);
-            log.debug("otherObject: " + otherObject);
+        if (! isLoggingDisabled) {
+            log.debug("Parsing template: {} with delimiter: {} object: {}",template, delimiter, object);
+            log.debug("Template: {}", template);
+            log.debug("Delim: {}", delimiter);
+            log.debug("otherObject: {}", otherObject);
         }
         if (useOldDelimiter() && delimiter.equals(DEFAULT_DELIMITER) && template.indexOf(delimiter) < 0 && template.indexOf(DEPRECATED_DELIMITER) >= 0) {
             if (!isLoggingDisabled) {
-                log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
+                log.warn("It seems that the template string '{}' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.", template);
             }
             delimiter = DEPRECATED_DELIMITER;
         }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
-        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
-            log.debug("Components: " + components);
+        if (! isLoggingDisabled) {
+            log.debug("Components: {}", components);
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         StringBuilder sb = new StringBuilder();
@@ -230,7 +231,7 @@ public class ERXSimpleTemplateParser {
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if(!isLoggingDisabled) {
-                log.debug("Processing Element: " + element);
+                log.debug("Processing Element: {}", element);
             }
             if(deriveElement) {
                 if(!isLoggingDisabled) {
@@ -244,8 +245,8 @@ public class ERXSimpleTemplateParser {
                     Object o = objects[i];
                     if(o != null && result == _undefinedKeyLabel) {
                         try {
-                            if(!isLoggingDisabled && log.isDebugEnabled()) {
-                                log.debug("calling valueForKeyPath("+o+", "+element+")");
+                            if(!isLoggingDisabled) {
+                                log.debug("calling valueForKeyPath({}, {})", o, element);
                             }
                             result = doGetValue(element, o);
                             // For just in case the above doesn't throw an exception when the 
@@ -264,10 +265,8 @@ public class ERXSimpleTemplateParser {
                     }
                 }
                 if(result == _undefinedKeyLabel) {
-                    if (!isLoggingDisabled && log.isDebugEnabled()) {
-                        log.debug("Could not find a value for \"" + element
-                                + "\" of template, \"" + template
-                                + "\" in either the object or extra data.");
+                    if (!isLoggingDisabled) {
+                        log.debug("Could not find a value for '{}' of template, '{}' in either the object or extra data.", element, template);
                     }
                 }
                 sb.append(result.toString());
@@ -278,8 +277,8 @@ public class ERXSimpleTemplateParser {
                 }
                 deriveElement = true;
             }
-            if(!isLoggingDisabled && log.isDebugEnabled()) {
-                log.debug("Buffer: " + sb);
+            if(!isLoggingDisabled) {
+                log.debug("Buffer: {}", sb);
             }
         }
         return sb.toString();

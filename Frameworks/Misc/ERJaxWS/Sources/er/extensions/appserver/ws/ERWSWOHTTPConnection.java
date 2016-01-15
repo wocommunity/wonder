@@ -7,7 +7,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.istack.NotNull;
 import com.sun.xml.ws.api.PropertySet;
@@ -37,6 +38,7 @@ public class ERWSWOHTTPConnection
 {
     public static final String ERJAXWS_WOCONTEXT = "com.webobjects.appserver.WOContext";
     public static final String ERJAXWS_ERXWOCONTEXT = "er.extensions.appserver.ERXWOContext";
+    private static final Logger log = LoggerFactory.getLogger(ERWSWOHTTPConnection.class);
 	
     /** the current ERXRequest */
     ERXRequest woRequest;
@@ -285,7 +287,7 @@ public class ERWSWOHTTPConnection
         }
         catch(IOException e)
         {
-            Logger.getLogger("er.extensions.appserver.ws.ERJaxWebServiceRequestHandler.Logging").error("Exception on writing response", e);
+            log.error("Exception on writing response.", e);
             return null;
         }
         

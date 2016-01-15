@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -58,7 +59,7 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger log = Logger.getLogger(ERDragAndDropUpload.class);
+	private static final Logger log = LoggerFactory.getLogger(ERDragAndDropUpload.class);
 
 	private String dropTargetID;
 	

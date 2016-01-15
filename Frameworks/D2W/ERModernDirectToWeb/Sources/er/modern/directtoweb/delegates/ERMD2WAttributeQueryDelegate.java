@@ -2,12 +2,13 @@ package er.modern.directtoweb.delegates;
 
 import java.math.BigDecimal;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOAttribute;
@@ -54,9 +55,7 @@ import er.extensions.localization.ERXLocalizer;
  * @author fpeters
  */
 public class ERMD2WAttributeQueryDelegate {
-
-    /** general logging support */
-    public static final Logger log = Logger.getLogger(ERMD2WAttributeQueryDelegate.class);
+    private static final Logger log = LoggerFactory.getLogger(ERMD2WAttributeQueryDelegate.class);
 
     public static final ERMD2WAttributeQueryDelegate instance = new ERMD2WAttributeQueryDelegate();
 
@@ -216,9 +215,7 @@ public class ERMD2WAttributeQueryDelegate {
                     qualifiers.addObject(dateQ);
                 }
             } catch (IllegalArgumentException iae) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Failed to prepare date qualifier:", iae);
-                }
+                log.debug("Failed to prepare date qualifier:", iae);
             }
         }
     }
@@ -291,8 +288,8 @@ public class ERMD2WAttributeQueryDelegate {
                         ERXStringUtilities.keyPathWithoutFirstProperty(anAttributeName),
                         relationship.destinationEntity(), attribute);
             } else {
-                log.warn("Failed to resolve destination attribute for key path: "
-                        + anAttributeName);
+                log.warn("Failed to resolve destination attribute for key path: {}",
+                        anAttributeName);
             }
         } else {
             entity = relationship.destinationEntity();

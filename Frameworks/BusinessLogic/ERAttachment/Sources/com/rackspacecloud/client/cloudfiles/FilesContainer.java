@@ -10,14 +10,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilesContainer
 {
     private String name;
     private List<FilesObject> objects = null;
     private FilesClient client = null;
-    private static Logger logger = Logger.getLogger(FilesContainer.class);
+    private static final Logger log = LoggerFactory.getLogger(FilesContainer.class);
 
     /**
      * Create a new container (Note, this does not actually create a container on the server)
@@ -84,7 +85,7 @@ public class FilesContainer
         }
         else
         {
-            logger.fatal("This Container has no FilesClient defined !");
+            log.error("This Container has no FilesClient defined!");
         }
         return null;
     }
@@ -112,7 +113,7 @@ public class FilesContainer
         }
         else
         {
-            logger.fatal("This Container has no FilesClient defined !");
+            log.error("This Container has no FilesClient defined!");
         }
         return null;
     }
@@ -133,7 +134,7 @@ public class FilesContainer
         }
         else
         {
-            logger.fatal("This container does not have a valid client !");
+            log.error("This container does not have a valid client!");
         }
         return null;
     }
@@ -171,7 +172,7 @@ public class FilesContainer
            if (objects != null)
               return objects.add (obj);
         }
-        logger.fatal("Could not add Object, it seems something is wrong with this Container or FilesClient"); 
+        log.error("Could not add Object, it seems something is wrong with this Container or FilesClient!"); 
         return false;
     }
 
@@ -191,7 +192,7 @@ public class FilesContainer
         	client.createContainer(name);
         }
         else
-            logger.fatal("This Container has no FilesClient defined !");
+            log.error("This Container has no FilesClient defined!");
 
     }
 }

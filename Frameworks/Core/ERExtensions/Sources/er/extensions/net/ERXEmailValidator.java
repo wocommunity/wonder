@@ -19,7 +19,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -42,7 +43,7 @@ public final class ERXEmailValidator implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ERXEmailValidator.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXEmailValidator.class);
 
 	// RFC 2822 2.2.2 Structured Header Field Bodies
 	private static final String wsp = "[ \\t]"; // space or tab

@@ -2,8 +2,9 @@ package er.ajax;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jabsorb.JSONSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -33,7 +34,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute
  */
 public class AjaxUtils {
-	private final static Logger log = Logger.getLogger(AjaxUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(AjaxUtils.class);
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
 	/**
@@ -619,7 +620,7 @@ public class AjaxUtils {
 				}
 			}
 			catch (Exception e) {
-				log.error(e);
+				log.error("Could not parse value '{}'", value, e);
 				value = null;
 			}
 		}

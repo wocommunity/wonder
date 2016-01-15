@@ -4,7 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -19,10 +20,7 @@ import er.pdf.builder.PDFBuilder;
 import er.pdf.builder.PDFBuilderFactory;
 
 public class ERPDFUtilities {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(ERPDFUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERPDFUtilities.class);
 
   private ERPDFUtilities() {
     // Utility class. Don't instantiate
@@ -151,10 +149,7 @@ public class ERPDFUtilities {
 	 * @throws Throwable java.io.IOException 
 	 */
 	public static NSData xml2Fop2Pdf(String xml, String fopxsl, NSDictionary<String, Object> config) throws Throwable {
-		if (logger.isDebugEnabled()) {
-			logger.debug("xml2Fop2Pdf(String xml (length)=" + xml.length() + ", String fopxsl=" + fopxsl + ", NSDictionary<String,Object> config=" + config + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		}
-
+		log.debug("xml2Fop2Pdf(String xml (length)={}, String fopxsl={}, NSDictionary<String,Object> config={}) - start", xml.length(), fopxsl, config);
 
 		NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
 		FOPBuilder fopb = FOPBuilderFactory.newBuilder();
@@ -166,12 +161,10 @@ public class ERPDFUtilities {
 			fopb.createDocument(os);
 			os.close();
 			NSData returnNSData = new NSData(os.toByteArray());
-			if (logger.isDebugEnabled()) {
-				logger.debug("xml2Fop2Pdf(String, String, NSDictionary<String,Object>) - end - return value=" + returnNSData); //$NON-NLS-1$
-			}
+			log.debug("xml2Fop2Pdf(String, String, NSDictionary<String,Object>) - end - return value={}", returnNSData);
 			return returnNSData;
 		} catch (java.io.IOException e) {
-			logger.error("xml2Fop2Pdf(String, String, NSDictionary<String,Object>)", e); //$NON-NLS-1$
+			log.error("xml2Fop2Pdf(String, String, NSDictionary<String,Object>)", e);
 
 			throw com.webobjects.foundation.NSForwardException._runtimeExceptionForThrowable(e);
 		}

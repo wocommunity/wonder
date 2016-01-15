@@ -2,7 +2,8 @@ package er.directtoweb.assignments.defaults;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -29,8 +30,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    static final Logger log = Logger.getLogger(ERDDefaultDisplayNameAssignment.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDDefaultDisplayNameAssignment.class);
 
     /** holds the dependent keys of the assignment */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
@@ -169,7 +169,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
                 taskName = pageConfiguration.substring(2,pageConfiguration.indexOf("__",3));
             }
             String entityName = (String)c.valueForKeyPath("entity.name");
-            log.debug(pageConfiguration + ": task=" + taskName +  ", entity=" + entityName);
+            log.debug("{}: task={}, entity={}", pageConfiguration, taskName, entityName);
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
         String localizerKey = "Pages." + pageConfiguration;
@@ -197,7 +197,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
 		String formerResult = ERXLocalizer.currentLocalizer().localizedStringForKey(result);
 		if(formerResult != null) {
 			result = formerResult;
-			log.info("Found an old-style entry: " + localizerKey +"->" + formerResult);
+			log.info("Found an old-style entry: {}->{}", localizerKey, formerResult);
 		}
 		ERXLocalizer.currentLocalizer().takeValueForKey(result, localizerKey);
 		return result;

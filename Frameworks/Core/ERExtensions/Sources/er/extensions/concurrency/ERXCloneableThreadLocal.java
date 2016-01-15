@@ -9,7 +9,8 @@ package er.extensions.concurrency;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXUtilities;
@@ -22,9 +23,7 @@ import er.extensions.foundation.ERXUtilities;
  * interface and have a public <code>clone</code> method.
  */
 public class ERXCloneableThreadLocal extends InheritableThreadLocal {
-
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXCloneableThreadLocal.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXCloneableThreadLocal.class);
 
     /**
      * Clones a copy of the parent object for the child thread.
@@ -48,14 +47,13 @@ public class ERXCloneableThreadLocal extends InheritableThreadLocal {
                 Method m = parentValue.getClass().getMethod("clone", ERXConstant.EmptyClassArray);
                 child = m.invoke(parentValue, ERXConstant.EmptyObjectArray);
             } catch (InvocationTargetException ite) {
-                log.error("Invocation exception occurred when invoking clone in ERXClonableThreadLocal:" 
-                        + ite.getTargetException() + " backtrace: " + ERXUtilities.stackTrace(ite.getTargetException()));
+                log.error("Invocation exception occurred when invoking clone in ERXClonableThreadLocal: {} backtrace: {}",
+                        ite.getTargetException(), ERXUtilities.stackTrace(ite.getTargetException()));
             } catch (NoSuchMethodException nsme) {
-                log.error("No clone method for the class: " + parentValue.getClass() + " very strange.");
+                log.error("No clone method for the class: {} very strange.", parentValue.getClass());
             } catch (IllegalAccessException iae) {
-                log.error("Clone method has protected or private access for the object: "
-                        + parentValue.getClass() + " " + parentValue.toString() 
-                        + " exception: " + iae.getMessage());
+                log.error("Clone method has protected or private access for the object: {} {}",
+                        parentValue.getClass(), parentValue, iae);
             }
         }            
         return child;

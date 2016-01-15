@@ -9,7 +9,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
@@ -28,7 +29,7 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 public class ERXTcpIp {
 
-	protected static final Logger log = Logger.getLogger(ERXTcpIp.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXTcpIp.class);
 
 	//********************************************************************
 	//	プロパティー
@@ -260,8 +261,7 @@ public class ERXTcpIp {
 			try {
 				// プロパティーがなければ、自動設定を行う
 				if(ERXStringUtilities.stringIsNullOrEmpty(machineIp)){
-					if(log.isDebugEnabled())
-						log.debug("MachineIp Automatic Mode");
+					log.debug("MachineIp Automatic Mode");
 
 					// マシンIPを得る
 					if(ERXArrayUtilities.arrayIsNullOrEmpty(_machineIpList))
@@ -278,7 +278,7 @@ public class ERXTcpIp {
 						// 使用する IP をセットします
 						_machineIpList = new NSArray<String>( new String[] {noIpAndNoNetwork});
 
-						log.warn("No IpAddress --- no network! use Address : " + noIpAndNoNetwork);
+						log.warn("No IpAddress --- no network! use Address : {}", noIpAndNoNetwork);
 					}
 				} else {
 					// 使用する IP をセットします
@@ -286,13 +286,13 @@ public class ERXTcpIp {
 				}
 			} catch (Exception e) {
 				// ここでの処理失敗は致命的
-				log.fatal( "getIpAddress error!!!" );
+				log.error( "getIpAddress error!!!" );
 
 				_machineIpList = new NSArray<String>( new String[] {LOCAL_IP_ADDRESS});
 			}
 
 			if(log.isInfoEnabled())
-				log.info( "MachineIp " + ERXArrayUtilities.arrayToLogstring(_machineIpList) + " is in use.");
+				log.info( "MachineIp {} is in use.", ERXArrayUtilities.arrayToLogstring(_machineIpList));
 		}
 
 		return _machineIpList;

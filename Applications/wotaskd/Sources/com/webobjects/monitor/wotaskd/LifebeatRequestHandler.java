@@ -15,7 +15,8 @@ SUCH DAMAGE.
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -28,9 +29,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.monitor._private.MInstance;
 
 public class LifebeatRequestHandler extends WORequestHandler {
-    
-    private static final Logger log = Logger.getLogger(LifebeatRequestHandler.class);
-    
+    private static final Logger log = LoggerFactory.getLogger(LifebeatRequestHandler.class);
     
     InetAddress myInetAddress;
     String myName;
@@ -82,7 +81,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         NSArray values = NSArray.componentsSeparatedByString(aRequest.queryString(), "&");
         if ( (values == null) || (values.count() != 4) ) {
             theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-            log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
+            log.error("{}: Received bad lifebeat: {}", myName, aRequest.queryString());
         } else {
             String notificationType = (String)values.objectAtIndex(0);
             String instanceName = (String)values.objectAtIndex(1);
@@ -115,7 +114,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 aResponse = null;
             } else {
                 theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-                log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
+                log.error("{}: Received bad lifebeat: {}", myName, aRequest.queryString());
             }
         }
         if ("HTTP/1.0".equals(aRequest.httpVersion())) {
@@ -129,7 +128,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         try {
            return InetAddress.getByName(name);
         } catch (UnknownHostException uhe) {
-            log.error("Unknown host: " + name);
+            log.error("Unknown host: {}", name);
         }
         return null;
     }

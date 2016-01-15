@@ -11,7 +11,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOSession;
@@ -34,9 +35,7 @@ import er.extensions.appserver.ERXApplication;
  * @version $Id$
  */
 public class ERMailUtils {
-
-	/** The class logger. */
-	private static Logger log = Logger.getLogger(ERMailUtils.class);
+	private static final Logger log = LoggerFactory.getLogger(ERMailUtils.class);
 
 	/** 
 	 * <div class="en">
@@ -149,7 +148,7 @@ public class ERMailUtils {
 		catch (javax.mail.MessagingException e) {
 			// we must handle this exception correctly because the
 			// mail cannot be sent
-			log.warn("While trying to sendMail: ", e);
+			log.warn("Could not send email.", e);
 		}
 		finally {
 			// We need to force the termination of the sessions
@@ -216,9 +215,7 @@ public class ERMailUtils {
 			String key = (String) en.nextElement();
 			Object object = dict.objectForKey(key);
 			if (object != null) {
-				if (log.isDebugEnabled()) {
-					log.debug("Setting in session dict value '" + object.toString() + "' for key '" + key + "'");
-				}
+				log.debug("Setting in session dict value '{}' for key '{}'", object, key);
 
 				session.setObjectForKey(object, key);
 			}

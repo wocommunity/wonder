@@ -1,7 +1,8 @@
 package er.quartzscheduler.util;
 
-import org.apache.log4j.Logger;
 import org.quartz.SchedulerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ERQSSchedulerAppHelper is an helper class that helps you to shut down the scheduler when the WO application
@@ -30,7 +31,7 @@ import org.quartz.SchedulerException;
  */
 public class ERQSSchedulerAppHelper 
 {
-	protected static final Logger log = Logger.getLogger(ERQSSchedulerAppHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERQSSchedulerAppHelper.class);
 
 	 /**
      * When refusing new sessions is activated, all running threads are told to exit.
@@ -41,7 +42,7 @@ public class ERQSSchedulerAppHelper
      */
 	public static void refuseNewSessions(final boolean shouldRefuse)
     {
-    	log.info("method: refuseNewSessions called with " + shouldRefuse);
+    	log.info("method: refuseNewSessions called with {}", shouldRefuse);
     	if (shouldRefuse && ERQSSchedulerServiceFrameworkPrincipal.schedulerMustRun())
     	{
     		ERQSSchedulerServiceFrameworkPrincipal.getSharedInstance().deleteAllJobs();

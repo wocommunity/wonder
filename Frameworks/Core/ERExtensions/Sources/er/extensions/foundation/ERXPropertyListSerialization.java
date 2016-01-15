@@ -40,6 +40,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -129,7 +131,7 @@ import com.webobjects.foundation._NSUtilities;
  * @see PListFormat#NSPropertyListXMLFormat_v1_0
  */
 public class ERXPropertyListSerialization {
-	static org.apache.log4j.Logger	logger							= org.apache.log4j.Logger.getLogger(ERXPropertyListSerialization.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXPropertyListSerialization.class);
 
 	/**
 	 *
@@ -232,7 +234,7 @@ public class ERXPropertyListSerialization {
 	 * This class is intentionally undocumented
 	 */
 	public static class _XML extends _PListParser {
-		private static org.apache.log4j.Logger	logger2	= org.apache.log4j.Logger.getLogger(_XML.class);
+		private static final Logger log = LoggerFactory.getLogger(_XML.class);
 
 		/**
 		 *
@@ -249,7 +251,7 @@ public class ERXPropertyListSerialization {
 		 */
 		@SuppressWarnings("unqualified-field-access")
 		public static class DictionaryParser extends DefaultHandler {
-			private static org.apache.log4j.Logger	logger1							= org.apache.log4j.Logger.getLogger(DictionaryParser.class);
+			private static final Logger log = LoggerFactory.getLogger(DictionaryParser.class);
 
 			static String							PUBLIC_APPLE_COMPUTER_PLIST_1_0	= "-//Apple Computer//DTD PLIST 1.0//EN";
 
@@ -734,13 +736,13 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public void error(SAXParseException exception) throws SAXException {
-				logger1.error("Parse error : ", exception);
+				log.error("Parse error : ", exception);
 				// throw exception;
 			}
 
 			@Override
 			public void fatalError(SAXParseException exception) throws SAXException {
-				logger1.error("Parse fatal error : ", exception);
+				log.error("Parse fatal error : ", exception);
 				throw exception;
 			}
 
@@ -872,7 +874,7 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public void warning(SAXParseException exception) throws SAXException {
-				logger1.warn("Parse warning : ", exception);
+				log.warn("Parse warning : ", exception);
 				// throw exception;
 			}
 
@@ -919,7 +921,7 @@ public class ERXPropertyListSerialization {
 				try {
 					_parserFactory = SAXParserFactory.newInstance();
 				} catch (Exception exception) {
-					logger2.warn("Exception ", exception);
+					log.warn("Exception ", exception);
 				}
 			}
 			return _parserFactory;
@@ -933,7 +935,7 @@ public class ERXPropertyListSerialization {
 				try {
 					return _XML.parserFactory().newSAXParser();
 				} catch (Exception exception) {
-					logger2.warn("Exception ", exception);
+					log.warn("Exception ", exception);
 				}
 			}
 			return null;
@@ -947,7 +949,7 @@ public class ERXPropertyListSerialization {
 				if (parser != null)
 					parser.parse(new InputSource(new StringReader(string)), dictionaryParser);
 			} catch (SAXException exception) {
-				logger2.warn("Exception ", exception);
+				log.warn("Exception ", exception);
 				if (exception instanceof SAXParseException) {
 					throw new RuntimeException("Parsing failed in line " + ((SAXParseException) exception).getLineNumber() + ", column "
 							+ ((SAXParseException) exception).getColumnNumber(), exception);
@@ -1731,7 +1733,7 @@ public class ERXPropertyListSerialization {
 				// ts = new NSTimestamp(_dateFormat.parse(theString));
 				// aobj[0] = ts;
 				// } catch (ParseException e) {
-				// logger.error("Failed to parse JSON date string " + theString + " returning raw string instead.", e);
+				// logger.error("Failed to parse JSON date string {} returning raw string instead.", theString, e);
 				// aobj[0] = theString;
 				// }
 				// } else {
@@ -1768,7 +1770,7 @@ public class ERXPropertyListSerialization {
 							aobj[0] = new BigInteger(theString);
 						}
 					} catch (Exception exception) {
-						logger.error("Exception ", exception);
+						log.error("Exception ", exception);
 						aobj[0] = theString;
 					}
 				}
@@ -1976,7 +1978,7 @@ public class ERXPropertyListSerialization {
 							+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT || ac[aBufferIndex] != ':') {
-					logger.info("Exception for key=" + aobj[0] + " with unparsed values=" + new StringBuilder().append(ac, aBufferIndex, ac.length - aBufferIndex));
+					log.info("Exception for key={} with unparsed values={}", aobj[0], new StringBuilder().append(ac, aBufferIndex, ac.length - aBufferIndex));
 
 					throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read dictionary. Read key " + aobj[0] + " with no value. At line number: " + _lineNumber
 							+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".  Parsed '" + ac[aBufferIndex] + "' instead.");
@@ -3336,13 +3338,13 @@ public class ERXPropertyListSerialization {
 				for (int i = 0; i < _keyref.length; i++) {
 
 					if (_keyref[i] < 0 || _keyref[i] >= _objectTable.size()) {
-						logger.error("Object table is in illegal state.  The key reference " + i + " is larger than the object table size " + _objectTable.size());
+						log.error("Object table is in illegal state.  The key reference {} is larger than the object table size {}", i, _objectTable.size());
 					} else if (_objectTable.get(_keyref[i]) == this) {
-						logger.warn("Encountered reference to 'self' in object table.");
+						log.warn("Encountered reference to 'self' in object table.");
 					}
 					String key = (String) _objectTable.get(_keyref[i]);
 					if (_objref[i] < 0 || _objref[i] >= _objectTable.size()) {
-						logger.error("Object table is in illegal state.  The object reference " + i + " is larger than the object table size " + _objectTable.size());
+						log.error("Object table is in illegal state.  The object reference {} is larger than the object table size {}", i, _objectTable.size());
 					}
 					Object value = _objectTable.get(_objref[i]);
 
@@ -3886,7 +3888,7 @@ public class ERXPropertyListSerialization {
 		 */
 		public void writePropertyListToStream(Object plist, OutputStream out) {
 			if (plist == null || out == null) {
-				logger.warn("Encountered empty plist or null outputstream, returning");
+				log.warn("Encountered empty plist or null outputstream, returning");
 				return;
 			}
 
@@ -3999,7 +4001,7 @@ public class ERXPropertyListSerialization {
 		 */
 		protected Object _propertyListWithStream(InputStream is) throws IOException {
 			if (is == null) {
-				logger.error("The stream paramenter cannot be null.");
+				log.error("The stream paramenter cannot be null.");
 				return null;
 			}
 
@@ -4028,7 +4030,7 @@ public class ERXPropertyListSerialization {
 
 		public Document propertyListDocumentWithURL(URL url) {
 			if (url == null) {
-				logger.error("URL paramenter cannot be null");
+				log.error("URL paramenter cannot be null");
 				return null;
 			}
 
@@ -4050,7 +4052,7 @@ public class ERXPropertyListSerialization {
 		
 		public Document propertyListDocumentWithStream(InputStream is) {
 			if (is == null) {
-				logger.error("InputStream paramenter cannot be null");
+				log.error("InputStream paramenter cannot be null");
 				return null;
 			}
 
@@ -4181,29 +4183,29 @@ public class ERXPropertyListSerialization {
 
 			// validate trailer
 			if (numObjects < 1) {
-				logger.error("numObjects < 1");
+				log.error("numObjects < 1");
 				return false;
 			}
 			if (offsetTableOffset < 9) {
-				logger.error("offsetTableOffset < 9");
+				log.error("offsetTableOffset < 9");
 				return false;
 			}
 			if (offsetIntSize < 1) {
-				logger.error("offsetIntSize < 1");
+				log.error("offsetIntSize < 1");
 				return false;
 			}
 			if (objectRefSize < 1) {
-				logger.error("objectRefSize < 1");
+				log.error("objectRefSize < 1");
 				return false;
 			}
 			if (offsetTableOffset < 1) {
-				logger.error("offsetTableOffset < 1");
+				log.error("offsetTableOffset < 1");
 				return false;
 			}
 			int numberOfBytes = (int) offsetIntSize;
 			int expectedLength = (int) (offsetTableOffset + (numObjects * numberOfBytes) + 32);
 			if (theBytes.length != expectedLength) {
-				logger.error("bytes read do not correspond to the expected: " + expectedLength + " got: " + theBytes.length);
+				log.error("bytes read do not correspond to the expected: {} got: {}", expectedLength, theBytes.length);
 				return false;
 			}
 
@@ -4494,13 +4496,13 @@ public class ERXPropertyListSerialization {
 		 */
 		private void parseObject(byte[] bytes, int startIndex) throws IOException {
 			int marker = (int) readByte(bytes, startIndex);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Marker=" + marker + " marker & 0xf0=" + (marker & 0xf0) + " (marker & 0xf0) >> 4)=" + ((marker & 0xf0) >> 4));
+			if (log.isDebugEnabled()) {
+				log.debug("Marker={} marker & 0xf0={} (marker & 0xf0) >> 4)={}", marker, (marker & 0xf0), ((marker & 0xf0) >> 4));
 			}
 
 			Type typeMarker = Type.typeForValue(marker & 0xf0);
 			if (typeMarker == null) {
-				logger.warn("Failed to translate binary plist marker " + marker);
+				log.warn("Failed to translate binary plist marker {}", marker);
 				return;
 			}
 			long count = marker & 0x0f;
@@ -4575,14 +4577,14 @@ public class ERXPropertyListSerialization {
 					break;
 				}
 				default: {
-					logger.debug("Fall through: Marker=" + marker + " marker & 0xf0=" + (marker & 0xf0) + " (marker & 0xf0) >> 4)=" + ((marker & 0xf0) >> 4));
-					logger.warn("Failed to translate binary plist marker " + typeMarker);
+					log.debug("Fall through: Marker={} marker & 0xf0={} (marker & 0xf0) >> 4)={}", marker, (marker & 0xf0), ((marker & 0xf0) >> 4));
+					log.warn("Failed to translate binary plist marker {}", typeMarker);
 				}
 			}
 		}
 
-		static void debugLog(String log) {
-			logger.info(log);
+		static void debugLog(String message) {
+			log.info(message);
 		}
 
 		/**
@@ -4812,8 +4814,8 @@ public class ERXPropertyListSerialization {
 			NSTimestamp ts = new NSTimestamp((long)((date + kCFAbsoluteTimeIntervalSince1970) * 1000));
 			// objectTable.add(new Date(ts.getTime()));
 			objectTable.add(ts);
-			if (logger.isDebugEnabled()) {
-				logger.info("parseDate double=" + date + " long date=" + (long) date + " timestamp=" + ts + " converted=" + new Date(ts.getTime()));
+			if (log.isDebugEnabled()) {
+				log.info("parseDate double={} long date={} timestamp={} converted={}", date, (long) date, ts, new Date(ts.getTime()));
 			}
 		}
 

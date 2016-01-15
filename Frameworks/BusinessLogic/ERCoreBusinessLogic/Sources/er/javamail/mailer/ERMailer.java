@@ -11,7 +11,8 @@ import java.util.Enumeration;
 
 import javax.mail.MessagingException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -47,8 +48,7 @@ public class ERMailer {
     //	Class Constant(s)
     //	---------------------------------------------------------------------------    
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERMailer.class);
+    private final static Logger log = LoggerFactory.getLogger(ERMailer.class);
 
     //	===========================================================================
     //	Class Variable(s)
@@ -131,8 +131,7 @@ public class ERMailer {
      * messages.
      */
     public void processOutgoingMail() {
-        if (log.isDebugEnabled())
-            log.debug("Starting outgoing mail processing.");
+        log.debug("Starting outgoing mail processing.");
         ERXFetchSpecificationBatchIterator iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages();
 
         EOEditingContext ec = ERXEC.newEditingContext();
@@ -155,8 +154,7 @@ public class ERMailer {
             }
             temp.dispose();
         }
-        if (log.isDebugEnabled())
-            log.debug("Done outgoing mail processing.");
+        log.debug("Done outgoing mail processing.");
     }
     
     /**
@@ -165,7 +163,7 @@ public class ERMailer {
      */
     public void sendMailMessages(NSArray mailMessages) {
         if (mailMessages.count() > 0) {
-            log.info("Sending " + mailMessages.count() + " mail message(s).");
+            log.info("Sending {} mail message(s).", mailMessages.count());
             for (Enumeration messageEnumerator = mailMessages.objectEnumerator();
                  messageEnumerator.hasMoreElements();) {
                 ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
@@ -174,8 +172,7 @@ public class ERMailer {
                     continue;
                 }
 
-                if (log.isDebugEnabled())
-                    log.debug("Sending mail message: " + mailMessage);
+                log.debug("Sending mail message: {}", mailMessage);
 
                 try {
                     ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
@@ -198,7 +195,7 @@ public class ERMailer {
                             }
                         }
                     } else {
-                        log.warn("Unable to create mail delivery for mail message: " + mailMessage);
+                        log.warn("Unable to create mail delivery for mail message: {}", mailMessage);
                     }
                 } catch (EOGeneralAdaptorException ge) {
                     if ( _warnOnGeneralAdaptorExceptionLockingMessage )
@@ -207,8 +204,8 @@ public class ERMailer {
                 } catch (Throwable e) {
                     if (e instanceof NSForwardException)
                         e = ((NSForwardException)e).originalException();
-                    log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e));
-                    log.warn("Message trying to send: " + mailMessage + " pk: " + mailMessage.primaryKey());
+                    log.warn("Caught exception when sending mail.", e);
+                    log.warn("Message trying to send: {} pk: {}", mailMessage, mailMessage.primaryKey());
                     
                     // ENHANCEME: Need to implement a waiting state to retry sending mails.
                     mailMessage.setState(ERCMailState.EXCEPTION_STATE);

@@ -5,7 +5,8 @@ import java.io.StringReader;
 import java.util.Enumeration;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.xml.WOXMLCoder;
@@ -27,7 +28,7 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class DRReportModel {
-    private static Logger log = Logger.getLogger(DRReportModel.class);
+    private static final Logger log = LoggerFactory.getLogger(DRReportModel.class);
 
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
     public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";
@@ -144,7 +145,7 @@ public class DRReportModel {
         if (rawpossVals instanceof String) {
             WOXMLDecoder decoder = WOXMLDecoder.decoder();
             String xmlString = new String(Base64.decodeBase64((String) rawpossVals));
-            log.info("xmlString: " + xmlString);
+            log.info("xmlString: {}", xmlString);
             StringReader stringReader = new StringReader(xmlString);
             InputSource is = new InputSource(stringReader);
             // invoke setEncoding (on the input source) if the XML contains multibyte characters
@@ -379,8 +380,8 @@ public class DRReportModel {
         flatListForAttributeList();
         log.debug("ABOUT TO GET flatListForAttributeListTotals");
         flatListForAttributeListTotals();
-        log.debug("flatAttributeList: "+ _flatAttributeList);
-        log.debug("flatAttributeListTotal: "+_flatAttributeListTotal);
+        log.debug("flatAttributeList: {}", _flatAttributeList);
+        log.debug("flatAttributeListTotal: {}", _flatAttributeListTotal);
         buildGrandTotal();
         buildOrderings();
         

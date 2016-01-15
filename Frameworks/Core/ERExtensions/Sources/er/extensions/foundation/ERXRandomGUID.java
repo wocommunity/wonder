@@ -11,7 +11,8 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -124,7 +125,7 @@ import org.apache.log4j.Logger;
  */
 @Deprecated
 public class ERXRandomGUID {
-    private static Logger log = Logger.getLogger(ERXRandomGUID.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXRandomGUID.class);
     public String valueBeforeMD5 = "";
     public String valueAfterMD5 = "";
     private static Random myRand;
@@ -146,7 +147,7 @@ public class ERXRandomGUID {
         try {
             s_id = InetAddress.getLocalHost().toString();
         } catch (UnknownHostException e) {
-            log.error(e, e);
+            log.error("Could not determine local IP address.", e);
         }
 
     }
@@ -187,7 +188,7 @@ public class ERXRandomGUID {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            log.error(e, e);
+            log.error("Missing MD5 classes.", e);
             valueBeforeMD5 = "";
             valueAfterMD5 = "";
             return;
@@ -230,7 +231,7 @@ public class ERXRandomGUID {
             valueAfterMD5 = sb.toString();
 
         } catch (Exception e) {
-            log.error(e, e);
+            log.error("Could not produce GUID.", e);
         }
     }
 

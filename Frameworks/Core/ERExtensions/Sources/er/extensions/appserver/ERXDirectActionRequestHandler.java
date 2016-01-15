@@ -6,7 +6,8 @@
 //
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -28,9 +29,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXMessageEncoding.Enabled
  */
 public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDirectActionRequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXDirectActionRequestHandler.class);
 
     /** caches if automatic message encoding is enabled, defaults to true */
     protected static Boolean automaticMessageEncodingEnabled;
@@ -92,7 +91,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                     }
                 }
             } catch (Exception e) {
-                log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: " + request, e);
+                log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: {}", request, e);
             } 
         }
 		if (response == null) {
@@ -135,7 +134,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             try {
                 ERXWOResponseCache.sharedInstance().cacheResponseForRequest(actionClass, actionName, request, response);
             } catch (Exception e) {
-                log.error("Caught exception when caching response. Request: " + request, e);
+                log.error("Caught exception when caching response. Request: {}", request, e);
             }
         }
         if (automaticMessageEncodingEnabled()) {

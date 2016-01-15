@@ -2,7 +2,8 @@ package er.extensions.migration;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOModel;
@@ -40,11 +41,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * @author cug
  */
 public abstract class ERXMigration implements IERXMigration {
-
-	/**
-	 * Logging support
-	 */
-	private Logger log = Logger.getLogger(ERXMigration.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(ERXMigration.class);
 	
 	private Boolean _useDatabaseSpecificMigrations;
 
@@ -80,7 +77,7 @@ public abstract class ERXMigration implements IERXMigration {
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + getClass().getName());
+			log.info("Applying migration for: {}", getClass());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
@@ -106,7 +103,7 @@ public abstract class ERXMigration implements IERXMigration {
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + getClass().getName());
+			log.info("Applying migration for: {}", getClass());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
@@ -144,7 +141,7 @@ public abstract class ERXMigration implements IERXMigration {
 						return new String(bundle.bytesForResourcePath(currentPath), _NSStringUtilities.UTF8_ENCODING);
 					}
 					catch (UnsupportedEncodingException e) {
-						log.error(e, e);
+						log.error("Could not use UTF-8 encoding.", e);
 					}
 				}
 			}

@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.directtoweb;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
@@ -17,7 +18,7 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
 
-    private static Logger log = Logger.getLogger(ERD2WUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WUtilities.class);
 
     public static void finalizeContext(D2WContext context) {
         if (context != null)
@@ -65,7 +66,7 @@ public class ERD2WUtilities {
                     }
                 } catch (NSKeyValueCoding.UnknownKeyException e) {
                     if (log.isDebugEnabled()) {
-                        log.debug("keyPath "+keyPath+" is not available for context with entity: "+c.entity().name() + "; task: " + c.task());
+                        log.debug("keyPath {} is not available for context with entity: {}; task: {}", keyPath, c.entity().name(), c.task());
                     }
                     return null;
                 }

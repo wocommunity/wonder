@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
@@ -33,6 +36,8 @@ import er.extensions.jdbc.ERXSQLHelper.CustomTypes;
  * @author mschrag
  */
 public class ERXMigrationTable {
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
+
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
 	private NSMutableArray<ERXMigrationIndex> _indexes;
@@ -953,7 +958,7 @@ public class ERXMigrationTable {
 			_new = false;
 		}
 		else {
-			ERXMigrationDatabase.log.warn("You called .create() on the table '" + _name + "', but it was already created.");
+			log.warn("You called .create() on the table '{}', but it was already created.", _name);
 		}
 	}
 

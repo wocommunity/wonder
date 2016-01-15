@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObjectStore;
@@ -30,9 +31,7 @@ public class ERXEditingContextDelegate implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** general logging support */
-    public static final Logger log = Logger
-            .getLogger(ERXEditingContextDelegate.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXEditingContextDelegate.class);
 
     /**
      * No arg constructor for Serializable.
@@ -77,7 +76,7 @@ public class ERXEditingContextDelegate implements java.io.Serializable {
         if (!(delegate instanceof ERXEditingContextDelegate)) {
             boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
             if(!_raiseOnMissingEditingContextDelegate) {
-                log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
+                log.warn("Found unexpected delegate class: {}", delegate.getClass());
                 return true;
             }
             throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");

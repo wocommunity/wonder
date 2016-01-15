@@ -1,7 +1,8 @@
 
 package org.ganymede.ui;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -15,8 +16,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.components.ERXComponent;
 
 public class AddResultsPage extends ERXComponent {
-
-    private final Logger log = Logger.getLogger(AddResultsPage.class);
+    private static final Logger log = LoggerFactory.getLogger(AddResultsPage.class);
 
     public AddResultsPage(WOContext context) {
         super(context);
@@ -35,7 +35,7 @@ public class AddResultsPage extends ERXComponent {
 
         NSMutableArray<String> resultLines = new NSMutableArray<String>();
 
-        log.debug("boxResults lines # "+lines.size());
+        log.debug("boxResults lines # {}", lines.size());
         for (String line : lines) {
             line = line.replace("[java]", "");
             line = line.trim();

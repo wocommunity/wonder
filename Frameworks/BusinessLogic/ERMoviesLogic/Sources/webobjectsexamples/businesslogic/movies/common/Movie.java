@@ -1,6 +1,7 @@
 package webobjectsexamples.businesslogic.movies.common;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
@@ -9,7 +10,7 @@ import er.taggable.ERTaggable;
 import er.taggable.ERTaggableEntity;
 
 public class Movie extends _Movie {
-  private static Logger log = Logger.getLogger(Movie.class);
+  private static final Logger log = LoggerFactory.getLogger(Movie.class);
   
 	public ERTaggable<Movie> taggable() {
         return ERTaggable.taggable(this);
@@ -21,9 +22,7 @@ public class Movie extends _Movie {
     
     @SuppressWarnings("all")
     public String content() {
-    	if (log.isDebugEnabled()) {
-    		log.debug( "Movie.searchableContent: " + title() );
-    	}
+    	log.debug("Movie.searchableContent: {}", title());
     	StringBuilder buffer = new StringBuilder();
     	
     	buffer.append(title());
@@ -48,9 +47,7 @@ public class Movie extends _Movie {
 			buffer.append(talentNamesString);
 			buffer.append(' ');
 		}
-		if (log.isDebugEnabled()) {
-			log.debug( "Movie.content: " + buffer );
-		}
+		log.debug( "Movie.content: {}", buffer );
     	return buffer.toString();
     }
 }

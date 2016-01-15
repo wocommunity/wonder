@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -44,9 +45,7 @@ import er.extensions.eof.ERXReplicableInterface;
  * split into more meaning full groups of utility methods.
  */
 public class ERXUtilities {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXUtilities.class);
 
     /**
      * Utility method for returning all of the primary keys for
@@ -155,7 +154,7 @@ public class ERXUtilities {
             if (bundle.name() != null)
                 frameworkNames.addObject(bundle.name());
             else
-                log.warn("Null framework name for bundle: " + bundle);
+                log.warn("Null framework name for bundle: {}", bundle);
         }
         return frameworkNames;
     }

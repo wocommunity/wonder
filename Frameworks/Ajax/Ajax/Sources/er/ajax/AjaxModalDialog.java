@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -161,8 +162,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	private WOComponent previousComponent;
 	private String ajaxComponentActionUrl;
 	
-	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(AjaxModalDialog.class);
 
 	public AjaxModalDialog(WOContext context) {
 		super(context);
@@ -504,11 +504,11 @@ public class AjaxModalDialog extends AjaxComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (context.isInForm()) {
-			logger.warn("The AjaxModalDialog should not be used inside of a WOForm (" + ERXWOForm.formName(context, "- not specified -") +
+			log.warn("The AjaxModalDialog should not be used inside of a WOForm ({}" +
 					") if it contains any form inputs or buttons.  Remove this AMD from this form, add a form of its own. Replace it with " +
-					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.");
-					logger.warn("    page: " + context.page());
-					logger.warn("    component: " + context.component());
+					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.", ERXWOForm.formName(context, "- not specified -"));
+					log.warn("    page: {}", context.page());
+					log.warn("    component: {}", context.component());
 		}
 		
 		if( ! booleanValueForBinding("enabled", true)) {
@@ -784,7 +784,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			hasWarnedOnNesting = true;
 			if (! ERXComponentUtilities.booleanValueForBinding(this, "ignoreNesting", false))
 			{
-				logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+				log.warn("AjaxModalDialog {} is nested inside of {}. Are you sure you want to do this?", id(), outerDialog.id());
 			}
 		}		
 	}

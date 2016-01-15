@@ -23,12 +23,13 @@
 
 package er.selenium.io;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class SeleniumImporterExporterFactory {
-	private static final Logger log = Logger.getLogger(SeleniumImporterExporterFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumImporterExporterFactory.class);
 	private static SeleniumImporterExporterFactory _instance = null;
 	
 	public static SeleniumImporterExporterFactory instance() {
@@ -45,13 +46,13 @@ public class SeleniumImporterExporterFactory {
 	protected static NSMutableDictionary _exportersByNameMap = new NSMutableDictionary();
 	
 	public void registerImporter(String extension, SeleniumTestImporter importer) {
-		log.debug("Registering importer '" + importer.name() + "' for extension '" + extension + "'");
+		log.debug("Registering importer '{}' for extension '{}'", importer.name(), extension);
 		_importersByExtensionMap.setObjectForKey(importer, extension);
 		_importersByNameMap.setObjectForKey(importer, importer.name());
 	}
 	
 	public void registerExporter(SeleniumTestExporter exporter) {
-		log.debug("Registering exporter '" + exporter.name() + "'");
+		log.debug("Registering exporter '{}'", exporter.name());
 		_exportersByNameMap.setObjectForKey(exporter, exporter.name());
 	}
 	

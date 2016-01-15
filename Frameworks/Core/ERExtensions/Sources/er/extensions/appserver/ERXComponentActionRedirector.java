@@ -1,6 +1,7 @@
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -125,9 +126,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * @author ak
  *  */
 public class ERXComponentActionRedirector {
-
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXComponentActionRedirector.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXComponentActionRedirector.class);
 
     /** implemented by the pages that want to be restorable */
     public static interface Restorable {
@@ -163,9 +162,7 @@ public class ERXComponentActionRedirector {
             }
             sessionRef.setObjectForKey(redirector, redirector.url());
         }
-        if(log.isDebugEnabled()) {
-            log.debug("Stored URL: " + redirector.url());
-        }
+        log.debug("Stored URL: {}", redirector.url());
     }
 
     /**
@@ -177,13 +174,9 @@ public class ERXComponentActionRedirector {
             redirector = (ERXComponentActionRedirector)responses.valueForKeyPath(request.sessionID() + "." + request.uri());
         }
         if(redirector != null) {
-            if(log.isDebugEnabled()) {
-                log.debug("Retrieved URL: " + redirector.url());
-            }
+            log.debug("Retrieved URL: {}", redirector.url());
         } else {
-            if(log.isDebugEnabled()) {
-                log.debug("No Redirector for request: " + request.uri());
-            }
+            log.debug("No Redirector for request: {}", request.uri());
         }
         return redirector;
     }
@@ -200,7 +193,7 @@ public class ERXComponentActionRedirector {
                     ERXComponentActionRedirector r = new ERXComponentActionRedirector((Restorable)component);
                     ERXComponentActionRedirector.storeRedirector(r);
                 } else {
-                    log.debug("Not restorable: " + context.request().uri() + ", " + component);
+                    log.debug("Not restorable: {}, {}", context.request().uri(), component);
                 }
             }
         }

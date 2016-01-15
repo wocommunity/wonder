@@ -2,8 +2,6 @@ package er.coolcomponents;
 
 import java.text.SimpleDateFormat;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -20,6 +18,8 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper around http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5/
@@ -65,7 +65,7 @@ public class CCDatePicker extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static final Logger log = Logger.getLogger(CCDatePicker.class);
+	private static final Logger log = LoggerFactory.getLogger(CCDatePicker.class);
 
 	public static final String FRAMEWORK_NAME = "ERCoolComponents";
 	public static final String CSS_FILENAME = "datepicker.css";

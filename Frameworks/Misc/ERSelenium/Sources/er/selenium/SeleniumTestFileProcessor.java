@@ -3,16 +3,16 @@ package er.selenium;
 import java.io.File;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXFileUtilities;
-import er.extensions.foundation.ERXUtilities;
 import er.selenium.filters.SeleniumTestFilter;
 import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumTestImporter;
 
 public class SeleniumTestFileProcessor {
-	private static final Logger log = Logger.getLogger(SeleniumTestFileProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTestFileProcessor.class);
 	
 	private final File testFile;
 	private final SeleniumTestFilter filter;
@@ -38,7 +38,7 @@ public class SeleniumTestFileProcessor {
     		}
     		return result;
     	} catch (Exception e) {
-    		log.debug(ERXUtilities.stackTrace(e));
+    		log.debug("Test import for '{}' failed.", testFile.getAbsolutePath(), e);
     		throw new RuntimeException("Test import for '" + testFile.getAbsolutePath() + "' failed.", e);
     	}
 

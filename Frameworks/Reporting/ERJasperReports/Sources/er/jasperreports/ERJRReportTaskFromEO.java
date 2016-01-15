@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.jasperreports.ERJRFoundationDataSource;
 import er.jasperreports.ERJRReportTaskFromEO;
@@ -23,8 +24,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXAssert;
 
 public class ERJRReportTaskFromEO implements Callable<File> {
-
-	private static final Logger log = Logger.getLogger(ERJRReportTaskFromEO.class);
+	private static final Logger log = LoggerFactory.getLogger(ERJRReportTaskFromEO.class);
 
 	private File reportFile;
 	private final String frameworkName;
@@ -98,8 +98,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 
 		reportFile = null;
 
-		if (log.isDebugEnabled())
-			log.debug("Starting JasperReportTask: " + this.toString());
+		log.debug("Starting JasperReportTask: {}", this);
 
 		/**
 		 * create a new editing context and work on the object there

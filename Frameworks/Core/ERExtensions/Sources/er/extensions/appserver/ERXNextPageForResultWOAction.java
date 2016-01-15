@@ -2,7 +2,8 @@ package er.extensions.appserver;
 
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -34,7 +35,7 @@ import er.extensions.eof.ERXEC;
  * @author kieran
  */
 public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction implements IERXPerformWOActionForResult {
-	private static final Logger log = Logger.getLogger(ERXNextPageForResultWOAction.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXNextPageForResultWOAction.class);
 	
 	protected Object _result;
 	protected final WOComponent _nextPage;
@@ -83,7 +84,7 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 
 	@Override
 	public WOActionResults performAction() {
-		log.debug("The result of the task was " + _result );
+		log.debug("The result of the task was {}", _result);
 		if (_nextPage != null && _nextPageResultKey != null) {
 			if (_result instanceof EOGlobalID) {
 				

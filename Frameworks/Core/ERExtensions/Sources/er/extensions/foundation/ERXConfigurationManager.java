@@ -9,7 +9,8 @@ package er.extensions.foundation;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -98,9 +99,7 @@ import er.extensions.logging.ERXLogger;
  * @property er.extensions.ERXConfigurationManager.PropertiesTouchFile if this property is set to a file name, the application will register for notifications of changes to that file and when that file is touched, the application will re-load properties.
  */
 public class ERXConfigurationManager {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXConfigurationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXConfigurationManager.class);
 
     /** 
      * Notification posted when the configuration is updated.  
@@ -265,11 +264,10 @@ public class ERXConfigurationManager {
             ERXFileNotificationCenter.defaultCenter().addObserver(this,
                                                                   new NSSelector(callbackMethod, ERXConstant.NotificationClassArray),
                                                                   path);
-            log.debug("Registered: " + path);
+            log.debug("Registered: {}", path);
         } catch (Exception ex) {
             log.error("An exception occured while registering the observer for the "
-                      + "logging configuration file: " 
-                      + ex.getClass().getName() + " " + ex.getMessage());
+                      + "logging configuration file: {} {}", ex.getClass().getName(), ex.getMessage(), ex);
         }            
     }
 
@@ -385,7 +383,7 @@ public class ERXConfigurationManager {
             try {
                 _hostName = java.net.InetAddress.getLocalHost().getHostName();
             } catch (java.net.UnknownHostException ehe) {
-                log.warn("Caught unknown host exception: " + ehe.getMessage());
+                log.warn("Caught unknown host exception.", ehe);
                 _hostName = "UnknownHost";
             }
         }

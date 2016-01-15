@@ -18,7 +18,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -89,8 +90,7 @@ public class ERXSQLHelper {
 		public static final int INET = 9001;
 	}
 	
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXSQLHelper.class);
 
 	private static Map<String, ERXSQLHelper> _sqlHelperMap = new HashMap<String, ERXSQLHelper>();
 
@@ -1083,7 +1083,7 @@ public class ERXSQLHelper {
 			}
 		}
 		catch (Exception e) {
-			ERXSQLHelper.log.error("Failed to sneakily execute adaptor.typeInfo().", e);
+			log.error("Failed to sneakily execute adaptor.typeInfo().", e);
 		}
 
 		if (externalType == null) {
@@ -1107,7 +1107,7 @@ public class ERXSQLHelper {
 			}
 			else {
 				externalType = defaultJDBCTypes.objectAtIndex(0);
-				ERXSQLHelper.log.warn("There was more than one type that in your database that maps to JDBC Type #" + jdbcType + ": " + defaultJDBCTypes + ". We guessed '" + externalType + "'. Cross your fingers.");
+				log.warn("There was more than one type that in your database that maps to JDBC Type #{}: {}. We guessed '{}'. Cross your fingers.", jdbcType, defaultJDBCTypes, externalType);
 			}
 		}
 
@@ -2448,7 +2448,7 @@ public class ERXSQLHelper {
 									databaseContext.rollbackChanges();
 									throw ex;
 								} catch (ParseException e) {
-									log.warn("Error parsing unique constraint exception message: " + message);
+									log.warn("Error parsing unique constraint exception message: {}", message, e);
 								}
 							}
 						}

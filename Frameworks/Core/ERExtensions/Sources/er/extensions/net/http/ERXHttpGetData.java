@@ -87,8 +87,7 @@ public class ERXHttpGetData extends ERXHttpDataObjectBase {
     // Set Path
     HttpGet httpget = new HttpGet(uri());
 
-    if(log.isDebugEnabled())
-      log.debug("executing request to " + targetHost);
+    log.debug("executing request to {}", targetHost);
 
     // Executes a request to the target using the default context.
     HttpResponse httpResponse = httpclient.execute(targetHost, httpget);
@@ -109,9 +108,9 @@ public class ERXHttpGetData extends ERXHttpDataObjectBase {
     }
 
     if (log.isDebugEnabled()) {
-      log.debug("Status: " + response().getStatusLine().getStatusCode());
-      log.debug("the response looks like: " + response() + "\n\n");
-      log.debug("the response entity looks like: " + html() + "\n\n");
+      log.debug("Status: {}", response().getStatusLine().getStatusCode());
+      log.debug("the response looks like: {}\n\n", response());
+      log.debug("the response entity looks like: {}\n\n", html());
     }
 
     // When HttpClient instance is no longer needed, 

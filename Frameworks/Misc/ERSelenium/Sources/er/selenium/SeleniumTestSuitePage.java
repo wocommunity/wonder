@@ -26,7 +26,8 @@ package er.selenium;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -51,7 +52,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(SeleniumTestSuitePage.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTestSuitePage.class);
 	
 	// NSProjectBundleEnabled is true if we have the newer "bundle-less builds" WOLips feature in use
 	// and that expects the FBL project layout, so the default location is different to a built runtime bundle
@@ -170,7 +171,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     			SeleniumTest test = new SeleniumTestFileProcessor(testFile, context().request().formValueForKey("noFilters") == null ? testFilter() : null).process();
     			return exporter.process(test);
     		} catch (Exception e) {
-    			log.debug(ERXUtilities.stackTrace(e));
+    			log.debug("Test export failed.", e);
     			throw new RuntimeException("Test export failed", e);
     		}
     	} else {

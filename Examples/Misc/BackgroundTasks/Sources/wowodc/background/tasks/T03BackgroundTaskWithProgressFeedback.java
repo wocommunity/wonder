@@ -3,7 +3,8 @@ package wowodc.background.tasks;
 import java.text.DecimalFormat;
 import java.text.Format;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import er.extensions.concurrency.IERXPercentComplete;
@@ -19,8 +20,7 @@ import er.extensions.foundation.IERXStatus;
  * @author kieran
  */
 public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStatus , IERXPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T03BackgroundTaskWithProgressFeedback.class);
+	private static final Logger log = LoggerFactory.getLogger(T03BackgroundTaskWithProgressFeedback.class);
 	
 	// Duration of the example task in milliseconds
 	// (For demonstration, I want predictable task run times rather than too short or too long)
@@ -51,9 +51,9 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStat
 		while (_elapsedTime < DURATION && !_isStopped) {
 
 			if (Utilities.isPrime(_numberToCheck)) {
-				log.info("==>> " + _numberToCheck + " is a PRIME number.");
+				log.info("==>> {} is a PRIME number.", _numberToCheck);
 			} else {
-				log.debug(_numberToCheck + " is not a prime number but is a COMPOSITE number.");
+				log.debug("{} is not a prime number but is a COMPOSITE number.", _numberToCheck);
 			}
 			
 			
@@ -62,8 +62,7 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStat
 			// Update progress variables
 			_percentComplete = (double)(_elapsedTime) / (double)DURATION;
 			_status = wholeNumberFormatter.format(_numberToCheck) + " numbers checked for prime qualification";
-			if (log.isDebugEnabled())
-				log.debug("_numberToCheck = " + _numberToCheck + "; _status = " + _status);
+			log.debug("_numberToCheck = {}; _status = {}", _numberToCheck, _status);
 			_numberToCheck++;
 		}
 

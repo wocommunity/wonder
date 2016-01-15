@@ -20,7 +20,8 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -66,7 +67,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak fixes
  */
 public abstract class ERMailDelivery {
-	private static final Logger log = Logger.getLogger(ERMailDelivery.class);
+	private static final Logger log = LoggerFactory.getLogger(ERMailDelivery.class);
 
 	/** JavaMail session */
 	private javax.mail.Session _session;

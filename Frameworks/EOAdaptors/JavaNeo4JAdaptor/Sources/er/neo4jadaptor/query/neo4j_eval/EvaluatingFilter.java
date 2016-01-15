@@ -1,6 +1,8 @@
 package er.neo4jadaptor.query.neo4j_eval;
 
 import org.neo4j.graphdb.PropertyContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOQualifier;
@@ -18,7 +20,7 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @param <T>
  */
 public class EvaluatingFilter<T extends PropertyContainer> implements Results<T> {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EvaluatingFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(EvaluatingFilter.class);
 
 	@SuppressWarnings("unchecked")
 	private static final EvaluationQueryConverter<?> generator = new EvaluationQueryConverter();
@@ -76,19 +78,15 @@ public class EvaluatingFilter<T extends PropertyContainer> implements Results<T>
 			
 			if (eval.evaluate(candidate)) {
 				countHits++;
-				if (log.isDebugEnabled()) {
-					log.debug("Evaluating " + candidate + " with " + eval + ", result: match");
-				}
+				log.debug("Evaluating {} with {}, result: match", candidate, eval);
 				return candidate;
 			} else {
 				countMisses++;
-				if (log.isDebugEnabled()) {
-					log.debug("Evaluating " + candidate + " with " + eval + ", result: miss");
-				}
+				log.debug("Evaluating {} with {}, result: miss", candidate, eval);
 			}
 		}
 		if (log.isDebugEnabled() && countMisses > 0) {
-			log.debug("Had " + countHits + " hits vs. " + countMisses + " misses for " + wrapped);
+			log.debug("Had {} hits vs. {} misses for {}", countHits, countMisses, wrapped);
 		}
 		return null;
 	}

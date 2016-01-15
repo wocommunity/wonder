@@ -5,7 +5,8 @@ import java.io.ByteArrayOutputStream;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.octo.captcha.engine.CaptchaEngine;
 import com.octo.captcha.service.CaptchaServiceException;
@@ -52,7 +53,7 @@ public class ERCaptcha extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ERCaptcha.class);
+	private static final Logger log = LoggerFactory.getLogger(ERCaptcha.class);
 	private static ImageCaptchaService _captchaService;
 	private NSData _captcha;
 	private String _response;
@@ -109,7 +110,7 @@ public class ERCaptcha extends WOComponent {
 				validated = ERCaptcha.captchaService().validateResponseForID(context.elementID(), _response);
 			}
 			catch (CaptchaServiceException e) {
-				ERCaptcha.log.error("Captcha service failed.", e);
+				log.error("Captcha service failed.", e);
 			}
 			finally {
 				_captcha = null;

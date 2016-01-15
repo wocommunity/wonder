@@ -1,6 +1,7 @@
 package er.bugtracker.components.reporting;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
@@ -10,7 +11,7 @@ import er.grouping.DRRecordGroup;
 import er.reporting.WRReport;
 
 public class Report extends WRReport {
-    private static final Logger log = Logger.getLogger(Report.class);
+    private static final Logger log = LoggerFactory.getLogger(Report.class);
 
     public Report(WOContext context) {
         super(context);
@@ -24,12 +25,12 @@ public class Report extends WRReport {
 
     @Override
     public Object handleQueryWithUnboundKey(String key) {
-        log.error("handleQueryWithUnboundKey: " + key, new RuntimeException("Stacktrace"));
+        log.error("handleQueryWithUnboundKey: {}", key, new RuntimeException("Stacktrace"));
         return null;
     }
 
     public void handleTakeValueWithUnboundKey(Object o, String key) {
-        log.error(key);
+        log.error("handleTakeValueWithUnboundKey: {}", key);
     }
 
     @Override

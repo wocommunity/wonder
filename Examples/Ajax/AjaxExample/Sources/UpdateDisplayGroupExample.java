@@ -1,4 +1,5 @@
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -11,7 +12,7 @@ import er.ajax.example.ExampleDataFactory;
 import er.ajax.example.Word;
 
 public class UpdateDisplayGroupExample extends WOComponent {
-	private static final Logger log = Logger.getLogger(UpdateDisplayGroupExample.class);
+	private static final Logger log = LoggerFactory.getLogger(UpdateDisplayGroupExample.class);
 
 	public WODisplayGroup dg;
 	public Word current;
@@ -73,6 +74,6 @@ public class UpdateDisplayGroupExample extends WOComponent {
 
 	public void save() {
 		// do nothing
-		log.info(dg.selectedObject());
+		log.info("{}", dg.selectedObject());
 	}
 }

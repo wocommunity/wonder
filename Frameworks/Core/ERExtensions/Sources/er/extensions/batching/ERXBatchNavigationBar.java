@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.batching;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -59,8 +60,7 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXBatchNavigationBar.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXBatchNavigationBar.class);
 
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
@@ -95,10 +95,10 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
         	if (displayGroup()!=null) {
             	NSArray selection = selection();
                 
-                if(log.isDebugEnabled()) log.debug("Setting db # of objects per batch to "+newNumberOfObjectsPerBatch);
+                log.debug("Setting db # of objects per batch to {}.", newNumberOfObjectsPerBatch);
                 displayGroup().setNumberOfObjectsPerBatch(newNumberOfObjectsPerBatch.intValue());
 
-                if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
+                log.debug("The batch index is being set to 1.");
                 displayGroup().setCurrentBatchIndex(1);
                 clearSelection(selection);
             }
@@ -142,7 +142,7 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
         if (newValue!=null) {
             if (displayGroup()!=null){
                 displayGroup().setCurrentBatchIndex(newValue.intValue());
-                if (log.isDebugEnabled()) log.debug("The batch index is being set to :"+newValue.intValue());
+                log.debug("The batch index is being set to {}.", newValue.intValue());
             }
         }
     }

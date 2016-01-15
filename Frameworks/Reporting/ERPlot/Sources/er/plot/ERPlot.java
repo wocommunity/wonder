@@ -1,8 +1,9 @@
 package er.plot;
 
-import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
@@ -16,8 +17,7 @@ public class ERPlot extends ERXFrameworkPrincipal {
 
     public final static Class<?> REQUIRES[] = new Class[] {ERXExtensions.class};
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERPlot.class);
+    private static final Logger log = LoggerFactory.getLogger(ERPlot.class);
 
     /** holds the shared instance reference */
     protected static ERPlot sharedInstance;

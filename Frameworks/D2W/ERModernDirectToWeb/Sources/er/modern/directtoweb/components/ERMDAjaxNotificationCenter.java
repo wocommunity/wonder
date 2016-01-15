@@ -1,6 +1,7 @@
 package er.modern.directtoweb.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -86,7 +87,7 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
 
     private NSMutableArray<String> updateContainerIDs = new NSMutableArray<String>();
 
-    private static final Logger log = Logger.getLogger(ERMDAjaxNotificationCenter.class);
+    private static final Logger log = LoggerFactory.getLogger(ERMDAjaxNotificationCenter.class);
 
     public String id() {
         if (id == null) {
@@ -108,19 +109,17 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
         }
         NSNotificationCenter.defaultCenter().addObserver(this, propertyChanged,
                 PropertyChangedNotification, context);
-        log.debug("Notifications registered for context: " + context);
+        log.debug("Notifications registered for context: {}", context);
         super.setD2wContext(context);
     }
 
     public NSMutableArray<String> updateContainerIDs() {
-        log.debug("Updating container IDs: "
-                + updateContainerIDs.componentsJoinedByString(", "));
+        log.debug("Updating container IDs: {}", updateContainerIDs.componentsJoinedByString(", "));
         return updateContainerIDs;
     }
 
     public void propertyChanged(NSNotification n) {
-        log.debug("Property changed for property key: "
-                + PROPERTY_KEY.valueInObject(n.object()));
+        log.debug("Property changed for property key: {}", PROPERTY_KEY.valueInObject(n.object()));
 
         NSArray<String> updateProps = propertyChanged((D2WContext) n.object());
         if (updateProps != null && updateProps.count() > 0) {
@@ -143,8 +142,7 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
 
             // force update of notification center UC
             AjaxUpdateContainer.safeUpdateContainerWithID(id, context());
-            log.debug("Container ids to be updated: "
-                    + updateContainerIDs.componentsJoinedByString(", "));
+            log.debug("Container ids to be updated: {}", updateContainerIDs.componentsJoinedByString(", "));
         }
     }
 
@@ -194,7 +192,7 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
                 // trigger a relationship component update for now
                 NSNotificationCenter.defaultCenter().postNotification(
                         ERMDDeleteButton.BUTTON_PERFORMED_DELETE_ACTION, obj, userInfo);
-                log.debug("Sent update notification for relationship: " + aPropertyKey);
+                log.debug("Sent update notification for relationship: {}", aPropertyKey);
             }
         }
     }
@@ -207,9 +205,7 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
      * dynamicBindings dictionary.
      */
     public Object handleQueryWithUnboundKey(String key) {
-        if (log.isDebugEnabled()) {
-            log.debug("Handling unbound key: " + key);
-        }
+        log.debug("Handling unbound key: {}", key);
         return dynamicBindings().objectForKey(key);
     }
 
@@ -222,9 +218,7 @@ public class ERMDAjaxNotificationCenter extends ERDCustomComponent {
      */
     @SuppressWarnings("unchecked")
     public void handleTakeValueForUnboundKey(Object value, String key) {
-        if (log.isDebugEnabled()) {
-            log.debug("Take value: " + value + " for unbound key: " + key);
-        }
+        log.debug("Take value: {} for unbound key: {}", value, key);
         dynamicBindings().setObjectForKey(value, key);
     }
 

@@ -8,7 +8,8 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -49,7 +50,7 @@ public class ERXFakeRelationship extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    private static final Logger log = Logger.getLogger(ERXFakeRelationship.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ERXFakeRelationship.class);
 
     // temps for our children
     NSArray theList;
@@ -164,7 +165,7 @@ public class ERXFakeRelationship extends WOComponent {
 		    selections.addObject(eo);
 		}
 	    } catch(Exception ex) {
-		log.warn(ex + " with pkValue " + pkValue);
+	    	log.warn("{} with pkValue {}", ex.getMessage(), pkValue);
 		// we do nothing here, when we reconstruct the array on setSelection, we simply ignore this value
 	    }
 	}

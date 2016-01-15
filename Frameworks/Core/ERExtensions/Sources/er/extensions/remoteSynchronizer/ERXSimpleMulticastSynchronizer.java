@@ -13,6 +13,9 @@ import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -48,6 +51,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
+	private static final Logger log = LoggerFactory.getLogger(ERXRemoteSynchronizer.class);
 	public static final int IDENTIFIER_LENGTH = 6;
 	private static final int JOIN = 1;
 	private static final int LEAVE = 2;
@@ -109,8 +113,8 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 
 	@Override
 	public void join() throws IOException {
-		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
+		if (log.isInfoEnabled()) {
+			log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
 		_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
 		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
@@ -127,8 +131,8 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 
 	@Override
 	public void leave() throws IOException {
-		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
+		if (log.isInfoEnabled()) {
+			log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
 		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(baos);
@@ -203,7 +207,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 						}
 					}
 					catch (Throwable t) {
-						ERXRemoteSynchronizer.log.error("Failed to read multicast notification.", t);
+						log.error("Failed to read multicast notification.", t);
 					}
 				}
 			}
@@ -236,8 +240,8 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.flush();
 		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
-		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-			ERXRemoteSynchronizer.log.debug("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
+		if (log.isDebugEnabled()) {
+			log.debug("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), cacheChange);
 		}
 	}
 
