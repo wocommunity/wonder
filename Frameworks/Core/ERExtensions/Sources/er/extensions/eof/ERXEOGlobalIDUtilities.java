@@ -4,8 +4,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -35,10 +33,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @author ak
  */
 public class ERXEOGlobalIDUtilities {
-	
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXEOGlobalIDUtilities.class);
-    
     /**
      * Decrypts the byte array of NSData PKs so you get the process number or port, 
      * host and timestamp.

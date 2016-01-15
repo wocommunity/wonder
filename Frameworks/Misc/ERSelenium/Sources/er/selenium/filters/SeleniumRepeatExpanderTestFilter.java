@@ -23,8 +23,6 @@
 
 package er.selenium.filters;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -33,8 +31,6 @@ import er.selenium.SeleniumTest;
 import er.selenium.SeleniumTest.Element;
 
 public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
-	private static final Logger log = Logger.getLogger(SeleniumRepeatExpanderTestFilter.class);
-
 	protected static class LoopData {
 		enum PlacementType { Target, Value };
 		

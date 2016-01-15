@@ -10,9 +10,6 @@ public class ERIFileContent extends _ERIFileContent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIFileContent.class);
-
     public static final ERIFileContentClazz clazz = new ERIFileContentClazz();
     public static class ERIFileContentClazz extends _ERIFileContent._ERIFileContentClazz {
         /* more clazz methods here */

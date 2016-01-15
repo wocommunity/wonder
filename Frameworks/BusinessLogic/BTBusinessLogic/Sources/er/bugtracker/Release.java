@@ -1,7 +1,6 @@
 // Release.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -11,8 +10,6 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
 public class Release extends _Release {
-    static final Logger log = Logger.getLogger(Release.class);
-
     public Release() {
         super();
     }

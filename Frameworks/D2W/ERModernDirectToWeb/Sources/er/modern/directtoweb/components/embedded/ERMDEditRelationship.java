@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.embedded;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSDictionary;
@@ -27,9 +25,6 @@ public class ERMDEditRelationship extends ERDCustomEditComponent {
     
 	private String _uniqueId;
 	
-    /* logging support */
-    static final Logger log = Logger.getLogger(ERDList.class);
-
 	public ERMDEditRelationship(WOContext context) {
         super(context);
     }

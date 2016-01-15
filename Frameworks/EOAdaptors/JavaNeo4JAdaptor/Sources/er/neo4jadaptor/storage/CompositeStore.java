@@ -18,9 +18,6 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @param <Type>
  */
 public class CompositeStore <Type extends PropertyContainer> implements Store<Ersatz, Neo4JErsatz> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CompositeStore.class);
-	
 	private final Store<Ersatz, Neo4JErsatz> neoStore;
 	private final LuceneStore<Type> luceneStore;
 	

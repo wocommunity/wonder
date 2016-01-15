@@ -2,8 +2,6 @@ package er.jquerymobile.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WODynamicGroup;
@@ -15,8 +13,6 @@ import er.extensions.foundation.ERXProperties;
 
 @SuppressWarnings("serial")
 public class ERQMHtmlTemplate extends ERXStatelessComponent {
-
-  protected static final Logger log = Logger.getLogger(ERQMHtmlTemplate.class);
 
   //********************************************************************
   //  Constructor

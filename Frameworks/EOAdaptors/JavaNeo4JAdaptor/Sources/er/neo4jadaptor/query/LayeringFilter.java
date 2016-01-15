@@ -27,9 +27,6 @@ import er.neo4jadaptor.query.neo4j_by_pk.ByPrimaryKeyFilter;
  * @param <T>
  */
 public class LayeringFilter <T extends PropertyContainer> extends Filter<T> {
-	@SuppressWarnings("unused") 
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LayeringFilter.class);
-	
 	private final Filter<T> firstLine;
 	
 	public LayeringFilter() {

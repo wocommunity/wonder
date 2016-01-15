@@ -1,14 +1,10 @@
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
 public class TestItemState extends _TestItemState {
-    static final Logger log = Logger.getLogger(TestItemState.class);
-
-
     public static TestItemState OPEN;
     public static TestItemState BUG;
     public static TestItemState CLOSED;

@@ -3,8 +3,6 @@ package er.ajax;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
@@ -38,8 +36,6 @@ import er.extensions.foundation.ERXSelectorUtilities;
 public class AjaxPushRequestHandler extends WORequestHandler {
 
 	public static final String AjaxCometRequestHandlerKey = "push";
-
-	protected static Logger log = Logger.getLogger(AjaxPushRequestHandler.class);
 
 	private static ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>> responses = new ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>>();
 

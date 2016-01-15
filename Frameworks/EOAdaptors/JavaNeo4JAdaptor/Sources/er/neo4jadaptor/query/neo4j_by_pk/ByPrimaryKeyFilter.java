@@ -30,9 +30,6 @@ import er.neo4jadaptor.utils.EOUtilities;
  * @param <T>
  */
 public class ByPrimaryKeyFilter<T extends PropertyContainer> extends Filter<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ByPrimaryKeyFilter.class);
-
 	public ByPrimaryKeyFilter() {
 		
 	}

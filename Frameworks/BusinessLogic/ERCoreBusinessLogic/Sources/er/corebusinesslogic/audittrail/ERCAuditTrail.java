@@ -26,8 +26,6 @@ public class ERCAuditTrail extends _ERCAuditTrail {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrail.class);
-
     public static final ERCAuditTrailClazz clazz = new ERCAuditTrailClazz();
 
     public static class ERCAuditTrailClazz extends _ERCAuditTrail._ERCAuditTrailClazz {

@@ -9,8 +9,6 @@ package er.extensions.components;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -54,10 +52,6 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXCheckboxMatrix.class);
-
-    
     private static final Integer DEFAULT_PADDING = Integer.valueOf(0);
     private static final Integer DEFAULT_SPACING = Integer.valueOf(0);
 

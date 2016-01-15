@@ -1,7 +1,5 @@
 package er.reporting;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -25,9 +23,6 @@ import er.grouping.DRValue;
  * binding.
  */
 public class WRRecordGroup extends WOComponent  {
-    /** logging support */
-    private static final Logger log = Logger.getLogger(WRRecordGroup.class);
-
     String _totalToShow;
     DRRecordGroup _recordGroup;
     String _displayType;

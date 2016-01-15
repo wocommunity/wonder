@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.text.Format;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -37,9 +35,6 @@ import er.extensions.validation.ERXValidationException;
  * @author ak
  */
 public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
-	
-    public static Logger log = Logger.getLogger(ERXWOTextField.class);
-    
 	protected WOAssociation _formatter;
 	protected WOAssociation _dateFormat;
 	protected WOAssociation _numberFormat;

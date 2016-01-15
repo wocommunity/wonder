@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.ConfirmPageInterface;
@@ -49,9 +47,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDDeleteButton.class);
-	
 	public final static String DisplayGroupObjectDeleted = "DisplayGroupObjectDeleted";
 	
 	public interface Keys extends ERMDActionButton.Keys {

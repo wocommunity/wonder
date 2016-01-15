@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
@@ -91,7 +89,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent implements 
         public static final String fetchLimit = "fetchLimit";
 	}
 	
-	public static Logger log = Logger.getLogger(ERMD2WEditToOneTypeAhead.class);
 	private String _searchValue;
 	private String _destinationEntityName;
 	private String _sortKey;

@@ -3,7 +3,6 @@ package com.secretpal.model;
 import java.util.UUID;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSValidation;
@@ -12,8 +11,6 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class SPPerson extends _SPPerson {
-	private static Logger log = Logger.getLogger(SPPerson.class);
-
 	public static String hashPassword(String password) {
 		return ERXStringUtilities.md5Hex(password, CharEncoding.UTF_8);
 	}

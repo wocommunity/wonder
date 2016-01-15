@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
@@ -19,8 +17,6 @@ import er.corebusinesslogic.ERCoreUserInterface;
 import er.extensions.eof.ERXQ;
 
 public class People extends _People implements ERCoreUserInterface {
-    static final Logger log = Logger.getLogger(People.class);
-
     public interface Key extends _People.Key {
         public static final String PREFERENCES = "preferences";
     }

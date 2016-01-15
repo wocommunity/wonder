@@ -1,5 +1,4 @@
 package er.extensions.components;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOAnyField;
@@ -34,9 +33,6 @@ public class ERXAnyField extends WOAnyField {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXAnyField.class);
-	
     /**
      * Public constructor
      * @param context the context

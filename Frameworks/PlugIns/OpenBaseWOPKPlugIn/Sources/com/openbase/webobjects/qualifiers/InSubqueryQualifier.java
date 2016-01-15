@@ -15,11 +15,7 @@ import com.webobjects.eocontrol.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-import org.apache.log4j.*;
-
 public class InSubqueryQualifier extends EOQualifier implements EOQualifierEvaluation, Cloneable {
-    protected static Logger LOGGER = Logger.getLogger(InQualifier.class.getName());
-
     private static final String	InKeyword = " IN ";
 
     /** Path to an attribute or relationship of the qualified entity

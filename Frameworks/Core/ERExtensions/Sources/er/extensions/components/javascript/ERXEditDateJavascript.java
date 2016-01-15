@@ -7,7 +7,6 @@
 package er.extensions.components.javascript;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -32,7 +31,6 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);
 	private static String _datePickerJavaScriptUrl;
 
 	private String elementID;

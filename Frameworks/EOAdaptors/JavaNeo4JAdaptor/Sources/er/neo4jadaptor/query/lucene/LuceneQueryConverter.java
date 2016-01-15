@@ -32,9 +32,6 @@ import er.neo4jadaptor.storage.lucene.LuceneStore;
  *
  */
 public class LuceneQueryConverter extends QueryConverter<Query> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LuceneQueryConverter.class);
-	
 //	public static LuceneQueryConverter instance = new LuceneQueryConverter();
 	private boolean isQueryFullyCovered = true;
 	

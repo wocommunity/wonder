@@ -2,7 +2,6 @@ package wowodc.eof;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -13,9 +12,6 @@ import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
 public class ResultItem extends _ResultItem {
-	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(ResultItem.class);
-	
 	// The first saved workflow state is after initial creation and prime check has been performed
 	public static String WORKFLOW_PRIME_CHECKED = "Prime Checked";
 	

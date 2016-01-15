@@ -15,9 +15,6 @@ public class ERCHelpText extends _ERCHelpText {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCHelpText.class);
-
     public final static String ENTITY = "ERCHelpText";
     public static final ERCHelpTextClazz clazz = (ERCHelpTextClazz)new ERCHelpTextClazz().init(ENTITY); 
     

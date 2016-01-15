@@ -1,7 +1,5 @@
 package er.jqm.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -25,7 +23,6 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 abstract public class ERQMComponentBase extends ERXNonSynchronizingComponent
 {
-	protected static final Logger log = Logger.getLogger(ERQMComponentBase.class);
 	private String _elementID = null;
 	private static Boolean _useShortNamesInLog = Boolean.FALSE;
 

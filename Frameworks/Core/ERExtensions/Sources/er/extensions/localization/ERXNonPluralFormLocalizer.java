@@ -6,8 +6,6 @@
 //
 package er.extensions.localization;
 
-import org.apache.log4j.Logger;
-
 /**
  * <div class="en">
  *  ERXNonPluralFormLocalizer is a subclass of {@link ERXLocalizer}.
@@ -30,8 +28,6 @@ import org.apache.log4j.Logger;
  *  </div>
  */
 public class ERXNonPluralFormLocalizer extends ERXLocalizer {
-  
-    static final Logger log = Logger.getLogger(ERXNonPluralFormLocalizer.class);
 
     public ERXNonPluralFormLocalizer(String aLanguage) { 
         super(aLanguage); 

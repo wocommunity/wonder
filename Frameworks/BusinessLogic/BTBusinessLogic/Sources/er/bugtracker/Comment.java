@@ -1,14 +1,9 @@
 package er.bugtracker;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSTimestamp;
 
 public class Comment extends _Comment {
-    @SuppressWarnings("unused")
-    private static final Logger log = Logger.getLogger(Comment.class);
-
     public static final CommentClazz clazz = new CommentClazz();
     public static class CommentClazz extends _Comment._CommentClazz {/* more clazz methods here */}
 

@@ -1,15 +1,12 @@
 // Requirement.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 
 public class Requirement extends _Requirement {
-    static final Logger log = Logger.getLogger(Requirement.class);
-
     public Requirement() {
         super();
     }

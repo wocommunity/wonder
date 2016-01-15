@@ -16,9 +16,6 @@ import er.neo4jadaptor.storage.Store;
 import er.neo4jadaptor.utils.cursor.Cursor;
 
 public class Tools {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Tools.class);
-
 	private static final String MODEL_NAME = "MyModel";
 	
 	static {

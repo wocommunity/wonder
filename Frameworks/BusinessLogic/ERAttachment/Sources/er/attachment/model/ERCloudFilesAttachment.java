@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
 
 import com.rackspacecloud.client.cloudfiles.FilesClient;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -19,8 +18,6 @@ import er.extensions.foundation.ERXProperties;
  * @author probert
  */
 public class ERCloudFilesAttachment extends _ERCloudFilesAttachment implements ERRemoteAttachment {
-  @SuppressWarnings("unused")
-  private static Logger log = Logger.getLogger(ERCloudFilesAttachment.class);
   public static final String STORAGE_TYPE = "cf";
 
   private File _pendingUploadFile;

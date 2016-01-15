@@ -1,6 +1,7 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -47,15 +48,14 @@ import er.extensions.foundation.ERXUtilities;
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
 public abstract class ERXArrayChooser extends ERXStatelessComponent {
+	private static final Logger log = LoggerFactory.getLogger(ERXArrayChooser.class);
+
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXArrayChooser.class);
 
     public static boolean localizeDisplayKeysDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.localizeDisplayKeysDefault", false);
     public static boolean includeUnmatchedValuesDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault", false);
@@ -433,7 +433,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             			_list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
             		}
             	} else {
-            		log.error("EC of datasource is null, possible resubmit: " + ERXApplication.erxApplication().extraInformationForExceptionInContext(null, context()));
+            		log.error("EC of datasource is null, possible resubmit: {}", ERXApplication.erxApplication().extraInformationForExceptionInContext(null, context()));
             		_list = NSArray.EmptyArray;
             	}
             }

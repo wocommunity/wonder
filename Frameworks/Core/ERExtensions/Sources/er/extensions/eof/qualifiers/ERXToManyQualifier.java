@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
@@ -62,9 +60,6 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
     }
     
     public static final String MatchesAllInArraySelectorName = "matchesAllInArray";
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXToManyQualifier.class);
 
     /** holds the to many key */    
     private String _toManyKey;

@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
@@ -39,9 +37,6 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-    
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
 
     public static final String IsContainedInArraySelectorName = "isContainedInArray";
     

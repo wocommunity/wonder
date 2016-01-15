@@ -6,8 +6,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -57,9 +55,6 @@ import er.extensions.woextensions.WOToOneRelationship;
  * may not break in the future.
  */
 public class ERXPatcher {
-
-	/** logging support */
-	public final static Logger log = Logger.getLogger(ERXPatcher.class);
 
 	public ERXPatcher() {
 	}

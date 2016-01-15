@@ -1,7 +1,5 @@
 package er.bugtracker.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -24,9 +22,6 @@ import er.extensions.localization.ERXLocalizer;
  * @created ak on Thu Aug 22 2002
  */
 public class CollapsibleList extends WOComponent {
-
-    /** logging support */
-    static final Logger log = Logger.getLogger(CollapsibleList.class.getClass().getName() + ".components");
     public String openedLabelString;
     public String closedLabelString;
 	

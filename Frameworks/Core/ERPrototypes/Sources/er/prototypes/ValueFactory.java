@@ -13,7 +13,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -33,9 +32,6 @@ import er.extensions.foundation.ERXMutableDictionary;
  * from values stored in the database.
  */
 public class ValueFactory {
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ValueFactory.class);
-    
 	public static Duration duration(String value) {
 		try {
 			Duration d = DatatypeFactory.newInstance().newDuration(value);

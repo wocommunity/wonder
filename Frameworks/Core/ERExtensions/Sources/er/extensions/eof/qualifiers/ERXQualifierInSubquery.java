@@ -8,8 +8,6 @@ package er.extensions.eof.qualifiers;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -59,9 +57,6 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXQualifierInSubquery.class);
 
 	/** holds the subqualifier */
 	protected EOQualifier qualifier;

@@ -14,9 +14,6 @@ import er.neo4jadaptor.query.neo4j_eval.Cost;
  */
 @SuppressWarnings("unchecked")
 public final class AlwaysTrue<T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlwaysTrue.class);
-
 	private static AlwaysTrue instance = new AlwaysTrue();
 	
 	public static <T extends PropertyContainer> AlwaysTrue<T> instance() {

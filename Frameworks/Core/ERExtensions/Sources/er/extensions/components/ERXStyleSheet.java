@@ -2,8 +2,6 @@ package er.extensions.components;
 
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
@@ -51,9 +49,6 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/** logging support */
-	public static final Logger log = Logger.getLogger( ERXStyleSheet.class );
 
 	/**
 	 * Public constructor

@@ -1,7 +1,5 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 
@@ -20,8 +18,6 @@ public class ERXMonthView extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXMonthView.class);
     protected int 	_cellWidth = -1;
     protected String 	_cellAlign;
     /**

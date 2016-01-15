@@ -17,9 +17,6 @@ import er.neo4jadaptor.query.neo4j_eval.retrievers.Retriever;
  * @param <T>
  */
 public class Comparison <T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Comparison.class);
-
 	private final Retriever<T, ?> valueRetriever;
 	private final ComparisonOperator operator;
 	private final Object rValue;

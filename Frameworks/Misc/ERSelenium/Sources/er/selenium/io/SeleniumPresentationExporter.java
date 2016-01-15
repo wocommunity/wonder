@@ -23,8 +23,6 @@
 
 package er.selenium.io;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -36,7 +34,6 @@ import com.webobjects.foundation.NSDictionary;
 import er.selenium.SeleniumTest;
 
 public class SeleniumPresentationExporter implements SeleniumTestExporter {
-	private static final Logger log = Logger.getLogger(SeleniumPresentationExporter.class);
 	private static final String PRESENTATION_COMPONENT = "SeleniumTestPresentation";
 	private static final String PRESENTATION_TEST_BINDING = "test";
 	

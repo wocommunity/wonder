@@ -2,8 +2,6 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -136,9 +134,6 @@ Template2: ERXWOTemplate {
  * @author Charles Lloyd
  */
 public class ERXWOComponentContent extends WODynamicElement {
-    
-	public static Logger log = Logger.getLogger(ERXWOComponentContent.class);
-	
     public static String WOHTMLTemplateNameAttribute = "templateName";
 
     private WOAssociation _templateName;

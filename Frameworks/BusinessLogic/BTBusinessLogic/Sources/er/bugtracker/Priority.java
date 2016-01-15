@@ -1,15 +1,12 @@
 // Priority.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
 public class Priority extends _Priority {
-    static final Logger log = Logger.getLogger(Priority.class);
-
     public static Priority CRITICAL;
     public static Priority HIGH;
     public static Priority MEDIUM;

@@ -15,6 +15,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <span class="en">
@@ -31,6 +33,7 @@ import org.apache.http.util.EntityUtils;
  * @author ishimoto
  */
 public class ERXHttpGetData extends ERXHttpDataObjectBase {
+	private static final Logger log = LoggerFactory.getLogger(ERXHttpDataObjectBase.class);
 
   //***********************************************************
   // Constructor

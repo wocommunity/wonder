@@ -2,16 +2,12 @@ package com.secretpal.model;
 
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class SPMembership extends _SPMembership {
-	private static Logger log = Logger.getLogger(SPMembership.class);
-
 	public String personName() {
 		return confirmed().booleanValue() ? person().name() : person().emailAddress();
 	}

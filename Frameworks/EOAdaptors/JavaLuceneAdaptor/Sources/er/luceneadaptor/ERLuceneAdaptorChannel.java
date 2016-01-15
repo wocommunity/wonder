@@ -6,7 +6,6 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
@@ -81,8 +80,6 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
 public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 
 	private static final String EXTERNAL_NAME_KEY = "_e";
-	
-	static Logger log = Logger.getLogger(ERLuceneAdaptorChannel.class);
 
 	private static class LuceneQualifierTraversal extends ERXQualifierTraversal {
 

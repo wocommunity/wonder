@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -38,9 +36,6 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 	
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDRemoveRelatedButton.class);
-	
 	public interface Keys extends ERMDActionButton.Keys {
 		public static final String removeButtonLabel = "removeButtonLabel";
 		public static final String cancelButtonLabel = "cancelButtonLabel";

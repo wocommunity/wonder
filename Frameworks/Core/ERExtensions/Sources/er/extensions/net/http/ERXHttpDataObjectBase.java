@@ -13,7 +13,6 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.log4j.Logger;
 
 import er.extensions.foundation.ERXProperties;
 
@@ -40,8 +39,6 @@ import er.extensions.foundation.ERXProperties;
  * @author ishimoto
  */
 public abstract class ERXHttpDataObjectBase {
-
-  protected static final Logger log = Logger.getLogger(ERXHttpDataObjectBase.class);
 
   //***********************************************************
   // Constants

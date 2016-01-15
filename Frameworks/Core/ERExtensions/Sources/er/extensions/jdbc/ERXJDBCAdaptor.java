@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
@@ -58,8 +56,6 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 
 		public Connection getConnection();
 	}
-
-	public static final Logger log = Logger.getLogger(ERXJDBCAdaptor.class);
 
 	public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
 

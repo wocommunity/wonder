@@ -37,9 +37,6 @@ import er.neo4jadaptor.utils.EOUtilities;
  * @param <T>
  */
 public class EvaluationQueryConverter <T extends PropertyContainer> extends QueryConverter<Evaluator<T>> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EvaluationQueryConverter.class);
-	
 	public EvaluationQueryConverter() {
 	}
 	

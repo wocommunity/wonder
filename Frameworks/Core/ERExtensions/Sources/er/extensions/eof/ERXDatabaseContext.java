@@ -1,7 +1,5 @@
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -16,10 +14,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 public class ERXDatabaseContext extends EODatabaseContext {
-
-	/** general logging */
-	public static final Logger log = Logger.getLogger(ERXDatabaseContext.class);
-
 	private static ThreadLocal _fetching = new ThreadLocal();
 
 	public ERXDatabaseContext(EODatabase database) {

@@ -17,11 +17,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import java.util.*;
-import org.apache.log4j.*;
 
 public class InQualifier extends EOKeyValueQualifier implements EOQualifierEvaluation, Cloneable {
-    protected static Logger LOGGER = Logger.getLogger(InQualifier.class.getName());
-    
     private static final String	InKeyword = " IN ";
     
     private String	_key = null;

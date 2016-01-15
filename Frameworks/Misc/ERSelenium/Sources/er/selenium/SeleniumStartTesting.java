@@ -23,8 +23,6 @@
 
 package er.selenium;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -41,8 +39,6 @@ import er.extensions.appserver.ERXResponse;
  * Has wa/SeleniumStartTesting, wa/SeleniumStartTesting/run and wa/SeleniumStartTesting/edit.
  */
 public class SeleniumStartTesting extends WODirectAction {
-	private static final Logger log = Logger.getLogger(SeleniumStartTesting.class);
-	
 	public static final String RESULTS_FILE_KEY = "resultsFile";
 	
 	public SeleniumStartTesting(WORequest request) {
