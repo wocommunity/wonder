@@ -130,8 +130,8 @@ public class AjaxSortableList extends AjaxComponent {
     addScriptResourceInHead(res, "dragdrop.js");
   }
 
-  public NSDictionary createAjaxOptions() {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+  public NSDictionary<String, String> createAjaxOptions() {
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
     ajaxOptionsArray.addObject(new AjaxOption("tag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("treeTag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("only", AjaxOption.STRING_ARRAY));
@@ -147,7 +147,7 @@ public class AjaxSortableList extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
   
@@ -183,6 +183,7 @@ public class AjaxSortableList extends AjaxComponent {
     return onUpdateBuffer.toString();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     if (!canGetValueForBinding("list")) {
@@ -193,26 +194,26 @@ public class AjaxSortableList extends AjaxComponent {
     }
     String listItemIDKeyPath = (String) valueForBinding("listItemIDKeyPath");
     Object listItemIDArrayObj = request.formValues().objectForKey(_sortOrderKeyName + "[]");
-    NSArray listItemIDArray;
+    NSArray<String> listItemIDArray;
     if (listItemIDArrayObj instanceof NSArray) {
-      listItemIDArray = (NSArray) listItemIDArrayObj;
+      listItemIDArray = (NSArray<String>) listItemIDArrayObj;
     }
     else if (listItemIDArrayObj instanceof String) {
       String listItemIDStr = (String) listItemIDArrayObj;
-      listItemIDArray = new NSArray(listItemIDStr);
+      listItemIDArray = new NSArray<String>(listItemIDStr);
     }
     else {
       throw new IllegalArgumentException("Unknown list item ID array " + listItemIDArrayObj);
     }
 
-    NSArray list = (NSArray) valueForBinding("list");
+    NSArray<Object> list = (NSArray<Object>) valueForBinding("list");
     boolean mutableList = (list instanceof NSMutableArray);
-    NSMutableArray reorderedList;
+    NSMutableArray<Object> reorderedList;
     if (mutableList) {
-      reorderedList = (NSMutableArray) list;
+      reorderedList = (NSMutableArray<Object>) list;
     }
     else {
-      reorderedList = new NSMutableArray();
+      reorderedList = new NSMutableArray<Object>();
     }
 
     int startIndex = 0;
@@ -238,9 +239,9 @@ public class AjaxSortableList extends AjaxComponent {
       else {
         itemPageRange = new NSRange(startIndex, listItemIDCount);
       }
-      NSArray itemPageArray = list.subarrayWithRange(itemPageRange);
+      NSArray<Object> itemPageArray = list.subarrayWithRange(itemPageRange);
       EOQualifier itemIDQualifier = new EOKeyValueQualifier(listItemIDKeyPath, EOQualifier.QualifierOperatorEqual, itemID);
-      NSArray matchingItems = EOQualifier.filteredArrayWithQualifier(itemPageArray, itemIDQualifier);
+      NSArray<Object> matchingItems = EOQualifier.filteredArrayWithQualifier(itemPageArray, itemIDQualifier);
       if (matchingItems.count() == 0) {
         throw new NoSuchElementException("There was no item that matched the ID '" + itemID + "' in " + list + ".");
       }
