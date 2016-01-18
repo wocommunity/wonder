@@ -300,7 +300,7 @@ function calendar_prev_year() {
 
 function calendar_show() {
   calendar.element.style.display = '';
-  if (Modalbox && Modalbox.MBoverlay) {
+  if (typeof Modalbox !== 'undefined' && Modalbox.MBoverlay) {
   	Modalbox.MBoverlay.observe("click", calendar_hide);
   }
 }
@@ -313,7 +313,7 @@ function calendar_hide() {
   {
     $('ieShim').style.display = 'none';  
   }
-  if (Modalbox && Modalbox.MBoverlay) {
+  if (typeof Modalbox !== 'undefined' && Modalbox.MBoverlay) {
   	Modalbox.MBoverlay.stopObserving("click", calendar_hide);
   }
 }
