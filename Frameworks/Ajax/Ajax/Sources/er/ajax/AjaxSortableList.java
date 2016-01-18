@@ -39,6 +39,13 @@ import com.webobjects.foundation.NSRange;
  * @binding handle if an element should only be draggable by an embedded handle, takes a class name
  * @binding hoverclass
  * @binding ghosting shows ghosting copy during drag, defaults to <code>false</code>
+ * @binding highlightColor a CSS color used to change the element background color when it is moved.
+ * @binding starteffect Effect, defaults to Effect.Opacity. Defines the effect
+ *          to use when the draggable starts being dragged
+ * @binding reverteffect Effect, default to Effect.Move. Defines the effect to
+ *          use when the draggable reverts back to its starting position
+ * @binding endeffect Effect, defaults to Effect.Opacity. Defines the effect to
+ *          use when the draggable stops being dragged
  * @binding dropOnEmpty
  * @binding scroll
  * @binding onChange client side method, fires on updating the sort order during drag
@@ -134,11 +141,28 @@ public class AjaxSortableList extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("hoverclass", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("starteffect", starteffect(), AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("endeffect", endeffect(), AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
+  }
+  
+  private String starteffect() {
+	  if (hasBinding("highlightColor")) {
+		  return "function(element){element.style.backgroundColor = '"+valueForBinding("highlightColor")+"';}";
+	  }
+	  return null;
+  }
+
+  private String endeffect() {
+	  if (hasBinding("highlightColor")) {
+		  return "function(element){element.style.backgroundColor = '';}";
+	  }
+	  return null;
   }
 
   public String onUpdate() {
