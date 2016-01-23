@@ -39,7 +39,7 @@ import com.webobjects.foundation.NSRange;
  * @binding handle if an element should only be draggable by an embedded handle, takes a class name
  * @binding hoverclass
  * @binding ghosting shows ghosting copy during drag, defaults to <code>false</code>
- * @binding highlightColor a CSS color used to change the element background color when it is moved.
+ * @binding movingClass a CSS class assigned to the element when it is moving.
  * @binding starteffect Effect, defaults to Effect.Opacity. Defines the effect
  *          to use when the draggable starts being dragged
  * @binding reverteffect Effect, default to Effect.Move. Defines the effect to
@@ -152,15 +152,15 @@ public class AjaxSortableList extends AjaxComponent {
   }
   
   private String starteffect() {
-	  if (hasBinding("highlightColor")) {
-		  return "function(element){element.style.backgroundColor = '"+valueForBinding("highlightColor")+"';}";
+	  if (hasBinding("movingClass")) {
+		  return "function(element){element.addClassName('"+valueForBinding("movingClass")+"');}";
 	  }
 	  return null;
   }
 
   private String endeffect() {
-	  if (hasBinding("highlightColor")) {
-		  return "function(element){element.style.backgroundColor = '';}";
+	  if (hasBinding("movingClass")) {
+		  return "function(element){element.removeClassName('"+valueForBinding("movingClass")+"');}";
 	  }
 	  return null;
   }
