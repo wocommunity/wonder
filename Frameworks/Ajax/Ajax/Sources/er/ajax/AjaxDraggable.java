@@ -102,11 +102,12 @@ public class AjaxDraggable extends AjaxComponent {
     return true;
   }
 
+  @SuppressWarnings("unchecked")
   public static Object draggableObjectForPage(WOComponent page, String draggableID) {
     Object droppedObject = null;
-    Map componentDraggablesMap = (Map)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+    Map<WOComponent, Map<String, Object>> componentDraggablesMap = (Map<WOComponent, Map<String, Object>>)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
     if (componentDraggablesMap != null) {
-      Map draggablesMap = (Map) componentDraggablesMap.get(page);
+      Map<String, Object> draggablesMap = componentDraggablesMap.get(page);
       if (draggablesMap != null) {
         droppedObject = draggablesMap.get(draggableID);
       }
@@ -115,18 +116,19 @@ public class AjaxDraggable extends AjaxComponent {
   }
   
   @Override
+  @SuppressWarnings("unchecked")
   public void appendToResponse(WOResponse res, WOContext ctx) {
     if (canGetValueForBinding("draggableObject")) {
       Object draggableObject = valueForBinding("draggableObject");
       WOComponent page = context().page();
-      Map componentDraggablesMap = (Map)ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+      Map<WOComponent, Map<String, Object>> componentDraggablesMap = (Map<WOComponent, Map<String, Object>>) ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       if (componentDraggablesMap == null) {
-        componentDraggablesMap = new WeakHashMap();
+        componentDraggablesMap = new WeakHashMap<WOComponent, Map<String, Object>>();
         ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       }
-      Map draggablesMap = (Map) componentDraggablesMap.get(page);
+      Map<String, Object> draggablesMap = componentDraggablesMap.get(page);
       if (draggablesMap == null) {
-        draggablesMap = new HashMap();
+        draggablesMap = new HashMap<String, Object>();
         componentDraggablesMap.put(page, draggablesMap);
       }
       String id = draggableID();
@@ -140,8 +142,8 @@ public class AjaxDraggable extends AjaxComponent {
     super.appendToResponse(res, ctx);
   }
 
-  public NSDictionary createAjaxOptions() {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+  public NSDictionary<String, String> createAjaxOptions() {
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 	// PROTOTYPE OPTIONS
     ajaxOptionsArray.addObject(new AjaxOption("starteffect", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
@@ -154,7 +156,7 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
 
