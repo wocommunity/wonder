@@ -1,5 +1,6 @@
 package er.extensions.appserver;
 
+import java.net.HttpCookie;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Map;
@@ -65,6 +66,11 @@ public  class ERXRequest extends WORequest {
      * Defaults to <code>false</code>, set er.extensions.ERXRequest.secureDisabled=true to turn it off.
      */
     protected boolean _secureDisabled;
+    
+    /**
+     * Holds the cookies in a NSDictionary.
+     */
+    protected NSDictionary<String, NSArray<String>> _cookieDictionary;
     
     /**
      * Returns a ERXRequest object initialized with the specified parameters.
@@ -411,18 +417,47 @@ public  class ERXRequest extends WORequest {
     }
 
     /**
-     * Overridden because malformed cookie to return an empty dictionary
-     * if the super implementation throws an exception. This will happen
-     * if the request contains malformed cookie values.
+     * Parses all cookies one at a time catch parse exception which just discards
+     * that cookie and not all cookies. It uses java.net.HttpCookie as a parser.
+     * @return a dictionary of cookies, parsed one cookie at a time
+     */
+    private NSDictionary _cookieDictionary() {
+        if (_cookieDictionary == null) {
+        	NSMutableDictionary<String, NSArray<String>> cookieDictionary = new NSMutableDictionary<String, NSArray<String>>();
+        	//
+        	// from WORequest._cookieDescription()
+        	String cookie = headerForKey("cookie");
+        	if (cookie == null || cookie.length() == 0)
+        		// IIS cookies use a different header
+        		cookie = headerForKey("http_cookie");
+        	
+        	if (cookie != null && cookie.length() > 0) {
+        		String[] cookies = cookie.split(";");
+        		for (int i = 0; i < cookies.length; i++) {
+        			try {
+        				//
+        				// only parse one cookie at a time => get(0)
+        				HttpCookie httpCookie = HttpCookie.parse(cookies[i]).get(0);
+        				log.debug("Cookie: '"+httpCookie.getName()+"' = '"+httpCookie.getValue()+"'");
+        				cookieDictionary.setObjectForKey(new NSArray<String>(httpCookie.getValue()), httpCookie.getName());
+        			} catch (Throwable t) {
+        				log.warn("Unable to parse cookie '"+cookies[i]+"' : "+t.getMessage());
+        			}
+        		}
+        	}
+        	_cookieDictionary = cookieDictionary.immutableClone();
+        }
+        return _cookieDictionary;
+    }
+
+    /**
+     * Overridden to call _cookieDictionary() where we parse the cookies one
+     * at a time using java.net.HttpCookie so that we don't get an empty cookie
+     * dictionary if one cookie is malformed.
      */
     @Override
 	public NSDictionary cookieValues() {
-        try {
-            return super.cookieValues();
-        } catch (Throwable t) {
-            log.warn("{}: {}", this, t, t);
-            return NSDictionary.EmptyDictionary;
-        }
+    	return _cookieDictionary();
     }    
 
     /**
