@@ -713,7 +713,7 @@ public class ERXArrayUtilities {
      */
     public static <T> NSArray<T> arrayByAddingObjectsFromArrayWithoutDuplicates(Collection<? extends T> array1, Collection<? extends T> array2) {
         if (array2 == null || array2.isEmpty()) {
-            if (array1.isEmpty()) {
+            if (array1 == null || array1.isEmpty()) {
                 return NSArray.emptyArray();
             } else if (array1 instanceof NSArray) {
                 return ((NSArray)array1).immutableClone();
