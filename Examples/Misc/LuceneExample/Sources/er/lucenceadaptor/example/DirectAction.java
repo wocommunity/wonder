@@ -93,7 +93,7 @@ public class DirectAction extends ERD2WDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 
 	/**
@@ -210,6 +210,6 @@ public class DirectAction extends ERD2WDirectAction {
 		} finally {
 			ec.unlock();
 		}
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 }

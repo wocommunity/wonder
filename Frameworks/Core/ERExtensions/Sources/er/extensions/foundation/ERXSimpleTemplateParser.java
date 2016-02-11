@@ -35,7 +35,7 @@ public class ERXSimpleTemplateParser {
     public static final String DEFAULT_DELIMITER = "@@";
 
     /** logging support */
-    private static final Logger log = LoggerFactory.getLogger(ERXSimpleTemplateParser.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ERXSimpleTemplateParser.class);
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;
