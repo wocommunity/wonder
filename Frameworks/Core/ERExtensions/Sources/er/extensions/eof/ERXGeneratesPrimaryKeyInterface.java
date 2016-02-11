@@ -18,15 +18,6 @@ import com.webobjects.foundation.NSDictionary;
  */
 public interface ERXGeneratesPrimaryKeyInterface {
 
-    /**
-     * This method is called by the ERXDatabaseContextDelegate when
-     * in the middle of a transaction. This is signaled by passing in
-     * the boolean <code>true</code> into the method. If the object
-     * returns <code>null</code> then a new primary key is generated.
-     */
-    @Deprecated
-    public NSDictionary primaryKeyDictionary(boolean inTransaction);
-
 	/**
 	 * This method is called by the ERXDatabaseContextDelegate when
 	 * in the middle of a transaction. This is signaled by passing in

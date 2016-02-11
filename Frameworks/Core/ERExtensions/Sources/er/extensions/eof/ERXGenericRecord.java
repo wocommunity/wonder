@@ -312,7 +312,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void mightDelete() {
 		if (tranLogMightDelete.isDebugEnabled())
-			tranLogMightDelete.debug("Object:" + description());
+			tranLogMightDelete.debug("Object: " + this);
 	}
 
 	public void willDelete() throws NSValidation.ValidationException {
@@ -320,7 +320,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeDeletedException");
 		}
 		if (tranLogWillDelete.isDebugEnabled())
-			tranLogWillDelete.debug("Object:" + description());
+			tranLogWillDelete.debug("Object: " + this);
 	}
 
 	public void willInsert() {
@@ -336,7 +336,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					tranLogWillInsert.error("Found illegal value in to many " + key + " for " + this + ": " + o);
 				}
 			}
-			tranLogWillInsert.debug("Object:" + description());
+			tranLogWillInsert.debug("Object: " + this);
 		}
 		if (shouldTrimSpaces())
 			trimSpaces();
@@ -359,7 +359,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				}
 			}
 			if (tranLogWillUpdate.isDebugEnabled())
-				tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
+				tranLogWillUpdate.debug("Object: " + this + " changes: " + changesFromCommittedSnapshot());
 		}
 		if (shouldTrimSpaces())
 			trimSpaces();
@@ -391,17 +391,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void didDelete(EOEditingContext ec) {
 		if (tranLogDidDelete.isDebugEnabled())
-			tranLogDidDelete.debug("Object:" + description());
+			tranLogDidDelete.debug("Object: " + this);
 	}
 
 	public void didUpdate() {
 		if (tranLogDidUpdate.isDebugEnabled())
-			tranLogDidUpdate.debug("Object:" + description());
+			tranLogDidUpdate.debug("Object: " + this);
 	}
 
 	public void didInsert() {
 		if (tranLogDidInsert.isDebugEnabled())
-			tranLogDidInsert.debug("Object:" + description());
+			tranLogDidInsert.debug("Object: " + this);
 		_permanentGlobalID = null;
 		
 		// We're going to blow the primaryKey cache:
@@ -410,12 +410,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void willRevert() {
 		if (tranLogWillRevert.isDebugEnabled())
-			tranLogWillRevert.debug("Object: " + description());
+			tranLogWillRevert.debug("Object: " + this);
 	}
 
 	public void didRevert(EOEditingContext ec) {
 		if (tranLogDidRevert.isDebugEnabled())
-			tranLogDidRevert.debug("Object: " + description());
+			tranLogDidRevert.debug("Object: " + this);
 		flushCaches();
 	}
 
@@ -645,36 +645,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/** caches the primary key dictionary for the given object */
 	private NSDictionary<String, Object> _primaryKeyDictionary;
-
-	/**
-	 * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
-	 * This implementation operates in the following fashion. If it is called
-	 * passing in 'false' and it has not yet been saved to the database, meaning
-	 * this object does not yet have a primary key assigned, then it will have
-	 * the adaptor channel generate a primary key for it. Then when the object
-	 * is saved to the database it will use the previously generated primary key
-	 * instead of having the adaptor channel generate another primary key. If
-	 * 'true' is passed in then this method will either return the previously
-	 * generated primaryKey dictionary or null if it does not have one.
-	 * Typically you should only call this method with the 'false' parameter
-	 * seeing as unless you are doing something really funky you won't be
-	 * dealing with this object when it is in the middle of a transaction. The
-	 * delegate {@link ERXDatabaseContextDelegate} is the only class that should
-	 * be calling this method and passing in 'true'.
-	 * 
-	 * @param inTransaction
-	 *            boolean flag to tell the object if it is currently in the
-	 *            middle of a transaction.
-	 * @return primary key dictionary for the current object, if the object does
-	 *         not have a primary key assigned yet and is not in the middle of a
-	 *         transaction then a new primary key dictionary is created, cached
-	 *         and returned.
-	 * @deprecated use {@link #rawPrimaryKeyDictionary(boolean)} instead
-	 */
-	@Deprecated
-	public NSDictionary<String, Object> primaryKeyDictionary(boolean inTransaction) {
-		return rawPrimaryKeyDictionary(inTransaction);
-	}
 
 	/**
 	 * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
@@ -1010,14 +980,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				.append(" pk:\"").append(primaryKey()).append("\">").toString();
 	}
 
-	/**
-	 * @deprecated use {@link #toString()} instead
-	 */
-	@Deprecated
-	public String description() {
-		return toString();
-	}
-
 	public String toLongString() {
 		return super.toString();
 	}
@@ -1175,8 +1137,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/**
 	 * This method performs a few checks before invoking super's implementation.
-	 * If the property key: <b>ERDebuggingEnabled</b> is set to true then the
-	 * method <code>checkConsistency</code> will be called on this object.
 	 * 
 	 * @throws NSValidation.ValidationException
 	 *             if the object does not pass validation for saving to the
@@ -1195,13 +1155,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
 		}
 		super.validateForSave();
-		// FIXME: Should move all of the keys into on central place for easier
-		// management.
-		// Also might want to have a flag off of ERXApplication is debugging is
-		// enabled.
-		// FIXME: Should have a better flag than just ERDebuggingEnabled
-		if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
-			checkConsistency();
 	}
 
 	/**
@@ -1234,14 +1187,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			((ERXEntityClassDescription) cd).validateObjectForUpdate(this);
 		}
 		super.validateForUpdate();
-	}
-
-	@Deprecated
-	public void checkConsistency() throws NSValidation.ValidationException {
-	}
-
-	@Deprecated
-	public void batchCheckConsistency() throws NSValidation.ValidationException {
 	}
 
 	/**
