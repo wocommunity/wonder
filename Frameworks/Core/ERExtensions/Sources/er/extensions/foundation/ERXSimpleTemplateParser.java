@@ -25,8 +25,6 @@ import er.extensions.logging.ERXPatternLayout;
  * {@literal @}{@literal @}, then a possible template might look like: "Hello, {@literal @}{@literal @}name{@literal @}{@literal @}.  How are
  * you feeling today?",  In this case the object will get asked for the
  * value name. This works with key-paths as well.
- * 
- * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only {@literal @}{@literal @} delimeters are supported (defaults to true)
  */
 public class ERXSimpleTemplateParser {
 
@@ -36,10 +34,6 @@ public class ERXSimpleTemplateParser {
     /** The default delimiter */
     public static final String DEFAULT_DELIMITER = "@@";
 
-    /** The deprecated delimiter */
-    @Deprecated
-    private static final String DEPRECATED_DELIMITER = "@";
-
     /** logging support */
     private static final Logger log = LoggerFactory.getLogger(ERXSimpleTemplateParser.class.getName());
 
@@ -47,7 +41,7 @@ public class ERXSimpleTemplateParser {
     private static ERXSimpleTemplateParser _sharedInstance;
 
     /**
-     * Convience method to return the shared instance
+     * Convenience method to return the shared instance
      * of the template parser.
      * 
      * @return shared instance of the parser
@@ -79,10 +73,6 @@ public class ERXSimpleTemplateParser {
     /** The label that will be appeared where an undefined key is found */ 
     private final String _undefinedKeyLabel;
 
-    /** Defines if @ can be used as alternative delimiter */
-    private Boolean _useOldDelimiter;
-
-    
     /** 
      * Returns a parser object with the default undefined label
      * 
@@ -103,27 +93,6 @@ public class ERXSimpleTemplateParser {
         _undefinedKeyLabel = (undefinedKeyLabel == null ? DEFAULT_UNDEFINED_KEY_LABEL : undefinedKeyLabel);
     }
 
-    /** 
-     * Returns a parser object with the given string as the undefined key label. 
-     * Depending on useOldDelimiter value @ can be used as delimiter if @@ is not present 
-     * in the template.
-     * 
-     * @param undefinedKeyLabel  string as the undefined key label, 
-     *                            for example, "?", "N/A"
-     * @param useOldDelimiter   boolean defining if @ is used as delimiter if @@ is not available in the template
-     */
-    public ERXSimpleTemplateParser(String undefinedKeyLabel, boolean useOldDelimiter) {
-        this(undefinedKeyLabel);
-        _useOldDelimiter = Boolean.valueOf(useOldDelimiter);
-    }
-    
-    protected boolean useOldDelimiter() {
-        if (_useOldDelimiter == null) {
-            _useOldDelimiter = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSimpleTemplateParser.useOldDelimiter", true));
-        }
-        return _useOldDelimiter.booleanValue();
-    }
-    
     /**
      * Calculates the set of keys used in a given template
      * for a given delimiter.
@@ -209,12 +178,6 @@ public class ERXSimpleTemplateParser {
             log.debug("Template: {}", template);
             log.debug("Delim: {}", delimiter);
             log.debug("otherObject: {}", otherObject);
-        }
-        if (useOldDelimiter() && delimiter.equals(DEFAULT_DELIMITER) && template.indexOf(delimiter) < 0 && template.indexOf(DEPRECATED_DELIMITER) >= 0) {
-            if (!isLoggingDisabled) {
-                log.warn("It seems that the template string '{}' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.", template);
-            }
-            delimiter = DEPRECATED_DELIMITER;
         }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
         if (! isLoggingDisabled) {
@@ -322,14 +285,14 @@ public class ERXSimpleTemplateParser {
      */
     public static String parseTemplatedStringWithObject(String templateString, Object templateObject) {
         String convertedValue = templateString;
-        if (templateString == null || templateString.indexOf("@@") == -1) {
+        if (templateString == null || templateString.indexOf(DEFAULT_DELIMITER) == -1) {
             return templateString;
         }
 
         String lastConvertedValue = null;
-        while (convertedValue != lastConvertedValue && convertedValue.indexOf("@@") > -1) {
+        while (convertedValue != lastConvertedValue && convertedValue.indexOf(DEFAULT_DELIMITER) > -1) {
             lastConvertedValue = convertedValue;
-            convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, "@@", templateObject, WOApplication.application());
+            convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, DEFAULT_DELIMITER, templateObject, WOApplication.application());
         }
 
         // MS: Should we warn here? This is awfully quiet ...
