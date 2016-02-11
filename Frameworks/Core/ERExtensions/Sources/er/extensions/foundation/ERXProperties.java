@@ -187,7 +187,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </div>
      */
     public static void populateSystemProperties() {
-        System.setProperty("com.webobjects.version", webObjectsVersion());
+        System.setProperty("com.webobjects.version", "5.4");
     }
 
     /** 
@@ -343,134 +343,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             wonderVersion = UNKNOWN_WONDER_VERSION;
         }
         return wonderVersion;
-    }
-
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as string. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをStringとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as string</div>
-     *         <div class="ja">WebObjects バージョン番号を String として戻ります。</div>
-     * @see #webObjectsVersionAsDouble()
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
-     * @deprecated Wonder is used with WO 5.4 only
-     */ 
-    @Deprecated
-	public static String webObjectsVersion() {
-        if (_webObjectsVersion == null) {
-            _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
-            
-            // if _webObjectsVersion is a null-string, we assume it's WebObjects 5.1.x
-            if (_webObjectsVersion.equals("")) 
-                _webObjectsVersion = "5.1";
-        }
-        return _webObjectsVersion;
-    }
-
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as double. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをdoubleとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as double</div>
-     *         <div class="ja">WebObjects バージョン番号を double として戻ります。</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static double webObjectsVersionAsDouble() {
-        if (_webObjectsVersionDouble == 0.0d) {
-            String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
-            int cutoffIndex = woVersionString.indexOf(' ');
-            if (cutoffIndex == -1) {
-            	cutoffIndex = woVersionString.indexOf('-');
-            }
-            if (cutoffIndex != -1) {
-            	woVersionString = woVersionString.substring(0, cutoffIndex);
-            }
-            try {
-                _webObjectsVersionDouble = Double.parseDouble(woVersionString);
-            } catch (NumberFormatException ex) {
-                log.error("An exception occurred while parsing webObjectVersion {} as a double value: {}",
-                        woVersionString, ex.getClass(), ex);
-            }
-        }
-        return _webObjectsVersionDouble;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.2 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     *  WebObjectsのバージョン番号が5.2以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.2 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.2以上であれば</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs52OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            return webObjectsVersionAsDouble() >= 5.2d;
-        }
-        return true;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.22 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョン番号が5.22以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.22 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.22以上であれば</div>
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs522OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            String webObjectsVersion = webObjectsVersion();
-            if("5.2".equals(webObjectsVersion)) {
-                String sourceVersion = sourceVersionString();
-                if("9260000".equals(sourceVersion)) {
-                    return true;
-                }
-            }
-            return webObjectsVersionAsDouble() >= 5.22d;
-        }
-        return true;
     }
 
     
