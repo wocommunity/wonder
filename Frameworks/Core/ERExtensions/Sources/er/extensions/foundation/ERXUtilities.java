@@ -279,19 +279,6 @@ public class ERXUtilities {
         public boolean invoke(Object ctx);
     }
 
-    /** @deprecated use {@link NSTimestamp#DistantFuture} */
-    @Deprecated
-    public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());
-    /** @deprecated use {@link NSTimestamp#DistantFuture} */
-    @Deprecated
-    public static NSTimestamp distantFuture() { return DISTANT_FUTURE; }
-    /** @deprecated use {@link NSTimestamp#DistantPast} */
-    @Deprecated
-    public static final NSTimestamp DISTANT_PAST = new NSTimestamp(1000,1,1,1,1,1,TimeZone.getDefault());
-    /** @deprecated use {@link NSTimestamp#DistantPast} */
-    @Deprecated
-    public static NSTimestamp distantPast() { return DISTANT_PAST; }
-
     /**
      * Gets rid of all ' from a String.
      * @param aString string to check
