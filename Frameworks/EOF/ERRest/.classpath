@@ -12,9 +12,21 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-3.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/ezmorph-1.0.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/json-lib-2.3-jdk15.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/ezmorph-1.0.6.jar" sourcepath="LibrarySources/ezmorph-1.0.6-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERRest/LibraryJavadocs/ezmorph-1.0.6-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="Libraries/commons-beanutils-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-3.2.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERRest/LibraryJavadocs/commons-collections-3.2.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="Libraries/json-lib-2.4-jdk15.jar" sourcepath="LibrarySources/json-lib-2.4-jdk15-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERRest/LibraryJavadocs/json-lib-2.4-jdk15-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

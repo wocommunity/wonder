@@ -30,9 +30,9 @@ public class ERMetadataUtils {
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ColorSpace", Integer.valueOf(ExifSubIFDDirectory.TAG_COLOR_SPACE));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SceneCaptureType", Integer.valueOf(ExifSubIFDDirectory.TAG_SCENE_TYPE));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneYResolution",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_Y_RES));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_Y_RESOLUTION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneResolutionUnit",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_UNIT));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_RESOLUTION_UNIT));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalLength", Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ShutterSpeedValue", Integer.valueOf(ExifSubIFDDirectory.TAG_SHUTTER_SPEED));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FNumber", Integer.valueOf(ExifSubIFDDirectory.TAG_FNUMBER));
@@ -49,7 +49,7 @@ public class ERMetadataUtils {
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("ExposureMode", Integer.valueOf(ExifIFD0Directory.TAG_EXPO));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ExposureBiasValue", Integer.valueOf(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneXResolution",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_X_RES));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_X_RESOLUTION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Orientation", Integer.valueOf(ExifIFD0Directory.TAG_ORIENTATION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Model", Integer.valueOf(ExifIFD0Directory.TAG_MODEL));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("YResolution", Integer.valueOf(ExifIFD0Directory.TAG_Y_RESOLUTION));
