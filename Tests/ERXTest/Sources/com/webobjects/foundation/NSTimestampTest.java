@@ -1,6 +1,8 @@
 package com.webobjects.foundation;
 
+import java.text.DateFormatSymbols;
 import java.util.Enumeration;
+import java.util.Locale;
 
 import junit.framework.Assert;
 import er.erxtest.ERXTestCase;
@@ -114,7 +116,7 @@ public class NSTimestampTest extends ERXTestCase {
             int day = ERXValueUtilities.intValue(dst.objectForKey("day"));
             tz = NSTimeZone.timeZoneWithName((String)dst.objectForKey("tz"), false);
 
-            formatter = new NSTimestampFormatter("%Y %b %d %H:%M:%S %z");
+            formatter = new NSTimestampFormatter("%Y %b %d %H:%M:%S %z", new DateFormatSymbols(Locale.US));
             formatter.setDefaultFormatTimeZone(tz);
 
             String before = (String)dst.objectForKey("before");
