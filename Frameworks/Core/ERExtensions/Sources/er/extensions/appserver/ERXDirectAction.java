@@ -342,7 +342,7 @@ public class ERXDirectAction extends WODirectAction {
 
     /**
      * Returns a list of the traces of open editing context locks.  This is only useful if
-     * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
+     * er.extensions.ERXEC.traceOpenLocks is enabled and 
      * er.extensions.ERXOpenEditingContextLocksPassword is set.
      * 
      * @return list of lock traces

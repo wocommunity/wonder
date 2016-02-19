@@ -433,12 +433,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 #########################################################################
 ## decides if locked editing contexts should be unlocked after the RR-loop.
 ## If you use D2W, it is *strongly* recommended to enable this feature!
-# er.extensions.ERXApplication.useEditingContextUnlocker=false
+# er.extensions.ERXEC.useUnlocker=false
 
 ## When true, ERXEC's will generate a stack trace when lock is called that
 ## can later be accessed via .openLockTrace() or the showOpenEditingContextLockTraces
 ## ERXDirectAction.  Defaults to false.
-# er.extensions.ERXApplication.traceOpenEditingContextLocks = true
+# er.extensions.ERXEC.traceOpenLocks = true
 
 ## decides if the session store deadlock detection (session can't get 
 ## checked out because it already was) should be enabled. This is useful 

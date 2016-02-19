@@ -136,7 +136,6 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.StatisticsBaseLogPath
  * @property er.extensions.ERXApplication.StatisticsLogRotationFrequency
  * @property er.extensions.ERXApplication.developmentMode
- * @property er.extensions.ERXApplication.developmentMode
  * @property er.extensions.ERXApplication.enableERXShutdownHook
  * @property er.extensions.ERXApplication.fixCachingEnabled
  * @property er.extensions.ERXApplication.lowMemBufferSize
@@ -152,10 +151,6 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.ssl.enabled
  * @property er.extensions.ERXApplication.ssl.host
  * @property er.extensions.ERXApplication.ssl.port
- * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
- * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
- * @property er.extensions.ERXApplication.useEditingContextUnlocker
- * @property er.extensions.ERXApplication.useEditingContextUnlocker
  * @property er.extensions.ERXApplication.useSessionStoreDeadlockDetection
  * @property er.extensions.ERXComponentActionRedirector.enabled
  * @property er.extensions.ERXApplication.allowMultipleDevInstances

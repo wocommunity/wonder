@@ -2,8 +2,8 @@
 ognl.helperFunctions=true
 ognl.inlineBindings=true
 er.ajax.secureResources=false
-er.extensions.ERXApplication.traceOpenEditingContextLocks=false
-er.extensions.ERXApplication.useEditingContextUnlocker=true
+er.extensions.ERXEC.traceOpenLocks=false
+er.extensions.ERXEC.useUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=true
 er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=false

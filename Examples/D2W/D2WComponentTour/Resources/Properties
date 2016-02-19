@@ -1,5 +1,5 @@
 er.extensions.ERXEC.defaultAutomaticLockUnlock=true
-er.extensions.ERXApplication.useEditingContextUnlocker=true
+er.extensions.ERXEC.useUnlocker=true
 
 er.javamail.adminEmail=admin@yourhost.com
 er.javamail.centralize=false
