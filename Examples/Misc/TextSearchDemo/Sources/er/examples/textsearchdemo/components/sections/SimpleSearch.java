@@ -59,7 +59,7 @@ public class SimpleSearch extends TSCommonComponent {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		Movie movie = (Movie)ec.faultForGlobalID(currentDocument().eoKeyGlobalId(), ec);
 		
-		MovieDetails nextPage = (MovieDetails)pageWithName(MovieDetails.class.getName());
+		MovieDetails nextPage = pageWithName(MovieDetails.class);
 		nextPage.setMovie(movie);
 
 		return nextPage;

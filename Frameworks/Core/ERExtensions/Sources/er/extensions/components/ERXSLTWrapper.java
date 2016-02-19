@@ -235,7 +235,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		//private static final WeakHashMap templates = new WeakHashMap();
 		private final Map   templates = new HashMap();
 		private static final Logger log = LoggerFactory.getLogger(TemplatePool.class);
-		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
+		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser();
 
 		protected TemplatePool() {}
 

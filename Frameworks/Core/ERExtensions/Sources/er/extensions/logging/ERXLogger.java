@@ -198,7 +198,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
 			Logger.getRootLogger().error("Logging prefs couldn't get read from properties, using defaults");
 		}
 		if (ERXLogger.log == null) {
-			ERXLogger.log = Logger.getLogger(Logger.class.getName());
+			ERXLogger.log = Logger.getLogger(Logger.class);
 		}
 		ERXLogger.log.info("Updated the logging configuration with the current system properties.");
 		if (ERXLogger.log.isDebugEnabled()) {

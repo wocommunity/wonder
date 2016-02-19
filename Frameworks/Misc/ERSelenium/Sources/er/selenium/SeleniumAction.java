@@ -82,12 +82,7 @@ public class SeleniumAction extends ERXDirectAction {
     }
     
     protected WOResponse stringResponse(String s) {
-        return new ERXResponse(s);  	
-    }
-  
-    // @Deprecated
-    protected WOResponse simpleResponse(String s) {
-    	return stringResponse(s);
+        return new ERXResponse(s);
     }
     
     protected WOResponse success() {

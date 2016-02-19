@@ -302,14 +302,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /**
-     * @deprecated This is duplicated from {link: er.extensions.ERXExtensions#userInfoUnit(EOEnterpriseObject, String)}
-     */
-    public static String userInfoUnit(EOEnterpriseObject object, String key) {
-    	String result = er.extensions.ERXExtensions.userInfoUnit(object, key);
-        return result;
-    }
-
-    /**
      * Subclass of NSForwardException that can hold a d2wContext. Useful when the exception
      * occurs while evaluating embedded components. The page's d2wContext will not show you the error.
      * 

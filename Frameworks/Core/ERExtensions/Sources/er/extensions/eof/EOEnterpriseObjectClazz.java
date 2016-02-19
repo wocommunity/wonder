@@ -533,24 +533,6 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * Constructs a fetch specification that will only fetch the primary
      * keys for a given qualifier.
-     * @param ec editing context, not used
-     * @param eoqualifier to construct the fetch spec with
-     * @param sortOrderings array of sort orderings to sort the result 
-     *     set with.
-     * @param additionalKeys array of additional key paths to construct
-     *      the raw rows key paths to fetch.
-     * @return fetch specification that can be used to fetch primary keys for 
-     *     a given qualifier and sort orderings.
-     * @deprecated use {@link #primaryKeyFetchSpecificationForEntity(EOQualifier, NSArray, NSArray)} instead
-     */
-    @Deprecated
-    public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
-        return primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, additionalKeys);
-    }
-
-    /**
-     * Constructs a fetch specification that will only fetch the primary
-     * keys for a given qualifier.
      * 
      * @param qualifier to construct the fetch spec with
      * @param sortOrderings array of sort orderings to sort the result 
