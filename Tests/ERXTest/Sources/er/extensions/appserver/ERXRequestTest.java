@@ -2,6 +2,7 @@
 package er.extensions.appserver;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.webobjects.appserver.WORequest;
@@ -27,31 +28,31 @@ public class ERXRequestTest extends ERXTestCase {
 		WORequest req = new TestRequest();
 
 		req.takeValueForKey("2001.07.04 AD at 12:08:56 PDT", "str");
-		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")));
+		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z", Locale.US)));
 
 		req.takeValueForKey("Wed, Jul 4, '01", "str");
-		assertEquals(new NSTimestamp(2001, 7, 4, 0, 0, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("EEE, MMM d, ''yy")));
+		assertEquals(new NSTimestamp(2001, 7, 4, 0, 0, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("EEE, MMM d, ''yy", Locale.US)));
 
 		req.takeValueForKey("12:08 PM", "str");
-		assertEquals(new NSTimestamp(1970, 1, 1, 12, 8, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("h:mm a")));
+		assertEquals(new NSTimestamp(1970, 1, 1, 12, 8, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("h:mm a", Locale.US)));
 
 		req.takeValueForKey("12 o'clock PM, Pacific Daylight Time", "str");
-		assertEquals(new NSTimestamp(1970, 1, 1, 12, 0, 0, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("hh 'o''clock' a, zzzz")));
+		assertEquals(new NSTimestamp(1970, 1, 1, 12, 0, 0, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("hh 'o''clock' a, zzzz", Locale.US)));
 
 		req.takeValueForKey("0:08 PM, PDT", "str");
-		assertEquals(new NSTimestamp(1970, 1, 1, 12, 8, 0, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("K:mm a, z")));
+		assertEquals(new NSTimestamp(1970, 1, 1, 12, 8, 0, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("K:mm a, z", Locale.US)));
 
 		req.takeValueForKey("02001.July.04 AD 12:08 PM", "str");
-		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("yyyyy.MMMMM.dd GGG hh:mm aaa")));
+		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 0, TimeZone.getDefault()), req.dateFormValueForKey("str", new SimpleDateFormat("yyyyy.MMMMM.dd GGG hh:mm aaa", Locale.US)));
 
 		req.takeValueForKey("Wed, 4 Jul 2001 12:08:56 -0700", "str");
-		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z")));
+		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.US)));
 
 		req.takeValueForKey("010704120856-0700", "str");
-		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("yyMMddHHmmssZ")));
+		assertEquals(new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt), req.dateFormValueForKey("str", new SimpleDateFormat("yyMMddHHmmssZ", Locale.US)));
 
 		req.takeValueForKey("2001-07-04T12:08:56.235-0700", "str");
-		assertEquals(new NSTimestamp((new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt)).getTime() + 235), req.dateFormValueForKey("str", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")));
+		assertEquals(new NSTimestamp((new NSTimestamp(2001, 7, 4, 12, 8, 56, pdt)).getTime() + 235), req.dateFormValueForKey("str", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US)));
 	}
 
 	public void testNumericFormValueForKey() {

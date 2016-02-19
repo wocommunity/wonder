@@ -1,33 +1,15 @@
 package er.extensions.foundation;
 
-import static org.junit.Assert.assertEquals;
-import junit.framework.Assert;
-import junit.framework.JUnit4TestAdapter;
-
 import org.apache.commons.lang.StringUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.erxtest.ERXTestSuite;
+import er.erxtest.ERXTestCase;
 
-//This test class does not extend ERXTestCase because doing so borks the jUnit4 features
-//used to test for exceptions. Since we aren't relying on ERXTestCase to do it for us, a 
-//static initializer block is provided at the beginning of the class. A test suite adapter
-//is also provided to maintain compatibility with the JUnit3 ERXTestSuite.
-
-public class ERXStringUtilitiesTest {
-	{
-		ERXTestSuite.initialize();
-	}
-	
-	public static junit.framework.Test suite() { 
-	    return new JUnit4TestAdapter(ERXStringUtilitiesTest.class); 
-	}
-
+public class ERXStringUtilitiesTest extends ERXTestCase {
 	/**
 	 * Represents a simple encapsulation of two strings and their expected
 	 * Levenshtein distance.
@@ -188,10 +170,6 @@ public class ERXStringUtilitiesTest {
 		levs = l.immutableClone();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void testMaskStringWithCharacter() {
 		String result;
@@ -217,27 +195,42 @@ public class ERXStringUtilitiesTest {
 		result = ERXStringUtilities.maskStringWithCharacter("Visa 4111111111111111", '*', 5, -4);
 		assertEquals("Visa ************1111", result);
 	}
-	
-	@Test(expected=StringIndexOutOfBoundsException.class)
+
+	@Test
 	public void testMaskStringWithCharacter2() {
-		//Illegal arguments. endIndex < beginIndex
-		ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 6, 5);		
+		try {
+			//Illegal arguments. endIndex < beginIndex
+			ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 6, 5);
+			fail("expected StringIndexOutOfBoundsException");
+		} catch (StringIndexOutOfBoundsException e) {
+			// ignore
+		}
 	}
 
-	@Test(expected=StringIndexOutOfBoundsException.class)
+	@Test
 	public void testMaskStringWithCharacter3() {
-		//Illegal arguments. endIndex < beginIndex
-		ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 6, 11);		
+		try {
+			//Illegal arguments. endIndex < beginIndex
+			ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 6, 11);
+			fail("expected StringIndexOutOfBoundsException");
+		} catch (StringIndexOutOfBoundsException e) {
+			// ignore
+		}
 	}
 
-	@Test(expected=StringIndexOutOfBoundsException.class)
+	@Test
 	public void testMaskStringWithCharacter4() {
-		//Illegal arguments. endIndex < beginIndex
-		ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 11, 12);		
+		try {
+			//Illegal arguments. endIndex < beginIndex
+			ERXStringUtilities.maskStringWithCharacter("0123456789", '*', 11, 12);
+			fail("expected StringIndexOutOfBoundsException");
+		} catch (StringIndexOutOfBoundsException e) {
+			// ignore
+		}
 	}
 
 	/**
-	 * Tests {@link ERXStringUtilities#distance(String, String)}.
+	 * Tests {@link StringUtils#getLevenshteinDistance(String, String)}.
 	 */
 	@Test
 	public void testDistance() {
@@ -247,7 +240,7 @@ public class ERXStringUtilitiesTest {
 	}
 
 	/**
-	 * Tests {@link ERXStringUtilities#levenshteinDistance(String, String)}.
+	 * Tests {@link StringUtils#getLevenshteinDistance(String, String)}.
 	 */
 	@Test
 	public void testLevenshteinDistance() {
@@ -273,21 +266,21 @@ public class ERXStringUtilitiesTest {
 		String resultWithNullStart = ERXStringUtilities.safeIdentifierName(nullIdentifierStart, prefix, replacement);
 		String resultWithEmptyStart = ERXStringUtilities.safeIdentifierName(emptyIdentifierStart, prefix, replacement);
 		
-		Assert.assertEquals(safeJavaIdentifierStart, resultWithSafeStart);
+		assertEquals(safeJavaIdentifierStart, resultWithSafeStart);
 		
-		Assert.assertNotSame(safeJavaIdentifierStartWithUnsafeChars, resultWithSafeStartUnsafeContent);
-		Assert.assertEquals("Expected 2 replacements for unsafe characters", 2, resultWithSafeStartUnsafeContent.replaceAll("[^_]", "").length());
-		Assert.assertFalse("Did not expect prefix as identifier starts with safe character.", resultWithSafeStartUnsafeContent.contains(prefix));
+		assertNotSame(safeJavaIdentifierStartWithUnsafeChars, resultWithSafeStartUnsafeContent);
+		assertEquals("Expected 2 replacements for unsafe characters", 2, resultWithSafeStartUnsafeContent.replaceAll("[^_]", "").length());
+		assertFalse("Did not expect prefix as identifier starts with safe character.", resultWithSafeStartUnsafeContent.contains(prefix));
 
-		Assert.assertNotSame(unsafeJavaIdentifierStart, resultWithUnsafeStart);
-		Assert.assertFalse("Expected no replacement for unsafe characters", resultWithUnsafeStart.contains("_"));
-		Assert.assertTrue("Did expect prefix as identifier starts with unsafe character.", resultWithUnsafeStart.contains(prefix));
+		assertNotSame(unsafeJavaIdentifierStart, resultWithUnsafeStart);
+		assertFalse("Expected no replacement for unsafe characters", resultWithUnsafeStart.contains("_"));
+		assertTrue("Did expect prefix as identifier starts with unsafe character.", resultWithUnsafeStart.contains(prefix));
 
-		Assert.assertNotSame(nullIdentifierStart, resultWithNullStart);
-		Assert.assertTrue("Did expect 'null' as identifier was null.", resultWithNullStart.contains("null"));
-		Assert.assertTrue("Did expect prefix as identifier was null.", resultWithNullStart.contains(prefix));
+		assertNotSame(nullIdentifierStart, resultWithNullStart);
+		assertTrue("Did expect 'null' as identifier was null.", resultWithNullStart.contains("null"));
+		assertTrue("Did expect prefix as identifier was null.", resultWithNullStart.contains(prefix));
 
-		Assert.assertNotSame(emptyIdentifierStart, resultWithEmptyStart);
-		Assert.assertEquals(prefix, resultWithEmptyStart);
+		assertNotSame(emptyIdentifierStart, resultWithEmptyStart);
+		assertEquals(prefix, resultWithEmptyStart);
 	}
 }
