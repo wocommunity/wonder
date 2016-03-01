@@ -2138,12 +2138,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return result;
     }
 
-	@Override
     public void takeValueForKey(Object anObject, String aKey) {
          setProperty(aKey, (anObject != null ? anObject.toString() : null));
     }
 
-    @Override
     public Object valueForKey(String aKey) {
          return getProperty(aKey);
     }
