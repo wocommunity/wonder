@@ -80,6 +80,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
@@ -2831,5 +2832,40 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
     public String[] adaptorExtensions() {
         return myAppExtensions;
+    }
+    
+    public BuildType buildType()
+    {
+    	if(buildType == null)
+    	{
+    		buildType = BuildType.Classic;
+    		
+    		@SuppressWarnings("deprecation")
+    		File infoPlistPath = new File(NSBundle.mainBundle().bundlePath(), "Contents/Info.plist");
+    		
+    		if(infoPlistPath.exists())
+    		{
+				NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListWithPathURL(NSPathUtilities._URLWithPath(infoPlistPath.getAbsolutePath()));
+
+				if(dict != null)
+				{
+					String cfBundleVersion = (String) dict.objectForKey("CFBundleVersion");
+					if(cfBundleVersion.length() > 0)
+					{
+			    		buildType = BuildType.Maven;
+					}
+				}
+    		}
+    	}
+    	
+    	return buildType;
+    }
+    
+    private BuildType buildType = null;
+    
+    public static enum BuildType
+    {
+    	Classic,
+    	Maven
     }
 }
