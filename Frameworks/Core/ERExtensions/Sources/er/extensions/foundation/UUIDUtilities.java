@@ -11,7 +11,10 @@ import com.webobjects.foundation.NSData;
 public class UUIDUtilities  {
 	private static final String validHexCharacters = "ABCDEF0123456789abcdef";
 	static final SecureRandom randomGenerator = new SecureRandom();
-	
+
+    public final static int typeByteOffset = 6;
+    public final static int variationByteOffset = 8;
+
 	
 	/**
 	 * Generate a type 4 UUID from a secure random source like the java UUID class.
@@ -28,6 +31,12 @@ public class UUIDUtilities  {
     private static byte[] generateAsByteArray() {
 		byte[] value = new byte[16];
 		randomGenerator.nextBytes(value);
+		
+		value[typeByteOffset] &= 0xF; // Clear the type part of the byte
+		value[typeByteOffset] |= 0x40; // Set the type part of the byte to random
+		value[variationByteOffset] &= 0x3F; // Clear the variant part of the byte
+		value[variationByteOffset] |= 0x80; // set to IETF variant
+		
 		return value;
 	}
 
@@ -52,7 +61,7 @@ public class UUIDUtilities  {
 			throw new IllegalArgumentException("Null is not a valid UUID value.");
 		}
 		String cleannedUuid = ERXStringUtilities.removeExceptCharacters(uuid, validHexCharacters);
-		if (cleannedUuid.length() != 16) {
+		if (cleannedUuid.length() != 32) {
 			throw new IllegalArgumentException("\""+uuid+"\" is not a valid hex string representing a byte[16].");
 		}
 		
@@ -90,9 +99,7 @@ public class UUIDUtilities  {
 		formattedString.append("-");
 		formattedString.append(rawString.substring(16, 20));
 		formattedString.append("-");
-		formattedString.append(rawString.substring(20, 24));
-		formattedString.append("-");
-		formattedString.append(rawString.substring(24, 32));
+		formattedString.append(rawString.substring(20, 32));
 		return formattedString.toString();
 	}
 	
