@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.UUIDUtilities;
 
 /**
  * EODelegate is an implementation of the ERXRestRequestNode.Delegate interface that understands EOF.
@@ -81,20 +82,23 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 				pkValue = ERXEOControlUtilities.primaryKeyObjectForObject(eo);
 			}
 		}
+		if (pkValue instanceof NSData) {
+			NSData pkData = (NSData) pkValue;
+			if (pkData.length() == 16) {
+				pkValue = UUIDUtilities.encodeAsPrettyString(pkData);
+			}
+		}
 
 		return pkValue;
 	}
 
 	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
-		EOEntity eoEntity = ((EOEntityClassDescription) entity).entity();
 		String strPKValue = String.valueOf(id);
-		Object pkValue = eoEntity.primaryKeyAttributes().objectAtIndex(0).validateValue(strPKValue);
 		EOEditingContext editingContext = context.editingContext();
 		if (editingContext == null) {
 			throw new IllegalArgumentException("There was no editing context attached to this rest context.");
 		}
 		editingContext.lock();
-		Object obj;
 		try {
 			EOGlobalID gid = ERXEOControlUtilities.globalIDForString(editingContext, entity.entityName(), strPKValue);
 			return editingContext.faultForGlobalID(gid, editingContext);
