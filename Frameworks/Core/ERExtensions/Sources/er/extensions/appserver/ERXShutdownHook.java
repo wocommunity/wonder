@@ -53,7 +53,7 @@ public abstract class ERXShutdownHook extends Thread {
 	
 	public static void initERXShutdownHook() {
 		System.out.println( "WILL ADD SHUTDOWNHOOK" );
-		Runtime.getRuntime().addShutdownHook( new Thread() {
+		Runtime.getRuntime().addShutdownHook( new Thread( "shutdown_complete_message_writer" ) {
 			@Override
 			public void run() {
 				try {
@@ -90,7 +90,8 @@ public abstract class ERXShutdownHook extends Thread {
 	}
 
 	/**
-	 * Construct a new nameless shutdown hook and register it.
+	 * Construct a new nameless shutdown hook and register it. It is recommended to use named hooks wherever
+	 * possible for easier debugging.
 	 */
 	public ERXShutdownHook() {
 		Runtime.getRuntime().addShutdownHook( this );
@@ -102,8 +103,10 @@ public abstract class ERXShutdownHook extends Thread {
 	 * @param hookName hook name
 	 */
 	public ERXShutdownHook( String hookName ) {
-		this();
+		super( hookName );
 		name = hookName;
+		Runtime.getRuntime().addShutdownHook( this );
+		ALL_HOOKS.add( this );
 	}
 
 	@Override
