@@ -3,8 +3,6 @@
 package er.bugtracker;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -25,8 +23,6 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.taggable.ERTaggable;
 
 public class Bug extends _Bug implements Markable {
-    static final Logger log = Logger.getLogger(Bug.class);
-
     protected boolean _componentChanged;
     protected boolean _ownerChanged;
 

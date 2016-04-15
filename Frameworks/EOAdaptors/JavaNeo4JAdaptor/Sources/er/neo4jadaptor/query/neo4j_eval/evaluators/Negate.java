@@ -13,9 +13,6 @@ import er.neo4jadaptor.query.neo4j_eval.Cost;
  * @param <T>
  */
 public final class Negate<T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Negate.class);
-
 	private final Evaluator<T> wrapped;
 	
 	public Negate(Evaluator<T> wrapped) {

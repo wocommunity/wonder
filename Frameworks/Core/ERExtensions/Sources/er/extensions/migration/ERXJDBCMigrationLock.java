@@ -2,7 +2,8 @@ package er.extensions.migration;
 
 import java.sql.Types;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
@@ -42,7 +43,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
-	public static final Logger log = Logger.getLogger(ERXJDBCMigrationLock.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCMigrationLock.class);
 
 	private EOModel _lastUpdatedModel;
 	private EOModel _dbUpdaterModelCache;
@@ -114,10 +115,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 							}
 							catch (EOGeneralAdaptorException e) {
 								// Assume this is the unique constraint on modelName that failed
-								if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-									ERXJDBCMigrationLock.log.info("Exception creating row for model '" + model.name() + 
-											", assuming another process has already added this and has the lock.", e);
-								}
+								log.info("Exception creating row for model '{}', assuming another process has already added this and has the lock.", model.name(), e);
 								return false;
 							}
 							count = 1;
@@ -126,9 +124,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 							throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".");
 						}
 					}
-					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-						ERXJDBCMigrationLock.log.info("Waiting on updateLock for model '" + model.name() + "' ...");
-					}
+					log.info("Waiting on updateLock for model '{}' ...", model.name());
 				}
 				channel.adaptorContext().commitTransaction();
 				channel.adaptorContext().beginTransaction();

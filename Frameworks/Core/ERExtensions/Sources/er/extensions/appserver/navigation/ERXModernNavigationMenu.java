@@ -1,7 +1,5 @@
 package er.extensions.appserver.navigation;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -30,9 +28,6 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXModernNavigationMenu.class);
 
     public ERXNavigationItem aNavigationItem;
 

@@ -16,13 +16,10 @@ import er.rest.ERXRestUtils;
  *
  * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
  */
-public class ERXXmlRestWriter implements IERXRestWriter {
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
-		response.setHeader("text/xml", "Content-Type");
-	}
-
+public class ERXXmlRestWriter extends ERXRestWriter {
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		appendHeadersToResponse(node, response, context);
+		response.setContentEncoding(contentEncoding());
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		appendNodeToResponse(node, response, 0, delegate, context);
 	}
@@ -188,4 +185,8 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
+	@Override
+	public String contentType() {
+		return "text/xml";
+	}
 }

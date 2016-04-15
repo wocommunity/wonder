@@ -11,10 +11,6 @@ import er.indexing.attributes.ERIDocument;
 import er.indexing.attributes.ERIExtensibleObject;
 
 public class Asset extends _Asset implements ERIExtensibleObject {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Asset.class);
-
     public static final AssetClazz clazz = new AssetClazz();
     public static class AssetClazz extends _Asset._AssetClazz {
         /* more clazz methods here */

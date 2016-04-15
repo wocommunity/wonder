@@ -19,9 +19,6 @@ import er.neo4jadaptor.test.eo.ThirdEntity;
 import er.neo4jadaptor.test.tools.Tools;
 
 public class Neo4JAdaptorTest extends TestCase {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Neo4JAdaptorTest.class);
-	
 	private EOEditingContext ec;
 	
 	@Override

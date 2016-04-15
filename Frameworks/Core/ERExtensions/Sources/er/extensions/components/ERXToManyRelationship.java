@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
@@ -47,9 +45,6 @@ public class ERXToManyRelationship extends WOToManyRelationship {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXToManyRelationship.class);
-    
     public final String checkBoxComponentName = ERXProperties.stringForKeyWithDefault("er.extensions.components.ERXToManyRelationship.checkBoxComponentName", "ERXCheckboxMatrix");
  
     public ERXToManyRelationship(WOContext context) {

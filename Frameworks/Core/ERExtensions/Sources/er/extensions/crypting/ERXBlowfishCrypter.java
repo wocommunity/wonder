@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -14,6 +17,8 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXBlowfishCipherKey the blowfish key to use
  */
 public class ERXBlowfishCrypter extends ERXAbstractBlowfishCrypter {
+	private static final Logger log = LoggerFactory.getLogger(ERXBlowfishCrypter.class);
+
 	private String _blowfishKey;
 	
 	public ERXBlowfishCrypter(String blowfishKey) {

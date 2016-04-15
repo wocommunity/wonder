@@ -1,6 +1,7 @@
 package er.extensions.migration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -112,7 +113,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * @author mschrag
  */
 public class ERXMigrationDatabase {
-	public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
 
 	private EOModel _model;
 	private EOAdaptorChannel _adaptorChannel;
@@ -373,7 +374,7 @@ public class ERXMigrationDatabase {
 			if (required) {
 				throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support the required '" + operationName + "' operation.");
 			}
-			ERXMigrationDatabase.log.error("Your EOSynchronizationFactory does not support the '" + operationName + "' operation, so this migration will be skipped.");
+			log.error("Your EOSynchronizationFactory does not support the '{}' operation, so this migration will be skipped.", operationName);
 		}
 	}
 

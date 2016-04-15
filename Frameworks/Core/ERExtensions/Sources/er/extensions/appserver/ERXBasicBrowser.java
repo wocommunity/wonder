@@ -6,7 +6,8 @@
 //
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -119,9 +120,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * </div>
  */
 public class ERXBasicBrowser extends ERXBrowser {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXBasicBrowser.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXBasicBrowser.class);
 
     private final String          _browserName;
     private final String          _version;
@@ -240,7 +239,7 @@ public class ERXBasicBrowser extends ERXBrowser {
 	        try {
 	        	mj = Integer.valueOf(majorVersion);
 	        } catch (NumberFormatException e) {
-	        	log.info("could not determine major version from '" + majorVersion + "'", e);
+	        	log.info("could not determine major version from '{}'", majorVersion, e);
 			}
 			_majorVersion = mj;
         }

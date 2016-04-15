@@ -3,7 +3,8 @@ package er.extensions.jdbc;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOModel;
@@ -24,7 +25,7 @@ import er.extensions.foundation.ERXExceptionUtilities;
  * {@literal @}madeWonderfulBy mschrag
  */
 public class ERXJDBCConnectionAnalyzer {
-    public final static Logger log = Logger.getLogger("er.transaction.adaptor.ConnectionAnalyzer");
+    private static final Logger log = LoggerFactory.getLogger("er.transaction.adaptor.ConnectionAnalyzer");
 
     private NSDictionary _connectionDictionary;
 	private JDBCAdaptor _targetAdaptor;
@@ -81,7 +82,7 @@ public class ERXJDBCConnectionAnalyzer {
 	public void analyzeConnection() {
 		NSMutableDictionary mutableConnectionDictionary = _connectionDictionary.mutableClone();
 		mutableConnectionDictionary.setObjectForKey("<password deleted for log>", "password");
-		ERXJDBCConnectionAnalyzer.log.info("Checking JDBC connection with information " + mutableConnectionDictionary);
+		log.info("Checking JDBC connection with information {}", mutableConnectionDictionary);
 
 		EOObjectStoreCoordinator.defaultCoordinator().lock();
 		try {
@@ -91,7 +92,7 @@ public class ERXJDBCConnectionAnalyzer {
 			testConnection();
 		}
 		catch (RuntimeException t) {
-			ERXJDBCConnectionAnalyzer.log.error(ERXExceptionUtilities.toParagraph(t));
+			log.error(ERXExceptionUtilities.toParagraph(t));
 		}
 		finally {
 			EOObjectStoreCoordinator.defaultCoordinator().unlock();
@@ -102,17 +103,17 @@ public class ERXJDBCConnectionAnalyzer {
 	 * Attempts to load the JDBCAdaptor.
 	 */
 	public void findAdaptor() {
-		ERXJDBCConnectionAnalyzer.log.info("Trying to create JDBCAdaptor...");
+		log.info("Trying to create JDBCAdaptor...");
 		try {
 			_targetAdaptor = (JDBCAdaptor) EOAdaptor.adaptorWithName("JDBC");
 		}
 		catch (java.lang.IllegalStateException e) {
-			ERXJDBCConnectionAnalyzer.log.info("Error: Failed to load JavaJDBCAdaptor.framework");
-			ERXJDBCConnectionAnalyzer.log.info("This framework needs to be included in your " + "application to make JDBC connections");
+			log.info("Error: Failed to load JavaJDBCAdaptor.framework");
+			log.info("This framework needs to be included in your application to make JDBC connections.");
 			dumpClasspath();
 			throw new RuntimeException("JDBC Connection Analysis: JavaJDBCAdaptor.framework not on classpath");
 		}
-		ERXJDBCConnectionAnalyzer.log.info("Successfully created adaptor " + targetAdaptor().getClass().getName());
+		log.info("Successfully created adaptor {}", targetAdaptor().getClass());
 
 		/** ensure [targetAdaptor_created] targetAdaptor() != null; * */
 	}
@@ -123,17 +124,17 @@ public class ERXJDBCConnectionAnalyzer {
 	public void findPlugin() {
 		/** require [targetAdaptor_created] targetAdaptor() != null; * */
 
-		ERXJDBCConnectionAnalyzer.log.info("Trying to create plugin...");
+		log.info("Trying to create plugin...");
 
 		try {
 			_targetAdaptor.setConnectionDictionary(connectionDictionary());
 			_targetPlugIn = targetAdaptor().plugIn();
-			ERXJDBCConnectionAnalyzer.log.info("Created plugin " + targetPlugIn().getClass().getName());
+			log.info("Created plugin {}", targetPlugIn().getClass());
 		}
 		catch (java.lang.NoClassDefFoundError e) {
-			ERXJDBCConnectionAnalyzer.log.info("Error: Failed to load class " + e.getMessage() + "when creating JDBC plugin.");
-			ERXJDBCConnectionAnalyzer.log.info("This is probably a class which is required by the " + "plugin class and can also indicate that the JDBC driver was not found.");
-			ERXJDBCConnectionAnalyzer.log.info("Either (a) your classpath is wrong or (b) something " + "is missing from the JRE extensions directory/ies.");
+			log.info("Error: Failed to load class {} when creating JDBC plugin.", e.getMessage());
+			log.info("This is probably a class which is required by the plugin class and can also indicate that the JDBC driver was not found.");
+			log.info("Either (a) your classpath is wrong or (b) something is missing from the JRE extensions directory/ies.");
 			dumpClasspath();
 			dumpExtensionDirectories();
 			throw new RuntimeException("JDBC Connection Analysis: Missing class needed by plugin");
@@ -141,19 +142,19 @@ public class ERXJDBCConnectionAnalyzer {
 		catch (Exception e) {
 			// Unwrap the exception to get at the real problem
 			Throwable t = ERXExceptionUtilities.getMeaningfulThrowable(e);
-			ERXJDBCConnectionAnalyzer.log.info("Error: Plugin creationg failed with " + t.getMessage(), t);
+			log.info("Error: Plugin creationg failed.", t);
 			throw new RuntimeException("JDBC Connection Analysis: unexpected failure creating plugin");
 		}
 
 		if (targetPlugIn().getClass().equals(com.webobjects.jdbcadaptor.JDBCPlugIn.class)) {
 			String driverClassName = (String) connectionDictionary().objectForKey(JDBCAdaptor.DriverKey);
 			if ((driverClassName == null) || (driverClassName.length() == 0)) {
-				ERXJDBCConnectionAnalyzer.log.info("Error: Failed to load custom JDBC plugin and " + "connection dictionary does not include the driver class name under " + "the key " + JDBCAdaptor.DriverKey);
-				ERXJDBCConnectionAnalyzer.log.info("Either \n(a) the plugin is missing from your classpath " + "or \n(b) the connection dictionary has a misspelled '" + JDBCAdaptor.PlugInKey + "' key or \n(c) the plug-in name specified under the '" + JDBCAdaptor.PlugInKey + "' key is incorrect or \n(d) the class name for the JDBC driver under the " + "key '" + JDBCAdaptor.DriverKey + "' is missing from the connection dictionary or" + "\n(e)the connection dictionary has a misspelled '" + JDBCAdaptor.DriverKey + "' key");
+				log.info("Error: Failed to load custom JDBC plugin and connection dictionary does not include the driver class name under the key {}", JDBCAdaptor.DriverKey);
+				log.info("Either \n(a) the plugin is missing from your classpath or \n(b) the connection dictionary has a misspelled '{}' key or \n(c) the plug-in name specified under the '{}' key is incorrect or \n(d) the class name for the JDBC driver under the key '{}' is missing from the connection dictionary or\n(e)the connection dictionary has a misspelled '{}' key", JDBCAdaptor.PlugInKey, JDBCAdaptor.PlugInKey, JDBCAdaptor.DriverKey, JDBCAdaptor.DriverKey);
 				dumpClasspath();
 				throw new RuntimeException("JDBC Connection Analysis: Missing plugin or driver");
 			}
-			ERXJDBCConnectionAnalyzer.log.info("WARNING: using generic JDBCPlugIn.");
+			log.info("WARNING: using generic JDBCPlugIn.");
 		}
 
 		/** ensure [targetPlugIn_created] targetPlugIn() != null; * */
@@ -165,20 +166,20 @@ public class ERXJDBCConnectionAnalyzer {
 	public void findJDBCDriver() {
 		/** require [targetPlugIn_created] targetPlugIn() != null; * */
 
-		ERXJDBCConnectionAnalyzer.log.info("Trying to load JDBC driver " + targetAdaptor().driverName() + "...");
+		log.info("Trying to load JDBC driver {}...", targetAdaptor().driverName());
 		Class targetDriver;
 
 		try {
 			targetDriver = Class.forName(targetAdaptor().driverName());
 		}
 		catch (ClassNotFoundException e) {
-			ERXJDBCConnectionAnalyzer.log.info("Error: Failed to load JDBC driver class " + e.getMessage());
-			ERXJDBCConnectionAnalyzer.log.info("The JDBC driver jar is either missing from  (a) " + "your classpath or (b) the JRE extensions directory/ies.");
+			log.info("Error: Failed to load JDBC driver class {}", e.getMessage());
+			log.info("The JDBC driver jar is either missing from  (a) " + "your classpath or (b) the JRE extensions directory/ies.");
 			dumpClasspath();
 			dumpExtensionDirectories();
 			throw new RuntimeException("JDBC Connection Analysis: Cannot load JDBC driver. " + e.getMessage());
 		}
-		ERXJDBCConnectionAnalyzer.log.info("Successfully loaded JDBC driver " + targetDriver.getName());
+		log.info("Successfully loaded JDBC driver {}", targetDriver.getName());
 	}
 
 	/**
@@ -187,31 +188,31 @@ public class ERXJDBCConnectionAnalyzer {
 	public void testConnection() {
 		/** require [targetPlugIn_created] targetPlugIn() != null; * */
 
-		ERXJDBCConnectionAnalyzer.log.info("JDBC driver and plugin are loaded, trying to connect...");
+		log.info("JDBC driver and plugin are loaded, trying to connect...");
 		try {
 			targetAdaptor().assertConnectionDictionaryIsValid();
 		}
 		catch (RuntimeException t) {
-			ERXJDBCConnectionAnalyzer.log.info("Error: Exception thrown while connecting.\n" + "Check exception message carefully.");
+			log.info("Error: Exception thrown while connecting.\nCheck exception message carefully.");
 			throw t;
 		}
 		catch (Error e) {
-			ERXJDBCConnectionAnalyzer.log.info("Error: Exception thrown while connecting.\n" + "Check exception message carefully.");
+			log.info("Error: Exception thrown while connecting.\nCheck exception message carefully.");
 			throw e;
 		}
-		ERXJDBCConnectionAnalyzer.log.info("JDBC connection successful!");
+		log.info("JDBC connection successful!");
 	}
 
 	/*
 	 * Prints out the classpath being used by this JVM.
 	 */
 	public void dumpClasspath() {
-		ERXJDBCConnectionAnalyzer.log.info("The classpath being used is: ");
+		log.info("The classpath being used is: ");
 
 		URLClassLoader classLoader = (URLClassLoader) getClass().getClassLoader();
 		URL[] sourceURLs = classLoader.getURLs();
 		for (int i = 0; i < sourceURLs.length; i++) {
-			ERXJDBCConnectionAnalyzer.log.info(sourceURLs[i]);
+			log.info("{}", sourceURLs[i]);
 		}
 	}
 
@@ -219,8 +220,8 @@ public class ERXJDBCConnectionAnalyzer {
 	 * Prints out the Java extension directories being used by this JVM.
 	 */
 	public void dumpExtensionDirectories() {
-		ERXJDBCConnectionAnalyzer.log.info("The JRE extension directories being used are: ");
-		ERXJDBCConnectionAnalyzer.log.info(System.getProperties().getProperty("java.ext.dirs"));
+		log.info("The JRE extension directories being used are: ");
+		log.info(System.getProperties().getProperty("java.ext.dirs"));
 	}
 
 	/**

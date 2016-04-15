@@ -325,18 +325,14 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public NSArray(List<? extends E> list, boolean checkForNull) {
 		if (list == null) {
-			throw new NullPointerException("List cannot be null");
+			initFromObjects(null, 0, 0, false, false);
+		} else {
+			initFromList(list, 0, list.size(), 0, checkForNull, false);
 		}
-		initFromList(list, 0, list.size(), 0, checkForNull, false);
 	}
 
 	public NSArray(Collection<? extends E> collection, boolean checkForNull) {
-		if (collection == null) {
-			throw new NullPointerException("Collection cannot be null");
-		}
-		
-		Object[] anArray = collection.toArray();
-		initFromObjects(anArray, 0, anArray.length, checkForNull, false);
+		initFromObjects(collection == null ? null : collection.toArray(), 0, collection == null ? 0 : collection.size(), checkForNull, false);
 	}
 
 	public NSArray(Collection<? extends E> collection) {

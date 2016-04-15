@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -44,7 +45,7 @@ import er.extensions.foundation.ERXStringUtilities;
  *
  */
 public abstract class FileUploader extends WOComponent {
-	private static Logger log = Logger.getLogger(FileUploader.class);
+	private static final Logger log = LoggerFactory.getLogger(FileUploader.class);
 	
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.jquery.useUnobtrusively", true);
 
@@ -188,7 +189,7 @@ public abstract class FileUploader extends WOComponent {
 				aFileName = (String) request.formValueForKey(FormKeys.qqfile);
 				anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
 	        } else {
-	        	log.error("Unable to obtain filename from form values: " + request.formValueKeys());
+	        	log.error("Unable to obtain filename from form values: {}", request.formValueKeys());
 	        	return;
 	        }
 

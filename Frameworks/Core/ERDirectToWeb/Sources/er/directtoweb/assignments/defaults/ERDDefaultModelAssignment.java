@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.defaults;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
 import com.webobjects.eoaccess.EOAttribute;
@@ -50,9 +48,6 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERDDefaultModelAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {

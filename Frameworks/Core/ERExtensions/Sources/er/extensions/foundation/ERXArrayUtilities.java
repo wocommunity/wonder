@@ -16,7 +16,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -47,7 +48,7 @@ import er.extensions.eof.ERXKey;
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities {
-	private static final Logger log = Logger.getLogger(ERXArrayUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXArrayUtilities.class);
 
 	   /**
 	    * Holds the null grouping key for use when grouping objects
@@ -712,7 +713,7 @@ public class ERXArrayUtilities {
      */
     public static <T> NSArray<T> arrayByAddingObjectsFromArrayWithoutDuplicates(Collection<? extends T> array1, Collection<? extends T> array2) {
         if (array2 == null || array2.isEmpty()) {
-            if (array1.isEmpty()) {
+            if (array1 == null || array1.isEmpty()) {
                 return NSArray.emptyArray();
             } else if (array1 instanceof NSArray) {
                 return ((NSArray)array1).immutableClone();

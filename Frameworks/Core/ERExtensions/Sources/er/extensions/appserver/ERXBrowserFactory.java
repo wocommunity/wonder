@@ -9,7 +9,8 @@ package er.extensions.appserver;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
@@ -168,9 +169,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @property er.extensions.ERXBrowserFactory.BrowserClassName (default ERXBasicBrowser)
  */
 public class ERXBrowserFactory {
-
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXBrowserFactory.class);
 
     /** 
      * <div class="en">holds the default browser class name</div>
@@ -212,16 +211,16 @@ public class ERXBrowserFactory {
         if (_factory == null) {
             String browserFactoryClass = System.getProperty("er.extensions.ERXBrowserFactory.FactoryClassName");
             if (browserFactoryClass != null && !browserFactoryClass.equals(ERXBrowserFactory.class.getName())) {
-                log.debug("Creating browser factory for class name: " + browserFactoryClass);
+                log.debug("Creating browser factory for class name: {}", browserFactoryClass);
                 try {
                     Class browserClass = Class.forName(browserFactoryClass);
                     _factory = (ERXBrowserFactory)browserClass.newInstance();
                 } catch (Exception e) {
-                    log.error("Unable to create browser factory for class name \"" + browserFactoryClass + "\"", e);
+                    log.error("Unable to create browser factory for class name '{}'", browserFactoryClass, e);
                 }
             }
             if (_factory == null) {
-                log.debug("Factory null creating default browser factory. " + browserFactoryClass);
+                log.debug("Factory null creating default browser factory. {}", browserFactoryClass);
                 _factory = new ERXBrowserFactory();
             }
         }
@@ -333,6 +332,30 @@ public class ERXBrowserFactory {
         }
 
         String ua = request.headerForKey("user-agent");
+        return browserMatchingUserAgent(ua);
+    }
+
+    /** 
+     * <div class="en">
+     * Returns a shared browser object for a given <code>user-agent</code>
+     * string by parsing the string and retrieving the appropriate browser 
+     * object, creating it if necessary. 
+     * <p>
+     * Use this method to retrieve a browser instance from an existing
+     * user-agent string rather than a request object (e.g. you're 
+     * recreating a browser instance from a past user-agent string). Once 
+     * you get the browser object, you are responsible for calling {@link 
+     * #retainBrowser retainBrowser} to keep it in the browser pool. 
+     * <p>
+     * You are also required to call {@link #releaseBrowser releaseBrowser} 
+     * to release the browser from the pool when it is no longer needed. 
+     * </div>
+     * 
+     * @param ua - user agent string (e.g. from request headers)
+     * @return <div class="en">a shared browser object</div>
+     *         <div class="ja">共有ブラウザ・オブジェクト</div>
+     */
+    public ERXBrowser browserMatchingUserAgent(String ua) {
         if (ua == null) {
             return getBrowserInstance(ERXBrowser.UNKNOWN_BROWSER, ERXBrowser.UNKNOWN_VERSION, 
             		ERXBrowser.UNKNOWN_VERSION, ERXBrowser.UNKNOWN_PLATFORM, null);
@@ -431,20 +454,18 @@ public class ERXBrowserFactory {
             browser = _createBrowserWithClassName(browserClassNameForBrowserNamed(browserName),
                                         browserName, version, mozillaVersion, platform, userInfo);
         } catch (Exception ex) {
-            log.error("Unable to create a browser for class name: " + browserClassNameForBrowserNamed(browserName) 
-                            + " with exception: " + ex.getMessage() + ".  Will use default classes."
+            log.error("Unable to create a browser for class name: {} with exception: {}. Will use default classes."
                             + " Please ensure that the fully-qualified name for the class is specified"
-                            + " if it is in a different package.", ex);
+                            + " if it is in a different package.", browserClassNameForBrowserNamed(browserName), ex.getMessage(), ex);
         }
         if (browser == null) {
             try {
                 browser = _createBrowserWithClassName(_DEFAULT_BROWSER_CLASS_NAME, 
                                         browserName, version, mozillaVersion, platform, userInfo);
             } catch (Exception ex) {
-                log.error("Unable to create even a default browser for class name: " + _DEFAULT_BROWSER_CLASS_NAME
-                            + " with exception: " + ex.getMessage()
-                            + "  Will instanciate a browser with regular" 
-                            + " new " + _DEFAULT_BROWSER_CLASS_NAME + "(...) statement.", ex);
+                log.error("Unable to create even a default browser for class name: {} with exception: {} "
+                            + "Will instanciate a browser with regular new {}(...) statement.",
+                            _DEFAULT_BROWSER_CLASS_NAME, ex.getMessage(), _DEFAULT_BROWSER_CLASS_NAME, ex);
                 browser = new ERXBasicBrowser(browserName, version, mozillaVersion, platform, userInfo);
             }
         }
@@ -606,7 +627,7 @@ public class ERXBrowserFactory {
 			userAgent = userAgent.toLowerCase();
 			for (Pattern pattern : robotExpressions) {
 				if (pattern.matcher(userAgent).find()) {
-					log.debug(pattern + " matches  " + userAgent);
+					log.debug("{} matches {}", pattern, userAgent);
 					return true;
 				}
 			}
@@ -830,8 +851,7 @@ public class ERXBrowserFactory {
             count = new ERXMutableInteger(1);
             _referenceCounters().setObjectForKey(count, key);
         }
-        if (log.isDebugEnabled()) 
-            log.debug("_incrementReferenceCounterForKey() - count = " + count + ", key = " + key);
+        log.debug("_incrementReferenceCounterForKey() - count = {}, key = {}", count, key);
         return count;
     }
 
@@ -850,8 +870,7 @@ public class ERXBrowserFactory {
         if (count != null)  
             count.decrement();
         
-        if (log.isDebugEnabled()) 
-            log.debug("_decrementReferenceCounterForKey() - count = " + count + ", key = " + key);
+        log.debug("_decrementReferenceCounterForKey() - count = {}, key = {}", count, key);
         return count;
     }
 

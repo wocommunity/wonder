@@ -10,7 +10,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -33,8 +34,7 @@ public class ERXPathDirectAction extends WODirectAction {
     //	Class Constant(s)
     //	---------------------------------------------------------------------------
     
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXPathDirectAction.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXPathDirectAction.class);
 
     //	===========================================================================
     //	Instance Variable(s)
@@ -84,13 +84,13 @@ public class ERXPathDirectAction extends WODirectAction {
                     try {
                         temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement(), WOURLEncoder.WO_URL_ENCODING));
                     } catch (UnsupportedEncodingException e) {
-                        log.error("Encoding not found: " + WOURLEncoder.WO_URL_ENCODING, e);
+                        log.error("Encoding not found: {}", WOURLEncoder.WO_URL_ENCODING, e);
                     }
                 }
                 pathParts = temp;
             }
             if (log.isDebugEnabled())
-                log.debug("Generated path parts: " + pathParts + " for uri: " + request().uri());
+                log.debug("Generated path parts: {} for uri: {}", pathParts, request().uri());
         }
         return pathParts;
     }

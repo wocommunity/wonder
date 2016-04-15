@@ -2,8 +2,6 @@ package er.grouping;
 
 import java.text.Format;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -22,8 +20,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * and the same with one z concatenated, respectively.
  */
 public class DRCriteria {
-    private static final Logger log = Logger.getLogger(DRCriteria.class);
-
     protected NSDictionary _valueDict;
     
     // The keys in the dict are DRSubMasterCriteria in the masterCriteria

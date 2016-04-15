@@ -1,6 +1,7 @@
 package er.persistentsessionstorage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -15,7 +16,7 @@ import er.extensions.eof.ERXEC;
 import er.persistentsessionstorage.model.ERSessionInfo;
 
 public class ERPersistentSessionStore extends WOSessionStore {
-	private static final Logger log = Logger.getLogger(ERPersistentSessionStore.class);
+	private static final Logger log = LoggerFactory.getLogger(ERPersistentSessionStore.class);
 
 	@Override
 	public WOSession removeSessionWithID(String s) {

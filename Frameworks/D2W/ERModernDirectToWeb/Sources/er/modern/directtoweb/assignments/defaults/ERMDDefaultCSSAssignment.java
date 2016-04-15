@@ -1,7 +1,5 @@
 package er.modern.directtoweb.assignments.defaults;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -21,9 +19,6 @@ import er.extensions.foundation.ERXStringUtilities;
 public class ERMDDefaultCSSAssignment extends ERDAssignment {
 
 	private static final long serialVersionUID = 1L;
-
-	/** logging support */
-    public final static Logger log = Logger.getLogger(ERMDDefaultCSSAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     @SuppressWarnings({ "unchecked", "rawtypes" })

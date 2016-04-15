@@ -9,7 +9,6 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -36,6 +35,8 @@ import org.jboss.netty.handler.codec.http.websocketx.PongWebSocketFrame;
 import org.jboss.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.jboss.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import org.jboss.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
@@ -74,8 +75,7 @@ import er.woadaptor.websockets.WebSocketStore;
  * @version 2.0
  */
 public class WONettyAdaptor extends WOAdaptor {
-
-    private static final Logger log = Logger.getLogger(WONettyAdaptor.class);
+    private static final Logger log = LoggerFactory.getLogger(WONettyAdaptor.class);
     
     private int _port;
     private String _hostname;
@@ -88,8 +88,8 @@ public class WONettyAdaptor extends WOAdaptor {
     		try {
     			InetAddress _host = InetAddress.getLocalHost();
 				_hostname = _host.getHostName();
-			} catch (UnknownHostException exception) {
-				log.error("Failed to get localhost address");
+			} catch (UnknownHostException e) {
+				log.error("Failed to get localhost address.", e);
 			}
     	}
     	return _hostname;
@@ -122,7 +122,7 @@ public class WONettyAdaptor extends WOAdaptor {
 		// Bind and start to accept incoming connections.
 		channel = bootstrap.bind(new InetSocketAddress(hostname(), _port));
 		
-		log.debug("Binding adaptor to address: " + channel.getLocalAddress());
+		log.debug("Binding adaptor to address: {}", channel.getLocalAddress());
 		_port = ((InetSocketAddress) channel.getLocalAddress()).getPort();
 		System.setProperty(WOProperties._PortKey, Integer.toString(_port));
 	}
@@ -190,8 +190,7 @@ public class WONettyAdaptor extends WOAdaptor {
 	 * @author ravim 	ERWOAdaptor/WONettyAdaptor version
 	 */
 	protected static class RequestHandler extends SimpleChannelUpstreamHandler {
-		
-		private static final Logger log = Logger.getLogger(RequestHandler.class);
+		private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 		
 		private WebSocketServerHandshaker handshaker;
 

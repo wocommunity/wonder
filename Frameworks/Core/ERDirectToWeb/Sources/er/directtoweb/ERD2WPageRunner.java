@@ -2,7 +2,8 @@ package er.directtoweb;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -39,7 +40,7 @@ public class ERD2WPageRunner {
 	
 	private NSArray _pages;
 	
-	private static final Logger log = Logger.getLogger(ERD2WPageRunner.class);
+	private static final Logger log = LoggerFactory.getLogger(ERD2WPageRunner.class);
 	
 	public ERD2WPageRunner(NSArray pages) {
 		_pages = pages;
@@ -56,7 +57,7 @@ public class ERD2WPageRunner {
 				EOEditingContext ec = ERXEC.newEditingContext();
 				ec.lock();
 				try {
-					log.info("Creating page: " + pageName);
+					log.info("Creating page: {}", pageName);
 					WOComponent page = D2W.factory().pageForConfigurationNamed(pageName, session);
 					context._setPageElement(page);
 					context._setCurrentComponent(page);
@@ -80,14 +81,14 @@ public class ERD2WPageRunner {
 						QueryPageInterface qpi = (QueryPageInterface) page;
 						// nothing
 					} else {
-						log.info("Unsupported: " + pageName + " -> " + page.name());
+						log.info("Unsupported: {} -> {}", pageName, page.name());
 					}
 					page.appendToResponse(new ERXResponse(), context);
 				} finally {
 					ec.unlock();
 				}
 			} catch(Throwable t) {
-				log.error("Error running: " + pageName + ":" +  t.getMessage() + " Tree: " + ERXWOContext.componentPath(context));
+				log.error("Error running: {}:{} Tree: {}", pageName, t.getMessage(), ERXWOContext.componentPath(context));
 			} finally {
 				session._sleepInContext(context);
 			}

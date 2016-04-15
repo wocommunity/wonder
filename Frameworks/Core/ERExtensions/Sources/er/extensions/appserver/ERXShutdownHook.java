@@ -5,11 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.webobjects.foundation.NSKeyValueCoding;
-
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
-
-import er.extensions.appserver.ERXApplication;
 
 
 /**

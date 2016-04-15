@@ -12,7 +12,8 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilesObject
 {
@@ -24,7 +25,7 @@ public class FilesObject
     private String lastModified = null;
     private FilesClient client = null;
 
-    private static Logger logger = Logger.getLogger(FilesObject.class);
+    private static final Logger log = LoggerFactory.getLogger(FilesObject.class);
 
     /**
      * Constructs a new FilesObject (from the file system)
@@ -53,19 +54,19 @@ public class FilesObject
                 }
                 else
                 {
-                	logger.fatal("Can not create Directories as FSObjects create a FilesContainer for this object");
+                	log.error("Can not create Directories as FSObjects create a FilesContainer for this object");
                 	throw new NullPointerException("File Object was a directory !");
                 }
             }
             else
             {
-                logger.fatal("File object must exist so we can create an MD5SUM for it !");
+                log.error("File object must exist so we can create an MD5SUM for it !");
                 throw new NullPointerException ("The file object provided does not exist.");
             }
         }
     	else
         {
-            logger.fatal("Not possible to create a FilesObject from a null File.");
+            log.error("Not possible to create a FilesObject from a null File.");
             throw new NullPointerException ("File Object passed was null !");
         }
     }
@@ -101,9 +102,9 @@ public class FilesObject
     {
         if (name.length() > FilesConstants.OBJECT_NAME_LENGTH)
         {
-            logger.warn("Object name larger than " + FilesConstants.OBJECT_NAME_LENGTH + " characters truncating from: "+name);
+            log.warn("Object name larger than {} characters truncating from: {}", FilesConstants.OBJECT_NAME_LENGTH, name);
             this.name = name.substring(0, FilesConstants.OBJECT_NAME_LENGTH);
-            logger.warn("Object name truncated to : "+name);
+            log.warn("Object name truncated to: {}", name);
         }
         this.name = name;
     }
@@ -305,7 +306,7 @@ public class FilesObject
     	}
     	catch (NoSuchAlgorithmException nsae) {
     		// This should never happen
-    		logger.fatal("Install doesn't have MD5, can't upload files", nsae);
+    		log.error("Install doesn't have MD5, can't upload files", nsae);
     	}
     	catch (HttpException ex) {
     		throw new FilesException("Error in network operation", ex);

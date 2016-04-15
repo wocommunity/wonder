@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXParseException;
 
 import com.webobjects.appserver.WOContext;
@@ -34,7 +35,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	private static final long serialVersionUID = 1L;
 
 	/** logging support */
-	private static final Logger log = Logger.getLogger(EGWrapper.class);
+	private static final Logger log = LoggerFactory.getLogger(EGWrapper.class);
     
 	private String _fileName;
 	private NSDictionary _styles;
@@ -92,9 +93,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 
             String contentString = newResponse.contentString();
             contentString = contentString.replaceAll("&nbsp;", "");
-            if (log.isDebugEnabled()) {
-                log.debug("Converting content string:\n" + contentString);
-            }
+            log.debug("Converting content string:\n{}", contentString);
             byte[] bytes;
             try {
                 bytes = contentString.getBytes(CharEncoding.UTF_8);

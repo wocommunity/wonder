@@ -1,7 +1,5 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXNonSynchronizingComponent;
@@ -9,8 +7,6 @@ import er.extensions.foundation.ERXStringUtilities;
 
 @SuppressWarnings("serial")
 public class ERQMInputBaseComponent extends ERXNonSynchronizingComponent {
-
-  protected static final Logger log = Logger.getLogger(ERQMInputBaseComponent.class);
 
   //********************************************************************
   //  Constructor

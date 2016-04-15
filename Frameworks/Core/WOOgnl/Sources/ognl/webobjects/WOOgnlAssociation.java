@@ -8,7 +8,8 @@
 /* WOOgnlAssociation.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -19,7 +20,7 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class WOOgnlAssociation extends WOKeyValueAssociation {
-	public static Logger log = Logger.getLogger(WOOgnlAssociation.class);
+	private static final Logger log = LoggerFactory.getLogger(WOOgnlAssociation.class);
 
 	public WOOgnlAssociation(String s) {
 		super(s);
@@ -41,7 +42,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 			if (shouldThrowException()) {
 				throw new NSForwardException(e);
 			}
-			log.error("Exception invoking valueInComponent on WOOgnlAssociation with keyPath '" + keyPath() + "'", e);
+			log.error("Exception invoking valueInComponent on WOOgnlAssociation with keyPath '{}'", keyPath(), e);
 		}
 		if (event != null) {
 			EOEventCenter.markEndOfEvent(event);
@@ -64,7 +65,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 			if (shouldThrowException()) {
 				throw new NSForwardException(e);
 			}
-			log.error("Exception invoking setValue on WOOgnlAssociation: '" + keyPath() + "'.", e);
+			log.error("Exception invoking setValue on WOOgnlAssociation: '{}'.", keyPath(), e);
 		}
 		if (event != null) {
 			EOEventCenter.markEndOfEvent(event);

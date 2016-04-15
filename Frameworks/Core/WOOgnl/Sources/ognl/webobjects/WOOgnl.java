@@ -11,6 +11,9 @@ package ognl.webobjects;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ognl.ClassResolver;
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -18,8 +21,6 @@ import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLParser;
 import ognl.helperfunction.WOHelperFunctionParser;
 import ognl.helperfunction.WOHelperFunctionTagRegistry;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -64,7 +65,7 @@ import com.webobjects.foundation._NSUtilities;
  * 
  */
 public class WOOgnl {
-	public static Logger log = Logger.getLogger(WOOgnl.class);
+	private static final Logger log = LoggerFactory.getLogger(WOOgnl.class);
 
 	public static final String DefaultWOOgnlBindingFlag = "~";
 
@@ -76,7 +77,7 @@ public class WOOgnl {
 			NSNotificationCenter.defaultCenter().addObserver(o, new NSSelector("configureWOOgnl", new Class[] { com.webobjects.foundation.NSNotification.class }), WOApplication.ApplicationWillFinishLaunchingNotification, null);
 		}
 		catch (Exception e) {
-			WOOgnl.log.error("Failed to configure WOOgnl.", e);
+			log.error("Failed to configure WOOgnl.", e);
 		}
 	}
 

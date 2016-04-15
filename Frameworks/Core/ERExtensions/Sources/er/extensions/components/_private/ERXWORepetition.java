@@ -2,7 +2,8 @@ package er.extensions.components._private;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -90,8 +91,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author ak
  */
 public class ERXWORepetition extends WODynamicGroup {
-	/** logging support */
-	private static final Logger log = Logger.getLogger(ERXWORepetition.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXWORepetition.class);
 
 	protected WOAssociation _list;
 	protected WOAssociation _item;
@@ -276,7 +276,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		}
 		hashCode = Math.abs(hashCode);
 		if (_debugHashCodes != null && _debugHashCodes.booleanValueInComponent(component)) {
-			log.info("debugHashCodes for '" + _list.keyPath() + "', " + object + " = " + hashCode);
+			log.info("debugHashCodes for '{}', {} = {}", _list.keyPath(), object, hashCode);
 		}
 		return hashCode;
 	}
@@ -291,7 +291,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		String key = ERXStringUtilities.safeIdentifierName(uniqueKey.toString());
 
 		if (_debugHashCodes != null && _debugHashCodes.booleanValueInComponent(component)) {
-			log.info("debugHashCodes for '" + _list.keyPath() + "', " + object + " = " + key);
+			log.info("debugHashCodes for '{}', {} = {}", _list.keyPath(), object, key);
 		}
 		return key;
 	}
@@ -333,9 +333,7 @@ public class ERXWORepetition extends WODynamicGroup {
 					if (index != 0) {
 						wocontext.deleteLastElementIDComponent();
 					}
-					if (log.isDebugEnabled()) {
-						log.debug("prepare " + elementID + "->" + object);
-					}
+					log.debug("prepare {}->{}", elementID, object);
 					wocontext.appendElementIDComponent(elementID);
 					didAppend = true;
 				}
@@ -412,7 +410,7 @@ public class ERXWORepetition extends WODynamicGroup {
 				count = ERXValueUtilities.intValue(object);
 			}
 			else {
-				log.error(toString() + " 'count' evaluated to null in component " + wocomponent.toString() + ".\nRepetition  count reset to 0.");
+				log.error("{} 'count' evaluated to null in component {}.\nRepetition  count reset to 0.", this, wocomponent);
 				count = 0;
 			}
 		}
@@ -444,7 +442,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		int count = _count(context, wocomponent);
 		boolean checkHashCodes = checkHashCodes(wocomponent);
 		if (log.isDebugEnabled()) {
-			log.debug("takeValuesFromRequest: " + wocontext.elementID() + " - " + wocontext.request().formValueKeys());
+			log.debug("takeValuesFromRequest: {} - {}", wocontext.elementID(), wocontext.request().formValueKeys());
 		}
 		for (int index = 0; index < count; index++) {
 			_prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
@@ -490,8 +488,11 @@ public class ERXWORepetition extends WODynamicGroup {
 								found = true;
 							}
 						}
-						if (! found) log.warn("Wrong object: " + otherHashCode + " vs " + hashCode + " (array = " + repetitionContext.nsarray + ")");
-						if (found && log.isDebugEnabled()) log.debug("Found object: " + otherHashCode + " vs " + hashCode);
+						if (found) {
+							log.debug("Found object: {} vs {}", otherHashCode, hashCode);
+						} else {
+							log.warn("Wrong object: {} vs {} (array = {})", otherHashCode, hashCode, repetitionContext.nsarray);
+						}
 					}
 					else {
 						String key = indexString;
@@ -505,8 +506,11 @@ public class ERXWORepetition extends WODynamicGroup {
 								found = true;
 							}
 						}
-						if (! found) log.warn("Wrong object: " + otherKey + " vs " + key + " (array = " + repetitionContext.nsarray + ")");
-						if (found && log.isDebugEnabled()) log.debug("Found object: " + otherKey + " vs " + key);
+						if (found) {
+							log.debug("Found object: {} vs {}", otherKey, key);
+						} else {
+							log.warn("Wrong object: {} vs {} (array = {})", otherKey, key, repetitionContext.nsarray);
+						}
 					}
 
 					if (!found) {
@@ -535,9 +539,7 @@ public class ERXWORepetition extends WODynamicGroup {
 				_index._setValueNoValidation(integer, wocomponent);
 			}
 			wocontext.appendElementIDComponent(indexString);
-			if (log.isDebugEnabled()) {
-				log.debug("invokeAction:" + wocontext.elementID());
-			}
+			log.debug("invokeAction: {}", wocontext.elementID());
 			woactionresults = super.invokeAction(worequest, wocontext);
 			wocontext.deleteLastElementIDComponent();
 		}
@@ -581,9 +583,7 @@ public class ERXWORepetition extends WODynamicGroup {
 
 		int count = _count(context, wocomponent);
 		boolean checkHashCodes = checkHashCodes(wocomponent);
-		if (log.isDebugEnabled()) {
-			log.debug("appendToResponse:" + wocontext.elementID());
-		}
+		log.debug("appendToResponse: {}", wocontext.elementID());
 
 		for (int index = 0; index < count; index++) {
 			_prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);

@@ -39,6 +39,13 @@ import com.webobjects.foundation.NSRange;
  * @binding handle if an element should only be draggable by an embedded handle, takes a class name
  * @binding hoverclass
  * @binding ghosting shows ghosting copy during drag, defaults to <code>false</code>
+ * @binding movingClass a CSS class assigned to the element when it is moving.
+ * @binding starteffect Effect, defaults to Effect.Opacity. Defines the effect
+ *          to use when the draggable starts being dragged
+ * @binding reverteffect Effect, default to Effect.Move. Defines the effect to
+ *          use when the draggable reverts back to its starting position
+ * @binding endeffect Effect, defaults to Effect.Opacity. Defines the effect to
+ *          use when the draggable stops being dragged
  * @binding dropOnEmpty
  * @binding scroll
  * @binding onChange client side method, fires on updating the sort order during drag
@@ -123,8 +130,8 @@ public class AjaxSortableList extends AjaxComponent {
     addScriptResourceInHead(res, "dragdrop.js");
   }
 
-  public NSDictionary createAjaxOptions() {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+  public NSDictionary<String, String> createAjaxOptions() {
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
     ajaxOptionsArray.addObject(new AjaxOption("tag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("treeTag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("only", AjaxOption.STRING_ARRAY));
@@ -134,11 +141,28 @@ public class AjaxSortableList extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("hoverclass", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("starteffect", starteffect(), AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("endeffect", endeffect(), AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
+  }
+  
+  private String starteffect() {
+	  if (hasBinding("movingClass")) {
+		  return "function(element){element.addClassName('"+valueForBinding("movingClass")+"');}";
+	  }
+	  return null;
+  }
+
+  private String endeffect() {
+	  if (hasBinding("movingClass")) {
+		  return "function(element){element.removeClassName('"+valueForBinding("movingClass")+"');}";
+	  }
+	  return null;
   }
 
   public String onUpdate() {
@@ -159,6 +183,7 @@ public class AjaxSortableList extends AjaxComponent {
     return onUpdateBuffer.toString();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     if (!canGetValueForBinding("list")) {
@@ -169,26 +194,26 @@ public class AjaxSortableList extends AjaxComponent {
     }
     String listItemIDKeyPath = (String) valueForBinding("listItemIDKeyPath");
     Object listItemIDArrayObj = request.formValues().objectForKey(_sortOrderKeyName + "[]");
-    NSArray listItemIDArray;
+    NSArray<String> listItemIDArray;
     if (listItemIDArrayObj instanceof NSArray) {
-      listItemIDArray = (NSArray) listItemIDArrayObj;
+      listItemIDArray = (NSArray<String>) listItemIDArrayObj;
     }
     else if (listItemIDArrayObj instanceof String) {
       String listItemIDStr = (String) listItemIDArrayObj;
-      listItemIDArray = new NSArray(listItemIDStr);
+      listItemIDArray = new NSArray<String>(listItemIDStr);
     }
     else {
       throw new IllegalArgumentException("Unknown list item ID array " + listItemIDArrayObj);
     }
 
-    NSArray list = (NSArray) valueForBinding("list");
+    NSArray<Object> list = (NSArray<Object>) valueForBinding("list");
     boolean mutableList = (list instanceof NSMutableArray);
-    NSMutableArray reorderedList;
+    NSMutableArray<Object> reorderedList;
     if (mutableList) {
-      reorderedList = (NSMutableArray) list;
+      reorderedList = (NSMutableArray<Object>) list;
     }
     else {
-      reorderedList = new NSMutableArray();
+      reorderedList = new NSMutableArray<Object>();
     }
 
     int startIndex = 0;
@@ -214,9 +239,9 @@ public class AjaxSortableList extends AjaxComponent {
       else {
         itemPageRange = new NSRange(startIndex, listItemIDCount);
       }
-      NSArray itemPageArray = list.subarrayWithRange(itemPageRange);
+      NSArray<Object> itemPageArray = list.subarrayWithRange(itemPageRange);
       EOQualifier itemIDQualifier = new EOKeyValueQualifier(listItemIDKeyPath, EOQualifier.QualifierOperatorEqual, itemID);
-      NSArray matchingItems = EOQualifier.filteredArrayWithQualifier(itemPageArray, itemIDQualifier);
+      NSArray<Object> matchingItems = EOQualifier.filteredArrayWithQualifier(itemPageArray, itemIDQualifier);
       if (matchingItems.count() == 0) {
         throw new NoSuchElementException("There was no item that matched the ID '" + itemID + "' in " + list + ".");
       }

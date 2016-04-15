@@ -2,9 +2,10 @@ package ognl.helperfunction;
 
 import java.util.Enumeration;
 
-import ognl.webobjects.WOOgnl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
+import ognl.webobjects.WOOgnl;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
@@ -18,7 +19,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOHelperFunctionParser {
-	public static Logger log = Logger.getLogger(WOHelperFunctionParser.class);
+	private static final Logger log = LoggerFactory.getLogger(WOHelperFunctionParser.class);
 
 	public static boolean _debugSupport;
 
@@ -66,9 +67,7 @@ public class WOHelperFunctionParser {
 			}
 		}
 		_currentWebObjectTag = new WOHTMLWebObjectTag(s, _currentWebObjectTag);
-		if (log.isDebugEnabled()) {
-			log.debug("inserted WebObject with Name '" + _currentWebObjectTag.name() + "'.");
-		}
+		log.debug("Inserted WebObject with Name '{}'.", _currentWebObjectTag.name());
 	}
 
 	public void didParseClosingWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOHelperFunctionDeclarationFormatException, WOHelperFunctionHTMLFormatException, ClassNotFoundException {
@@ -298,9 +297,7 @@ public class WOHelperFunctionParser {
 					ognlKeyPath.append(otherParams);
 				}
 				ognlKeyPath.append(')');
-				if (log.isDebugEnabled()) {
-					log.debug("Converted " + originalKeyPath + " into " + ognlKeyPath);
-				}
+				log.debug("Converted {} into {}", originalKeyPath, ognlKeyPath);
 				association = new WOConstantValueAssociation(ognlKeyPath.toString());
 			}
 		}

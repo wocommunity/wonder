@@ -16,9 +16,6 @@ import er.neo4jadaptor.query.neo4j_eval.retrievers.Retriever;
  * @param <T>
  */
 public class RegexMatch <T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RegexMatch.class);
-	
 	private final Retriever<T, String> valueRetriever;
 	private final Pattern pattern;
 	

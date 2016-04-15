@@ -59,7 +59,7 @@ See BUILD.txt to find out how to build Wonder.
 Binaries
 --------------------
 
-Binaries can be downloaded from the [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+Binaries can be downloaded from the [releases page](https://github.com/wocommunity/wonder/releases) or [community build server](http://jenkins.wocommunity.org/job/Wonder/)
 
 Changelog
 --------------------

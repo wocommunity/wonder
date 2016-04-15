@@ -20,9 +20,6 @@ import er.neo4jadaptor.utils.iteration.MultiLevelIterator;
  * @param <V>
  */
 public class ChainedRetriever <N extends PropertyContainer, V> implements Retriever<N, V> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ChainedRetriever.class);
-
 	private final List<Retriever<N, ?>> chain = new ArrayList<Retriever<N, ?>>();
 	
 	@SuppressWarnings("unchecked")

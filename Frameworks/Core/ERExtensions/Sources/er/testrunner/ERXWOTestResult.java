@@ -13,8 +13,6 @@ import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -61,9 +59,6 @@ public class ERXWOTestResult extends WOComponent {
             // error = WOExceptionParser.parseException(exception);
          }
     }
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXWOTestResult.class);
 
     public String errorMessage;
     public ERXTestResult testResult;

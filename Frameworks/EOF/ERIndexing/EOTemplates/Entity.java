@@ -4,10 +4,13 @@ package $entity.packageName;
 #end
 import com.webobjects.eocontrol.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ${entity.classNameWithoutPackage} extends ${entity.prefixClassNameWithOptionalPackage} {
 
     @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(${entity.classNameWithoutPackage}.class);
+    private static final Logger log = LoggerFactory.getLogger(${entity.classNameWithoutPackage}.class);
 
     public static final ${entity.classNameWithoutPackage}Clazz clazz = new ${entity.classNameWithoutPackage}Clazz();
     public static class ${entity.classNameWithoutPackage}Clazz extends ${entity.prefixClassNameWithOptionalPackage}.${entity.prefixClassNameWithOptionalPackage}Clazz {

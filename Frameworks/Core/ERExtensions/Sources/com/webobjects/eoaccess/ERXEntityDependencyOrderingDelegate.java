@@ -1,7 +1,7 @@
 package com.webobjects.eoaccess;
 
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
@@ -31,7 +31,7 @@ public class ERXEntityDependencyOrderingDelegate {
 
 	public static final String ERXEntityDependencyOrderingDelegateActiveKey = "com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active";
     protected NSComparator adaptorOpComparator;
-    private static Logger logger = Logger.getLogger(ERXEntityDependencyOrderingDelegate.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXEntityDependencyOrderingDelegate.class);
 
 
     public ERXEntityDependencyOrderingDelegate() {
@@ -55,8 +55,8 @@ public class ERXEntityDependencyOrderingDelegate {
                 NSArray<EOEntity> entityOrdering = constraintOrder.allEntities().sortedArrayUsingComparator(entityOrderingComparator);
                 NSArray<String> entityNameOrdering = (NSArray<String>)entityOrdering.valueForKey("name");
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Entity ordering:\n " + entityNameOrdering.componentsJoinedByString("\n"));
+                if (log.isDebugEnabled()) {
+                    log.debug("Entity ordering:\n{}", entityNameOrdering.componentsJoinedByString("\n"));
                 }
 
                 adaptorOpComparator = new ERXAdaptorOpComparator(entityNameOrdering);
@@ -98,7 +98,7 @@ public class ERXEntityDependencyOrderingDelegate {
     	// Useful for debugging
     	if ( ! (exception instanceof EOGeneralAdaptorException))
     	{
-        	logger.error("Unexpected non-EOGeneralAdaptorException exception", exception);
+        	log.error("Unexpected non-EOGeneralAdaptorException exception", exception);
     	}
     	
     	return true;

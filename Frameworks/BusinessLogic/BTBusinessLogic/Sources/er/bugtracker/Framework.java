@@ -1,7 +1,6 @@
 // Framework.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -10,8 +9,6 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.eof.ERXS;
 
 public class Framework extends _Framework {
-    static final Logger log = Logger.getLogger(Framework.class);
-
     public Framework() {
         super();
     }

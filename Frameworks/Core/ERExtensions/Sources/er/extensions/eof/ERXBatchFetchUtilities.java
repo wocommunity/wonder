@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -24,7 +25,7 @@ import com.webobjects.foundation.NSRange;
  * @author Lenny Marks (lenny@aps.org)
  */
 public class ERXBatchFetchUtilities {
-	private static Logger log = Logger.getLogger(ERXBatchFetchUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXBatchFetchUtilities.class);
 
 	/**
 	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
@@ -353,9 +354,7 @@ public class ERXBatchFetchUtilities {
             EOEnterpriseObject eo = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
             EOEditingContext ec = eo.editingContext();
 
-            if (log.isDebugEnabled()) {
-            	log.debug("Batch fetching '" + path + "' relationship on " + sourceObjects);
-            }
+            log.debug("Batch fetching '{}' relationship on {}", path, sourceObjects);
 
             EODatabaseContext dbContext = ERXEOAccessUtilities.databaseContextForObject(eo);
             dbContext.lock();

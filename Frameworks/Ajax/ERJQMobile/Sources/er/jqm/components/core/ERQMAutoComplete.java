@@ -1,5 +1,8 @@
 package er.jqm.components.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -49,6 +52,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERQMAutoComplete extends ERQMTextField
 {
+	private static final Logger log = LoggerFactory.getLogger(ERQMAutoComplete.class);
+
 	public ERQMAutoComplete(WOContext context)
 	{
 		super(context);

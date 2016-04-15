@@ -23,8 +23,6 @@
 
 package er.selenium.io;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSTimestamp;
 
@@ -39,8 +37,6 @@ public class SeleniumComponentExporterPage extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(SeleniumComponentExporterPage.class);
-	
 	public SeleniumTest.Element element;
 	
 	protected SeleniumTest _test;

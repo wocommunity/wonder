@@ -14,9 +14,6 @@ public class ERIAttribute extends _ERIAttribute {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIAttribute.class);
-
     public static final ERIAttributeClazz clazz = new ERIAttributeClazz();
     public static class ERIAttributeClazz extends _ERIAttribute._ERIAttributeClazz {
         /* more clazz methods here */

@@ -6,8 +6,6 @@ import java.security.Key;
 
 import javax.crypto.Cipher;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -44,8 +42,6 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 			return (Cipher) super.get();
 		}
 	}
-	
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
 
 	/** Block size of encrypted strings */
 	private int _blockSize;

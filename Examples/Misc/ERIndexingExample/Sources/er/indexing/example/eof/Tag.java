@@ -3,10 +3,6 @@ package er.indexing.example.eof;
 import com.webobjects.eocontrol.EOEditingContext;
 
 public class Tag extends _Tag {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Tag.class);
-
     public static final TagClazz clazz = new TagClazz();
     public static class TagClazz extends _Tag._TagClazz {
         /* more clazz methods here */

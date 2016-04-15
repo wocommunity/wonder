@@ -17,9 +17,6 @@ import er.neo4jadaptor.query.Results;
  *
  */
 public class NodesWithIds implements Results<Node> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodesWithIds.class);
-
 	private final Iterator<Number> nodeIdsIt;
 	private Node next;
 	

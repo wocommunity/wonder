@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -54,7 +55,7 @@ public class AjaxTree extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(AjaxTree.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxTree.class);
 	private AjaxTreeModel _treeModel;
 
 	private NSArray _nodes;
@@ -176,9 +177,7 @@ public class AjaxTree extends WOComponent {
 			_lastParent = parent;
 			_level = level;
 			_item = item;
-			if (log.isDebugEnabled()) {
-				log.debug("AjaxTree item at level "+_level+" with close count "+_closeCount+": "+_item);
-			}
+			log.debug("AjaxTree item at level {} with close count {}: {}", _level, _closeCount, _item);
 			setValueForBinding(item, "item");
 		}
 	}

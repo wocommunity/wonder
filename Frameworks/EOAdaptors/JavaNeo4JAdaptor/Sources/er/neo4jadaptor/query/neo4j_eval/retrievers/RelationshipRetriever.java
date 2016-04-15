@@ -17,9 +17,6 @@ import er.neo4jadaptor.storage.neo4j.RelationshipStore;
  * @param <T>
  */
 public abstract class RelationshipRetriever <Arg, T extends PropertyContainer> implements Retriever<Arg, T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RelationshipRetriever.class);
-	
 	public static RelationshipRetriever<? extends PropertyContainer, ? extends PropertyContainer> create(EORelationship rel) {
 		boolean isSourceStoredAsNode = ! RelationshipStore.shouldBeStoredAsRelationship(rel.entity());
 		boolean isDestinationStoredAsNode = ! RelationshipStore.shouldBeStoredAsRelationship(rel.destinationEntity());

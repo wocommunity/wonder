@@ -26,9 +26,6 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @author Jedrzej Sobanski
  */
 public class RelationshipStore implements Store<Ersatz, Neo4JErsatz> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RelationshipStore.class);
-	
 	private final GraphDatabaseService db;
 	private final EOEntity entity;
 	

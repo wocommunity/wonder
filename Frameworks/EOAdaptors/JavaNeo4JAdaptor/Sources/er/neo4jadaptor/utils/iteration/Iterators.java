@@ -3,9 +3,6 @@ package er.neo4jadaptor.utils.iteration;
 import java.util.Iterator;
 
 public class Iterators {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Iterators.class);
-	
 	public static <T> Iterator<T> singleton(T t) {
 		return new SingleIterator<T>(t);
 	}

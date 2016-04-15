@@ -1,7 +1,5 @@
 package wowodc.background.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -20,10 +18,6 @@ import er.extensions.foundation.IERXStatus;
  * @author kieran
  */
 public class TaskThreadMonitor extends ERXStatelessComponent {
-	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(TaskThreadMonitor.class);
-	
     public TaskThreadMonitor(WOContext context) {
         super(context);
     }

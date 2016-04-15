@@ -9,7 +9,8 @@ package er.extensions.appserver.navigation;
 import java.io.Serializable;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -42,8 +43,7 @@ public class ERXNavigationItem implements Serializable {
 
 	private static int counter = 0;
 
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXNavigationItem.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXNavigationItem.class);
 
 	public String _uniqueID;
 
@@ -72,8 +72,7 @@ public class ERXNavigationItem implements Serializable {
 		_uniqueID = "id" + counter;
 		counter++;
 		if (values != null) {
-			if (log.isDebugEnabled())
-				log.debug("ERXNavigationItem " + uniqueID() + "assigned these values at creation:\n" + values);
+			log.debug("ERXNavigationItem {} assigned these values at creation:\n{}", uniqueID(), values);
 			_action = (String) values.valueForKey("action");
 			_conditions = NSArray.EmptyArray;
 			Object o = values.valueForKey("conditions");
@@ -158,9 +157,7 @@ public class ERXNavigationItem implements Serializable {
 					String anObject = (String) possibleKey;
 					Object value = context.valueForKeyPath(anObject);
 					meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
-					if (log.isDebugEnabled()) {
-						log.debug(name() + " testing display condition: " + anObject + " --> " + value + ":" + meetsDisplayConditions);
-					}
+					log.debug("{} testing display condition: {} --> {}:{}", name(), anObject, value, meetsDisplayConditions);
 					if (!meetsDisplayConditions.booleanValue()) {
 						break;
 					}
@@ -175,9 +172,7 @@ public class ERXNavigationItem implements Serializable {
 						if (temp) {
 							break;
 						}
-						if (log.isDebugEnabled()) {
-							log.debug(name() + " testing display condition: " + key + " --> " + value + ":" + meetsDisplayConditions);
-						}
+						log.debug("{} testing display condition: {} --> {}:{}", name(), key, value, meetsDisplayConditions);
 					}
 					meetsDisplayConditions = temp ? Boolean.TRUE : Boolean.FALSE;
 					if (!meetsDisplayConditions.booleanValue()) {
@@ -223,11 +218,11 @@ public class ERXNavigationItem implements Serializable {
 				else if (o != null && o instanceof String) {
 					children = (NSArray) childrenChoices().objectForKey(o);
 					if (children == null) {
-						log.warn("For nav core object: " + this + " and child binding: " + childrenBinding() + " couldn't find children for choice key: " + o);
+						log.warn("For nav core object: {} and child binding: {} couldn't find children for choice key: {}", this, childrenBinding(), o);
 					}
 				}
 				else {
-					log.warn("For nav core object: " + this + " and child binding: " + childrenBinding() + " recieved binding object: " + o);
+					log.warn("For nav core object: {} and child binding: {} recieved binding object: {}", this, childrenBinding(), o);
 				}
 			}
 		}
@@ -250,7 +245,7 @@ public class ERXNavigationItem implements Serializable {
 					childNavItems.addObject(item);
 				}
 				else {
-					log.warn("Unable to find navigation item for name: " + childName);
+					log.warn("Unable to find navigation item for name: {}", childName);
 				}
 			}
 			children = childNavItems;

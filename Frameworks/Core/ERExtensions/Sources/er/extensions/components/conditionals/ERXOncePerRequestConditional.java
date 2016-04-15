@@ -6,7 +6,8 @@
 //
 package er.extensions.components.conditionals;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -32,8 +33,7 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXOncePerRequestConditional.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ERXOncePerRequestConditional.class);
     
     String keyName = null;
     int currentStage = -1;
@@ -113,8 +113,7 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 
     public boolean displayContent() {
 	int showCount = displayCountForKey(keyName() + "--" + currentStage);
-        if(log.isDebugEnabled())
-            log.debug("displayContent - showCount: " + showCount + " stage:" + currentStage);
+    log.debug("displayContent - showCount: {} stage: {}", showCount, currentStage);
 	return showCount == 0;
     }
 }

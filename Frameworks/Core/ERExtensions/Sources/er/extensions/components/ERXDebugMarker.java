@@ -7,7 +7,8 @@
  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -31,8 +32,7 @@ public class ERXDebugMarker extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDebugMarker.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXDebugMarker.class);
 
     public ERXDebugMarker(WOContext aContext) {
         super(aContext);
@@ -72,7 +72,7 @@ public class ERXDebugMarker extends WOComponent {
     
     public WOComponent debug() {
         WOComponent result=null;
-        //if (log.isDebugEnabled()) log.debug("Object = "+object());
+        //log.debug("Object = {}", object());
         if (object() instanceof EOEditingContext) {
             result=pageWithName("ERXEditingContextInspector");
             result.takeValueForKey(object(),"object");
@@ -82,9 +82,9 @@ public class ERXDebugMarker extends WOComponent {
             if(result != null) {
                 result.takeValueForKey(object(),"object");
             } else if(object() instanceof ERXEnterpriseObject) {
-                log.info("Object: " + ((ERXEnterpriseObject)object()).toLongString());
+                log.info("Object: {}", ((ERXEnterpriseObject)object()).toLongString());
             } else {
-                log.info("Object: " + object());
+                log.info("Object: {}", object());
             }
         }
         return result;

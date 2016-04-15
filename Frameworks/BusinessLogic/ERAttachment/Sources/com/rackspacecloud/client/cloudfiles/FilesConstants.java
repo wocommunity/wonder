@@ -7,11 +7,12 @@ package com.rackspacecloud.client.cloudfiles;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilesConstants
 {
-    private static Logger logger = Logger.getLogger(FilesConstants.class);
+    private static final Logger log = LoggerFactory.getLogger(FilesConstants.class);
     
     public static final String USER_AGENT = "java-cloudfiles/1.9.2";
     
@@ -79,7 +80,7 @@ public class FilesConstants
         }
         catch (IOException err)
         {
-            logger.warn ("Could not load MIME.types all refrences to FilesConstants.MIMETYPES will return null.", err);
+            log.warn("Could not load MIME.types all refrences to FilesConstants.MIMETYPES will return null.", err);
         }
     }
 

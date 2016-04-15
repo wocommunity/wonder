@@ -8,7 +8,8 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -31,8 +32,7 @@ public class ERXGracefulShutdown implements SignalHandler {
     //	Class Constant(s)
     //	---------------------------------------------------------------------------    
     
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXGracefulShutdown.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXGracefulShutdown.class);
 
     //	===========================================================================
     //	Interfaces(s)
@@ -96,13 +96,13 @@ public class ERXGracefulShutdown implements SignalHandler {
      * @param signal to be handled
      */
     public void handle(Signal signal) {
-        log.info("Received " + signal + ", starting graceful shutdown.");
+        log.info("Received {}, starting graceful shutdown.", signal);
         try {
             if (WOApplication.application() instanceof GracefulApplication) {
                 ((GracefulApplication)WOApplication.application()).gracefulTerminate();
             }
         } catch (RuntimeException e) {
-            log.warn("Caught exception when attempting to gracefully shutdown! " + e.getClass().getName() + " stack: " + ERXUtilities.stackTrace(e));
+            log.warn("Caught exception when attempting to gracefully shutdown! {} stack: {}", e.getClass().getName(), ERXUtilities.stackTrace(e));
         }
         // Chaining back to original handler
         defaultHandler().handle(signal);

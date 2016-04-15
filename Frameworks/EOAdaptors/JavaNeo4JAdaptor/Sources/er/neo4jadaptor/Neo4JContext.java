@@ -1,8 +1,9 @@
 package er.neo4jadaptor;
 
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
@@ -16,7 +17,7 @@ import er.neo4jadaptor.storage.Store;
 import er.neo4jadaptor.storage.StoreFactory;
 
 public class Neo4JContext <T extends Ersatz> extends EOAdaptorContext {
-	private static final Logger log = Logger.getLogger(Neo4JContext.class);
+	private static final Logger log = LoggerFactory.getLogger(Neo4JContext.class);
 
 	private Transaction tx;
 	private final StoreFactory storeFactory;

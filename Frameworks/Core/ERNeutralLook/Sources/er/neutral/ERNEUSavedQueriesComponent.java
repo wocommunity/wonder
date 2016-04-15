@@ -1,7 +1,5 @@
 package er.neutral;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 
@@ -20,8 +18,6 @@ import er.directtoweb.components.misc.ERDSavedQueriesComponent;
  */
 
 public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
-    public static final Logger log = Logger.getLogger(ERNEUSavedQueriesComponent.class);
-
     //  For backward compatibility we need er.neutral.ERNEUSavedQueriesComponent.SavedQuery
     //  So that previously saved preferences can still be decoded
     //  The EOKeyValueUnarchiver uses the class name stored in the saved dictionary to instantiate the destination class

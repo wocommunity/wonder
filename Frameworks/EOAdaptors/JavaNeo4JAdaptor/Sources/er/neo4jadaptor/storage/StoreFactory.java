@@ -22,9 +22,6 @@ import er.neo4jadaptor.storage.neo4j.TemporaryNodePool;
  * @author Jedrzej Sobanski
  */
 public class StoreFactory {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StoreFactory.class);
-
 	private final Map<String, Store<Ersatz, Neo4JErsatz>> map = new HashMap<String, Store<Ersatz, Neo4JErsatz>>();
 	private final GraphDatabaseService db;
 	private final NodeSpaceManager spaceManager;

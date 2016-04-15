@@ -7,7 +7,8 @@ import java.io.InputStream;
 import java.net.URLDecoder;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WODynamicURL;
@@ -29,8 +30,7 @@ import er.extensions.foundation.ERXProperties;
  * @author ak
  */
 public class ERXStaticResourceRequestHandler extends WORequestHandler {
-	
-	private static Logger log = Logger.getLogger(ERXStaticResourceRequestHandler.class);
+	private static Logger log = LoggerFactory.getLogger(ERXStaticResourceRequestHandler.class);
 	
 	private static WOApplication application = WOApplication.application();
 
@@ -159,14 +159,14 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				is = new FileInputStream(file);
 				
 				contentType = rm.contentTypeForResourceNamed(path);
-				log.debug("Reading file '" + file + "' for uri: " + uri);
+				log.debug("Reading file '{}' for uri: {}", file, uri);
 			} catch (IOException ex) {
 				if (!uri.toLowerCase().endsWith("/favicon.ico")) {
-					log.info("Unable to get contents of file '" + file + "' for uri: " + uri);
+					log.info("Unable to get contents of file '{}' for uri: {}", file, uri);
 				}
 			}
 		} else {
-			log.error("Can't fetch relative path: " + uri);
+			log.error("Can't fetch relative path: {}", uri);
 		}
 		response = _generateResponseForInputStream(is, length, contentType);
 		NSNotificationCenter.defaultCenter().postNotification(WORequestHandler.DidHandleRequestNotification, response);

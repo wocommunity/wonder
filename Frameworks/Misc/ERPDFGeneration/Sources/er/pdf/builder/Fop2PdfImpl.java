@@ -19,7 +19,8 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.webobjects.foundation.NSDictionary;
@@ -39,7 +40,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	private String _outputType = MimeConstants.MIME_PDF;
 	private NSMutableDictionary<String, Object> _config;
 
-	private static final Logger logger = Logger.getLogger(Fop2PdfImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(Fop2PdfImpl.class);
 
 	protected static FopFactory fopFactory;
 
@@ -75,13 +76,11 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void createDocument(OutputStream os, NSDictionary<String, Object> agentAttributes) throws Throwable {
-		if (logger.isDebugEnabled()) {
-			logger.debug("createDocument(OutputStream os=" + os + ", NSDictionary<String,Object> agentAttributes=" + agentAttributes + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
+		log.debug("createDocument(OutputStream os={}, NSDictionary<String,Object> agentAttributes={}) - start", os, agentAttributes);
 
 		fopFactory = FopFactory.newInstance();
 
-		logger.debug("createDocument(OutputStream) - initializing FOUserAgent"); //$NON-NLS-1$
+		log.debug("createDocument(OutputStream) - initializing FOUserAgent");
 		// get the defaults, but immediately override them with whatever was
 		// passed in
 		// from the program. This is meant to ensure that we have all the
@@ -103,8 +102,10 @@ public class Fop2PdfImpl implements FOPBuilder {
 		try {
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, os);
 
-			logger.debug("createDocument(OutputStream) - Fop initialized with:  - _fopxslLocation=" + _fopxslLocation + ", os=" + os + ", foUserAgent=" + foUserAgent); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			logger.debug("xsl resource: " + Fop2PdfImpl.class.getClassLoader().getResourceAsStream(_fopxslLocation));
+			if (log.isDebugEnabled()) {
+				log.debug("createDocument(OutputStream) - Fop initialized with:  - _fopxslLocation={}, os={}, foUserAgent={}", _fopxslLocation, os, foUserAgent);
+				log.debug("xsl resource: {}", Fop2PdfImpl.class.getClassLoader().getResourceAsStream(_fopxslLocation));
+			}
 			
 			TransformerFactory txfac = TransformerFactory.newInstance();
 			Transformer tx = txfac.newTransformer(new SAXSource(new InputSource(Fop2PdfImpl.class.getClassLoader().getResourceAsStream(_fopxslLocation))));
@@ -116,24 +117,24 @@ public class Fop2PdfImpl implements FOPBuilder {
 			tx.transform(src, res);
 
 		} catch (FOPException e) {
-			logger.error("createDocument(OutputStream, NSDictionary<String,Object>)", e); //$NON-NLS-1$
+			log.error("createDocument(OutputStream, NSDictionary<String,Object>)", e);
 
 			e.printStackTrace();
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		} catch (TransformerConfigurationException e) {
-			logger.error("createDocument(OutputStream, NSDictionary<String,Object>)", e); //$NON-NLS-1$
+			log.error("createDocument(OutputStream, NSDictionary<String,Object>)", e);
 
 			e.printStackTrace();
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		} catch (TransformerException e) {
-			logger.error("createDocument(OutputStream, NSDictionary<String,Object>)", e); //$NON-NLS-1$
+			log.error("createDocument(OutputStream, NSDictionary<String,Object>)", e);
 
 			e.printStackTrace();
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("createDocument(OutputStream, NSDictionary<String,Object>) - end"); //$NON-NLS-1$
+		if (log.isDebugEnabled()) {
+			log.debug("createDocument(OutputStream, NSDictionary<String,Object>) - end");
 		}
 	}
 

@@ -20,9 +20,6 @@ import er.neo4jadaptor.utils.cursor.IteratorCursor;
  *
  */
 public class NodesRelatedTo implements Results<Node> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodesRelatedTo.class);
-
 	final Cursor<Relationship> relationshipsIterator;
 	
 	public NodesRelatedTo(Results<Node> relatedTo, EORelationship rel) {

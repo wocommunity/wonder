@@ -1,7 +1,5 @@
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -49,8 +47,6 @@ public class ERXJSInputValidator extends WOComponent {
         }
     }
     
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXJSInputValidator.class);
     public String _errorSpanID;
     public NSDictionary currentItem;
     /**

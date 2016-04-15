@@ -17,6 +17,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -35,6 +37,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author ishimoto
  */
 public class ERXHttpPostData extends ERXHttpDataObjectBase{
+	private static final Logger log = LoggerFactory.getLogger(ERXHttpDataObjectBase.class);
 
   //***********************************************************
   // Constructor
@@ -102,8 +105,7 @@ public class ERXHttpPostData extends ERXHttpDataObjectBase{
       httpost.setEntity(new UrlEncodedFormEntity(queryParams(), sendEncoding()));
     }
 
-    if(log.isDebugEnabled())
-      log.debug("executing request to " + targetHost);
+    log.debug("executing request to {}", targetHost);
 
     // Executes a request to the target using the default context.
     HttpResponse httpResponse = httpclient.execute(targetHost, httpost);
@@ -124,9 +126,9 @@ public class ERXHttpPostData extends ERXHttpDataObjectBase{
     }
 
     if (log.isDebugEnabled()) {
-      log.debug("Status: " + response().getStatusLine().getStatusCode());
-      log.debug("the response looks like: " + response() + "\n\n");
-      log.debug("the response entity looks like: " + html() + "\n\n");
+      log.debug("Status: {}", response().getStatusLine().getStatusCode());
+      log.debug("the response looks like: {}\n\n", response());
+      log.debug("the response entity looks like: {}\n\n", html());
     }
 
     // When HttpClient instance is no longer needed, 

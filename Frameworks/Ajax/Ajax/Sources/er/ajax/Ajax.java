@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSNotification;
@@ -13,7 +14,7 @@ import er.extensions.eof.ERXConstant;
 
 public class Ajax extends ERXFrameworkPrincipal {
 	public static Class[] REQUIRES = new Class[0];
-	public static final Logger log = Logger.getLogger(Ajax.class);
+	private static final Logger log = LoggerFactory.getLogger(Ajax.class);
 
     static {
         setUpFrameworkPrincipalClass(Ajax.class);

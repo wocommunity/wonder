@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomEditComponent;
+import er.extensions.ERXExtensions;
 
 /**
  * Cool class.  Specify a 'unit' in the userInfo dictionary of an EOAttribute and this component will display the number plus the unit.
@@ -31,6 +32,6 @@ public class ERDDisplayNumberWithUnit extends ERDCustomEditComponent {
 
     public String unit() {
         return valueForBinding("unit") != null ? (String)valueForBinding("unit") :
-        ERDirectToWeb.resolveUnit(ERDirectToWeb.userInfoUnit(object(),key()),object(),key());
+        ERDirectToWeb.resolveUnit(ERXExtensions.userInfoUnit(object(), key()), object(), key());
     }
 }

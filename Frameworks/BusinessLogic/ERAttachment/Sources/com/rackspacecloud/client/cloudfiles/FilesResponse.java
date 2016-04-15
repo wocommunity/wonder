@@ -12,14 +12,15 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilesResponse
 {
     private HttpResponse response = null;
     private HttpEntity entity = null;
 
-    private static Logger logger = Logger.getLogger(FilesResponse.class);
+    private static final Logger log = LoggerFactory.getLogger(FilesResponse.class);
 
     /**
      * @param response the HTTP response that generated this response
@@ -28,13 +29,13 @@ public class FilesResponse
     {
     	this.response = response;
     	entity = response.getEntity();
-    	if (logger.isDebugEnabled())
+    	if (log.isDebugEnabled())
         {
-     		logger.debug ("Status Line: " + getStatusLine());
+     		log.debug("Status Line: {}", getStatusLine());
 
     		Header [] responseHeaders = getResponseHeaders();    
     		for (int i=0; i < responseHeaders.length;i++)
-    			logger.debug(responseHeaders[i]);
+    			log.debug("{}", responseHeaders[i]);
         }
     }
 

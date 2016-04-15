@@ -31,7 +31,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -42,7 +41,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.selenium.SeleniumTest;
 
 public class SeleniumXHTMLImporter implements SeleniumTestImporter {
-	private static final Logger log = Logger.getLogger(SeleniumXHTMLImporter.class);
 	private static final String TEST_NAME_XPATH = "//thead/tr/td/text()";
 	private static final String ROOT_ELEMENTS_XPATH = "//tbody/child::node()[self::tr or self::comment()]";
 	private static final String COMMAND_XPATH = "self::node()/child::td/text()";

@@ -1,6 +1,7 @@
 package er.grouping;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSTimestamp;
@@ -13,8 +14,7 @@ import com.webobjects.foundation.NSTimestamp;
  * simple Timestamps, Dates or the like.
  */
 public class DRValueConverter {
-    /** Logging support */
-    protected static final Logger log = Logger.getLogger(DRValueConverter.class);
+    private static final Logger log = LoggerFactory.getLogger(DRValueConverter.class);
     
     public NSTimestamp timestampForValue(Object v) {
         if(v instanceof NSTimestamp) {
@@ -30,7 +30,7 @@ public class DRValueConverter {
             try {
                 scr = Double.parseDouble((String)v);
             } catch(NumberFormatException e) {
-                log.error("Not a number: " + v);
+                log.error("Not a number: {}", v);
                 scr = 0.0;
             }
         } else if(v instanceof Number){
@@ -45,7 +45,7 @@ public class DRValueConverter {
             try {
                 scr = Double.parseDouble(v.toString());
             } catch(NumberFormatException ex) {
-                log.error("Not a number: " + v);
+                log.error("Not a number: {}", v);
                 scr = 0.0;
             }
         }

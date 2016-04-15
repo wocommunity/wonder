@@ -9,7 +9,8 @@ package er.directtoweb.components.numbers;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditNumber;
@@ -37,8 +38,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
 
     public ERD2WEditNumber(WOContext context) { super(context); }
     
-    /** Logging support */
-    public final static Logger log = Logger.getLogger(ERD2WEditNumber.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WEditNumber.class);
 
     @Override
     public void reset() {
@@ -66,7 +66,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
             if (anObject instanceof String) {
                 number = (Number)numberFormatValueForString((String)anObject);
             } else if (anObject!=null && !(anObject instanceof Number)) {
-                log.warn("Unable to read number: " + anObject);
+                log.warn("Unable to read number: {}", anObject);
                 throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
             }
         } catch(NSValidation.ValidationException ex) {
@@ -106,7 +106,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
             if (value != null)
                 formatValue = numberFormatter().parseObject(value);
         } catch (ParseException e) {
-            log.debug("Unable to parse number: " + value + " in " + propertyKey());
+            log.debug("Unable to parse number: {} in {}", value, propertyKey());
             throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), value, "IllegalCharacterInNumberException");
         }
         return formatValue;

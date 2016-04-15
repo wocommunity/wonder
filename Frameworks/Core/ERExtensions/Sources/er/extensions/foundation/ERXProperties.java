@@ -29,7 +29,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.webobjects.appserver.WOApplication;
@@ -97,8 +98,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXProperties.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXProperties.class);
+    private static final Logger configLog = LoggerFactory.getLogger(ERXConfigurationManager.class);
+
     private static final Map AppSpecificPropertyNames = new HashMap(128);
 
     /** WebObjects version number as string */
@@ -185,7 +187,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </div>
      */
     public static void populateSystemProperties() {
-        System.setProperty("com.webobjects.version", webObjectsVersion());
+        System.setProperty("com.webobjects.version", "5.4");
     }
 
     /** 
@@ -341,134 +343,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             wonderVersion = UNKNOWN_WONDER_VERSION;
         }
         return wonderVersion;
-    }
-
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as string. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをStringとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as string</div>
-     *         <div class="ja">WebObjects バージョン番号を String として戻ります。</div>
-     * @see #webObjectsVersionAsDouble()
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
-     * @deprecated Wonder is used with WO 5.4 only
-     */ 
-    @Deprecated
-	public static String webObjectsVersion() {
-        if (_webObjectsVersion == null) {
-            _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
-            
-            // if _webObjectsVersion is a null-string, we assume it's WebObjects 5.1.x
-            if (_webObjectsVersion.equals("")) 
-                _webObjectsVersion = "5.1";
-        }
-        return _webObjectsVersion;
-    }
-
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as double. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをdoubleとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as double</div>
-     *         <div class="ja">WebObjects バージョン番号を double として戻ります。</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static double webObjectsVersionAsDouble() {
-        if (_webObjectsVersionDouble == 0.0d) {
-            String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
-            int cutoffIndex = woVersionString.indexOf(' ');
-            if (cutoffIndex == -1) {
-            	cutoffIndex = woVersionString.indexOf('-');
-            }
-            if (cutoffIndex != -1) {
-            	woVersionString = woVersionString.substring(0, cutoffIndex);
-            }
-            try {
-                _webObjectsVersionDouble = Double.parseDouble(woVersionString);
-            } catch (NumberFormatException ex) {
-                log.error("An exception occurred while parsing webObjectVersion " + woVersionString 
-                    + " as a double value: " + ex.getClass().getName() + " " + ex.getMessage());
-            }
-        }
-        return _webObjectsVersionDouble;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.2 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     *  WebObjectsのバージョン番号が5.2以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.2 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.2以上であれば</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs52OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            return webObjectsVersionAsDouble() >= 5.2d;
-        }
-        return true;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.22 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョン番号が5.22以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.22 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.22以上であれば</div>
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs522OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            String webObjectsVersion = webObjectsVersion();
-            if("5.2".equals(webObjectsVersion)) {
-                String sourceVersion = sourceVersionString();
-                if("9260000".equals(sourceVersion)) {
-                    return true;
-                }
-            }
-            return webObjectsVersionAsDouble() >= 5.22d;
-        }
-        return true;
     }
 
     
@@ -1364,15 +1238,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
         File file = new File(path);
         if (! file.exists()  ||  ! file.isFile()  ||  ! file.canRead()) {
-            log.warn("File " + path + " doesn't exist or can't be read.");
+            log.warn("File '{}' doesn't exist or can't be read.", path);
             return prop;
         }
 
         try {
         	prop.load(file);
-            log.debug("Loaded configuration file at path: "+ path);
+            log.debug("Loaded configuration file at path: {}", path);
         } catch (IOException e) {
-            log.error("Unable to initialize properties from file \"" + path + "\"", e);
+            log.error("Unable to initialize properties from file '{}'", path, e);
         }
         return prop;
     }
@@ -1460,7 +1334,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	if(path != null && path.length() > 0) {
     		path = getActualPath(path);
     		if(propertiesPaths.containsObject(path)) {
-    			log.error("Path was already included: " + path + "");
+    			log.error("Path was already included: {}", path);
     		}
     		projectsInfo.addObject("  " + info +" -> " + path);
     		propertiesPaths.addObject(path);
@@ -1510,7 +1384,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			    	addIfPresent("{$user.home}/WebObjects.properties", userHomePath, propertiesPaths, projectsInfo);
 				}
 				catch (java.io.IOException ex) {
-					ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
+					log.error("Failed to load the configuration file '{}'.", file, ex);
 				}
 			}
         }
@@ -1526,11 +1400,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				    	addIfPresent("Optional Configuration", optionalPath, propertiesPaths, projectsInfo);
 					}
 					catch (java.io.IOException ex) {
-						ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
+						log.error("Failed to load configuration file '{}'.", file, ex);
 					}
 				}
 				else {
-					ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
+					log.error("The optional configuration file '{}' either does not exist or could not be read.", file);
 				}
 			}
 		}
@@ -1679,15 +1553,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     				try {
     					Properties props = ERXProperties.propertiesFromFile(file);
     					if(log.isDebugEnabled()) {
-    						log.debug("Loaded: " + file + "\n" + ERXProperties.logString(props));
+    						log.debug("Loaded: {}\n{}", file, ERXProperties.logString(props));
     					}
     					ERXProperties.transferPropertiesFromSourceToDest(props, dest);
     				} catch (java.io.IOException ex) {
-    					log.error("Unable to load optional configuration file: " + configFile, ex);
+    					log.error("Unable to load optional configuration file: {}", configFile, ex);
     				}
     			}
     			else {
-    				ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
+    				configLog.error("The optional configuration file '{}' either does not exist or cannot be read.", file);
     			}
     		}
     	}
@@ -1812,7 +1686,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 try {
                     path = file.getCanonicalPath();
                 } catch (IOException ex) {
-                    log.error(ex.getClass().getName() + ": " + ex.getMessage());
+                    log.error("Could not get canonical path from {}", file, ex);
                 }
                 break;
             }
@@ -1922,7 +1796,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     			applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
     		}
     		catch (IOException e) {
-    			ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    			log.error("Failed to load machine Properties file '{}'.", fileName, e);
     		}
     	}
     	return applicationMachinePropertiesPath;
@@ -1987,8 +1861,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         try {
             actualPath = file.getCanonicalPath();
         } catch (Exception ex) {
-            log.warn("The file at " + path + " does not seem to exist: " 
-                + ex.getClass().getName() + ": " + ex.getMessage());
+            log.warn("The file at {} does not seem to exist.", path , ex);
         }
         return actualPath;
     }
@@ -2660,7 +2533,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 	existingIncludeProps = "";
                 }
                 if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
-                    log.error("_Properties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                    log.error("_Properties.load(): recursive includeProps detected! {} in {}", propsFile, existingIncludeProps);
                     log.error("_Properties.load() cannot proceed - QUITTING!");
                     System.exit(1);
                 }
@@ -2671,7 +2544,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 super.put(_Properties.IncludePropsKey, existingIncludeProps);
 
                 try {
-                    log.info("_Properties.load(): Including props file: " + propsFile);
+                    log.info("_Properties.load(): Including props file: {}", propsFile);
 					load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);

@@ -8,6 +8,7 @@ DateInput : WOTextField {
   maxlength = ^maxlength;
   name = ^name;
   disabled = ^disabled;
+  readonly = ^readonly;
   onfocus = onFocusScript;
   onclick = onClickScript;
   otherTagString = ^otherTagString;

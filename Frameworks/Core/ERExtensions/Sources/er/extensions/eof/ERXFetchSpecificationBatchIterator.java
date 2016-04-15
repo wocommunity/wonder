@@ -10,7 +10,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -51,8 +52,7 @@ public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enume
 	/** holds the default batch size, any bigger than this an Oracle has a fit */
     public static final int DefaultBatchSize = 250;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXFetchSpecificationBatchIterator.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXFetchSpecificationBatchIterator.class);
 
     /** holds the selected batch size */
     protected int batchSize;
@@ -198,8 +198,7 @@ public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enume
         if (batchSize <= 0)
             throw new RuntimeException("Attempting to set a batch size of negative value.");
         if (batchSize > DefaultBatchSize)
-            log.warn("Batches larger than the the default batch size of " + DefaultBatchSize
-                     + " might cause JDBC issues.");
+            log.warn("Batches larger than the the default batch size of {} might cause JDBC issues.", DefaultBatchSize);
         this.batchSize = batchSize;
     }
 
@@ -361,7 +360,7 @@ public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enume
             NSArray primaryKeys = primaryKeys();
             NSArray primaryKeysToFetch = primaryKeys.subarrayWithRange(range);
 
-            log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
+            log.debug("Of primaryKey count: {} fetching range: {} which is: {}", primaryKeys.count(), range, primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
             EOFetchSpecification batchFS = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
@@ -373,10 +372,10 @@ public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enume
             nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
             if (log.isDebugEnabled()) {
-                log.debug("Actually fetched: " + nextBatch.count() + " with fetch specification: " + batchFS);
+                log.debug("Actually fetched: {} with fetch specification: {}", nextBatch.count(), batchFS);
                 if (primaryKeysToFetch.count() > nextBatch.count()) {
                     NSArray missedKeys = ERXArrayUtilities.arrayMinusArray(primaryKeysToFetch, (NSArray)nextBatch.valueForKey(primaryKeyAttributeName));
-                    log.debug("Primary Keys that were not found for this batch: " + missedKeys);
+                    log.debug("Primary Keys that were not found for this batch: {}", missedKeys);
                 }
             }
 
@@ -384,7 +383,7 @@ public class ERXFetchSpecificationBatchIterator<E> implements Iterator<E>, Enume
                 EOQualifier originalQualifier = fetchSpecification.qualifier();
                 if (originalQualifier != null) {
                     nextBatch = EOQualifier.filteredArrayWithQualifier(nextBatch, originalQualifier);
-                    log.debug("Filtered batch to: " + nextBatch.count());
+                    log.debug("Filtered batch to: {}", nextBatch.count());
                 }
             }
         }

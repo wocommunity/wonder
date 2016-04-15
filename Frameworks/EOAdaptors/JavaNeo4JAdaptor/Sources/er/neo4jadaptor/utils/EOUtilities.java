@@ -17,9 +17,6 @@ import er.neo4jadaptor.utils.cursor.Cursor;
 import er.neo4jadaptor.utils.cursor.IteratorCursor;
 
 public class EOUtilities {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EOUtilities.class);
-	
 	private static final String INTEGER_CLASS_NAME = Integer.class.getCanonicalName();
 	
 	public static Number convertToAttributeType(EOAttribute att, Number value) {

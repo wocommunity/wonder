@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -27,9 +26,6 @@ import er.extensions.foundation.ERXMutableDictionary;
  * into values stored by the database.
  */
 public class ValueConversion {
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ValueConversion.class);
-    
 	public static Date jodaLocalTime(LocalTime value) {
 		Date javaTime = value.toDateTimeToday().toDate();
 		return javaTime;

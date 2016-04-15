@@ -2,10 +2,11 @@ package er.ajax;
 
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
 import org.jabsorb.JSONRPCBridge;
 import org.jabsorb.JSONRPCResult;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -94,7 +95,7 @@ public class AjaxProxy extends AjaxComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(AjaxProxy.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxProxy.class);
 
 	public AjaxProxy(WOContext context) {
 		super(context);
@@ -147,7 +148,7 @@ public class AjaxProxy extends AjaxComponent {
 				// well, it wasn't ... there is high chance of unexpected
 				// problem. just warn the user (programmer), that it might cause
 				// problem.
-				log.warn("JSONRPCProxy detected a conflict.  You defined the javascript variable '" + name + "'  multiple times, and linked to differents proxy objects: <" + bridge + "> and <" + oldValue + ">");
+				log.warn("JSONRPCProxy detected a conflict. You defined the javascript variable '{}' multiple times, and linked to differents proxy objects: <{}> and <{}>", name, bridge, oldValue);
 			}
 		}
 	}
@@ -158,9 +159,7 @@ public class AjaxProxy extends AjaxComponent {
 		WOResponse response = AjaxUtils.createResponse(request, context);
 
 		String inputString = request.contentString();
-		if (log.isDebugEnabled()) {
-			log.debug("AjaxProxy.handleRequest: input = " + inputString);
-		}
+		log.debug("AjaxProxy.handleRequest: input = {}", inputString);
 
 		// Process the request
 		JSONObject input = null;
@@ -200,9 +199,7 @@ public class AjaxProxy extends AjaxComponent {
 		}
 
 		// Write the response
-		if (log.isDebugEnabled()) {
-			log.debug("AjaxProxy.handleRequest: output = " + output);
-		}
+		log.debug("AjaxProxy.handleRequest: output = {}", output);
 		response.appendContentString(output.toString());
 		return response;
 	}

@@ -14,7 +14,8 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -201,7 +202,7 @@ public class ERWOMailDelivery {
 			(new MimeMessageMailDelivery(smtpMessage)).sendMail();
 		}
 		catch (Exception x) {
-			log.error(x);
+			log.error("Could not send mail.", x);
 		}
 	}
 
@@ -211,7 +212,7 @@ public class ERWOMailDelivery {
 	}
 
 	// Private Implementation.
-	private static Logger log = Logger.getLogger(ERWOMailDelivery.class);
+	private static final Logger log = LoggerFactory.getLogger(ERWOMailDelivery.class);
 	private static ERWOMailDelivery _sharedInstance = null;
 
 	private MimeMessage newMimeMessage(String fromEmailAddress, NSArray<String> toEmailAddresses, NSArray<String> bccEmailAddresses, String subject, String message, String contentType, boolean sendNow) {
@@ -250,7 +251,7 @@ public class ERWOMailDelivery {
 				(new MimeMessageMailDelivery(smtpMessage)).sendMail();
 		}
 		catch (Exception x) {
-			log.error(x);
+			log.error("Could not create Mime message", x);
 		}
 
 		return smtpMessage;
@@ -267,7 +268,7 @@ public class ERWOMailDelivery {
 			result = baos.toString();
 		}
 		catch (Exception x) {
-			log.error(x);
+			log.error("Could not create String from Mime message.", x);
 		}
 
 		return result;
@@ -288,7 +289,7 @@ public class ERWOMailDelivery {
 				contentType = msg.getContentType();
 			}
 			catch (javax.mail.MessagingException x) {
-				ERWOMailDelivery.log.error(x);
+				ERWOMailDelivery.log.error("Could not get content type.", x);
 			}
 
 			return new DataHandler(ERWOMailDelivery.mimeMessageToString(msg), contentType);

@@ -4,7 +4,8 @@ import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -34,6 +35,14 @@ import er.extensions.eof.ERXS;
  * <li>allows you to add qualifiers to the final query qualifier (as opposed to just min/equals/max with the keys)</li>
  * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.</li>
  * </ul>
+ * <h2>Selections and usage with Datasource</h2>
+ * If you are using the display group with a datasource and changing the selection by {@link #setSelectedObjects(NSArray)}
+ * only matching objects in the displayed objects will be selected and the events <i>displayGroupShouldChangeSelectionToIndexes</i>,
+ * <i>displayGroupDidChangeSelectedObjects</i> and <i>displayGroupDidChangeSelection</i> will be triggered.
+ * <h2>Selections and usage without Datasource</h2>
+ * If you are using plain arrays to fill your display group and set a selection by {@link #setSelectedObjects(NSArray)} you won't
+ * get related events as with a datasource. Also the selection is not matched against the displayed objects but set directly. 
+ * 
  * @author ak
  * @param <T> data type of the displaygroup's objects
  */
@@ -50,8 +59,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** Logging support */
-	private static final Logger log = Logger.getLogger(ERXDisplayGroup.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDisplayGroup.class);
 
 	public ERXDisplayGroup() {
 		super();
@@ -166,7 +174,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public Object fetch() {
 		if(log.isDebugEnabled()) {
-			log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
+			log.debug("Fetching: {}", this, new RuntimeException("Dummy for Stacktrace"));
 		}
 		Object result;
 		// ak: we need to transform localized keys (foo.name->foo.name_de)
@@ -217,7 +225,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public NSArray<T> selectedObjects() {
 		if(log.isDebugEnabled()) {
-			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
+			log.debug("selectedObjects@{}:{}", hashCode(), super.selectedObjects().count());
 		}
 		return super.selectedObjects();
 	}
@@ -225,9 +233,9 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public void setSelectedObjects(NSArray objects) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + (objects != null ? objects.count() : "0"));
+			log.debug("setSelectedObjects@{}:{}", hashCode(), (objects != null ? objects.count() : "0"));
 		}
-		if (this instanceof ERXBatchingDisplayGroup) {
+		if (this instanceof ERXBatchingDisplayGroup || dataSource() == null) {
 			// keep previous behavior
 			// CHECKME a batching display group has its own _displayedObjects variable so setSelectionIndexes won't work
 			super.setSelectedObjects(objects);
@@ -254,7 +262,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@Override
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectionIndexes@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"),
+			log.debug("setSelectionIndexes@{}:{}", hashCode(), (nsarray != null ? nsarray.count() : "0"),
 					new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
@@ -382,9 +390,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
 		super.setSortOrderings(sortOrderings);
 		if (sortOrderings != null && sortOrderings.count() > 1) {
-			if (log.isDebugEnabled()) {
-				log.debug("More than one sort order: " + sortOrderings);
-			}
+			log.debug("More than one sort order: {}", sortOrderings);
 		}
 	}
 

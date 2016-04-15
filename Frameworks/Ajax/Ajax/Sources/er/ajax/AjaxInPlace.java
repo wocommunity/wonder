@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -120,8 +121,8 @@ public class AjaxInPlace extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-  public static final Logger log = Logger.getLogger(AjaxInPlace.class);
-  
+	private static final Logger log = LoggerFactory.getLogger(AjaxInPlace.class);
+
 	private boolean _editing;
 	private String _id;
 	private boolean _changingToEdit;
@@ -222,7 +223,7 @@ public class AjaxInPlace extends WOComponent {
 	  if (_alreadyInForm) {
 	    formName = ERXWOForm.formName(context(), null);
 	    if (formName == null) {
-	      AjaxInPlace.log.warn(id() + " is already inside of a form, but that form has no name, so AjaxInPlace can't work properly.");
+	      log.warn("{} is already inside of a form, but that form has no name, so AjaxInPlace can't work properly.", id());
 	      formName = "SetTheParentFormName";
 	    }
 	  }

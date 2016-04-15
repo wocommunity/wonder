@@ -28,9 +28,6 @@ import er.neo4jadaptor.storage.neo4j.NodeSpaceManager.Space;
  * @author Jedrzej Sobanski
  */
 public class TemporaryNodePool {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(TemporaryNodePool.class);
-	
 	private static final int INITIAL_POOL_SIZE = ERXProperties.intForKeyWithDefault("TemporaryNodePool.initialPoolSize", 4);
 	private static final int MAX_POOL_SIZE = ERXProperties.intForKeyWithDefault("TemporaryNodePool.maxPoolSize", 256);
 	

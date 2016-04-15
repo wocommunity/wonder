@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -43,6 +43,6 @@ public class ERXHyperlinkKeyValueSetter extends WOComponent {
 
     public boolean disabled() {
     	Object val = valueForBinding("binding");
-    	return ObjectUtils.equals(val, valueForBinding("value"));
+    	return Objects.equals(val, valueForBinding("value"));
     }
 }

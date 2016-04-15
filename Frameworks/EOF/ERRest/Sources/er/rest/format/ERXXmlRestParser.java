@@ -13,8 +13,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-import com.webobjects.appserver.WORequest;
-
 import er.rest.ERXRestContext;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;

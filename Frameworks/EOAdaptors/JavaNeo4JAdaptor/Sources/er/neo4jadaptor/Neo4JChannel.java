@@ -1,5 +1,7 @@
 package er.neo4jadaptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
@@ -18,7 +20,7 @@ import er.neo4jadaptor.storage.Store;
 import er.neo4jadaptor.utils.cursor.Cursor;
 
 public class Neo4JChannel <T extends Ersatz> extends EOAdaptorChannel {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Neo4JChannel.class);
+	private static final Logger log = LoggerFactory.getLogger(Neo4JChannel.class);
 
 	private boolean isOpen = false;
 	
@@ -85,9 +87,7 @@ public class Neo4JChannel <T extends Ersatz> extends EOAdaptorChannel {
 		fetchResult = null;
 		fetchedEntity = null;
 		
-		if (log.isDebugEnabled()) {
-			log.debug("Fetch took " + fetchTimeTaken + "ms and returned " + countFetched + " results (query from " + fetchSpec.entityName() + ": " + fetchSpec.qualifier() + ")");
-		}
+		log.debug("Fetch took {}ms and returned {} results (query from {}: {})", fetchTimeTaken, countFetched, fetchSpec.entityName(), fetchSpec.qualifier());
 	}
 
 	@Override

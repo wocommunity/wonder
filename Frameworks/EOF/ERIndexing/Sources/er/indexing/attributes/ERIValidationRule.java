@@ -10,9 +10,6 @@ public class ERIValidationRule extends _ERIValidationRule {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIValidationRule.class);
-
     public static final ERIValidationRuleClazz clazz = new ERIValidationRuleClazz();
     public static class ERIValidationRuleClazz extends _ERIValidationRule._ERIValidationRuleClazz {
         /* more clazz methods here */

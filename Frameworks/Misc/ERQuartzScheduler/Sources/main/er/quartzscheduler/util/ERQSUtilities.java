@@ -2,7 +2,6 @@ package er.quartzscheduler.util;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.simpl.SimpleClassLoadHelper;
 
@@ -84,8 +83,6 @@ public class ERQSUtilities
 				return new StringBuilder().append(super.toString()).append(" [See nested exception: ").append(cause).append(']').toString();
 		}
 	}
-
-	protected static final Logger log = Logger.getLogger(ERQSUtilities.class);
 
 	public static Job createJobInstance(final ERQSJobDescription jobDescription) throws COJobInstanciationException
 	{

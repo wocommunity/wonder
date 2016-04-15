@@ -2,6 +2,9 @@ package er.ajax;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -22,6 +25,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
  * @author mschrag
  */
 public class AjaxResponse extends ERXResponse {
+	private static final Logger log = LoggerFactory.getLogger(Ajax.class);
 	public static final String AJAX_UPDATE_PASS = "_ajaxUpdatePass";
 	private static NSMutableArray _responseAppenders; 
 	
@@ -75,7 +79,7 @@ public class AjaxResponse extends ERXResponse {
 				}
 				if (_contentLength() == 0) {
 					setStatus(HTTP_STATUS_INTERNAL_ERROR);
-					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
+					log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
 				}
 			}
 			finally {

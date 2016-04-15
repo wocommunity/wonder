@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.validation;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.eoaccess.EOAttribute;
@@ -34,9 +33,6 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXValidationException.class);
 
     // Validation Exception Types
     /** corresponds to a model thrown 'null property' exception */
@@ -438,8 +434,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
-            return ObjectUtils.equals(type(), ex.type()) && ObjectUtils.equals(key(), ex.key()) && ObjectUtils.equals(object(), ex.object())
-                && ObjectUtils.equals(value(), ex.value()) && ObjectUtils.equals(additionalExceptions(), ex.additionalExceptions());
+            return Objects.equals(type(), ex.type()) && Objects.equals(key(), ex.key()) && Objects.equals(object(), ex.object())
+                && Objects.equals(value(), ex.value()) && Objects.equals(additionalExceptions(), ex.additionalExceptions());
         }
         return super.equals(anotherObject);
     }

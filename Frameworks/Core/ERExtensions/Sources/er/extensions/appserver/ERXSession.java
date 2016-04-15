@@ -12,7 +12,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -60,8 +61,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-  /** logging support */
-  public static final Logger log = Logger.getLogger(ERXSession.class);
+  private static final Logger log = LoggerFactory.getLogger(ERXSession.class);
 
   /**
    * Notification name that is posted when a session is about to sleep.
@@ -157,9 +157,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
       String currentLanguage = session._localizer.language();
       session._localizer = ERXLocalizer.localizerForLanguage(currentLanguage);
-      if (log.isDebugEnabled()) {
-        log.debug("Detected changes in the localizers. Reset reference to " + currentLanguage + " localizer for session " + session.sessionID());
-      }
+      log.debug("Detected changes in the localizers. Reset reference to {} localizer for session {}", currentLanguage, session.sessionID());
     }
 
     /** 
@@ -389,8 +387,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       // FIXME: Shouldn't be hardcoded form value.
       String js = request.stringFormValueForKey("javaScript");
       if (js != null) {
-        if (log.isDebugEnabled())
-          log.debug("Received javascript form value " + js);
+        log.debug("Received javascript form value {}", js);
       }
       else {
         try {
@@ -432,7 +429,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     WORequest request = context() != null ? context().request() : null;
     if (request != null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
       if ((request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
-        log.debug("Form values " + request.formValues());
+        log.debug("Form values {}", request.formValues());
       else
         log.debug("Multipart Form values found");
     }
@@ -586,9 +583,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       ERXBrowserFactory.factory().releaseBrowser(_browser);
       _browser = null;
     }
-    if (log.isDebugEnabled()) {
-      log.debug("Will terminate, sessionId is " + sessionID());
-    }
+    log.debug("Will terminate, sessionId is {}", sessionID());
     super.terminate();
   }
 
@@ -668,8 +663,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     stream.defaultReadObject();
     if (_serializableLanguageName != null)
       setLanguage(_serializableLanguageName);
-    if (log.isDebugEnabled())
-      log.debug("Session has been deserialized: " + toString());
+    log.debug("Session has been deserialized: {}", this);
   }
 
   @Override

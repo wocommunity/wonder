@@ -2,7 +2,8 @@ package er.extensions.foundation;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -48,7 +49,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXAssert {
     private static final NSMutableDictionary _instances = new NSMutableDictionary();
     private static final NSMutableDictionary _handlersForKey = new NSMutableDictionary();
-    private static final Logger log = Logger.getLogger(ERXAssert.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXAssert.class);
 
     public static final ERXAssert DURING;
     public static final ERXAssert PRE;

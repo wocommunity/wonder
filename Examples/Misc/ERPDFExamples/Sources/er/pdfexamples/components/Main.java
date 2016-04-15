@@ -1,18 +1,11 @@
 package er.pdfexamples.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXComponent;
 
 public class Main extends ERXComponent {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(Main.class);
-
 	public Main(WOContext context) {
 		super(context);
 	}

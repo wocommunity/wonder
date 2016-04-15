@@ -7,12 +7,10 @@
 package er.extensions.crypting;
 
 import java.io.IOException;
-import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -39,9 +37,6 @@ import er.extensions.foundation.ERXStringUtilities;
  *           er.extensions.ERXCrypto.crypter.DES)
  */
 public class ERXCrypto {
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
-
 	/**
 	 * The constant for the DES encryption algorithm.
 	 */

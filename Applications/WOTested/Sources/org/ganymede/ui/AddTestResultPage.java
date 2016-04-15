@@ -1,7 +1,8 @@
 
 package org.ganymede.ui;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOUtilities;
@@ -14,8 +15,7 @@ import er.extensions.components.ERXComponent;
 import er.extensions.eof.ERXEC;
 
 public class AddTestResultPage extends ERXComponent {
-
-    private final Logger log = Logger.getLogger(AddTestResultPage.class);
+    private static final Logger log = LoggerFactory.getLogger(AddTestResultPage.class);
 
     public AddTestResultPage(WOContext context) {
         super(context);

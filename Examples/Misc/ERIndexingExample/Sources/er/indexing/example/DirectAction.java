@@ -55,7 +55,7 @@ public class DirectAction extends ERD2WDirectAction {
         vals = new _EOMutableKnownKeyDictionary(initializer, new Object[]{"1", "2"});
         log.info(vals);
 //        ERXRemoteNotificationCenter.defaultCenter().postNotification("All", null, dict);
-        return pageWithName(Main.class.getName());
+        return pageWithName(Main.class);
     }
 
     static {

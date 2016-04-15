@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseChannel;
@@ -41,8 +42,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * @author ak
  */
 public class ERXAdaptorChannelDelegate {
-
-	private static Logger log = Logger.getLogger(ERXAdaptorChannelDelegate.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXAdaptorChannelDelegate.class);
 
     private long _lastMilliseconds;
     
@@ -125,7 +125,7 @@ public class ERXAdaptorChannelDelegate {
 		log.info("******* dumping collected SQL statements *******");
 		if (_lastStatements != null) {
 			for (int i = 0; i < _lastStatements.size(); i++) {
-				log.info(_lastStatements.get(i));
+				log.info("{}", _lastStatements.get(i));
 			}
 		}
 		else {

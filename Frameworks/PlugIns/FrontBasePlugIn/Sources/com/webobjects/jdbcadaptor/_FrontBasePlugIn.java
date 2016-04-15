@@ -523,53 +523,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		return pksGenerated;
 	}
 
-	@Deprecated
-	protected static final int FB_Boolean = 1;
-	@Deprecated
-	protected static final int FB_Integer = 2;
-	@Deprecated
-	protected static final int FB_SmallInteger = 3;
-	@Deprecated
-	protected static final int FB_Float = 4;
-	@Deprecated
-	protected static final int FB_Real = 5;
-	@Deprecated
-	protected static final int FB_Double = 6;
-	@Deprecated
-	protected static final int FB_Numeric = 7;
-	@Deprecated
-	protected static final int FB_Decimal = 8;
-	@Deprecated
-	protected static final int FB_Character = 9;
-	@Deprecated
-	protected static final int FB_VCharacter = 10;
-	@Deprecated
-	protected static final int FB_Bit = 11;
-	@Deprecated
-	protected static final int FB_VBit = 12;
-	@Deprecated
-	protected static final int FB_Date = 13;
-	@Deprecated
-	protected static final int FB_Time = 14;
-	@Deprecated
-	protected static final int FB_TimeTZ = 15;
-	@Deprecated
-	protected static final int FB_Timestamp = 16;
-	@Deprecated
-	protected static final int FB_TimestampTZ = 17;
-	@Deprecated
-	protected static final int FB_YearMonth = 18;
-	@Deprecated
-	protected static final int FB_DayTime = 19;
-	@Deprecated
-	protected static final int FB_CLOB = 20;
-	@Deprecated
-	protected static final int FB_BLOB = 21;
-	@Deprecated
-	protected static final int FB_TinyInteger = 22;
-	@Deprecated
-	protected static final int FB_LongInteger = 23;
-
 	protected static String notNullConstraintName(EOAttribute attribute) {
 		return notNullConstraintName(attribute.entity().externalName(), attribute.columnName());
 	}
@@ -591,58 +544,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return "\"" + s + "\"";
 		else
 			return "\"" + s.substring(0, i) + "\".\"" + s.substring(i + 1, s.length()) + "\"";
-	}
-
-	/**
-	 * @deprecated user {@link FrontBaseTypes#internalTypeForExternal(String)} instead
-	 */
-	@Deprecated
-	protected static int internalTypeForExternal(String externalType) {
-		String upperExternalType = externalType.toUpperCase();
-		if (upperExternalType.equals("BOOLEAN"))
-			return FB_Boolean;
-		else if (upperExternalType.equals("INTEGER") || upperExternalType.equals("INT"))
-			return FB_Integer;
-		else if (upperExternalType.equals("SMALLINT"))
-			return FB_SmallInteger;
-		else if (upperExternalType.equals("LONGINT"))
-			return FB_LongInteger;
-		else if (upperExternalType.equals("TINYINT"))
-			return FB_TinyInteger;
-		else if (upperExternalType.equals("FLOAT"))
-			return FB_Float;
-		else if (upperExternalType.equals("REAL"))
-			return FB_Real;
-		else if (upperExternalType.equals("DOUBLE PRECISION"))
-			return FB_Double;
-		else if (upperExternalType.equals("NUMERIC"))
-			return FB_Numeric;
-		else if (upperExternalType.equals("DECIMAL"))
-			return FB_Decimal;
-		else if (upperExternalType.equals("CHAR") || upperExternalType.equals("CHARACTER"))
-			return FB_Character;
-		else if (upperExternalType.equals("VARCHAR") || upperExternalType.equals("CHARACTER VARYING") || upperExternalType.equals("CHAR VARYING"))
-			return FB_VCharacter;
-		else if (upperExternalType.equals("BIT") || upperExternalType.equals("BYTE"))
-			return FB_Bit;
-		else if (upperExternalType.equals("BIT VARYING") || upperExternalType.equals("BYTE VARYING"))
-			return FB_VBit;
-		else if (upperExternalType.equals("DATE"))
-			return FB_Date;
-		else if (upperExternalType.equals("TIME"))
-			return FB_Time;
-		else if (upperExternalType.equals("TIME WITH TIME ZONE"))
-			return FB_TimeTZ;
-		else if (upperExternalType.equals("TIMESTAMP"))
-			return FB_Timestamp;
-		else if (upperExternalType.equals("TIMESTAMP WITH TIME ZONE"))
-			return FB_TimestampTZ;
-		else if (upperExternalType.equals("BLOB"))
-			return FB_BLOB;
-		else if (upperExternalType.equals("CLOB"))
-			return FB_CLOB;
-		else
-			return -1;
 	}
 
 	public static class FrontbaseSynchronizationFactory extends EOSynchronizationFactory {

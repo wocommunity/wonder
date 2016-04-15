@@ -9,7 +9,8 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
@@ -23,7 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public class ERXExceptionUtilities {
-	public static final Logger log = Logger.getLogger(ERXExceptionUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXExceptionUtilities.class);
 
 	/**
 	 * Implemented by any exception that you explicitly want to not appear in
@@ -183,7 +184,7 @@ public class ERXExceptionUtilities {
 	public static void logStackTrace() {
 		Exception e = new Exception("DEBUG");
 		e.fillInStackTrace();
-		ERXExceptionUtilities.log.error(null, e);
+		log.error("", e);
 	}
 
 	/**
@@ -254,13 +255,15 @@ public class ERXExceptionUtilities {
 										mutableSkipPatterns.addObject(Pattern.compile(skipPatternString));
 									}
 									catch (Throwable patternThrowable) {
-										ERXExceptionUtilities.log.error("Skipping invalid exception pattern '" + skipPatternString + "' in '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+										log.error("Skipping invalid exception pattern '{}' in '{}' in the framework '{}' ({})",
+												skipPatternString, skipPatternsFile, framework, ERXExceptionUtilities.toParagraph(patternThrowable));
 									}
 								}
 							}
 						}
 						catch (Throwable patternThrowable) {
-							ERXExceptionUtilities.log.error("Failed to read pattern file '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+							log.error("Failed to read pattern file '{}' in the framework '{}' ({})",
+									skipPatternsFile, framework, ERXExceptionUtilities.toParagraph(patternThrowable));
 						}
 					}
 				}

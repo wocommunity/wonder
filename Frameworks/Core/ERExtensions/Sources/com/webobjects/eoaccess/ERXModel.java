@@ -5,7 +5,8 @@ package com.webobjects.eoaccess;
 
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -70,7 +71,7 @@ public class ERXModel extends EOModel {
 	// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
 	public static Object _ERXGlobalModelLock = EOModel._EOGlobalModelLock;
 	
-	private static final Logger log = Logger.getLogger(ERXModel.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXModel.class);
 	
 	/**
 	 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
@@ -110,7 +111,7 @@ public class ERXModel extends EOModel {
 		NSArray<EOAttribute> result = NSArray.emptyArray();
 		if (entity != null) {
 			result = entity.attributes();
-			log.debug("Attributes from " + entity.name() + ": " + result);
+			log.debug("Attributes from {}: {}", entity.name(), result);
 		}
 		return result;
 	}
@@ -125,7 +126,7 @@ public class ERXModel extends EOModel {
 		if (dict.objectForKey("password") != null) {
 			dict.setObjectForKey("<deleted for log>", "password");
 		}
-		log.info("Creating prototypes for model: " + model.name() + "->" + dict);
+		log.info("Creating prototypes for model: {}->{}", model.name(), dict);
 		synchronized (_EOGlobalModelLock) {
 			StringBuilder debugInfo = null;
 			if (log.isDebugEnabled()) {
@@ -140,7 +141,7 @@ public class ERXModel extends EOModel {
 				adaptorPrototypes = adaptor.prototypeAttributes();
 			}
 			catch (Exception e) {
-				log.error(e, e);
+				log.error("Could not get prototype attributes from adaptor.", e);
 			}
 			addAttributesToPrototypesCache(model, adaptorPrototypes);
 			NSArray prototypesToHide = attributesFromEntity(model._group.entityNamed("EOPrototypesToHide"));

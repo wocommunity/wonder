@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -30,7 +31,7 @@ import er.extensions.foundation.ERXAssert;
  * @author kieran
  */
 public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPercentComplete {
-	private static final Logger log = Logger.getLogger(ERJRFetchSpecificationReportTask.class);
+	private static final Logger log = LoggerFactory.getLogger(ERJRFetchSpecificationReportTask.class);
 	
 	private File reportFile;
 	private final String frameworkName;
@@ -112,8 +113,7 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPer
 		
 		reportFile = null;
 		
-		if (log.isDebugEnabled())
-			log.debug("Starting JasperReportTask: " + toString());
+		log.debug("Starting JasperReportTask: {}", this);
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {

@@ -8,7 +8,8 @@ package er.directtoweb.qualifiers;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.BooleanQualifier;
 import com.webobjects.directtoweb.NonNullQualifier;
@@ -24,9 +25,7 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
  * a network of qualifiers.
  */
 public class ERDQualifierTraversal {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERDQualifierTraversal.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDQualifierTraversal.class);
     
     /**
      * Simple method to traverse a network of qualifiers
@@ -75,7 +74,7 @@ public class ERDQualifierTraversal {
             }
         }
         if (result==null) {
-            log.error("Found unknown qualifier type:"+q.getClass().getName());
+            log.error("Found unknown qualifier type: {}", q.getClass());
             throw new RuntimeException("Found unknown qualifier type:"+q.getClass().getName());            
         }
         return result.booleanValue();

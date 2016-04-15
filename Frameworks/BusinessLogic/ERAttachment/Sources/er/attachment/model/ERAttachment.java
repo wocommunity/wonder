@@ -3,7 +3,8 @@ package er.attachment.model;
 import java.io.File;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
@@ -37,7 +38,7 @@ public abstract class ERAttachment extends _ERAttachment {
 	 */
 	private static final long serialVersionUID = 1L;
 
-  private static Logger log = Logger.getLogger(ERAttachment.class);
+  private static final Logger log = LoggerFactory.getLogger(ERAttachment.class);
 
   private boolean isInNestedEditingContext(EOEditingContext attachmentEc) {
 	  return (attachmentEc.parentObjectStore() instanceof EOEditingContext); 
@@ -157,7 +158,7 @@ public abstract class ERAttachment extends _ERAttachment {
     		ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
     	}
     	catch (Throwable e) {
-    		log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
+    		log.error("Failed to delete attachment '{}'.", primaryKey(), e);
     	}
     }
   }

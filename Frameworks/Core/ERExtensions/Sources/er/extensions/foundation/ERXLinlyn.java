@@ -127,16 +127,15 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Can upload and download files from ftp servers
  */
 
 public class ERXLinlyn {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXLinlyn.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXLinlyn.class);
     
     // FOR DEBUGGING: set the variable to "true"
     private boolean DEBUG = false;
@@ -167,7 +166,7 @@ public class ERXLinlyn {
         ftpSendCmd("LIST "+dir);
 
         String contents = getAsString(is);
-        if (log.isDebugEnabled()) { log.debug(contents); }
+        log.debug(contents);
         String[] files = contents.split("\n");
         return files;
     }
@@ -290,7 +289,7 @@ public class ERXLinlyn {
                       case -1: break loop;
 
                       default: if (--room < 0) {
-                                   if (log.isDebugEnabled()) { log.debug("Growing array by: " + doubler); }
+                                   log.debug("Growing array by: {}", doubler);
                                    buf = new char[offset + doubler];
                                    doubler *= 2; // double the size of the array each time it grows.
                                    room = buf.length - offset - 1;
@@ -430,10 +429,8 @@ public class ERXLinlyn {
         pos.print(cmd + "\r\n" );
         pos.flush(); 
         String response = responseHandler(cmd);
-        if(log.isDebugEnabled()) {
-            log.debug("command = "+cmd);
-            log.debug("response = "+response);
-        }
+        log.debug("command = {}", cmd);
+        log.debug("response = {}", response);
         return response;
     }
 

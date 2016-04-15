@@ -16,9 +16,6 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIAttributeGroup.class);
-
     public static final ERIAttributeGroupClazz clazz = new ERIAttributeGroupClazz();
 
     public static class ERIAttributeGroupClazz extends _ERIAttributeGroup._ERIAttributeGroupClazz {

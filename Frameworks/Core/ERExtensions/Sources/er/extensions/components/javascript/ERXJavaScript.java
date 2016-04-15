@@ -1,6 +1,7 @@
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -74,8 +75,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
     	}
     }
     
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXJavaScript.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJavaScript.class);
 
 	WOAssociation _framework;
 	WOAssociation _scriptFramework;
@@ -148,7 +148,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 							src = ERXResourceManager._completeURLForResource(src, null, wocontext);
 						}
 					} else {
-						log.warn("relative fragment URL" + srcFromBindings);
+						log.warn("relative fragment URL {}", srcFromBindings);
 					}
 				}
 			}

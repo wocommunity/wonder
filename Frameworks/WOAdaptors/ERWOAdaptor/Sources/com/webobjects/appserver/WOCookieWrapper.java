@@ -2,8 +2,9 @@ package com.webobjects.appserver;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.jboss.netty.handler.codec.http.Cookie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper for WOCookie to pass to Netty HttpResponseEncoder
@@ -11,7 +12,7 @@ import org.jboss.netty.handler.codec.http.Cookie;
  * @author ravim
  */
 public class WOCookieWrapper implements Cookie {	
-    private static final Logger log = Logger.getLogger(WOCookieWrapper.class);
+    private static final Logger log = LoggerFactory.getLogger(WOCookieWrapper.class);
 
 	private WOCookie wrapping;
 	
@@ -103,7 +104,7 @@ public class WOCookieWrapper implements Cookie {
 	}
 
 	public void setVersion(int version) {
-		log.warn("Illegally trying to set cookie version: " + version);
+		log.warn("Illegally trying to set cookie version: {}", version);
 	}
 
 	public int compareTo(Cookie o) {

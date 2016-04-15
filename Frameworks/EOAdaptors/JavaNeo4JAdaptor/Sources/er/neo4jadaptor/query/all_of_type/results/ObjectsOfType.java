@@ -10,9 +10,6 @@ import er.neo4jadaptor.query.lucene.LuceneQueryConverter;
 import er.neo4jadaptor.utils.cursor.IteratorCursor;
 
 public class ObjectsOfType <Type extends PropertyContainer> extends IteratorCursor<Type> implements Results<Type> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectsOfType.class);
-	
 	public ObjectsOfType(Index<Type> nodeIndex, EOEntity entity) {
 		super(nodeIndex.query(LuceneQueryConverter.matchAllOfEntity(entity)).iterator());
 	}

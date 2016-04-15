@@ -18,7 +18,8 @@ import java.util.Enumeration;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
@@ -49,8 +50,7 @@ import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class ERXJDBCUtilities {
-
-	public static final Logger log = Logger.getLogger(ERXJDBCUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCUtilities.class);
 
 	public static final NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 
@@ -167,7 +167,7 @@ public class ERXJDBCUtilities {
 			}
 			Connection con = DriverManager.getConnection(url, username, password);
 			DatabaseMetaData dbmd = con.getMetaData();
-			log.info("Connection to " + dbmd.getDatabaseProductName() + " " + dbmd.getDatabaseProductVersion() + " successful.");
+			log.info("Connection to {} {} successful.", dbmd.getDatabaseProductName(), dbmd.getDatabaseProductVersion());
 			con.setAutoCommit(ac);
 			return con;
 		}
@@ -202,7 +202,7 @@ public class ERXJDBCUtilities {
 					}
 				}
 				else {
-					log.warn("Attribute " + att.name() + " column was null or empty");
+					log.warn("Attribute {} column was null or empty.", att.name());
 				}
 			}
 			return columns;
@@ -286,7 +286,7 @@ public class ERXJDBCUtilities {
 				rowsCount++;
 				if (rows.getRow() % 1000 == 0) {
 					System.out.println("CopyTask.copyEntity: table " + tableName + ", inserted " + rows.getRow() + " rows");
-					log.info("table " + tableName + ", inserted " + rows.getRow() + " rows");
+					log.info("table {}, inserted {} rows", tableName, rows.getRow());
 				}
 
 				NSMutableSet<File> tempfilesToDelete = new NSMutableSet<File>();
@@ -297,13 +297,11 @@ public class ERXJDBCUtilities {
 					int type = rows.getMetaData().getColumnType(i + 1);
 
 					Object o = rows.getObject(columnName);
-					if (log.isDebugEnabled()) {
-						if (o != null) {
-							log.info("column=" + columnName + ", value class=" + o.getClass().getName() + ", value=" + o);
-						}
-						else {
-							log.info("column=" + columnName + ", value class unknown, value is null");
-						}
+					if (o != null) {
+						log.info("column={}, value class={}, value={}", columnName, o.getClass(), o);
+					}
+					else {
+						log.info("column={}, value class unknown, value is null", columnName);
 					}
 
 					if (o instanceof Blob) {
@@ -316,7 +314,7 @@ public class ERXJDBCUtilities {
 							ERXFileUtilities.writeInputStreamToFile(bis, tempFile);
 						}
 						catch (IOException e5) {
-							log.error("could not create tempFile for row " + rows.getRow() + " and column " + columnName + ", setting column value to null!");
+							log.error("could not create tempFile for row {} and column {}, setting column value to null!", rows.getRow(), columnName);
 							upps.setNull(i + 1, type);
 							if (tempFile != null)
 								if (!tempFile.delete())
@@ -331,7 +329,7 @@ public class ERXJDBCUtilities {
 							fis = new FileInputStream(tempFile);
 						}
 						catch (FileNotFoundException e6) {
-							log.error("could not create FileInputStream from tempFile for row " + rows.getRow() + " and column " + columnName + ", setting column value to null!");
+							log.error("could not create FileInputStream from tempFile for row {} and column {}, setting column value to null!", rows.getRow(), columnName);
 							upps.setNull(i + 1, type);
 							if (tempFile != null)
 								if (!tempFile.delete())
@@ -362,13 +360,13 @@ public class ERXJDBCUtilities {
 				}
 
 				// if (rows.getRow() % 1000 == 0) {
-				// log.info("committing at count=" + rowsCount);
+				// log.info("committing at count={}", rowsCount);
 				// dest.commit();
 				// log.info("committing done");
 				// }
 
 			}
-			log.info("table " + tableName + ", inserted " + rowsCount + " rows");
+			log.info("table {}, inserted {} rows", tableName, rowsCount);
 			rows.close();
 		}
 	}
@@ -659,9 +657,7 @@ public class ERXJDBCUtilities {
 				while (sqlStatementsEnum.hasMoreElements()) {
 					String sql = sqlStatementsEnum.nextElement();
 					if (sqlHelper.shouldExecute(sql)) {
-						if (ERXJDBCUtilities.log.isInfoEnabled()) {
-							ERXJDBCUtilities.log.info("Executing " + sql);
-						}
+						log.info("Executing {}", sql);
 						try {
 							rowsUpdated += stmt.executeUpdate(sql);
 						}
@@ -669,13 +665,11 @@ public class ERXJDBCUtilities {
 							if (!ignoreFailures) {
 								throw new RuntimeException("Failed to execute '" + sql + "'.", t);
 							}
-							ERXJDBCUtilities.log.warn("Failed to execute '" + sql + "', but ignoring: " + ERXExceptionUtilities.toParagraph(t));
+							log.warn("Failed to execute '{}', but ignoring: ()", sql, ERXExceptionUtilities.toParagraph(t));
 						}
 					}
 					else {
-						if (ERXJDBCUtilities.log.isInfoEnabled()) {
-							ERXJDBCUtilities.log.info("Skipping " + sql);
-						}
+						log.info("Skipping {}", sql);
 					}
 				}
 			}
@@ -711,7 +705,7 @@ public class ERXJDBCUtilities {
 	 */
 	@SuppressWarnings("unchecked")
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
-		ERXJDBCUtilities.log.info("Executing SQL script '" + resourceName + "' from " + frameworkName + " ...");
+		log.info("Executing SQL script '{}' from {} ...", resourceName, frameworkName);
 		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
 		if (sqlScript == null) {
 			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");

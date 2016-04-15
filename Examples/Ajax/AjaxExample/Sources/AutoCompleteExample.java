@@ -1,7 +1,5 @@
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -11,11 +9,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.ajax.example.ExampleDataFactory;
 import er.ajax.example.Word;
 
-
 public class AutoCompleteExample extends WOComponent {
-    
-	static Logger log = Logger.getLogger(AutoCompleteExample.class);
-
 	public String value;
     public Word currentValue;
     public Word selectedValue;

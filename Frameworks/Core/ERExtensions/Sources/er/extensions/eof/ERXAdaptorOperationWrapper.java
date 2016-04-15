@@ -3,7 +3,8 @@ package er.extensions.eof;
 import java.io.Serializable;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -39,7 +40,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    public static final Logger log = Logger.getLogger(ERXAdaptorOperationWrapper.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXAdaptorOperationWrapper.class);
 
     public static final ReentrantLock adaptorOperationsLock = new ReentrantLock();
     
@@ -124,7 +125,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
                     try {
                         achannel.performAdaptorOperation(op.operation());
                     } catch(EOGeneralAdaptorException ex) {
-                        log.error("Failed op " + i + ": " + ex + "\n" + op);
+                        log.error("Failed op {}: {}\n{}", i, ex, op);
                         throw ex;
                     }
                 }

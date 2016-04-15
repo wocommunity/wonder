@@ -8,7 +8,8 @@ package er.extensions.appserver.navigation;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
@@ -28,9 +29,7 @@ import er.extensions.foundation.ERXUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationManager {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXNavigationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigationManager.class);
     
     protected static ERXNavigationManager manager;
 
@@ -87,7 +86,7 @@ public class ERXNavigationManager {
             for (Enumeration e = items.objectEnumerator(); e.hasMoreElements();) {
                 ERXNavigationItem item = (ERXNavigationItem)e.nextElement();
                 if (itemsByName.objectForKey(item.name()) != null) {
-                    log.warn("Attempting to register multiple navigation items for the same name: " + item.name());
+                    log.warn("Attempting to register multiple navigation items for the same name: {}", item.name());
                 } else {
                     itemsByName.setObjectForKey(item, item.name());
                     if (item.name().equals("Root"))
@@ -110,8 +109,7 @@ public class ERXNavigationManager {
         // First load the nav_menu from application.
         NSArray appNavigationMenu = (NSArray)ERXFileUtilities.readPropertyListFromFileInFramework(navigationMenuFileName(), null);
         if (appNavigationMenu != null) {
-            if (log.isDebugEnabled())
-                log.debug("Found navigation menu in application: " + WOApplication.application().name());
+            log.debug("Found navigation menu in application: {}", WOApplication.application().name());
             navigationMenus.addObjectsFromArray(createNavigationItemsFromDictionaries(appNavigationMenu));
             registerObserverForFramework(null);
         }
@@ -119,21 +117,19 @@ public class ERXNavigationManager {
             String frameworkName = (String)e.nextElement();
             NSArray aNavigationMenu = (NSArray)ERXFileUtilities.readPropertyListFromFileInFramework(navigationMenuFileName(), frameworkName);
             if (aNavigationMenu != null && aNavigationMenu.count() > 0) {
-                if (log.isDebugEnabled()) log.debug("Found navigation menu in framework: " + frameworkName);
+                log.debug("Found navigation menu in framework: {}", frameworkName);
                 navigationMenus.addObjectsFromArray(createNavigationItemsFromDictionaries(aNavigationMenu));
                 registerObserverForFramework(frameworkName);
             }
         }
         setNavigationItems(navigationMenus);
-        if (log.isDebugEnabled())
-            log.debug("Navigation Menu Configured");
+        log.debug("Navigation Menu Configured");
     }
 
     public void registerObserverForFramework(String frameworkName) {
         if (!WOApplication.application().isCachingEnabled() && !hasRegistered) {
             String filePath = ERXFileUtilities.pathForResourceNamed(navigationMenuFileName(), frameworkName, null);
-            if (log.isDebugEnabled())
-                log.debug("Registering observer for filePath: " + filePath);
+            log.debug("Registering observer for filePath: {}", filePath);
             ERXFileNotificationCenter.defaultCenter().addObserver(this,
                                                                   new NSSelector("reloadNavigationMenu", ERXConstant.NotificationClassArray),
                                                                   filePath);

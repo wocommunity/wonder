@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -39,7 +40,7 @@ import er.extensions.foundation.ERXStringUtilities;
  *           is missing.
  */
 public class ERXResponseRewriter {
-	public static final Logger log = Logger.getLogger(ERXResponseRewriter.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXResponseRewriter.class);
 
 	private static final String ADDED_RESOURCES_KEY = "ERXResponseRewriter.addedResources";
 
@@ -391,7 +392,7 @@ public class ERXResponseRewriter {
 			// IGNORE
 		}
 		else if (tagMissingBehavior == TagMissingBehavior.SkipAndWarn) {
-			ERXResponseRewriter.log.warn("There was no " + tag + ", so your content did not get added: " + content);
+			log.warn("There was no {}, so your content did not get added: {}", tag, content);
 		}
 		else {
 			throw new IllegalArgumentException("Unknown tag missing missing: " + tagMissingBehavior + ".");

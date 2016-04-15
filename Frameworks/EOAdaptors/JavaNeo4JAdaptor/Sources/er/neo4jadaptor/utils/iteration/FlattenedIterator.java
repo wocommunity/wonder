@@ -3,9 +3,6 @@ package er.neo4jadaptor.utils.iteration;
 import java.util.Iterator;
 
 public class FlattenedIterator <V> implements Iterator<V> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(FlattenedIterator.class);
-	
 	private final Iterator<? extends Iterator<V>> it;
 	
 	private Iterator<V> internal;

@@ -10,9 +10,6 @@ public class ERCAuditBlob extends _ERCAuditBlob {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditBlob.class);
-
     public static final ERCAuditBlobClazz clazz = new ERCAuditBlobClazz();
     public static class ERCAuditBlobClazz extends _ERCAuditBlob._ERCAuditBlobClazz {
         /* more clazz methods here */

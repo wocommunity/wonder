@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -35,8 +36,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger("er.directtoweb.rules.DelayedBooleanAssignment");
+    private static final Logger log = LoggerFactory.getLogger("er.directtoweb.rules.DelayedBooleanAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -80,8 +80,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
     @Override
     public Object fireNow(D2WContext c) {
         NSDictionary booleanConditions = (NSDictionary)value();
-        if (log.isDebugEnabled())
-            log.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
+        log.debug("Resolving delayed fire for boolean conditions: {}", booleanConditions);
         return ERXValueUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?
             booleanConditions.objectForKey("trueValue") : booleanConditions.objectForKey("falseValue");
 

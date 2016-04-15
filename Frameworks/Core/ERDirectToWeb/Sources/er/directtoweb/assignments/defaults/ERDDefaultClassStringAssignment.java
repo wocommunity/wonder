@@ -1,7 +1,5 @@
 package er.directtoweb.assignments.defaults;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
@@ -34,9 +32,6 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-    public final static Logger log = Logger.getLogger(ERDDefaultClassStringAssignment.class);
-	
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"task", "subTask"}), "classForTask",

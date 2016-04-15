@@ -62,7 +62,6 @@ import er.extensions.validation.ERXValidationFactory;
  * forget to update an inverse relationship. To turn this feature on, you must set the system default 
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  *
- * @property ERDebuggingEnabled
  * @property er.extensions.ERXCustomObject.shouldTrimSpaces
  */
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
@@ -154,7 +153,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void mightDelete() {
         if (tranLogMightDelete.isDebugEnabled())
-        	tranLogMightDelete.debug("Object:" + description());
+        	tranLogMightDelete.debug("Object: " + this);
     }
 
     /* (non-Javadoc)
@@ -165,7 +164,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
             throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeDeletedException");            
         }
         if (tranLogWillDelete.isDebugEnabled())
-            tranLogWillDelete.debug("Object:" + description());
+            tranLogWillDelete.debug("Object: " + this);
     }
     
     /* (non-Javadoc)
@@ -183,7 +182,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
                      tranLogWillInsert.error("Found illegal value in to many "+key+" for "+this+": "+o);
                  }
              }
-             tranLogWillInsert.debug("Object:" + description());
+             tranLogWillInsert.debug("Object: " + this);
          }
          if(shouldTrimSpaces())
              trimSpaces();
@@ -205,7 +204,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
                  }
              }
              if (tranLogWillUpdate.isDebugEnabled())
-                 tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
+                 tranLogWillUpdate.debug("Object: " + this + " changes: " + changesFromCommittedSnapshot());
          }
          if(shouldTrimSpaces())
              trimSpaces();
@@ -221,21 +220,21 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void didDelete(EOEditingContext ec) {
         if (tranLogDidDelete.isDebugEnabled())
-            tranLogDidDelete.debug("Object:" + description());
+            tranLogDidDelete.debug("Object: " + this);
     }
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#didUpdate()
      */
     public void didUpdate() {
         if (tranLogDidUpdate.isDebugEnabled())
-            tranLogDidUpdate.debug("Object:" + description());
+            tranLogDidUpdate.debug("Object: " + this);
     }
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#didInsert()
      */
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
-            tranLogDidInsert.debug("Object:" + description());
+            tranLogDidInsert.debug("Object: " + this);
 
         //We're going to blow the primaryKey cache:
         _primaryKey = null;
@@ -246,7 +245,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void willRevert() {
         if ( tranLogWillRevert.isDebugEnabled() )
-            tranLogWillRevert.debug("Object: " + description());
+            tranLogWillRevert.debug("Object: " + this);
     }
 
     /* (non-Javadoc)
@@ -254,7 +253,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void didRevert(EOEditingContext ec) {
         if ( tranLogDidRevert.isDebugEnabled() )
-            tranLogDidRevert.debug("Object: " + description());
+            tranLogDidRevert.debug("Object: " + this);
         flushCaches();
     }
 
@@ -420,8 +419,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public Object rawPrimaryKeyInTransaction() {
         Object result = rawPrimaryKey();
         if (result == null) {
-            NSDictionary pk = primaryKeyDictionary(false);
-            NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
+            NSDictionary<String, Object> pk = rawPrimaryKeyDictionary(false);
+            NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
             result = ERXArrayUtilities.valuesForKeyPaths(pk, primaryKeyAttributeNames);
             if(((NSArray)result).count() == 1) result = ((NSArray)result).lastObject();
         }
@@ -469,7 +468,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
 
     
     /** caches the primary key dictionary for the given object */
-    private NSDictionary _primaryKeyDictionary;
+    private NSDictionary<String, Object> _primaryKeyDictionary;
 
     /**
      * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
@@ -491,16 +490,15 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      *      a primary key assigned yet and is not in the middle of a transaction then
      *      a new primary key dictionary is created, cached and returned.
      */
-    // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
-    @SuppressWarnings("unchecked")
-	public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+    @Override
+    public NSDictionary<String, Object> rawPrimaryKeyDictionary(boolean inTransaction) {
         if(_primaryKeyDictionary == null) {
             if (!inTransaction) {
                 Object rawPK = rawPrimaryKey();
                 if (rawPK != null) {
                     if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPK);
-                    NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-                    _primaryKeyDictionary = new NSDictionary(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray(rawPK), primaryKeyAttributeNames);
+                    NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
+                    _primaryKeyDictionary = new NSDictionary<>(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray<>(rawPK), primaryKeyAttributeNames);
                 } else {
                     if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
                     _primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
@@ -509,7 +507,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         }
         return _primaryKeyDictionary;
     }
-    
+
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#committedSnapshotValueForKey(java.lang.String)
      */
@@ -559,7 +557,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public ERXEnterpriseObject refetchObjectFromDBinEditingContext(EOEditingContext ec){
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName());
-        EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
+        EOQualifier qual = entity.qualifierForPrimaryKey(rawPrimaryKeyDictionary(false));
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName(), qual, null);
         fetchSpec.setRefreshesRefetchedObjects(true);
         NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
@@ -590,12 +588,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
 
-    /**
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String description() { return toString(); }
-    
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#toLongString()
      */
@@ -675,9 +667,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     
     /**
      * This method performs a few checks before invoking
-     * super's implementation. If the property key:
-     * <b>ERDebuggingEnabled</b> is set to true then the method
-     * <code>checkConsistency</code> will be called on this object.
+     * super's implementation.
+     * 
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
@@ -689,11 +680,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
         super.validateForSave();
-        // FIXME: Should move all of the keys into on central place for easier management.
-        //    Also might want to have a flag off of ERXApplication is debugging is enabled.
-        // FIXME: Should have a better flag than just ERDebuggingEnabled
-        if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
-            checkConsistency();
     }
 
     /**
@@ -738,17 +724,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         super.validateForDelete();
     }
 
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#checkConsistency()
-     */
-    // CHECKME: This method was very useful at NS, might not be as useful here.
-    public void checkConsistency() throws NSValidation.ValidationException {}
-    
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#batchCheckConsistency()
-     */
-    public void batchCheckConsistency() throws NSValidation.ValidationException {}
-    
 	/**
 	 * Overridden to support two-way relationship setting.
 	 */

@@ -8,7 +8,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -60,10 +61,7 @@ import er.extensions.foundation.ERXPatcher;
  * @param <T> 
  */
 public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
-    /**
-     * logging support
-     */
-    public static final Logger log = Logger.getLogger(EOEnterpriseObjectClazz.class);
+    private static final Logger log = LoggerFactory.getLogger(EOEnterpriseObjectClazz.class);
     
     /**
      * caches the clazz objects
@@ -147,7 +145,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
 					EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
 					NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
 					if(candidates.count() > 1) {
-						log.warn("More than one entity found: " + candidates);
+						log.warn("More than one entity found: {}", candidates);
 					}
 					EOEntity entity = (EOEntity) candidates.lastObject();
 					if(entity != null) {
@@ -232,7 +230,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
             clazz.setEntityName(entityName);
         }
         if(log.isDebugEnabled()) {
-            log.debug("clazzForEntityNamed '" +entityName+ "': " + clazz.getClass().getName());
+            log.debug("clazzForEntityNamed '{}': {}", entityName, clazz.getClass());
         }
         return clazz;
     }
@@ -535,8 +533,8 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * Constructs a fetch specification that will only fetch the primary
      * keys for a given qualifier.
-     * @param ec editing context, not used
-     * @param eoqualifier to construct the fetch spec with
+     * 
+     * @param qualifier to construct the fetch spec with
      * @param sortOrderings array of sort orderings to sort the result 
      *     set with.
      * @param additionalKeys array of additional key paths to construct
@@ -544,13 +542,12 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return fetch specification that can be used to fetch primary keys for 
      *     a given qualifier and sort orderings.
      */
-    // FIXME: The ec parameter is not needed, nor used.
-    public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
+    public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, NSArray<String> additionalKeys) {
         String entityName = entityName();
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, sortOrderings);
         fs.setFetchesRawRows(true);
-        EOEntity entity = entity(ec);
-        NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
+        EOEntity entity = entity();
+        NSMutableArray<String> keys = new NSMutableArray<>(entity.primaryKeyAttributeNames());
         if(additionalKeys != null) {
             keys.addObjectsFromArray(additionalKeys);
         }
@@ -575,7 +572,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @return array of primary keys matching a given qualifier
      */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
+        EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(eoqualifier, sortOrderings, null);
         //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
         return nsarray;

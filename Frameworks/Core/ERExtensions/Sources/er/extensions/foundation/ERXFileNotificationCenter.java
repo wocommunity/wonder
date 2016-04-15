@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -34,9 +35,7 @@ import er.extensions.eof.ERXConstant;
  * future.</p>
  */
 public class ERXFileNotificationCenter {
-
-    /** Logging support */
-    public static final Logger log = Logger.getLogger(ERXFileNotificationCenter.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXFileNotificationCenter.class);
 
     /** Contains the name of the notification that is posted when a file changes. */
     public static final String FileDidChange = "FileDidChange";
@@ -81,7 +80,7 @@ public class ERXFileNotificationCenter {
 
         if (developmentMode || checkFilesPeriod() > 0) {
             ERXRetainer.retain(this);
-            log.debug("Caching disabled.  Registering for notification: " + WOApplication.ApplicationWillDispatchRequestNotification);
+            log.debug("Caching disabled.  Registering for notification: {}", WOApplication.ApplicationWillDispatchRequestNotification);
             NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkIfFilesHaveChanged", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillDispatchRequestNotification, null);            
         }
         
@@ -131,11 +130,10 @@ public class ERXFileNotificationCenter {
         if (!developmentMode && checkFilesPeriod() == 0) {
             log.info("Registering an observer when file checking is disabled (WOCaching must be " +
                      "disabled or the er.extensions.ERXFileNotificationCenter.CheckFilesPeriod " +
-                     "property must be set).  This observer will not ever by default be called: " + file);
+                     "property must be set).  This observer will not ever by default be called: {}", file);
         }
         String filePath = cacheKeyForFile(file);
-        if (log.isDebugEnabled())
-            log.debug("Registering Observer for file at path: " + filePath);
+        log.debug("Registering Observer for file at path: {}", filePath);
         // Register last modified date.
         registerLastModifiedDateForFile(file);
         // FIXME: This retains the observer.  This is not ideal.  With the 1.3 JDK we can use a ReferenceQueue to maintain weak references.
@@ -179,7 +177,7 @@ public class ERXFileNotificationCenter {
 	    	}
 	    	catch (IOException e) {
 	    		// MS: return a zero to match the previous semantics from calling file.lastModified() on a missing file.
-	    		ERXFileNotificationCenter.log.warn("Failed to determine the lastModified time on '" + file + "': " + e.getMessage());
+	    		log.warn("Failed to determine the lastModified time on '{}': {}", file, e.getMessage());
 	    		return Long.valueOf(0);
 	    	}
     	}
@@ -219,7 +217,7 @@ public class ERXFileNotificationCenter {
     protected void fileHasChanged(File file) {
         NSMutableSet observers = (NSMutableSet)_observersByFilePath.objectForKey(cacheKeyForFile(file));
         if (observers == null)
-            log.warn("Unable to find observers for file: " + file);
+            log.warn("Unable to find observers for file: {}", file);
         else {
             NSNotification notification = new NSNotification(FileDidChange, file);
             for (Enumeration e = observers.objectEnumerator(); e.hasMoreElements();) {
@@ -227,7 +225,7 @@ public class ERXFileNotificationCenter {
                 try {
                     holder.selector.invoke(holder.observer, notification);
                 } catch (Exception ex) {
-                    log.error("Catching exception when invoking method on observer: " + ex.toString()+" - "+ERXUtilities.stackTrace(ex));
+                    log.error("Catching exception when invoking method on observer: {}", ex, ex);
                 }
             }
             registerLastModifiedDateForFile(file);            
@@ -249,7 +247,7 @@ public class ERXFileNotificationCenter {
         
         lastCheckMillis = System.currentTimeMillis();
         
-        if (log.isDebugEnabled()) log.debug("Checking if files have changed");
+        log.debug("Checking if files have changed");
         for (Enumeration e = _lastModifiedByFilePath.keyEnumerator(); e.hasMoreElements();) {
             File file = new File((String)e.nextElement());
             if (file.exists() && hasFileChanged(file)) {

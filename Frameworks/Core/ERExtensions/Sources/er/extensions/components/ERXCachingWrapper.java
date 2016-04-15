@@ -6,8 +6,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -51,10 +49,6 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXCachingWrapper.class);
 
     /** The cached entries */
     protected static Map cache = Collections.synchronizedMap(new HashMap() {

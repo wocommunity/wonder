@@ -10,7 +10,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -46,9 +47,7 @@ import er.testrunner.ERXWOTestInterface;
  * you need to give an argument "pw" that matches the corresponding system property for the action.
  */
 public class ERXDirectAction extends WODirectAction {
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXDirectAction.class);
+    private final static Logger log = LoggerFactory.getLogger(ERXDirectAction.class);
 
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;
@@ -68,7 +67,7 @@ public class ERXDirectAction extends WODirectAction {
     	}
     	String password = ERXProperties.decryptedStringForKey(passwordKey);
     	if(password == null || password.length() == 0) {
-    		log.error("Attempt to use action when key is not set: " + passwordKey);
+    		log.error("Attempt to use action when key is not set: {}", passwordKey);
     		return false;
     	}
     	String requestPassword = request().stringFormValueForKey("pw");
@@ -216,7 +215,7 @@ public class ERXDirectAction extends WODirectAction {
                         "<p>Your url should look like: <code>.../WebObjects/1/wa/...</code>, where '1' would be the first instance of the target application.</p>";
             } else {
                 String debugParam = request().stringFormValueForKey("debug");
-                log.debug("EOAdaptorDebuggingAction requested with 'debug' param:" + debugParam);
+                log.debug("EOAdaptorDebuggingAction requested with 'debug' param: {}", debugParam);
                 if (debugParam == null || debugParam.trim().length() == 0) {
                     message = "<p>EOAdaptorDebugging is currently <strong>" + (currentState ? "ON" : "OFF") + "</strong> for instance <strong>" + instance + "</strong>.</p>";
                     message += "<p>To change the setting, provide the 'debug' parameter to this action, e.g.: <code>...eoAdaptorDebugging?debug=on&pw=secret</code></p>";
@@ -228,7 +227,7 @@ public class ERXDirectAction extends WODirectAction {
                     }
 
                     boolean desiredState = ERXValueUtilities.booleanValueWithDefault(debugParam, false);
-                    log.debug("EOAdaptorDebuggingAction requested 'debug' state change to: '" + desiredState + "' for instance: " + instance + ".");
+                    log.debug("EOAdaptorDebuggingAction requested 'debug' state change to: '{}' for instance: {}.", desiredState, instance);
                     if (currentState != desiredState) {
                         ERXExtensions.setAdaptorLogging(desiredState);
                         message = "<p>Turned EOAdaptorDebugging <strong>" + (desiredState ? "ON" : "OFF") + "</strong> for instance <strong>" + instance + "</strong>.</p>";
@@ -335,7 +334,7 @@ public class ERXDirectAction extends WODirectAction {
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
 
             result.setValue(info);
-            log.info("GC forced\n"+info);
+            log.info("GC forced\n{}", info);
             return result;
         }
         return forbiddenResponse();
@@ -343,7 +342,7 @@ public class ERXDirectAction extends WODirectAction {
 
     /**
      * Returns a list of the traces of open editing context locks.  This is only useful if
-     * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
+     * er.extensions.ERXEC.traceOpenLocks is enabled and 
      * er.extensions.ERXOpenEditingContextLocksPassword is set.
      * 
      * @return list of lock traces

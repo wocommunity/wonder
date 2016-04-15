@@ -8,8 +8,6 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -66,9 +64,6 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     /** Key used to denote a suffix for a generated url string */ 
     // MOVEME: ERXWOUtilities
     public final static String SUFFIX_MARKER="**SUFFIX**";
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDirectActionHyperlink.class);
 
 	
     // Constructor -------------------------------------------------

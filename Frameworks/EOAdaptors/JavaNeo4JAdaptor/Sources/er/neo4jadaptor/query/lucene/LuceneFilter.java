@@ -5,6 +5,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOQualifier;
@@ -26,7 +28,7 @@ import er.neo4jadaptor.storage.IndexProvider;
  * @param <Type>
  */
 public class LuceneFilter <Type extends PropertyContainer> extends Filter<Type> {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LuceneFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(LuceneFilter.class);
 
 	public LuceneFilter() {
 	}
@@ -39,9 +41,7 @@ public class LuceneFilter <Type extends PropertyContainer> extends Filter<Type> 
 		Index<Type> index = (Index<Type>) IndexProvider.instance.getIndexForEntity(db, entity);
 		IndexHits<Type> hits = index.query(q);
 		
-		if (log.isDebugEnabled()) {
-			log.debug("Querying lucene with " + q);
-		}
+		log.debug("Querying lucene with {}.", q);
 		
 		// optimization
 		if (LuceneOptimizer.canBeOptimized(hits, qualifier)) {

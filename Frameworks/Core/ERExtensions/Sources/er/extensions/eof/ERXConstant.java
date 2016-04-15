@@ -11,7 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -21,7 +22,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
@@ -137,8 +137,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant {
-	
-	private static final Logger log = Logger.getLogger(ERXConstant.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXConstant.class);
 
 	/**
 	 * Holds the value store, grouped by class name.
@@ -175,9 +174,7 @@ public abstract class ERXConstant {
         synchronized (_store) {
             Map classMap = keyMap(clazzName, false);
             Constant result = (Constant) classMap.get(value);
-            if(log.isDebugEnabled()) {
-                log.debug("Getting " + result + " for " + clazzName + " and " + value);
-            }
+            log.debug("Getting {} for {} and {}", result, clazzName, value);
             return result;
         }
     }
@@ -207,9 +204,7 @@ public abstract class ERXConstant {
         synchronized (_store) {
             String className = clazz.getName();
             Map classMap = keyMap(className, true);
-            if(log.isDebugEnabled()) {
-                log.debug("Putting " + key + " for " + className);
-            }
+            log.debug("Putting {} for {}", key, className);
             classMap.put(key, value);
         }
     }

@@ -8,8 +8,6 @@
 
 package er.extensions.localization;
 
-import org.apache.log4j.Logger;
-
 /**
  *  ERXDutchLocalizer is a subclass of {@link ERXLocalizer}.
  *  <p>
@@ -56,8 +54,6 @@ import org.apache.log4j.Logger;
  *  </pre>
  */
 public class ERXDutchLocalizer extends ERXLocalizer {
-  
-    static final Logger log = Logger.getLogger(ERXDutchLocalizer.class);
     
     public ERXDutchLocalizer(String aLanguage) { 
         super(aLanguage);

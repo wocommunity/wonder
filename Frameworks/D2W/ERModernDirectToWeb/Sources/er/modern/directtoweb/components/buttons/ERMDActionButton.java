@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -41,11 +39,6 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  */
 public abstract class ERMDActionButton extends ERDCustomComponent {
-	
-    /** logging support */
-    @SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDActionButton.class);
-
     public interface Keys extends ERDCustomComponent.Keys {
         public static final String object = "object";
         public static final String displayGroup = "displayGroup";

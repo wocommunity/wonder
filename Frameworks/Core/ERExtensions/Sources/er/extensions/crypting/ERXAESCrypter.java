@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -14,6 +17,8 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXAESCipherKey the cipher key to use
  */
 public class ERXAESCrypter extends ERXAbstractAESCrypter {
+	private static final Logger log = LoggerFactory.getLogger(ERXAESCrypter.class);
+
 	/**
 	 * Generates a secret key from the System property
 	 * <b>er.extensions.ERXAESCipherKey</b>. This secret key is used when

@@ -1,6 +1,7 @@
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -20,24 +21,21 @@ public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction 
     // Used for logging only
     private String pageNameThatCreated = "Unknown";
 
-    private static final Logger log = Logger.getLogger(ERXAbstractPerformWOAction.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXAbstractPerformWOAction.class);
 
     public ERXAbstractPerformWOAction() {
         if (log.isDebugEnabled()) {
             WOContext context = ERXWOContext.currentContext();
             pageNameThatCreated = (context == null ? "Unknown" : context.page().name());
-            log.info("Controller named '" + getClass().getName() + "' just instantiated in page named '" + pageNameThatCreated + "'");
+            log.info("Controller named '{}' just instantiated in page named '{}'", getClass().getName(), pageNameThatCreated);
         }
     }
 
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
         if (log.isDebugEnabled())
-            log.debug("Controller named '" + getClass().getName()
-                            + "' which was originally created on " + pageNameThatCreated
-                            + "' is creating pageWithName '" + componentClass.getName()
-                            + "' while performing action in page '"
-                            + ERXWOContext.currentContext() == null ? "Unknown" : ERXWOContext.currentContext().page().name()
-                                            +"'");
+            log.debug("Controller named '{}' which was originally created on '{}' is creating pageWithName '{}' " +
+                    "while performing action in page '{}'", getClass().getName(), pageNameThatCreated,
+                    componentClass.getName(), ERXWOContext.currentContext() == null ? "Unknown" : ERXWOContext.currentContext().page().name());
         return ERXApplication.erxApplication().pageWithName(componentClass);
     }
 

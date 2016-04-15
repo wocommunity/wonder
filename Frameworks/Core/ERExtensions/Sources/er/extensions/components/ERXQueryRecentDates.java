@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -34,9 +32,6 @@ public class ERXQueryRecentDates extends WOComponent {
     public ERXQueryRecentDates(WOContext aContext) {
         super(aContext);
     }
-    
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXQueryRecentDates.class);
     
     public WODisplayGroup displayGroup;
     public String key;

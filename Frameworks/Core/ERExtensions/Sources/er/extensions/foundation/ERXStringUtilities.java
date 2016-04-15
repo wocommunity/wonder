@@ -29,7 +29,8 @@ import java.util.Vector;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -87,7 +88,7 @@ public class ERXStringUtilities {
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
     protected static double adjustement = 0.5;
-    private static Logger log = Logger.getLogger(ERXStringUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXStringUtilities.class);
 
     /**
      * Sets the base adjustment used for fuzzy matching
@@ -258,7 +259,7 @@ public class ERXStringUtilities {
             if(file != null)
                 return ERXFileUtilities.stringFromFile(file);
         } catch (IOException e) {
-            log.error(e, e);
+            log.error("Could not read string from file {}", file, e);
         }
         return null;
     }
@@ -366,7 +367,7 @@ public class ERXStringUtilities {
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
                 return new String(bytes);
             } catch (IOException e) {
-                log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
+                log.warn("IOException when stringFromResource({}.{} in bundle {}", name, extension, bundle.name());
             } finally {
             	if (stream != null) {
             		try { stream.close(); } catch (IOException e) {}
@@ -1178,10 +1179,7 @@ public class ERXStringUtilities {
     public static String stringByTruncatingStringToByteLengthInEncoding(final String inputString, final int byteLength, final String encoding) {
         String result = null;
         
-        if ( log.isDebugEnabled() ) {
-            log.debug("stringByTruncatingStringToByteLengthInEncoding: encoding='" + encoding + "', byteLength=" +
-                      byteLength + ", inputString='" + inputString + "'");
-        }
+        log.debug("stringByTruncatingStringToByteLengthInEncoding: encoding='{}', byteLength={}, inputString='{}'", encoding, byteLength, inputString);
         
         if ( inputString != null ) {
             final byte[] bytes = toBytes(inputString, encoding);
@@ -1240,8 +1238,8 @@ public class ERXStringUtilities {
                                 // we're not expecting to get this exception.  the javadoc doesn't say
                                 // under what circumstances it happens and it would be surprising it this happened
                                 // and the conversion to byte array worked earlier.
-                                log.error("Got " + e.getClass() + " exception. byteLength=" + byteLength + ", encoding='" + encoding +
-                                          "', inputString='"+ inputString + "'.", e);
+                                log.error("Got {} exception. byteLength={}, encoding='{}', inputString='{}'.",
+                                        e.getClass(), byteLength, encoding, inputString, e);
                                 break;
                             }
                         } while ( charBuffer == null && currentLength > 0 );
@@ -1255,8 +1253,7 @@ public class ERXStringUtilities {
             }
         }
         
-        if ( log.isDebugEnabled() )
-            log.debug("stringByTruncatingStringToByteLengthInEncoding: result='" + result + "'");
+        log.debug("stringByTruncatingStringToByteLengthInEncoding: result='{}'", result);
         
         return result;
     }

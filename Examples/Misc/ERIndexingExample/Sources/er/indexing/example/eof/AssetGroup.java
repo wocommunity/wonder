@@ -3,10 +3,6 @@ package er.indexing.example.eof;
 import com.webobjects.eocontrol.EOEditingContext;
 
 public class AssetGroup extends _AssetGroup {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AssetGroup.class);
-
     public static final AssetGroupClazz clazz = new AssetGroupClazz();
     public static class AssetGroupClazz extends _AssetGroup._AssetGroupClazz {
         /* more clazz methods here */

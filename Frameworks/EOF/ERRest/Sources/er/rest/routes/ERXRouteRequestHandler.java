@@ -4,7 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
@@ -272,7 +273,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 	}
 
-	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXRouteRequestHandler.class);
 
 	public static final String Key = "ra";
 	public static final String TypeKey = "ERXRouteRequestHandler.type";
@@ -322,9 +323,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to add
 	 */
 	public void addRoute(ERXRoute route) {
-		if (log.isDebugEnabled()) {
-			log.debug("adding route " + route);
-		}
+		log.debug("adding route {}", route);
 		verifyRoute(route);
 		_routes.addObject(route);
 	}
@@ -496,7 +495,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (addDefaultRoutesIfNoDeclaredRoutesFound && !declaredRoutesFound) {
-			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '{}'. Registering default routes instead.", routeControllerClass.getSimpleName());
 			addDefaultRoutes(entityName, routeControllerClass);
 		}
 	}

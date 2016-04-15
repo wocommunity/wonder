@@ -15,6 +15,7 @@ import javax.imageio.stream.ImageInputStream;
 import org.w3c.dom.Node;
 
 import com.drew.lang.ByteArrayReader;
+import com.drew.lang.SequentialByteArrayReader;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifReader;
@@ -80,7 +81,7 @@ public class JAIMetadataParser implements IERMetadataParser {
     	ByteArrayReader reader = new ByteArrayReader((byte[]) ((IIOMetadataNode) node).getUserObject());
     	Metadata metadata = new Metadata();
     	new ExifReader().extract(reader, metadata);
-    	return metadata.getDirectory(ExifIFD0Directory.class);
+    	return metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       }
     }
 
@@ -98,10 +99,10 @@ public class JAIMetadataParser implements IERMetadataParser {
   private IptcDirectory getIptcDirectory(Node node) {
     if ("unknown".equals(node.getNodeName())) {
       if (Integer.parseInt(node.getAttributes().getNamedItem("MarkerTag").getNodeValue()) == IPTC) {
-    	ByteArrayReader reader = new ByteArrayReader((byte[]) ((IIOMetadataNode) node).getUserObject());
+        byte[] tagBytes = (byte[]) ((IIOMetadataNode) node).getUserObject();
     	Metadata metadata = new Metadata();
-    	new IptcReader().extract(reader, metadata);
-        return metadata.getDirectory(IptcDirectory.class);
+    	new IptcReader().extract(new SequentialByteArrayReader(tagBytes), metadata, tagBytes.length);
+        return metadata.getFirstDirectoryOfType(IptcDirectory.class);
       }
     }
 

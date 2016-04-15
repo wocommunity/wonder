@@ -19,8 +19,6 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -54,7 +52,6 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXAdaptorChannelDelegate;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContext;
@@ -73,10 +70,8 @@ import er.extensions.eof.qualifiers.ERXFullTextQualifierSupport;
 import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 import er.extensions.eof.qualifiers.ERXRegExQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
-import er.extensions.formatters.ERXSimpleHTMLFormatter;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
-import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;

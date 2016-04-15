@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -311,7 +312,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void mightDelete() {
 		if (tranLogMightDelete.isDebugEnabled())
-			tranLogMightDelete.debug("Object:" + description());
+			tranLogMightDelete.debug("Object: " + this);
 	}
 
 	public void willDelete() throws NSValidation.ValidationException {
@@ -319,7 +320,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeDeletedException");
 		}
 		if (tranLogWillDelete.isDebugEnabled())
-			tranLogWillDelete.debug("Object:" + description());
+			tranLogWillDelete.debug("Object: " + this);
 	}
 
 	public void willInsert() {
@@ -335,7 +336,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					tranLogWillInsert.error("Found illegal value in to many " + key + " for " + this + ": " + o);
 				}
 			}
-			tranLogWillInsert.debug("Object:" + description());
+			tranLogWillInsert.debug("Object: " + this);
 		}
 		if (shouldTrimSpaces())
 			trimSpaces();
@@ -358,7 +359,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				}
 			}
 			if (tranLogWillUpdate.isDebugEnabled())
-				tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
+				tranLogWillUpdate.debug("Object: " + this + " changes: " + changesFromCommittedSnapshot());
 		}
 		if (shouldTrimSpaces())
 			trimSpaces();
@@ -390,17 +391,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void didDelete(EOEditingContext ec) {
 		if (tranLogDidDelete.isDebugEnabled())
-			tranLogDidDelete.debug("Object:" + description());
+			tranLogDidDelete.debug("Object: " + this);
 	}
 
 	public void didUpdate() {
 		if (tranLogDidUpdate.isDebugEnabled())
-			tranLogDidUpdate.debug("Object:" + description());
+			tranLogDidUpdate.debug("Object: " + this);
 	}
 
 	public void didInsert() {
 		if (tranLogDidInsert.isDebugEnabled())
-			tranLogDidInsert.debug("Object:" + description());
+			tranLogDidInsert.debug("Object: " + this);
 		_permanentGlobalID = null;
 		
 		// We're going to blow the primaryKey cache:
@@ -409,12 +410,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public void willRevert() {
 		if (tranLogWillRevert.isDebugEnabled())
-			tranLogWillRevert.debug("Object: " + description());
+			tranLogWillRevert.debug("Object: " + this);
 	}
 
 	public void didRevert(EOEditingContext ec) {
 		if (tranLogDidRevert.isDebugEnabled())
-			tranLogDidRevert.debug("Object: " + description());
+			tranLogDidRevert.debug("Object: " + this);
 		flushCaches();
 	}
 
@@ -597,8 +598,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	public Object rawPrimaryKeyInTransaction() {
 		Object result = rawPrimaryKey();
 		if (result == null) {
-			NSDictionary pk = primaryKeyDictionary(false);
-			NSArray primaryKeyAttributeNames = primaryKeyAttributeNames();
+			NSDictionary<String, Object> pk = rawPrimaryKeyDictionary(false);
+			NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
 			result = ERXArrayUtilities.valuesForKeyPaths(pk, primaryKeyAttributeNames);
 			if (((NSArray) result).count() == 1)
 				result = ((NSArray) result).lastObject();
@@ -663,16 +664,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * 
 	 * @param inTransaction
 	 *            boolean flag to tell the object if it is currently in the
-	 *            middle of a transaction.
+	 *            middle of a transaction
 	 * @return primary key dictionary for the current object, if the object does
 	 *         not have a primary key assigned yet and is not in the middle of a
 	 *         transaction then a new primary key dictionary is created, cached
-	 *         and returned.
+	 *         and returned
 	 */
-	// FIXME: this method is really misnamed; it should be called
-	// rawPrimaryKeyDictionary
-	@SuppressWarnings("unchecked")
-	public NSDictionary<String, Object> primaryKeyDictionary(boolean inTransaction) {
+	@Override
+	public NSDictionary<String, Object> rawPrimaryKeyDictionary(boolean inTransaction) {
 		if (_primaryKeyDictionary == null) {
 			if (!inTransaction) {
 				Object rawPK = rawPrimaryKey();
@@ -680,7 +679,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					if (log.isDebugEnabled())
 						log.debug("Got raw key: " + rawPK);
 					NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
-					_primaryKeyDictionary = new NSDictionary<String, Object>(rawPK instanceof NSArray ? (NSArray<Object>) rawPK : new NSArray<Object>(rawPK), primaryKeyAttributeNames);
+					_primaryKeyDictionary = new NSDictionary<>(rawPK instanceof NSArray ? (NSArray<Object>) rawPK : new NSArray<>(rawPK), primaryKeyAttributeNames);
 				}
 				else {
 					EOEntity entity = entity();
@@ -693,7 +692,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					// attributes rather
 					// than attempting to generate a PK with the plugin.
 					if (primaryKeyAttributes.count() > 1) {
-						NSMutableDictionary<String, Object> compositePrimaryKey = new NSMutableDictionary<String, Object>();
+						NSMutableDictionary<String, Object> compositePrimaryKey = new NSMutableDictionary<>();
 						boolean incompletePK = false;
 						for (EOAttribute primaryKeyAttribute : primaryKeyAttributes) {
 							Object value = null;
@@ -705,7 +704,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 									if (obj instanceof ERXGenericRecord) {
 										// .. and then get the PK dictionary for
 										// the related object
-										NSDictionary<String, Object> foreignKey = ((ERXGenericRecord) obj).primaryKeyDictionary(inTransaction);
+										NSDictionary<String, Object> foreignKey = ((ERXGenericRecord) obj).rawPrimaryKeyDictionary(inTransaction);
 										for (EOJoin join : relationship.joins()) {
 											// .. find the particular join that
 											// is associated with this pk
@@ -722,7 +721,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 													// when it isn't, so
 													// we go ahead and check for
 													// both conditions.
-													value = foreignKey.objectForKey(new NSArray(join.destinationAttribute().name()));
+													value = foreignKey.objectForKey(new NSArray<>(join.destinationAttribute().name()));
 													if (value instanceof NSArray) {
 														value = ((NSArray) value).lastObject();
 													}
@@ -848,7 +847,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && Objects.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -862,7 +861,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key)) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && Objects.equals(newValue, d.objectForKey(key)) && Objects.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -875,7 +874,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotToValue(String key, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key));
+		return d.containsKey(key) && Objects.equals(newValue, d.objectForKey(key));
 	}
 
 	public boolean parentObjectStoreIsObjectStoreCoordinator() {
@@ -895,7 +894,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public ERXEnterpriseObject refetchObjectFromDBinEditingContext(EOEditingContext ec) {
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName());
-		EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
+		EOQualifier qual = entity.qualifierForPrimaryKey(rawPrimaryKeyDictionary(false));
 		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName(), qual, null);
 		fetchSpec.setRefreshesRefetchedObjects(true);
 		NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
@@ -933,7 +932,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					_permanentGlobalID = (EOKeyGlobalID) gid;
 				}
 				else if (generateIfMissing) {
-					final NSDictionary<String, Object> primaryKeyDictionary = primaryKeyDictionary(false);
+					final NSDictionary<String, Object> primaryKeyDictionary = rawPrimaryKeyDictionary(false);
 					final Object[] values;
 
 					if (primaryKeyDictionary.count() == 1) {
@@ -979,14 +978,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	public String toString() {
 		return new StringBuilder().append('<').append(getClass().getName())
 				.append(" pk:\"").append(primaryKey()).append("\">").toString();
-	}
-
-	/**
-	 * @deprecated use {@link #toString()} instead
-	 */
-	@Deprecated
-	public String description() {
-		return toString();
 	}
 
 	public String toLongString() {
@@ -1146,8 +1137,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/**
 	 * This method performs a few checks before invoking super's implementation.
-	 * If the property key: <b>ERDebuggingEnabled</b> is set to true then the
-	 * method <code>checkConsistency</code> will be called on this object.
 	 * 
 	 * @throws NSValidation.ValidationException
 	 *             if the object does not pass validation for saving to the
@@ -1166,13 +1155,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
 		}
 		super.validateForSave();
-		// FIXME: Should move all of the keys into on central place for easier
-		// management.
-		// Also might want to have a flag off of ERXApplication is debugging is
-		// enabled.
-		// FIXME: Should have a better flag than just ERDebuggingEnabled
-		if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
-			checkConsistency();
 	}
 
 	/**
@@ -1205,14 +1187,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			((ERXEntityClassDescription) cd).validateObjectForUpdate(this);
 		}
 		super.validateForUpdate();
-	}
-
-	@Deprecated
-	public void checkConsistency() throws NSValidation.ValidationException {
-	}
-
-	@Deprecated
-	public void batchCheckConsistency() throws NSValidation.ValidationException {
 	}
 
 	/**

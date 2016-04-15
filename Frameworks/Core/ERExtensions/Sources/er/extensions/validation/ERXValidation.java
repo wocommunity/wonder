@@ -8,7 +8,8 @@ package er.extensions.validation;
 
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
@@ -32,9 +33,7 @@ import er.extensions.localization.ERXLocalizer;
  * WOComponents.
  */
 public class ERXValidation {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger("er.validation.ERValidation");
+    private static final Logger log = LoggerFactory.getLogger("er.validation.ERValidation");
 
     /** holds the static constant for pushing an incorrect value onto an eo */
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;
@@ -127,7 +126,7 @@ public class ERXValidation {
                                                      EOEntity entity,
                                                      boolean pushChanges) {
         if (log.isDebugEnabled())
-            log.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
+            log.debug("ValidationFailedWithException: {} message: {}", e.getClass(), e.getMessage());
         String key = null;
         String newErrorMessage=e.getMessage();
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
@@ -152,7 +151,7 @@ public class ERXValidation {
                         // AK: as we could have custom components that have non-existant keys
                         // we of course can't push a value, so we discard the resulting exception
                     } catch(Exception ex) {
-                        log.error("Can't push value to key '" + key + "': " + value, ex);
+                        log.error("Can't push value to key '{}': {}", key, value, ex);
                     }
                 }
                 entity = EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),(EOEnterpriseObject)eo);
@@ -170,10 +169,10 @@ public class ERXValidation {
         } else {
             if(key != null) {
                 //log.warn("NULL message for key:'"+key+"': " + ((EOGeneralAdaptorException)e).userInfo() , e);
-                log.warn("NULL message for key:'"+key+"': " + e, e);
+                log.warn("NULL message for key:'{}'", key, e);
                 
             } else {
-                log.warn("NULL key for message:'"+newErrorMessage+"'", e);
+                log.warn("NULL key for message:'{}'", newErrorMessage, e);
             }
         }
     }

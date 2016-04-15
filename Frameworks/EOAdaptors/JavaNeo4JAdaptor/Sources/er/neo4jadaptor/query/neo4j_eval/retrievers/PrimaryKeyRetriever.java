@@ -23,9 +23,6 @@ import er.neo4jadaptor.utils.iteration.Iterators;
  * @param <T>
  */
 public abstract class PrimaryKeyRetriever<T> implements Retriever<T, Number> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PrimaryKeyRetriever.class);
-
 	private final EOAttribute attribute;
 	protected abstract long getId(T t);
 	

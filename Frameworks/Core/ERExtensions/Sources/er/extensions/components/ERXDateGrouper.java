@@ -4,7 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eocontrol.EODataSource;
@@ -35,8 +36,7 @@ public class ERXDateGrouper extends WODisplayGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static Logger log = Logger.getLogger(ERXDateGrouper.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXDateGrouper.class);
 
     public static final int DAY = Calendar.DAY_OF_YEAR;
     public static final int MONTH = Calendar.MONTH;
@@ -196,9 +196,9 @@ public class ERXDateGrouper extends WODisplayGroup {
         int dayOfWeek = ERXTimestampUtilities.dayOfWeek(value);
         int dayOfYear = ERXTimestampUtilities.dayOfYear(value);
         if(log.isDebugEnabled()) {
-            log.debug("dayOfYear: " + dayOfYear);
-            log.debug("dayOfWeek: " + dayOfWeek);
-            log.debug("SUNDAY: " + Calendar.SUNDAY);
+            log.debug("dayOfYear: {}", dayOfYear);
+            log.debug("dayOfWeek: {}", dayOfWeek);
+            log.debug("SUNDAY: {}", Calendar.SUNDAY);
         }
         int startOfWeek = weekStartsMonday() ? Calendar.MONDAY : Calendar.SUNDAY;
         if(dayOfWeek == startOfWeek) {
@@ -211,8 +211,8 @@ public class ERXDateGrouper extends WODisplayGroup {
         int dayOfMonth = ERXTimestampUtilities.dayOfMonth(value);
         int dayOfYear = ERXTimestampUtilities.dayOfYear(value);
         if(log.isDebugEnabled()) {
-            log.debug("dayOfYear: " + dayOfYear);
-            log.debug("dayOfMonth: " + dayOfMonth);
+            log.debug("dayOfYear: {}", dayOfYear);
+            log.debug("dayOfMonth: {}", dayOfMonth);
         }
         return _dateForDayInYear(ERXTimestampUtilities.yearOfCommonEra(value), ERXTimestampUtilities.dayOfYear(value) - dayOfMonth + 1);
     }

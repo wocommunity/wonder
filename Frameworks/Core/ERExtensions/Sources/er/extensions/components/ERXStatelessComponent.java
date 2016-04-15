@@ -8,8 +8,6 @@ package er.extensions.components;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.foundation.ERXUtilities;
-
 /**
  * Abstract stateless component used as the super class for a number
  * of components within the ER frameworks. Adds a number of nice binding resolution

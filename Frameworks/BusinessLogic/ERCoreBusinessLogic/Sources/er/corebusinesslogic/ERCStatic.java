@@ -1,7 +1,6 @@
 // ERCStatic.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -29,9 +28,6 @@ public class ERCStatic extends _ERCStatic {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCStatic.class);
-        
     // Class methods go here
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
