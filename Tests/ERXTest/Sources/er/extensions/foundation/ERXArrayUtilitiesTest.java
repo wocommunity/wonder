@@ -728,12 +728,16 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         assertEquals(NSArray.emptyArray(), ERXArrayUtilities.arrayMinusObject(new NSArray<>(), null));
 
         NSArray<String> array1 = new NSArray<>("red", "blue");
+        NSArray<String> array2 = new NSArray<>("red", "blue", "red");
 
         assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, null));
 
         assertEquals(array1, ERXArrayUtilities.arrayMinusObject(array1, "something"));
         assertEquals(new NSArray<>("red"), ERXArrayUtilities.arrayMinusObject(array1, "blue"));
         assertEquals(new NSArray<>("blue"), ERXArrayUtilities.arrayMinusObject(array1, "red"));
+
+        assertEquals(2, ERXArrayUtilities.arrayMinusObject(array2, "blue").size());
+        assertEquals(new NSArray<>("blue"), ERXArrayUtilities.arrayMinusObject(array2, "red"));
     }
 
     public void testArrayByAddingObjectsFromArrayWithoutDuplicates() {
