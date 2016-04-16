@@ -696,7 +696,10 @@ public class ERXArrayUtilities {
             return new NSArray<T>(array);
         }
         NSMutableArray<T> result = new NSMutableArray<>(array);
-        result.remove(object);
+        boolean removed = true;
+        while (removed) {
+        	removed = result.remove(object);
+        }
         return result.immutableClone();
     }
 
