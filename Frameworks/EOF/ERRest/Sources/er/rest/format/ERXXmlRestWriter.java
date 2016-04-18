@@ -15,6 +15,8 @@ import er.rest.ERXRestUtils;
 /**
  *
  * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
+ * @property <code>er.rest.ERXRest.includeNullValues</code> Boolean property to enable null values in return. Defaults
+ *           to true.
  */
 public class ERXXmlRestWriter extends ERXRestWriter {
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
@@ -47,16 +49,18 @@ public class ERXXmlRestWriter extends ERXRestWriter {
 		String name = node.name();
 		Object value = node.value();
 		String formattedValue = coerceValueToString(value, context);
+
 		if (formattedValue == null) {
-			indent(response, indent);
-			response.appendContentString("<");
-			response.appendContentString(name);
-			appendAttributesToResponse(node, response, context);
-			appendTypeToResponse(value, response);
-			response.appendContentString("/>");
-			response.appendContentString("\n");
-		}
-		else {
+			if(ERXProperties.booleanForKeyWithDefault("ERXRest.includeNullValues", true)) {
+				indent(response, indent);
+				response.appendContentString("<");
+				response.appendContentString(name);
+				appendAttributesToResponse(node, response, context);
+				appendTypeToResponse(value, response);
+				response.appendContentString("/>");
+				response.appendContentString("\n");
+			}
+		} else {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
