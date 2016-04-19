@@ -6,7 +6,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-import er.ajax.AjaxUtils;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * YUIShowPanelLink generates either an hyperlink or an input button that 
@@ -28,9 +28,9 @@ public class YUIShowPanelLink extends WODynamicGroup {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    String id = AjaxUtils.stringValueForBinding("panelID", _associations, context.component());
+    String id = ERXComponentUtilities.stringValueForBinding("panelID", _associations, context.component());
     String varName = YUIUtils.varName(id, _associations, context);
-    String type = AjaxUtils.stringValueForBinding("type", _associations, context.component());
+    String type = ERXComponentUtilities.stringValueForBinding("type", _associations, context.component());
     String showScript = varName + ".render();" + varName + ".show();return false;";
     if ("button".equals(type)) {
       response.appendContentString("<input");

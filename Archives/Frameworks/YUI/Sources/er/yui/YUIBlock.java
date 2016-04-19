@@ -4,7 +4,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.foundation.NSDictionary;
 
-import er.ajax.AjaxUtils;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * Generates a YUI class = "yui-b" div.
@@ -21,7 +21,7 @@ public class YUIBlock extends YUIDivContainer {
 
   @Override
   protected String divID(WOContext context) {
-    return AjaxUtils.stringValueForBinding("id", associations(), context.component());
+    return ERXComponentUtilities.stringValueForBinding("id", associations(), context.component());
   }
 
   @Override
@@ -31,7 +31,7 @@ public class YUIBlock extends YUIDivContainer {
 
   @Override
   protected String divStyle(WOContext context) {
-    return AjaxUtils.stringValueForBinding("style", associations(), context.component());
+    return ERXComponentUtilities.stringValueForBinding("style", associations(), context.component());
   }
 
 }
