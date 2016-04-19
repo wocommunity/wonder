@@ -167,7 +167,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 	 */
 	public String removeButtonClass() {
 		if (_removeButtonClass == null) {
-			_removeButtonClass = stringValueForBinding(Keys.classForRemoveDialogButton, "Button DialogButton CancelDialogButton");
+			_removeButtonClass = stringValueForBinding(Keys.classForRemoveDialogButton, "Button DialogButton RemoveDialogButton");
 		}
 		return _removeButtonClass;
 	}
