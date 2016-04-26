@@ -3,9 +3,9 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/ERFoundation.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ERWebObjects.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.9.2.jar" sourcepath="LibrarySources/joda-time-2.9.2-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.9.3.jar" sourcepath="LibrarySources/joda-time-2.9.3-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/joda-time-2.9.2-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/joda-time-2.9.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.12.jar" sourcepath="LibrarySources/junit-4.12-sources.jar">
@@ -25,9 +25,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/commons-cli-1.3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-io-2.4.jar" sourcepath="LibrarySources/commons-io-2.4-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-io-2.5.jar" sourcepath="LibrarySources/commons-io-2.5-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/commons-io-2.4-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/commons-io-2.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang3-3.4.jar" sourcepath="LibrarySources/commons-lang3-3.4-sources.jar">
@@ -40,19 +40,19 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/commons-logging-1.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/fluent-hc-4.5.1.jar" sourcepath="LibrarySources/fluent-hc-4.5.1-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/fluent-hc-4.5.2.jar" sourcepath="LibrarySources/fluent-hc-4.5.2-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/fluent-hc-4.5.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/fluent-hc-4.5.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.5.1.jar" sourcepath="LibrarySources/httpclient-4.5.1-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.5.2.jar" sourcepath="LibrarySources/httpclient-4.5.2-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpclient-4.5.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpclient-4.5.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.5.1.jar" sourcepath="LibrarySources/httpclient-cache-4.5.1-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.5.2.jar" sourcepath="LibrarySources/httpclient-cache-4.5.2-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpclient-cache-4.5.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpclient-cache-4.5.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.4.4.jar" sourcepath="LibrarySources/httpcore-4.4.4-sources.jar">
@@ -60,24 +60,24 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpcore-4.4.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.5.1.jar" sourcepath="LibrarySources/httpmime-4.5.1-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.5.2.jar" sourcepath="LibrarySources/httpmime-4.5.2-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpmime-4.5.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpmime-4.5.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.16.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.16-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.21.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.21-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/slf4j-log4j12-1.7.16-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/slf4j-log4j12-1.7.21-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.16.jar" sourcepath="LibrarySources/slf4j-api-1.7.16-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.21.jar" sourcepath="LibrarySources/slf4j-api-1.7.21-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/slf4j-api-1.7.16-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/slf4j-api-1.7.21-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/ognl-3.1.2.jar" sourcepath="LibrarySources/ognl-3.1.2-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/ognl-3.1.4.jar" sourcepath="LibrarySources/ognl-3.1.4-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/ognl-3.1.2-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/ognl-3.1.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/javassist-3.20.0-GA.jar"/>

@@ -3,9 +3,9 @@ package er.attachment.metadata;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.drew.metadata.exif.ExifThumbnailDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 
 public class ERMetadataUtils {
@@ -67,7 +67,7 @@ public class ERMetadataUtils {
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("GainControl", Integer.valueOf(ExifIFD0Directory.TAG_));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("DigitalZoomRatio", Integer.valueOf(ExifIFD0Directory.TAG_));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("MaxApertureValue", Integer.valueOf(ExifSubIFDDirectory.TAG_MAX_APERTURE));
-		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("LightSource", Integer.valueOf(ExifSubIFDDirectory.TAG_LIGHT_SOURCE));
+		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("LightSource", Integer.valueOf(ExifSubIFDDirectory.TAG_WHITE_BALANCE));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("CompressedBitsPerPixel", Integer.valueOf(ExifIFD0Directory.TAG_));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SensingMethod", Integer.valueOf(ExifSubIFDDirectory.TAG_SENSING_METHOD));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("Sharpness", Integer.valueOf(ExifIFD0Directory.TAG_));
@@ -83,7 +83,7 @@ public class ERMetadataUtils {
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SubsecTime", Integer.valueOf(ExifSubIFDDirectory.TAG_SUBSECOND_TIME));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("PhotometricInterpretation",
 				Integer.valueOf(ExifSubIFDDirectory.TAG_PHOTOMETRIC_INTERPRETATION));
-		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Compression", Integer.valueOf(ExifThumbnailDirectory.TAG_THUMBNAIL_COMPRESSION));
+		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Compression", Integer.valueOf(ExifDirectoryBase.TAG_COMPRESSION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SubjectDistance", Integer.valueOf(ExifSubIFDDirectory.TAG_SUBJECT_DISTANCE));
 	}
 

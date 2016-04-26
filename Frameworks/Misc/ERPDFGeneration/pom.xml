@@ -31,17 +31,17 @@
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-core</artifactId>
-			<version>9.0.7</version>
+			<version>9.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-pdf</artifactId>
-			<version>9.0.7</version>
+			<version>9.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-swt</artifactId>
-			<version>9.0.7</version>
+			<version>9.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
