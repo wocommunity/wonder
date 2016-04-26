@@ -35,7 +35,7 @@ public class ERXSimpleTemplateParser {
     public static final String DEFAULT_DELIMITER = "@@";
 
     /** logging support */
-    private static final Logger LOG = LoggerFactory.getLogger(ERXSimpleTemplateParser.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXSimpleTemplateParser.class);
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;
@@ -108,7 +108,7 @@ public class ERXSimpleTemplateParser {
         }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
         if (! isLoggingDisabled) {
-            LOG.debug("Components: {}", components);
+            log.debug("Components: {}", components);
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
@@ -174,14 +174,14 @@ public class ERXSimpleTemplateParser {
             delimiter = DEFAULT_DELIMITER;
         }
         if (! isLoggingDisabled) {
-            LOG.debug("Parsing template: {} with delimiter: {} object: {}",template, delimiter, object);
-            LOG.debug("Template: {}", template);
-            LOG.debug("Delim: {}", delimiter);
-            LOG.debug("otherObject: {}", otherObject);
+            log.debug("Parsing template: {} with delimiter: {} object: {}",template, delimiter, object);
+            log.debug("Template: {}", template);
+            log.debug("Delim: {}", delimiter);
+            log.debug("otherObject: {}", otherObject);
         }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
         if (! isLoggingDisabled) {
-            LOG.debug("Components: {}", components);
+            log.debug("Components: {}", components);
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         StringBuilder sb = new StringBuilder();
@@ -194,11 +194,11 @@ public class ERXSimpleTemplateParser {
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if(!isLoggingDisabled) {
-                LOG.debug("Processing Element: {}", element);
+                log.debug("Processing Element: {}", element);
             }
             if(deriveElement) {
                 if(!isLoggingDisabled) {
-                    LOG.debug("Deriving value ...");
+                    log.debug("Deriving value ...");
                 }
                 if(element.length() == 0) {
                     throw new IllegalArgumentException("\"\" is not a valid keypath in template: " + template);
@@ -209,7 +209,7 @@ public class ERXSimpleTemplateParser {
                     if(o != null && result == _undefinedKeyLabel) {
                         try {
                             if(!isLoggingDisabled) {
-                                LOG.debug("calling valueForKeyPath({}, {})", o, element);
+                                log.debug("calling valueForKeyPath({}, {})", o, element);
                             }
                             result = doGetValue(element, o);
                             // For just in case the above doesn't throw an exception when the 
@@ -229,7 +229,7 @@ public class ERXSimpleTemplateParser {
                 }
                 if(result == _undefinedKeyLabel) {
                     if (!isLoggingDisabled) {
-                        LOG.debug("Could not find a value for '{}' of template, '{}' in either the object or extra data.", element, template);
+                        log.debug("Could not find a value for '{}' of template, '{}' in either the object or extra data.", element, template);
                     }
                 }
                 sb.append(result.toString());
@@ -241,7 +241,7 @@ public class ERXSimpleTemplateParser {
                 deriveElement = true;
             }
             if(!isLoggingDisabled) {
-                LOG.debug("Buffer: {}", sb);
+                log.debug("Buffer: {}", sb);
             }
         }
         return sb.toString();
@@ -296,7 +296,7 @@ public class ERXSimpleTemplateParser {
         }
 
         if (convertedValue.indexOf("ERXSystem:KEY_NOT_FOUND") > -1) {
-        	LOG.warn("Not all keys in templateString were present in templateObject, returning unmodified templateString.");
+            log.warn("Not all keys in templateString were present in templateObject, returning unmodified templateString.");
             return templateString; // not all keys are present
         }
 
