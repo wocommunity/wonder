@@ -295,8 +295,8 @@ public class ERXSimpleTemplateParser {
             convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, DEFAULT_DELIMITER, templateObject, WOApplication.application());
         }
 
-        // MS: Should we warn here? This is awfully quiet ...
         if (convertedValue.indexOf("ERXSystem:KEY_NOT_FOUND") > -1) {
+            log.warn("Not all keys in templateString were present in templateObject, returning unmodified templateString.");
             return templateString; // not all keys are present
         }
 
