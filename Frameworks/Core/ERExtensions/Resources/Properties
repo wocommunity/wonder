@@ -291,6 +291,17 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # Set to true to have this delegate order the operations (e.g. or MS SQL Server)
 com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
 
+## Defines the DB class to use together with ERXDatabaseContext
+er.extensions.ERXDatabase.className = er.extensions.eof.ERXDatabase
+
+## Define the HashMap initialization parameters to use for the HashMap that ERXDatabase
+## uses for the snapshot cache. Usually the load factor is fine, but the capacity
+## could use increasing for applications handling many objects. You can use
+## ERXDatabase.snapshotCacheSize() to get the actual map size at runtime to
+## determine how to tune this.
+# er.extensions.ERXDatabase.snapshotCacheMapInitialCapacity = 1048576
+# er.extensions.ERXDatabase.snapshotCacheMapInitialLoadFactor = 0.75
+
 #########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
