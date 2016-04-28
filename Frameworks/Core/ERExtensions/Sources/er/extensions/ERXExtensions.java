@@ -54,6 +54,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXAdaptorChannelDelegate;
 import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabase;
 import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXDatabaseContextMulticastingDelegate;
@@ -281,12 +282,32 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
         if (ERXRemoteSynchronizer.remoteSynchronizerEnabled() || ERXProperties.booleanForKey("er.extensions.ERXDatabaseContext.activate")) {
-        	String className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContext.className", ERXDatabaseContext.class.getName());
-        	Class c = ERXPatcher.classForName(className);
-        	if(c == null) {
-        		throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + className);
+        	String dbCtxClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContext.className", ERXDatabaseContext.class.getName());
+        	Class dbCtxClass = ERXPatcher.classForName(dbCtxClassName);
+        	if(dbCtxClass == null) {
+        		throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + dbCtxClassName);
         	}
-        	EODatabaseContext.setContextClassToRegister(c);
+        	EODatabaseContext.setContextClassToRegister(dbCtxClass);
+
+        	String dbClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabase.className", ERXDatabase.class.getName());
+        	Class dbClass = ERXPatcher.classForName(dbClassName);
+        	if(dbClass == null) {
+        		throw new IllegalStateException("er.extensions.ERXDatabase.className not found: " + dbClassName);
+        	}
+        	if( ERXDatabase.class.isAssignableFrom( dbClass ) ) {
+        		ERXDatabaseContext.setDatabaseContextClass( dbClass );
+        	} else {
+        		throw new IllegalStateException("er.extensions.ERXDatabase.className is not a subclass of ERXDatabase: " + dbClassName);
+        	}
+        	
+        	int mapCapacity = ERXProperties.intForKey( "er.extensions.ERXDatabase.snapshotCacheMapInitialCapacity" );
+        	if( mapCapacity > 0 ) {
+        		ERXDatabase.setSnapshotCacheMapInitialCapacity( mapCapacity );
+        	}
+        	float mapLoadFactor = ERXProperties.floatForKey( "er.extensions.ERXDatabase.snapshotCacheMapInitialLoadFactor" );
+        	if( mapLoadFactor > 0.0f ) {
+        		ERXDatabase.setSnapshotCacheMapInitialLoadFactor( mapLoadFactor );
+        	}
         }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
