@@ -279,7 +279,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				for (ERXRestRequestNode child : _children) {
 					String name = child.name();
 					Object value = child.toNSCollection(delegate, associatedObjects);
-					if (value != NSKeyValueCoding.NullValue || ERXProperties.booleanForKeyWithDefault("ERXRest.includeNullValues", true) == true) {
+					if (value != NSKeyValueCoding.NullValue || ERXProperties.booleanForKeyWithDefault("ERXRest.includeNullValues", true)) {
 						dict.put(name, value);
 					}
 				}
