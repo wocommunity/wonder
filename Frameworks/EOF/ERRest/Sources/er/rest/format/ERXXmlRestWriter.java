@@ -15,7 +15,7 @@ import er.rest.ERXRestUtils;
 /**
  *
  * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
- * @property <code>er.rest.ERXRest.includeNullValues</code> Boolean property to enable null values in return. Defaults
+ * @property <code>ERXRest.includeNullValues</code> Boolean property to enable null values in return. Defaults
  *           to true.
  */
 public class ERXXmlRestWriter extends ERXRestWriter {
