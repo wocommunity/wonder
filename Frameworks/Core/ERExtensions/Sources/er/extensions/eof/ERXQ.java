@@ -366,7 +366,7 @@ public class ERXQ {
 	
 
 	/**
-	 * Return a OR qualifier of identity qualifier using each value from the param array
+	 * Return a OR qualifier of identity qualifiers using each value from the param array
 	 * 
 	 * @param valueArray
 	 *            the array of values

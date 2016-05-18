@@ -2362,11 +2362,10 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
 	}
-		
+	
 	/**
-	 * Uses ERXExistsQualifier with an array of identity qualifiers to build a qualifier that 
-	 * returns true if at least one the the objects specified is found in the to many relationship 
-	 * represented by this key.
+	 * Uses ERXExistsQualifier to build a qualifier that returns true if at least one the objects 
+	 * specified is found in the to many relationship represented by this key.
 	 * 
 	 * @param valueArray
 	 *            an array of {@link ERXGenericRecord} we want to have in this to many relationship. 
