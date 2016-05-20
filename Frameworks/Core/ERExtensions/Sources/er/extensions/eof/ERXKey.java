@@ -2374,7 +2374,7 @@ public class ERXKey<T> {
 	 *         represented by this ERXKey.
 	 * 
 	 * @author Samuel Pelletier
-	 * @since May 56, 2016
+	 * @since May 16, 2016
 	 */
 	public ERXExistsQualifier containsAnyOfTheseObjects(NSArray<? extends ERXGenericRecord> valueArray) {
 		ERXExistsQualifier existsQualifier = new ERXExistsQualifier(ERXQ.isIn(valueArray), _key);

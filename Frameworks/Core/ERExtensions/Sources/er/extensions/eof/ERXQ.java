@@ -373,7 +373,7 @@ public class ERXQ {
 	 * @return an EOQualifier 
 	 * 
 	 * @author Samuel Pelletier
-	 * @since May 56, 2016
+	 * @since May 16, 2016
 	 */
 	public static EOQualifier isIn(NSArray<? extends ERXGenericRecord> valueArray) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
@@ -391,7 +391,7 @@ public class ERXQ {
 	 * @return an EOQualifier 
 	 * 
 	 * @author Samuel Pelletier
-	 * @since May 56, 2016
+	 * @since May 16, 2016
 	 */
 	public static EOQualifier is(ERXGenericRecord value) {
 		EOEntity entity = value.entity();
