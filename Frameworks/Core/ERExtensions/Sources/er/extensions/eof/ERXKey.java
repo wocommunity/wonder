@@ -338,17 +338,14 @@ public class ERXKey<T> {
 	 * Creates a new ERXKey that appends ERXArrayUtilities'
 	 * {@code @flatten} operator to this key.
 	 * 
-	 * @param <U>
-	 *            the type of the next key
-	 * 
 	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@flatten}
 	 *         keypath
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
 	 *      FlattenOperator
 	 */
-	public <U> ERXKey<U> atFlatten() {
-		return (ERXKey<U>) append(ERXKey.flatten());
+	public ERXKey<T> atFlatten() {
+		return append(ERXKey.flatten());
 	}
 
 	/**
@@ -489,8 +486,6 @@ public class ERXKey<T> {
 	 * 
 	 * @param limit
 	 *            the maximum number of objects allowed by the limit
-	 * @param <U>
-	 *            the type of the next key
 	 * @param key
 	 *            the key following the key to be limited
 	 * 
@@ -500,8 +495,8 @@ public class ERXKey<T> {
 	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
 	 *      LimitOperator
 	 */
-	public <U> ERXKey<U> atLimit(Integer limit) {
-		return (ERXKey<U>) append(ERXKey.limit(limit));
+	public ERXKey<T> atLimit(Integer limit) {
+		return append(ERXKey.limit(limit));
 	}
 	
 	/**
@@ -618,14 +613,13 @@ public class ERXKey<T> {
 	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
 	 * then this will return a new ERXKey "@objectAtIndex.3".
 	 * 
-	 * @param <U> the type of the next key
 	 * @param index The index of the object to return from the array
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
-	public <U> ERXKey<U> atObjectAtIndex(Integer index) {
-		return (ERXKey<U>) append(ERXKey.objectAtIndex(index));
+	public ERXKey<T> atObjectAtIndex(Integer index) {
+		return append(ERXKey.objectAtIndex(index));
 	}
 	
 	/**
@@ -675,14 +669,12 @@ public class ERXKey<T> {
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * RemoveNullValues operator @removeNullValues.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
-	public <U> ERXKey<U> atRemoveNullValues() {
-		return (ERXKey<U>) append(ERXKey.removeNullValues());
+	public ERXKey<T> atRemoveNullValues() {
+		return append(ERXKey.removeNullValues());
 	}
 
 	/**
@@ -732,14 +724,13 @@ public class ERXKey<T> {
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse.
 	 * 
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
-	public <U> ERXKey<U> atReverse() {
-		return (ERXKey<U>) append(ERXKey.reverse());
+	public ERXKey<T> atReverse() {
+		return append(ERXKey.reverse());
 	}
 	
 	/**
@@ -767,14 +758,13 @@ public class ERXKey<T> {
 	 * would return a key like @sort.firstName,lastname
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSort(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sort(sortKeys));
+	public ERXKey<T> atSort(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sort(sortKeys));
 	}
 
 	/**
@@ -802,14 +792,13 @@ public class ERXKey<T> {
 	 * would return a key like @sortAsc.firstName,lastname
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortAsc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortAsc(sortKeys));
+	public ERXKey<T> atSortAsc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortAsc(sortKeys));
 	}
 
 	/**
@@ -837,14 +826,13 @@ public class ERXKey<T> {
 	 * would return a key like @sortDesc.firstName,lastname
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortDesc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortDesc(sortKeys));
+	public ERXKey<T> atSortDesc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortDesc(sortKeys));
 	}
 
 	/**
@@ -872,14 +860,13 @@ public class ERXKey<T> {
 	 * would return a key like @sortInsensitiveAsc.firstName,lastname
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortInsensitiveAsc(sortKeys));
+	public ERXKey<T> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortInsensitiveAsc(sortKeys));
 	}
 
 	
@@ -908,14 +895,13 @@ public class ERXKey<T> {
 	 * would return a key like @sortInsensitiveDesc.firstName,lastname
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortInsensitiveDesc(sortKeys));
+	public ERXKey<T> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortInsensitiveDesc(sortKeys));
 	}
 
 	/**
@@ -974,14 +960,13 @@ public class ERXKey<T> {
 	 * ERXKey "@subarrayWithRange.4-2.price".
 	 * 
 	 * @param range the range for the operator
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
-	public <U> ERXKey<U> atSubarrayWithRange(NSRange range) {
-		return (ERXKey<U>) append(ERXKey.subarrayWithRange(range));
+	public ERXKey<T> atSubarrayWithRange(NSRange range) {
+		return append(ERXKey.subarrayWithRange(range));
 	}
 	
 	/**
@@ -1066,17 +1051,14 @@ public class ERXKey<T> {
 	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
 	 * {@code @unique} operator.
 	 * 
-	 * @param <U>
-	 *            the type of the next key
-	 * 
 	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@unique}
 	 *         keypath
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator
 	 *      UniqueOperator
 	 */
-	public <U> ERXKey<U> atUnique() {
-		return (ERXKey<U>) append(ERXKey.unique());
+	public ERXKey<T> atUnique() {
+		return append(ERXKey.unique());
 	}
 
 	/**
