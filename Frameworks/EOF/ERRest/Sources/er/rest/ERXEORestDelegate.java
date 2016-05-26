@@ -7,6 +7,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -38,7 +39,22 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		}
 		return numericPKs;
 	}
-	
+
+	private boolean hasUUIDPrimaryKeys(EOClassDescription classDescription) {
+		boolean uuidPK = false;
+		if (classDescription instanceof EOEntityClassDescription) {
+			EOEntity entity = ((EOEntityClassDescription)classDescription).entity();
+			NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
+			if (primaryKeyAttributes.count() == 1) {
+				EOAttribute primaryKeyAttribute = primaryKeyAttributes.objectAtIndex(0);
+                if(primaryKeyAttribute.adaptorValueType() == EOAttribute.AdaptorBytesType && primaryKeyAttribute.width() == 16) {
+                	uuidPK = true;
+                }
+			}
+		}
+		return uuidPK;
+	}
+
 	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		EOEditingContext editingContext = context.editingContext();
 		if (editingContext == null) {
@@ -47,7 +63,14 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		editingContext.lock();
 		try {
 			EOEnterpriseObject eo = entity.createInstanceWithEditingContext(editingContext, null);
-			editingContext.insertObject(eo);
+			if (hasUUIDPrimaryKeys(entity) && id != null) {
+				NSData uuid = UUIDUtilities.decodeStringAsNSData((String)id);
+				EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entity.entityName(), new Object[]{uuid});
+				editingContext.insertObjectWithGlobalID(eo, gid);
+			}
+			else {
+				editingContext.insertObject(eo);
+			}
 			return eo;
 		}
 		finally {
