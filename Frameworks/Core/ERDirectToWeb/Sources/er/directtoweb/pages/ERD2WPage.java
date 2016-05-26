@@ -437,6 +437,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * {@link ERXExceptionHolder} interface.
      */
     public void clearValidationFailed() {
+        errorMessage = null;
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
         keyPathsWithValidationExceptions.removeAllObjects();
