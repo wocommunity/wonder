@@ -29,10 +29,10 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		boolean numericPKs = false;
 		if (classDescription instanceof EOEntityClassDescription) {
 			EOEntity entity = ((EOEntityClassDescription)classDescription).entity();
-			NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+			NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
 			if (primaryKeyAttributes.count() == 1) {
-				EOAttribute primaryKeyAttribute = (EOAttribute) primaryKeyAttributes.objectAtIndex(0);
-				Class primaryKeyClass = _NSUtilities.classWithName(primaryKeyAttribute.className());
+				EOAttribute primaryKeyAttribute = primaryKeyAttributes.objectAtIndex(0);
+				Class<?> primaryKeyClass = _NSUtilities.classWithName(primaryKeyAttribute.className());
 				numericPKs = primaryKeyClass != null && Number.class.isAssignableFrom(primaryKeyClass);
 			}
 		}
