@@ -173,6 +173,13 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 	 * @author David Avendasora
 	 */
 	public enum CopyType {
+		
+		/**
+		 * Stored as " {@code ERXCopyable.CopyType = Skip;}" in the
+		 * property's UserInfo dictionary. Skips the value.
+		 * <em>For attributes only.</em>
+		 */
+		SKIP("Skip", new NSArray<Class<? extends EOProperty>>(EOAttribute.class, EORelationship.class)),
 
 		/**
 		 * Stored as " {@code ERXCopyable.CopyType = Nullify;}" in the
@@ -1333,6 +1340,9 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 				break;
 			case NULLIFY:
 				destination.takeStoredValueForKey(null, attributeName);
+				break;
+			case SKIP:
+				// nothig to do
 				break;
 			default:
 				handleMissingOrInvalidCopyType(attribute, copyType);
