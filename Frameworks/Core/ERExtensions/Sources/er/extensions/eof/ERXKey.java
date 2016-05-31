@@ -2360,7 +2360,26 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
 	}
-		
+	
+	/**
+	 * Uses ERXExistsQualifier to build a qualifier that returns true if at least one the objects 
+	 * specified is found in the to many relationship represented by this key.
+	 * 
+	 * @param valueArray
+	 *            an array of {@link ERXGenericRecord} we want to have in this to many relationship. 
+	 * @return a qualifier that evaluates to true when at least one the the objects specified in 
+	 *         {@code valueArray} is found in the to many {@link EORelationship}
+	 *         represented by this ERXKey.
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 16, 2016
+	 */
+	public ERXExistsQualifier containsAnyOfTheseObjects(NSArray<? extends ERXGenericRecord> valueArray) {
+		ERXExistsQualifier existsQualifier = new ERXExistsQualifier(ERXQ.isIn(valueArray), _key);
+		existsQualifier.setUsesInQualInstead(true);
+		return existsQualifier;
+	}
+
 	/**
 	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
 	 * 
@@ -2403,6 +2422,44 @@ public class ERXKey<T> {
 		return new ERXNotQualifier(containsAnyObjectSatisfying(qualifier));
 	}
 
+	/**
+	 * Equivalent to containsAnyObjectSatisfying() but set the ERXExistsQualifier to uses IN instead of EXISTS.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 56, 2016
+	 */
+	public ERXExistsQualifier containsAnyObjectSatisfyingUsingIn(EOQualifier qualifier) {
+		ERXExistsQualifier existsQualifier = new ERXExistsQualifier(qualifier, _key);
+		existsQualifier.setUsesInQualInstead(true);
+		return existsQualifier;
+	}
+
+	/**
+	 * Equivalent to doesNotContainsAnyObjectSatisfying() but set the ERXExistsQualifier to uses IN instead of EXISTS.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey does not contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 56, 2016
+	 */
+	public ERXNotQualifier doesNotContainsAnyObjectSatisfyingUsingIn(EOQualifier qualifier) {
+		return new ERXNotQualifier(containsAnyObjectSatisfyingUsingIn(qualifier));
+	}
+	
 	/**
 	 * Determines if there are any objects in the to-one or to-many
 	 * {@link EORelationship} that this ERXKey represents.
