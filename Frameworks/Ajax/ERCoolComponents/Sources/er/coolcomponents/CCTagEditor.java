@@ -1,6 +1,7 @@
 package er.coolcomponents;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
@@ -36,7 +37,7 @@ import er.extensions.appserver.ERXWOContext;
  */
 public class CCTagEditor extends AjaxDynamicElement {
 	
-    public CCTagEditor(String name, NSDictionary associations, WOElement children){
+    public CCTagEditor(String name, NSDictionary<String, WOAssociation> associations, WOElement children){
         super(name, associations, children);
     }
 
@@ -167,7 +168,7 @@ public class CCTagEditor extends AjaxDynamicElement {
      * @param context WOContext providing component to resolve bindings in
      * @return binding values converted into Ajax options
      */
-    protected NSMutableDictionary createOptions(WOContext context) {
+    protected NSMutableDictionary<String, String> createOptions(WOContext context) {
         NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 
         // Insignia options
