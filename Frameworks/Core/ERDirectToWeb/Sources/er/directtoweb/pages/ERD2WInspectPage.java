@@ -163,6 +163,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public WOComponent cancelAction() {
         if ((object() != null) && (object().editingContext()!=null) && shouldRevertChanges()) {
             object().editingContext().revert();
+            clearValidationFailed();
         }
         return nextPage(false);
     }
