@@ -97,7 +97,7 @@ public class CCTagEditor extends AjaxDynamicElement {
         // TODO this should really be moved to a separate script file,
         // but right now I cannot be bothered – pull requests welcome!
         response.appendContentString("<script type=\"text/javascript\">");
-        response.appendContentString("(function() {");
+        response.appendContentString("(function(Ajax) {");
         // get our input element
         response.appendContentString("var input = document.querySelector('#");
         response.appendContentString(id);
@@ -131,17 +131,25 @@ public class CCTagEditor extends AjaxDynamicElement {
         response.appendContentString("}); ");
         // add an event listener to the input
         response.appendContentString("input.addEventListener('insignia-evaluated', changed);");
+        // cache the initial tag state
+        response.appendContentString("var cachedState = tags.value();");
         // handle the change event
         response.appendContentString("function changed () {");
-        response.appendContentString("var params = {}, a;");
+        // check whether the tags actually changed
+        // (this is mostly to avoid creation of an additional Ajax call when
+        // leaving the page, which would go w/o a response and hang around)
+        response.appendContentString("if (cachedState != tags.value()) {");
+        response.appendContentString("cachedState = tags.value();");
+        response.appendContentString("var params = {};");
         response.appendContentString("params['");
         response.appendContentString(formValueName(context));
         response.appendContentString("'] = tags.value();");
         // send the current tags value to the server
-        response.appendContentString("a = new Ajax.Request('");
+        response.appendContentString("new Ajax.Request('");
         response.appendContentString(AjaxUtils.ajaxComponentActionUrl(context));
-        response.appendContentString("', Object.extend({}, { parameters : params }));");
-        response.appendContentString("}})()");
+        response.appendContentString("', { parameters : params });");
+        response.appendContentString("} }");
+        response.appendContentString("})(Ajax)");
         response.appendContentString("</script>");
     }
 
