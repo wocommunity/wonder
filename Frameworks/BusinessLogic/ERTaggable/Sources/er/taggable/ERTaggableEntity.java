@@ -19,6 +19,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -885,9 +886,11 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     NSMutableDictionary<String, Integer> tagCounts = new NSMutableDictionary<String, Integer>();
     NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, fetchAttributes);
     for (NSDictionary rawRow : rawRows) {
-      String name = (String) rawRow.objectForKey("tagName");
-      Integer nameCount = (Integer) rawRow.objectForKey("tagCount");
-      tagCounts.setObjectForKey(nameCount, name);
+      if (!NSKeyValueCoding.NullValue.equals(rawRow.objectForKey("tagName"))) {
+          String name = (String) rawRow.objectForKey("tagName");
+          Integer nameCount = (Integer) rawRow.objectForKey("tagCount");
+          tagCounts.setObjectForKey(nameCount, name);
+      }
     }
 
     return tagCounts;
