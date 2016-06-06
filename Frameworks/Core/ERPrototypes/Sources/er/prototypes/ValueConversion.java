@@ -4,13 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.TimeZone;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -26,28 +27,64 @@ import er.extensions.foundation.ERXMutableDictionary;
  * into values stored by the database.
  */
 public class ValueConversion {
-	public static Date jodaLocalTime(LocalTime value) {
+	public static Date localTime(LocalTime value) {
+		Instant instant = value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
+	}
+
+	public static Date localDate(LocalDate value) {
+		Instant instant = value.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
+	}
+
+	public static Date localDateTime(LocalDateTime value) {
+		Instant instant = value.atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
+	}
+
+	public static Date dateTime(OffsetDateTime value) {
+		Date ts = Date.from(value.toInstant());
+		return ts;
+	}
+
+	/**
+	 * @deprecated should use localTime instead
+	 */
+	@Deprecated
+	public static Date jodaLocalTime(org.joda.time.LocalTime value) {
 		Date javaTime = value.toDateTimeToday().toDate();
 		return javaTime;
 	}
 
-	public static Date jodaLocalDate(LocalDate value) {
-		Date javaDate = value.toDate();
-		return javaDate;
-	}
-	
-	public static Date jodaLocalDateTime(LocalDateTime value) {
+	/**
+	 * @deprecated should use localDate instead
+	 */
+	@Deprecated
+	public static Date jodaLocalDate(org.joda.time.LocalDate value) {
 		Date javaDate = value.toDate();
 		return javaDate;
 	}
 
-	public static Date jodaDateTime(DateTime value) {
+	/**
+	 * @deprecated should use localDateTime instead
+	 */
+	@Deprecated
+	public static Date jodaLocalDateTime(org.joda.time.LocalDateTime value) {
+		Date javaDate = value.toDate();
+		return javaDate;
+	}
+
+	/**
+	 * @deprecated should use dateTime instead
+	 */
+	@Deprecated
+	public static Date jodaDateTime(org.joda.time.DateTime value) {
 		long dateInMillis = value.toInstant().getMillis();
 		int offset = TimeZone.getDefault().getOffset(dateInMillis);
 		Date javaDate = new Date(dateInMillis - offset);
 		return javaDate;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static String stringArray(NSArray value) {
 		return NSPropertyListSerialization.stringFromPropertyList(value);

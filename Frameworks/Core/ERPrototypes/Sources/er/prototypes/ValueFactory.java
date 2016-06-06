@@ -4,6 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -12,11 +18,6 @@ import java.util.TimeZone;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -40,29 +41,68 @@ public class ValueFactory {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 	}
-	
-	public static LocalDate jodaLocalDate(Date value) {
-		LocalDate ld = new LocalDate(value.getTime());
+
+	public static LocalDate localDate(Date value) {
+		Instant instant = Instant.ofEpochMilli(value.getTime());
+		LocalDate ld = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
 		return ld;
 	}
-	
-	public static LocalDateTime jodaLocalDateTime(Date value) {
-		LocalDateTime ldt = new LocalDateTime(value.getTime());
+
+	public static LocalDateTime localDateTime(Date value) {
+		Instant instant = Instant.ofEpochMilli(value.getTime());
+		LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 		return ldt;
 	}
-	
-	public static LocalTime jodaLocalTime(Date value) {
-		LocalTime time = new LocalTime(value.getTime());
+
+	public static LocalTime localTime(Date value) {
+		Instant instant = Instant.ofEpochMilli(value.getTime());
+		LocalTime time = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime();
 		return time;
 	}
 
-	public static DateTime jodaDateTime(Date value) {
+	public static OffsetDateTime dateTime(Date value) {
+		OffsetDateTime odt = OffsetDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
+		return odt;
+	}
+
+	/**
+	 * @deprecated should use localDate instead
+	 */
+	@Deprecated
+	public static org.joda.time.LocalDate jodaLocalDate(Date value) {
+		org.joda.time.LocalDate ld = new org.joda.time.LocalDate(value.getTime());
+		return ld;
+	}
+
+	/**
+	 * @deprecated should use localDateTime instead
+	 */
+	@Deprecated
+	public static org.joda.time.LocalDateTime jodaLocalDateTime(Date value) {
+		org.joda.time.LocalDateTime ldt = new org.joda.time.LocalDateTime(value.getTime());
+		return ldt;
+	}
+
+	/**
+	 * @deprecated should use localTime instead
+	 */
+	@Deprecated
+	public static org.joda.time.LocalTime jodaLocalTime(Date value) {
+		org.joda.time.LocalTime time = new org.joda.time.LocalTime(value.getTime());
+		return time;
+	}
+
+	/**
+	 * @deprecated should use dateTime instead
+	 */
+	@Deprecated
+	public static org.joda.time.DateTime jodaDateTime(Date value) {
 		long dateInMillis = value.getTime();
 		int offset = TimeZone.getDefault().getOffset(dateInMillis);
-		DateTime dateTime = new DateTime(dateInMillis + offset);
+		org.joda.time.DateTime dateTime = new org.joda.time.DateTime(dateInMillis + offset);
 		return dateTime;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static NSArray stringArray(String value) {
 		return (NSArray)NSPropertyListSerialization.propertyListFromString(value);
