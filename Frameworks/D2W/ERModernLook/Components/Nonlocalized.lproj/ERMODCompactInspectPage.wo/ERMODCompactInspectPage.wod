@@ -1,4 +1,4 @@
-Debug: ERDDebuggingHelp {
+Debug: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

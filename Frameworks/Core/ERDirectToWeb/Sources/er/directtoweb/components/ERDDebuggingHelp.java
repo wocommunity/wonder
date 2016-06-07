@@ -115,7 +115,7 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     
     public Object debugValueForKey() {
         if(key != null && !"".equals(key))
-            return d2wContext().valueForKeyPath(key);
+                return d2wContext().valueForKeyPath(key);
         return null;
     }
     
@@ -151,5 +151,5 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     	dict.removeObjectForKey("componentLevelKeys");
         return dict;
     }
- 
+    
 }

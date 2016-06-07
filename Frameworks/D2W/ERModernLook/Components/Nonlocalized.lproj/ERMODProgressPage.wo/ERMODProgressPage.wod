@@ -6,7 +6,7 @@ ShouldShowProgressBar: WOConditional {
 	condition = shouldShowProgressBar;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

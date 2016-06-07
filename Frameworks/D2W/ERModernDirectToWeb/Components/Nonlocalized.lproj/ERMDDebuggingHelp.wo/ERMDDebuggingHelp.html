@@ -1,0 +1,90 @@
+<webobject name = "ShowHelp">
+  <webobject name = "UpdateContainer">
+    <div class = "DebugHelp">
+      <webobject name = "ToggleDetails">
+        <webobject name = "IsShowDetails"><webobject name = "DoCloseIcon" /></webobject>
+        <webobject name = "IsNotShowDetails"><webobject name = "DoOpenIcon" /></webobject>
+        Page Configuration: 
+      </webobject>
+      <webobject name = "D2wContextPageConfiguration" />
+      <a class = "D2WPropertyDebugInfoToolTip">
+        ? 
+        <span>
+          <table class = "D2WPropertyDebugInfo">
+            <webobject name = "ContextDictionaryForPageAllKeysSortAscToString">
+              <tr>
+                <td> <webobject name = "CurrentKey" /> </td>
+                <td> <webobject name = "CurrentValue" /> </td>
+              </tr>
+            </webobject>
+          </table>
+        </span>
+      </a>
+      <br />
+      <br />
+      <webobject name = "IsShowDetails">
+        <table>
+          <tr>
+            <td>Task</td>
+            <td><webobject name = "D2wContextTask" /></td>
+          </tr>
+          <tr>
+            <td>SubTask</td>
+            <td><webobject name = "D2wContextSubTask" /></td>
+          </tr>
+          <tr>
+            <td>Tab Section</td>
+            <td><webobject name = "D2wContextTabKey" /></td>
+          </tr>
+          <tr>
+            <td>Entity Name</td>
+            <td><webobject name = "D2wContextEntityName" /></td>
+          </tr>
+          <tr>
+            <td>Template Name</td>
+            <td><webobject name = "D2wContextPageName" /></td>
+          </tr>
+          <tr>
+            <td>Parent Page Configuration</td>
+            <td><webobject name = "D2wContextParentPageConfiguration" /></td>
+          </tr>
+          <webobject name = "HasEditingContext">
+            <tr>
+              <td>Page Editing Context</td>
+              <td>
+                <webobject name = "EditingContext" />: 
+                <webobject name = "ShowEditingContextLink">Show</webobject>
+              </td>
+            </tr>
+          </webobject>
+          <tr>
+            <td>Default Editing Context</td>
+            <td>
+              <webobject name = "SessionDefaultEditingContext" />: 
+              <webobject name = "ShowDefaultEditingContextLink">Show</webobject>
+            </td>
+          </tr>
+          <tr>
+            <td>Rule tracing</td>
+            <td>Turn <webobject name = "ToggleRuleTracingLink" /></td>
+          </tr>
+          <webobject name = "Form1">
+            <tr>
+              <td>D2W Key 
+                <webobject name = "d2wKeyObserver"><webobject name = "TextField1" /></webobject>
+                has value</td>
+              <td>
+                <webobject name = "d2wKeyUC">
+                  <webobject name = "isKeyEmpty"><webobject name = "D2WContextInspector" /></webobject>
+                  <webobject name = "isKeyNotEmpty">
+                    <pre><webobject name = "DebugValueForKey"/></pre>
+                  </webobject>
+                </webobject>
+              </td>
+            </tr>
+          </webobject>
+        </table>
+      </webobject>
+    </div>
+  </webobject>
+</webobject>

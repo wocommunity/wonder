@@ -9,7 +9,7 @@ ErrorBlock: ERMODErrorBlock {
     errorMessages = errorMessages;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
