@@ -158,7 +158,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = dateTime; 
             columnName = ""; 
-            externalType = datetimeoffset; 
+            externalType = datetime; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = javaDateTime; 
             valueClassName = "java.time.OffsetDateTime"; 

@@ -4,12 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -28,23 +29,19 @@ import er.extensions.foundation.ERXMutableDictionary;
  */
 public class ValueConversion {
 	public static Date localTime(LocalTime value) {
-		Instant instant = value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
-		return Date.from(instant);
+		return Time.valueOf(value);
 	}
 
 	public static Date localDate(LocalDate value) {
-		Instant instant = value.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-		return Date.from(instant);
+		return java.sql.Date.valueOf(value);
 	}
 
 	public static Date localDateTime(LocalDateTime value) {
-		Instant instant = value.atZone(ZoneId.systemDefault()).toInstant();
-		return Date.from(instant);
+		return Timestamp.valueOf(value);
 	}
 
 	public static Date dateTime(OffsetDateTime value) {
-		Date ts = Date.from(value.toInstant());
-		return ts;
+		return Timestamp.valueOf(value.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime());
 	}
 
 	/**

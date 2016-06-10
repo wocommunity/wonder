@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -43,25 +45,45 @@ public class ValueFactory {
 	}
 
 	public static LocalDate localDate(Date value) {
-		Instant instant = Instant.ofEpochMilli(value.getTime());
-		LocalDate ld = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+		LocalDate ld = null;
+		if (value instanceof java.sql.Date) {
+			ld = ((java.sql.Date) value).toLocalDate();
+		} else {
+			throw new IllegalArgumentException("Expected java.sql.Date object but got <" + value.getClass().getCanonicalName() + ">.");
+		}
 		return ld;
 	}
 
 	public static LocalDateTime localDateTime(Date value) {
-		Instant instant = Instant.ofEpochMilli(value.getTime());
-		LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+		LocalDateTime ldt = null;
+		if (value instanceof java.sql.Timestamp) {
+			ldt = ((java.sql.Timestamp) value).toLocalDateTime();
+		} else {
+			throw new IllegalArgumentException("Expected java.sql.Timestamp object but got <" + value.getClass().getCanonicalName() + ">.");
+		}
 		return ldt;
 	}
 
 	public static LocalTime localTime(Date value) {
-		Instant instant = Instant.ofEpochMilli(value.getTime());
-		LocalTime time = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime();
+		LocalTime time = null;
+		if (value instanceof java.sql.Time) {
+			time = ((java.sql.Time) value).toLocalTime();
+		} else {
+			throw new IllegalArgumentException("Expected java.sql.Time object but got <" + value.getClass().getCanonicalName() + ">.");
+		}
 		return time;
 	}
 
 	public static OffsetDateTime dateTime(Date value) {
-		OffsetDateTime odt = OffsetDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
+		OffsetDateTime odt = null;
+		if (value instanceof java.sql.Timestamp) {
+			LocalDateTime ldt = ((java.sql.Timestamp) value).toLocalDateTime();
+			Instant instant = ldt.toInstant(ZoneOffset.UTC);
+			ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+			odt = zdt.toOffsetDateTime();
+		} else {
+			throw new IllegalArgumentException("Expected java.sql.Timestamp object but got <" + value.getClass().getCanonicalName() + ">.");
+		}
 		return odt;
 	}
 
