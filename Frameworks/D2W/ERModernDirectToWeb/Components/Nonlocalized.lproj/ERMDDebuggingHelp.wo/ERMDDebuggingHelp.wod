@@ -46,7 +46,7 @@ ShowDefaultEditingContextLink: WOHyperlink {
 ToggleRuleTracingLink: AjaxUpdateLink {
 	action = toggleRuleTracing;
 	string = ruleTracingState;
-	updateContainerID = d2wKeyResultUC;
+	updateContainerID = debugHelpUC;
 }
 
 ContextDictionaryForPageAllKeysSortAscToString: WORepetition {
