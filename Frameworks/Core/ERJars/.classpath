@@ -55,9 +55,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpclient-cache-4.5.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.4.4.jar" sourcepath="LibrarySources/httpcore-4.4.4-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.4.5.jar" sourcepath="LibrarySources/httpcore-4.4.5-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpcore-4.4.4-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/httpcore-4.4.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.5.2.jar" sourcepath="LibrarySources/httpmime-4.5.2-sources.jar">
@@ -75,9 +75,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/slf4j-api-1.7.21-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Libraries/ognl-3.1.4.jar" sourcepath="LibrarySources/ognl-3.1.4-sources.jar">
+	<classpathentry exported="true" kind="lib" path="Libraries/ognl-3.1.8.jar" sourcepath="LibrarySources/ognl-3.1.8-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/ognl-3.1.4-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/ognl-3.1.8-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Libraries/javassist-3.20.0-GA.jar"/>
