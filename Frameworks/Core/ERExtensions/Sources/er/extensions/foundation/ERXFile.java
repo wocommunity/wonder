@@ -32,9 +32,12 @@ import com.ibm.icu.text.Normalizer;
  *
  * Actually, the code above _does_ work (WO 5.4.3, Mac OS X 10.5.8, java 1.5.0_22),
  * but what else does this do? -rrk
+ * 
+ * @deprecated use plain java.io.File instead
  *
  * @author David Teran
  */
+@Deprecated
 public class ERXFile extends File {
 	/**
 	 * Do I need to update serialVersionUID?
