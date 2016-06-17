@@ -4,6 +4,9 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -93,6 +96,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
+	private static final Logger log = LoggerFactory.getLogger(AjaxAutoComplete.class);
+
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -352,6 +357,15 @@ public class AjaxAutoComplete extends AjaxComponent {
 	        for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
 	        	appendItemToResponse(iter.next(), child, hasItem, response, context);
 	        }
+        }
+        else if (values instanceof Object[]) {
+            Object[] array = (Object[]) values;
+            for (int i = 0; i < array.length && i < maxItems; i++) {
+                appendItemToResponse(array[i], child, hasItem, response, context);
+            }
+        }
+        else if (values != null) {
+            log.warn("Unsupported class type for list: {}", values.getClass().getCanonicalName());
         }
         response.appendContentString("</ul>");
         return response;
