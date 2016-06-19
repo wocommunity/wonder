@@ -102,7 +102,46 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
 		public static final String onClickBefore = "onClickBefore";
 	}
-	
+
+	/**
+	 * Wrapper class to expose only the methods we need to {@link AjaxProxy}.
+	 * 
+	 * @author paulh
+	 * @see <a href="https://github.com/wocommunity/wonder/issues/768">#768</a>
+	 */
+	public final class Proxy {
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public NSDictionary<String, ?> uploadState() {
+			return AjaxFlexibleFileUpload.this.uploadState();
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#cancelUpload()}.
+		 */
+		public void cancelUpload() {
+			AjaxFlexibleFileUpload.this.cancelUpload();
+			return;
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public WOActionResults clearFileResults() {
+			return AjaxFlexibleFileUpload.this.clearFileResults();
+		}
+	}
+
+	/**
+	 * Proxy used for method access by {@link AjaxProxy}
+	 */
+	public final Proxy proxy = new Proxy();
+
 	private String _refreshTime;
 	private String _clearLabel;
 	private String _cancelLabel;
