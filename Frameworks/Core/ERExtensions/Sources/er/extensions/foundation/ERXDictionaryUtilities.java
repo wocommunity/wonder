@@ -166,7 +166,7 @@ public class ERXDictionaryUtilities {
      * @return Returns a {@code NSDictionary} containing all of the object-key pairs.
      */
     public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, String... keys) {
-        return ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, new NSArray<>(keys));
+        return ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, new NSArray<String>(keys));
     }
 
     // if you're keys are not all strings, this method will throw.
