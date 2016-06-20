@@ -294,20 +294,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	protected boolean _initializedAdaptors = false;
 
-  /**
-   * To support load balancing with mod_proxy
-   */
-  private String _proxyBalancerRoute = null;
-  
-  /**
-   * To support load balancing with mod_proxy
-   */
-  private String _proxyBalancerCookieName = null;
-  
-  /**
-   * To support load balancing with mod_proxy
-   */
-  private String _proxyBalancerCookiePath = null;
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerRoute = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookieName = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookiePath = null;
 
 	/**
 	 * Copies the props from the command line to the static dict
@@ -2910,29 +2910,29 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		super.terminate();
 	}
 	
-  public void addBalancerRouteCookieByNotification(NSNotification notification) {
-    if (notification.object() instanceof WOContext) {
-      addBalancerRouteCookie((WOContext) notification.object());
-    }
-  }
-  
-  public void addBalancerRouteCookie(WOContext context) {
-    if (context != null && context.request() != null && context.response() != null) {
-      if (_proxyBalancerRoute == null) {
-        _proxyBalancerRoute = (name() + "_" + port().toString()).toLowerCase();
-        _proxyBalancerRoute = "." + _proxyBalancerRoute.replace('.', '_');
-      }
-      if (_proxyBalancerCookieName == null) {
-        _proxyBalancerCookieName = ("routeid_" + name()).toLowerCase();
-        _proxyBalancerCookieName = _proxyBalancerCookieName.replace('.', '_');
-      }
-      if (_proxyBalancerCookiePath == null) {
-        _proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
-      }
-    }
-    WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
-    cookie.setExpires(null);
-    context.response().addCookie(cookie);
-  }
+	public void addBalancerRouteCookieByNotification(NSNotification notification) {
+		if (notification.object() instanceof WOContext) {
+			addBalancerRouteCookie((WOContext) notification.object());
+		}
+	}
+
+	public void addBalancerRouteCookie(WOContext context) {
+		if (context != null && context.request() != null && context.response() != null) {
+			if (_proxyBalancerRoute == null) {
+				_proxyBalancerRoute = (name() + "_" + port().toString()).toLowerCase();
+				_proxyBalancerRoute = "." + _proxyBalancerRoute.replace('.', '_');
+			}
+			if (_proxyBalancerCookieName == null) {
+				_proxyBalancerCookieName = ("routeid_" + name()).toLowerCase();
+				_proxyBalancerCookieName = _proxyBalancerCookieName.replace('.', '_');
+			}
+			if (_proxyBalancerCookiePath == null) {
+				_proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
+			}
+		}
+		WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
+		cookie.setExpires(null);
+		context.response().addCookie(cookie);
+	}
   
 }
