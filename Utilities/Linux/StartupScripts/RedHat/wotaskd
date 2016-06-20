@@ -15,7 +15,7 @@
 #       needs to run to be an configurable host via WebObjects Monitor.
 ### END INIT INFO
 
-USER=wouser
+USER=appserver
 NEXT_ROOT="/opt"
 export NEXT_ROOT
 TIME="[`date +%d.%m.%Y\ %H:%M:%S`]:"
@@ -56,7 +56,7 @@ case "$1" in
         ;;
     start)
         echo "$TIME Starting wotaskd: " 2>&1 | tee -a /var/log/wotaskd.log
-        su $USER -c -l "$NEXT_ROOT/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 2>&1 | tee -a /var/log/wotaskd.log &"
+        su $USER -c -l "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 2>&1 | tee -a /var/log/wotaskd.log &"
         ;;
     stop)
         echo "$TIME Shutting down wotaskd" 2>&1 | tee -a /var/log/wotaskd.log
