@@ -344,6 +344,13 @@
             externalType = CLOB; 
             name = varcharLarge; 
             valueClassName = NSString; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = RAW; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (
@@ -441,5 +448,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCOraclePrototypes; 
-    primaryKeyAttributes = (eofKey, id); 
+    primaryKeyAttributes = (eofKey, id, uuid); 
 }

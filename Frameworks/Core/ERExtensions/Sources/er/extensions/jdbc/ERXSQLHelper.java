@@ -2194,6 +2194,9 @@ public class ERXSQLHelper {
 			if (jdbcType == Types.BOOLEAN) {
 				externalType = "boolean";
 			}
+			else if (jdbcType == Types.BINARY) {
+				externalType = "byte";
+			}
 			else {
 				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
 			}

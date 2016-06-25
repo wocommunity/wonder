@@ -359,6 +359,13 @@
             valueClassName = NSString; 
             valueType = S; 
             width = 10000000; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = bytea; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (boolean, id, jodaDateTime); 
@@ -441,5 +448,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCPostgresqlPrototypes; 
-    primaryKeyAttributes = (eofKey, id); 
+    primaryKeyAttributes = (eofKey, id, uuid); 
 }
