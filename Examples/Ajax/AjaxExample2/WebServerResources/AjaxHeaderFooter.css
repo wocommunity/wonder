@@ -39,7 +39,7 @@ ul#objectives li {
 
 div#content {
 	position: absolute;
-	left: 20em;
+	left: 14em;
 	right: 2em;
 }
 
@@ -48,7 +48,7 @@ ol#menu {
 	list-style-type: none;
 	padding-left: 0px;
 	left: 10em;
-	width: 18em;
+	width: 12em;
 	margin-right: 2em;
 	margin-top: 0em;
 }
