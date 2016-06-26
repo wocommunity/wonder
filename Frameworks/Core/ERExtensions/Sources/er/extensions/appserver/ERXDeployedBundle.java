@@ -16,6 +16,8 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * Replacement of the WODeployedBundle which adds:
  * <ul>
@@ -24,6 +26,20 @@ import com.webobjects.foundation._NSStringUtilities;
  * <li> Resource URLs for embedded Frameworks are automatically adapted to refer to the embedded Framework, 
  *      rather than to the Frameworks base URL
  * </ul>
+ * 
+ * There are two styles of webserver resource packages, with ANT (old style) builds, embedded frameworks are embedded this way
+ *    MyApp.woa/Frameworks/EmbeddedFramework.framework/...
+ * 
+ * while with Maven builds (and some newer ANT builds), frameworks are embedded in the WebServerResources package the same way as in the Application package:
+ *    MyApp.woa/Contents/Frameworks/EmbeddedFramework.framework/...
+ * 
+ * 
+ * setting the property WOEmbeddedFrameworksPath lets you activate automatic URL generation for embedded frameworks in a proper way
+ * 
+ * in the cited cases above, set the property to
+ *   WOEmbeddedFrameworksPath=Frameworks
+ *   or
+ *   WOEmbeddedFrameworksPath=Contents/Frameworks
  * 
  * @author mstoll
  */
@@ -83,9 +99,18 @@ public class ERXDeployedBundle extends WODeployedBundle {
                 String aBaseURL = null;
                 if(isFramework())
                 	if(isEmbeddedFramework)
-                        aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/Frameworks";
+                	{
+            			String embeddedFrameworkPath = ERXProperties.stringForKey("WOEmbeddedFrameworksPath");
+            			if(embeddedFrameworkPath == null)
+            			{
+                            aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/" + embeddedFrameworkPath;
+            			} else
+            			{
+            				aBaseURL = embeddedFrameworkPath;
+            			}
+                	}
                 	else
-                    aBaseURL = WOApplication.application().frameworksBaseURL();
+                		aBaseURL = WOApplication.application().frameworksBaseURL();
                 else
                     aBaseURL = WOApplication.application().applicationBaseURL();
                 String aWrapperName = wrapperName();
