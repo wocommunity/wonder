@@ -1,0 +1,113 @@
+<wo:AjaxHeaderFooter title = "D3 Pie interective chart">
+
+
+<p>This demonstrates the integration of an dynamic svg pie chart build with d3 and d3pie.</p>
+<p>Click on a pie segment will toggle the visibility of this segment data.</p>
+
+<div id="pieChart" width="475" height="300"></div>
+
+<wo:ERXJavaScript filename = "js/vendor/d3/d3.js"/>
+<wo:ERXJavaScript filename = "js/vendor/d3/d3pie.js"/>
+<script>
+
+function pieChartCallBack(pieSegment) {
+	eval("toggle_"+pieSegment.data.id+"();");
+}
+
+var pieChartElem = document.getElementById("pieChart");
+pie = new d3pie(pieChartElem, {
+	"header": {
+		"title": {
+			"text": "Persons by province",
+			"fontSize": 20,
+			"font": "open sans"
+		},
+	},
+	"footer": {
+		"color": "#999999",
+		"fontSize": 10,
+		"font": "open sans",
+		"location": "bottom-left"
+	},
+	"size": {
+		"canvasWidth": "475",
+		"canvasHeight": 300,
+		"pieOuterRadius": "80%"
+	},
+	"data": {
+		"sortOrder": "none",
+		"content": <wo:string value="$pieDatas" escapeHTML = "NO"/>,
+	},
+	"labels": {
+		"outer": {
+			"format": "label-percentage1",
+			"pieDistance": 16
+		},
+		"inner": {
+			"format": "none",
+			"hideWhenLessThanPercentage": 3
+		},
+		"mainLabel": {
+			"fontSize": 11
+		},
+		"percentage": {
+			"color": "#b1acac",
+			"decimalPlaces": 0
+		},
+		"value": {
+			"color": "#adadad",
+			"fontSize": 11
+		},
+		"lines": {
+			"enabled": true
+		},
+		"truncation": {
+			"enabled": true
+		}
+	},
+	"effects": {
+		"load": {
+			"effect": "none",
+			"speed": 0
+		},
+		"pullOutSegmentOnClick": {
+			"effect": "linear",
+			"speed": 400,
+			"size": 0
+		}
+	},
+	"misc": {
+		"gradient": {
+			"enabled": true,
+			"percentage": 100
+		},
+		"pieCenterOffset": {
+			"x": 0,
+		}
+	},
+	"callbacks": {
+		"onClickSegment": pieChartCallBack
+	}
+});
+</script>
+
+<div id = "dataTables">
+	<wo:repeat list = "$segments" item = "$segment"><wo:AjaxUpdateContainer id = "$segment.containerID">
+		<wo:AjaxUpdateLink updateContainerID = "$segment.containerID" action = "$toggleSegment" functionName = "$toggleFunctionName"/>
+		<h3><wo:string value = "$segment.region"/> <wo:string value = "$segment.nbPersons"/> persons, <wo:string value = "$pourcentType" numberformat = "0%"/> <wo:link href = "#" onclick = "$onClickHandler"><wo:string value = "$segment.buttonName"/></wo:link></h3>
+		<wo:if condition = "$segment.open"><table class = "noOverflow">
+			<tr>
+				<th width>Name</th>
+				<th width = "80">Age</th>
+			</tr>
+			<tbody>
+			<wo:repeat list = "$segment.persons" item = "$person"><tr>
+				<td><wo:string value = "$person.name//VALID"/></td>
+				<td><wo:string value = "$person.age//VALID"/></td>
+			</tr></wo:repeat>
+			</tbody>
+		</table></wo:if>
+	</wo:AjaxUpdateContainer></wo:repeat>
+</div>
+
+</wo:AjaxHeaderFooter>

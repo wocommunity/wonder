@@ -1,0 +1,45 @@
+<script>
+toggleBlocSelection = function (blocCheckBox) {
+	var form = blocCheckBox.form;
+	var formCheckBoxes = form.elements;
+	for(var i = 0; i < formCheckBoxes.length; i++) {
+       if (formCheckBoxes[i].checked != blocCheckBox.checked) {
+         formCheckBoxes[i].click();
+       }
+    }
+};
+</script>
+
+
+<wo:AjaxUpdateContainer id = "personList">
+<wo:form class = "custom"><wo:AjaxObserveField fullSubmit = "$true">
+
+<wo:AjaxModalDialog id = "someActionDialog" closeUpdateContainerID = "personList" width = "500" height = "150" title = "Some action">
+	Perform some action on <wo:string value = "$selectedPersons.count"/> persons.
+	<a onClick = "AMD.close();" class="tiny button">Close</a>
+</wo:AjaxModalDialog>
+
+
+<table>
+<thead><tr>
+	<th width="45">
+		<wo:image filename = "action.png" width="25" data-dropdown="bulkChanges"/>
+		<ul id="bulkChanges" class="f-dropdown" data-dropdown-content>
+		  <li><wo:AjaxModalDialogOpener dialogId = "someActionDialog">Action with a modal dialog</wo:AjaxModalDialogOpener></li>
+		  <li class="alert"><wo:link href = "#">Do nothing action</wo:link></li>
+		</ul>
+	</th>
+	<th width="25"><input type="checkbox" class = "no-custom" onClick = "toggleBlocSelection(this);"/></th>
+	<th width="65"></th>
+</tr></thead>
+<tbody>
+<wo:repeat list = "$persons" item = "$person"><tr>
+	<td> </td>
+	<td><wo:checkbox class = "no-custom" checked = "$personSelected"/></td>
+	<td data-tooltip title="<wo:string value="$personTooltip"/>"><wo:string value = "$person.name//VALID"/></td>
+</tr></wo:repeat>
+</tbody>
+</table>
+
+</wo:AjaxObserveField></wo:form>
+</wo:AjaxUpdateContainer>
