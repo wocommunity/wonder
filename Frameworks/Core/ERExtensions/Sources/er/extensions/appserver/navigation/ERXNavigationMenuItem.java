@@ -94,8 +94,9 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         
         return page;
     }
-    
+        
     public String contextComponentActionURL() {
+    	String url = null;
         // If the navigation should be disabled return null
         if (navigationState().isDisabled() || meetsDisplayConditions() == false) {
             return null;
@@ -103,37 +104,39 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
         // hrefs take precedence over actions.
         if (navigationItem().href() != null && !"".equals(navigationItem().href().trim())) {
-        	return navigationItem().href();
+        	url =  navigationItem().href();
         }
         
         // If the user specified an action or pageName, return the source URL
-        if ((navigationItem().action() != null) || (navigationItem().pageName() != null)) {
+        if (url == null && (navigationItem().action() != null) || (navigationItem().pageName() != null)) {
             // Return the URL to the action or page placed in the context by invokeAction
-            return context().componentActionURL();
+            url = context().componentActionURL();
         }
-        if (navigationItem().directActionName() != null) {
+        if (url == null && navigationItem().directActionName() != null) {
         	if(_linkDirectlyToDirectActions) {
         		NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
         		bindings.setObjectForKey(context().contextID(), "__cid");
-        		return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
+        		url = context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
+        	} else {
+        		url = context().componentActionURL();
         	}
-        	return context().componentActionURL();
         }
 
         // If the user specified some javascript, put that into the HREF and return it
-        if (canGetValueForBinding("javascriptFunction")) {
-
+        if (url == null && canGetValueForBinding("javascriptFunction")) {
             // Make sure there are no extra quotations marks - replace them with apostrophes
             String theFunction = (String)valueForBinding("javascriptFunction");
-            return StringUtils.replace(theFunction, "\"", "'");
+            url = StringUtils.replace(theFunction, "\"", "'");
         }
-
-        return null;
+        // force parent hierarchy to be computed, required for full state to be computed
+        children();
+        // store navigation state for this item
+		ERXNavigationManager.manager().storeInNavigationMap(context().session(), navigationItem(), url);
+        return url;
     }
 
     public WOComponent menuItemSelected() {
         WOComponent anActionResult = null;
-
         if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().action())) {
             anActionResult = (WOComponent)valueForKeyPath(navigationItem().action());
         } else if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().pageName())) {
@@ -262,4 +265,8 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 		return _omitLabelSpanTag;
 	}
     
+    public NSArray children() {
+        return navigationItem().childItemsInContext(this);
+    }
+
 }

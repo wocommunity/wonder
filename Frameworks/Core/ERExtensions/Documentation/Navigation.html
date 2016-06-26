@@ -64,6 +64,16 @@
 		*/
 		action = "session.navController.homeAction";
 		children = ("Graph","Logout");
+		
+		/*
+		A frequent special case is a parent element having the same 
+		action as one if its children. In this case, you may omit the 
+		href/action/pageName/directActionName and instead specify a 
+		defaultChild:
+		*/
+		
+		defaultChild = "Movie.SearchMovie";
+		
 	},
 	{
 		/* an example using a direct action */
