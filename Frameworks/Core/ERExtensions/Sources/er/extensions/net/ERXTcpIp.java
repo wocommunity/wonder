@@ -214,7 +214,7 @@ public class ERXTcpIp {
 	 * </div>
 	 */
 	public static boolean isInet4IPAddressWithinRange( long ipStart, long ip, long ipEnd ){
-		if(!isInet4IPAddressRange(ipStart) || !isInet4IPAddressRange(ip) || !isInet4IPAddressRange(ip)) return false;
+		if(!isInet4IPAddressRange(ipStart) || !isInet4IPAddressRange(ip) || !isInet4IPAddressRange(ipEnd)) return false;
 		return ((ipStart <= ip) && (ip <= ipEnd));
 	}
 
