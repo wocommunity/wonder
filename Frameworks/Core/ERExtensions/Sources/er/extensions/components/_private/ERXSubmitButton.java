@@ -43,8 +43,6 @@ public class ERXSubmitButton extends WOInput {
 	public static final String STYLE_PREFIX = "ERXSubmitButton-";
 	private static boolean useIEFix = ERXProperties.booleanForKeyWithDefault("er.extensions.components._private.ERXSubmitButton.useIEFix", true);
 	
-    protected WOAssociation _class;
-    protected WOAssociation _id;
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
@@ -100,8 +98,6 @@ public class ERXSubmitButton extends WOInput {
         _action = _associations.removeObjectForKey("action");
         _actionClass = _associations.removeObjectForKey("actionClass");
         _directActionName = _associations.removeObjectForKey("directActionName");
-        _class = (WOAssociation) nsdictionary.valueForKey("class");
-        _id = (WOAssociation) nsdictionary.valueForKey("id");
 
         if(_action != null && _action.isValueConstant())
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");

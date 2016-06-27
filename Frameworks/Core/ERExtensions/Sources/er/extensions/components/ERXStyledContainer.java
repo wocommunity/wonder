@@ -31,13 +31,11 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXStyledContainer extends WOGenericContainer {
 
 	NSMutableDictionary _styles;
-	WOAssociation _style;
 	WOAssociation _mimeType;
 	WOAssociation _unit;
 	
 	public ERXStyledContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
-		_style = _associations.removeObjectForKey("style");
 		_styles = new NSMutableDictionary();
 		for (Enumeration enumerator = _associations.keyEnumerator(); enumerator.hasMoreElements();) {
 			String key = (String) enumerator.nextElement();
