@@ -116,6 +116,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	private NSSet(E[] objects, boolean checkForNull) {
+		if (objects == null) {
+			throw new IllegalArgumentException("Objects cannot be null.");
+		}
 		initFromObjects(objects, checkForNull);
 	}
 
