@@ -2870,10 +2870,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (_proxyBalancerCookiePath == null) {
 				_proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
 			}
+			WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
+			cookie.setExpires(null);
+			context.response().addCookie(cookie);
 		}
-		WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
-		cookie.setExpires(null);
-		context.response().addCookie(cookie);
 	}
   
 }
