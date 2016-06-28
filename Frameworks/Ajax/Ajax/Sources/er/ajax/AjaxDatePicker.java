@@ -232,6 +232,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         return showCalendarScript();
     }
     
@@ -239,6 +242,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());
