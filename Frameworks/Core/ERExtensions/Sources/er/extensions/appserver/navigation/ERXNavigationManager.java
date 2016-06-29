@@ -26,6 +26,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXFileNotificationCenter;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
@@ -123,7 +124,7 @@ public class ERXNavigationManager {
 
     public String navigationMenuFileName() {
         if (navigationMenuFileName == null) {
-            navigationMenuFileName = System.getProperty("er.extensions.ERXNavigationManager.NavigationMenuFileName");
+            navigationMenuFileName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXNavigationManager.NavigationMenuFileName", "NavigationMenu.plist");
         }
         return navigationMenuFileName;
     }

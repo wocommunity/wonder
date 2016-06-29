@@ -240,7 +240,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public String displayName() {
     	String name = (String) resolveValue(navigationItem().displayName());
     	if(name != null) {
-    		if(ERXProperties.booleanForKey("er.extensions.ERXNavigationManager.localizeDisplayKeys")) {
+    		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.localizeDisplayKeys", false)) {
     			String localizerKey = "Nav." + name;
     			String localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
     			if(localizedValue == null) {
