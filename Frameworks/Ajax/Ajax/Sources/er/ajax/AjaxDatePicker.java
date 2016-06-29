@@ -194,9 +194,13 @@ public class AjaxDatePicker extends AjaxComponent {
     		return (NSArray<String>)valueForBinding("monthNames");
     	return localizeStringArray(_monthNames);
     }
-
-    public boolean inputFieldIsReadonly() {
-        return booleanValueForBinding("readonly", false) || !booleanValueForBinding("manualInput", true);
+    
+    public String otherTagString() {
+    	String otherTagString = (String)valueForStringBinding("otherTagString", "");
+    	if (booleanValueForBinding("manualInput", true) == false) {
+    		otherTagString = otherTagString + " readonly";
+    	}
+    	return otherTagString;
     }
 
     /**
