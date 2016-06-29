@@ -103,7 +103,7 @@ public class ERXDeployedBundle extends WODeployedBundle {
                 			ERXProperties.booleanForKeyWithDefault("WOOverrideEmbeddedFrameworksPath", false);
                 	if(isEmbeddedFramework && enableAutomaticEmbeddedFrameworkPath)
                 	{
-            			String embeddedFrameworkPath = ERXProperties.stringForKeyWithDefault("WOEmbeddedFrameworksPath", "Contents/Frameworks");
+            			String embeddedFrameworkPath = ERXProperties.stringForKeyWithDefault("WOEmbeddedFrameworksPath", "Frameworks");
                         aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/" + embeddedFrameworkPath;
                 	}
                 	else
