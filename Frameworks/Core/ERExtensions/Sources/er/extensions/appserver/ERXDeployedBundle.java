@@ -61,11 +61,11 @@ public class ERXDeployedBundle extends WODeployedBundle {
     	super(nsb);
 
     	_myURLs = new NSMutableDictionary();
+		embeddingWrapperName = NSBundle.mainBundle().name() + ".woa";
 
     	if(bundlePath().startsWith(NSBundle.mainBundle().bundlePath()))
     	{
     		isEmbeddedFramework = true;
-    		embeddingWrapperName = NSBundle.mainBundle().name() + ".woa";
     	}
     }
 
@@ -98,19 +98,17 @@ public class ERXDeployedBundle extends WODeployedBundle {
             {
                 String aBaseURL = null;
                 if(isFramework())
-                	if(isEmbeddedFramework)
+                {
+                	boolean enableAutomaticEmbeddedFrameworkPath = !ERXProperties.hasKey("WOFrameworksBaseURL") ||
+                			ERXProperties.booleanForKeyWithDefault("WOOverrideEmbeddedFrameworksPath", false);
+                	if(isEmbeddedFramework && enableAutomaticEmbeddedFrameworkPath)
                 	{
-            			String embeddedFrameworkPath = ERXProperties.stringForKey("WOEmbeddedFrameworksPath");
-            			if(embeddedFrameworkPath == null)
-            			{
-                            aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/" + embeddedFrameworkPath;
-            			} else
-            			{
-            				aBaseURL = embeddedFrameworkPath;
-            			}
+            			String embeddedFrameworkPath = ERXProperties.stringForKeyWithDefault("WOEmbeddedFrameworksPath", "Contents/Frameworks");
+                        aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/" + embeddedFrameworkPath;
                 	}
                 	else
                 		aBaseURL = WOApplication.application().frameworksBaseURL();
+                }
                 else
                     aBaseURL = WOApplication.application().applicationBaseURL();
                 String aWrapperName = wrapperName();
