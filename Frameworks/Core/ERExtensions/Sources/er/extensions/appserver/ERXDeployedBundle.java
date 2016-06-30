@@ -33,13 +33,17 @@ import er.extensions.foundation.ERXProperties;
  * while with Maven builds (and some newer ANT builds), frameworks are embedded in the WebServerResources package the same way as in the Application package:
  *    MyApp.woa/Contents/Frameworks/EmbeddedFramework.framework/...
  * 
+ * ERXDeployedBundle introduces automatic url generation for embedded frameworks. The new property WOEmbeddedFrameworksPath 
+ * helps adjusting to the deployment schemes on embedding:
  * 
- * setting the property WOEmbeddedFrameworksPath lets you activate automatic URL generation for embedded frameworks in a proper way
- * 
- * in the cited cases above, set the property to
- *   WOEmbeddedFrameworksPath=Frameworks
+ * in the cited cases above, the property should be
+ *   WOEmbeddedFrameworksPath=Frameworks (default)
  *   or
  *   WOEmbeddedFrameworksPath=Contents/Frameworks
+ * 
+ * However if WOFrameworksBaseURL is custom defined, you get the behaviour as before, there is nointervention in url generation.
+ * In the case of a mixed deployment (some frameworks globally installed, some embedded), the property WOOverrideEmbeddedFrameworksPath
+ * lets activate automatic url generation for embedded frameworks, while globally installad frameworks do get their path from WOFrameworksBaseURL.
  * 
  * @author mstoll
  */
@@ -50,6 +54,7 @@ public class ERXDeployedBundle extends WODeployedBundle {
     private static final boolean _allowRapidTurnaround = NSPropertyListSerialization.booleanForString(NSProperties.getProperty("WOAllowRapidTurnaround"));
     private boolean isEmbeddedFramework = false;
     private String embeddingWrapperName = null;
+    private static final String defaultFrameworkBaseURL = "/WebObjects/Frameworks";
     
     /**
      * Initializer, determines by comparing bundle paths whether bundle is embedded. 
@@ -99,7 +104,8 @@ public class ERXDeployedBundle extends WODeployedBundle {
                 String aBaseURL = null;
                 if(isFramework())
                 {
-                	boolean enableAutomaticEmbeddedFrameworkPath = !ERXProperties.hasKey("WOFrameworksBaseURL") ||
+                	// WOFrameworksBaseURL is never null but rather by default "/WebObjects/Frameworks"
+                	boolean enableAutomaticEmbeddedFrameworkPath = defaultFrameworkBaseURL.equals(ERXProperties.stringForKey("WOFrameworksBaseURL")) ||
                 			ERXProperties.booleanForKeyWithDefault("WOOverrideEmbeddedFrameworksPath", false);
                 	if(isEmbeddedFramework && enableAutomaticEmbeddedFrameworkPath)
                 	{
