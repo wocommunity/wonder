@@ -286,8 +286,14 @@ public class WOHelperFunctionDeclarationParser {
 				association = WOHelperFunctionAssociation.associationWithValue(quotedString);
 			}
 			else if (_NSStringUtilities.isNumber(associationValue)) {
-				Integer integer = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
-				association = WOHelperFunctionAssociation.associationWithValue(integer);
+				Number number = null;
+				if (associationValue != null && associationValue.contains(".")) {
+					number = Double.valueOf(associationValue);
+				}
+				else {
+					number = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
+				}
+				association = WOHelperFunctionAssociation.associationWithValue(number);
 			}
 			else if ("true".equalsIgnoreCase(associationValue) || "yes".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.TRUE;
