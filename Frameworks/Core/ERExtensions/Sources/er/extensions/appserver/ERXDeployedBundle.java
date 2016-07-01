@@ -105,7 +105,7 @@ public class ERXDeployedBundle extends WODeployedBundle {
                 if(isFramework())
                 {
                 	// WOFrameworksBaseURL is never null but rather by default "/WebObjects/Frameworks"
-                	boolean enableAutomaticEmbeddedFrameworkPath = defaultFrameworkBaseURL.equals(ERXProperties.stringForKey("WOFrameworksBaseURL")) ||
+                	boolean enableAutomaticEmbeddedFrameworkPath = defaultFrameworkBaseURL.equals(WOApplication.application().frameworksBaseURL()) ||
                 			ERXProperties.booleanForKeyWithDefault("WOOverrideEmbeddedFrameworksPath", false);
                 	if(isEmbeddedFramework && enableAutomaticEmbeddedFrameworkPath)
                 	{
