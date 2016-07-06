@@ -22,6 +22,7 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
 			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "createEmbeddedConfigurationName",
 			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "selectEmbeddedConfigurationName",
 			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "pickEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "subTask", "object.entityName", "entity.name"}), "editListEmbeddedConfigurationName",
 			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "editRelationshipEmbeddedConfigurationName",
 			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name", "inlineTask"}), "inlineConfigurationName"
 			});
@@ -98,6 +99,17 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
      */
     public Object selectEmbeddedConfigurationName(D2WContext c) {
     	return "SelectEmbedded" + entityNameForContext(c);
+    }
+    
+    /**
+     * Generates a default embedded edit list page configuration
+     * based on the current entity name. Default format
+     * is 'EditListEmbedded' + entity name.
+     * @param c current D2W context
+     * @return default edit list page configuration name
+     */
+    public Object editListEmbeddedConfigurationName(D2WContext c) {
+    	return "EditListEmbedded" + entityNameForContext(c);
     }
     
     /**
