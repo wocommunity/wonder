@@ -405,7 +405,7 @@
             <dependency>
                 <groupId>ognl</groupId>
                 <artifactId>ognl</artifactId>
-                <version>3.1.8</version>
+                <version>3.1.10</version>
             </dependency>
             <dependency>
                 <groupId>metaparadigm</groupId>

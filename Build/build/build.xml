@@ -32,7 +32,7 @@
     <property name="framework.erjars.joda" value="joda-time-2.9.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.12.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
-    <property name="framework.erjars.ognl" value="ognl-3.1.8.jar" />
+    <property name="framework.erjars.ognl" value="ognl-3.1.10.jar" />
     <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.21.jar" />
     <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.21.jar" />
 
