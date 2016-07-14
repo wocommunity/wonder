@@ -570,6 +570,15 @@ ul.L2WithChildren li.Nav2Selected {
 	width: 35px;
 }
 
+/* increase clickable area */
+.ShowNestedActionCell {
+	padding: 0;
+}
+.ShowNestedActionCell a {
+	padding: 0.5em;
+	width: 18px;
+}
+
 .EmbeddedObjTable .RtActionCell,
 .EditRelationshipObjTable .RtActionCell {
 	width: 170px;
@@ -816,6 +825,12 @@ span.ErrorLabel {
 
 .OddObjRow .Button span {
 	background-color: #e6e9ef;
+}
+
+/* hide empty children row */
+.ObjRow.NestedObjRow .hidden {
+	line-height: 0px;
+	padding: 0px;
 }
 
 .ComboTHLink .Label{
