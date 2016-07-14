@@ -634,7 +634,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				_queueThread.interrupt();
 			}
 			else {
-				throw new IllegalStateException("Attempted to stop the " + getClass().getSimpleName() + " when it wasn't already running");
+				log.warn("Attempted to stop the " + getClass().getSimpleName() + " when it wasn't already running");
 			}
 		}
 	}
