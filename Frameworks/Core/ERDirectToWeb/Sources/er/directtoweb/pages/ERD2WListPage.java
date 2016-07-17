@@ -225,7 +225,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	/** The number of objects in the list. */
 	public int listSize() {
-		return displayGroup().allObjects().count();
+		return displayGroup().displayedObjects().count();
 	}
 
 	/**

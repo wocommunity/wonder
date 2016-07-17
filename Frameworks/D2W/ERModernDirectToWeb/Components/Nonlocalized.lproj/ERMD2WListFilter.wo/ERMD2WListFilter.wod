@@ -7,7 +7,7 @@ Wrapper : WOGenericContainer {
 	class = wrapperClass;
 }
 
-form : WOForm {
+form : ERXOptionalForm {
 }
 
 observeField : AjaxObserveField {

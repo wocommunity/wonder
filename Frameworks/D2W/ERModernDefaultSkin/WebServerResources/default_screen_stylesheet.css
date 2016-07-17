@@ -1367,6 +1367,12 @@ div.RtActionCell li {
 	z-index: 100;
 }
 
+/* adapt position when used to filter relationships */
+.AttrVal .ListFilter {
+	top: -3px;
+	padding: 4px 50px;
+}
+
 .ListFilter .ListFilterSearch  {
 	font-size: 16px;
 	display: inline-block;
@@ -1375,6 +1381,12 @@ div.RtActionCell li {
 
 .ListFilter .ListFilterSearch input {
 	width: 100%;
+}
+
+/* apply lighter border and smaller font-size when used to filter relationships */
+.AttrVal .ListFilter .ListFilterSearch input {
+	border: 1px solid #aaa;
+	font-size: 11px;
 }
 
 .ListFilter .ListFilterChoices {

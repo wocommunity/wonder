@@ -16,6 +16,7 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -84,9 +85,10 @@ public class ERMD2WAttributeQueryDelegate {
             NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
             for (String anAttributeName : searchKey(sender)) {
                 EOEntity entity = null;
-                if (sender.dataSource() != null
-                        && sender.dataSource() instanceof EODatabaseDataSource) {
-                    entity = ((EODatabaseDataSource) sender.dataSource()).entity();
+                if (sender.dataSource() != null) {
+                    entity = EOUtilities.entityNamed(sender.dataSource().editingContext(),
+                            sender.dataSource().classDescriptionForObjects()
+                                    .entityName());
                 } else {
                     // sender should be a to-one relationship component
                     entity = EOModelGroup.defaultGroup().entityNamed(

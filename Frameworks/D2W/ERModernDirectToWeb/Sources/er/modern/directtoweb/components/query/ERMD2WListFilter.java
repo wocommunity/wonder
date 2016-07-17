@@ -73,7 +73,6 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
     // actions
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public WOActionResults search() {
-        EODataSource dataSource = displayGroup().dataSource();
         EOQualifier _qualifier = ERMD2WAttributeQueryDelegate.instance
                 .buildQualifier(this);
         
@@ -93,9 +92,14 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
             }
         }
         
-        ((EODatabaseDataSource) dataSource).setAuxiliaryQualifier(_qualifier);
-        ((EODatabaseDataSource) displayGroup().dataSource()).fetchSpecification()
-                .setUsesDistinct(true);
+        // qualify on the data source if it's a DB data source
+        if (displayGroup().dataSource() instanceof EODatabaseDataSource) {
+            EODatabaseDataSource dbds = (EODatabaseDataSource) displayGroup().dataSource();
+            dbds.setAuxiliaryQualifier(_qualifier);
+            dbds.fetchSpecification().setUsesDistinct(true);
+        } else {
+            displayGroup().setQualifier(_qualifier);
+        }
         displayGroup().fetch();
         displayGroup().setCurrentBatchIndex(1);
         return null;

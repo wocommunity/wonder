@@ -1,5 +1,5 @@
 DisplayGroupAllObjectsCount : WOString {
-  value = ^displayGroup.allObjects.count;
+  value = allObjectsCount;
 }
 
 ItemsString2 : ERXPluralString {
@@ -10,7 +10,7 @@ ItemsString2 : ERXPluralString {
 
 ItemsString : ERXPluralString {
   value = itemsString;
-  count = ^displayGroup.allObjects.count;
+  count = allObjectsCount;
   showNumber = false;
 }
 
