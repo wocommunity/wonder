@@ -1,6 +1,7 @@
 package er.extensions.foundation;
 
 import java.io.File;
+import java.util.UUID;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -39,7 +40,7 @@ public class ERXFileRepository {
 	 * @return the new file
 	 */
 	public File createFile() {
-		return getFile(ERXRandomGUID.newGid());
+		return getFile(UUID.randomUUID().toString());
 	}
 	
 	/**

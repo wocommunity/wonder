@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.jabsorb.JSONSerializer;
@@ -30,7 +31,6 @@ import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXRandomGUID;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -475,7 +475,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			if (id != null) {
 				return id;
 			}
-			id = ERXRandomGUID.newGid();
+			id = UUID.randomUUID().toString();
 			contexts.put(ec, id);
 			return id;
 		}
