@@ -1,7 +1,6 @@
 package er.modern.movies.test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
@@ -11,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 
 /**
  * Test integration of ERCPreference values for batch size and sort order.
