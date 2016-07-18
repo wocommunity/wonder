@@ -12,45 +12,42 @@ import er.extensions.appserver.ERXWOContext;
 /**
  * Hints input and textarea fields with ghosted text that serves as an explanation for the user what to enter.
  * The style "ajax-hinted-text-with-default" defines the color for this.
- * 
+ * <p>
  * The default value for the field comes from setting default = "something"; on the input element.  For instance,
  * to set the default value on a text field, you would do &lt;wo:WOTextField value = "$value" default = "Fill this in"/&gt;.
- * 
+ * <p>
  * If you place this tag around your forms or input elements, all input elements and forms are automatically re-registered
  * after an Ajax-Refresh when placed within an AjaxUpdateContainer.
- * 
- * <pre>
- * 
+ * <p>
  * Example 1: Given form and all input elements are registered on load (old behaviour of AjaxTextHinter)
- * 
- * <wo:Form id="myform" ...>
- *   <wo:WOTextField default="Login name"/>
- * </wo:Form>
- * <wo:AjaxTextHinter form="myform"/>
- * 
+ * <pre>
+ * &lt;wo:Form id="myform" ...&gt;
+ *   &lt;wo:WOTextField default="Login name"/&gt;
+ * &lt;/wo:Form&gt;
+ * &lt;wo:AjaxTextHinter form="myform"/&gt;
+ * </pre>
  * Example 2: Form is within AjaxUpdateContainer and has to be re-registered after Ajax refresh.
- *            So you can nest multiple AjaxTextHinter tags, if neccessary
- * 
- * <wo:AjaxUpdateContainer>
- *   <wo:AjaxTextHinter>
- *     <wo:Form id="myform" ...>
- *       <wo:WOTextField default="Login name"/>
- *     </wo:Form>
- *   </wo:AjaxTextHinter/>
- * </wo:AjaxUpdateContainer>
- * 
- * Exmaple 3: only some input elements are within AjaxUpdateContainer
- * 
- * <wo:AjaxTextHinter>
- *   <wo:Form id="myform" ...>
- *     <wo:AjaxUpdateContainer>
- *       <wo:AjaxTextHinter>
- *         <wo:WOTextField default="Login name"/>
- *      </wo:AjaxTextHinter/>
- *     </wo:AjaxUpdateContainer>
- *   </wo:Form>
- * </wo:AjaxTextHinter/>
- * 
+ *            So you can nest multiple AjaxTextHinter tags, if necessary
+ * <pre>
+ * &lt;wo:AjaxUpdateContainer&gt;
+ *   &lt;wo:AjaxTextHinter&gt;
+ *     &lt;wo:Form id="myform" ...&gt;
+ *       &lt;wo:WOTextField default="Login name"/&gt;
+ *     &lt;/wo:Form&gt;
+ *   &lt;/wo:AjaxTextHinter/&gt;
+ * &lt;/wo:AjaxUpdateContainer&gt;
+ * </pre>
+ * Example 3: only some input elements are within AjaxUpdateContainer
+ * <pre>
+ * &lt;wo:AjaxTextHinter&gt;
+ *   &lt;wo:Form id="myform" ...&gt;
+ *     &lt;wo:AjaxUpdateContainer&gt;
+ *       &lt;wo:AjaxTextHinter&gt;
+ *         &lt;wo:WOTextField default="Login name"/&gt;
+ *      &lt;/wo:AjaxTextHinter/&gt;
+ *     &lt;/wo:AjaxUpdateContainer&gt;
+ *   &lt;/wo:Form&gt;
+ * &lt;/wo:AjaxTextHinter/&gt;
  * </pre>
  *
  * @binding form ID of the form to apply the hints to

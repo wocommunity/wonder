@@ -18,21 +18,21 @@ import er.extensions.appserver.navigation.ERXNavigationManager;
  * order to find a matching navigation item. It assumes your navigation elements
  * are named according to the following conventions:
  * <ul>
- * <li>task=list, entity.name=Movie => 'ListMovie' or 'SearchMovie'
- * <li>task=query, entity.name=Movie => 'SearchMovie'
+ * <li>task=list, entity.name=Movie =&gt; 'ListMovie' or 'SearchMovie'
+ * <li>task=query, entity.name=Movie =&gt; 'SearchMovie'
  * </ul>
  * You may still have to define a rule for the initial navigation state after
- * login, if it cannot be resolved with the simple conventions above. <br>
+ * login, if it cannot be resolved with the simple conventions above.
  * <br>
  * While it should set the vast majority of navigation states correctly, you can
  * override the default choice via a rule such as:
  * <pre>
- * 100 : pageConfiguration = 'ListMovie' => navigationState = "Movies.ListMovie" [com.webobjects.directtoweb.Assignment]
+ * 100 : pageConfiguration = 'ListMovie' =&gt; navigationState = "Movies.ListMovie" [com.webobjects.directtoweb.Assignment]
  * </pre>
  * 
  * In the same way, you can disable it entirely, e.g. via:
  * <pre>
- * 50 : *true* => navigationState = (null) [com.webobjects.directtoweb.Assignment]
+ * 50 : *true* =&gt; navigationState = (null) [com.webobjects.directtoweb.Assignment]
  * </pre>
  * 
  * @author fpeters

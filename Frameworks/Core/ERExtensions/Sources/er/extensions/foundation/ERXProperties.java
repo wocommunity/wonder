@@ -1225,7 +1225,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *             <div class="ja">プロパティー・ファイルへのパス</div>
      * 
      * @return <div class="en">properties object with the values from the file specified.</div>
-     *         <div class="ja"ファイルの内容を持つプロパティー・オブジェクト</div>
+     *         <div class="ja">ファイルの内容を持つプロパティー・オブジェクト</div>
      */
     // FIXME: This shouldn't eat the exception
 	public static Properties propertiesFromPath(String path) {

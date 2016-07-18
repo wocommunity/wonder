@@ -1102,7 +1102,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * are arrays (<em>Only</em> if {@link ERXKey#isToManyRelationship()}
 	 * returns <code>true</code>, which can only possibly happen if
 	 * {@link ERXKey#type()} has been set.)</li>
-	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
+	 * <li>{@link ERXArrayUtilities#distinct(Collection) remove} all duplicate
 	 * objects</li>
 	 * </ol>
 	 * 
@@ -1131,7 +1131,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * are arrays (<em>Only</em> if {@link ERXKey#isToManyRelationship()}
 	 * returns <code>true</code>, which can only possibly happen if
 	 * {@link ERXKey#type()} has been set.)</li>
-	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
+	 * <li>{@link ERXArrayUtilities#distinct(Collection) remove} all duplicate
 	 * objects</li>
 	 * </ol>
 	 * <p>

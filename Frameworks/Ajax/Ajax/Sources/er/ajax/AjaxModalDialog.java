@@ -357,7 +357,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * Overridden to include result returned by action binding if bound.
 	 *
 	 * @see #close(WOContext)
-	 * @see #update(WOContext)
+	 * @see #update(WOContext, String)
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
 	@Override
