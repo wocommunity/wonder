@@ -156,6 +156,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		boolean useBatchingDisplayGroup = useBatchingDisplayGroup();
 		if (useBatchingDisplayGroup) {
 			_displayGroup = new ERXBatchingDisplayGroup();
+            ((ERXBatchingDisplayGroup) _displayGroup).setShouldRememberRowCount(false);
 		} else {
 			_displayGroup = new ERXDisplayGroup();
 		}
