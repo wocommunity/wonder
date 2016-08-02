@@ -277,7 +277,7 @@ public class ERXEC extends EOEditingContext {
 	
 	/**
 	 * Sets whether or not open editing context lock tracing is enabled.
-	 * @param value 
+	 * @param value if open locks should be traced
 	 */
 	public static void setTraceOpenLocks(boolean value) {
 		traceOpenLocks = Boolean.valueOf(value);
@@ -285,7 +285,7 @@ public class ERXEC extends EOEditingContext {
 	
 	/**
 	 * Sets whether or not open editing context lock marking is enabled.
-	 * @param value 
+	 * @param value if open locks should be marked
 	 */
 	public static void setMarkOpenLocks(boolean value) {
 		markOpenLocks = Boolean.valueOf(value);
@@ -476,8 +476,10 @@ public class ERXEC extends EOEditingContext {
 //		 */
 //	}
 
-	/** Utility to delete a bunch of objects. 
-	 * @param objects */
+	/**
+	 * Utility to delete a bunch of objects.
+	 * @param objects objects to delete
+	 */
 	public void deleteObjects(NSArray objects) {
 		for (int i = objects.count(); i-- > 0;) {
 			Object o = objects.objectAtIndex(i);
@@ -490,7 +492,8 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** Decides on a per-EC-level if autoLocking should be used. 
+	/**
+	 * Decides on a per-EC-level if autoLocking should be used.
 	 * @return true if autoLocking should be used
 	 */
 	public boolean useAutoLock() {
@@ -500,8 +503,9 @@ public class ERXEC extends EOEditingContext {
 		return useAutolock.booleanValue();
 	}
 
-	/** Sets whether to use autoLocking on this EC. 
-	 * @param value 
+	/**
+	 * Sets whether to use autoLocking on this EC.
+	 * @param value if autolocking should be used
 	 */
 	public void setUseAutoLock(boolean value) {
 		useAutolock = Boolean.valueOf(value);
@@ -528,7 +532,7 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Sets whether or not coalescing auto locks should be enabled.
-	 * @param value 
+	 * @param value if coalescing auto locks should be enabled
 	 */
 	public void setCoalesceAutoLocks(boolean value) {
 		coalesceAutoLocks = Boolean.valueOf(value);
@@ -1157,6 +1161,8 @@ public class ERXEC extends EOEditingContext {
 	 * 
 	 * @param recoversFromException
 	 * @param doesRetry
+	 *            when true, saves again after resolving. when false, throws the
+	 *            optimistic locking after resolving
 	 * @param mergesChanges
 	 */
 	public void setOptions(boolean recoversFromException, boolean doesRetry, boolean mergesChanges) {
