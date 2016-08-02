@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 
-public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSKeyValueCoding.ErrorHandling,
+public class WOCookie implements NSKeyValueCoding, NSKeyValueCoding.ErrorHandling,
 		NSKeyValueCodingAdditions, Serializable {
 
 	static final long serialVersionUID = 310727495L;
@@ -83,7 +83,6 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_isHttpOnly = httpOnly;
 		_sameSite = SameSite.NORMAL;
 		setTimeOut(-1);
-		return;
 	}
 
 	public WOCookie(final String name, final String value, final String path, final String domain, final int timeout,
@@ -104,7 +103,6 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_isSecure = isSecure;
 		_isHttpOnly = httpOnly;
 		_sameSite = SameSite.NORMAL;
-		return;
 	}
 
 	public WOCookie(final String name, final String value) {
@@ -258,31 +256,31 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	}
 
 	public Object valueForKey(final String key) {
-		return com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
 	}
 
 	public void takeValueForKey(final Object value, final String key) {
-		com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, value, key);
+		NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, value, key);
 	}
 
 	public Object handleQueryWithUnboundKey(final String key) {
-		return com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.handleQueryWithUnboundKey(this, key);
+		return NSKeyValueCoding.DefaultImplementation.handleQueryWithUnboundKey(this, key);
 	}
 
 	public void handleTakeValueForUnboundKey(final Object value, final String key) {
-		com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.handleTakeValueForUnboundKey(this, value, key);
+		NSKeyValueCoding.DefaultImplementation.handleTakeValueForUnboundKey(this, value, key);
 	}
 
 	public void unableToSetNullForKey(final String key) {
-		com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.unableToSetNullForKey(this, key);
+		NSKeyValueCoding.DefaultImplementation.unableToSetNullForKey(this, key);
 	}
 
 	public Object valueForKeyPath(final String key) {
-		return com.webobjects.foundation.NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, key);
+		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, key);
 	}
 
 	public void takeValueForKeyPath(final Object value, final String key) {
-		com.webobjects.foundation.NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, key);
+		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, key);
 	}
 
 	private void writeObject(final ObjectOutputStream out) throws IOException {
