@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import er.extensions.eof.ERXKey;
+
 /**
  * <div class="en">
  * NSDictionary reimplementation to support JDK 1.5 templates. Use with
@@ -480,7 +482,15 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return value;
 	}
 
+	public <T> T valueForKey(ERXKey<T> key) {
+		return (T)valueForKey(key.key());
+	}
+
 	public void takeValueForKey(Object value, String key) {
+		throw new IllegalStateException(getClass().getName() + " is immutable.");
+	}
+
+	public void takeValueForKey(Object value, ERXKey<?> key) {
 		throw new IllegalStateException(getClass().getName() + " is immutable.");
 	}
 

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Map;
 
+import er.extensions.eof.ERXKey;
+
 /**
  * <div class="en">
  * NSMutableDictionary reimplementation to support JDK 1.5 templates and the
@@ -167,6 +169,10 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		else {
 			removeObjectForKey(key);
 		}
+	}
+
+	public void takeValueForKey(Object value, ERXKey<?> key) {
+		takeValueForKey(value, key.key());
 	}
 
 	@Override
