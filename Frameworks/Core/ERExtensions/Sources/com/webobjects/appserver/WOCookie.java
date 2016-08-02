@@ -25,6 +25,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	NSTimestamp _expires;
 	int _timeout;
 	boolean _isHttpOnly;
+	SameSite _sameSite;
 	@Deprecated
 	static final SimpleDateFormat TheDateFormat;
 
@@ -80,6 +81,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_expires = expires;
 		_isSecure = isSecure;
 		_isHttpOnly = httpOnly;
+		_sameSite = SameSite.NORMAL;
 		setTimeOut(-1);
 		return;
 	}
@@ -101,6 +103,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		setTimeOut(timeout);
 		_isSecure = isSecure;
 		_isHttpOnly = httpOnly;
+		_sameSite = SameSite.NORMAL;
 		return;
 	}
 
@@ -113,11 +116,13 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		String expiresString = _expires != null ? new StringBuilder().append(" expires=")
 				.append(TIMESTAMP_FORMATTER.get().format(_expires)).toString() : "";
 		String expires = _timeout < 0 ? "" : new StringBuilder().append(" max-age=").append(_timeout).toString();
+		String sameSite = _sameSite == SameSite.NORMAL ? "" :
+			new StringBuilder().append(" SameSite=").append(_sameSite.toString().toLowerCase()).toString();
 
 		return new StringBuilder().append('<').append(getClass().getName()).append(" name=").append(_name)
 				.append(" value=").append(_value).append(" path=").append(_path).append(" domain=").append(_domain)
 				.append(expiresString).append(expires).append(" isSecure=").append(_isSecure)
-				.append(" isHttpOnly=").append(_isHttpOnly).append('>').toString();
+				.append(" isHttpOnly=").append(_isHttpOnly).append(sameSite).append('>').toString();
 	}
 
 	public String headerString() {
@@ -167,6 +172,10 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			}
 			if (_isHttpOnly) {
 				header.append("; HttpOnly");
+			}
+			if (_sameSite != SameSite.NORMAL) {
+				header.append("; SameSite=");
+				header.append(_sameSite.toString().toLowerCase());
 			}
 		}
 		return header.toString();
@@ -236,6 +245,14 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_isHttpOnly = isHttpOnly;
 	}
 
+	public SameSite sameSite() {
+		return _sameSite;
+	}
+
+	public void setSameSite(final SameSite sameSite) {
+		_sameSite = sameSite;
+	}
+
 	public static boolean canAccessFieldsDirectly() {
 		return true;
 	}
@@ -277,6 +294,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		out.writeBoolean(_isSecure);
 		out.writeObject(_expires);
 		out.writeBoolean(_isHttpOnly);
+		out.writeObject(_sameSite);
 	}
 
 	private void readObject(final ObjectInputStream out) throws IOException, ClassNotFoundException {
@@ -288,5 +306,17 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_isSecure = out.readBoolean();
 		_expires = (NSTimestamp) out.readObject();
 		_isHttpOnly = out.readBoolean();
+		_sameSite = (SameSite) out.readObject();
+	}
+
+	/**
+	 * Possible values for same-site cookie setting.
+	 * 
+	 * @see <a href="https://tools.ietf.org/html/draft-west-first-party-cookies-07">RFC draft</a>
+	 */
+	public static enum SameSite {
+		NORMAL,
+		LAX,
+		STRICT
 	}
 }
