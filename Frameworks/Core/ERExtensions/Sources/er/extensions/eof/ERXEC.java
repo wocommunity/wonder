@@ -231,7 +231,7 @@ public class ERXEC extends EOEditingContext {
 	}
 	
 	public static void setUseUnlocker(boolean value) {
-		useUnlocker = value;
+		useUnlocker = Boolean.valueOf(value);
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class ERXEC extends EOEditingContext {
 	 * @param value 
 	 */
 	public static void setTraceOpenLocks(boolean value) {
-		traceOpenLocks = value;
+		traceOpenLocks = Boolean.valueOf(value);
 	}
 	
 	/**
@@ -288,7 +288,7 @@ public class ERXEC extends EOEditingContext {
 	 * @param value 
 	 */
 	public static void setMarkOpenLocks(boolean value) {
-		markOpenLocks = value;
+		markOpenLocks = Boolean.valueOf(value);
 	}
 
 	private static ThreadLocal<List> locks = new ThreadLocal() {
