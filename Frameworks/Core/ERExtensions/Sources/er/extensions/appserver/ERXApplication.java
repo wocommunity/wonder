@@ -1239,15 +1239,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("addBalancerRouteCookieByNotification", new Class[] { NSNotification.class }), WORequestHandler.DidHandleRequestNotification, null);
 
-		Boolean useUnlocker = ERXEC.useUnlocker();
-		if (useUnlocker != null) {
-			ERXEC.setUseUnlocker(useUnlocker);
-		}
-		Boolean traceOpenLocks = ERXEC.traceOpenLocks();
-		if (traceOpenLocks != null) {
-			ERXEC.setTraceOpenLocks(traceOpenLocks);
-		}
-
 		// Signal handling support
 		if (ERXGracefulShutdown.isEnabled()) {
 			ERXGracefulShutdown.installHandler();
