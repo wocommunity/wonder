@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Formatter class to format and parse {@link LocalDate} objects.
+ * <p>
+ * This class is thread-safe.
  * 
  * @author jw
  */

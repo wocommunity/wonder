@@ -17,8 +17,8 @@ import java.util.Objects;
  */
 public abstract class ERXDateTimeFormatter extends Format {
 	private static final long serialVersionUID = 1L;
-	private DateTimeFormatter formatter;
-	private TemporalQuery<?> query;
+	private final DateTimeFormatter formatter;
+	private final TemporalQuery<?> query;
 
 	public ERXDateTimeFormatter(DateTimeFormatter formatter, TemporalQuery<?> query) {
 		this.formatter = Objects.requireNonNull(formatter, "formatter must not be null");
@@ -28,14 +28,14 @@ public abstract class ERXDateTimeFormatter extends Format {
 	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
 		if (obj instanceof TemporalAccessor) {
-			formatter().formatTo((TemporalAccessor) obj, toAppendTo);
+			formatter.formatTo((TemporalAccessor) obj, toAppendTo);
 		}
 		return toAppendTo;
 	}
 
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {
-		Object date = formatter().parse(source, query());
+		Object date = formatter.parse(source, query);
 		pos.setIndex(source.length());
 		return date;
 	}
@@ -47,10 +47,6 @@ public abstract class ERXDateTimeFormatter extends Format {
 	 */
 	public DateTimeFormatter formatter() {
 		return formatter;
-	}
-
-	protected void setFormatter(DateTimeFormatter formatter) {
-		this.formatter = Objects.requireNonNull(formatter, "formatter must not be null");
 	}
 
 	/**
