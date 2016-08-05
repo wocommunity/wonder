@@ -155,6 +155,10 @@ import er.extensions.validation.ERXValidationFactory;
  *          }
  *          );
  * }</code></pre>
+ * If you have validation methods in your EO classes (e.g. <code>validateName(String name)</code> for attribute <i>name</i>)
+ * be aware that those are executed first and that they possibly coerce the value to validate (e.g. making a string uppercase).
+ * The validations done by this class will be executed on those potentially coerced values.
+ * <p>
  * This code is mainly a quick-and-dirty rewrite from PRValidation by Proteon.
  * <p>
  * Additionally, this class adds a concept of "Default" values that get pushed into the object at creation time.
@@ -184,7 +188,6 @@ import er.extensions.validation.ERXValidationFactory;
  * If you wish to provide your own class description subclass
  * see the documentation associated with the Factory inner class.
  */
-
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -929,6 +932,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return true;
     }
 
+    /**
+     * Validates a specific property of an EO by applying the rules found in the userInfo
+     * of the entity i.e. model driven validations. See class description for more info
+     * on it.
+     * 
+     * @param object the EO validation is done for
+     * @param value the value to validate
+     * @param validationTypeString the key for the validation info from userInfo
+     * @param property the property key to validate
+     */
     public void validateObjectWithUserInfo(EOEnterpriseObject object, Object value, String validationTypeString, String property) {
         if(_validationInfo != null) {
             NSArray qualifiers = (NSArray)_validationInfo.valueForKeyPath(validationTypeString);
