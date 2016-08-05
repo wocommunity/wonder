@@ -64,4 +64,4 @@ Binaries can be downloaded from the [releases page](https://github.com/wocommuni
 Changelog
 --------------------
 
-You can find a [changelog](https://github.com/projectwonder/wonder/wiki/Changelog) in the Wiki section on Github.
+You can find changelogs for older releases in the Wiki section or for more recent releases on the [releases page](https://github.com/wocommunity/wonder/releases).
