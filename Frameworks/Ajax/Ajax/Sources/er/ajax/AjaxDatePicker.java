@@ -135,7 +135,7 @@ public class AjaxDatePicker extends AjaxComponent {
 		else if (hasBinding("formatter")) {
     		formatter = (Format) valueForBinding("formatter");
     		if (formatter instanceof NSTimestampFormatter) {
-    			format = translateSimpleDateFormatSymbols(((NSTimestampFormatter)formatter).pattern());
+    			format = ((NSTimestampFormatter)formatter).pattern();
     		}
     		else if (formatter instanceof SimpleDateFormat) {
     			format = ((SimpleDateFormat)formatter).toPattern();
