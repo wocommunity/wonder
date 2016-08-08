@@ -401,6 +401,13 @@
             name = varcharLarge; 
             valueClassName = NSString; 
             valueType = c; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = BINARY; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (
@@ -512,5 +519,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCMySQLPrototypes; 
-    primaryKeyAttributes = (id); 
+    primaryKeyAttributes = (id, uuid); 
 }

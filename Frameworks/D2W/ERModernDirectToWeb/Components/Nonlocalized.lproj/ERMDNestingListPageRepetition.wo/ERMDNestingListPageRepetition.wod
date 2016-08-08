@@ -1,0 +1,183 @@
+AttributeDisplay: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+}
+
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
+ColumnLabelRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+ObjectsRepetition: WORepetition {
+	item = d2wContext.object;
+	list = ^displayGroup.displayedObjects;
+	index = rowIndex;
+	checkHashCodes = true;
+	eoSupport = true;	
+}
+
+IsRenderTableHeader : ERXEqualConditional {
+	value1 = rowIndex;
+	value2 = 0;
+}
+
+LeftAction: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+	displayGroup = displayGroup;
+	updateContainerID = d2wContext.updateContainerID;
+}
+
+LeftActions: WORepetition {
+	item = propertyKey;
+	list = leftActions;
+}
+
+ObjectTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+	class = d2wContext.classForObjectTableHeader;
+}
+
+ListTableRow: WOGenericContainer {
+	elementName = "tr";
+	class = objectRowClass;
+}
+
+HasNestedRelationship : WOConditional {
+	condition = hasNestedRelationship;
+}
+
+NestedUC : AjaxUpdateContainer {
+	id = idForNestedUpdateContainer;
+	elementName = "tr";
+	class = nestedRowClass;
+}
+
+showNestedRelationshipEditor : WOConditional {
+	condition = showNestedRelationshipEditor;
+}
+
+NestedRelationshipField : WOGenericContainer {
+	elementName = "td";
+	colspan = columnCount;
+}
+
+HiddenNestedRelationshipField : WOGenericContainer {
+	elementName = "td";
+	colspan = columnCount;
+	class = "hidden";
+}
+
+NestedRelationshipEditor : WOSwitchComponent {
+	WOComponentName = childContext.componentName;
+	localContext = childContext;
+	object = childContext.object; // VALID
+}
+
+hideNestedRelationshipEditor : WOConditional {
+	condition = showNestedRelationshipEditor;
+	negate = true;
+}
+
+TableHeaderSwitchComponent : WOSwitchComponent {
+	WOComponentName = d2wContext.tableHeaderComponentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+	updateContainerID = ^updateContainerID;
+}
+
+RightAction: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+	displayGroup = displayGroup;
+}
+
+RightActions: WORepetition {
+	item = propertyKey;
+	list = rightActions;
+}
+
+SectionRepetition: ERXWORepetition {
+	list = sectionsContents;
+	item = currentSection;
+}
+
+ObjectTable : WOGenericContainer {
+	elementName = "table";
+	class = d2wContext.classForObjectTable;
+}
+
+AttColumnHeader : WOGenericContainer {
+	elementName = "th";
+	class = d2wContext.classForAttributeColumn;
+}
+
+AttColumnCell : WOGenericContainer {
+	elementName = "td";
+	class = d2wContext.classForAttributeColumn;
+	data-label = d2wContext.displayNameForProperty;
+}
+
+HasLeftActionsConditional : WOConditional {
+	condition = hasLeftActions;
+}
+
+HasChildren : WOConditional {
+	condition = hasChildren;
+}
+
+ToggleNestedRelationshipEditor : AjaxUpdateLink {
+	action = toggleNestedRelationshipEditor;
+	updateContainerID = idForNestedUpdateContainer;
+	onComplete = toggleIconsScript;
+	style = "display:block;";
+}
+
+DoOpenIcon : WOImage {
+	filename = "RightTriangle.gif";
+	framework = "JavaWOExtensions";
+	id = idForDoOpenIcon;
+	style = initialStyleForDoOpenIcon;
+}
+
+DoCloseIcon : WOImage {
+	filename = "DownTriangle.gif";
+	framework = "JavaWOExtensions";
+	id = idForDoCloseIcon;
+	style = initialStyleForDoCloseIcon;
+}
+
+HasRightActionsConditional : WOConditional {
+	condition = hasRightActions;
+}
+D2wContextEntityName : WOString {
+  value = d2wContext.entity.name;
+}
+
+D2wContextParentPageConfiguration : WOString {
+  value = d2wContext.parentPageConfiguration;
+}
+
+D2wContextPageConfiguration : WOString {
+  value = d2wContext.pageConfiguration;
+}
+
+D2wContextParentProperytKey : WOString {
+  value = d2wContext.parentProperytKey;
+}

@@ -409,6 +409,13 @@
             valueClassName = NSString; 
             valueType = c; 
             width = 10000000; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = BYTE; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (boolean, id); 
@@ -487,6 +494,7 @@
             osType, 
             shortString, 
             type, 
+            uuid, 
             varchar10, 
             varchar100, 
             varchar1000, 
@@ -499,7 +507,7 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCFrontBasePrototypes; 
-    primaryKeyAttributes = (eofKey, id); 
+    primaryKeyAttributes = (eofKey, id, uuid); 
     userInfo = {
         exampleConnectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/DatabaseName"; }; 
     }; 

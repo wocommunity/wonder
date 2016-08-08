@@ -159,6 +159,16 @@ public class ERXDictionaryUtilities {
         return result.immutableClone();
     }
 
+    /**
+     * Creates a dictionary from an object and a list of key paths
+     * @param object object to pull the values from
+     * @param keys list of keys
+     * @return Returns a {@code NSDictionary} containing all of the object-key pairs.
+     */
+    public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, String... keys) {
+        return ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, new NSArray<>(keys));
+    }
+
     // if you're keys are not all strings, this method will throw.
 	public static NSArray<String> stringKeysSortedAscending(final NSDictionary<String, ?> d) {
         NSArray<String> result = null;

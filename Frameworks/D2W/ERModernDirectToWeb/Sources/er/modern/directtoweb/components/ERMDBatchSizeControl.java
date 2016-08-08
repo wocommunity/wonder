@@ -118,23 +118,23 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
      * Defaults to the first parent update container id.
      */
 	public String updateContainerID() {
-		if (_updateContainerID == null) {
-			_updateContainerID = (String) valueForBinding(Keys.updateContainerID);
-			if (_updateContainerID == null) {
-				_updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
-			}
-		}
-		return _updateContainerID;
+        if (_updateContainerID == null) {
+            _updateContainerID = (String) valueForBinding(Keys.updateContainerID);
+            if (_updateContainerID == null) {
+                _updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+            }
+        }
+        return _updateContainerID;
 	}
 
 	/**
 	 * Returns a unique id for this batch size control
 	 */
 	public String batchSizeFieldID() {
-		if (_batchSizeFieldID == null) {
-			_batchSizeFieldID = "BSIF" + ERXStringUtilities.safeIdentifierName(context().contextID());;
-		}
-		return _batchSizeFieldID;
+        if (_batchSizeFieldID == null) {
+            _batchSizeFieldID = updateContainerID() + "_BSIF";
+        }
+        return _batchSizeFieldID;
 	}
 	
 	public void setBatchSizeFieldID(String fieldID) {

@@ -52,6 +52,7 @@ import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
@@ -289,6 +290,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Tracks whether or not _addAdditionalAdaptors has been called yet.
 	 */
 	protected boolean _initializedAdaptors = false;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerRoute = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookieName = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookiePath = null;
 
 	/**
 	 * Copies the props from the command line to the static dict
@@ -1221,14 +1237,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 
-		Boolean useUnlocker = ERXEC.useUnlocker();
-		if (useUnlocker != null) {
-			ERXEC.setUseUnlocker(useUnlocker);
-		}
-		Boolean traceOpenLocks = ERXEC.traceOpenLocks();
-		if (traceOpenLocks != null) {
-			ERXEC.setTraceOpenLocks(traceOpenLocks);
-		}
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("addBalancerRouteCookieByNotification", new Class[] { NSNotification.class }), WORequestHandler.DidHandleRequestNotification, null);
 
 		// Signal handling support
 		if (ERXGracefulShutdown.isEnabled()) {
@@ -2832,4 +2841,30 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     public String[] adaptorExtensions() {
         return myAppExtensions;
     }
+	
+	public void addBalancerRouteCookieByNotification(NSNotification notification) {
+		if (notification.object() instanceof WOContext) {
+			addBalancerRouteCookie((WOContext) notification.object());
+		}
+	}
+
+	public void addBalancerRouteCookie(WOContext context) {
+		if (context != null && context.request() != null && context.response() != null) {
+			if (_proxyBalancerRoute == null) {
+				_proxyBalancerRoute = (name() + "_" + port().toString()).toLowerCase();
+				_proxyBalancerRoute = "." + _proxyBalancerRoute.replace('.', '_');
+			}
+			if (_proxyBalancerCookieName == null) {
+				_proxyBalancerCookieName = ("routeid_" + name()).toLowerCase();
+				_proxyBalancerCookieName = _proxyBalancerCookieName.replace('.', '_');
+			}
+			if (_proxyBalancerCookiePath == null) {
+				_proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
+			}
+			WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
+			cookie.setExpires(null);
+			context.response().addCookie(cookie);
+		}
+	}
+  
 }

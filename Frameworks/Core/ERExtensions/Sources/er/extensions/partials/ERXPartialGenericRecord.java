@@ -13,15 +13,11 @@ import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.eof.ERXGenericRecord;
 
 /**
- * <p>
  * For overview information on partials, read the {@code package.html} in
  * {@code er.extensions.partials}.
- * </p>
- * 
  * <p>
  * {@code ERXPartialGenericRecord} is the base class of any entity that allows
  * itself to be extended with partials.
- * </p>
  * 
  * @author mschrag
  */
@@ -201,7 +197,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 	protected Object _validateValueForKey(Object value, String key) throws ValidationException {
 		Object result = value;
 		for (ERXPartial partial : _partials()) {
-			result = partial.validateValueForKey(value, key);
+			result = partial.validateValueForKey(result, key);
 		}
 		return result;
 	}
@@ -211,7 +207,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 		Object result = super.validateTakeValueForKeyPath(value, keyPath);
 		for (ERXPartial partial : _partials()) {
 			if (partial.isPartialKeypath(keyPath)) {
-				result = partial.validateTakeValueForKeyPath(value, keyPath);
+				result = partial.validateTakeValueForKeyPath(result, keyPath);
 			}
 		}
 		return result;

@@ -570,6 +570,15 @@ ul.L2WithChildren li.Nav2Selected {
 	width: 35px;
 }
 
+/* increase clickable area */
+.ShowNestedActionCell {
+	padding: 0;
+}
+.ShowNestedActionCell a {
+	padding: 0.5em;
+	width: 18px;
+}
+
 .EmbeddedObjTable .RtActionCell,
 .EditRelationshipObjTable .RtActionCell {
 	width: 170px;
@@ -816,6 +825,12 @@ span.ErrorLabel {
 
 .OddObjRow .Button span {
 	background-color: #e6e9ef;
+}
+
+/* hide empty children row */
+.ObjRow.NestedObjRow .hidden {
+	line-height: 0px;
+	padding: 0px;
 }
 
 .ComboTHLink .Label{
@@ -1479,7 +1494,28 @@ div.RtActionCell li {
 	font-weight: bold;
 }
 
+.D2WPropertyDebugInfo, .DebugHelp table, .D2WPropertyDebugInfo th, .D2WPropertyDebugInfo td {
+	font-weight: normal;
+	padding: 4px;
+	color: black;
+	background-color: #eae9eb;
+}
+
+.D2WPropertyDebugInfoToolTip {
+	z-index: 100;
+}
+
+.D2WPropertyDebugInfoToolTip span {
+	position: absolute;
+}
+
+.D2WPropertyDebugInfoToolTip:hover table {
+	display: table;
+}
+
 .D2WPropertyDebugInfo {
+	position: relative;
+	display: none;
 	z-index: 100;
 	background-color: #ddd;
 }
@@ -1488,7 +1524,6 @@ div.RtActionCell li {
 	display: none;
 }
 
-.D2WPropertyDebugInfo {}
 #ERD2WDebugFlags {
 	position: fixed;
 	bottom: 25px;
@@ -1504,3 +1539,4 @@ div.RtActionCell li {
 	opacity: 0.6;
 	-moz-opacity:0.6;
 }
+

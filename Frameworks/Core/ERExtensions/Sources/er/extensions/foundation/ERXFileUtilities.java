@@ -1178,21 +1178,20 @@ public class ERXFileUtilities {
      * exist then the array is empty.
      */
     public static NSArray<File> arrayByAddingFilesInDirectory(File directory, boolean recursive) {
-        ERXFile erxDirectory = new ERXFile(directory.getAbsolutePath());
-        NSMutableArray<File> files = new NSMutableArray<File>();
-        if (!erxDirectory.exists()) {
-            return files;
+        if (!directory.exists()) {
+            return NSArray.emptyArray();
         }
 
-        File[] fileList = erxDirectory.listFiles();
-        if (fileList == null) {
-            return files;
+        File[] fileList = directory.listFiles();
+        if (fileList == null || fileList.length == 0) {
+            return NSArray.emptyArray();
         }
 
+        NSMutableArray<File> files = new NSMutableArray<>();
         for (int i = 0; i < fileList.length; i++) {
             File f = fileList[i];
             if (f.isDirectory() && recursive) {
-                files.addObjectsFromArray(ERXFileUtilities.arrayByAddingFilesInDirectory(f, true));
+                files.addObjectsFromArray(arrayByAddingFilesInDirectory(f, true));
             } else {
                 files.addObject(f);
             }

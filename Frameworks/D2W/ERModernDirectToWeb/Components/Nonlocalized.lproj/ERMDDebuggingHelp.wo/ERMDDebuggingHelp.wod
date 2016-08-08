@@ -1,0 +1,143 @@
+UpdateContainer : AjaxUpdateContainer {
+	id = debugHelpUC;
+}
+
+ShowHelp: WOConditional {
+	condition = showHelp;
+}
+
+ToggleDetails : AjaxUpdateLink {
+	action = toggleDetails;
+	updateContainerID = debugHelpUC;
+}
+
+DoOpenIcon : WOImage {
+	filename = "RightTriangle.gif";
+	framework = "JavaWOExtensions";
+}
+
+DoCloseIcon : WOImage {
+	filename = "DownTriangle.gif";
+	framework = "JavaWOExtensions";
+}
+
+IsNotShowDetails : WOConditional {
+	condition = showDetails;
+	negate = true;
+}
+
+HasEditingContext: WOConditional {
+	condition = hasEditingContext;
+}
+
+Form1: ERXOptionalForm {
+}
+
+ShowEditingContextLink: WOHyperlink {
+	action = showEditingContext;
+	target = "_inspector";
+}
+
+ShowDefaultEditingContextLink: WOHyperlink {
+	action = showDefaultEditingContext;
+	target = "_inspector";
+}
+
+ToggleRuleTracingLink: AjaxUpdateLink {
+	action = toggleRuleTracing;
+	string = ruleTracingState;
+	updateContainerID = debugHelpUC;
+}
+
+ContextDictionaryForPageAllKeysSortAscToString: WORepetition {
+	list = contextDictionaryForPage.allKeys.@sortAsc.toString;
+	item = currentKey;
+}
+
+D2wContextPageConfiguration: WOString {
+	value = ^d2wContext.pageConfiguration;
+	valueWhenEmpty = "No Page Configuration";
+}
+
+D2wContextSubTask: WOString {
+	value = ^d2wContext.subTask;
+	valueWhenEmpty = "No Sub Task";
+}
+
+D2wContextPageName: WOString {
+	value = ^d2wContext.pageName;
+	valueWhenEmpty = "Now this is very strange";
+}
+
+D2wContextParentPageConfiguration: WOString {
+	value = ^d2wContext.parentPageConfiguration;
+	valueWhenEmpty = "No Parent Configuration";
+}
+
+D2wContextTask: WOString {
+	value = ^d2wContext.task;
+}
+
+D2wContextTabKey: WOString {
+	value = ^d2wContext.tabKey;
+	valueWhenEmpty = "No Current Page Name";
+}
+
+D2wContextEntityName: WOString {
+	value = ^d2wContext.entity.name;
+}
+
+EditingContext: WOString {
+	value = editingContext;
+}
+
+DebugValueForKey: WOString {
+	value = debugValueForKey;
+	valueWhenEmpty = "No value set or empty";
+}
+
+SessionDefaultEditingContext: WOString {
+	value = session.defaultEditingContext;
+}
+
+CurrentValue: WOString {
+	value = currentValue;
+}
+
+CurrentKey: WOString {
+	value = currentKey;
+}
+
+IsShowDetails : WOConditional {
+	condition = showDetails;
+}
+
+d2wKeyObserver : AjaxObserveField {
+	updateContainerID = d2wKeyResultUC;
+	observeFieldFrequency = 1;
+}
+
+TextField1: WOText {
+	value = key;
+	rows = 3;
+	cols = 30;
+	style = "max-width:300px;";
+}
+
+d2wKeyUC : AjaxUpdateContainer {
+	id = d2wKeyResultUC;
+	style = "max-height:190px;max-width:500px;overflow:auto;";
+}
+
+isKeyEmpty : ERXNonNullConditional {
+	condition = key;
+	negate = true;
+}
+
+D2WContextInspector : ERD2WContextInspector {
+	d2wContext = d2wContext;
+}
+
+isKeyNotEmpty : ERXNonNullConditional {
+	condition = key;
+}

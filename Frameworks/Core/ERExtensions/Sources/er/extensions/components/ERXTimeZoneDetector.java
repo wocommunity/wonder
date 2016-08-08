@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -46,6 +48,11 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ERXTimeZoneDetector.class);
 
 	public static final String TIMEZONE_SESSION_KEY = "detectedTimeZone";
 
@@ -145,7 +152,14 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			boolean dst = "1".equals(data[1]);
 			boolean southern = "1".equals(data[2]);
 			TimeZone tz = zoneWithRawOffset(rawOffset, dst, southern);
-			session.setTimeZone(tz);
+			// Call ERXSession.setTimeZone() if tz is not null
+			// https://github.com/wocommunity/wonder/issues/774
+			if (tz != null) {
+				session.setTimeZone(tz);
+			}
+			else {
+				log.warn("Unable to find a timezone for '{}'.", zoneString);
+			}
 		}
 	}
 

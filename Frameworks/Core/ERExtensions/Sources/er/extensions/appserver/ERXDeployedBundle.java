@@ -16,6 +16,8 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * Replacement of the WODeployedBundle which adds:
  * <ul>
@@ -24,6 +26,24 @@ import com.webobjects.foundation._NSStringUtilities;
  * <li> Resource URLs for embedded Frameworks are automatically adapted to refer to the embedded Framework, 
  *      rather than to the Frameworks base URL
  * </ul>
+ * 
+ * There are two styles of webserver resource packages, with ANT (old style) builds, embedded frameworks are embedded this way
+ *    MyApp.woa/Frameworks/EmbeddedFramework.framework/...
+ * 
+ * while with Maven builds (and some newer ANT builds), frameworks are embedded in the WebServerResources package the same way as in the Application package:
+ *    MyApp.woa/Contents/Frameworks/EmbeddedFramework.framework/...
+ * 
+ * ERXDeployedBundle introduces automatic url generation for embedded frameworks. The new property WOEmbeddedFrameworksPath 
+ * helps adjusting to the deployment schemes on embedding:
+ * 
+ * in the cited cases above, the property should be
+ *   WOEmbeddedFrameworksPath=Frameworks (default)
+ *   or
+ *   WOEmbeddedFrameworksPath=Contents/Frameworks
+ * 
+ * However if WOFrameworksBaseURL is custom defined, you get the behaviour as before, there is nointervention in url generation.
+ * In the case of a mixed deployment (some frameworks globally installed, some embedded), the property WOOverrideEmbeddedFrameworksPath
+ * lets activate automatic url generation for embedded frameworks, while globally installad frameworks do get their path from WOFrameworksBaseURL.
  * 
  * @author mstoll
  */
@@ -34,6 +54,7 @@ public class ERXDeployedBundle extends WODeployedBundle {
     private static final boolean _allowRapidTurnaround = NSPropertyListSerialization.booleanForString(NSProperties.getProperty("WOAllowRapidTurnaround"));
     private boolean isEmbeddedFramework = false;
     private String embeddingWrapperName = null;
+    private static final String defaultFrameworkBaseURL = "/WebObjects/Frameworks";
     
     /**
      * Initializer, determines by comparing bundle paths whether bundle is embedded. 
@@ -45,11 +66,11 @@ public class ERXDeployedBundle extends WODeployedBundle {
     	super(nsb);
 
     	_myURLs = new NSMutableDictionary();
+		embeddingWrapperName = NSBundle.mainBundle().name() + ".woa";
 
     	if(bundlePath().startsWith(NSBundle.mainBundle().bundlePath()))
     	{
     		isEmbeddedFramework = true;
-    		embeddingWrapperName = NSBundle.mainBundle().name() + ".woa";
     	}
     }
 
@@ -82,10 +103,18 @@ public class ERXDeployedBundle extends WODeployedBundle {
             {
                 String aBaseURL = null;
                 if(isFramework())
-                	if(isEmbeddedFramework)
-                        aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/Frameworks";
+                {
+                	// WOFrameworksBaseURL is never null but rather by default "/WebObjects/Frameworks"
+                	boolean enableAutomaticEmbeddedFrameworkPath = defaultFrameworkBaseURL.equals(WOApplication.application().frameworksBaseURL()) ||
+                			ERXProperties.booleanForKeyWithDefault("WOOverrideEmbeddedFrameworksPath", false);
+                	if(isEmbeddedFramework && enableAutomaticEmbeddedFrameworkPath)
+                	{
+            			String embeddedFrameworkPath = ERXProperties.stringForKeyWithDefault("WOEmbeddedFrameworksPath", "Frameworks");
+                        aBaseURL = WOApplication.application().applicationBaseURL() + "/" + embeddingWrapperName + "/" + embeddedFrameworkPath;
+                	}
                 	else
-                    aBaseURL = WOApplication.application().frameworksBaseURL();
+                		aBaseURL = WOApplication.application().frameworksBaseURL();
+                }
                 else
                     aBaseURL = WOApplication.application().applicationBaseURL();
                 String aWrapperName = wrapperName();

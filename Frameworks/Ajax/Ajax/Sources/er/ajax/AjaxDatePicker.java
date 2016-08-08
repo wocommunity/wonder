@@ -59,6 +59,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
+ * @binding manualInput false if you want to prevent manual input from the user and force him/her to use the date picker, defaults to true
  * 
  * @binding startDay specify the first day of week to use 0(Sunday)-6(Saturday). The default use the current localizer.
  * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
@@ -200,6 +201,14 @@ public class AjaxDatePicker extends AjaxComponent {
     		return (NSArray<String>)valueForBinding("monthNames");
     	return localizeStringArray(_monthNames);
     }
+    
+    public String otherTagString() {
+    	String otherTagString = (String)valueForStringBinding("otherTagString", "");
+    	if (booleanValueForBinding("manualInput", true) == false) {
+    		otherTagString = otherTagString + " readonly";
+    	}
+    	return otherTagString;
+    }
 
     /**
      * Sets up AjaxOptions prior to rendering.
@@ -239,6 +248,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         return showCalendarScript();
     }
     
@@ -246,6 +258,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());

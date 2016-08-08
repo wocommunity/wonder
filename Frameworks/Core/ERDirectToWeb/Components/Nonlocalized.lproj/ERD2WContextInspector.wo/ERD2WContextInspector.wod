@@ -1,0 +1,3 @@
+d2wContextString : WOString {
+	value = d2wContextString;
+}

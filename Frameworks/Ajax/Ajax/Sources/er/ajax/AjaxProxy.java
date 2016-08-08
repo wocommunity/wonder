@@ -198,6 +198,7 @@ public class AjaxProxy extends AjaxComponent {
 	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = AjaxUtils.createResponse(request, context);
+		response.setHeader("application/json", "content-type");
 
 		String inputString = request.contentString();
 		log.debug("AjaxProxy.handleRequest: input = {}", inputString);

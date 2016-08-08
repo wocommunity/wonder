@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Component that generates a mailto href of the form: {@literal "<a href=mailto:foo@bar.com>foo@bar.com</a>"}.
+ * Component that generates a mailto href of the form: "&lt;a href=mailto:foo@bar.com&gt;foo@bar.com&lt;/a&gt;".
  * <h3> Synopsis:</h3>
  * email=<i>anEmail</i>;
  * 

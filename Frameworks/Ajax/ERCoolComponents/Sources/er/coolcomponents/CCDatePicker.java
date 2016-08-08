@@ -132,9 +132,6 @@ public class CCDatePicker extends ERXStatelessComponent {
 		setValueForBinding(value, "dateformat");
 	}
 	
-	/**
-	 * 
-	 */
 	public String dateFormatString() {
 		String result = dateformat();
 		

@@ -39,6 +39,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.UUIDUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
@@ -88,6 +89,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/** holds all subclass related Logger's */
 	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+
+	private static final Object uuidPrototypeName = "uuid";
 
 	public static boolean shouldTrimSpaces() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
@@ -749,12 +752,36 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						_primaryKeyDictionary = compositePrimaryKey;
 					}
 					else {
-						_primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+						_primaryKeyDictionary = createUuidPrimaryKey(primaryKeyAttributes);
+						if (_primaryKeyDictionary == null) {
+							_primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+						}
 					}
 				}
 			}
+			else { // inTransaction
+				EOEntity entity = entity();
+				NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
+				_primaryKeyDictionary = createUuidPrimaryKey(primaryKeyAttributes);
+			}
 		}
 		return _primaryKeyDictionary;
+	}
+
+	/**
+	 * Create a primary key if the entity primary key is an attribute with uuid prototype.
+	 * @param primaryKeyAttributes
+	 * @return the primary key dictionary or null if the primary key is not a uuid.
+	 */
+	private NSDictionary<String, Object> createUuidPrimaryKey(NSArray<EOAttribute> primaryKeyAttributes) {
+		if (primaryKeyAttributes.count() == 1) {
+			EOAttribute primaryKeyAttribute = primaryKeyAttributes.objectAtIndex(0);			
+			String prototypeName = primaryKeyAttribute.prototypeName();
+			if (prototypeName != null && prototypeName.equals(uuidPrototypeName)) {
+				return new NSDictionary<String, Object>(UUIDUtilities.generateAsNSData(), primaryKeyAttribute.name());
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -1075,8 +1102,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * validateValueForKey on the object's class description. The class
 	 * description for this object should be an
 	 * {@link ERXEntityClassDescription} or subclass. It is that class that
-	 * provides the hooks to convert model throw validation exceptions into
+	 * provides the hooks to convert model thrown validation exceptions into
 	 * {@link ERXValidationException} objects.
+	 * <p>
+	 * The order of validation processed is, if applicable:
+	 * <ol>
+	 * <li>EO class validation methods (e.g. <code>User.validateName()</code>)</li>
+	 * <li>model driven validation (see {@link ERXEntityClassDescription})</li>
+	 * <li>Partial's class validation methods</li>
+	 * </ol>
 	 * 
 	 * @param value
 	 *            to be validated for a given attribute or relationship
@@ -1097,9 +1131,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			result = super.validateValueForKey(value, key);
 			EOClassDescription cd = classDescription();
 			if (cd instanceof ERXEntityClassDescription) {
-				((ERXEntityClassDescription) cd).validateObjectWithUserInfo(this, value, "validateForKey." + key, key);
+				((ERXEntityClassDescription) cd).validateObjectWithUserInfo(this, result, "validateForKey." + key, key);
 			}
-			value = _validateValueForKey(value, key);
+			result = _validateValueForKey(result, key);
 		}
 		catch (ERXValidationException e) {
 			throw e;

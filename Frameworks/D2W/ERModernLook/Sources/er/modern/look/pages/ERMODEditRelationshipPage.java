@@ -635,4 +635,17 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		}
 	}
 
+    /**
+     * @return a unique ID for the repetition container
+     */
+    public String idForRepetitionContainer() {
+        String repetitionContainerID = (String) d2wContext().valueForKey(
+                "idForRepetitionContainer");
+        // use master object to generate globally unique ID
+        // - allows for nesting of relationship components
+        repetitionContainerID = repetitionContainerID.concat("_"
+                + masterObject().hashCode());
+        return repetitionContainerID;
+    }
+
 }
