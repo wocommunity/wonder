@@ -35,6 +35,8 @@ public class ERXRouteResults implements WOActionResults {
 	 * 
 	 * @param context
 	 *            the current context
+	 * @param restContext
+	 *            the REST context
 	 * @param format
 	 *            the intended format of this response
 	 * @param responseNode

@@ -578,6 +578,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	/**
 	 * Returns the type of this node.
 	 * 
+	 * @param name
+	 *            the attribute or node name
 	 * @return the type of this node
 	 */
 	public Object attributeOrChildNodeValue(String name) {
@@ -797,7 +799,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
 	 * @param context
-	 *            the delegate to use
+	 *            the REST context
 	 * @return the object that this request node represents
 	 */
 	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -843,7 +845,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
 	 * @param context
-	 *            the delegate to use
+	 *            the REST context
 	 * @return a new instance of an object represented by this request node
 	 */
 	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -1068,6 +1070,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @param format
 	 *            the format to use
+	 * @param context
+	 *            the REST context
 	 * @return a string representation of this request node using the given format
 	 */
 	public String toString(ERXRestFormat format, ERXRestContext context) {
@@ -1079,6 +1083,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @param writer
 	 *            the writer to use
+	 * @param context
+	 *            the REST context
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
 	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate, ERXRestContext context) {
@@ -1141,7 +1147,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use to determine how to update
 	 * @param context
-	 *            the delegate
+	 *            the REST context
 	 */
 	public void updateObjectWithFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {
 		if (obj == null) {
@@ -1448,6 +1454,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the array to turn into request nodes
 	 * @param keyFilter
 	 *            the filter to use
+	 * @param context
+	 *            the REST context
 	 * @return the root ERXRestRequestNode
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -1468,6 +1476,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the object to turn into request nodes
 	 * @param keyFilter
 	 *            the filter to use
+	 * @param context
+	 *            the REST context
 	 * @return the root ERXRestRequestNode
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {

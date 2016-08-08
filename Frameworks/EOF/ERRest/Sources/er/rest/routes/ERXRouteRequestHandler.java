@@ -714,6 +714,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	
 	/**
 	 * @param method
+	 *            the request method
 	 * @param urlPattern
 	 * @return the first route matching <code>method</code> and <code>pattern</code>.
 	 */

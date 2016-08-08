@@ -112,6 +112,7 @@ public class ERXRestUtils {
 	 * Convert the given object to a String (using REST formats).
 	 * 
 	 * @param value the value to convert
+	 * @param context the REST context
 	 * @return the REST-formatted string
 	 */
 	public static String coerceValueToString(Object value, ERXRestContext context) {
@@ -436,10 +437,12 @@ public class ERXRestUtils {
 	 *            the value of the attribute
 	 * @param parentEntity
 	 *            the entity
-	 * @param attributeName
-	 *            the name of the property
 	 * @param parentObject
 	 *            the parent object
+	 * @param attributeName
+	 *            the name of the property
+	 * @param context
+	 *            the REST context
 	 * @return a parsed version of the String
 	 */
 	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName, ERXRestContext context) {
