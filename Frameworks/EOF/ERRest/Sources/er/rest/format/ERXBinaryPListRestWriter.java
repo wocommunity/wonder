@@ -11,6 +11,7 @@ import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 
 public class ERXBinaryPListRestWriter extends ERXRestWriter {
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		if (node != null) {
 			node._removeRedundantTypes();

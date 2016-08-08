@@ -14,7 +14,7 @@ public class ERXRestTransactionManager {
 	private IntRangeSet _sequenceIDs;
 
 	public ERXRestTransactionManager() {
-		_transactions = new NSMutableDictionary<String, ERXRestTransaction>();
+		_transactions = new NSMutableDictionary<>();
 		_sequenceIDs = new IntRangeSet();
 	}
 
@@ -75,7 +75,7 @@ public class ERXRestTransactionManager {
 		private List<IntRange> _ranges;
 
 		public IntRangeSet() {
-			_ranges = new LinkedList<IntRange>();
+			_ranges = new LinkedList<>();
 		}
 
 		public boolean contains(int start, int end) {

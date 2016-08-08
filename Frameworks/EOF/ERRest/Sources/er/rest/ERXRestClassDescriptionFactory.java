@@ -12,8 +12,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 public class ERXRestClassDescriptionFactory {
-	private static Map<Class<?>, EOClassDescription> _classDescriptionByClass = new ConcurrentHashMap<Class<?>, EOClassDescription>();
-	private static Map<String, Class<?>> _classByName = new ConcurrentHashMap<String, Class<?>>();
+	private static Map<Class<?>, EOClassDescription> _classDescriptionByClass = new ConcurrentHashMap<>();
+	private static Map<String, Class<?>> _classByName = new ConcurrentHashMap<>();
 
 	public static String _guessMismatchedCaseEntityName(String mismatchedCaseEntityName) {
 		String guessedEntityName = null;
@@ -42,7 +42,6 @@ public class ERXRestClassDescriptionFactory {
 		_classDescriptionByClass.put(clazz, classDescription);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static EOClassDescription classDescriptionForObject(Object obj) {
 		return ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
 	}

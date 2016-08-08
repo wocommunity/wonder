@@ -205,7 +205,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 			return _defaultSortOrderings;
 		}
 		EOEntity entity = EOUtilities.entityNamed(editingContext, _entityName);
-		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<>();
 		for (String sortKeyStr : sortKeysStr.split(",")) {
 			String[] sortAttributes = sortKeyStr.split("\\|");
 			String sortKey = sortAttributes[0];

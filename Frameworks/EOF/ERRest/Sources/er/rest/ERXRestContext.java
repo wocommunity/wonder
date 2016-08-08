@@ -21,7 +21,7 @@ public class ERXRestContext {
 	
 	public void setUserInfoForKey(Object value, String key) {
 		if (_userInfo == null) {
-			_userInfo = new NSMutableDictionary<String, Object>();
+			_userInfo = new NSMutableDictionary<>();
 		}
 		_userInfo.setObjectForKey(value, key);
 	}

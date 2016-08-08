@@ -109,7 +109,8 @@ public class ERXXmlRestParser implements IERXRestParser {
 		
 		return requestNode;
 	}
-	
+
+	@Override
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();

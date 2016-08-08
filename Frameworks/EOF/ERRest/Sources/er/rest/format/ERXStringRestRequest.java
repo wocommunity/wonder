@@ -20,11 +20,13 @@ public class ERXStringRestRequest implements IERXRestRequest {
 		_contentString = contentString;
 		_encoding = encoding;
 	}
-	
+
+	@Override
 	public String stringContent() {
 		return _contentString;
 	}
 
+	@Override
 	public InputStream streamContent() {
 		try {
 			return new ByteArrayInputStream(_contentString.getBytes(_encoding));
@@ -34,10 +36,12 @@ public class ERXStringRestRequest implements IERXRestRequest {
 		}
 	}
 
+	@Override
 	public NSArray<String> keyNames() {
 		return NSArray.<String> emptyArray();
 	}
 
+	@Override
 	public Object objectForKey(String key) {
 		return null;
 	}

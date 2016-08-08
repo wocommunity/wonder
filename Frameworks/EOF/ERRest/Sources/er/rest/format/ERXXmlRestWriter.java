@@ -19,6 +19,7 @@ import er.rest.ERXRestUtils;
  *           to true.
  */
 public class ERXXmlRestWriter extends ERXRestWriter {
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		appendHeadersToResponse(node, response, context);
 		response.setContentEncoding(contentEncoding());

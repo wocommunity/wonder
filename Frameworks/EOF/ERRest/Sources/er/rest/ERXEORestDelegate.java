@@ -55,6 +55,7 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		return uuidPK;
 	}
 
+	@Override
 	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		EOEditingContext editingContext = context.editingContext();
 		if (editingContext == null) {
@@ -77,7 +78,8 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 			editingContext.unlock();
 		}
 	}
-	
+
+	@Override
 	public Object primaryKeyForObject(Object obj, ERXRestContext context) {
 		Object pkValue;
 		if (obj == null) {
@@ -115,6 +117,7 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 		return pkValue;
 	}
 
+	@Override
 	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		String strPKValue = String.valueOf(id);
 		EOEditingContext editingContext = context.editingContext();

@@ -51,6 +51,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 		_writeTypeKey = writeTypeKey;
 	}
 
+	@Override
 	public void nodeDidParse(ERXRestRequestNode node) {
 		if (node.isRootNode()) {
 			node.setName(ERXRestNameRegistry.registry().internalNameForExternalName(node.name()));
@@ -87,6 +88,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 		}
 	}
 
+	@Override
 	public void nodeWillWrite(ERXRestRequestNode node) {
 		if (node.isRootNode() && node.isArray()) {
 			if (_pluralNames) {
