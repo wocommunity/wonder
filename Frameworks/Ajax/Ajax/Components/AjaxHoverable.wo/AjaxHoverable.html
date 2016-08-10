@@ -1,0 +1,43 @@
+<webobject name="HoverAreaContainer">
+	<webobject name="ComponentContent"></webobject>
+	<webobject name="showHoverableConditional">
+		<webobject name="ToolTipContainer">
+			<webobject name="HasNSDataConditional">
+				<webobject name="NSDataImage"></webobject>
+			</webobject>
+			<webobject name="HasImageResourceConditional">
+				<webobject name="HoverImgResource"></webobject>
+			</webobject>
+			<webobject name="HasHoverTextMessageConditional">
+				<webobject name="ToolTipMessageText"></webobject>
+			</webobject>
+			<webobject name="useJavascriptHoverEffectConditional">
+				<script>
+					var hoverSetup = function () {
+						var hoverToolTipElement = $('<webobject name="toolTipIDString"></webobject>');
+						var hoverActionElement = hoverToolTipElement.up('.erxHoverArea');
+						var hoverActionElementAnchor = new Element('div');
+						hoverActionElement.insert(hoverActionElementAnchor);
+						hoverActionElementAnchor.setStyle({position: 'absolute', zIndex: 1000});
+						hoverActionElementAnchor.clonePosition(hoverActionElement);
+						hoverActionElementAnchor.addClassName('hiddenHoverableShield');
+						var hoverToolTipWidth = '<webobject name="toolTipWidthString"></webobject>';
+						var hoverOffsetX = <webobject name="useJavascriptOffsetX"></webobject>;
+						var hoverOffsetY = <webobject name="useJavascriptOffsetY"></webobject>;
+						
+						hoverActionElementAnchor.observe('mouseover', erxToolTip.show.bind(hoverActionElementAnchor, hoverActionElement, 
+							hoverToolTipElement.innerHTML, hoverToolTipWidth, hoverOffsetX, hoverOffsetY));
+						hoverActionElementAnchor.observe('mouseout', erxToolTip.hide.bind(hoverActionElementAnchor));
+					}
+					
+					<webobject name="isAjaxRedrawConditional">
+						hoverSetup();
+					</webobject>
+					<webobject name="isNotAjaxRedrawConditional">
+						Event.observe(window, 'dom:loaded', hoverSetup);
+					</webobject>
+				</script>
+			</webobject>
+		</webobject>
+	</webobject>
+</webobject>

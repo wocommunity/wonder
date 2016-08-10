@@ -11,13 +11,19 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * !!Don't use, use ERDInspect instead!! Embedded component that can be used for nesting page configurations, ie ERD2WInspect can be a customComponentName.<br />
- * 
+ * !!Don't use, use ERDInspect instead!! Embedded component that can be used for nesting page configurations, ie ERD2WInspect can be a customComponentName.
  */
 
 public class ERD2WInspect extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WInspect(WOContext context) { super(context); }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 }

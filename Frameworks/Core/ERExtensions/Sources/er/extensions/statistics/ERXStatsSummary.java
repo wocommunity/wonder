@@ -1,23 +1,29 @@
 package er.extensions.statistics;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
-
-import java.util.Enumeration;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * A component to display a summary of collected stats.
  * @author Travis Cripps
  */
 public class ERXStatsSummary extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public String currentType;
     private NSDictionary _statsByType;
@@ -86,6 +92,7 @@ public class ERXStatsSummary extends ERXStatelessComponent {
         return statsTypes().count() > 0;
     }
 
+    @Override
     public void reset() {
         super.reset();
         currentType = null;

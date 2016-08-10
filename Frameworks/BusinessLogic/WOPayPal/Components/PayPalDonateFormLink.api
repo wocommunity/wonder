@@ -21,23 +21,23 @@
 		<binding name="useImageButton" defaults="Boolean"/>
 		<binding name="useDefaultIPNURL" defaults="Boolean"/>
 
-		<validation message="&apos;payPalBusinessName&apos; is a required binding">
+		<validation message="'payPalBusinessName' is a required binding">
 			<unbound name="payPalBusinessName"/>
 		</validation>
 
-		<validation message="&apos;itemName&apos; is a required binding">
+		<validation message="'itemName' is a required binding">
 			<unbound name="itemName"/>
 		</validation>
 
-		<validation message="&apos;itemNumber&apos; is a required binding">
+		<validation message="'itemNumber' is a required binding">
 			<unbound name="itemNumber"/>
 		</validation>
 
-		<validation message="&apos;useImageButton&apos; is a required binding">
+		<validation message="'useImageButton' is a required binding">
 			<unbound name="useImageButton"/>
 		</validation>
 
-		<validation message="&apos;useIPN&apos; is a required binding">
+		<validation message="'useIPN' is a required binding">
 			<unbound name="useIPN"/>
 		</validation>
 

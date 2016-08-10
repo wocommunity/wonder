@@ -1,0 +1,112 @@
+
+/* 
+ * This is a sample CSS file for FancySelect.
+ * You can easily change styles such as colors, backgrounds, borders, font 
+ * and dimensions to customize FancySelect look, but be careful about the
+ * layout properties - some of them are essential to make FancySelect works
+ * as expected. 
+ */
+
+/* The following rules set style for the <select> replacement 
+ * Select is replaced by an inline <div class="fancy-select"> */
+
+div.fancy-select {
+	display: inline-block; /* Needed to behave like a select element */
+	*display: inline; /* IE7 fix */
+	*zoom: 1; /* IE7 fix */
+	vertical-align: middle;
+	margin: 0;
+	overflow: hidden; /* For float clearing */
+	cursor: pointer;
+	padding: 1px;
+	color: #333333;
+	background-color: #eeeeee;
+	border: 1px solid #dddddd;
+	font-weight: bold;
+}
+
+/* This is the arrow on the right side. The triangle is 
+ * rendered using a base64 encoded PNG :)
+ * See the magic here: http://ptrn.it/x0Hdzg */
+
+div.fancy-select .arrow {
+	display: block;
+	float: left;
+	height: 16px;
+	width: 16px;
+	margin: 8px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAANElEQVQImXXLwQkAIAxD0b9TFnSnDKgXCyXWDz2U8AAM7OEMoM8obqlNK7WIPKnUj6pWfw5v3BfTx+n+2AAAAABJRU5ErkJggg==');
+	background-position: 5px 5px;
+	background-repeat: no-repeat;
+}
+
+/* The following rule set style for the dropdown list,
+ * which is a <ul class="fancy-select"> */
+
+ul.fancy-select {
+	margin: 0; /* Reccomended! */
+	padding: 0;
+}
+
+ul.fancy-select li {
+	margin: 0;
+	padding: 1px;
+	list-style-type: none; /* We do not need bullets */
+	border: 1px solid #dddddd;
+	background-color: #eeeeee;
+	overflow: hidden; /* For float clearing */
+	border-top: none; /* Avoid double-borders */
+	cursor: pointer;
+	*width: 150px; /* IE7 fix, we HAVE TO se fixed with :( */
+	*margin-bottom: -3px; /* IE7 fix */
+}
+
+ul.fancy-select li:hover {
+	background-color: #f6f6f6;
+}
+
+/* This is for the currently selected option */
+
+ul.fancy-select li.selected {
+	background-color: #ddeeff;
+	font-weight: bold;
+}
+
+/* This is for the disabled options */
+
+ul.fancy-select li.disabled {
+	background-color: #dddddd;
+	color: #666666;
+	cursor: default;
+}
+
+/* The following rules set style for inner content of the <select> 
+ * replacement and the dropdown list. Just an image and a text left-floated */
+
+.fancy-select .image {
+	display: block;
+	float: left;
+	width: 32px;
+	height: 32px;
+}
+
+.fancy-select .text {
+	display: block;
+	float: left;
+	height: 32px;
+	line-height: 32px;
+	padding: 0 10px;
+}
+
+/* Some rules to have bigger images for "fancy-select-big" class */
+
+ul.fancy-select-big li .image {
+	display: block;
+	float: left;
+	width: 64px;
+	height: 64px;
+}
+
+ul.fancy-select-big li {
+	*width: 64px; /* IE7 fix, we HAVE TO se fixed with :( */
+}

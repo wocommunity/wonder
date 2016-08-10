@@ -13,19 +13,16 @@ import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.woextensions.WOExceptionParser;
 import com.webobjects.woextensions.WOParsedErrorLine;
 
 /**
- * WOComponent display of an ERTestResult.<br />
+ * WOComponent display of an ERTestResult.
  * 
  * @binding errorMessage
  * @binding testResult
@@ -35,6 +32,13 @@ import com.webobjects.woextensions.WOParsedErrorLine;
  */
 
 public class ERXWOTestResult extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public Throwable exception;
     public String currentReasonLine;
 
@@ -55,9 +59,6 @@ public class ERXWOTestResult extends WOComponent {
             // error = WOExceptionParser.parseException(exception);
          }
     }
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXWOTestResult.class);
 
     public String errorMessage;
     public ERXTestResult testResult;
@@ -86,7 +87,7 @@ public class ERXWOTestResult extends WOComponent {
         return byos.toString();
     }
     public String currentErrorTestName() {
-        Object failedTest = (Object)currentError.failedTest();
+        Object failedTest = currentError.failedTest();
         if (failedTest instanceof TestCase)
             return ((TestCase)failedTest).getName();
         else if (failedTest instanceof TestSuite)
@@ -114,7 +115,7 @@ public class ERXWOTestResult extends WOComponent {
         ERXWOTestResult report = (ERXWOTestResult)WOApplication.application().pageWithName("ERXWOTestResult", new WOContext(new WORequest(null,null,null,null,null,null)));
         report.takeValueForKey(bti.testResult(), "testResult");
         report.takeValueForKey(bti.errorMessage(), "errorMessage");
-        report.takeValueForKey(new Long(bti.runTime()), "runTime");
+        report.takeValueForKey(Long.valueOf(bti.runTime()), "runTime");
         report.takeValueForKey(bti.test(), "test");
         report.takeValueForKey(bti.showExceptions() ? Boolean.TRUE : Boolean.FALSE, "showExceptions");
         return report;

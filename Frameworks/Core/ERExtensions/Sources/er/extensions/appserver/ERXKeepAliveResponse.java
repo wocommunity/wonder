@@ -6,8 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSForwardException;
  * @author ak
  */
 public class ERXKeepAliveResponse extends ERXResponse {
-	protected static final Logger log = Logger.getLogger(ERXKeepAliveResponse.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXKeepAliveResponse.class);
 
 	/**
 	 * Queue to push the items into.
@@ -39,6 +39,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 	public ERXKeepAliveResponse() {
 		//setHeader("keep-alive", "connection");
 		setContentStream(new InputStream() {
+			@Override
 			public int read() throws IOException {
 				synchronized (_queue) {
 					if (_current != null && _currentIndex >= _current.length) {
@@ -48,11 +49,11 @@ public class ERXKeepAliveResponse extends ERXResponse {
 					if (_current == null) {
 						try {
 							if (log.isDebugEnabled()) {
-								log.debug("waiting: " + _queue.hashCode());
+								log.debug("waiting: {}", _queue.hashCode());
 							}
 							_queue.wait();
 							if (log.isDebugEnabled()) {
-								log.debug("got data: " + _queue.hashCode());
+								log.debug("got data: {}", _queue.hashCode());
 							}
 						}
 						catch (InterruptedException e) {
@@ -63,14 +64,12 @@ public class ERXKeepAliveResponse extends ERXResponse {
 					if (_current == null) {
 						return -1;
 					}
-					if (log.isDebugEnabled()) {
-						log.debug("writing: " + _currentIndex);
-					}
+					log.debug("writing: {}", _currentIndex);
 					return _current[_currentIndex++];
 				}
 			}
 
-		}, 1, Integer.MAX_VALUE); // MS: turning it up to 11
+		}, 1, Long.MAX_VALUE); // MS: turning it up to 11
 	}
 
 	/**

@@ -1,13 +1,9 @@
 package er.prototaculous;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSDictionary;
-
-import er.extensions.appserver.ERXWOContext;
-
 
 /**
  * An Ajax.Updater as a link
@@ -23,11 +19,6 @@ import er.extensions.appserver.ERXWOContext;
 public class AjaxUpdaterLink extends AjaxUpdater {	
     public AjaxUpdaterLink(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override
@@ -64,7 +55,7 @@ public class AjaxUpdaterLink extends AjaxUpdater {
     
     public String href() {
     	if (hasBinding(Bindings.action)) {
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	} else if (hasBinding(Bindings.directActionName)) {
     		NSDictionary queryDictionary = hasBinding(Bindings.queryDictionary) ? queryDictionary() : null;
     		return context().directActionURLForActionNamed(directActionName(), queryDictionary);
@@ -77,7 +68,7 @@ public class AjaxUpdaterLink extends AjaxUpdater {
     
     // actions
     public WOActionResults invokeAction() {
-    	context()._setActionInvoked(true);
+    	context().setActionInvoked(true);
 		if (hasBinding(Bindings.action))  {
 			WOActionResults action = action();
 			if (action instanceof WOComponent)  ((WOComponent) action)._setIsPage(true);	// cache is pageFrag cache

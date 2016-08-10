@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMCheckboxList" wocomponentcontent="true">    <binding name="string"/>
+    <binding name="list"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+    <binding name="item"/>
+        <validation message="'item' is a required binding.">
+            <unbound name="item"/>
+        </validation>
+    
+    
+    <binding name="selections"/>
+    
+    <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+    <binding defaults="Boolean" name="isHorizontal"/>
+    <binding defaults="Boolean" name="mini"/>
+    </wo>
+</wodefinitions>

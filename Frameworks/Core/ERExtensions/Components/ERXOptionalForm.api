@@ -9,5 +9,6 @@
 		<binding name="actionClass"/>
 		<binding name="multipleSubmit"/>
     	<binding name="style"/>
+    <binding defaults="Boolean" name="showForm"/>
     </wo>
 </wodefinitions>

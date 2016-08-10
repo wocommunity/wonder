@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 
 import er.extensions.appserver.ERXDirectAction;
-
 import er.websocketexample.components.Main;
 
 public class DirectAction extends ERXDirectAction {
@@ -14,6 +13,6 @@ public class DirectAction extends ERXDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 }

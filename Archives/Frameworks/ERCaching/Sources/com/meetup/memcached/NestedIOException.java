@@ -1,0 +1,50 @@
+/**
+ * Copyright (c) 2008 Greg Whalin
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the BSD license
+ *
+ * This library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.
+ *
+ * You should have received a copy of the BSD License along with this
+ * library.
+ *
+ * @author Kevin A. Burton <burton@peerfear.org> 
+ */
+package com.meetup.memcached;
+
+import java.io.IOException;
+
+/**
+ * Bridge class to provide nested Exceptions with IOException which has
+ * constructors that don't take Throwables.
+ * 
+ * @author <a href="mailto:burton@rojo.com">Kevin Burton</a>
+ * @version 1.2
+ */
+public class NestedIOException extends IOException {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    /**
+     * Create a new <code>NestedIOException</code> instance.
+     * @param cause object of type throwable
+     */
+    public NestedIOException( Throwable cause ) {
+        super( cause.getMessage() );
+        super.initCause( cause );
+    }
+
+    public NestedIOException( String message, Throwable cause ) {
+        super( message );
+        initCause( cause );
+    }
+}

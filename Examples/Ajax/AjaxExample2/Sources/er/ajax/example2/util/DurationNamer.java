@@ -8,7 +8,7 @@ import er.ajax.example2.helper.StringHelper;
 
 public class DurationNamer {
   public static String timeFrom(NSTimestamp time, NSTimestamp baseTime) {
-    StringBuffer results = new StringBuffer();
+	StringBuilder results = new StringBuilder();
     StringHelper helper = new StringHelper();
 
     int years = DateUtils.difference(time, baseTime, Calendar.YEAR) - 1;

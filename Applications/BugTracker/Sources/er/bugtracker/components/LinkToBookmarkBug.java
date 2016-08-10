@@ -20,14 +20,17 @@ public class LinkToBookmarkBug extends ERDCustomEditComponent {
 		super(c);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		_bug = null;

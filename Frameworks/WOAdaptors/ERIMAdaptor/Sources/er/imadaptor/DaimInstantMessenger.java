@@ -175,7 +175,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			super.incomingICQ(userInfo, arg1, arg2, message);
 			if (userInfo != null) {
 				message = message.replaceAll("\\<.*?\\>", "");
-				DaimInstantMessenger.this.fireMessageReceived(userInfo.getSN(), message);
+				fireMessageReceived(userInfo.getSN(), message);
 			}
 		}
 
@@ -185,7 +185,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			String message = im.getMsg();
 			if (buddy != null) {
 				message = message.replaceAll("\\<.*?\\>", "");
-				DaimInstantMessenger.this.fireMessageReceived(buddy.getName(), message);
+				fireMessageReceived(buddy.getName(), message);
 			}
 		}
 

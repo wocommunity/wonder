@@ -12,6 +12,13 @@ import com.webobjects.appserver.WOContext;
 
 public class WOThresholdColoredNumber extends WOComponent
 {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected Number _threshold;
     protected String _highColor;
     protected String _lowColor;
@@ -20,10 +27,12 @@ public class WOThresholdColoredNumber extends WOComponent
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }
@@ -32,14 +41,14 @@ public class WOThresholdColoredNumber extends WOComponent
         Object bindingValue = valueForBinding(theBinding);
         if (bindingValue != null) {
             if (bindingValue instanceof String) {
-                return (Number) new Long((String) bindingValue);
+                return Long.valueOf((String) bindingValue);
             }
             if (bindingValue instanceof Number) {
                 return (Number) bindingValue;
             }
         }
 
-        return new Integer(0);
+        return Integer.valueOf(0);
     }
     
     public Number threshold()  {

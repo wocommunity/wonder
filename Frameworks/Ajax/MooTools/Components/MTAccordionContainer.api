@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAccordionContainer" wocomponentcontent="true">    <binding name="display"/>
+        <binding name="show"/>
+        <binding name="trigger"/>
+        <binding name="height"/>
+        <binding name="width"/>
+        <binding name="opacity"/>
+        <binding name="fixedHeight"/>
+        <binding name="fixedWidth"/>
+        <binding name="alwaysHide"/>
+        <binding name="initialDisplayFx"/>
+        <binding name="resetHeight"/>
+        <binding name="onActive"/>
+        <binding name="onBackground"/>
+    </wo>
+</wodefinitions>

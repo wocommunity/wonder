@@ -39,6 +39,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		array = new NSMutableArray(capacity);
 	}
 
+	@Override
 	public NSArray allObjects() {
 		processQueue();
 		NSMutableArray list = new NSMutableArray(array.count());
@@ -53,6 +54,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		return list.immutableClone();
 	}
 
+	@Override
 	public int count() {
 		return array.count();
 	}
@@ -67,57 +69,62 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		return -1;
 	}
 
+	@Override
 	public Object[] objects() {
 		return allObjects().objects();
 	}
 
+	@Override
 	public Enumeration objectEnumerator() {
 		return new _NSWeakMutableCollection._NSWeakMutableCollectionEnumerator(array.objectEnumerator());
 	}
 
+	@Override
 	public Enumeration referenceEnumerator() {
 		return array.objectEnumerator();
 	}
 
+	@Override
 	public void addObject(Object object) {
 		processQueue();
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an _NSWeakMutableArray");
-		} else {
-			array.addObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
-
-			return;
 		}
+		array.addObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
+	@Override
 	public void addReference(WeakReference object) {
 		processQueue();
 		array.addObject(object);
 	}
 
+	@Override
 	public void removeObject(Object object) {
 		processQueue();
 		if (object == null || array.count() == 0) {
 			return;
-		} else {
-			array.removeObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
-			return;
 		}
+		array.removeObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
+	@Override
 	public void removeReference(Object object) {
 		processQueue();
 		array.removeObject(object);
 	}
 
+	@Override
 	protected void __removeReference(Reference object) {
 		array.removeObject(object);
 	}
 
+	@Override
 	public void removeAllObjects() {
 		array.removeAllObjects();
 	}
 
+	@Override
 	public String toString() {
 		processQueue();
 		StringBuilder buffer = new StringBuilder(128);
@@ -142,7 +149,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		java.io.ObjectOutputStream.PutField fields = s.putFields();
 		Object values[] = allObjects().objects();
-		fields.put("objects", ((Object) (values)));
+		fields.put("objects", values);
 		s.writeFields();
 	}
 
@@ -150,8 +157,8 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
 
-		Object values[] = (Object[]) (Object[]) fields.get("objects", ((Object) (_NSUtilities._NoObjectArray)));
-		values = values != null ? values : (Object[]) _NSUtilities._NoObjectArray;
+		Object values[] = (Object[]) fields.get("objects", _NSUtilities._NoObjectArray);
+		values = values != null ? values : _NSUtilities._NoObjectArray;
 		int c = values.length;
 		for (int i = 0; i < c; i++)
 			addObject(values[i]);

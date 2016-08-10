@@ -1,0 +1,76 @@
+ComponentContent : WOComponentContent {
+	
+}
+
+HasHoverTextMessageConditional: WOConditional {
+	condition = ^toolTipMessage.toString;
+}
+
+HasImageResourceConditional: WOConditional {
+	condition = ^toolTipImageFilename.toString;
+}
+
+HasNSDataConditional: WOConditional {
+	condition = ^toolTipImageData.toString;
+}
+
+HoverAreaContainer: WOGenericContainer {
+	class = hoverAreaClasses;
+	elementName = "div";
+	style = hoverAreaInlineStyle;
+}
+
+HoverImgResource: WOImage {
+	filename = ^toolTipImageFilename;
+	framework = ^toolTipImageFramework;
+}
+
+NSDataImage: WOImage {
+	data = ^toolTipImageData;
+	mimeType = ^toolTipImageMimeType;
+}
+
+ToolTipContainer: WOGenericContainer {
+	id = idStr;
+	class = toolTipClasses;
+	elementName = "div";
+	style = toolTipInlineStyle;
+}
+
+ToolTipMessageText: WOString {
+	escapeHTML = false;
+	value = ^toolTipMessage;
+}
+
+showHoverableConditional: WOConditional {
+	condition = showHoverable;
+}
+
+useJavascriptHoverEffectConditional: WOConditional {
+	condition = useJavascriptForHoverEffect;
+}
+
+toolTipIDString: WOString {
+	value = idStr;
+}
+
+toolTipWidthString: WOString {
+	value = toolTipWidth;
+}
+
+useJavascriptOffsetX: WOString {
+	value = useJavascriptOffsetX;
+}
+
+useJavascriptOffsetY: WOString {
+	value = useJavascriptOffsetY;
+}
+
+isAjaxRedrawConditional : WOConditional {
+	condition = isAjaxRequest;
+}
+
+isNotAjaxRedrawConditional : WOConditional {
+	condition = isAjaxRequest;
+	negate = true;
+}

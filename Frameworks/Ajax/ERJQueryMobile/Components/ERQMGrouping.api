@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMGrouping" wocomponentcontent="true">    <binding name="string"/>
+    <binding defaults="Boolean" name="inset"/>
+    <binding defaults="Boolean" name="isHorizontal"/>
+    </wo>
+</wodefinitions>

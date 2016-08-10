@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
     <wo class="ERAttachmentFlexibleEditor" wocomponentcontent="false">    <binding name="masterObject"/>
         <binding name="relationshipKey"/>
@@ -40,5 +40,6 @@
         <binding name="uploadSelectFileButtonClass"/>
         <binding name="uploadSelectFileLabel"/>
         <binding name="uploadStartedFunction"/>
+    <binding name="viewTarget"/>
     </wo>
 </wodefinitions>

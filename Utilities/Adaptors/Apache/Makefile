@@ -2,7 +2,7 @@ include ../make.config
 include ../Adaptor/make.preamble
 
 # Common compiler and linker flags
-CFLAGS = -O2 -I../Adaptor ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT}
+CFLAGS += -O2 -I../Adaptor ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT}
 
 # MacOS X
 ifeq "MACOS" "${OS}"

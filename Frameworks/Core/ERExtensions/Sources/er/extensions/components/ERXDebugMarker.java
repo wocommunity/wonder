@@ -7,7 +7,8 @@
  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -20,13 +21,18 @@ import er.extensions.eof.ERXEnterpriseObject;
 /**
  * Given an object displays a link to show information about the editing context of that object.
  * 
- * @binding object
+ * @binding object An EOEditingContext or an EOEnterpriseObject object 
+ * @binding debugPageProvider Page to display for showing up details about a EOEnterpriseObject
  */
-
 public class ERXDebugMarker extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDebugMarker.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXDebugMarker.class);
 
     public ERXDebugMarker(WOContext aContext) {
         super(aContext);
@@ -35,9 +41,9 @@ public class ERXDebugMarker extends WOComponent {
     public static interface DebugPageProvider {
         WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s);
     }
-    
+
+    @Override
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     private DebugPageProvider _debugPageProvider;
     public DebugPageProvider debugPageProvider() {
@@ -54,6 +60,8 @@ public class ERXDebugMarker extends WOComponent {
         }
         return _object;
     }
+
+    @Override
     public void reset() {
         super.reset();
         _object=null;
@@ -64,7 +72,7 @@ public class ERXDebugMarker extends WOComponent {
     
     public WOComponent debug() {
         WOComponent result=null;
-        //if (log.isDebugEnabled()) log.debug("Object = "+object());
+        //log.debug("Object = {}", object());
         if (object() instanceof EOEditingContext) {
             result=pageWithName("ERXEditingContextInspector");
             result.takeValueForKey(object(),"object");
@@ -74,9 +82,9 @@ public class ERXDebugMarker extends WOComponent {
             if(result != null) {
                 result.takeValueForKey(object(),"object");
             } else if(object() instanceof ERXEnterpriseObject) {
-                log.info("Object: " + ((ERXEnterpriseObject)object()).toLongString());
+                log.info("Object: {}", ((ERXEnterpriseObject)object()).toLongString());
             } else {
-                log.info("Object: " + object());
+                log.info("Object: {}", object());
             }
         }
         return result;

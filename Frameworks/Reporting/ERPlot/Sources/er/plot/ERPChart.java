@@ -3,7 +3,6 @@ package er.plot;
 import java.io.ByteArrayOutputStream;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -12,6 +11,8 @@ import org.jfree.chart.imagemap.ImageMapUtilities;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.data.general.Dataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -48,9 +49,14 @@ import er.extensions.foundation.ERXAssert;
  * @author ak
  */
 public abstract class ERPChart extends ERXStatelessComponent {
-    
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERPChart.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(ERPChart.class);
     protected static final int DEFAULT_SIZE = 400;
 
     protected NSData _imageData;
@@ -150,7 +156,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
         if(_configuration == null) {
             _configuration = (NSDictionary<String,Object>)valueForBinding("configuration");
             if(_configuration == null) {
-                _configuration = (NSDictionary<String, ?>) NSDictionary.EmptyDictionary;
+                _configuration = NSDictionary.EmptyDictionary;
             }
         }
         return _configuration;
@@ -255,7 +261,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
                     _imageData = new NSData(imageStream.toByteArray());
                 }
             } catch (Exception ex) {
-                log.error(ex, ex);
+                log.error("Could not convert chart to NSData.", ex);
                 NSForwardException._runtimeExceptionForThrowable(ex);
             }
         }

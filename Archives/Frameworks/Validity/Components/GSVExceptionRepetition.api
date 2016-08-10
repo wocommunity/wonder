@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="GSVExceptionRepetition" wocomponentcontent="true">
+
+		<binding name="exception"/>
+		<binding name="showAllErrors" defaults="Boolean"/>
+		<binding name="attributeKeys"/>
+		<binding name="currentMessage"/>
+
+		<validation message="'exception' is a required binding">
+			<unbound name="exception"/>
+		</validation>
+
+		<validation message="'currentMessage' is a required binding">
+			<unbound name="currentMessage"/>
+		</validation>
+	</wo>
+</wodefinitions>

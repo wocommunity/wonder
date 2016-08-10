@@ -6,15 +6,23 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyValueCoding;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.crypting.ERXCryptoString;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -82,10 +90,19 @@ public class ERXRestUtils {
 		else if (Calendar.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
+		else if (LocalDateTime.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (LocalDate.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
 		else if (Enum.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
 		else if (NSKeyValueCoding.Null.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (ERXCryptoString.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
 		return primitive;
@@ -109,12 +126,20 @@ public class ERXRestUtils {
 				formattedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(timestamp.getTime()));
 				formattedValue = formattedValue.substring(0, formattedValue.length()-2) + ":" + formattedValue.substring(formattedValue.length()-2);  				
 			} else {
-				formattedValue = formattedValue = ERXRestUtils.timestampFormat(false, context).format(timestamp);
+				formattedValue = ERXRestUtils.timestampFormat(false, context).format(timestamp);
 			}
 		}
 		else if (value instanceof Date) {
-			Date date = (Date) value;
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
+		}
+		else if (value instanceof LocalDateTime) {
+			formattedValue = ERXRestUtils.jodaLocalDateTimeFormat(false, context).print((LocalDateTime)value);
+		}
+		else if (value instanceof LocalDate) {
+			formattedValue = ERXRestUtils.jodaLocalDateFormat(false, context).print((LocalDate)value);
+		}
+		else if (value instanceof NSData && ((NSData)value).length() == 24) {
+			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
 		}
 		else {
 			formattedValue = value.toString();
@@ -164,6 +189,46 @@ public class ERXRestUtils {
 		return dateFormatter;
 	}
 	
+	protected static DateTimeFormatter jodaLocalDateFormat(boolean spaces, ERXRestContext context) {
+		DateTimeFormatter dateFormatter = (DateTimeFormatter)context.userInfoForKey("er.rest.jodaFormatter");
+		if (dateFormatter == null) {
+			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormat");
+			if (dateFormat == null) {
+				dateFormat = ERXProperties.stringForKey("er.rest.jodaFormat");
+				if (dateFormat == null) {
+					if (spaces) {
+						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
+					}
+					else {
+						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
+					}
+				}
+			}
+			dateFormatter = DateTimeFormat.forPattern(dateFormat);
+		}
+		return dateFormatter;
+	}
+	
+	protected static DateTimeFormatter jodaLocalDateTimeFormat(boolean spaces, ERXRestContext context) {
+		DateTimeFormatter dateFormatter = (DateTimeFormatter)context.userInfoForKey("er.rest.jodaTimeFormatter");
+		if (dateFormatter == null) {
+			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormatTime");
+			if (dateFormat == null) {
+				dateFormat = ERXProperties.stringForKey("er.rest.jodaFormatTime");
+				if (dateFormat == null) {
+					if (spaces) {
+						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
+					}
+					else {
+						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
+					}
+				}
+			}
+			dateFormatter = DateTimeFormat.forPattern(dateFormat);
+		}
+		return dateFormatter;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, ERXRestContext context, boolean resolveEntities) {
 		Object parsedValue;
@@ -203,7 +268,7 @@ public class ERXRestUtils {
 			parsedValue = ERXValueUtilities.BooleanValueWithDefault(value, null);
 		}
 		else if (valueType != null && Character.class.isAssignableFrom(valueType)) {
-			parsedValue = new Character(((String) value).charAt(0)); // MS: Presumes String
+			parsedValue = Character.valueOf(((String) value).charAt(0)); // MS: Presumes String
 		}
 		else if (valueType != null && Byte.class.isAssignableFrom(valueType)) {
 			parsedValue = Byte.valueOf((String) value); // MS: Presumes String
@@ -226,6 +291,9 @@ public class ERXRestUtils {
 		else if (valueType != null && Double.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.DoubleValueWithDefault(value, null);
 		}
+		else if (valueType != null && NSData.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.dataValueWithDefault(value, null);
+		}		
 		else if (valueType != null && NSTimestamp.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;
@@ -235,13 +303,13 @@ public class ERXRestUtils {
 				boolean spaces = strValue.indexOf(' ') != -1;
 				String rfcFormat = ERXProperties.stringForKeyWithDefault("er.rest.rfcDateFormat", "rfc822");					
 				if ("rfc3339".equals(rfcFormat)) {
-					SimpleDateFormat formatter = null;
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 					java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(.*[\\-,\\+]{1}[0-9]{1,2}):([0-9]{1,2})");
 					java.util.regex.Matcher matcher = pattern.matcher(strValue);
 					if (matcher.matches()) {
 						try {
 							strValue = matcher.group(1) + matcher.group(2);
-							parsedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parseObject(strValue);
+							parsedValue = formatter.parseObject(strValue);
 							if (parsedValue instanceof java.util.Date) {
 								parsedValue = new NSTimestamp((Date)parsedValue);
 							} 
@@ -296,8 +364,55 @@ public class ERXRestUtils {
 				}
 			}
 		}
+		else if (valueType != null && LocalDateTime.class.isAssignableFrom(valueType)) {
+			if (value instanceof NSTimestamp) {
+				parsedValue = value;
+			}
+			else {
+				String strValue = (String) value;
+				DateTimeFormatter formatter = null;
+				try {
+					boolean spaces = strValue.indexOf(' ') != -1;
+					formatter = ERXRestUtils.jodaLocalDateTimeFormat(spaces, context);
+					parsedValue = new LocalDateTime(formatter.parseDateTime(strValue));
+				}
+				catch (Throwable t) {
+					String msg = "Failed to parse '" + strValue + "' as a timestamp";
+					if (formatter != null) {
+						msg += " (example: " + formatter.print(new LocalDateTime()) + ")";
+					}
+					msg += ".";
+					throw new IllegalArgumentException(msg, t);
+				}
+			}
+		}
+		else if (valueType != null && LocalDate.class.isAssignableFrom(valueType)) {
+			if (value instanceof NSTimestamp) {
+				parsedValue = value;
+			}
+			else {
+				String strValue = (String) value;
+				DateTimeFormatter formatter = null;
+				try {
+					boolean spaces = strValue.indexOf(' ') != -1;
+					formatter = ERXRestUtils.jodaLocalDateFormat(spaces, context);
+					parsedValue = new LocalDate(formatter.parseDateTime(strValue));
+				}
+				catch (Throwable t) {
+					String msg = "Failed to parse '" + strValue + "' as a timestamp";
+					if (formatter != null) {
+						msg += " (example: " + formatter.print(new LocalDate()) + ")";
+					}
+					msg += ".";
+					throw new IllegalArgumentException(msg, t);
+				}
+			}
+		}
 		else if (valueType != null && Enum.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.enumValueWithDefault(value, (Class<? extends Enum>) valueType, null);
+		}
+		else if (valueType != null && ERXCryptoString.class.isAssignableFrom(valueType)) {
+			parsedValue = new ERXCryptoString(value.toString());
 		}
 		else if (resolveEntities) {
 			EOClassDescription entity = ERXRestClassDescriptionFactory.classDescriptionForEntityName(valueTypeName);
@@ -330,7 +445,6 @@ public class ERXRestUtils {
 	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName, ERXRestContext context) {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(parentObject, attributeName);
 		Class<?> valueType = binding.valueType();
-
 		try {
 			Object parsedValue;
 			if (value == null || ERXValueUtilities.isNull(value) || (value instanceof String && ((String) value).length() == 0)) {

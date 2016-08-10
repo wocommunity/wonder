@@ -29,6 +29,7 @@ public class ERXAjaxBatchNavigationBar extends ERXBatchNavigationBar {
 	/*
 	 * Workaround for when there are more than one batch nav bar on a list page
 	 */
+    @Override
     public boolean isStateless() {
     	return false;
     }
@@ -41,4 +42,4 @@ public class ERXAjaxBatchNavigationBar extends ERXBatchNavigationBar {
         String value = (String)valueForBinding("objectName");
         return localizer().plurifiedString(value, c!=null ? c.intValue() : 0);
     }
- }
+}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="ERXRRLoopDebug" wocomponentcontent="false">    <binding name="name"/>
         <validation message="'name' is a required binding.">

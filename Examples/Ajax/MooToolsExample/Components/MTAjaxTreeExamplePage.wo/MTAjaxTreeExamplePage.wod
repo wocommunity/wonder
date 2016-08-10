@@ -1,0 +1,18 @@
+AjaxTree : MTAjaxTree {
+	id = "exampleTree";
+	class = "nav nav-list";
+	root = rootTreeNode;
+	item = treeNode;
+	delegate = delegate;
+	rootExpanded = true;
+}
+
+TreeNodeAction : MTAjaxUpdateLink {
+	action = nodeSelected;
+	string = treeNode.toString; //VALID
+	updateContainerID = "workarea";
+}
+
+Workarea : MTAjaxUpdateContainer {
+	id = "workarea";	
+}

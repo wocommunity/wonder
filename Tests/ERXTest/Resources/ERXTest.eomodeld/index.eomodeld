@@ -3,9 +3,13 @@
     adaptorName = JDBC; 
     entities = (
         {className = "er.erxtest.model.Company"; name = Company; }, 
+        {className = "er.erxtest.model.Department"; name = Department; }, 
         {className = "er.erxtest.model.Employee"; name = Employee; }, 
+        {className = EOGenericRecord; name = EmployeeHI; parent = Person; }, 
         {className = EOGenericRecord; name = EmployeeRole; }, 
+        {className = EOGenericRecord; name = EmployeeVI; parent = Person; }, 
         {className = "er.erxtest.model.Paycheck"; name = Paycheck; }, 
+        {className = EOGenericRecord; name = Person; }, 
         {className = "er.erxtest.model.Role"; name = Role; }
     ); 
 }

@@ -10,6 +10,7 @@ import er.bugtracker.State;
 
 public class BugDelegate extends BranchDelegate {
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         log.debug("in: " + result);
@@ -38,31 +39,31 @@ public class BugDelegate extends BranchDelegate {
 
     public WOComponent resolve(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        return (WOComponent)Factory.bugTracker().resolveBug(bug);
+        return Factory.bugTracker().resolveBug(bug);
     }
 
     public WOComponent comment(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        return (WOComponent)Factory.bugTracker().commentBug(bug);
+        return Factory.bugTracker().commentBug(bug);
     }
 
     public WOComponent reopen(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        return (WOComponent)Factory.bugTracker().reopenBug(bug);
+        return Factory.bugTracker().reopenBug(bug);
     }
 
 
     public WOComponent reject(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        return (WOComponent)Factory.bugTracker().rejectBug(bug);
+        return Factory.bugTracker().rejectBug(bug);
     }
 
     public WOComponent create(WOComponent sender) {
-        return (WOComponent)Factory.bugTracker().createBug();
+        return Factory.bugTracker().createBug();
     }
 
     public WOComponent createTestItem(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        return (WOComponent)Factory.bugTracker().createTestItemFromBug(bug);
+        return Factory.bugTracker().createTestItemFromBug(bug);
     }
 }

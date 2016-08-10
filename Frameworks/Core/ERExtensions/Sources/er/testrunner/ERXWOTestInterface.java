@@ -8,10 +8,11 @@ package er.testrunner;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -25,14 +26,18 @@ import com.webobjects.foundation.NSMutableSet;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * component for interactively running tests.<br />
- * 
+ * component for interactively running tests.
  */
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXWOTestInterface.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXWOTestInterface.class);
 
     // bind to a WOTextField
     public String theTest;
@@ -82,7 +87,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                         			theClassNames.addObject(munge(className));
                         	} catch(Exception ex) {
                         		// ignored
-                        		log.warn("Skipping test " + className + ": " + ex);
+                        		log.warn("Skipping test {}.", className, ex);
                         	}
                         }
                     }
@@ -92,7 +97,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
             try {
                 allTests = allTests.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
             } catch (Exception ex) {
-                log.warn(ex);
+                log.warn("Could not sort tests.", ex);
                 // so we won't get sorted, oh well :)
             }
         }
@@ -163,19 +168,19 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     // TestListener implementation
     //////////////////////////////////////
     public synchronized void addError(Test test, Throwable t) {
-        log.error ("[E] " + test.toString() + " : " + t.getMessage(), t);
+        log.error ("[E] {} : {}", test, t.getMessage(), t);
     }
 
     public synchronized void addFailure(Test test, AssertionFailedError t) {
-        log.error ("[F] " + test.toString() + " : " + t.getMessage());
+        log.error ("[F] {} : {}", test, t.getMessage());
     }
 
     public synchronized void startTest(Test test) {
-        log.info ("[START] " + test.toString());
+        log.info ("[START] {}" + test);
     }
 
     public void endTest(Test test) {
-        log.info ("[END] " + test.toString());
+        log.info ("[END] {}" + test);
     }
 
     //////////////////////////////////////
@@ -191,12 +196,13 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
         errorMessage = "";
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
-    	if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+    	if (session().objectForKey("ERXWOTestInterface.enabled") != null) {
     		super.appendToResponse(r, c);
     	}
     	else {
-    		r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+    		r.appendContentString("please use the ERXDirectAction testAction to login first!");
     	}
     }
 }

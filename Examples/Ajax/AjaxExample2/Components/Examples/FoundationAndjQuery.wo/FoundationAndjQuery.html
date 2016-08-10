@@ -1,0 +1,32 @@
+<wo:AjaxHeaderFooter title = "Integration of Foundation and jQuery libs">
+<wo:ERXStyleSheet filename = "css/foundation.css" />
+<wo:ERXJavaScript filename = "js/vendor/jquery.js" />
+<script>
+// Give $ back to prototype.js
+	jQuery.noConflict();
+	if(window.history){window.history.forward(1);}
+</script>
+
+<h2>Foundation and jQuery integration</h2>
+<ul>
+<li>This demonstrates the integration of Foundation, a responsive frameworks with some javascript widgets with jQuery dependency. <a href="http://foundation.zurb.com">http://foundation.zurb.com</a></li>
+<li>Mouse over a name to get a tooltip from Foundation.</li>
+<li>The checkbox in the table header will select or deselect all rows.</li>
+<li>The uses Foundation dropdows to create a menu of actions available on the selection.</li>
+<li>Tab change trigger the Foundation script to parse the updated content and activate the widget used. This is done using the <i>onSelect</i> binding of AjaxTabbedPanel to trigger javascript code.</li>
+<li>The back button is disabled with <code>if(window.history){window.history.forward(1);}</code></li>
+</ul>
+<wo:AjaxTabbedPanel id = "FoundationDemoTabPanel" onSelect = "jQuery(document).foundation();">
+	<wo:AjaxTabbedPanelTab name = "Ontario" isSelected = "$tabOntarioSelected" refreshOnSelect = "$true"><wo:FoundationAndjQueryTab persons = "$personsFromOntario"/></wo:AjaxTabbedPanelTab>
+	<wo:AjaxTabbedPanelTab name = "Quebec" isSelected = "$tabQuebecSelected" refreshOnSelect = "$true"><wo:FoundationAndjQueryTab persons = "$personsFromQuebec"/></wo:AjaxTabbedPanelTab>
+</wo:AjaxTabbedPanel>
+
+<wo:ERXJavaScript filename = "js/vendor/custom.modernizr.js" /> 
+<wo:ERXJavaScript filename = "js/foundation/foundation.js" />
+<wo:ERXJavaScript filename = "js/foundation/foundation.tooltip.js" /> 
+<wo:ERXJavaScript filename = "js/foundation/foundation.dropdown.js" /> 
+<script>
+	jQuery(document).foundation();
+</script>
+
+</wo:AjaxHeaderFooter>

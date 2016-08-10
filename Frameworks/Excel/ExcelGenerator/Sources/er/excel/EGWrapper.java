@@ -1,13 +1,21 @@
 package er.excel;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
-import org.apache.log4j.*;
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXParseException;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.*;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -17,16 +25,21 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  * @binding sample sample binding explanation
  *
  * @author ak on Thu Mar 04 2004
- * @project ExcelGenerator
  */
-
 public class EGWrapper extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(EGWrapper.class);
+	/** logging support */
+	private static final Logger log = LoggerFactory.getLogger(EGWrapper.class);
+    
 	private String _fileName;
 	private NSDictionary _styles;
-    private NSDictionary _fonts;
+	private NSDictionary _fonts;
     
     /**
      * Public constructor
@@ -71,49 +84,97 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     	_fonts = value;
     }
     
-
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
+            ERXResponse newResponse = new ERXResponse();
 
             super.appendToResponse(newResponse, context);
 
             String contentString = newResponse.contentString();
             contentString = contentString.replaceAll("&nbsp;", "");
-            if (log.isDebugEnabled()) {
-                log.debug("Converting content string:\n" + contentString);
-            }
+            log.debug("Converting content string:\n{}", contentString);
             byte[] bytes;
             try {
-                bytes = contentString.getBytes("UTF-8");
+                bytes = contentString.getBytes(CharEncoding.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
             }
             InputStream stream = new ByteArrayInputStream(bytes);
 
-            EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
-            NSData data = parser.data();
-            if((hasBinding("data") && canSetValueForBinding("data")) ||
-               (hasBinding("stream") && canSetValueForBinding("stream"))
-               ) {
-                if(hasBinding("data")) {
-                    setValueForBinding(data, "data");
-                }
-                if(hasBinding("stream")) {
-                    setValueForBinding(data.stream(), "stream");
-                }
-                response.appendContentString(contentString);
-            } else {
-                response.appendContentData(data);
-                String fileName = fileName();
-                if(fileName == null) {
-                    fileName = "results.xls";
-                }
-                response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
-                response.setHeader("application/vnd.ms-excel", "content-type");
-            }
+            EGSimpleTableParser parser = parser(stream);
+            try {
+	            NSData data = parser.data();
+	            if((hasBinding("data") && canSetValueForBinding("data")) ||
+	               (hasBinding("stream") && canSetValueForBinding("stream"))
+	               ) {
+	                if(hasBinding("data")) {
+	                    setValueForBinding(data, "data");
+	                }
+	                if(hasBinding("stream")) {
+	                    setValueForBinding(data.stream(), "stream");
+	                }
+	                response.appendContentString(contentString);
+	            } else {
+	                String fileName = fileName();
+	                if(fileName == null) {
+	                    fileName = defaultFilename();
+	                }
+	                
+	                response.disableClientCaching();
+	                response.appendHeader(String.valueOf( data.length()), "Content-Length" );
+	                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
+	
+	                response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
+	                response.setHeader(contentType(), "content-type");
+	            }
+    		} catch (Exception ex) {
+    			if (ex.getCause() instanceof SAXParseException) {
+    				SAXParseException parseException = (SAXParseException)ex.getCause();
+    				String logMessage = "'"+context().page().getClass().getName()+"' caused a SAXParseException";
+    				logMessage += "\nMessage: '"+parseException.getMessage()+"'";
+    				// weird but true, getLineNumber is off by 1 (for display purposes I think - mhast)
+    				logMessage += "\nLine   : "+(parseException.getLineNumber() - 1);
+    				logMessage += "\nColumn : "+parseException.getColumnNumber();
+    				logMessage += "\n--- content begin ---";
+    				logMessage += addLineNumbers(contentString);
+    				logMessage += "--- content end ---";
+    				log.error(logMessage);
+    				throw new NSForwardException(ex);
+    			}
+    			// else don't handle exception just pass it forward
+    			else {
+    				throw new NSForwardException(ex);
+    			}
+    		}
         } else {
             super.appendToResponse(response, context);
         }
     }
+    
+	protected String addLineNumbers(String in) {
+		String out = "";
+		int i = 1, beginIndex = 0;
+		int endIndex = in.indexOf('\n');
+		while (endIndex != -1) {
+			out += in.substring(beginIndex, endIndex+1);
+			beginIndex = endIndex+1;
+			endIndex = in.indexOf('\n', beginIndex);
+			// only want to add line numbers if we have a next newline
+			if (endIndex != -1) out +=  (i++) + " ";
+		}
+		return out;
+	}
+	
+	protected String defaultFilename() {
+		return "results.xls";
+	}
+	
+	protected String contentType() {
+		return "application/vnd.ms-excel";
+	}
+	
+	protected EGSimpleTableParser parser(InputStream stream) {
+		return new EGSimpleTableParser(stream, fonts(), styles());
+	}
 }

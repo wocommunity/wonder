@@ -1,10 +1,10 @@
 {
-	"IllegalCharacterInNumberException" = "Bitte \U00fcberpr\U00fcfen Sie den Wert <b>@@value@@</b> in <b>@@displayNameForProperty@@</b>.";
-	"InvalidDateFormatException" = "Der Wert <b>@@value@@</b> in <b>@@displayNameForProperty@@</b> ist kein g\U00fcltiges Datum.";
+	"IllegalCharacterInNumberException" = "Bitte \U00fcberpr\U00fcfen Sie den Wert <b>@@escapedValue@@</b> in <b>@@displayNameForProperty@@</b>.";
+	"InvalidDateFormatException" = "Der Wert <b>@@escapedValue@@</b> in <b>@@displayNameForProperty@@</b> ist kein g\U00fcltiges Datum.";
 	"InvalidNumberException" = "Dieser Wert ist keine Zahl.";
 	"MandatoryToManyRelationshipException" = "@@displayNameForProperty@@ m\U00fcssen gesetzt sein.";
 	"MandatoryToOneRelationshipException" = "@@displayNameForProperty@@ muss gesetzt sein.";
-	"NotANumberException" = "Der Wert <b>@@value@@</b> ist keine Zahl.";
+	"NotANumberException" = "Der Wert <b>@@escapedValue@@</b> ist keine Zahl.";
 	"NullPropertyException" = "Bitte f\U00fcllen Sie das Feld <b>@@displayNameForProperty@@</b> aus.";
 	"ObjectCannotBeDeletedException" = "Diese <b>@@displayNameForEntity@@</b> kann nicht gel\U00f6scht werden, weil Sie keine Rechte haben, diese <b>@@displayNameForEntity@@</b> direkt oder eines der verkn\U00fcpften Objekte dieser <b>@@displayNameForEntity@@</b> zu l\U00f6schen.";
 	"ObjectRemovalException" = "<b>@@displayNameForEntity@@</b> kann nicht gel\U00f6scht werden l\U00f6schen, solange noch <b>@@displayNameForProperty@@</b> gesetzt sind.";

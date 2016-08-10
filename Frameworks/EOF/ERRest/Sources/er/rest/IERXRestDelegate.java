@@ -137,7 +137,7 @@ public interface IERXRestDelegate {
 
 		public static IERXRestDelegate delegateForClassDescription(EOClassDescription classDescription) {
 			String entityName = classDescription.entityName();
-			IERXRestDelegate delegate = (IERXRestDelegate) _delegates.objectForKey(entityName);
+			IERXRestDelegate delegate = _delegates.objectForKey(entityName);
 			if (delegate == null) {
 				Class<?> possibleDelegateClass = _NSUtilities.classWithName(entityName + "RestDelegate");
 				if (possibleDelegateClass != null) {

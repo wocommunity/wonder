@@ -1,6 +1,7 @@
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -20,8 +21,10 @@ import com.webobjects.foundation._NSStringUtilities;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXExpiringCache;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Modern version of a javascript component. 
@@ -43,6 +46,9 @@ import er.extensions.foundation.ERXExpiringCache;
  * @binding scriptKey if set, the content will get rendered into an external script src
  * @binding hideInComment boolean that specifies if the script content should
  *   be included in HTML comments, true by default of the script tag contains a script
+ *   
+ * @property er.extensions.ERXJavaScript.hideInComment sets globally if the script
+ *   content should be included within HTML comments, defaults to <code>true</code>
  */
 public class ERXJavaScript extends WOHTMLDynamicElement {
 
@@ -69,8 +75,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
     	}
     }
     
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXJavaScript.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJavaScript.class);
 
 	WOAssociation _framework;
 	WOAssociation _scriptFramework;
@@ -82,17 +87,17 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	WOAssociation _hideInComment;
 	WOAssociation _language;
 
-	public ERXJavaScript(String s, NSDictionary nsdictionary, WOElement woelement) {
+	public ERXJavaScript(String s, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
 		super("script", nsdictionary, woelement);
-		_scriptFile = (WOAssociation)_associations.removeObjectForKey("scriptFile");
-		_scriptString = (WOAssociation)_associations.removeObjectForKey("scriptString");
-		_scriptSource = (WOAssociation)_associations.removeObjectForKey("scriptSource");
-		_filename = (WOAssociation)_associations.removeObjectForKey("filename");
-		_language = (WOAssociation)_associations.removeObjectForKey("language");
-		_scriptKey = (WOAssociation)_associations.removeObjectForKey("scriptKey");
-		_hideInComment = (WOAssociation)_associations.removeObjectForKey("hideInComment");
-		_scriptFramework = (WOAssociation) _associations.removeObjectForKey("scriptFramework");
-		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
+		_scriptFile = _associations.removeObjectForKey("scriptFile");
+		_scriptString = _associations.removeObjectForKey("scriptString");
+		_scriptSource = _associations.removeObjectForKey("scriptSource");
+		_filename = _associations.removeObjectForKey("filename");
+		_language = _associations.removeObjectForKey("language");
+		_scriptKey = _associations.removeObjectForKey("scriptKey");
+		_hideInComment = _associations.removeObjectForKey("hideInComment");
+		_scriptFramework = _associations.removeObjectForKey("scriptFramework");
+		_framework = _associations.removeObjectForKey("framework");
 		if((_scriptFile != null && _scriptString != null) 
 				|| (_scriptFile != null && (_scriptSource != null || _filename != null)) 
 				|| (_scriptString != null && (_scriptSource != null || _filename != null))) {
@@ -143,7 +148,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 							src = ERXResourceManager._completeURLForResource(src, null, wocontext);
 						}
 					} else {
-						log.warn("relative fragment URL" + srcFromBindings);
+						log.warn("relative fragment URL {}", srcFromBindings);
 					}
 				}
 			}
@@ -157,7 +162,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 				boolean render = cache.isStale(key);
 				render |= ERXApplication.isDevelopmentModeSafe();
 				if(render) {
-					WOResponse newresponse = new WOResponse();
+					WOResponse newresponse = new ERXResponse();
 					super.appendChildrenToResponse(newresponse, wocontext);
 					newresponse.setHeader("application/x-javascript", "content-type");
 					cache.setObjectForKey(newresponse, key);
@@ -183,7 +188,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	@Override
 	public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
 			String script = "";
-			boolean hideInComment = true;
+			boolean hideInComment = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXJavaScript.hideInComment", true);
 			WOComponent wocomponent = wocontext.component();
 			if(_hideInComment != null) {
 				hideInComment = _hideInComment.booleanValueInComponent(wocomponent);
@@ -239,7 +244,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		if(s != null) {
 			_appendOpenTagToResponse(woresponse, wocontext);
 		}
-		if(_scriptSource == null && _filename == null && hasChildrenElements() 
+		if(_scriptSource == null && _filename == null && ( hasChildrenElements() || _scriptString != null)
 				&& _scriptKey == null) {
 			appendChildrenToResponse(woresponse, wocontext);
 		}
@@ -250,8 +255,8 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
     
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<");
+		StringBuilder sb = new StringBuilder();
+		sb.append('<');
 		sb.append(getClass().getName());
 		sb.append(" scriptFile=" + _scriptFile);
 		sb.append(" scriptString=" + _scriptString);
@@ -261,7 +266,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		sb.append(" filename=" + _filename);
 		sb.append(" hideInComment=" + _hideInComment);
 		sb.append(" language=" + _language);
-		sb.append(">");
+		sb.append('>');
 		return sb.toString();
 	}
 }

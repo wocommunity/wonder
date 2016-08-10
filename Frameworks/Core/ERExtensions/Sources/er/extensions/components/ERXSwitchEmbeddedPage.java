@@ -21,12 +21,14 @@ import com.webobjects.foundation.NSMutableDictionary;
  * is very similar to ERXEmbeddedPage except in it comes in the form of a switch
  * component.
  * 
+ * @binding initialComponentName the name of the component to display
+ * 
  * @author mschrag
  */
 public class ERXSwitchEmbeddedPage extends WODynamicElement {
 	private WOAssociation _initialComponentName;
-	private NSMutableDictionary _componentAttributes;
-	private NSMutableDictionary _componentCache;
+	private NSMutableDictionary<String, WOAssociation> _componentAttributes;
+	private NSMutableDictionary<String, WOElement> _componentCache;
 	private WOElement _template;
 
 	public ERXSwitchEmbeddedPage(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
@@ -38,7 +40,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 		_componentAttributes = associations.mutableClone();
 		_componentAttributes.removeObjectForKey("initialComponentName");
 
-		_componentCache = new NSMutableDictionary();
+		_componentCache = new NSMutableDictionary<String, WOElement>();
 
 		_template = template;
 	}
@@ -51,7 +53,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 			s = obj.toString();
 		}
 		if (s == null || s.length() == 0) {
-			throw new IllegalStateException("<" + getClass().getName() + "> : componentName not specified or componentName association evaluated to null.");
+			throw new IllegalStateException("<" + getClass().getName() + "> : componentName not specified or initialComponentName association evaluated to null.");
 		}
 		return s;
 	}
@@ -59,7 +61,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 	public WOElement _realComponentWithName(String s, WOContext wocontext) {
 		WOElement woelement;
 		synchronized (this) {
-			woelement = (WOElement) _componentCache.objectForKey(s);
+			woelement = _componentCache.objectForKey(s);
 			if (woelement == null) {
 				woelement = WOApplication.application().dynamicElementWithName(s, _componentAttributes, _template, wocontext._languages());
 				if (woelement == null) {
@@ -80,6 +82,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 		}
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		String s = _elementNameInContext(wocontext);
 		wocontext.appendElementIDComponent(s.replace('.', '_'));
@@ -88,6 +91,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 		wocontext.deleteLastElementIDComponent();
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 		String s = _elementNameInContext(wocontext);
 		wocontext.appendElementIDComponent(s.replace('.', '_'));
@@ -110,6 +114,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 		return woactionresults;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		String s = _elementNameInContext(wocontext);
 		wocontext.appendElementIDComponent(s.replace('.', '_'));

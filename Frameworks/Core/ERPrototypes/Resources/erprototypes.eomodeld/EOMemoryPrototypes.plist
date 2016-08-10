@@ -52,12 +52,14 @@
             externalType = TIMESTAMP; 
             name = date; 
             valueClassName = NSCalendarDate; 
+            valueType = D; 
         }, 
         {
             columnName = ""; 
             externalType = TIMESTAMP; 
             name = dateTime; 
             valueClassName = NSCalendarDate; 
+            valueType = T; 
         }, 
         {
             columnName = ""; 

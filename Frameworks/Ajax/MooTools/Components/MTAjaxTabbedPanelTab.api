@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxTabbedPanelTab" wocomponentcontent="false">    <binding name="accessKey"/>
+        <binding name="id"/>
+        <binding name="isSelected"/>
+        <binding name="isVisible"/>
+        <binding name="name"/>
+        <binding name="onLoad"/>
+        <binding name="refreshOnSelect"/>
+    </wo>
+</wodefinitions>

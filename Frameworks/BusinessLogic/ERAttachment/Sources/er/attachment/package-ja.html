@@ -1,0 +1,471 @@
+<html>
+<head>
+	<title>ERAttachment</title>
+	<style>
+	p {
+		color: rgb(80, 80, 80);
+	}
+	
+	h1,h2,h3,h4 {
+		font-family: Helvetica;
+		margin-top: 20px;
+	}
+	
+	dl dt {
+		font-family: Helvetica;
+		font-weight: bold;
+	}
+	
+	dl dd {
+		margin-bottom: 10px;
+	}
+	
+	code {
+		display: block;
+		margin-left: 20px;
+		margin-right: 20px;
+		white-space: pre;
+	}
+	</style>
+</head>
+<body>
+
+<h1>ERAttachment</h1>
+
+<h2>概要</h2>
+<p>
+WebObjects アプリケーション経由でファイル、ドキュメント又はイメージを使用することは一般敵な要求です。
+ERAttachment フレームワークはアタッチメントを簡単に使用できる為に Rails の attachment_fu を参照して作成せれていました。
+このフレームワークはコンポーネントとモデルを提供し、アタッチメントをローカル・ファイルシステムで Webserver より配信され、
+ローカル・ファイルシステム上でカスタム・リクエスト・ハンドラーより配信され、データベース内でカスタム・リクエスト・ハンドラーより配信され、
+又は RackSpace's CloudFiles や Amazon's S3 サービス直接で配信できます。
+少しプロパティを変更することのみで設定は簡単にできるように作成されています。
+</p>
+
+<h2>インストール＆セットアップ</h2>
+<p>
+Project Wonder 及び WOdka をご使用する場合には起動時テーブルが自動的に作成されます。
+</p>
+<p>
+ERAttachment モデルの接続ディクショナリを定義する必要があります。全モデル共通のグローバル接続プロパティのセット、または ERAttachment モデル
+のみの接続ディクショナリのセットで行います。
+</p>
+<h3>グローバル・データベース・プロパティ</h3>
+<dl>
+	<dt>dbConnectURLGLOBAL</dt>
+	<dd>(optional) データベース・サーバの jdbc URL</dd>
+
+	<dt>dbConnectUserGLOBAL</dt>
+	<dd>(optional) データベース・サーバのユーザ</dd>
+	
+	<dt>dbConnectPasswordGLOBAL</dt>
+	<dd>(optional) データベース・サーバのユーザのパスワード</dd>
+</dl>
+<h3>ERAttachment モデル・プロパティ</h3>
+<dl>
+	<dt>ERAttachment.URL</dt>
+	<dd>(optional) データベース・サーバの jdbc URL</dd>
+
+	<dt>ERAttachment.DBUser</dt>
+	<dd>(optional) データベース・サーバのユーザ</dd>
+	
+	<dt>ERAttachment.DBPassword</dt>
+	<dd>(optional) データベース・サーバのユーザのパスワード</dd>
+</dl>
+
+<h2>定義</h2>
+<p>
+アタッチメント・インポートを行う処理ロジックには違う設定方法があります。
+簡単なアプリケーションが複数アタッチメント・カラムをもっているかも知れません。例えば、Person には写真があり、Bug はスクリーンショットがあります。
+このような場合、各種類のアタッチメントには異なる定義があります。すべての定義の設定が常にオーバライドすることが可能です。
+例えば、値 "er.attachment.s3.bucket" をデフォルト・バッケットとしてセットしても、"Person.avatar" の定義をセットできます。
+（実際の文字列は意味がありませんが、EntityName.relationshipName にすることで後で思い出しやすくなります。）
+さらにプロパティ "er.attachment.s3.Person.avatar.bucket" のバッケットで "Person.avatar" の定義 をオーバライドすることが可能です。
+ERAttachment の全コンポーネントには定義名を引き渡すことが可能です。
+</p>
+
+<h2>グローバル・プロパティー</h2>
+<p>
+全アタッチメントに共通プロパティがあります。
+</p>
+
+<dl>
+	<dt>er.attachment.maxSize / er.attachment.[configurationName].maxSize</dt>
+	<dd>(オプション) アップロード・アタッチメントの最大バイト・サイズ。現在ではアップロードが<em>完了</em>してからのみ、実行チェックされます。
+	AjaxFileUpload を使用していれば、Ajax アップロードの最大サイズも指定できます。（アップロード中でもチェックを行います）
+	現在では各定義のオーバライドはできません。このアップロード・チェックは次回アップデートで改良される予定です。
+	デフォルトは無制限</dd>
+
+	<dt>er.attachment.tempFolder / er.attachment.[configurationName].tempFolder</dt>
+	<dd>(オプション) 
+	WOFileUpload (Ajaxでない) の一時的なアップロード・フォルダを指定します。Ajax の場合,
+	AjaxFileUploadRequestHandler と AjaxFileUpload コンポーネントの設定に従ってください。
+	デフォルトでは Java の定義の一時的フォルダが使用されます。 (/tmp Mac OS X と UNIX).</dd>
+	
+	<dt>er.attachment.storageType / er.attachment.[configurationName].storageType</dt>
+	<dd>(オプション) ERAttachmentUpload アップロード・コンポーネントを使用する場合、アタッチメントのデフォルト保存タイプがセットされます。
+	例えば、 "cf", "s3", "db", や "file".  デフォルトは "db".</dd>
+	
+	<dt>er.attachment.width / er.attachment.[configurationName].width と er.attachment.height / er.attachment.[configurationName].height</dt>
+	<dd>(オプション) ERAttachmentUpload コンポーネントを使用する場合、アタッチメントの幅と高さをセットします。オリジナル・アタッチメントをリサイズされます。
+	将来的なバージョンではオリジナルと別にサムナイル生成をサポートする予定です。</dd>
+	
+	<dt>er.attachment.proxyAsAttachment / er.attachment.[configurationName].proxyAsAttachment</dt>
+	<dd>(オプション) プロキシー・リクエスト・ハンドラーを使用するとリクエスト・ハンドラーがアタッチメントと Content-Disposition ヘッダーを戻すかどうかをセットします。
+	普通ならインライン表示を行わず、ダウンロードされます。デフォルトは false</dd>
+</dl>
+
+<h2>Image Processing Properties</h2>
+<p>
+While ERAttachment will try and automatically figure out a library for image processing operations such as thumbnailing and resizing, you can configure it yourself using
+appropriate properties. Here are some properties that apply to image processing libraries configuration.
+</p>
+
+<dl>
+	<dt>er.attachment.thumbnail.imageProcessor</dt>
+	<dd>Values for this property can be one of sips, imageio, imagemagick or java</dd>
+
+	<dt>er.attachment.ImageProcessor.imageMagickBinFolder</dt>
+	<dd>Indicates the directory path of the ImageMagick binaries.</dd>
+</dl>
+
+<h2>パス・テンプレート</h2>
+<p>
+多数のアタッチメント・タイプはファイルシステムとWebサーバ・パスを保存のために定義します。テンプレート変数を使うことで簡単にパスの定義を設定し直すことができます。
+</p>
+
+<dl>
+	<dt>${ext}</dt>
+	<dd>オリジナル・ファイルの mime タイプのルックアップし（オリジナル拡張子に従って）、mime タイプのプライマリー・ファイル拡張子と接頭辞の "." を戻します。
+	例えば、ユーザが image/jpg の拡張子 .JPEG のアタッチメントをアップロードし、この変数の結果は ".jpg" になります。
+	mime タイプが見つからない、又はプライマリー・ファイル拡張子が無い場合、オリジナル拡張子が使用されます。オリジナル拡張子がなければ、空の文字列が戻ります。（ドットもありません）</dd>
+
+	<dt>${hash}</dt>
+	<dd>オリジナル・ファイル名より SHA-1 ハッシュを使って、３つのフォルダ・パスを生成して戻します("a/c/9")。沢山のアタッチメントがあれば、とても有効です。なぜなら、
+	一つのフォルダのファイル数が少なくなるからです。</dd>
+	
+	<dt>${uuid}</dt>
+	<dd>Produces a unique UUID using java.util.UUID. This is useful if you just want your path to contain a unique value that
+	is not related to the attachment itself.</dd>
+	
+	<dt>${pk}</dt>
+	<dd>ERAttachment オブジェクトの基本キー (PK)</dd>
+	
+	<dt>${fileName}</dt>
+	<dd>アップロードされているオリジナル・ファイル名（ファイル拡張子を含む）</dd>
+</dl>
+
+<h2>データベース・アタッチメント</h2>
+<p>
+データベース・アタッチメントでの設定が一番簡単です。データベース・アタッチメントはデータベースの ERAttachmentData テーブル内に保存されます。
+現在では C9ResourceStreamer （データベースのカラムからストリームアウト可能）には対応していません。一般の EOF の NSData blob カラムを
+使用しています。EOF の blob カラムのメモリ使用方法によるとこのアタッチメント・タイプは小さな・データ・サイズにのみ最適です。
+全データベース・アタッチメントは ERAttachmentRequestHandler 経由でサーブされます。プロキシー化されているから、アタッチメントのセッキュリティー・チェック
+が可能です。（詳しくはセッキュリティーを参照）</p>
+
+<dl>
+	<dt>er.attachment.db.webPath / er.attachment.[configurationName].db.webPath</dt>
+	<dd>(オプション) URL の "/attachments" のレクエスト・ハンドラー後のパスに追加されます。
+	デフォルト "/${pk}${ext}".
+	webPaths は全アタッチメント内でユニークである必要があります。 ( ${pk} を含む)</dd>
+	
+	<dt>er.attachment.db.smallData / er.attachment.[configurationName].db.smallData</dt>
+	<dd>(オプション) EOF と大きな BLOB のメモリ使用で、to-one リレーションシップを EO データ保存する一般デザインです。
+	EO データを取得するにはさらに一つのクエリーが必要ですが、メモリ性能がよくなります。
+	データの小さなサイズを保存されている場合 -- 例えば、avatar アイコン (2k位)などではさらなクエリを必要ない設計も考えられます。
+	この場合には smallData = true にすることで、データはオリジナル EO アタッチメントに保存され、別 EO を使用しません。
+	デフォルトは false 。
+</dl>
+
+<h2>ファイル・アタッチメント</h2>
+<p>
+ファイル・アタッチメントはデータベース・アタッチメントと違って、もっと柔軟性があります。ファイル・アタッチメントをプロキシ化することはできません。
+プロキシ化されているアタッチメントは ERAttachmentRequestHandler 経由でハンドルされ、WO アプリケーションでストリームされます。
+非プロキシ化のファイルはスタティック・ファイルで直接 Apache 経由で送信されます。ファイル・アタッチメントを使用できるためには、WebObjects アプリケーション
+はフォルダとサブフォルダのアクセス権限が必要となります。それから非プロキシ化されているアタッチメントの場合、フォルダは WebServer より見えるところにあるはずです。
+ (ドキュメント・ルートのサブフォルダである必要がある）
+プロキシー化されているから、アタッチメントのセッキュリティー・チェックが可能です。（詳しくはセッキュリティーを参照）
+ </p>
+
+<dl>
+	<dt>er.attachment.file.proxy / er.attachment.[configurationName].file.proxy</dt>
+	<dd>(オプション) プロキシが true の場合、アタッチメント・コンテントはリクエスト・ハンドラー経由で送信されます。
+	デフォルトは true 。</dd>
+	
+	<dt>er.attachment.file.overwrite / er.attachment.[configurationName].file.overwrite</dt>
+	<dd>(オプション) ${fileName} のみのファイルシステム・パスを指定すると重複ファイルの保存を引き起こすことがあります。
+	オーバライドを true にした場合、ファイルはオーバライドされます。false の場合にはテンプレートに従ってユニークの名前
+	"filename-1.gif", "filename-2.gif" で保存されます。
+	デフォルトは false 。</dd>
+	
+	<dt>er.attachment.file.filesystemPath / er.attachment.[configurationName].file.filesystemPath</dt>
+	<dd>(必須) アタッチメントのアップロードするファイルシステムの完全パスです。ファイル名を含む。
+	パス・テンプレートと同じように処理されます。（上記参照）
+	例："/Library/WebServer/Documents/photos/${hash}/${pk}${ext}".</dd>
+	
+	<dt>er.attachment.file.webPath / er.attachment.[configurationName].file.webPath</dt>
+	<dd>(プロキシが false の場合には必須) webserver ドキュメント・ルートの相対的なパス。（又はプロキシが true の場合のレクエスト・ハンドラー）
+	指定アタッチメントのアクセスが可能になります。
+	webPaths は全アタッチメントでユニークである必要があります。
+	プロキシが false の場合のデフォルト webPath は 
+	If proxy is false, the "/${pk}{$ext}"。
+	ファイルシステム・パスの上記のサンプルの場合には webPath が "/photos/${hash}/${pk}${ext}" になります。</dd>
+</dl>
+
+<h2>S3 アタッチメント</h2>
+<p>
+Amazon's S3 サービスはたくさんのデータを保存する値段も手頃なサービスである。パブリック・サイトのアタッチメント・システムを作る場合には最適です。
+<a href = "http://aws.amazon.com/s3">Amazon's S3 ページ</a> でアカウントを作成できます。
+S3 アップロードが少し時間がかかるので、バックグラウンド・キューで処理されます。アップロードが完了するまでには、アタッチメントが使用不可能な
+ステータスが考えられます。 (attachment.available = false)
+アタッチメント・コンポーネントは特別なビューで表示し、リンクをオフにします。
+メモ：まだアップロードが完了されているファイルを削除すると残ることが考えられます。
+</p>
+
+<dl>
+	<dt>er.attachment.s3.accessKeyID / er.attachment.[configurationName].s3.accessKeyID</dt>
+	<dd>(必須) Amazon S3 アクセス・キー ID。暗号化する場合には ERXProperties.decryptedStringForKey でロードします。</dd>
+	
+	<dt>er.attachment.s3.secretAccessKey / er.attachment.[configurationName].s3.secretAccessKey</dt>
+	<dd>(必須) Amazon S3 秘密アクセス・キー。暗号化する場合には ERXProperties.decryptedStringForKey でロードします。</dd>
+	
+	<dt>er.attachment.s3.bucket / er.attachment.[configurationName].s3.bucket</dt>
+	<dd>(必須) アタッチメントの送受信するバケット名。バケットはすでに S3 アカウント内に作成されている必要があります。</dd> 
+
+	<dt>er.attachment.s3.key / er.attachment.[configurationName].s3.key</dt>
+	<dd>(オプション) S3 バケット内のファイル・ストア名。パス・テンプレートと同じ扱い方。デフォルトは "${pk}${ext}"。</dd>
+
+	<dt>er.attachment.s3.acl / er.attachment.[configurationName].s3.acl</dt>
+	<dd>(optional) The access control policy for uploaded objects. See http://docs.amazonwebservices.com/AmazonS3/latest/index.html?RESTAccessPolicy.html for more deails. The default value is "public-read".</dd>
+	
+	<dt>er.attachment.s3.linkLife / er.attachment.[configurationName].s3.linkLife</dt>
+	<dd>(optional) If acl is set to "private" then urls generated for attachments are signed and expire. linkLife specifies the length of time in milliseconds that the generated url is valid. The default value is "60000".</dd>
+
+	<dt>er.attachment.s3.proxy / er.attachment.[configurationName].s3.proxy</dt>
+	<dd>(optional) If proxy is true, then the attachment's contents will be served through the request handler proxy.  The default is true.</dd>
+</dl>
+
+<h2>CloudFiles Attachments</h2>
+<p>
+RasckSpace's CloudFiles service is an alternative to Amazon's S3. Like the S3 implementation, uploading may take a while, so the actual upload to CloudFiles
+is performed in a background queue.  As a result, your attachment may be in an "unavailable" state (attachment.available = false)
+until the upload is complete.  The attachment components handle this state with specific views and by disabling attachment links.
+Note: Deleting an attachment that is in the unavailable state may result in the file not being removed from CloudFiles right now.
+</p>
+ 
+<dl>
+	<dt>er.attachment.cf.apiAccessKey / er.attachment.[configurationName].cf.apiAccessKey</dt>
+	<dd>(required) Your CloudFiles API access key ID.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
+	
+	<dt>er.attachment.cf.username / er.attachment.[configurationName].cf.username</dt>
+	<dd>(required) Your CloudFiles username.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
+	
+	<dt>er.attachment.cf.container / er.attachment.[configurationName].cf.container</dt>
+	<dd>(required) The name of the container to store and retrieve attachments into.  The container must already exist in your CloudFiles account.</dd> 
+ 
+	<dt>er.attachment.cf.connectionTimeOut / er.attachment.[configurationName].cf.connectionTimeOut</dt>
+	<dd>(optional) The timeout, in ms, before it stops trying to reach CloudFiles servers. Default is 5000</dd>
+ 
+	<dt>er.attachment.cf.authUrl / er.attachment.[configurationName].cf.authUrl</dt>
+	<dd>(optional) URL to the REST API. Default is https://auth.api.rackspacecloud.com/v1.0</dd>
+	
+</dl>
+ 
+<h2>Mime タイプ</h2>
+<p>
+ERAttachment フレームワークは多数の mime タイプのサポートを提供しています。オーバライドでデフォルト定義を拡張できます。
+Mime タイプでアタッチメントを表示する方法を変更します。
+</p>
+
+<dl>
+	<dt>er.attachment.mimeTypes</dt>
+	<dd>(オプション) システムで定義されているコンマ区切り mime タイプ・リスト。
+	デフォルトは
+	"image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime". 
+	アプリケーション内でこの値を設定することでオーバライドされます。</dd>
+	
+	<dt>er.attachment.additionalMimeTypes</dt>
+	<dd>(オプション) 上記には似ていますが、オーバライドする代わりに追加します。</dd>
+</dl>
+
+<p>
+mimeTypes と additionalMimeTypes プロパティで定義されている、各 mime タイプは複数の追加プロパティがあります。
+</p>
+
+<dl>
+	<dt>er.attachment.mimeType.[mimeType].name</dt>
+	<dd>(オプション) mime タイプにディスプレイ名 ("Portable Network Graphics")</dd>
+	
+	<dt>er.attachment.mimeType.[mimeType].uti</dt>
+	<dd>(オプション) mime タイプに関連する universal type identifier</dd>
+	
+	<dt>er.attachment.mimeType.[mimeType].extensions</dt>
+	<dd>(必須) mime タイプに関連するコンマ区きり拡張子リスト。最初のアイテムはプライマリーとして使用されます。
+	${ext} パス・テンプレート変数で使用されます。</dd>
+</dl>
+
+<h2>アタッチメント変化</h2>
+<p>
+現在ではサムネイルの自動化をサポートしていませんが将来的な追加のために開発されています。
+</p>
+
+<h2>セッキュリティー</h2>
+<p>
+S3 又は非プロキシのファイル・アタッチメントをサーブする場合、セッキュリティーは S3 又は Web サーバにより実行されます。
+プロキシでデータベース・アタッチメントをサーブする時にはアタッチメントのセッキュリティーのデリゲートを実装することができます。
+現在ではデリゲートがとても簡単で、あまりたくさんのコンテキストを提供していません。
+デリゲート機能はこれからもバージョンアップされます。
+</p>
+
+<p>
+デリゲートを提供するには、ERAttachmentRequestHandler.Delegate インタフェースをアプリケーション・コンストラクタ実装する必要があります。
+</p>
+
+<code>
+((ERAttachmentRequestHandler) WOApplication.application().requestHandlerForKey(ERAttachmentRequestHandler.REQUEST_HANDLER_KEY)).setDelegate(yourCustomDelegate);
+</code>
+
+<p>
+デリゲート・インタフェースは一つのメソッドがあります。WORequest、WOContext と ERAttachment を受け取ります。セッション情報のルックアップ、認証などを行うことができます。
+ERAttachment の configurationName() プロパティを使用することでどのセッキュリティー・コンテキストを評価中を知ることができます。
+</p>
+
+<h2>アタッチメント・モデリング</h2>
+<p>
+アタッチメントを使用するためには EOModel 内でのアタッチメントへのリレーションシップが必要です。
+例えば、Person の avatar イメージの場合、Person EO には下記を追加します。
+</p>
+<ol>
+	<li>An non-class, allows null property "avatarID" (of type "id" if you use ERPrototypes)</li>
+	<li>オプション・リレーションシップ "avatar" that joins Person.avatarID to ERAttachment.id</li>
+</ol>
+<p>
+以上です ... モデルは完了！
+</p>
+
+<h2>アタッチメント・アップロード</h2>
+<p>
+システムへのアタッチメント・アップロードはとても簡単です。ERAttachmentUpload コンポーネントを使用することで、
+WOFileUpload、または AjaxFileUpload のレイヤーを提供します。独自で WOFileUpload を使うことでもアタッチメントの
+API をコールすることでできます。
+</p>
+
+<p>
+Person の avatar アタッチメントをアップロードする場合を考えます。avatar を S3 の非 Ajax ファイル・アップロードで行います。
+</p>
+
+<h3>プロパティ</h3>
+<code>
+er.attachment.Person.avatar.storageType=s3
+er.attachment.Person.avatar.s3.accessKeyID=xxxxxxxxxx
+er.attachment.Person.avatar.s3.secretAccessKey=xxxxxxxxxxxxxxx
+er.attachment.Person.avatar.s3.bucket=Avatars
+</code>
+
+<h3>WOD</h3>
+<code>
+AvatarForm : WOForm {
+	enctype = "multipart/form-data";
+	multipleSubmit = true;
+}
+
+AvatarUpload : ERAttachmentUpload {
+	configurationName = "Person.avatar";
+	editingContext = person.editingContext;
+	attachment = person.avatar;
+}
+
+UploadAction : WOSubmitButton {
+	action = uploadAvatar;
+	value = "Upload Avatar!";
+}
+</code>
+
+<p>
+以上。ファイルのアップロードが完了されると S3 へのポスト処理が行われます。ERAttachmentUpload の "storageType" と "mimeType" などをオーバライドすることできます。
+セッキュリティーの為にレクエスト・ハンドラー・デリゲートの実装で "ownerID" をアップロードで使用することです。
+ownerID はアタッチメントの "owner" の文字列 ID になります。(例 "person.primaryKey")
+</p>
+
+<p>
+どちにしても、自分の WOFileUpload を使いたい時があり、まだは存在のアップロード・プロセスを持っていると考えられます。このような場合には API を直接呼ぶことです。
+とても簡単です。
+</p>
+
+<code>
+ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, originalFileName, mimeType, configurationName, ownerID);
+</code>
+
+<p>
+この例では、storageType が "s3" 、編集コンテキストはアタッチメントを作成する編集コンテキスト、アップロードファイルは一時的ファイルへの java.io.File リファレンス
+（完了後に削除され）、オリジナルファイル名、mime タイプが null（オリジナルファイル名の拡張子より自動設定される） 又は強制的にセットし、プロパティの定義名とオブジェクトの所有者の ownerID です。
+</p>
+
+<p>
+メモ: avatar の storageType を選択した後で変更するツールはありません。手動で S3 アタッチメントをローカルのファイルシステムへ保存し直すことです。
+API にはデータ管理レイヤーで殆どのことを行いますが、一同アップロードした方法を変更するのは自分で頑張ってください。^^
+</p>
+
+<h2>アタッチメント表示</h2>
+<p>
+アタッチメントを表示するには二つの方法があります。-- リンクと埋め込み
+ページ内に埋め込みするには（埋め込みタイプである必要がある）、ERAttachmentViewer を使うことができます。
+アタッチメント・タイプにレンダリングが無ければ、ERAttachmentViewer はデフォルト・アイコンを表示します。
+リンクのみを提供する場合、ERAttachmentLink を WOHyperlink 同様に扱えますが、プロパティ定義名とアタッチメント・レファレンスを渡します。
+オプションで ERAttachmentIcon で mime タイプのアイコンを表示ができます。
+</p>
+
+<code>
+Avatar : ERAttachmentViewer {
+	configurationName = "Person.avatar";
+	attachment = person.avatar;
+	width = 50; 
+}
+
+AvatarLink : ERAttachmentLink {
+	configurationName = "Person.avatar";
+	attachment = person.avatar;
+}
+</code>
+
+<h2>カスタム・ビュー</h2>
+<p>
+アタッチメント・ビューが拡張可能です。AbstractERAttachmentViewer をサブクラス化するコンポーネントを作成し、定義プロパティをある mime タイプ
+がビューに指すように置き換えることで可能です。
+</p>
+
+<dl>
+	<dt>er.attachment.mimeType.[mimeType].viewer</dt>
+	<dd>(オプション) ある mime タイプのアタッチメントを表示する為のビュー・コンポーネントのクラス名。指定 mime タイプやグローバル mime タイプを設定できます。
+	例えば、er.attachment.mimeType.image/pdf.viewer=com.mine.PDFViewer と er.attachment.mimeType.image/*.viewer=com.mine.DefaultImageViewer を設定できます。</dd>
+	
+	<dt>er.attachment.mimeType.default.viewer</dt>
+	<dd>(オプション) 他の mime タイプ・ビューがない場合に使用するビュー・コンポーネントのクラス名。</dd>
+	
+	<dt>er.attachment.mimeType.unavailable.viewer</dt>
+	<dd>(オプション) "unavailable" ステータスである場合に使用するビュー・コンポーネントのクラス名。</dd>
+</dl>
+
+<p>
+サンプルとして、フレームワークのデフォルト・プロパティ：
+</p>
+
+<code>
+er.attachment.mimeType.image/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
+er.attachment.mimeType.default.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.unavailable.viewer=er.attachment.components.viewers.ERAttachmentUnavailableViewer
+</code>
+
+<h2>カスタム保存</h2>
+<p>
+ERAttachment はモジュール形式でデザインされています。自分のストア・ロケーションを作成できます：
+</p>
+
+<ol>
+	<li>カスタム storageType の ERAttachment サブクラス化されているシングル・テーブルを追加します。</li>
+	<li>ストア・ロケーションへの URL 提供と ERAttachmentProcessor サブクラス化のインポートを追加します。</li> 
+</ol>
+
+</body>
+</html>

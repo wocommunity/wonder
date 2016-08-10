@@ -2,7 +2,8 @@ package er.directtoweb.assignments.defaults;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -11,21 +12,25 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Beautify the display names for the various keys in D2W a better way.<br />
+ * Beautify the display names for the various keys in D2W a better way.
  * @author ak
  */
 
 public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    static final Logger log = Logger.getLogger(ERDDefaultDisplayNameAssignment.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDDefaultDisplayNameAssignment.class);
 
     /** holds the dependent keys of the assignment */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
@@ -44,7 +49,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     });
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This array
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This array
      * of keys is used when constructing the
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for.
@@ -164,11 +169,11 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
                 taskName = pageConfiguration.substring(2,pageConfiguration.indexOf("__",3));
             }
             String entityName = (String)c.valueForKeyPath("entity.name");
-            log.debug(pageConfiguration + ": task=" + taskName +  ", entity=" + entityName);
+            log.debug("{}: task={}, entity={}", pageConfiguration, taskName, entityName);
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
         String localizerKey = "Pages." + pageConfiguration;
-        String result = (String) ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+        String result = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
         if(false) {
            	String task = c.task();
            	String subTask = (String) c.valueForKey("subTask");
@@ -192,7 +197,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
 		String formerResult = ERXLocalizer.currentLocalizer().localizedStringForKey(result);
 		if(formerResult != null) {
 			result = formerResult;
-			log.info("Found an old-style entry: " + localizerKey +"->" + formerResult);
+			log.info("Found an old-style entry: {}->{}", localizerKey, formerResult);
 		}
 		ERXLocalizer.currentLocalizer().takeValueForKey(result, localizerKey);
 		return result;

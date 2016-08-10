@@ -1,9 +1,13 @@
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormatSymbols;
+import java.text.Format;
+import java.util.Locale;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class AjaxDatePickerExample extends WOComponent {
 	
@@ -12,8 +16,8 @@ public class AjaxDatePickerExample extends WOComponent {
 
 	public Format frenchFormatter = new NSTimestampFormatter("%e %b %Y", new DateFormatSymbols(Locale.FRENCH));	
 	public NSArray<String> frenchMonths = new NSArray<String>(new String[]{
-			"janvier", "f�vrier", "mars", "avril", "mai", "juin",
-			"juillet", "ao�t", "septembre", "octobre", "novembre", "d�cembre"});
+			"janvier", "février", "mars", "avril", "mai", "juin",
+			"juillet", "août", "septembre", "octobre", "novembre", "décembre"});
 
 	public NSArray<String> frenchDays = new NSArray<String>(new String[]{
 			"dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"});

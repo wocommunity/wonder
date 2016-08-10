@@ -5,7 +5,11 @@ Thus not every jar library that is included with JasperReports distribution has 
 However, in the rare case that your report generates a class not found error due to a specific dependency library
 being missing, please file a JIRA with the details and the required jar will be added.
 
-
+Which Version of iReport is Compatible?
+---------------------------------------
+The iReport MUST match the JasperReports version in this project. You have been warned.
+Look in Libraries directory of this project for the jar named something like jasperreports-X.X.X.jar.
+That file has the current version number.
 
 Class Path
 -------------

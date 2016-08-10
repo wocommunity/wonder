@@ -7,6 +7,8 @@ import com.webobjects.foundation.NSDictionary;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXStringUtilities;
+import er.rest.ERXRestContext;
+import er.rest.IERXRestDelegate;
 
 /**
  * Utilities for generating URLs to ERXRouteController routes (quicky impl).
@@ -20,7 +22,8 @@ public class ERXRouteUrlUtils {
 	}
 
 	public static String actionUrlForRecord(WOContext context, ERXGenericRecord record, String action, String format, NSDictionary<String, Object> queryParameters, boolean secure, boolean includeSessionID) {
-		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(record.entityName(), record.primaryKeyInTransaction(), action, format), queryParameters, Boolean.valueOf(secure), includeSessionID);
+		Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(record.entityName()).primaryKeyForObject(record, new ERXRestContext(record.editingContext()));
+		String url = ERXWOContext.directActionUrl(context, ERXRouteUrlUtils.actionUrlPathForEntity(record.entityName(), entityID, action, format), queryParameters, Boolean.valueOf(secure), includeSessionID);
 		url = ERXRouteUrlUtils.changeDirectActionRequestHandlerTo(url, ERXRouteRequestHandler.Key);
 		return url;
 	}
@@ -38,22 +41,24 @@ public class ERXRouteUrlUtils {
 	}
 
 	public static String actionUrlPathForEntity(String entityName, Object entityID, String action, String format) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		ERXRouteRequestHandler requestHandler = (ERXRouteRequestHandler) WOApplication.application().requestHandlerForKey(ERXRouteRequestHandler.Key);
 		sb.append(requestHandler.controllerPathForEntityNamed(entityName));
 		if (entityID != null) {
-			sb.append("/");
+			sb.append('/');
 			sb.append(ERXStringUtilities.escapeNonXMLChars(String.valueOf(entityID)));
 			if (action != null && !"show".equals(action)) {
-				sb.append("/");
+				sb.append('/');
 				sb.append(action);
 			}
 		}
 		else if (action != null && !"index".equals(action)) {
-			sb.append("/");
+			if ((entityName != null) && (entityName.length() > 0)) {
+				sb.append('/');				
+			}
 			sb.append(action);
 		}
-		sb.append(".");
+		sb.append('.');
 		if (format == null) {
 			sb.append("html");
 		}

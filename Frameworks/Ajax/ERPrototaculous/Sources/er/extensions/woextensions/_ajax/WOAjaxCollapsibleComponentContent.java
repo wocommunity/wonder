@@ -25,6 +25,7 @@ public class WOAjaxCollapsibleComponentContent extends WOCollapsibleComponentCon
     }
     
     // actions (ajax)
+    @Override
     public WOComponent toggleVisibilityClicked()  {
         super.toggleVisibilityClicked();
         return this;

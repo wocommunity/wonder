@@ -119,28 +119,33 @@ public abstract class AjaxSocialNetwork {
 	public abstract String submissionUrl(String url, String title);
 
 	public static class Delicious extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://del.icio.us/post", "url", url, "title", title, null);
 		}
 	}
 
 	public static class Digg extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://digg.com/submit", "url", url, "title", title, new NSDictionary<String, String>("2", "phase"));
 		}
 	}
 
 	public static class Furl extends AjaxSocialNetwork {
+		@Override
 		public String iconName() {
 			return "SocialNetwork/Furl.gif";
 		}
 
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.furl.net/store", "u", url, "ti", title, new NSDictionary<String, String>(new String[] { "f", "0" }, new String[] { "s", "to" }));
 		}
 	}
 
 	public static class Newsvine extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.newsvine.com/_tools/seed&save", "u", url, "T", title, null);
 		}
@@ -148,6 +153,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Netscape extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.netscape.com/submit/", "U", url, "T", title, null);
 		}
@@ -155,36 +161,43 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Facebook extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.facebook.com/sharer.php", "u", url, "t", title, null);
 		}
 
+		@Override
 		public String iconName() {
 			return "SocialNetwork/Facebook.gif";
 		}
 	}
 
 	public static class Reddit extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://reddit.com/submit", "url", url, "title", title, null);
 		}
 
+		@Override
 		public String iconName() {
 			return "SocialNetwork/Reddit.gif";
 		}
 	}
 
 	public static class StumbleUpon extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.stumbleupon.com/submit", "url", url, "title", title, null);
 		}
 
+		@Override
 		public String iconName() {
 			return "SocialNetwork/StumbleUpon.gif";
 		}
 	}
 
 	public static class Technorati extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("ttp://technorati.com/faves", "add", url, null, null, null);
 		}
@@ -192,6 +205,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Squidoo extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.squidoo.com/lensmaster/bookmark", null, url, "title", title, null);
 		}
@@ -199,6 +213,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class WindowsLive extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("https://favorites.live.com/quickadd.aspx", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "1", "en-us", "1" }, new String[] { "marklet", "mkt", "top" }));
 		}
@@ -206,10 +221,12 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class YahooMyWeb extends AjaxSocialNetwork {
+		@Override
 		public String name() {
 			return "Yahoo MyWeb";
 		}
 
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://myweb.yahoo.com/myresults/bookmarklet", "u", url, "t", title, new NSDictionary<String, String>("UTF", "ei"));
 		}
@@ -217,6 +234,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Ask extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://myjeeves.ask.com/mysearch/BookmarkIt", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "1.2", "webpages" }, new String[] { "v", "t" }));
 		}
@@ -224,6 +242,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Google extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.google.com/bookmarks/mark", "bkmk", url, "title", title, new NSDictionary<String, String>(new String[] { "edit", "popup" }, new String[] { "op", "output" }));
 		}
@@ -231,6 +250,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Magnolia extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://ma.gnolia.com/bookmarklet/snap/add", "url", url, "title", title, null);
 		}
@@ -238,6 +258,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Ning extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://bookmarks.ning.com/addItem.php", "url", url, "T", title, null);
 		}
@@ -245,6 +266,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Rawsugar extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.rawsugar.com/pages/tagger.faces", "url", url, "tttl", title, null);
 		}
@@ -252,6 +274,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Spurl extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.spurl.net/spurl.php", "url", url, "title", title, null);
 		}
@@ -259,6 +282,7 @@ public abstract class AjaxSocialNetwork {
 	}
 
 	public static class Tagtooga extends AjaxSocialNetwork {
+		@Override
 		public String submissionUrl(String url, String title) {
 			return _submissionUrl("http://www.tagtooga.com/tapp/db.exe", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "jsEntryForm", "fx" }, new String[] { "c", "b" }));
 		}

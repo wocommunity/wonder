@@ -5,7 +5,8 @@ package com.webobjects.eoaccess;
 
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -26,7 +27,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * <p>To allow for extended prototypes set
  * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
- * Note: this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.</p>
+ * Note: this may be incompatible with {@link er.extensions.eof.ERXModelGroup#flattenPrototypes}.</p>
  * 
  * <p>The existence of prototype entities based on specific conventions
  * is checked and the attributes of those prototype entities are added to the model's
@@ -67,36 +68,11 @@ import er.extensions.foundation.ERXProperties;
  * @author ldeck
  */
 public class ERXModel extends EOModel {
-	public static Object _ERXGlobalModelLock;
+	// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
+	public static Object _ERXGlobalModelLock = EOModel._EOGlobalModelLock;
 	
-	private static final Logger log = Logger.getLogger(ERXModel.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXModel.class);
 	
-	static {
-		// Expose EOModel._EOGlobalModelLock so that ERXModelGroup can lock on it
-		try {
-			_ERXGlobalModelLock = EOModel._EOGlobalModelLock;
-		}
-		catch (NoSuchFieldError e) {
-			// MS: It just so happens that this occurs really early on in the startup process, and this API changed in WO 5.3 vs WO 5.4. We catch this
-			// failure explicitly and give the user a slightly better error message.
-			try {
-				String eomodelLockClassName = EOModel.class.getDeclaredField("_EOGlobalModelLock").getType().getSimpleName();
-				if ("ReentrantLock".equals(eomodelLockClassName)) {
-					throw new RuntimeException("You're using WebObjects 5.4 with the WebObjects 5.3 version of Project Wonder. You need to download the 5.4 version of Project Wonder for your application to work properly.");
-				}
-				else if ("NSRecursiveLock".equals(eomodelLockClassName)) {
-					throw new RuntimeException("You're using WebObjects 5.3 with the WebObjects 5.4 version of Project Wonder. You need to download the 5.3 version of Project Wonder for your application to work properly.");
-				}
-				else {
-					throw new RuntimeException("You have the wrong version of Project Wonder for the version of WebObjects that you're using. You need to download the appropriate version of Project Wonder for your application to work properly.");
-				}
-			}
-			catch (NoSuchFieldException e2) {
-				throw e;
-			}
-		}
-		
-	}
 	/**
 	 * Utility to add attributes to the prototype cache. As the attributes are chosen by name, replace already
 	 * existing ones.
@@ -128,14 +104,14 @@ public class ERXModel extends EOModel {
 	/**
 	 * Utility for getting all the attributes off an entity. If the entity is null, an empty array is returned.
 	 * 
-	 * @param entity
+	 * @param entity an entity
 	 * @return array of attributes from the given entity
 	 */
 	private static NSArray<EOAttribute> attributesFromEntity(EOEntity entity) {
 		NSArray<EOAttribute> result = NSArray.emptyArray();
 		if (entity != null) {
 			result = entity.attributes();
-			log.debug("Attributes from " + entity.name() + ": " + result);
+			log.debug("Attributes from {}: {}", entity.name(), result);
 		}
 		return result;
 	}
@@ -150,7 +126,7 @@ public class ERXModel extends EOModel {
 		if (dict.objectForKey("password") != null) {
 			dict.setObjectForKey("<deleted for log>", "password");
 		}
-		log.info("Creating prototypes for model: " + model.name() + "->" + dict);
+		log.info("Creating prototypes for model: {}->{}", model.name(), dict);
 		synchronized (_EOGlobalModelLock) {
 			StringBuilder debugInfo = null;
 			if (log.isDebugEnabled()) {
@@ -165,7 +141,7 @@ public class ERXModel extends EOModel {
 				adaptorPrototypes = adaptor.prototypeAttributes();
 			}
 			catch (Exception e) {
-				log.error(e, e);
+				log.error("Could not get prototype attributes from adaptor.", e);
 			}
 			addAttributesToPrototypesCache(model, adaptorPrototypes);
 			NSArray prototypesToHide = attributesFromEntity(model._group.entityNamed("EOPrototypesToHide"));
@@ -214,7 +190,7 @@ public class ERXModel extends EOModel {
 	/**
 	 * Utility for getting all names from an array of attributes.
 	 * 
-	 * @param attributes
+	 * @param attributes array of attributes
 	 * @return array of attribute names
 	 */
 	private static NSArray<String> namesForAttributes(NSArray<? extends EOAttribute> attributes) {
@@ -223,7 +199,7 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Defaults to false.
-	 * Note: when enabled, this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.
+	 * Note: when enabled, this may be incompatible with {@link er.extensions.eof.ERXModelGroup#flattenPrototypes}.
 	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
 	 */
 	public static boolean isUseExtendedPrototypesEnabled() {
@@ -325,7 +301,8 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Defaults to false as returned by {@link #isUseExtendedPrototypesEnabled()}.
-	 * @see ERXModel#isUseExtendedPrototypesEnabled()
+	 * @return <code>true</code> if extended prototypes are used
+	 * @see #isUseExtendedPrototypesEnabled()
 	 */
 	protected boolean useExtendedPrototypes() {
 		return isUseExtendedPrototypesEnabled();

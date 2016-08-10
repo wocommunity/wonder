@@ -4,19 +4,23 @@ package er.corebusinesslogic;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.eof.EOEnterpriseObjectClazz;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
-    static final Logger log = Logger.getLogger(ERCMessageAttachment.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERCMessageAttachment() {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

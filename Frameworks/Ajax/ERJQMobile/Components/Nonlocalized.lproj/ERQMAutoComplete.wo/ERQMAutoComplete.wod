@@ -1,0 +1,11 @@
+JsonDirectActionSource : WOActionURL {
+	actionClass = jsonActionClass;
+	directActionName = jsonDirectActionName;
+	queryDictionary = jsonQueryDictionary;
+	secure = context.secureMode;
+}
+JsonActionSource : WOActionURL {
+	action = ^jsonAction;
+	queryDictionary = jsonQueryDictionary;
+	secure = context.secureMode;
+}

@@ -7,8 +7,7 @@
 package er.directtoweb.interfaces;
 
 /**
- * Used to identify tab edit pages, not requiring common superclass.<br />
- * 
+ * Used to identify tab edit pages, not requiring common superclass.
  */
 
 public interface ERDTabEditPageInterface extends ERDEditPageInterface {

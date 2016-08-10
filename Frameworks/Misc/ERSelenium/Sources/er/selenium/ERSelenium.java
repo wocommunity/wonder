@@ -68,7 +68,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
 
     public ERSelenium sharedInstance() {
         if (sharedInstance == null) {
-            sharedInstance = (ERSelenium) ERXFrameworkPrincipal.sharedInstance(ERSelenium.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERSelenium.class);
         }
         return sharedInstance;
     }
@@ -78,7 +78,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
         return isDevMode || ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false);
     }
 
-    // @Override
+    @Override
     public void finishInitialization() {
         // TODO: check for multithreading/synchronization issued with factory
         // instance() method

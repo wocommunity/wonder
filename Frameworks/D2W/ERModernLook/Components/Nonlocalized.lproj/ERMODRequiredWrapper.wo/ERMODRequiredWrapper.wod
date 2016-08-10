@@ -1,4 +1,4 @@
-Help: ERDDebuggingHelp {
+Help: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 	condition = showHelp;
 }
@@ -22,6 +22,7 @@ OptionalForm: ERXOptionalForm {
 	showForm = showForm;
 	multipleSubmit = true;
 	name = formName;
+	fragmentIdentifier = session.objectStore.fragmentIdentifier; //VALID
 }
 
 HeaderDiv : WOGenericContainer {

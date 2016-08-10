@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxUpdateContainer" wocomponentcontent="true">    <binding name="frequency"/>
+        <binding name="initialDelay"/>
+        <binding name="delay"/>
+        <binding name="limit"/>
+        <binding name="encoding"/>
+        <binding name="emulation"/>
+        <binding name="headers"/>
+        <binding name="isSuccess"/>
+        <binding name="evalScripts"/>
+        <binding name="evalResponse"/>
+        <binding name="urlEncoded"/>
+        <binding name="async"/>
+        <binding name="noCache"/>
+        <binding name="onRequest"/>
+        <binding name="onCancel"/>
+        <binding name="onComplete"/>
+        <binding name="onSuccess"/>
+        <binding name="onFailure"/>
+        <binding name="onException"/>
+        <binding name="useSpinner"/>
+        <binding name="spinnerTarget"/>
+        <binding name="spinnerOptions"/>
+        <binding name="elementName"/>
+        <binding name="action"/>
+        <binding name="method"/>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>

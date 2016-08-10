@@ -7,21 +7,22 @@
 package er.directtoweb.components.bool;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSValidation;
-
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Allows editing boolean values based on radio buttons and localizable strings.<br />
+ * Allows editing boolean values based on radio buttons and localizable strings.<br>
  * Set the values via the <code>choicesNames</code> d2wcontext value, eg: ("Yes", "No") or ("Set", "Unset", "Don't care")
  * @d2wKey choicesNames
  */
 // FIXME AK: together with ERD2WQueryBoolean, should use a common ERXEditBoolean that takes a choicesNames binding
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WCustomEditBoolean(WOContext context) {
         super(context);
@@ -29,14 +30,16 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
  
     protected NSArray<String> _choicesNames;
     
+   	@Override
     public void reset(){
         super.reset();
         _choicesNames = null;
     }
 
-    public NSArray<String> choicesNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> choicesNames() {
         if(_choicesNames == null) {
-            _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+            _choicesNames = (NSArray<String>)d2wContext().valueForKey("choicesNames");
         }
         return _choicesNames;
     }

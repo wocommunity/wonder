@@ -1,0 +1,12 @@
+AccordionContainerID : WOString {
+	value = accordionID;
+}
+
+AccordionDiv : WOGenericContainer {
+	elementName = "div";
+	id = accordionID;
+}
+
+AjaxOptions : AjaxOptions {
+	options = createAjaxOptions;
+}

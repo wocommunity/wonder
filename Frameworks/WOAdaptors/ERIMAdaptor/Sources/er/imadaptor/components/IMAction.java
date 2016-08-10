@@ -1,6 +1,7 @@
 package er.imadaptor.components;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -22,14 +23,13 @@ public class IMAction extends WODynamicElement {
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		String actionUrl = context._componentActionURL(false);
+		String actionUrl = context.componentActionURL(WOApplication.application().componentRequestHandlerKey(), false);
 		response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
 		super.appendToResponse(response, context);
 	}
 
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		String s = null;
 		WOActionResults results = null;
 		if (context.elementID().equals(context.senderID())) {
 			actionInvoked(request, context);

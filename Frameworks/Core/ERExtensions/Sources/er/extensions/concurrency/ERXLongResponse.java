@@ -1,5 +1,4 @@
 package er.extensions.concurrency;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -18,15 +17,18 @@ import er.extensions.eof.ERXConstant;
  * via either the bindings or explicitely.
  *
  * @binding task implementation of ERXLongResponseTask
+ * 
  * @author ak on Tue Feb 03 2004
- * @project ERExtensions
  */
-
 public class ERXLongResponse extends ERXNonSynchronizingComponent {
-    static String WOMetaRefreshSenderId = "WOMetaRefresh";
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXLongResponse.class);
+    static String WOMetaRefreshSenderId = "WOMetaRefresh";
 
     protected Number _refreshInterval;
     protected boolean _performingAction;
@@ -62,13 +64,14 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
     	return _refreshInterval.intValue();
     }
     public void setRefreshInterval(int value) {
-    	_refreshInterval = new Integer(value);
+    	_refreshInterval = Integer.valueOf(value);
     }
     
     public WOComponent refresh() {
     	return task().nextPage();
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         if (!_performingAction) {
             _performingAction = true;
@@ -84,8 +87,12 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
             // If the response is done and finished quickly (before the first branch of this conditional is invoked),
             // make sure to refresh the page immediately.
             String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
-
-            String header = interval + ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
+            String query = "";
+            if (modifiedDynamicUrl.contains("?")) {
+            	query = modifiedDynamicUrl.substring(modifiedDynamicUrl.indexOf("?"));
+            	modifiedDynamicUrl = modifiedDynamicUrl.substring(0, modifiedDynamicUrl.indexOf("?"));
+            }
+            String header = interval + ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId + query;
 
             aResponse.setHeader(header, "Refresh");
             if((doneButNotRefreshed)) {
@@ -95,6 +102,7 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
         super.appendToResponse(aResponse, aContext);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         if (aContext.senderID().equals(WOMetaRefreshSenderId)) {
             // We recognized the elementID that was set for the meta refresh.

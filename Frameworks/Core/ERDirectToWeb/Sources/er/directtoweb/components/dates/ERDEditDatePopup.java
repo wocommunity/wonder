@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components.dates;
 
+import java.util.TimeZone;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSTimestamp;
@@ -18,7 +20,7 @@ import com.webobjects.foundation.NSValidation;
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Edits dates with popup lists.<br />
+ * Edits dates with popup lists.
  * 
  * @binding yearRangeBottom
  * @binding yearRangeTop
@@ -28,9 +30,20 @@ import com.webobjects.foundation.NSValidation;
  */
 
 public class ERDEditDatePopup extends ERDEditDatePopupCommon {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditDatePopup(WOContext context) { super(context); }
     
+    public Object timeZoneString() {
+      return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
+    }
+    
+    @Override
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         NSTimestamp date = null;

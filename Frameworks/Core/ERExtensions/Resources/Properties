@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERExtensions=load
+er.extensions.ERExtensions.hasLocalization=true
+
 
 # ERExtensions Framework Properties
 
@@ -206,8 +210,8 @@ er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
 #########################################################################
 # Navigation 
 #########################################################################
-er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
-er.extensions.ERXNavigationManager.localizeDisplayKeys = false
+# er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
+# er.extensions.ERXNavigationManager.localizeDisplayKeys = false
 
 #########################################################################
 # Shared EO loading patching 
@@ -286,6 +290,17 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 # Set to true to have this delegate order the operations (e.g. or MS SQL Server)
 com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
+
+## Defines the DB class to use together with ERXDatabaseContext
+er.extensions.ERXDatabase.className = er.extensions.eof.ERXDatabase
+
+## Define the HashMap initialization parameters to use for the HashMap that ERXDatabase
+## uses for the snapshot cache. Usually the load factor is fine, but the capacity
+## could use increasing for applications handling many objects. You can use
+## ERXDatabase.snapshotCacheSize() to get the actual map size at runtime to
+## determine how to tune this.
+# er.extensions.ERXDatabase.snapshotCacheMapInitialCapacity = 1048576
+# er.extensions.ERXDatabase.snapshotCacheMapInitialLoadFactor = 0.75
 
 #########################################################################
 # ERXDatabaseContextDelegate 
@@ -429,12 +444,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 #########################################################################
 ## decides if locked editing contexts should be unlocked after the RR-loop.
 ## If you use D2W, it is *strongly* recommended to enable this feature!
-# er.extensions.ERXApplication.useEditingContextUnlocker=false
+# er.extensions.ERXEC.useUnlocker=false
 
 ## When true, ERXEC's will generate a stack trace when lock is called that
 ## can later be accessed via .openLockTrace() or the showOpenEditingContextLockTraces
 ## ERXDirectAction.  Defaults to false.
-# er.extensions.ERXApplication.traceOpenEditingContextLocks = true
+# er.extensions.ERXEC.traceOpenLocks = true
 
 ## decides if the session store deadlock detection (session can't get 
 ## checked out because it already was) should be enabled. This is useful 
@@ -645,6 +660,11 @@ er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
 # Components 
 #########################################################################
 er.extensions.ERXWOForm.multipleSubmitDefault=true
+
+#########################################################################
+# ERXLocalizationEditor 
+#########################################################################
+er.extensions.ERXLocalizationEditor.endoding=UTF-16BE
 
 #########################################################################
 # SSL DirectConnect

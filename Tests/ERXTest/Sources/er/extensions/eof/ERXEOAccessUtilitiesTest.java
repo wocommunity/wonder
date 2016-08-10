@@ -2,12 +2,25 @@ package er.extensions.eof;
 
 import junit.framework.Assert;
 
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
+
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
 
 import er.erxtest.ERXTestCase;
+import er.erxtest.ERXTestSuite;
+import er.erxtest.ERXTestUtilities;
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
 
@@ -32,6 +45,19 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 		super(adaptorName);
 	}
 
+	private static final NSDictionary<String,NSArray<String>> skipTestsForAdaptor;
+
+	static {
+		NSMutableDictionary<String,NSArray<String>> skips = new NSMutableDictionary<String,NSArray<String>>();
+
+		NSArray<String> memorySkips = new NSArray<String>(new String[] { "testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression" } );
+		skips.setObjectForKey(memorySkips, "Memory");
+                skips.setObjectForKey(NSArray.EmptyArray, "JDBC");
+
+		skipTestsForAdaptor = skips.immutableClone();
+	}
+
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
@@ -39,7 +65,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 
 		ec = ERXEC.newEditingContext();
 
-		model = EOModelGroup.defaultGroup().modelNamed("ERXTest");
+		model = EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL);
 
 		companyEntity = model.entityNamed(Company.ENTITY_NAME);
 		employeeEntity = model.entityNamed(Employee.ENTITY_NAME);
@@ -196,9 +222,47 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 
 	/**
 	 * Test method for {@link er.extensions.eof.ERXEOAccessUtilities#rawRowsForSQLExpression(com.webobjects.eocontrol.EOEditingContext, java.lang.String, com.webobjects.eoaccess.EOSQLExpression)}.
+	 * Not the best test, but it will work. Uses the select statement from the method being tested to fetch from the ERXTest model. Then, after inserting
+	 * a few objects, makes sure that the results are greater than the last time.
 	 */
-	public void _testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression() {
-		fail("Not yet implemented");
+	public void testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression() {
+
+		EOAdaptor adaptor = EOAdaptor.adaptorWithName(EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).adaptorName());
+		if (skipTestsForAdaptor.objectForKey(adaptor.name()).contains("testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression")) return;
+		EOSQLExpressionFactory factory = new EOSQLExpressionFactory(adaptor);
+		NSArray<EOEntity> entities = EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).entities();
+		NSMutableDictionary<String,Number> counts = new NSMutableDictionary<String,Number>();
+
+		for (EOEntity entity : entities) {
+			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
+								false,
+								new EOFetchSpecification(entity.name(), null, null),
+								entity);
+			NSArray rows = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, ERXTestSuite.ERXTEST_MODEL, sqlExp);
+
+			counts.setObjectForKey(rows.size(), entity.name());
+		}
+
+		ERXTestUtilities.createCompanyAnd3Employees();
+
+		NSMutableSet<String> hasMore = new NSMutableSet<String>();
+
+		for (EOEntity entity : entities) {
+			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
+								false,
+								new EOFetchSpecification(entity.name(), null, null),
+								entity);
+			NSArray rows = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, ERXTestSuite.ERXTEST_MODEL, sqlExp);
+
+			if ( ! counts.containsKey(entity.name()))
+				fail();
+			if (counts.objectForKey(entity.name()).intValue() > rows.size())
+				fail();
+			if (counts.objectForKey(entity.name()).intValue() < rows.size())
+				hasMore.add(entity.name());
+		}
+
+		Assert.assertEquals(new NSSet<String>(new String[] { "Company", "Employee", "Paycheck" } ), hasMore);
 	}
 
 	/**

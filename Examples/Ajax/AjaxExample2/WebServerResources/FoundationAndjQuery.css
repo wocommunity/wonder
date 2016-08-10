@@ -1,0 +1,144 @@
+.ajaxTabbedPanel {
+  list-style: none;
+  margin: 0;
+  left: 0;
+  display: block;
+  border-collapse: collapse;
+  padding-left: 20px;
+  margin-bottom: 0px;
+  height: 27px;
+}
+/* line 172, ../scss/foundation/components/_global.scss */
+.ajaxTabbedPanel:before, .ajaxTabbedPanel:after {
+  content: " ";
+  display: table;
+}
+/* line 173, ../scss/foundation/components/_global.scss */
+.ajaxTabbedPanel:after {
+  clear: both;
+}
+/* line 36, ../scss/_ajax.scss */
+.ajaxTabbedPanel li a {
+  height: 26px;
+  padding: 0px;
+}
+/* line 41, ../scss/_ajax.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-selected {
+  display: block;
+}
+/* line 44, ../scss/_ajax.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-selected a {
+  border-style: solid;
+  border-width: 0;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: normal;
+  margin: 0 0 8px;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  -webkit-appearance: none;
+  border-radius: 0;
+  display: inline-block;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;;
+  padding-left: 16px;
+  font-size: 16px;
+  display: inline;
+  margin: 0px;
+  background-color: white;
+  border: 1px solid #5bc5bf;
+  border-bottom: 2px solid white;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  color: #5bc5bf;
+}
+/* line 56, ../scss/_ajax.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-unselected {
+  display: block;
+}
+/* line 58, ../scss/_ajax.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-unselected a {
+  border-style: solid;
+  border-width: 0;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: normal;
+  margin: 0 0 8px;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  -webkit-appearance: none;
+  border-radius: 0;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;;
+  padding-left: 16px;
+  font-size: 16px;
+  display: inline-block;
+  background-color: #5bc5bf;
+  border-color: #3caaa4;
+  color: #FFFFFF;
+  border: 1px solid #5bc5bf;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  margin: 0px;
+  display: inline;
+}
+/* line 161, ../scss/foundation/components/_buttons.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-unselected a:hover, .ajaxTabbedPanel .ajaxTabbedPanelTab-unselected a:focus {
+  background-color: #3caaa4;
+}
+/* line 167, ../scss/foundation/components/_buttons.scss */
+.ajaxTabbedPanel .ajaxTabbedPanelTab-unselected a:hover, .ajaxTabbedPanel .ajaxTabbedPanelTab-unselected a:focus {
+  color: #FFFFFF;
+}
+/* line 70, ../scss/_ajax.scss */
+.ajaxTabbedPanel > li {
+  margin: 0;
+  float: left;
+  display: list-item;
+}
+/* line 39, ../scss/foundation/components/_button-groups.scss */
+.ajaxTabbedPanel > li > button, .ajaxTabbedPanel > li .button {
+  border-left: 1px solid;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+/* line 45, ../scss/foundation/components/_button-groups.scss */
+.ajaxTabbedPanel > li:first-child button, .ajaxTabbedPanel > li:first-child .button {
+  border-left: 0;
+}
+/* line 56, ../scss/foundation/components/_button-groups.scss */
+.ajaxTabbedPanel > li:first-child {
+  margin-left: 0;
+}
+
+/* This controls the radius of the left and right edges. */
+/* Set to true or px value */
+/* This makes the buttons take up even space in their container */
+/* Set to the number of buttons in the group */
+/* Controls how the buttons in the group floatm set to left or right */
+/* line 85, ../scss/_ajax.scss */
+.ajaxTabbedPanelPanes {
+  display: block;
+  width: auto;
+  padding-left: 0px;
+  margin: 0px;
+  min-height: 300px;
+  overflow: auto;
+  border: 1px solid #5bc5bf;
+}
+
+/* line 95, ../scss/_ajax.scss */
+.ajaxTabbedPanelPane-selected {
+  list-style-type: none;
+  display: block;
+  padding: 10px;
+}
+
+/* line 101, ../scss/_ajax.scss */
+.ajaxTabbedPanelPane-unselected {
+  list-style-type: none;
+  display: none;
+}

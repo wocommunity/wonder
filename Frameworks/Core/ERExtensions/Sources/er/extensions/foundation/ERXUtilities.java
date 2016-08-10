@@ -12,13 +12,13 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -26,16 +26,12 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXEnterpriseObject;
 import er.extensions.eof.ERXReplicableInterface;
 
@@ -45,88 +41,7 @@ import er.extensions.eof.ERXReplicableInterface;
  * split into more meaning full groups of utility methods.
  */
 public class ERXUtilities {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXUtilities.class);
-
-    /**
-     * @deprecated use ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject,EOEnterpriseObject,String)
-     */
-    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject, EOEnterpriseObject referenceObject, String key) {
-        ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(addedObject, referenceObject, key);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.createAndInsertObject(EOEditingContext,String)
-     */
-    public static EOEnterpriseObject createEO(String entityName, EOEditingContext editingContext) {
-        return ERXUtilities.createEO(entityName, editingContext, null);
-    }
-    
-    /**
-     * @deprecated use  createAndInsertObject(EOEditingContext,String, NSDictionary)
-     */    
-    public static EOEnterpriseObject createEO(String entityName,
-                                              EOEditingContext editingContext,
-                                              NSDictionary objectInfo) {
-        return ERXEOControlUtilities.createAndInsertObject(editingContext, entityName, objectInfo);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.createAndAddObjectToRelationship(EOEditingContext,EOEnterpriseObject,String,String,NSDictionary);
-     */
-    public static EOEnterpriseObject createEOLinkedToEO(String entityName,
-                                                        EOEditingContext editingContext,
-                                                        String relationshipName,
-                                                        EOEnterpriseObject eo) {
-        return ERXEOControlUtilities.createAndAddObjectToRelationship(editingContext,eo,relationshipName,entityName,null);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.createAndAddObjectToRelationship(EOEditingContext,EOEnterpriseObject,String,String,NSDictionary);
-     */
-    public static EOEnterpriseObject createEOLinkedToEO(String entityName,
-                                                        EOEditingContext editingContext,
-                                                        String relationshipName,
-                                                        EOEnterpriseObject eo,
-                                                        NSDictionary objectInfo) {
-        return ERXEOControlUtilities.createAndAddObjectToRelationship(editingContext,eo,relationshipName,entityName,objectInfo);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.localInstanceOfObject(EOEditingContext,EOEnterpriseObject);
-     */
-    public static EOEnterpriseObject localInstanceOfObject(EOEditingContext ec, EOEnterpriseObject eo) {
-        return ERXEOControlUtilities.localInstanceOfObject(ec, eo);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.localInstancesOfObjects(EOEditingContext,NSArray);
-     */
-    public static NSArray localInstancesOfObjects(EOEditingContext ec, NSArray eos) {
-        return ERXEOControlUtilities.localInstancesOfObjects(ec, eos);
-    }    
-
-    /**
-     * @deprecated use ERXEOControlUtilities.sharedObjectWithFetchSpec(String, String)
-     */
-    public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
-        return ERXEOControlUtilities.sharedObjectWithFetchSpec(entityName, fetchSpec);
-    }
-
-    /**
-     * @deprecated use ERXEOControlUtilities.sharedObjectWithPrimaryKey(String, object)
-     */
-    public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
-        return ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName, pk);
-    }
-    
-    /**
-     * @deprecated use ERXEOAccessUtilities.primaryKeyDictionaryForEntity(EOEditingContext, String)
-     */
-    public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
-        return ERXEOAccessUtilities.primaryKeyDictionaryForEntity(ec,entityName);
-    }
+    private static final Logger log = LoggerFactory.getLogger(ERXUtilities.class);
 
     /**
      * Utility method for returning all of the primary keys for
@@ -149,24 +64,11 @@ public class ERXUtilities {
         }
         return result;
     }
-
-    /**
-     * @deprecated see {@link ERXEOAccessUtilities.makeEditableSharedEntityNamed(String)}
-     */
-    public static void makeEditableSharedEntityNamed(String entityName) {
-    	ERXEOAccessUtilities.makeEditableSharedEntityNamed(entityName);
-    }
-
-    /**
-     * @deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
-     */
-    public static EOArrayDataSource dataSourceForArray(NSArray array) {
-        return ERXEOControlUtilities.dataSourceForArray(array);
-    }
  
     /**
      * Traverses a key path to return the last {@link EORelationship}
-     * object.<br/>
+     * object.
+     * <p>
      * Note: that this method uses the object and not the model to traverse
      * the key path, this has the added benefit of handling EOF inheritance
      * @param object enterprise object to find the relationship off of
@@ -200,12 +102,9 @@ public class ERXUtilities {
             EORelationship rel = srcentity.relationshipNamed(key);
             if (rel == null) {
                 break;
-
-            } else {
-                srcentity = rel.destinationEntity();
-                keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
-                
             }
+            srcentity = rel.destinationEntity();
+            keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
         }
         NSDictionary d = new NSDictionary(new Object[]{srcentity, keyPath}, new Object[]{"entity", "keyPath"});
         return d;
@@ -251,29 +150,9 @@ public class ERXUtilities {
             if (bundle.name() != null)
                 frameworkNames.addObject(bundle.name());
             else
-                log.warn("Null framework name for bundle: " + bundle);
+                log.warn("Null framework name for bundle: {}", bundle);
         }
         return frameworkNames;
-    }
-    
-    /**
-     * Performs a basic intersection between two arrays.
-     * @param array1 first array
-     * @param array2 second array
-     * @return array containing the intersecting elements of
-     *		the two arrays.
-     */
-    // MOVEME: Should move to ERXArrayUtilities
-    public static NSArray intersectingElements(NSArray array1, NSArray array2) {
-        NSArray intersection = null;
-        if (array1 != null && array2 != null && array1.count() > 0 && array2.count() > 0) {
-            NSMutableSet set1 = new NSMutableSet();
-            NSMutableSet set2 = new NSMutableSet();
-            set1.addObjectsFromArray(array1);
-            set2.addObjectsFromArray(array2);
-            intersection = (set1.setByIntersectingSet(set2)).allObjects();
-        }
-        return intersection != null ? intersection : NSArray.EmptyArray;
     }
 
     /**
@@ -292,7 +171,8 @@ public class ERXUtilities {
 
     /**
      * Finds an entity given a case insensitive search
-     * of all the entity names.<br/>
+     * of all the entity names.
+     * <p>
      * Note: The current implementation caches the entity-entity name
      * pair in an insensitive manner. This means that all of the
      * models should be loaded before this method is called.
@@ -315,57 +195,7 @@ public class ERXUtilities {
         }
         return entity;
     }
-
-    /**
-     * Utility method used to find all of the sub entities
-     * for a given entity.
-     * @param entity to walk all of the <code>subEntities</code>
-     *		relationships
-     * @param includeAbstracts determines if abstract entities should
-     *		be included in the returned array
-     * @return all of the sub-entities for a given entity.
-     */
-    public static NSArray allSubEntitiesForEntity(EOEntity entity, boolean includeAbstracts) {
-        NSMutableArray entities = new NSMutableArray();
-        if (entity != null) {
-            for (Enumeration e = entity.subEntities().objectEnumerator(); e.hasMoreElements();) {
-                EOEntity anEntity = (EOEntity)e.nextElement();
-                if ((includeAbstracts && anEntity.isAbstractEntity()) || !anEntity.isAbstractEntity())
-                    entities.addObject(anEntity);
-                if (anEntity.subEntities() != null && anEntity.subEntities().count() > 0)
-                    entities.addObjectsFromArray(allSubEntitiesForEntity(anEntity, includeAbstracts));
-            }
-        }
-        return entities;
-    }
-
-    /**
-     * Walks all of the parentEntity relationships to
-     * find the root entity.
-     * @param entity to find the root parent
-     * @return root parent entity
-     */
-    public static EOEntity rootParentEntityForEntity(EOEntity entity) {
-        EOEntity root = entity;
-        while (root!=null && root.parentEntity() != null)
-            root = root.parentEntity();
-        return root;
-    }
-    /** caches date formatter the first time it is used */
-    private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
-    /**
-     * Utility method to return a standard timestamp
-     * formatter for the default string representation
-     * of java dates.
-     * @return timestamp formatter for java dates.
-     */
-    // MOVEME: Should move to ERXTimestampUtilities
-    public static NSTimestampFormatter gregorianDateFormatterForJavaDate() {
-        if (_gregorianDateFormatterForJavaDate == null)
-            _gregorianDateFormatterForJavaDate = new NSTimestampFormatter("%a %b %d %H:%M:%S %Z %Y");
-        return _gregorianDateFormatterForJavaDate;
-    }    
-
+   
     /**
      * Generates a string representation of the current stacktrace.
      *
@@ -449,12 +279,6 @@ public class ERXUtilities {
         public boolean invoke(Object ctx);
     }
 
-    // DELETEME: These are not needed now that all of the distant stuff works again.
-    public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());
-    public static NSTimestamp distantFuture() { return DISTANT_FUTURE; }
-    public static final NSTimestamp DISTANT_PAST = new NSTimestamp(1000,1,1,1,1,1,TimeZone.getDefault());
-    public static NSTimestamp distantPast() { return DISTANT_PAST; }
-
     /**
      * Gets rid of all ' from a String.
      * @param aString string to check
@@ -464,20 +288,6 @@ public class ERXUtilities {
     public static String escapeApostrophe(String aString) {
         NSArray parts = NSArray.componentsSeparatedByString(aString,"'");
         return parts.componentsJoinedByString("");
-    }
-
-    /**
-     * @deprecated use ERXArrayUtilities.setFromArray(NSArray)
-     */
-    public static NSSet setFromArray(NSArray array) {
-        return ERXArrayUtilities.setFromArray(array);
-    }
-
-    /**
-     * @deprecated use ERXArrayUtilities.sortSelectorWithKey(String)
-     */
-    public static NSSelector sortSelectorWithKey(String key) {
-        return ERXArrayUtilities.sortSelectorWithKey(key);
     }
 
     /** Copies values from one EO to another using an array of Attributes */

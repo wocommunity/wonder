@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -37,7 +38,7 @@ import er.extensions.components._private.ERXWOForm;
  * <ul>
  * <li>the label binding</li>
  * <li>an in-line ERXWOTemplate named "link".  This allows for images etc to be used to open the dialog</li>
- * </ul></p>
+ * </ul>
  *
  * <p>The contents for the modal dialog can come from four sources:
  * <ul>
@@ -45,7 +46,7 @@ import er.extensions.components._private.ERXWOForm;
  * <li>externally from an in-line WOComponent</li>
  * <li>externally from an action method (see action binding)</li>
  * <li>externally from an named WOcomponent (see pageName binding)</li>
- * </ul></p>
+ * </ul>
  * 
  * <p>To cause the dialog to be closed in an Ajax action method, use this:
  * <code>
@@ -60,7 +61,7 @@ import er.extensions.components._private.ERXWOForm;
  * </p>
  * 
  * <p>The modal dialog is opened by calling a JavaScript function.  While this is normally done from an onclick
- * handler, you can call it directly.  The function name is openAMD_<ID>():
+ * handler, you can call it directly.  The function name is openAMD_&lt;ID&gt;():
  * <code>
  * openAMD_MyDialogId();
  * </code>
@@ -127,7 +128,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding onUpdate client side method, fires on updating the content of ModalBox (on call of Modalbox.show method from active ModalBox instance).
  * 
  * @see AjaxModalDialogOpener
- * @see <a href="http://www.wildbit.com/labs/modalbox"/>Modalbox Page</a>
+ * @see <a href="http://www.wildbit.com/labs/modalbox">Modalbox Page</a>
  * @see <a href="http://code.google.com/p/modalbox/">Google Group</a>
  * @author chill
  * 
@@ -137,6 +138,12 @@ import er.extensions.components._private.ERXWOForm;
  * TODO add transitioning to other contents without closing dialog
  */
 public class AjaxModalDialog extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "AMD.close();";
@@ -155,13 +162,13 @@ public class AjaxModalDialog extends AjaxComponent {
 	private WOComponent previousComponent;
 	private String ajaxComponentActionUrl;
 	
-	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(AjaxModalDialog.class);
 
 	public AjaxModalDialog(WOContext context) {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -250,27 +257,16 @@ public class AjaxModalDialog extends AjaxComponent {
 	}
 
 	/**
-	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog
-	 * without updating the title.
-	 * 
-	 * @see #update(WOContext, String)
+	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog.
+	 *
 	 * @param context the current WOContext
-	 * @deprecated use update(WOContext, null) instead
+	 * @param newContent the new content for the updated dialog
+	 * @param title optional new title for the updated dialog
 	 */
-	public static void update(WOContext context) {
-		update(context, null);
-	}
-	
-	/**
-	 * Call this method to have a JavaScript response returned that updates the title of the modal dialog.
-	 * 
-	 * @see #update(WOContext, String)
-	 * @param context the current WOContext
-	 * @param title the new title for the dialog window
-	 * @deprecated use update(WOContext, title) instead
-	 */
-	public static void setTitle(WOContext context, String title) {
-		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
+	public static void update(WOContext context, WOComponent newContent, String title) {
+		AjaxModalDialog currentDialog = currentDialog(context);
+		currentDialog._actionResults = newContent;
+		update(context, title);
 	}
 
 	public void setCurrentDialogInPageIfNecessary(WOActionResults results, WORequest request, WOContext context) {
@@ -318,6 +314,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#awake()
 	 */
+	@Override
 	public void awake() {
 		super.awake();
 		if (_actionResults != null) {
@@ -330,6 +327,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (isOpen()) {
@@ -359,9 +357,10 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * Overridden to include result returned by action binding if bound.
 	 *
 	 * @see #close(WOContext)
-	 * @see #update(WOContext)
+	 * @see #update(WOContext, String)
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		pushDialog();		
@@ -400,6 +399,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return <code>true</code> if this request is for this component
 	 */
+	@Override
     protected boolean shouldHandleRequest(WORequest request, WOContext context) {
 		String elementID = context.elementID();
 		String senderID = context.senderID();
@@ -420,6 +420,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return null or dialog contents
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOActionResults response = null;
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
@@ -499,14 +500,15 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (context.isInForm()) {
-			logger.warn("The AjaxModalDialog should not be used inside of a WOForm (" + ERXWOForm.formName(context, "- not specified -") +
+			log.warn("The AjaxModalDialog should not be used inside of a WOForm ({}" +
 					") if it contains any form inputs or buttons.  Remove this AMD from this form, add a form of its own. Replace it with " +
-					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.");
-					logger.warn("    page: " + context.page());
-					logger.warn("    component: " + context.component());
+					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.", ERXWOForm.formName(context, "- not specified -"));
+					log.warn("    page: {}", context.page());
+					log.warn("    component: {}", context.component());
 		}
 		
 		if( ! booleanValueForBinding("enabled", true)) {
@@ -583,7 +585,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * Appends function body to open the modal dialog window.
 	 * 
-	 * @see AjaxModalDialog#openDialogFunctionName(String)
+	 * @see #openDialogFunctionName(String)
 	 * 
 	 * @param response WOResponse to append to
 	 * @param context WOContext of response
@@ -603,6 +605,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#sleep()
 	 */
+	@Override
 	public void sleep() {
 		if (_actionResults != null) {
 			_actionResults._sleepInContext(context());
@@ -643,6 +646,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return id()
 	 */
+	@Override
 	protected String _containerID(WOContext context) {
 		return id();
 	}
@@ -743,6 +747,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "wonder.js");
@@ -770,7 +775,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
 	 * nested in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
 	 * the outer one while processing this inner one
-	 * @see AjaxModalDialog#popDialog()
+	 * @see #popDialog()
 	 */
 	protected void pushDialog() {
 		outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
@@ -779,7 +784,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			hasWarnedOnNesting = true;
 			if (! ERXComponentUtilities.booleanValueForBinding(this, "ignoreNesting", false))
 			{
-				logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+				log.warn("AjaxModalDialog {} is nested inside of {}. Are you sure you want to do this?", id(), outerDialog.id());
 			}
 		}		
 	}
@@ -823,7 +828,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is opened
 	 */
 	protected String openDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
 	}
 	
 	/**
@@ -831,6 +836,6 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is closed
 	 */
 	protected String closeDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
 	}
 }

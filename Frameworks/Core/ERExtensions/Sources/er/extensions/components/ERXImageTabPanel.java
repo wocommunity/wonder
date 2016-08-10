@@ -9,19 +9,14 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-/*
- This component takes a list of tabs, the same as ERXTabPanel
- to find images, the naming convention is:
-
- /nsi/tab<tabName>.gif : tab is not selected
- /nsi/tab<tabName>Selected.gif : tab is selected
-
- where tabName is the name of the tab, minus spaces
- */
-
 /**
- * Tab panel using images.<br />
+ * This component takes a list of tabs, the same as ERXTabPanel
+ * to find images, the naming convention is:
  * 
+ * /nsi/tab&lt;tabName&gt;.gif : tab is not selected
+ * /nsi/tab&lt;tabName&gt;Selected.gif : tab is selected
+ * where tabName is the name of the tab, minus spaces
+ *
  * @binding bgcolor
  * @binding nonSelectedBgColor
  * @binding selectedTab
@@ -29,10 +24,15 @@ import com.webobjects.foundation.NSArray;
  * @binding tabNameKey
  * @binding tabs
  * @binding textColor
- * @binding useFormSubmit" defaults="Boolean
+ * @binding useFormSubmit defaults=Boolean
  */
-
 public class ERXImageTabPanel extends ERXTabPanel  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXImageTabPanel(WOContext context) {
         super(context);

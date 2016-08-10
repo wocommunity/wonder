@@ -1,0 +1,160 @@
+<html>
+<body>
+
+<p>
+EOAdaptor that uses Neo4J graph database for data storage. Neo4J database is a set of nodes, named directional relationships between nodes and key-value properties set on both nodes and 
+relationships. 
+</p>
+
+<p>
+To avoid confusion between EOF framework relationships and Neo4J relationship, we will use the following convention in this documentation - EOF relationships will be referred 
+to as <i>EO relationships</i>, Neo4J relationships will be referred to as <i>relationships</i>.
+</p>
+
+
+
+<h1>1. How it works</h1>
+
+<h2>1.1.Representation in Neo4J</h2>
+<p>
+Generally each entity record is stored using a node or a relationship. Storing entity record as a relationship is a special case only for entities acting as join tables, where primary key 
+consists of two values being foreign keys. Such relationship name is equal to represented entity name. In all other cases you can think of entity record being a node.
+</p>
+
+<p>
+All to-one EO relationships are stored as relationships, where the start node represents record from the entity that has foreign key column and the end node is a node representing record 
+referrenced by this foreign key. Relationship name has form <code><i>entity-name</i>:<i>relationship-name</i></code> to distinguish between relationships originating from nodes for different entities
+but with the same relationship names (in Neo4J unlike RDBS there are no separate spaces for different entity types). To-many EO relationship values are calculated by traversing to-one 
+relationships in the opposite direction. 
+</p>
+
+<p>
+EO attribute values, regardless of whether an entity is stored using nodes or relationships (for join entities) its EO attribute values are stored as node/relationship property in Neo4J, except for 
+primary keys and foreign keys. All values are stored using the same Java type in Neo4J except for <code>java.util.Date</code> subclasses for which we store them as a number of milliseconds
+(we don't store time zone though, should be added if needed). If value for some EO attribute is null then the property corresponding to this value is not set in the corresponding node/relationship
+(in other words <code>null</code>s are represented as empty values).
+</p>
+
+<p>
+Foreign key values are not stored at all. Their role in RDBS is to simulate relationships. In Neo4J having real relationships these are no longer relevant, but for EOF compatibility
+(EOF translates fetch specifications with EO relationship values into matching by foreign keys and then passes it down to EOAdaptor) we calculate foreign key value by examining Neo4J 
+relationship destination.
+</p>
+
+<p>
+<div>
+Primary keys for entities stored using nodes are not stored among attributes but node IDs are used in their place (it's much quicker for Neo4J to retrieve just a node with the specified ID
+rather than storing it somewhere else and searching). See <a href="#inserting">Inserting a new record</a> to read on how primary keys are being assigned.
+</div>
+<div>
+Although relationships do have their own IDs like nodes, IDs for relationships representing join entities are ignored and their calculated foreign key values are used instead. 
+</div>  
+</p>
+
+<p>
+Neo4J keeps all nodes in one space making it difficult to tell by looking at the node which entity record it represents. Intuition tells to use additional property for each node with an
+entity name and that was initial implementation but over a time it turned out that we need to know the type only for queries in which we go to Lucene (see <a href="#queries">Queries</a>).
+</p>
+
+<p>
+See <a href="er/neo4jadaptor/storage/package-summary.html">er.neo4jadaptor.storage</a> package summary for more details.
+</p>
+
+<h2><a name="inserting">1.2. Inserting a new record</a></h2>
+<p>
+Node IDs in Neo4J are read-only and can't be manually set (see <a href="#limitations">Limitations</a>) making it a bit more complex process to insert a row into the database due to a two-step
+process where EOF first request a new primary key to be generated and then it requests the adaptor to save a row with some given values, including primary key value. We use as primary keys 
+node IDs, which once created can't be changed and node ID is known only when the node is created so the node gets created already at the point when EOF only requests a new primary key.
+At this point node is marked as temporary by linking it with <code>TEMPORARY</code> relationship to the graph root. When EOF comes back to actually set its values, this marker relationship
+is removed. 
+</p>
+
+<h2><a name="queries">1.3. Queries</a></h2>
+<p>
+Neo4J comes in with a built-in Lucene support. For each entity record in parallel to storing it as a Neo4J node/relationship we put its representation in Lucene. Depending on the type
+of query we refer to Lucene, Neo4J API or a mixture of these. We update Lucene index automatically whenever create/update/delete operation on a record is performed, storing each node or 
+relationship representing join entity as a single Lucene document, where each EO attribute has corresponding Lucene field. Additionally we add more artificial Lucene fields that:
+<ul>
+<li>contain entity name</li>
+<li>for each textual EO attribute value store its value in lowercase for to support case insensitive searches</li>
+</ul>
+
+</p> 
+
+<p>
+Queries can be divided into two categories:
+<ul>
+<li>fetching records related to the one, well known record</li>
+<li>fetching records from an unknown neighborhood</li>
+</ul>
+
+Lucene performs quite fast, but has constant overhead so for the first category we examine result nodes/relationships directly in a way very similar to Neo4J traversers, for the second 
+category we go to Lucene. Join entities are again treated exceptionally and regardless of the query type we always use Neo4J examination for these.
+</p>
+
+<p>
+<div>
+Whenever some query results are returned they are given in the form of a <a href="er/neo4jadaptor/utils/cursor/Cursor.html">Cursor</a> which is an iterator with an additional 
+<code>close</code> method. Result candidates are evaluated lazily as the <code>Cursor</code> user requests the next value.
+</div>
+<div>
+Correct way to use <a href="er/neo4jadaptor/utils/cursor/Cursor.html">Cursor</a> is:
+<pre>
+Cursor<?> cursor = getCursor();
+
+try {
+	// getting cursor values here
+} finally {
+	// always close cursor at the end
+	cursor.close();
+}
+</pre>
+</div>
+</p>
+
+<p>
+See <a href="er/neo4jadaptor/query/package-summary.html">er.neo4jadaptor.query</a> package summary for more details.
+</p>
+
+<h1>2. General architecture</h1>
+
+<h2>Ersatz</h2>
+This adaptor uses three technologies (Lucene/Neo4J/NextStep collection). Each of these technologies has a custom way to represent a record/document using different sets of
+supported types and ways for denoting absent or <code>null</code> values. To avoid confusion we use type record <a href="er/neo4jadaptor/ersatz/Ersatz.html">Ersatz</a> as a universal
+communication language between libraries and then each library uses own translator to transform <a href="er/neo4jadaptor/ersatz/Ersatz.html">Ersatz</a> object into custom representation.
+Quoting <a href="http://en.wikipedia.org/wiki/Ersatz" target="_about">wikipedia</a>:
+<p>
+<cite>
+Ersatz means 'substituting for, and typically inferior in quality to', e.g. 'chicory is ersatz coffee'. It is a German word literally meaning substitute or replacement.
+</cite>
+</p>
+
+
+<h2>Major components</h2>
+There are 4 major components separated between packages composing this framework:
+<li>database pool which decides which Neo4J database type to use (see <a href="er/neo4jadaptor/database/pool/package-summary.html">er.neo4jadaptor.database.pool</a> package)</li>
+<li>ersatz for communication between components (see <a href="er/neo4jadaptor/ersatz/package-summary.html">er.neo4jadaptor.ersatz</a> package)</li>
+<li>storage for storing record values (see <a href="er/neo4jadaptor/storage/package-summary.html">er.neo4jadaptor.storage</a> package)</li>
+<li>query for EOFetchSpecification query support (see <a href="er/neo4jadaptor/query/package-summary.html">er.neo4jadaptor.query</a> package)</li>
+</ul>
+
+Refer to package description for each component details. 
+
+<h1><a name="limitations">3. Limitations</a></h1>
+<ul>
+<li>Join entities must be two entities join</li>
+<li>Join entities must not have any other to-one EO relationships except for the main two</li>
+<li>All entities (except for joins) primary keys must be one value of type integer (in math terms, so in Java Integer or Long type can be used)</li> 
+<li>Primary key values should never be set manually</li>
+</ul>
+
+<h1>4. How to use it</h1>
+There are two things you need to do to start using Neo4J adaptor in your model:
+<ol>
+<li>Set adaptor name to "Neo4J"</li>
+<li>In connection dictionary set value for "URL" key being filesystem path to your database. At the moment only <code>file://...</code> URLs are supported.</li>
+</ol>
+Since graph database has no schema you don't need to set up database, it will be created and set up by the adaptor.
+
+</body>
+</html>

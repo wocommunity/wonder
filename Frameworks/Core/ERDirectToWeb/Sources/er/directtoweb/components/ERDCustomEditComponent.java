@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -21,16 +22,24 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
- * Superclass for most of the custom edit components.  <br />
- * 
+ * <span class="en">Superclass for most of the custom edit components.</span>
+ * <span class="ja">カスタム編集可能コンポーネントのスーパークラス</span>
  */
-
 public abstract class ERDCustomEditComponent extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 2L;
 
     /** logging support */
     public final static Logger log = Logger.getLogger(ERDCustomEditComponent.class);
 
-    /** interface for all the keys used in this pages code */
+    /** 
+     * <span class="en">interface for all the keys used in this pages code</span>
+     * <span class="ja">このページで使用する全キーのインタフェース</span>
+     */
     public static interface Keys {
         public static final String object = "object";
         public static final String localContext = "localContext";
@@ -51,7 +60,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     private EOEnterpriseObject object;
     protected EOEditingContext editingContext;
     
-    public Object objectPropertyValue() {
+   public Object objectPropertyValue() {
         return objectKeyPathValue();
     }
     public void setObjectPropertyValue(Object newValue) {
@@ -64,21 +73,51 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
         if (key() != null && object() != null) object().takeValueForKeyPath(newValue,key());
     }
 
+    /**
+     * <span class="ja">
+     * オブジェクトをセットします
+     * 
+     * @param newObject - 新オブジェクト
+     * </span>
+     */
     public void setObject(EOEnterpriseObject newObject) {
         object=newObject;
-        if (object!=null) // making sure the editing context stays alive
+        if (object!=null) {
+        	// making sure the editing context stays alive
             editingContext=object.editingContext();
-    }
-    public EOEnterpriseObject object() {
-        if (object==null && !synchronizesVariablesWithBindings())
-            object=(EOEnterpriseObject)valueForBinding(Keys.object);
-        return object;
+        }
     }
     
+    /**
+     * <span class="ja">
+     * エンタプライス・オブジェクトを戻します。
+     * 
+     * @return エンタプライス・オブジェクト
+     * </span>
+     */
+    public EOEnterpriseObject object() {
+        if (object==null && !synchronizesVariablesWithBindings()) {
+            object=(EOEnterpriseObject)valueForBinding(Keys.object);
+            if (object!=null) {
+            	/*
+            	 * making sure the editing context stays alive
+            	 * ...
+            	 * I don't think this is really necessary, but doing
+            	 * it to be consistent.
+            	 */
+                editingContext=object.editingContext();
+            }
+        }
+        return object;
+    }
+
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return true; }
 
     /** Used by stateful but non-synching subclasses */
+    @Override
     public void resetCachedBindingsInStatefulComponent() {
         super.resetCachedBindingsInStatefulComponent();
         object = null;
@@ -87,6 +126,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     }
 
     // Used by stateless subclasses
+    @Override
     public void reset() {
         super.reset();
         object = null;
@@ -118,7 +158,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
      */
     public NSArray defaultSortOrderingsForDestinationEntity() {
         if (_defaultSortOrderingsForDestinationEntity == null) {
-            final D2WContext context = new D2WContext();
+            final D2WContext context = ERD2WContext.newContext();
             final NSArray sortOrderingDefinition;
             final int sortOrderingDefinitionCount;
             NSMutableArray sortOrderings = null;

@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
@@ -33,6 +36,8 @@ import er.extensions.jdbc.ERXSQLHelper.CustomTypes;
  * @author mschrag
  */
 public class ERXMigrationTable {
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
+
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
 	private NSMutableArray<ERXMigrationIndex> _indexes;
@@ -66,6 +71,7 @@ public class ERXMigrationTable {
 	
 	/**
 	 * Returns the configured default languages for this migration.
+	 * @return the configured default languages for this migration
 	 */
 	public NSArray<String> languages() {
 		//TODO AK have a local override
@@ -226,7 +232,9 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @param defaultValue the default value for the column
+	 * @param autocreate if <code>true</code> will call create on new column
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
@@ -253,6 +261,7 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @param defaultValue the default value for the column
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
@@ -275,6 +284,7 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
@@ -733,7 +743,8 @@ public class ERXMigrationTable {
 
 	/**
 	 * Returns a new flag boolean column.  See newColumn(..) for the full docs.
-	 * This might or might not work with your database, it's only tested with PostgreSQL.
+	 * This might or might not work with your database, it's only tested with PostgreSQL
+	 * and FrontBase.
 	 * 
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
@@ -746,7 +757,8 @@ public class ERXMigrationTable {
 
 	/**
 	 * Returns a new flag boolean column.  See newColumn(..) for the full docs.
-	 * This might or might not work with your database, it's only tested with PostgreSQL.
+	 * This might or might not work with your database, it's only tested with PostgreSQL
+	 * and FrontBase.
 	 * 
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
@@ -895,7 +907,19 @@ public class ERXMigrationTable {
 	public ERXMigrationColumn newIpAddressColumn(String name, boolean allowsNull, String defaultValue) throws SQLException {
 		return newColumn(name, CustomTypes.INET, 39, 0, 0, allowsNull, null, defaultValue);
 	}
-	
+
+	/**
+	 * Returns a new UUID column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newUuidColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.BINARY, 16, 0, 0, allowsNull, null);
+	}
+
 	/**
 	 * Callback method for ERXMigrationColumn to notify the table that
 	 * it has been deleted.
@@ -946,7 +970,7 @@ public class ERXMigrationTable {
 			_new = false;
 		}
 		else {
-			ERXMigrationDatabase.log.warn("You called .create() on the table '" + _name + "', but it was already created.");
+			log.warn("You called .create() on the table '{}', but it was already created.", _name);
 		}
 	}
 
@@ -976,18 +1000,24 @@ public class ERXMigrationTable {
 	/**
 	 * Returns an array of EOSQLExpressions for renaming this table.
 	 * 
+	 * @param newName
+	 *            new table name
+	 * 
 	 * @return an array of EOSQLExpressions for renaming this table
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<EOSQLExpression> _renameToExpressions(String newName) {
 		EOSchemaSynchronization schemaSynchronization = _database.synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, (NSDictionary<String, String>) NSDictionary.EmptyDictionary);
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, NSDictionary.EmptyDictionary);
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "rename table", true);
 		return expressions;
 	}
 
 	/**
 	 * Executes the SQL operations to rename this table.
+	 * 
+	 * @param newName
+	 *            new table name
 	 * 
 	 * @throws SQLException if the rename fails
 	 */
@@ -997,7 +1027,9 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table
+	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table.
+	 * 
+	 * @param columns 
 	 * 
 	 * @return an array of EOSQLExpressions for setting the primary key constraint of this table
 	 */
@@ -1043,6 +1075,7 @@ public class ERXMigrationTable {
 	 * 
 	 * @param indexName the name of the index
 	 * @param columnName the name of the column to add a unique index on
+	 * @param width 
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addUniqueIndex(String indexName, String columnName, int width) throws SQLException {
@@ -1120,6 +1153,7 @@ public class ERXMigrationTable {
 	 * 
 	 * @param indexName the name of the index
 	 * @param columnName the name of the column to add a unique index on
+	 * @param width 
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addIndex(String indexName, String columnName, int width) throws SQLException {

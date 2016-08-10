@@ -15,10 +15,12 @@ import er.extensions.eof.ERXEC;
 
 public class PushBugsDelegate extends BranchDelegate {
 
+    @Override
     protected Session session(WOComponent sender) {
         return (Session)sender.session();
     }
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         return result;

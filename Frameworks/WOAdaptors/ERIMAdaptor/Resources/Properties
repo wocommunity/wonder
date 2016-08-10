@@ -1,0 +1,40 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERIMAdaptor=load
+er.extensions.ERIMAdaptor.hasLocalization=false
+
+##############################################################
+## ERIMAdaptor REQUIRED
+##############################################################
+
+#### the screen name of the IM account that the server should login with
+#IMScreenName=
+
+#### the password of the IM account that the server should login with
+#IMPassword=
+
+##############################################################
+## ERIMAdaptor OPTIONAL
+##############################################################
+
+#### the conversation timeout time in milliseconds (default 5 minutes)
+#IMTimeout=
+
+#### whether or not the adaptor should autologin to AIM.  If false, you must call adaptor.connect() (default "true")
+#IMAutoLogin=
+
+#### the name of the DirectAction to call when a Conversation is initiated, the default is that you must create a public WOActionResults imConversationAction() { .. } method in your
+#### DirectAction class (default "imConversation")
+#IMConversationActionName=
+
+#### whether or not you want to have a second AIM account login and watchdog the first.  Most of the AIM libraries can have issues with getting kicked off after a period of time.  If you
+#### have two AIM accounts, they can keep eachother alive. (default "false")
+#IMWatcherEnabled=
+	
+#### if IMWatcherEnabled, the factory class to use (default same as IMFactory)
+#IMWatcherFactory=
+
+#### the screen name of the watcher IM account (required if IMWatcherEnabled)
+#IMWatcherScreenName=
+
+#### the password of the watcher IM account (required if IMWatcherEnabled)
+#IMWatcherPassword=

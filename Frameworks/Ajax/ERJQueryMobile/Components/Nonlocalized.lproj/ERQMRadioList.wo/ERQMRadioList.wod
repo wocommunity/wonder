@@ -1,0 +1,30 @@
+RadioButtonWrapper : WOGenericContainer {
+	elementName = "fieldset";
+	name = context.elementID;
+	elementID = wrapperElementID;
+	formValue = selection;
+	data-role = "controlgroup";
+	otherTagString = html;
+}
+
+RadioButtonRepetition : WORepetition {
+	list = ^list;
+	index = index;
+	item = currentItem;
+}
+
+RadioButton : WOGenericElement {
+	elementName = "input";
+	type = "radio";
+	name = wrapperElementID;
+	id = id;
+	value = index;
+	otherTagString = otherTagString;
+}
+
+LABEL : WOGenericContainer {
+	elementName = "label";
+	for = id;
+}
+
+Content : WOComponentContent {}

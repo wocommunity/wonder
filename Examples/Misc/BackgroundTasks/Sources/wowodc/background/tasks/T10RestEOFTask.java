@@ -4,7 +4,8 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.ResultItem;
@@ -14,12 +15,12 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * A task that <em>returns</em> an EOGlobalID result.
@@ -40,13 +41,10 @@ import er.extensions.foundation.ERXStatusInterface;
  * 
  * Every number checked is stored as a {@link ResultItem} that is related to the {@link TaskInfo}
  * 
- * 
  * @author kieran
- *
  */
-public class T10RestEOFTask implements Callable<EOGlobalID>, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T10RestEOFTask.class);
+public class T10RestEOFTask implements Callable<EOGlobalID>, IERXStatus, IERXPercentComplete, IERXStoppable {
+	private static final Logger log = LoggerFactory.getLogger(T10RestEOFTask.class);
 	
 	// Duration of the example task in milliseconds
 	private final long DURATION = 15000;
@@ -99,10 +97,10 @@ public class T10RestEOFTask implements Callable<EOGlobalID>, ERXStatusInterface 
 				resultItem.setNumberToCheck(_numberToCheck);
 
 				if (Utilities.isPrime(_numberToCheck)) {
-					log.info("==>> " + _numberToCheck + " is a PRIME number.");
+					log.info("==>> {} is a PRIME number.", _numberToCheck);
 					resultItem.setIsPrime(Boolean.TRUE);
 				} else {
-					log.debug(_numberToCheck + " is not a prime number but is a COMPOSITE number.");
+					log.debug("{} is not a prime number but is a COMPOSITE number.", _numberToCheck);
 					resultItem.setIsPrime(Boolean.FALSE);
 				}
 				
@@ -135,14 +133,14 @@ public class T10RestEOFTask implements Callable<EOGlobalID>, ERXStatusInterface 
 	}
 	
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
@@ -155,5 +153,4 @@ public class T10RestEOFTask implements Callable<EOGlobalID>, ERXStatusInterface 
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-	
 }

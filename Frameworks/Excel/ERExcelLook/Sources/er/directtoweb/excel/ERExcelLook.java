@@ -6,9 +6,9 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**

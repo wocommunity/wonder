@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -25,11 +26,16 @@ import er.extensions.localization.ERXLocalizer;
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Common superclass for date editing components.<br />
- * 
+ * Common superclass for date editing components.
  */
 
 public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditDatePopupCommon(WOContext context) { super(context); }
 
@@ -37,11 +43,11 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     protected String month;
     protected String year;
     public String currentMonth;
-    protected NSMutableArray yearList;
-    protected static NSArray monthList;
-    protected NSArray monthNameList;
-    protected static NSArray defaultMonthNameList;
-    protected static NSArray dayList;
+    protected NSMutableArray<String> yearList;
+    protected static NSArray<String> monthList;
+    protected NSArray<String> monthNameList;
+    protected static NSArray<String> defaultMonthNameList;
+    protected static NSArray<String> dayList;
 
     protected static final NSTimestampFormatter DAY_FORMAT =
         new NSTimestampFormatter("%d");
@@ -59,8 +65,12 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
 
     protected String time;
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+
+    @Override
     public void reset() {
         super.reset();
         yearList = null;
@@ -72,23 +82,24 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
         monthNameList = null;
     }
 
-    public NSArray dayList() {
+    public NSArray<String>  dayList() {
         if (dayList == null) {
-            dayList = new NSMutableArray(new Object[] {
+            dayList = new NSMutableArray<String> (
                 "01","02","03","04","05","06","07","08","09","10",
                 "11","12","13","14","15","16","17","18","19","20",
                 "21","22","23","24","25","26","27","28","29","30","31"
-            });
+            );
         }
         return dayList;
     }
 
-    public NSArray monthNameList() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> monthNameList() {
         if (monthNameList == null) {
-            monthNameList = (NSArray)ERXLocalizer.currentLocalizer().valueForKey("ERDDatePopup.monthList");
+            monthNameList = (NSArray<String>)ERXLocalizer.currentLocalizer().valueForKey("ERDDatePopup.monthList");
             if(monthNameList == null) {
                 if(defaultMonthNameList == null) {
-                    defaultMonthNameList = new NSArray(new Object[] { "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"});
+                    defaultMonthNameList = new NSArray<String>("Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
                 }
                 monthNameList = defaultMonthNameList;
             }
@@ -96,19 +107,19 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
         return monthNameList;
     }
 
-    public NSArray monthList() {
+    public NSArray<String> monthList() {
         if (monthList == null) {
-            monthList = new NSArray(new Object[] {
+            monthList = new NSArray<String>(
                 "01","02","03","04","05","06",
                 "07","08","09","10","11","12"
-            });
+            );
         }
         return monthList;
     }
 
-    public NSArray yearList() {
+    public NSArray<String> yearList() {
         if (yearList == null) {
-            yearList = new NSMutableArray();
+            yearList = new NSMutableArray<String>();
             int startYear = 1950, endYear = 2050;
             String yearRangeTop = null, yearRangeBottom = null;
             if ((valueForBinding("yearRangeTop") != null) && (valueForBinding("yearRangeBottom") != null)) {
@@ -117,8 +128,8 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
             }
             if (yearRangeBottom != null && yearRangeTop != null) {
                 try {
-                    Integer start = ERXConstant.integerForString(yearRangeBottom);
-                    Integer end = ERXConstant.integerForString(yearRangeTop);
+                    Integer start = ERXStringUtilities.integerWithString(yearRangeBottom);
+                    Integer end = ERXStringUtilities.integerWithString(yearRangeTop);
                     if (end.intValue() > start.intValue()) {
                         startYear = start.intValue();
                         endYear = end.intValue();

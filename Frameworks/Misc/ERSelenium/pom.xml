@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>misc</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.misc</groupId>
@@ -27,7 +27,7 @@
 			<artifactId>JavaXML</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.openqa.selenium.client-drivers</groupId>
+			<groupId>org.seleniumhq.selenium.client-drivers</groupId>
 			<artifactId>selenium-java-client-driver</artifactId>
 		</dependency>
 	</dependencies>
@@ -35,6 +35,8 @@
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<repositories>
+	<!-- OpenQA is off the air. I'm just commenting this out
+	instead of deleting it in case a replacement is necessary.
 		<repository>
 			<id>openqa-releases</id>
 			<name>OpenQA Releases</name>
@@ -46,5 +48,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		-->
 	</repositories>
 </project>

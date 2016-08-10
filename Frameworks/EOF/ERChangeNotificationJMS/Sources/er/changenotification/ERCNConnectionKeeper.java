@@ -6,13 +6,26 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import java.util.*;
-import java.text.*;
+import javax.jms.ConnectionMetaData;
+import javax.jms.ExceptionListener;
+import javax.jms.JMSException;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.naming.CommunicationException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 
-import javax.naming.*;
-import javax.jms.*;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSTimestamp;
 
 class ERCNConnectionKeeper implements ExceptionListener {
 
@@ -57,7 +70,7 @@ class ERCNConnectionKeeper implements ExceptionListener {
             return;
         } catch (NameNotFoundException ex) {
             // javax.naming.NameNotFoundException -- no topic
-            new RuntimeException("Cannot find the topic with name \"" + _coordinator.configuration().topicName() + "\"."
+            throw new RuntimeException("Cannot find the topic with name \"" + _coordinator.configuration().topicName() + "\"."
                     + "Please check if the JMS server is properly configured: " + ex.getMessage());
         } catch (NamingException ex) {
             if (verboseLogging) {
@@ -143,6 +156,7 @@ class ERCNConnectionKeeper implements ExceptionListener {
         // This TimerTask trys to recover the JMS connection.
         TimerTask recoveryTask = new TimerTask() {
 
+            @Override
             public void run() {
                 openConnection(QUIET_LOGGING);
                 if (isConnected())
@@ -157,6 +171,7 @@ class ERCNConnectionKeeper implements ExceptionListener {
             private NSTimestamp _downTime = new NSTimestamp();
             private String _downTimeString = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(_downTime);
 
+            @Override
             public void run() {
                 if (! _isConnected) {
                     double elapsTime = (new NSTimestamp().getTime() - _downTime.getTime()) / (60.0d * 60.0d * 1000.0d);

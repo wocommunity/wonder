@@ -2,8 +2,6 @@ package er.indexing.example.eof;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXMutableDictionary;
@@ -13,10 +11,6 @@ import er.indexing.attributes.ERIDocument;
 import er.indexing.attributes.ERIExtensibleObject;
 
 public class Asset extends _Asset implements ERIExtensibleObject {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Asset.class);
-
     public static final AssetClazz clazz = new AssetClazz();
     public static class AssetClazz extends _Asset._AssetClazz {
         /* more clazz methods here */
@@ -28,6 +22,7 @@ public class Asset extends _Asset implements ERIExtensibleObject {
      * Initializes the EO. This is called when an EO is created, not when it is 
      * inserted into an EC.
      */
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

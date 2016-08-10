@@ -11,7 +11,9 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -23,16 +25,17 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say 
- * states and depending on which state is picked the second popup might reflect all of the cities of that state.<br />
+ * states and depending on which state is picked the second popup might reflect all of the cities of that state.
+ * <p>
  * This WOComponent displays two pop-up buttons. One pop-up displays a list of what can be thought of as parent entities. 
  * The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in 
  * the parent list, the child list is instantly modified to reflect the children entities available to the user 
  * through that parent. This is done through client-side Javascript. Also handles to-many selections both on the 
- * parent and the children.<br />
+ * parent and the children.
+ * <p>
  * For example:
 <pre><code>
 parent1(child1,child2,child3)
@@ -66,14 +69,19 @@ parent3(child2,child5)
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSPopUpRelationPicker(WOContext aContext) {
         super(aContext);
     }
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXJSPopUpRelationPicker.class);
-    public final static Logger jsLog = Logger.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
+    private final static Logger log = LoggerFactory.getLogger(ERXJSPopUpRelationPicker.class);
+    private final static Logger jsLog = LoggerFactory.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
 
     protected Integer _size;
     protected String _childDisplayValueName;
@@ -104,6 +112,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     private static final int NOT_FOUND = -1;
     private static final NSArray UNSET = new NSArray();
     
+    @Override
     public void awake() {
         super.awake();
         updateVarNames();
@@ -111,7 +120,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     protected void updateVarNames() {
         String elementID = context().elementID();
-        elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
+        elementID = StringUtils.replace(elementID,  ".", "_");
         pickerName = "picker_"+ elementID;
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;
@@ -139,7 +148,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected Object idForParent(Object parent) {
         if(parent != null) {
-            return new Integer(parentEntitiesList().indexOfObject(parent));
+            return Integer.valueOf(parentEntitiesList().indexOfObject(parent));
         }
         return null;
     }
@@ -156,7 +165,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                     return sortedChildren(parent).objectAtIndex(offset);
                 }
             } else {
-                log.info("Child ID not valid: " + id);
+                log.info("Child ID not valid: {}", id);
             }
         }
         return null;
@@ -174,7 +183,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             }
         } else {
             for (Enumeration parents = parentEntitiesList().objectEnumerator(); parents.hasMoreElements();) {
-                Object aParent = (Object) parents.nextElement();
+                Object aParent = parents.nextElement();
                 int offset = sortedChildren(aParent).indexOfObject(child);
                 if(offset != NOT_FOUND) {
                     return idForParent(aParent) + "|" + offset;
@@ -185,6 +194,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     
    
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         NSArray parentFormValues = request.formValuesForKey(parentSelectName);
         NSArray childFormValues = request.formValuesForKey(childSelectName);
@@ -256,21 +266,18 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     public String jsString() {
         // this method returns all the javascript we need to embed in the web page.
-        StringBuffer returnString;
-
-        returnString = new StringBuffer(2000);
-        returnString.append("\n");
+        StringBuilder returnString = new StringBuilder(2000);
+        returnString.append('\n');
 
         // This Javascript string builds an array of Entity objects on the browser end.
-        returnString.append("" + objectArrayCreationString() + "\n");
-        if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
+        returnString.append(objectArrayCreationString());
+        returnString.append('\n');
+        jsLog.debug("JSPopUpRelationPicker jsString  returnString is {}", returnString);
         return returnString.toString();
     }
 
     public String hiddenFormElementStrings() {
-        StringBuffer returnString;
-
-        returnString = new StringBuffer(500);
+        StringBuilder returnString  = new StringBuilder(500);
         returnString.append("\n<script language=\"JavaScript\">");
 		String childToSelect = "";
 		if (!multiple() && 
@@ -290,7 +297,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         +");\n"
         + (parentPopUpStringForAll() == null ? pickerName + ".parentChanged("+childToSelect+");"	: "")
         +"\n</script>");
-        log.debug(returnString);
+        log.debug("{}", returnString);
 		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
 		// we are editing a new object
         return returnString.toString();
@@ -303,7 +310,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             setSelectedParents(new NSArray(parentEntitiesList().objectAtIndex(0)));
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
-            Object aEntity = (Object)parentEntitiesList().objectAtIndex(i);
+            Object aEntity = parentEntitiesList().objectAtIndex(i);
             returnString.append("\t<option ");
             if (isSelectedParent(aEntity)) {
                 returnString.append("selected=\"selected\" ");
@@ -352,7 +359,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         }
 
         returnString.append("</select>\n");
-        if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
+        jsLog.debug("JSPopUpRelationPicker childPopUpString  returnString is {}", returnString);
         return returnString.toString();
     }
     
@@ -392,19 +399,21 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         // here's an example of the string this method should return:
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
-        StringBuffer returnString = new StringBuffer(1000);
-        returnString.append("var "+objectsArrayName+" = new Array(");
+        StringBuilder returnString = new StringBuilder(1000);
+        returnString.append("var ");
+        returnString.append(objectsArrayName);
+        returnString.append(" = [");
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
-            Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
+            Object aParent = parentEntitiesList().objectAtIndex(i);
             returnString.append("\n\tnew Entity(");
             returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aParent, parentDisplayValueName()) + "\",");
             returnString.append(" \"" + idForParent(aParent) + "\",");
             returnString.append(" \"" + System.identityHashCode(aParent) + "\",");
 
             // now do all the possible children of the parent. Each child should look like 'new Entity("poodle","4",null,false)'
-            returnString.append(" new Array(");
+            returnString.append(" [");
             NSArray childrenOfAParent = sortedChildren(aParent);
 
             int jCount = childrenOfAParent.count();
@@ -412,7 +421,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             int defaultChildIndex=-1;
 
             for (int j=0;j<jCount;j++) {
-                Object aChild = (Object)childrenOfAParent.objectAtIndex(j);
+                Object aChild = childrenOfAParent.objectAtIndex(j);
                 returnString.append("\n\t\t new Entity(");
                 returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
@@ -424,14 +433,14 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                     returnString.append(" false");
                 }
                 returnString.append(", null");
-                returnString.append(")");
+                returnString.append(')');
                 if (j != jCount - 1) {
                     // append a comma and a space
                     returnString.append(", ");
                 }
                 if (aChild==defaultChild) defaultChildIndex=j;
             }
-            returnString.append("),");
+            returnString.append("],");
             if (isSelectedParent(aParent)) { // in the single case, the parent will be updated when we call parent changed
                 returnString.append(" true");
             } else {
@@ -439,7 +448,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             }
             returnString.append(", ");
             returnString.append(defaultChild!=null ? "\""+defaultChildIndex+"\"" : "-1");
-            returnString.append(")");
+            returnString.append(')');
 
 
             if (i != iCount - 1) {
@@ -447,13 +456,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append(", ");
             }
         }
-        returnString.append(");");
+        returnString.append("];");
         return returnString.toString();
     }
 
     /**
      * @param aParent
-     * @return
      */
     private boolean isSelectedParent(Object aParent) {
         return parentSelection().containsObject(aParent);
@@ -461,7 +469,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     /**
      * @param aChild
-     * @return
      */
     private boolean isSelectedChild(Object aChild) {
         return childrenSelection().containsObject(aChild);
@@ -586,7 +593,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     public int size() {
         if(_size == null) {
-            _size = new Integer(intValueForBinding("size", multiple() ? 5 : 1));
+            _size = Integer.valueOf(intValueForBinding("size", multiple() ? 5 : 1));
         }
         return _size.intValue();
     }
@@ -597,6 +604,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return _multiple.booleanValue();
     }
     
+    @Override
     public void reset() {
         super.reset();
         _childrenSelection = null;

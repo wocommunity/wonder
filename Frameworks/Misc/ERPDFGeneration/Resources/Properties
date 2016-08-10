@@ -1,1 +1,5 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERPDFGeneration=load
+er.extensions.ERPDFGeneration.hasLocalization=false
+
 java.awt.headless=true

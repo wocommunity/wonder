@@ -48,6 +48,7 @@ public abstract class ERMD2WHeader extends ERDCustomComponent{
 		return _object;
     }
     
+    @Override
     public String key() {
     	if (_key == null) {
     		_key = (String)valueForBinding("key");

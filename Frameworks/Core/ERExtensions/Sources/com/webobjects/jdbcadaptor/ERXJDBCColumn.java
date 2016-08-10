@@ -1,16 +1,14 @@
 package com.webobjects.jdbcadaptor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXPatcher;
@@ -22,8 +20,7 @@ import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
  *
  */
 public class ERXJDBCColumn extends JDBCColumn {
-	
-	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCColumn.class);
 
 	private String _constantClassName;
 	private static final String NO_NAME = "no name";
@@ -36,6 +33,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		super(aChannel);
 	}
 
+	@Override
 	public void takeInputValue(Object arg0, int arg1, boolean arg2) {
 		try {
 			super.takeInputValue(arg0, arg1, arg2);
@@ -52,6 +50,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		}
 	}
 
+	@Override
 	Object _fetchValue(boolean flag) {
 		if (_rs == null || _column < 1)
 			throw new JDBCAdaptorException(" *** JDBCColumn : trying to fetchValue on a null ResultSet [" + _rs
@@ -81,7 +80,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		try {
 			return super._fetchValue(flag);
 		} catch(NSForwardException ex) {
-			log.error("There's an error with this attribute: " + _attribute);
+			log.error("There's an error with this attribute: {}", _attribute);
 			throw ex;
 		}
 	}

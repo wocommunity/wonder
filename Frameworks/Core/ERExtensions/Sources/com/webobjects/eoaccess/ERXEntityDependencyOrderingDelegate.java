@@ -1,12 +1,12 @@
 package com.webobjects.eoaccess;
 
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSComparator.ComparisonException;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.eof.ERXEntityFKConstraintOrder;
 import er.extensions.eof.ERXEntityOrder;
@@ -31,7 +31,7 @@ public class ERXEntityDependencyOrderingDelegate {
 
 	public static final String ERXEntityDependencyOrderingDelegateActiveKey = "com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active";
     protected NSComparator adaptorOpComparator;
-    private static Logger logger = Logger.getLogger(ERXEntityDependencyOrderingDelegate.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXEntityDependencyOrderingDelegate.class);
 
 
     public ERXEntityDependencyOrderingDelegate() {
@@ -41,22 +41,22 @@ public class ERXEntityDependencyOrderingDelegate {
 
 
     /**
-     * Lazy creation of an EOAdaptorOpComparator that uses a list of entities that are in FK dependancy order.
+     * Lazy creation of an EOAdaptorOpComparator that uses a list of entities that are in FK dependency order.
      * Enable DEBUG logging to see the ordered list of entity names.
      *
      * @see com.webobjects.eoaccess.EOAdaptorOpComparator
-     * @return EOAdaptorOpComparator that uses a list of entities that are in FK dependancy order
+     * @return EOAdaptorOpComparator that uses a list of entities that are in FK dependency order
      */
     protected NSComparator adaptorOpComparator() {
         if (adaptorOpComparator == null) {
             ERXEntityFKConstraintOrder constraintOrder = new ERXEntityFKConstraintOrder();
             NSComparator entityOrderingComparator = new ERXEntityOrder.EntityInsertOrderComparator(constraintOrder);
             try {
-                NSArray entityOrdering = constraintOrder.allEntities().sortedArrayUsingComparator(entityOrderingComparator);
-                NSArray entityNameOrdering = (NSArray)entityOrdering.valueForKey("name");
+                NSArray<EOEntity> entityOrdering = constraintOrder.allEntities().sortedArrayUsingComparator(entityOrderingComparator);
+                NSArray<String> entityNameOrdering = (NSArray<String>)entityOrdering.valueForKey("name");
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Entity ordering:\n " + entityNameOrdering.componentsJoinedByString("\n"));
+                if (log.isDebugEnabled()) {
+                    log.debug("Entity ordering:\n{}", entityNameOrdering.componentsJoinedByString("\n"));
                 }
 
                 adaptorOpComparator = new ERXAdaptorOpComparator(entityNameOrdering);
@@ -78,12 +78,12 @@ public class ERXEntityDependencyOrderingDelegate {
      * @param adaptorOperations list of operations to execute
      * @param adaptorChannel the adaptor channel these will be executed on
      *
-     * @see com.webobjects.eoaccess.EODatabaseContext.Delegate#databaseContextWillPerformAdaptorOperations(EODatabaseContext, NSArray,EOAdaptorChannel)
+     * @see com.webobjects.eoaccess.EODatabaseContext.Delegate#databaseContextWillPerformAdaptorOperations(EODatabaseContext,NSArray,EOAdaptorChannel)
      * @return operations in an order that should avoid FK constraint violations
      */
-    public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext aDatabaseContext,
-                                                               NSArray adaptorOperations,
-                                                               EOAdaptorChannel adaptorChannel) {
+	public NSArray<EOAdaptorOperation> databaseContextWillPerformAdaptorOperations(EODatabaseContext aDatabaseContext, 
+																				   NSArray<EOAdaptorOperation> adaptorOperations, 
+																				   EOAdaptorChannel adaptorChannel) {
         try {
             return adaptorOperations.sortedArrayUsingComparator(adaptorOpComparator());
         }
@@ -98,7 +98,7 @@ public class ERXEntityDependencyOrderingDelegate {
     	// Useful for debugging
     	if ( ! (exception instanceof EOGeneralAdaptorException))
     	{
-        	logger.error("Unexpected non-EOGeneralAdaptorException exception", exception);
+        	log.error("Unexpected non-EOGeneralAdaptorException exception", exception);
     	}
     	
     	return true;

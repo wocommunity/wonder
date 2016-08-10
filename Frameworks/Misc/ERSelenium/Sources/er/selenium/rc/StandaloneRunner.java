@@ -84,7 +84,7 @@ public class StandaloneRunner {
 					log.error(String.format("test '%s' FAILED: %s", testFile, e));
 					log.error("test log:");
 					int curCommand = 0;
-					for (SeleniumTest.Element elem: (NSArray<SeleniumTest.Element>)test.elements()) {
+					for (SeleniumTest.Element elem: test.elements()) {
 						if (elem instanceof SeleniumTest.Command) {
 							if (curCommand++ > e.processedCommands()) {
 								break;

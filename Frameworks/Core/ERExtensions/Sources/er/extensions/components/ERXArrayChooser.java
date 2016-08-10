@@ -1,6 +1,7 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -29,12 +30,15 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
 
 /**
- * This is an effort to consolidate the WOToOneRelationship, WOToManyRelationship and descendant components. <br />
+ * This is an effort to consolidate the WOToOneRelationship, WOToManyRelationship and descendant components.
+ * <p>
  * As most of the code between the two is shared anyway, it makes sense to provide a base class and only
  * handle the differences in the descendants. One core difference if that this component can handle POJOs both as the
- * source and the destination objects. You can't instantiate one of these yourself.<br />
+ * source and the destination objects. You can't instantiate one of these yourself.
+ * <p>
  * This class can handle to-one, to-many and simple attribute selections. You can can set the list via 
- * possibleChoices, dataSource, destinationEntityName or via sourceEntityName and relationshipKey.<br />
+ * possibleChoices, dataSource, destinationEntityName or via sourceEntityName and relationshipKey.
+ * <p>
  * The main difference between this component and the former WOToOne/WOToMany is that it is non-synchronizing. So if
  * you have custom subclasses of WOToOne/WOToMany you need to take this into account.
  * Also adds the values that are not included in the restricted-choice list. These items are marked by [name of item]. 
@@ -43,11 +47,15 @@ import er.extensions.foundation.ERXUtilities;
  * NOTE: currently "includeUnmatchedValues" is set to false
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
-
 public abstract class ERXArrayChooser extends ERXStatelessComponent {
+	private static final Logger log = LoggerFactory.getLogger(ERXArrayChooser.class);
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXArrayChooser.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static boolean localizeDisplayKeysDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.localizeDisplayKeysDefault", false);
     public static boolean includeUnmatchedValuesDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault", false);
@@ -83,6 +91,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
 
     protected abstract boolean isSingleSelection();
 
+    @Override
     public void reset() {
         super.reset();
         _sourceEntityName = null;
@@ -424,7 +433,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             			_list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
             		}
             	} else {
-            		log.error("EC of datasource is null, possible resubmit: " + ERXApplication.erxApplication().extraInformationForExceptionInContext(null, context()));
+            		log.error("EC of datasource is null, possible resubmit: {}", ERXApplication.erxApplication().extraInformationForExceptionInContext(null, context()));
             		_list = NSArray.EmptyArray;
             	}
             }
@@ -477,12 +486,13 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     }
     
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // we want to pass the validation here for the case where we are creating a new object
         // and are given isMandatory=0 on a mandatory relationship to force users to pick one..
         super.takeValuesFromRequest(r, c);
         
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
           Object realSource = realSourceObject();
           if(realSource instanceof EOEnterpriseObject) {
               EOEnterpriseObject localObject = (EOEnterpriseObject)realSource;

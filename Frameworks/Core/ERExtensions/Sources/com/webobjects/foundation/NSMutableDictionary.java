@@ -5,23 +5,33 @@ import java.util.Dictionary;
 import java.util.Map;
 
 /**
+ * <div class="en">
  * NSMutableDictionary reimplementation to support JDK 1.5 templates and the
  * proper collection methods. Use with
+ * </div>
  * 
- * <pre>
- * NSMutableDictionary&lt;String, String&gt; env = new NSMutableDictionary&lt;String, String&gt;(System.getenv(), true);
+ * <div class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。
+ * 使用は
+ * </div>
+ * 
+ * <pre>{@code
+ * NSMutableDictionary<String, String> env = new NSMutableDictionary<String, String>(System.getenv(), true);
  * 
  * for (String key : env)
  * 	logger.debug(env.valueForKey(key));
- * </pre>
+ * }</pre>
  * 
- * @param &lt;K&gt;
+ * @param <K>
  *            type of key contents
- * @param &lt;V&gt;
+ * @param <V>
  *            type of value contents
  */
 @SuppressWarnings("unchecked")
 public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
+  
+  static final long serialVersionUID = 6690723083816355576L;
+
 	//TODO iterator.remove() throws unimplemented
 
 	public NSMutableDictionary() {
@@ -175,7 +185,6 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	}
 
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
-	static final long serialVersionUID = 6690723083816355576L;
 
 	/**
 	 * Associate the <tt>value</tt> with <tt>key</tt> in this map. If the

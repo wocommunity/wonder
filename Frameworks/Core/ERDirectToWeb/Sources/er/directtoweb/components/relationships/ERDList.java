@@ -23,7 +23,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />
+ * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.
  * 
  * @binding object
  * @binding key
@@ -34,6 +34,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey useNestedEditingContext
  */
 public class ERDList extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /* logging support */
     static final Logger log = Logger.getLogger(ERDList.class);
@@ -42,8 +48,10 @@ public class ERDList extends ERDCustomEditComponent {
 
     public ERDList(WOContext context) { super(context); }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    @Override
     public void reset() {
         list = null;
         super.reset();
@@ -125,6 +133,7 @@ public class ERDList extends ERDCustomEditComponent {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
     
+    @Override
     public Object valueForKey(String key) {
         Object o = super.valueForKey(key);
         if (key.indexOf("emptyListMessage")!=-1) {
@@ -132,6 +141,7 @@ public class ERDList extends ERDCustomEditComponent {
         } 
         return o;
     }
+    @Override
     public Object valueForBinding(String key) {
         Object o = super.valueForBinding(key);
         if (key.indexOf("emptyListMessage")!=-1) {

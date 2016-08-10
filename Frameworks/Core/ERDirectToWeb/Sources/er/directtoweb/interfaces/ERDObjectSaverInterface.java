@@ -7,8 +7,7 @@
 package er.directtoweb.interfaces;
 
 /**
- * Nice interface implemented by all ER edit pages.  In a next page delegate you can ask the sender if the object was saved.  Useful for determining which button the user hit, ie save or cancel.<br />
- * 
+ * Nice interface implemented by all ER edit pages.  In a next page delegate you can ask the sender if the object was saved.  Useful for determining which button the user hit, ie save or cancel.
  */
 
 public interface ERDObjectSaverInterface {

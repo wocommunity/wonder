@@ -8,14 +8,17 @@ import java.util.regex.Pattern;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyGlobalID;
+
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * ERXEntity provides a basic subclass of EOEntity providing
  * a simple fix for vertical inheritance.
- * 
- * <p><b>Note:</b> If you plan on subclassing EOEntity or ERXEntity you
+ * <p>
+ * <b>Note:</b> If you plan on subclassing EOEntity or ERXEntity you
  * MUST put your subclass in the same package if you want it
  * to work. There are numerous default and protected instance
  * methods within EOEntity itself that will fail to resolve at
@@ -55,9 +58,9 @@ public class ERXEntity extends EOEntity {
 	
 	/**
 	 * ldeck radar bug#6302622.
-	 * 
-	 * <p>Relating two sub-entities in vertical inheritance can fail to resolve
-	 *  the foreign key for inserts. i.e., NeededByEOF<index> was not dealt with.
+	 * <p>
+	 * Relating two sub-entities in vertical inheritance can fail to resolve
+	 *  the foreign key for inserts. i.e., NeededByEOF&lt;index&gt; was not dealt with.
 	 *  The simple fix is to return the primary key attribute at the given index.
 	 * 
 	 * @see com.webobjects.eoaccess.EOEntity#anyAttributeNamed(java.lang.String)
@@ -71,7 +74,7 @@ public class ERXEntity extends EOEntity {
 			if (neededIndex >= primaryKeyAttributeNames().count()) {
 				throw new IllegalStateException("No matching primary key found for entity'" + name() + "' with attribute'" + name + "'");
 			}
-			result = (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
+			result = primaryKeyAttributes().objectAtIndex(neededIndex);
 		}
 		return result;
 	}
@@ -80,7 +83,7 @@ public class ERXEntity extends EOEntity {
 	 * @see com.webobjects.eoaccess.EOEntity#hasExternalName()
 	 * @since 5.4.1
 	 */
-	//@Override introduced with 5.4.1
+	@Override
 	public boolean hasExternalName() {
 		// (ldeck) radar://6592526 fix for 5.4.3 regression which assumed that any parent entity that is abstract has no external name!
 		return externalName() != null && externalName().trim().length() > 0;
@@ -92,7 +95,7 @@ public class ERXEntity extends EOEntity {
 	 * @param classDescription - the EOClassDescription to associate with the receiver.
 	 */
 	public void setClassDescription(EOClassDescription classDescription) {
-		this._classDescription = classDescription;
+		_classDescription = classDescription;
 	}
 
 	/**
@@ -101,5 +104,23 @@ public class ERXEntity extends EOEntity {
 	@Override
 	protected EOKeyGlobalID _globalIDWithoutTypeCoercion(Object[] values) {
 		return ERXSingleValueID.globalIDWithEntityName(name(), values);
+	}
+
+	public NSArray<EOAttribute> classAttributes() {
+		NSMutableArray<EOAttribute> found = new NSMutableArray<EOAttribute>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.attributeNamed(name) != null)
+				found.add(this.attributeNamed(name));
+		}
+		return found.immutableClone();
+	}
+
+	public NSArray<EORelationship> classRelationships() {
+                NSMutableArray<EORelationship> found = new NSMutableArray<EORelationship>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.relationshipNamed(name) != null)
+				found.add(this.relationshipNamed(name));
+		}
+		return found.immutableClone();
 	}
 }

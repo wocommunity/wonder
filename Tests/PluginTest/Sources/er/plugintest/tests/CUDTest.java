@@ -1,12 +1,15 @@
 package er.plugintest.tests;
 
-import java.io.*;
+import java.io.IOException;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSData;
 
-import er.extensions.eof.*;
-import er.extensions.foundation.*;
-import er.plugintest.model.*;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXModelGroup;
+import er.extensions.foundation.ERXFileUtilities;
+import er.plugintest.model.City;
+import er.plugintest.model.Country;
 
 public class CUDTest extends PluginTest{
 

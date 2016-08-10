@@ -60,13 +60,15 @@
             name = date; 
             userInfo = {modificationDate = "2002-07-21 21:47:29 +0200"; }; 
             valueClassName = NSCalendarDate; 
+            valueType = D; 
         }, 
         {
             columnName = dateTime; 
             externalType = DATETIME; 
             name = dateTime; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
-            valueClassName = NSCalendarDate; 
+            valueClassName = NSCalendarDate;
+            valueType = T;  
         }, 
         {
             columnName = doubleNumber; 
@@ -102,7 +104,7 @@
             externalType = CHARACTER; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "er.extensions.ERXKeyGlobalID"; 
+            valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -221,7 +223,7 @@
             columnName = mutableArray; 
             externalType = MEMO; 
             name = mutableArray; 
-            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueClassName = "er.extensions.foundation.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -229,7 +231,7 @@
             columnName = mutableDictionary; 
             externalType = MEMO; 
             name = mutableDictionary; 
-            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {

@@ -14,11 +14,16 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 //	cache the assignment instead of the value it returns.
 //	Interesting subclasses are DelayedBooleanAssignment and DelayedConditionalAssignment
 /**
- * Crazy assignment used when you actually don't want the computed value cached.<br />
- * 
+ * Crazy assignment used when you actually don't want the computed value cached.
  */
 
 public abstract class ERDDelayedAssignment extends Assignment  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** 
      * Public constructor
@@ -35,6 +40,7 @@ public abstract class ERDDelayedAssignment extends Assignment  {
     public ERDDelayedAssignment(String key, Object value) { super(key,value); }
 
     // ENHANCEME: Might want to make this method final
+    @Override
     public Object fire(D2WContext c) { return this; }
     
     /**

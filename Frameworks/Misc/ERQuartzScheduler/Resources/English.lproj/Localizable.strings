@@ -1,0 +1,6 @@
+{
+	COScheduler.DefaultMailErrorMessage = "Error message: {0}. It took {1}";
+    COScheduler.DefaultMailShortMessage = "It took {0}";
+    COScheduler.DefaultMailMessageWithMoreInfos = "More informations: {0}. It took {1}";
+    COScheduler.MailSubject = "Job info: {0} is done.";
+}

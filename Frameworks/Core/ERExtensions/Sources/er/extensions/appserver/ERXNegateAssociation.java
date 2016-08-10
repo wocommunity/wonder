@@ -39,6 +39,7 @@ public class ERXNegateAssociation extends WOAssociation {
 		return _isConstant;
 	}
 	
+	@Override
 	public Object valueInComponent(WOComponent wocomponent) {
 		String key = null;
 		if(_isConstant) {

@@ -1,10 +1,5 @@
-//
-// ERD2WUpload.java: Class file for WO Component 'ERD2WUpload'
-// Project ERExtras
-//
-// Created by ak on Mon Jul 08 2002
-//
 package er.directtoweb.components.misc;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +35,13 @@ import er.extensions.validation.ERXValidationFactory;
  *
  */
 public class ERDEditFile extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     static final Logger log = Logger.getLogger(ERDEditFile.class);
     // Instance variables for the name and contents of the upload
     public String fileName;
@@ -62,27 +64,27 @@ public class ERDEditFile extends ERDCustomEditComponent {
     }
     
     public String selectMessage() {
-        String result = (String)localizedValueForBinding("selectMessage");
+        String result = localizedValueForBinding("selectMessage");
         return result;
     }
     
     public String uploadMessage() {
-        String result = (String)localizedValueForBinding("uploadMessage");
+        String result = localizedValueForBinding("uploadMessage");
         return result;
     }
     
     public String selectButton() {
-        String result = (String)localizedValueForBinding("selectButton");
+        String result = localizedValueForBinding("selectButton");
         return result;
     }
     
     public String uploadButton() {
-        String result = (String)localizedValueForBinding("uploadButton");
+        String result = localizedValueForBinding("uploadButton");
         return result;
     }
     
     public String deleteButton() {
-        String result = (String)localizedValueForBinding("deleteButton");
+        String result = localizedValueForBinding("deleteButton");
         return result;
     }
     
@@ -147,14 +149,15 @@ public class ERDEditFile extends ERDCustomEditComponent {
         }
         return uploadDirectory;
     }
-    
+
+    @Override
     public WOActionResults invokeAction(WORequest worequest,
                                         WOContext wocontext) {
         WOActionResults results = super.invokeAction(worequest, wocontext);
         return results;
     }
 
-
+    @Override
     public void takeValuesFromRequest(WORequest q, WOContext c) throws NSValidation.ValidationException {
         super.takeValuesFromRequest(q,c);
         uploadFile();
@@ -173,13 +176,14 @@ public class ERDEditFile extends ERDCustomEditComponent {
             reset();
     }
 */
+    @Override
     public void sleep() {
         if(!synchronizesVariablesWithBindings())
             reset();
         super.sleep();
     }
 
-    
+    @Override
     public void reset() {
         fileName = null;
         fileContents = null;
@@ -189,10 +193,12 @@ public class ERDEditFile extends ERDCustomEditComponent {
         didUpload = false;
     }
     
+    @Override
     public boolean isStateless() {
         return false;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -217,7 +223,7 @@ public class ERDEditFile extends ERDCustomEditComponent {
         String filePath = ( tmpPath.exists() ) ? tmpPath.getAbsolutePath() : System.getProperty( "user.dir" );
 
         // Create the output path for the file on the application server
-        return new String( filePath + File.separator + lastPartOfFileName());
+        return filePath + File.separator + lastPartOfFileName();
     }
 
     public NSData fileContentz() {
@@ -239,11 +245,13 @@ public class ERDEditFile extends ERDCustomEditComponent {
         return false;
     }
 
+    @Override
     public void setObjectKeyPathValue(Object value) {
         if(key().charAt(0) != '#')
             super.setObjectKeyPathValue(value);
     }
 
+    @Override
     public Object objectKeyPathValue() {
         if(key().charAt(0) != '#')
             return super.objectKeyPathValue();

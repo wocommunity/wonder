@@ -40,4 +40,4 @@ cat ../WebServerResources/switchtabs.js      >> $UNCOMPRESSED
 
 # run YUI compressor
 
-java -jar yuicompressor-2.4.2.jar -o $COMPRESSED $UNCOMPRESSED
+java -jar yuicompressor-2.4.7.jar -o $COMPRESSED $UNCOMPRESSED

@@ -1,0 +1,34 @@
+{
+    attributes = (
+        {
+            columnName = message; 
+            name = message; 
+            prototypeName = varchar50; 
+            width = 511; 
+        }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = "result_pk"; 
+            name = resultPk; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (message, pk, resultPk); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    classProperties = (message, result); 
+    externalName = failures; 
+    fetchSpecificationDictionary = {}; 
+    name = Failure; 
+    primaryKeyAttributes = (pk); 
+    relationships = (
+        {
+            destination = Result; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = resultPk; }); 
+            name = result; 
+        }
+    ); 
+}

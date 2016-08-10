@@ -1,0 +1,41 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = companyID; 
+            name = companyID; 
+            prototypeName = id; 
+        }, 
+        {
+            columnName = departmentCode; 
+            name = departmentCode; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (companyID, departmentCode, id, name); 
+    className = "er.example.erxpartials.model.Department"; 
+    classProperties = (company, departmentCode, name, "partial_EmployeePersons"); 
+    externalName = Department; 
+    fetchSpecificationDictionary = {}; 
+    name = Department; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
+            name = company; 
+        }, 
+        {
+            destination = "Partial_EmployeePerson"; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = departmentID; sourceAttribute = id; }); 
+            name = "partial_EmployeePersons"; 
+        }
+    ); 
+}

@@ -1,0 +1,115 @@
+body {
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	color: #153346;
+	padding: 20px;
+	background-color: #153346;
+}
+
+form {
+	width: 260px;
+	padding: 20px;
+	background: #999;
+	margin: 20px 0;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+form h4 {
+	margin: 0 0 10px 0;
+	color: #fff;
+}
+
+.textfield {
+	width: 180px;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 20px auto;
+}
+
+table, td, th {
+	border: 1px solid #999;
+}
+
+td, th {
+	padding: 3px 5px;
+	text-align: left;
+}
+
+a {
+	text-decoration: none;
+}
+
+#Content {
+	background-color: #eee;
+	padding: 20px;
+	height: 600px;
+	border: 1px solid #153346;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+#SearchWrapper {
+	width: 600px;
+	margin: 0 auto;
+}
+
+#Choices,
+#Choices li {
+	list-style-type: none;
+}
+
+#Choices {
+	margin-top: 100px;
+}
+
+#Choices li {
+	margin-bottom: 5px;
+}
+
+#Choices a {
+	display: block;
+	width: 200px;
+	padding: 10px;
+	color: #fff;
+	background-color: #328ec2;
+	text-align: center;
+	margin: 0 auto;
+	
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+.Button {
+	display: block;
+	padding: 4px 10px;
+	width: 50px;
+	color: #fff;
+	background-color: #328ec2;
+	margin-top: 10px;
+	
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+.PrimeIndexButton {
+	width: 93px;
+}
+
+#Choices a:hover,
+.Button:hover {
+	background-color: #819cb1;
+}
+
+#Choices a:visited {
+	background-color: #666;
+}
+
+#MovieDetails {
+	margin-top: 80px;
+}
+
+
+

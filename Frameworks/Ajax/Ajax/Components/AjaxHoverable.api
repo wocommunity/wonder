@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+        <wo class="AjaxHoverable.java" wocomponentcontent="true">
+
+        <binding name="toolTipMessage"/>
+        <binding name="showHoverable"/>
+        <binding name="toolTipWidth"/>
+        <binding name="useJavascriptForHoverEffect"/>
+        <validation message="'showHoverable' is a required binding.">
+            <unbound name="showHoverable"/>
+        </validation>
+        <validation message="'toolTipMessage' is a required binding.">
+            <unbound name="toolTipMessage"/>
+        </validation>
+    </wo>
+</wodefinitions>

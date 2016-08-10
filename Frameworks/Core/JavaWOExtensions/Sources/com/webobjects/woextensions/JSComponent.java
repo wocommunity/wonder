@@ -12,16 +12,29 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
 
+/**
+ * <span class="ja">
+ *  このパッケージ内の Javascript のスーパークラス
+ * </span>
+ */
 public abstract class JSComponent extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public JSComponent(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
            return false;
     }
 
-
+	/** <span class="ja">フレームワーク</span> */
     public String framework() {
         String aFramework = (String)_WOJExtensionsUtil.valueForBindingOrNull("framework",this);
         if ((aFramework != null) && aFramework.equalsIgnoreCase("app"))
@@ -29,6 +42,7 @@ public abstract class JSComponent extends WOComponent {
         return aFramework;
     }
 
+	/** <span class="ja">イメージ・ロケーション</span> */
     public String imageLocation() {
 
            // Return the image source (SRC) location ...
@@ -38,6 +52,7 @@ public abstract class JSComponent extends WOComponent {
 
     }
 
+	/** <span class="ja">アクションURL</span> */
     public String contextComponentActionURL() {
 
         // If the user specified an action or pageName, return the source URL
@@ -63,6 +78,9 @@ public abstract class JSComponent extends WOComponent {
 
     }
 
+	/** 
+     * <span class="ja">アクション実行</span>
+     */
     public WOComponent invokeAction() {
 
             // Set the result of the link, either an action from the parent or a page

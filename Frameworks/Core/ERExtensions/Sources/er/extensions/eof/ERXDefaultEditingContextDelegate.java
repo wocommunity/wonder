@@ -6,10 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
-
-
-
 /**
  * Default editing context delegate. This delegate
  * augments the regular transaction process by adding
@@ -26,9 +22,12 @@ import org.apache.log4j.Logger;
  * handy.
  */
 public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDefaultEditingContextDelegate.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Constructor needed for Serialable interface

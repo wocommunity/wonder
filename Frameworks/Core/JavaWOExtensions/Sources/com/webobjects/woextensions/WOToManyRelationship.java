@@ -26,6 +26,12 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOToManyRelationship extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     // ** passed-in (required)
     protected String _sourceEntityName;
@@ -51,6 +57,7 @@ public class WOToManyRelationship extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -164,6 +171,7 @@ public class WOToManyRelationship extends WOComponent {
         set_privateSelections(null);
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }
@@ -338,16 +346,10 @@ public class WOToManyRelationship extends WOComponent {
 
         count = (newValues == null) ? 0 : newValues.count();
 
-        if (isDictionary && currentValues == null) {
-            currentValues = new NSMutableArray(count);
-
-            _dictionary.setObjectForKey(currentValues, masterKey);
-        }
-
         for (int i = count - 1; i >= 0; i--) {
             o = (EOEnterpriseObject) newValues.objectAtIndex(i);
 
-            if (currentValues == null || currentValues.indexOfIdenticalObject(o) == NSArray.NotFound) {  // not found
+            if (currentValues.indexOfIdenticalObject(o) == NSArray.NotFound) {  // not found
 
                 if (isDictionary) {
                     currentValues.addObject(o);
@@ -380,7 +382,7 @@ public class WOToManyRelationship extends WOComponent {
 
             if (isMandatory() && theList().count() > 0) {
                 Object anObject = theList().objectAtIndex(0);
-                aTempValue = new NSArray(anObject);
+                aTempValue = new NSArray<Object>(anObject);
             }
             else {
                 aTempValue = null;
@@ -404,7 +406,7 @@ public class WOToManyRelationship extends WOComponent {
                 if (theList().count() > 0) {
                     Object anObject = theList().objectAtIndex(0);
 
-                    set_privateSelections(new NSArray(anObject));
+                    set_privateSelections(new NSArray<Object>(anObject));
                 }
 
             }
@@ -415,7 +417,7 @@ public class WOToManyRelationship extends WOComponent {
     }
 
     public NSArray theList() {
-        NSMutableArray aSortedArray;
+        NSMutableArray<EOEnterpriseObject> aSortedArray;
 
         // ** This is cached because WOBrowser and WOCheckBoxList
         // ** might ask for list many times.

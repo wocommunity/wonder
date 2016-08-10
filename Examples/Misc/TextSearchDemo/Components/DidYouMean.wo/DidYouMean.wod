@@ -1,0 +1,8 @@
+PageWrapper : PageWrapper {
+	pageTitle = "Did You Mean...";
+}
+
+PrimeIndexLink : WOHyperlink {
+	action = createDidYouMeanIndexAction;
+	class = "Button PrimeIndexButton";
+}

@@ -1,0 +1,31 @@
+<wo:if condition = "$isDivider">
+  <wo:WOGenericContainer elementName = "li" otherTagString = "$otherTagString"><wo:WOComponentContent /></wo:WOGenericContainer>
+</wo:if>
+<wo:else>
+  <wo:genericContainer elementName = "li" otherTagString = "$otherTagString">
+    <wo:if condition = "$hasAnyAction">
+      <webobject name = "LnkItem">
+        <wo:if condition = "$hasImageResource"> <wo:image src = "$imageResource.urlForResourceNamed" otherTagString = "$imageOtherTagString" /> </wo:if>
+        <wo:if condition = "$hasImageData"> <wo:image data = "$imageResource.urlForResourceNamed" mimeType = "image/jpeg" otherTagString = "$imageOtherTagString" /> </wo:if>
+        <wo:content />
+        <wo:if condition = "$hasSideText">
+          <p class = "ui-li-aside"><wo:str value = "$sideText" /></p>
+        </wo:if>
+        <wo:if condition = "$hasCountBubble">
+          <span class = "ui-li-count"><wo:str value = "$countBubble" /></span>
+        </wo:if>
+      </webobject>
+    </wo:if>
+    <wo:else>
+      <wo:if condition = "$hasImageResource"> <wo:image src = "$imageResource.urlForResourceNamed" otherTagString = "$imageOtherTagString" /> </wo:if>
+      <wo:if condition = "$hasImageData"> <wo:image data = "$imageResource.urlForResourceNamed" mimeType = "image/jpeg" otherTagString = "$imageOtherTagString" /> </wo:if>
+      <wo:content />
+      <wo:if condition = "$hasSideText">
+        <p class = "ui-li-aside"><wo:str value = "$sideText" /></p>
+      </wo:if>
+      <wo:if condition = "$hasCountBubble">
+        <span class = "ui-li-count"><wo:str value = "$countBubble" /></span>
+      </wo:if>
+    </wo:else>
+  </wo:genericContainer>
+</wo:else>

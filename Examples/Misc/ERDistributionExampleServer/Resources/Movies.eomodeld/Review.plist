@@ -1,0 +1,45 @@
+{
+    attributes = (
+        {columnName = "MOVIE_ID"; name = movieID; precision = 9; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = REVIEW; 
+            name = review; 
+            prototypeName = longText; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "REVIEW_ID"; 
+            name = reviewID; 
+            precision = 9; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = REVIEWER; 
+            name = reviewer; 
+            prototypeName = varchar50; 
+        }
+    ); 
+    attributesUsedForLocking = (reviewID, movieID, reviewer); 
+    className = "er.distribution.example.server.eo.Review"; 
+    classProperties = (reviewer, review, movie); 
+    externalName = REVIEW; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (reviewer, review, movie); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.Review"; 
+    }; 
+    name = Review; 
+    primaryKeyAttributes = (reviewID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

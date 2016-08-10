@@ -14,6 +14,7 @@ public class Application extends ERXApplication {
 		/* ** put your initialization code in here ** */
 	}
 	
+	@Override
 	public void finishInitialization() {
 		super.finishInitialization();
 		WebSocketStore.defaultWebSocketStore().setFactory(new ExampleWebSocketFactory());

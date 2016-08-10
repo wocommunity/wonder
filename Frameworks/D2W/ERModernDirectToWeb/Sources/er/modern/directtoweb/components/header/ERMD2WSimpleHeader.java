@@ -20,6 +20,7 @@ public class ERMD2WSimpleHeader extends ERMD2WHeader {
         super(context);
     }
     
+    @Override
     public String headerString() {
 			return stringValueForBinding(Keys.displayNameForPageConfiguration);
     }

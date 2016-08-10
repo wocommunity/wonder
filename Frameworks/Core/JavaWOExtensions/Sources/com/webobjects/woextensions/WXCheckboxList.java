@@ -2,27 +2,29 @@ package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver._private.WOCheckBoxList;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
  * XHTML equivalents of WOCheckboxList
  * 
- * @see WOCheckboxList
+ * @see WOCheckBoxList
  * @author mendis
- *
  */
 public class WXCheckboxList extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public int index;
 	private String _id;
 	
     public WXCheckboxList(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override
@@ -50,7 +52,6 @@ public class WXCheckboxList extends WOComponent {
 	}
     
     // accesors
-    @SuppressWarnings("unchecked")
 	private NSArray selections() {
     	return (NSArray) valueForBinding(Bindings.selections);
     }
@@ -75,7 +76,7 @@ public class WXCheckboxList extends WOComponent {
     }
     
     public String elementName() {
-    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();		
+    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();
     }
     
     public String id() {
@@ -83,12 +84,12 @@ public class WXCheckboxList extends WOComponent {
     }
     
     private String _id() {
-    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().elementID();	// RM: FIXME: convert to javascriptElementID() in WO 5.4
+    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().javaScriptElementID();
     	return _id;
     }
     
     public void setIndex(int i) {
     	index = i;
-    	setValueForBinding(index, Bindings.index);
+    	setValueForBinding(Integer.valueOf(index), Bindings.index);
     }
 }

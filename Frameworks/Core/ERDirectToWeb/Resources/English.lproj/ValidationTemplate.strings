@@ -1,10 +1,10 @@
 {
-	"IllegalCharacterInNumberException" = "Please check the value <b>@@value@@</b> you supplied for the field <b>@@displayNameForProperty@@</b>.";
-	"InvalidDateFormatException" = "Please check <b>@@displayNameForProperty@@</b> as <b>@@value@@</b> is not a valid date";
+	"IllegalCharacterInNumberException" = "Please check the value <b>@@escapedValue@@</b> you supplied for the field <b>@@displayNameForProperty@@</b>.";
+	"InvalidDateFormatException" = "Please check <b>@@displayNameForProperty@@</b> as <b>@@escapedValue@@</b> is not a valid date";
 	"InvalidNumberException" = "The value is an invalid number.";
 	"MandatoryToManyRelationshipException" = "A <b>@@displayNameForEntity@@</b> must have a least one <b>@@displayNameForDestinationEntity@@</b>.";
 	"MandatoryToOneRelationshipException" = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
-	"NotANumberException" = "Sorry, I could not read this number <b>@@value@@</b> ";
+	"NotANumberException" = "Sorry, I could not read this number <b>@@escapedValue@@</b> ";
 	"NullPropertyException" = "Please provide @@indefiniteArticleForProperty@@ <b>@@displayNameForProperty@@</b>.";
 	"ObjectCannotBeDeletedException" = "Cannot delete this <b>@@displayNameForEntity@@</b> because either this <b>@@displayNameForEntity@@</b> or any object related to this <b>@@displayNameForEntity@@</b> cannot be deleted.";
 	"ObjectRemovalException" = "Cannot delete this <b>@@displayNameForEntity@@</b>. You should first delete the item in its <b>@@displayNameForProperty@@</b>.";

@@ -24,3 +24,7 @@ yearPopup: WOPopUpButton {
 	list = yearList;
 	selection = year;
 }
+
+String3: WOString {
+	value = timeZoneString;
+}

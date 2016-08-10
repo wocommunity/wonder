@@ -1,0 +1,11 @@
+(
+	{
+		name = Root;
+		children = ("Home");
+	},
+	{
+		name = "Home";
+		action = "session.navController.homeAction";
+		
+	}
+)

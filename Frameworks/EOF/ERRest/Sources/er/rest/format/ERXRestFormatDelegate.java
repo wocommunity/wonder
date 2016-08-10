@@ -9,12 +9,12 @@ import er.rest.ERXRestRequestNode;
 /**
  * ERXRestFormatDelegate is the default implementation of the ERXRestFormat.Delegate interface.
  * 
- * @property ERXRest.idKey
- * @property ERXRest.nilKey
- * @property ERXRest.writeNilKey
- * @property ERXRest.pluralEntityNames
- * @property ERXRest.typeKey
- * @property ERXRest.writeTypeKey
+ * @property ERXRest.idKey (default "id") Override this property if you want to use a different key for the 'id' attribute
+ * @property ERXRest.nilKey (default "nil") Override this property if you want to use a different key for the 'nil' attribute
+ * @property ERXRest.writeNilKey (default "true") 
+ * @property ERXRest.pluralEntityNames (default "true")
+ * @property ERXRest.typeKey (default "type") Override this property if you want to use a different key for the 'type' attribute
+ * @property ERXRest.writeTypeKey (default "true")
  *
  * @author mschrag
  */

@@ -1,11 +1,11 @@
 package com.webobjects.monitor.application;
 
 /*
- � Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+ © Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
- IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (�Apple�) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+ IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
- In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple�s copyrights in this original Apple software (the �Apple Software�), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+ In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
  The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -22,26 +22,30 @@ import com.webobjects.monitor._private.String_Extensions;
 
 public class ApplicationsPage extends MonitorComponent {
 
+    private static final long serialVersionUID = -2523319756655905750L;
+
+	private int _totalInstancesConfigured = 0;
+	private int _totalInstancesRunning = 0;
+	
+	
     public ApplicationsPage(WOContext aWocontext) {
         super(aWocontext);
         handler().updateForPage(name());
     }
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -2523319756655905750L;
+ 
 
     public MApplication currentApplication;
 
     public String newApplicationName;
 
     public NSArray<MApplication> applications() {
-    	NSMutableArray<MApplication> result = new NSMutableArray<MApplication>();
-    	result.addObjectsFromArray(mySession().siteConfig().applicationArray());
+    	NSMutableArray<MApplication> applications = new NSMutableArray<MApplication>();
+    	applications.addObjectsFromArray(mySession().siteConfig().applicationArray());
     	EOSortOrdering order= new EOSortOrdering("name", EOSortOrdering.CompareAscending);
-    	EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
-     	return result;
+    	EOSortOrdering.sortArrayUsingKeyOrderArray(applications, new NSArray(order));
+    	
+    	calculateTotals(applications);
+     	return applications;
     }
     
     public String hrefToApp() {
@@ -125,7 +129,8 @@ public class ApplicationsPage extends MonitorComponent {
 	    });
     }
 
-
+	
+	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -137,5 +142,58 @@ public class ApplicationsPage extends MonitorComponent {
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
+    
+    
+    /**
+     * Calculates and sets the {@link #totalInstancesConfigured()} and {@link #totalInstancesRunning()}
+     * for the given array of applications
+     * 
+     * @param applications
+     */
+    public void calculateTotals(NSMutableArray<MApplication> applications){
+    	int totalRunningInstances = 0;
+    	int totalConfiguredInstances = 0;
+    	
+    	// use for-loop to preserve compile-time error-checking instead of using valueForKey("runningInstancesCount.@sum")
+    	for (MApplication mApplication : applications) {
+    		totalRunningInstances = totalRunningInstances + mApplication.runningInstancesCount();
+    		totalConfiguredInstances = totalConfiguredInstances +  mApplication.instanceArray().count();
+		}
+    	setTotalInstancesConfigured(totalConfiguredInstances);
+    	setTotalInstancesRunning(totalRunningInstances);
+    }
 
+    
+	/**
+	 * @return the total number of instances configured for all applications
+	 */
+	public int totalInstancesConfigured() {
+		return _totalInstancesConfigured;
+	}
+
+	/**
+	 * Sets the total number of instances configured for all applications
+	 * @param totalInstancesConfigured 
+	 */
+	public void setTotalInstancesConfigured(int totalInstancesConfigured) {
+		_totalInstancesConfigured = totalInstancesConfigured;
+	}
+
+	/**
+	 * @return the total number of running instances for all applications
+	 */
+	public int totalInstancesRunning() {
+		return _totalInstancesRunning;
+	}
+
+	/**
+	 * Sets the total number of running instances for all applications
+	 * @param totalInstancesRunning
+	 */
+	public void setTotalInstancesRunning(int totalInstancesRunning) {
+		_totalInstancesRunning = totalInstancesRunning;
+	}
+
+    
+    
 }

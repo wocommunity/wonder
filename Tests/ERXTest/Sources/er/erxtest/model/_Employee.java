@@ -27,6 +27,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public static final ERXKey<String> ZIPCODE = new ERXKey<String>("zipcode");
   // Relationship Keys
   public static final ERXKey<er.erxtest.model.Company> COMPANY = new ERXKey<er.erxtest.model.Company>("company");
+  public static final ERXKey<er.erxtest.model.Department> DEPARTMENT = new ERXKey<er.erxtest.model.Department>("department");
   public static final ERXKey<er.erxtest.model.Paycheck> PAYCHECKS = new ERXKey<er.erxtest.model.Paycheck>("paychecks");
   public static final ERXKey<er.erxtest.model.Role> ROLES = new ERXKey<er.erxtest.model.Role>("roles");
 
@@ -42,6 +43,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public static final String ZIPCODE_KEY = ZIPCODE.key();
   // Relationships
   public static final String COMPANY_KEY = COMPANY.key();
+  public static final String DEPARTMENT_KEY = DEPARTMENT.key();
   public static final String PAYCHECKS_KEY = PAYCHECKS.key();
   public static final String ROLES_KEY = ROLES.key();
 
@@ -176,6 +178,31 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
       }
     } else {
     	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.COMPANY_KEY);
+    }
+  }
+  
+  public er.erxtest.model.Department department() {
+    return (er.erxtest.model.Department)storedValueForKey(_Employee.DEPARTMENT_KEY);
+  }
+  
+  public void setDepartment(er.erxtest.model.Department value) {
+    takeStoredValueForKey(value, _Employee.DEPARTMENT_KEY);
+  }
+
+  public void setDepartmentRelationship(er.erxtest.model.Department value) {
+    if (_Employee.LOG.isDebugEnabled()) {
+      _Employee.LOG.debug("updating department from " + department() + " to " + value);
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setDepartment(value);
+    }
+    else if (value == null) {
+    	er.erxtest.model.Department oldValue = department();
+    	if (oldValue != null) {
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Employee.DEPARTMENT_KEY);
+      }
+    } else {
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.DEPARTMENT_KEY);
     }
   }
   

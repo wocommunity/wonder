@@ -1,9 +1,9 @@
 /*
-© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+¬© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (“Apple”) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple’s copyrights in this original Apple software (the “Apple Software”), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -13,7 +13,6 @@ SUCH DAMAGE.
 package com.webobjects.monitor._private;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -274,23 +273,23 @@ public class MApplication extends MObject {
     }
     
     private static NSDictionary _defaults = new NSDictionary <Object, Object>(new Object[]{
-                                                                new Integer(2001),
-                                                                new Integer(30),
+                                                                Integer.valueOf(2001),
+                                                                Integer.valueOf(30),
                                                                 Boolean.TRUE,
                                                                 Boolean.TRUE,
-                                                                new Integer(0),
+                                                                Integer.valueOf(0),
                                                                 Boolean.TRUE,
                                                                 "WODefaultAdaptor",
-                                                                new Integer(8),
-                                                                new Integer(128),
-                                                                new Integer(16),
-                                                                new Integer(256),
+                                                                Integer.valueOf(8),
+                                                                Integer.valueOf(128),
+                                                                Integer.valueOf(16),
+                                                                Integer.valueOf(256),
 								"()",
-								new Integer(3600),
+								Integer.valueOf(3600),
 								"",
                                                                 Boolean.FALSE,
                                                                 Boolean.FALSE,
-                                                                new Integer(30),
+                                                                Integer.valueOf(30),
                                                                 "",
                                                                 Boolean.FALSE,
                                                                 "/Library/WebObjects/Logs",
@@ -336,6 +335,7 @@ public class MApplication extends MObject {
     /********** Archiving Support **********/
     public NSDictionary dictionaryForArchive() { return values; }
 
+    @Override
     public String toString() {
         if(false) {
             return values.toString();
@@ -378,7 +378,7 @@ public class MApplication extends MObject {
                 lastSequence = thisSequence;
             }
         }
-        return new Integer(lastSequence+1);
+        return Integer.valueOf(lastSequence+1);
     }
 
     public boolean isIDInUse(Integer ID) {
@@ -408,7 +408,7 @@ public class MApplication extends MObject {
                 runningInstances++;
             }
         }
-        return new Integer(runningInstances);
+        return Integer.valueOf(runningInstances);
     }
 
     public boolean isRunning_W() {
@@ -427,17 +427,17 @@ public class MApplication extends MObject {
     }
 
     public int runningInstancesCount() {
-        return runningInstancesCount;
+        return runningInstancesCount.intValue();
     }
 
     public void setRunningInstancesCount(int cnt) {
-        runningInstancesCount = new Integer(cnt);
+        runningInstancesCount = Integer.valueOf(cnt);
     }
 
     // Used for the AppDetailPage
     public Integer runningInstancesCount_M() {
         int runningInstances = runningInstances_M().count();
-        Integer riInt = new Integer(runningInstances);
+        Integer riInt = Integer.valueOf(runningInstances);
         runningInstancesCount = riInt;
         return riInt;
     }

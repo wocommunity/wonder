@@ -10,7 +10,8 @@ package er.extensions.appserver.navigation;
 
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -18,18 +19,15 @@ import com.webobjects.foundation.NSRange;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**
- * Not very generic right now, but will be in the future. Nice for mantaining a
+ * Not very generic right now, but will be in the future. Nice for maintaining a
  * stack based navigation system, ie drilling down pushes nav state onto the
- * stack and backing up pops state off the stack.<br />
- * Please read "Documentation/Navigation.html" to fnd out how to use the
+ * stack and backing up pops state off the stack.
+ * <p>
+ * Please read "Documentation/Navigation.html" to find out how to use the
  * navigation components.
- * 
  */
-
 public class ERXNavigation {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigation.class);
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;
@@ -47,8 +45,7 @@ public class ERXNavigation {
     }
 
     public void setAdditionalNavigationState(NSArray value) {
-        if (log.isDebugEnabled())
-            log.debug("Setting additional navigation state: " + value);
+        log.debug("Setting additional navigation state: {}", value);
         _additionalNavigationState = value;
     }
     // Not used.
@@ -77,18 +74,17 @@ public class ERXNavigation {
             int index = currentNavigationLevel - 1;
             int length = navCount - currentNavigationLevel + 1;
             NSRange range = new NSRange(index, length);
-            log.debug("Range: " + range + " current: " + currentNavigationLevel + " navCount: " + navCount);
+            log.debug("Range: {} current: {} navCount: {}", range, currentNavigationLevel, navCount);
             itmesToBeShown = navigationState().subarrayWithRange(range);
             
         }
-        log.debug("Nav state: " + navigationState() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
+        log.debug("Nav state: {} current nav level: {} items: {}", navigationState(), currentNavigationLevel, itmesToBeShown);
         return itmesToBeShown != null ? itmesToBeShown : NSArray.EmptyArray;
     }
     
     // Anytime we are setting the absolute we reset the relative.
     public void setNavigationState(NSArray navigationState) {
-        if (log.isDebugEnabled())
-            log.debug("Setting Navigation State: " + navigationState);
+        log.debug("Setting Navigation State: {}", navigationState);
         _navigationState = navigationState;
         _additionalNavigationState = null;
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTJSSlider" wocomponentcontent="true">    <binding name="snap"/>
+        <binding name="offset"/>
+        <binding name="range"/>
+        <binding name="wheel"/>
+        <binding name="steps"/>
+        <binding name="mode"/>
+        <binding name="onChange"/>
+        <binding name="onComplete"/>
+        <binding name="onTick"/>
+    <binding name="elementClass"/>
+    <binding name="observer"/>
+    <binding name="observerEvent"/>
+    </wo>
+</wodefinitions>

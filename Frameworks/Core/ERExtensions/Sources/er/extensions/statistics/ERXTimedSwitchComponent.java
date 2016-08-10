@@ -21,7 +21,7 @@ public class ERXTimedSwitchComponent extends WOSwitchComponent {
         super(name, associations, template);
         
         if (super.componentAttributes != null) {
-            _statsKey = (WOAssociation)super.componentAttributes.removeObjectForKey("statsKey");
+            _statsKey = super.componentAttributes.removeObjectForKey("statsKey");
         }
     }
     

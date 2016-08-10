@@ -16,6 +16,7 @@ import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXMutableURL;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * ERAttachmentLink is like a WOHyperlink that points to an attachment's contents.
@@ -27,9 +28,11 @@ import er.extensions.foundation.ERXMutableURL;
  * @binding id (optional) the html element id
  * @binding style (optional) the css inline style
  * @binding download if true, the attachment will be downloaded instead of inlined
+ * @binding target (optional) specifies where to open the linked attachment
  */
 public class ERAttachmentLink extends WODynamicGroup {
   private WOAssociation _attachment;
+  private WOAssociation _target;
   private WOAssociation _configurationName;
   private NSMutableDictionary<String, WOAssociation> _associations;
   private WOAssociation _download;
@@ -39,6 +42,7 @@ public class ERAttachmentLink extends WODynamicGroup {
     _associations = associations.mutableClone();
     _attachment = _associations.removeObjectForKey("attachment");
     _download = _associations.removeObjectForKey("download");
+    _target = _associations.removeObjectForKey("target");
     if (_attachment == null) {
       throw new WODynamicElementCreationException("<ERAttachmentLink> The 'attachment' binding is required.");
     }
@@ -73,6 +77,14 @@ public class ERAttachmentLink extends WODynamicGroup {
         }
         response.appendContentString(attachmentUrl);
         response.appendContentString("\"");
+        
+        if (_target != null) {
+          String sTarget = (String) _target.valueInComponent(component);
+          if(!ERXStringUtilities.stringIsNullOrEmpty(sTarget)) {      
+            response.appendContentString(" target=\"" + sTarget +"\"");
+          }
+        }      
+        
         ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
         response.appendContentString(">");
         super.appendToResponse(response, context);

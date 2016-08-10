@@ -1,0 +1,8 @@
+PageWrapper : PageWrapper {
+	pageTitle = "Spell Check";
+}
+
+PrimeIndexLink : WOHyperlink {
+	action = createSpellingIndexAction;
+	class = "Button PrimeIndexButton";
+}

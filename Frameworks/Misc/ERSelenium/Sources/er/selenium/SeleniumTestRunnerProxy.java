@@ -23,11 +23,11 @@
 
 package er.selenium;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -38,13 +38,15 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * Request hanlder for selenium tests. Returns the files to get parsed by the runner.
  */
 public class SeleniumTestRunnerProxy extends WORequestHandler {
-	private static final Logger log = Logger.getLogger(SeleniumTestRunnerProxy.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTestRunnerProxy.class);
 	
 	protected class CachedFile {
 		public NSData data;
@@ -55,11 +57,11 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     public SeleniumTestRunnerProxy() {
         super();
     }
-    
-    // @Override
+
+    @Override
     public WOResponse handleRequest(WORequest request) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
  
     	NSArray pathElements = request.requestHandlerPathArray();
@@ -69,14 +71,14 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     	while (iter.hasNext()) {
     		builder.append(iter.next());
     		if (iter.hasNext())
-    			builder.append("/");
+    			builder.append('/');
     	}
     	
 		String filePath = builder.toString();
-		log.debug("Processing file '" + filePath + "'");
+		log.debug("Processing file '{}'.", filePath);
 		
 		/*
-		 * Syncrhonization mistakes are possible here, but not fatal at all.
+		 * Synchronization mistakes are possible here, but not fatal at all.
 		 * At the worst case the file will be read 2-or-more times instead of 1 (if process 1
 		 * checks that the file is not cached and process 2 does the same check before
 		 * process 1 has updated the cache).
@@ -110,7 +112,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
 	    	}
 		}
     	
-		WOResponse response = new WOResponse();
+		ERXResponse response = new ERXResponse();
 		response.setHeader(cachedFile.mimeType, "content-type");
 		response.setContent(cachedFile.data);
 		

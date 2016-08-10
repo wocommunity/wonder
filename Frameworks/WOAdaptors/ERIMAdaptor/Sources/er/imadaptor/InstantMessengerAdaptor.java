@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
@@ -162,13 +162,6 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return instantMessenger;
 	}
 
-	/**
-	 * @deprecated use defaultInstantMessenger() instead
-	 */
-	public IInstantMessenger instantMessenger() {
-		return defaultInstantMessenger();
-	}
-
 	public IInstantMessenger defaultInstantMessenger() {
 		return instantMessengerForScreenName(_defaultScreenName);
 	}
@@ -209,7 +202,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 			while (instantMessengerIter.hasNext()) {
 				Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-				String screenName = (String) instantMessengerEntry.getKey();
+				// String screenName = (String) instantMessengerEntry.getKey();
 				InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 				connection.connect(this);
 			}
@@ -225,7 +218,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.disconnect();
 			instantMessengerIter.remove();
@@ -248,11 +241,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			message = message.trim();
 		}
 
-		StringBuffer uri = new StringBuffer();
+		StringBuilder uri = new StringBuilder();
 		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
-			String webserverConnectUrl = _application.webserverConnectURL();
 			String cgiAdaptorURL = _application.cgiAdaptorURL();
 			WODynamicURL imConversationUrl = new WODynamicURL();
 
@@ -276,21 +268,24 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		else {
 			uri.append(requestUrl);
 		}
-		uri.append("?");
+		uri.append('?');
 		uri.append(InstantMessengerAdaptor.BUDDY_NAME_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(buddyName));
-		uri.append("&");
+		uri.append('&');
 		uri.append(InstantMessengerAdaptor.MESSAGE_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(message));
-		uri.append("&");
+		uri.append('&');
 		uri.append(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(rawMessage));
 		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
-			uri.append("&wosid=" + sessionID);
+			uri.append('&');
+			uri.append(WOApplication.application().sessionIdKey());
+			uri.append('=');
+			uri.append(sessionID);
 		}
 
 		NSMutableDictionary headers = new NSMutableDictionary();
@@ -318,7 +313,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				if (responseMessage != null) {
 					responseMessage = responseMessage.trim();
 				}
-				if (responseMessage.length() > 0) {
+				if (responseMessage != null && responseMessage.length() > 0) {
 					if (log.isInfoEnabled()) {
 						log.info("Sending message to '" + buddyName + "': " + responseMessage);
 					}
@@ -384,7 +379,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.removeExpiredConversations(_conversationTimeout);
 		}
@@ -399,7 +394,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				catch (InterruptedException t) {
 					// ignore
 				}
-				InstantMessengerAdaptor.this.removeExpiredConversations();
+				removeExpiredConversations();
 			}
 		}
 	}

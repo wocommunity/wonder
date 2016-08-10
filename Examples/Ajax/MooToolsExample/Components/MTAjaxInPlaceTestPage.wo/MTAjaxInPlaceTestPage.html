@@ -1,0 +1,89 @@
+<wo:Main pageTitle = "Ajax In Place Port">
+	<h2>Ajax In Place...</h2>
+	<hr />
+	<p>
+		AjaxInPlace provides support for arbitrarily complex view and edit components.
+	</p>
+	<hr/>
+	<h3>Simple AjaxInPlace</h3>
+	<hr/>
+	<webobject name = "ExampleInPlace">
+		<webobject name = "View">View: <webobject name = "Value" /></webobject>
+		<webobject name = "Edit"><label>Edit:</label><webobject name = "ValueField" /></webobject>
+	</webobject>
+	<hr/>
+	<h3>Simple AjaxInPlace with Manual Controls</h3>
+	<hr/>
+	<webobject name = "ExampleInPlaceManual">
+		<webobject name = "ViewManual">
+			View: <webobject name = "ManualValue"/>
+			<br/>
+			<webobject name = "ClickToEdit">click to edit</webobject>
+		</webobject>
+		<webobject name = "EditManual">
+			Edit: <webobject name = "ManualValueField"/>
+			<br/>
+			<webobject name = "ClickToSave">click to save</webobject>
+			<webobject name = "ClickToCancel">click to cancel</webobject>
+		</webobject>
+	</webobject>
+	<hr/>
+	<h3>Fancier AjaxInPlace</h3>
+	<hr/>
+	<webobject name = "FancyInPlace">
+		<webobject name = "FancyView">
+			<div id = "fancyView">
+				<h2>Personal Information</h2>
+				<table class = "table table-striped">
+					<tr>
+						<th>First Name</th>
+						<td><webobject name = "FirstName"/></td>
+					</tr>
+
+					<tr>
+						<th>Last Name</th>
+						<td><webobject name = "LastName"/></td>
+					</tr>
+
+					<tr>
+						<th>Phone Number</th>
+						<td><webobject name = "PhoneNumber"/></td>
+					</tr>
+				</table>
+				<span class = "label label-info">click anywhere to edit</span>
+			</div>
+		</webobject>
+		<webobject name = "FancyEdit">
+			<div id = "fancyEdit">
+				<fieldset>
+	    			<legend>Edit Personal Information</legend>
+					<div class="control-group">
+						<label class="control-label" for="firstName">First Name</label>
+						 <div class="controls">
+							<webobject name = "FirstNameField"/>
+							<p class="help-block">Enter your first name here.</p>
+						</div>
+					</div>	
+					<div class="control-group">
+						<label class="control-label" for="lastName">Last Name</label>
+						 <div class="controls">
+							<webobject name = "LastNameField"/>
+							<p class="help-block">Enter your last name here.</p>
+						</div>
+					</div>	
+					<div class="control-group">
+						<label class="control-label" for="phoneNumber">Phone Number</label>
+						 <div class="controls">
+							<webobject name = "PhoneNumberField"/>
+							<p class="help-block">Enter your phone number here.</p>
+						</div>
+					</div>	
+					<div class = "form-actions">
+						<webobject name = "FancySave">save</webobject> or 
+						<webobject name = "FancyCancel">cancel</webobject>
+					</div>
+				</fieldset>
+			</div>
+		</webobject>
+	</webobject>
+</wo:Main>

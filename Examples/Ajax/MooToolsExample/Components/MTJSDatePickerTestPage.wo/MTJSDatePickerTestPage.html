@@ -1,0 +1,26 @@
+<wo:Main pageTitle = "Date Picker Test Page">
+	<h2>Date Picker Test</h2>
+	<p>
+		Original can be found here: <a href = "http://www.monkeyphysics.com/mootools/script/2/datepicker" target = "_blank">http://www.monkeyphysics.com/mootools/script/2/datepicker</a>
+		Nice thing about this one is you just set the dateformat like you would with a regular wotextfield.
+	</p>
+	<p>
+		<span class="label label-warning">Warning</span> I ported this script to MooTools 1.4.  It should work but if you come across any issues please let me know.
+	</p>
+	<hr/>
+	<div class = "row">
+		<div class = "span3">
+		<wo:form>
+			<webobject name = "DatePicker"></webobject><br/>
+			<webobject name = "ASB"></webobject>
+		</wo:form>
+			
+		</div>
+		<div class = "span5 offset1">
+			<h3>Selected Date</h3>
+			<webobject name = "AUC">
+				<wo:str value = "$today" dateformat = "%m/%d/%y" />
+			</webobject>
+		</div>
+	</div>	
+</wo:Main>

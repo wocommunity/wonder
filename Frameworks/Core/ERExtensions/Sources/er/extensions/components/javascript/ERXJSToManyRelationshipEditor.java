@@ -1,5 +1,7 @@
 package er.extensions.components.javascript;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -7,13 +9,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXEqualator;
 import er.extensions.foundation.ERXStringUtilities;
-import org.apache.log4j.Logger;
-
-import java.util.Enumeration;
 
 /**
  * A fancy to-many relationship editor component.
@@ -28,8 +28,12 @@ import java.util.Enumeration;
  * @binding sortKey (optional) to use in order to produce a sorted menu
  */
 public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent {
-
-    public static final Logger log = Logger.getLogger(ERXJSToManyRelationshipEditor.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static interface Keys {
         public static final String DisplayString = "displayString";
@@ -51,10 +55,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }
@@ -127,10 +133,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         _editorContextID = null;
     }
 
+    @Override
     public void sleep() {
         invalidateCaches();
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         invalidateCaches();
         super.appendToResponse(aResponse, aContext);
@@ -176,9 +184,8 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
     private int indexOfObjectInArrayUsingERXEOControlUtilitiesEOEquals(Object anObject, NSArray anArray) {
         if (anObject instanceof EOEnterpriseObject) {
             return ERXArrayUtilities.indexOfObjectUsingEqualator(anArray, anObject, ERXEqualator.EOEqualsEqualator);
-        } else {
-            return anArray.indexOfObject(anObject);
         }
+        return anArray.indexOfObject(anObject);
     }
 
     /**
@@ -248,6 +255,10 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         if (canGetValueForBinding(Keys.Selections)) {
             NSArray result = (NSArray)valueForBinding(Keys.Selections);
             if(result != null) {
+            	if (hasBinding(Keys.SortKey)) {
+            		String sortKey = stringValueForBinding(Keys.SortKey);
+            		result = ERXArrayUtilities.sortedArraySortedWithKey(result, sortKey);
+            	}
             	return result;
             }
         }
@@ -314,7 +325,7 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         sb.append("var ").append(editorName()).append(" = new ERXJSToManyRelationshipEditor();\n");
         sb.append(editorName).append(".elementID = '").append(safeElementID).append("';\n");
         sb.append(editorName).append(".possibleValues = ").append(possibleValuesHashForScript()).append(";\n");
-        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript()).append(";");
+        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript()).append(';');
         return sb.toString();
     }
 

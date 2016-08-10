@@ -10,8 +10,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WEditableListPage;
 
 /**
- * List page for editing all items in the list.<br />
- * See {@link ERD2WEditableListPage}
+ * List page for editing all items in the list.
+ * @see ERD2WEditableListPage
  * 
  * @binding backAction
  * @binding dataSource
@@ -34,6 +34,12 @@ import er.directtoweb.pages.ERD2WEditableListPage;
  * @d2wKey showBanner
  */
 public class ERD2WEditableListTemplate extends ERD2WEditableListPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WEditableListTemplate(WOContext context) {super(context);}
 }

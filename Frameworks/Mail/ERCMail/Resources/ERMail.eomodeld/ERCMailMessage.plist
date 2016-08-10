@@ -1,0 +1,141 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = "BCC_ADDR"; 
+            name = bccAddresses; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "CC_ADDR"; 
+            name = ccAddresses; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            columnName = "CONTENT_GZIPPED"; 
+            name = contentGzipped; 
+            prototypeName = intBoolean; 
+        }, 
+        {columnName = CREATED; name = created; prototypeName = dateTime; }, 
+        {
+            allowsNull = Y; 
+            columnName = "DATE_SENT"; 
+            name = dateSent; 
+            prototypeName = dateTime; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "EXCEPTION_REASON"; 
+            name = exceptionReason; 
+            prototypeName = varchar1000; 
+        }, 
+        {columnName = "FROM_ADDR"; name = fromAddress; prototypeName = varchar255; }, 
+        {columnName = ID; name = id; prototypeName = id; }, 
+        {columnName = "IS_READ"; name = isRead; prototypeName = intBoolean; }, 
+        {columnName = "LAST_MODIFIED"; name = lastModified; prototypeName = dateTime; }, 
+        {
+            allowsNull = Y; 
+            columnName = "PLAIN_TEXT_"; 
+            name = plainText; 
+            prototypeName = varcharLarge; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "plain_text_compressed"; 
+            name = plainTextCompressed; 
+            prototypeName = blob; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "REPLY_TO_ADDR"; 
+            name = replyToAddress; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            columnName = "SHOULD_ARCHIVE_SENT_MAIL"; 
+            name = shouldArchiveSentMail; 
+            prototypeName = intBoolean; 
+        }, 
+        {
+            adaptorValueConversionMethodName = value; 
+            columnName = "MAIL_STATE_ID"; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = state; 
+            prototypeName = osType; 
+            valueClassName = "er.corebusinesslogic.ERCMailState"; 
+            valueFactoryMethodName = mailState; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "TEXT_"; 
+            name = text; 
+            prototypeName = varcharLarge; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "TEXT_COMPRESSED"; 
+            name = textCompressed; 
+            prototypeName = blob; 
+        }, 
+        {columnName = TITLE; name = title; prototypeName = varchar255; }, 
+        {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varchar1000; }, 
+        {
+            allowsNull = Y; 
+            columnName = "X_MAILER"; 
+            name = xMailer; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        bccAddresses, 
+        contentGzipped, 
+        fromAddress, 
+        id, 
+        isRead, 
+        shouldArchiveSentMail, 
+        state, 
+        title, 
+        toAddresses, 
+        xMailer
+    ); 
+    className = "er.corebusinesslogic.ERCMailMessage"; 
+    classProperties = (
+        attachments, 
+        bccAddresses, 
+        ccAddresses, 
+        contentGzipped, 
+        created, 
+        dateSent, 
+        exceptionReason, 
+        fromAddress, 
+        isRead, 
+        lastModified, 
+        plainText, 
+        plainTextCompressed, 
+        replyToAddress, 
+        shouldArchiveSentMail, 
+        state, 
+        text, 
+        textCompressed, 
+        title, 
+        toAddresses, 
+        xMailer
+    ); 
+    externalName = "ERCMAIL_MESSAG"; 
+    name = ERCMailMessage; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ERCMessageAttachment; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = mailMessageId; sourceAttribute = id; }); 
+            name = attachments; 
+        }
+    ); 
+    userInfo = {
+        modificationDate = "2002-06-04 14:00:54 +0200"; 
+        superclass = ERCStampedEnterpriseObject; 
+    }; 
+}

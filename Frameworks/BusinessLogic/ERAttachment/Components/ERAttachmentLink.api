@@ -11,5 +11,6 @@
 			<unbound name="attachment"/>
 		</validation>
 	<binding defaults="Boolean" name="download"/>
+    <binding name="target"/>
     </wo>
 </wodefinitions>

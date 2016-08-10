@@ -13,7 +13,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.components._private.ERXWOForm;
 
 /**
- * Better navigation bar without a form.<br />
+ * Better navigation bar without a form.
  * 
  * @binding d2wContext the D2W context that this component is in
  * @binding displayGroup the WODisplayGroup that is being controlled
@@ -29,11 +29,18 @@ import er.extensions.components._private.ERXWOForm;
  * @binding rightArrowImage the name of the right navigation arrow image
  */
 public class ERXBatchNavigationBarInForm extends ERXBatchNavigationBar {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ERXBatchNavigationBarInForm(WOContext context) {
         super(context);
     }
 
+    @Override
     public String formTarget() {
         return ERXWOForm.formName(context(), "EditForm") + ".target='_self';";
     }

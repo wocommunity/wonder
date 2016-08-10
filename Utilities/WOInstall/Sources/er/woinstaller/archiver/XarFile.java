@@ -63,7 +63,8 @@ public class XarFile {
 			checksumAlgorithm = readUint32();
 		}
 		
-		public void dumpHeader() {
+		@SuppressWarnings("unused")
+    public void dumpHeader() {
 			System.out.println("\nmagic:\t\t\t 0x"+ Long.toHexString((magic >> Short.SIZE & SHORT_MASK)) +  
 					Long.toHexString(magic & SHORT_MASK)
 					+ " " + ((magic == XAR_HEADER_MAGIC)?"(OK)":"(BAD)"));

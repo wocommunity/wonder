@@ -12,13 +12,14 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Store;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MailReader extends Thread {
     
     private boolean running = true;
 
-    private static final Logger log = Logger.getLogger(MailReader.class);
+    private static final Logger log = LoggerFactory.getLogger(MailReader.class);
 
     private String server;
 
@@ -82,7 +83,7 @@ public class MailReader extends Thread {
             folder.open(Folder.READ_WRITE);
 
             Message[] messages = folder.getMessages();
-            log.debug("Checking INBOX: " + messages.length);
+            log.debug("Checking INBOX: {}", messages.length);
             for (int i = 0; i < messages.length; i++) {
                 Message m = messages[i];
                 Message result = processMessage(m);
@@ -92,7 +93,7 @@ public class MailReader extends Thread {
                 }
             }
         } catch (AuthenticationFailedException e) {
-            log.error("Mail setup wrong: " + server + ", " + user + ", " + password, e);
+            log.error("Mail setup wrong: {}, {}, {}", server, user, password, e);
             throw e;
         } finally {
             if (folder != null && folder.isOpen()) {
@@ -106,12 +107,12 @@ public class MailReader extends Thread {
     }
 
     private Message processMessage(Message message) throws MessagingException, IOException {
-        log.info("Processing mail: " + message.getSubject());
+        log.info("Processing mail: {}", message.getSubject());
         if (true) {
             Address senders[] = message.getFrom();
             if(senders.length > 0) {
                 Address sender = senders[0];
-                log.info(sender);
+                log.info("{}", sender);
                 // People user = People.clazz.userByEmail();
                 Object content = message.getContent();
                 if (content instanceof Multipart) {
@@ -135,6 +136,7 @@ public class MailReader extends Thread {
         
     }
 
+    @Override
     public void run() {
         while (running) {
             try {

@@ -36,7 +36,6 @@ import com.webobjects.foundation._NSStringUtilities;
  * @author Tim Cummings: case sensitive table and column names
  * @author cug: hacks for identifier quoting while creating tables
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 public class DB2Expression extends JDBCExpression {
 
     /**
@@ -62,7 +61,7 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Holds array of join clauses.
      */
-    protected NSMutableArray _alreadyJoined = new NSMutableArray();
+    protected NSMutableArray<JoinClause> _alreadyJoined = new NSMutableArray<JoinClause>();
     
     /**
      * Fetch spec limit ivar
@@ -80,12 +79,13 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Overridden to remove the rtrim usage. The original implementation
      * will remove every trailing space from character based column which 
-     * should not be OK for Postgres.
+     * should not be OK for DB2.
+     * @param entity entity for this expression
      */
     public DB2Expression(EOEntity entity) {
         super(entity);
 
-    	if (this.useLowercaseForCaseInsensitiveLike()) {
+    	if (useLowercaseForCaseInsensitiveLike()) {
     		_upperFunctionName = "LOWER";
     	}
 }
@@ -95,9 +95,7 @@ public class DB2Expression extends JDBCExpression {
      * <code>com.webobjects.jdbcadaptor.DB2Expression.enableBooleanQuoting</code>
      * to enable or disable quoting (default) of boolean items.
      * 
-     * @return
      */
-
     private boolean enableBooleanQuoting() {
         if(_enableBooleanQuoting == null) {
             _enableBooleanQuoting = Boolean.getBoolean(getClass().getName() + ".enableBooleanQuoting") ? Boolean.TRUE : Boolean.FALSE;
@@ -112,7 +110,6 @@ public class DB2Expression extends JDBCExpression {
      * field names. Required if names which are case sensitive or reserved words
      * or have special characters.
      * 
-     * @return
      */
     private boolean enableIdentifierQuoting() {
         if(_enableIdentifierQuoting == null) {
@@ -125,8 +122,9 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Overridden to fix an issue with NStimestamp classes and "T" value-typed attributes. 
      */
-    public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
-        NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
+    @Override
+    public NSMutableDictionary<String, Object> bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
+        NSMutableDictionary<String, Object> result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
         if((obj instanceof NSTimestamp) && (isTimestampAttribute(eoattribute))) {
             NSTimestamp nstimestamp = (NSTimestamp)obj;
             long millis = nstimestamp.getTime();
@@ -141,12 +139,13 @@ public class DB2Expression extends JDBCExpression {
     }
 
     /**
-     * Overriden to not call the super implementation.
+     * Overridden to not call the super implementation.
      * 
      * @param leftName  the table name on the left side of the clause
      * @param rightName the table name on the right side of the clause
      * @param semantic  the join semantic
      */
+    @Override
     public void addJoinClause(String leftName,
                               String rightName,
                               int semantic) {
@@ -154,7 +153,7 @@ public class DB2Expression extends JDBCExpression {
     }
     
     /**
-     * Overriden to contruct a valid SQL92 JOIN clause as opposed to
+     * Overridden to construct a valid SQL92 JOIN clause as opposed to
      * the Oracle-like SQL the superclass produces.
      *
      * @param leftName  the table name on the left side of the clause
@@ -162,6 +161,7 @@ public class DB2Expression extends JDBCExpression {
      * @param semantic  the join semantic
      * @return  the join clause
      */
+    @Override
     public String assembleJoinClause(String leftName,
                                      String rightName,
                                      int semantic) {
@@ -172,7 +172,7 @@ public class DB2Expression extends JDBCExpression {
         String leftAlias = leftName.substring(0, leftName.indexOf("."));
         String rightAlias = rightName.substring(0, rightName.indexOf("."));
         
-        NSArray k;
+        NSArray<String> k;
         EOEntity rightEntity;
         EOEntity leftEntity;
         String relationshipKey = null;
@@ -199,7 +199,7 @@ public class DB2Expression extends JDBCExpression {
             ? relationshipKey
             : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
         r = rightEntity.anyRelationshipNamed( relationshipKey );
-        // fix from Michael M�ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+        // fix from Michael Müller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
         if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
@@ -215,7 +215,7 @@ public class DB2Expression extends JDBCExpression {
         }
         JoinClause jc = new JoinClause();
         
-        jc.table1 = leftTable + " " + leftAlias;
+        jc.setTable1(leftTable, leftAlias);
         
         switch (semantic) {
             case EORelationship.LeftOuterJoin:
@@ -233,11 +233,11 @@ public class DB2Expression extends JDBCExpression {
         }
         
         jc.table2 = rightTable + " " + rightAlias;
-        NSArray joins = r.joins();
+        NSArray<EOJoin> joins = r.joins();
         int joinsCount = joins.count();
-        NSMutableArray joinStrings = new NSMutableArray( joinsCount );
+        NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
         for( int i = 0; i < joinsCount; i++ ) {
-            EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
+            EOJoin currentJoin = joins.objectAtIndex(i);
             String left;
             String right;
             if(enableIdentifierQuoting()) {
@@ -258,9 +258,9 @@ public class DB2Expression extends JDBCExpression {
     }
     
     /**
-     * Overriden to handle correct placements of join conditions and 
+     * Overridden to handle correct placements of join conditions and 
      * to handle DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
-     * Change from Postgrss to use Fetch First rows only rather then limit
+     * Change from Postgres to use Fetch First rows only rather then limit
      *
      * @param attributes    the attributes to select
      * @param lock  flag for locking rows in the database
@@ -274,6 +274,7 @@ public class DB2Expression extends JDBCExpression {
      * @param lockClause    the SQL lock clause
      * @return  the select statement
      */
+    @Override
     public String assembleSelectStatementWithAttributes(NSArray attributes,
                                                         boolean lock,
                                                         EOQualifier qualifier,
@@ -285,7 +286,7 @@ public class DB2Expression extends JDBCExpression {
                                                         String joinClause,
                                                         String orderByClause,
                                                         String lockClause) {
-        StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         sb.append(selectString);
         sb.append(columnList);
         // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not also present in the columns list...
@@ -327,7 +328,7 @@ public class DB2Expression extends JDBCExpression {
             sb.append(orderByClause);
         }
         if (lockClause != null && lockClause.length() > 0) {
-            sb.append(" ");
+            sb.append(' ');
             sb.append(lockClause);
         }
         if (_fetchLimit != 0) {
@@ -371,6 +372,7 @@ public class DB2Expression extends JDBCExpression {
      * @param eoattribute   the attribute associated with <code>obj</code>
      * @return  the formatted string
      */
+    @Override
     public String formatValueForAttribute(Object obj, EOAttribute eoattribute) {
         String value;
         if(obj instanceof NSData) {
@@ -412,7 +414,7 @@ public class DB2Expression extends JDBCExpression {
                 }
               }
               else if (convertedObj instanceof String) {
-                String str = (String)obj;
+                String str = (String)convertedObj;
                 String valueType = eoattribute.valueType();
                 if (valueType == null || "i".equals(valueType)) {
                   return String.valueOf(Integer.parseInt(str));
@@ -464,14 +466,10 @@ public class DB2Expression extends JDBCExpression {
         				|| adaptorValue instanceof Boolean) {
         			value = formatValueForAttribute(adaptorValue, eoattribute);
         		} else {
-        			//NSLog.err.appendln(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
-              //value = obj.toString();
-              throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
+        			throw new IllegalArgumentException(getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
         		}
         	} catch(Exception ex) {
-        	  throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
-        		//NSLog.err.appendln(ex);
-        		//value = obj.toString();
+        	  throw new IllegalArgumentException(getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
         	}
         }
         return value;
@@ -482,7 +480,6 @@ public class DB2Expression extends JDBCExpression {
      * From what I understand, you will only need this if you disable bind variables.
      * @param value
      * @param eoattribute
-     * @return
      * @author ak
      */
     private String fixBigDecimal(BigDecimal value, EOAttribute eoattribute) {
@@ -513,7 +510,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for timestamp columns that have a "D" value type.
      * @param eoattribute
-     * @return
      */
     private boolean isDateAttribute(EOAttribute eoattribute) {
         return "D".equals(eoattribute.valueType());
@@ -522,7 +518,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for timestamp columns that have a "T" value type.
      * @param eoattribute
-     * @return
      */
     private boolean isTimestampAttribute(EOAttribute eoattribute) {
         return "T".equals(eoattribute.valueType());
@@ -531,7 +526,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for data columns that are not keys.
      * @param eoattribute
-     * @return
      */
     private boolean isDataAttribute(EOAttribute attribute) {
         return (attribute.className().equals("com.webobjects.foundation.NSData") ||
@@ -544,14 +538,15 @@ public class DB2Expression extends JDBCExpression {
      * Overrides the parent implementation to compose the final string
      * expression for the join clauses.
      */
+    @Override
     public String joinClauseString() {
-        NSMutableDictionary seenIt = new NSMutableDictionary();
-        StringBuffer sb = new StringBuffer();
+        NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
+        StringBuilder sb = new StringBuilder();
         JoinClause jc;
         EOSortOrdering.sortArrayUsingKeyOrderArray
-            ( _alreadyJoined, new NSArray( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
+            ( _alreadyJoined, new NSArray<EOSortOrdering>( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
         if (_alreadyJoined.count() > 0) {
-            jc = (JoinClause)_alreadyJoined.objectAtIndex(0);
+            jc = _alreadyJoined.objectAtIndex(0);
             
             sb.append(jc);
             seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
@@ -559,7 +554,7 @@ public class DB2Expression extends JDBCExpression {
         }
         
         for (int i = 1; i < _alreadyJoined.count(); i++) {
-            jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
+            jc = _alreadyJoined.objectAtIndex(i);
             
             sb.append(jc.op);
             if (seenIt.objectForKey(jc.table1) == null) {
@@ -585,6 +580,7 @@ public class DB2Expression extends JDBCExpression {
      * @param sourceColumns the source columns for the constraints
      * @param destinationColumns    the destination columns for the constraints
      */
+    @Override
 	public void prepareConstraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns) {
 		
     	EOEntity entity = relationship.entity();
@@ -600,29 +596,27 @@ public class DB2Expression extends JDBCExpression {
 		
 		// quotes the identifier in the array
 		
-		String sourceKeyList = this.quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
-		String destinationKeyList = this.quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
+		String sourceKeyList = quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
+		String destinationKeyList = quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
 		
 		EOModel sourceModel = entity.model();
 		EOModel destModel = relationship.destinationEntity().model();
 		if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
-			throw new IllegalArgumentException((new StringBuilder()).append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
+			throw new IllegalArgumentException(new StringBuilder().append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
 		} 
-		else {
-			setStatement((new StringBuilder())
-					.append("ALTER TABLE ")
-					.append(sqlStringForSchemaObjectName(tableName))
-					.append(" ADD CONSTRAINT ")
-					.append(quoteIdentifier(constraintName))
-					.append(" FOREIGN KEY (")
-					.append(sourceKeyList)
-					.append(") REFERENCES ")
-					.append(sqlStringForSchemaObjectName(relationship.destinationEntity().externalName()))
-					.append(" (")
-					.append(destinationKeyList)
-					.append(")")
-					.toString());
-		}
+		setStatement(new StringBuilder()
+				.append("ALTER TABLE ")
+				.append(sqlStringForSchemaObjectName(tableName))
+				.append(" ADD CONSTRAINT ")
+				.append(quoteIdentifier(constraintName))
+				.append(" FOREIGN KEY (")
+				.append(sourceKeyList)
+				.append(") REFERENCES ")
+				.append(sqlStringForSchemaObjectName(relationship.destinationEntity().externalName()))
+				.append(" (")
+				.append(destinationKeyList)
+				.append(')')
+				.toString());
 	}
     
     /**
@@ -632,12 +626,12 @@ public class DB2Expression extends JDBCExpression {
      * 
      * @return array of quoted or unquoted strings, depends on enableIdentifierQuoting
      */
-	private NSArray quoteArrayContents (NSArray a) {
+	private NSArray<String> quoteArrayContents(NSArray<String> a) {
     	Enumeration enumeration = a.objectEnumerator();
-    	NSMutableArray result = new NSMutableArray();
+    	NSMutableArray<String> result = new NSMutableArray<String>();
     	while (enumeration.hasMoreElements()) {
     		String identifier = (String) enumeration.nextElement();
-    		String quotedString = this.quoteIdentifier(identifier);
+    		String quotedString = quoteIdentifier(identifier);
     		result.addObject(quotedString);
     	}
     	return result;
@@ -650,23 +644,24 @@ public class DB2Expression extends JDBCExpression {
      * 
      * @return quoted or unquoted string (check with enableIdentifierQuoting)
      */
-    private String quoteIdentifier (String identifier) {
-   		return this.externalNameQuoteCharacter() + identifier + this.externalNameQuoteCharacter();
+    private String quoteIdentifier(String identifier) {
+   		return externalNameQuoteCharacter() + identifier + externalNameQuoteCharacter();
     }
     
     
     /**
      * Overridden so we can get the fetch limit from the fetchSpec.
      *
-     * @param nsarray   the array of attributes
-     * @param flag  locking flag
+     * @param attributes   the array of attributes
+     * @param lock  locking flag
      * @param eofetchspecification  the fetch specification
      */
-    public void prepareSelectExpressionWithAttributes(NSArray nsarray, boolean flag, EOFetchSpecification eofetchspecification) {
+    @Override
+    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification eofetchspecification) {
         if(!eofetchspecification.promptsAfterFetchLimit()) {
             _fetchLimit = eofetchspecification.fetchLimit();
         }
-        super.prepareSelectExpressionWithAttributes(nsarray, flag, eofetchspecification);
+        super.prepareSelectExpressionWithAttributes(attributes, lock, eofetchspecification);
     }
     
 
@@ -692,6 +687,7 @@ public class DB2Expression extends JDBCExpression {
       return shouldAllowNull;
     }
 
+    @Override
     public void addCreateClauseForAttribute(EOAttribute attribute) {
       NSDictionary userInfo = attribute.userInfo();
       Object defaultValue = null;
@@ -701,10 +697,10 @@ public class DB2Expression extends JDBCExpression {
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));
       String sql;
       if (defaultValue == null) {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
       }
       else {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
       }
       appendItemToListString(sql, _listString());
     }
@@ -714,15 +710,14 @@ public class DB2Expression extends JDBCExpression {
      * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
      * and "addCreateClauseForAttribute" is not called anymore. Will probably change.
      */
-    public String allowsNullClauseForConstraint(boolean allowsNull)
-    {
+    @Override
+    public String allowsNullClauseForConstraint(boolean allowsNull) {
         if(allowsNull)
             return "";
         Object value = jdbcInfo().objectForKey("NON_NULLABLE_COLUMNS");
         if(value != null && value.equals("T"))
             return " NOT NULL";
-        else
-            return "";
+        return "";
     }
    
     /**
@@ -732,6 +727,7 @@ public class DB2Expression extends JDBCExpression {
      * @param attribute the attribute (column name) to be converted to a SQL string
      * @return SQL string for the attribute
      */
+    @Override
     public String sqlStringForAttribute(EOAttribute attribute) {
         String sql = null;
         if ( attribute.isDerived() || useAliases() || attribute.columnName() == null || !enableIdentifierQuoting()) {
@@ -749,6 +745,7 @@ public class DB2Expression extends JDBCExpression {
      * 
      * @return  the SQL string for the table names
      */
+    @Override
     public String tableListWithRootEntity(EOEntity entity) {
         String sql = null;
         if ( useAliases()) {
@@ -759,41 +756,53 @@ public class DB2Expression extends JDBCExpression {
         //NSLog.out.appendln("PostgresqlExpression.tableListWithRootEntity " + entity.externalName() + ", useAliases() = " + useAliases() + ", sql = " + sql); 
         return sql;
     }
+    
     /**
      * Helper class that stores a join definition and
      * helps <code>DB2Expression</code> to assemble
      * the correct join clause.
      */
-    public class JoinClause {
+    public static class JoinClause {
         String table1;
         String op;
         String table2;
         String joinCondition;
+    	String sortKey;
         
+    	@Override
         public String toString() {
             return table1 + op + table2 + joinCondition;
         }
         
-        public boolean equals( Object obj ) {
+    	@Override
+        public boolean equals(Object obj) {
             if( obj == null || !(obj instanceof JoinClause) ) {
                 return false;
             }
             return toString().equals( obj.toString() );
         }
         
+    	public void setTable1(String leftTable, String leftAlias) {
+    		table1 = leftTable + " " + leftAlias;
+    		sortKey = leftAlias.substring(1);
+    		if (sortKey.length() < 2) {
+    			// add padding for cases with >9 joins
+    			sortKey = " " + sortKey;
+    		}
+    	}
+        
         /**
          * Property that makes this class "sortable". 
          * Needed to correctly assemble a join clause.
          */
         public String sortKey() {
-            return table1.substring( table1.indexOf( " " ) + 1 );
+            return sortKey;
         }
     }
     
     /**
      * Checks the system property <code>com.webobjects.jdbcadaptor.DB2Expression.disableBindVariables</code> to enable
      * or disable bind variables in general.
-     * @return
      */
     private boolean disableBindVariables() {
     	if (_disableBindVariables == null) {
@@ -803,16 +812,18 @@ public class DB2Expression extends JDBCExpression {
     }
     
     /**
-     * Overriddden to return the negated value of {@link #disableBindVariables()}.
+     * Overridden to return the negated value of <code>disableBindVariables</code>.
      */
+    @Override
     public boolean useBindVariables() {
         return !disableBindVariables();
     }
     
     /**
      * Overridden to set the <code>disableBindVariables</code> value correctly.
-     * @param value
+     * @param value new value
      */
+    @Override
     public void setUseBindVariables(boolean value) {
     	_disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
     }
@@ -820,6 +831,7 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Overridden to return true only if bind variables are enabled or the is a data type.
      */
+    @Override
     public boolean shouldUseBindVariableForAttribute(EOAttribute attribute) {
         return useBindVariables() || isDataAttribute(attribute);
     }
@@ -827,6 +839,7 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Overridden to return true only if bind variables are enabled or the is a data type.
      */
+    @Override
     public boolean mustUseBindVariableForAttribute(EOAttribute attribute) {
     	return useBindVariables() || isDataAttribute(attribute);
      }
@@ -842,7 +855,7 @@ public class DB2Expression extends JDBCExpression {
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while(begin < length)
@@ -868,8 +881,6 @@ public class DB2Expression extends JDBCExpression {
      * Checks the system property
      * <code>com.webobjects.jdbcadaptor.DB2Expression.useLowercaseForCaseInsensitiveLike</code>
      * to use the "lower" function for caseInsensitive compares
-     * 
-     * @return
      */
     private boolean useLowercaseForCaseInsensitiveLike() {
 		if (_useLowercaseForCaseInsensitiveLike == null) {

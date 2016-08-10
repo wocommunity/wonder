@@ -4,7 +4,7 @@
 
 		<binding name="keyName"/>
 
-		<validation message="&apos;keyName&apos; is a required binding">
+		<validation message="'keyName' is a required binding">
 			<unbound name="keyName"/>
 		</validation>
 	</wo>

@@ -11,6 +11,12 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSSelector;
 
+/**
+ * <span class="ja">
+ *  このクラスは二つの EOEvent を比較する為に使用します。
+ *  woextensions の private クラス
+ * </span>
+ */
 public class _ClassNameComparator extends NSComparator {
     protected boolean _compareAscending;
 
@@ -19,6 +25,7 @@ public class _ClassNameComparator extends NSComparator {
         _compareAscending = (comparator == EOSortOrdering.CompareAscending) ;
     }
 
+    @Override
     public int compare(Object c1, Object c2) throws NSComparator.ComparisonException {
         if (!(c1 instanceof Class) || !(c2 instanceof Class) || (c1 == null) || (c2 == null))
             throw new NSComparator.ComparisonException("<"+getClass().getName()+" Unable to compare classes. Either one of the arguments is not a Class or is null. Comparison was made with " + c1 + " and " + c2 + "." );

@@ -8,6 +8,7 @@ import er.extensions.eof.ERXEOControlUtilities;
 
 public class PeopleDelegate extends BranchDelegate {
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         People people = (People) object(context);

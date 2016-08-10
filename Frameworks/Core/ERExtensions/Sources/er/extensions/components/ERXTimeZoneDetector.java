@@ -3,7 +3,9 @@ package er.extensions.components;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -20,15 +22,17 @@ import er.extensions.foundation.ERXArrayUtilities;
 
 /**
  * This component adds javascript to a page to grab the system time zone
- * from the browser. The information is then sent to the session using
- * an ajax call.  It determines a time zone based on minutes offset from
+ * from the browser and write the time zone to the <code>timeZone</code>
+ * attribute of the session via a call to the <code>setTimeZone()</code>
+ * method. The information is sent to the session using an ajax call.
+ * This code determines a time zone based on minutes offset from
  * GMT, whether the time zone observes DST, and if DST, whether the time
  * zone is in the northern or southern hemisphere. Since there may be more
  * than one time zone that matches these values, the array of possible
  * values is compared against an array of preferred values if one is
  * supplied.  If no preferred values are supplied, the zone selected is
  * pulled from the list of possible options in no particular order. Use
- * of an ERXSession is expected/required.
+ * of an {@link ERXSession} is expected/required.
  * 
  * @binding preferredTimeZones an array of preferred TimeZone objects. This
  * array takes precedence over the preferredTimeZoneIDs binding.
@@ -38,6 +42,18 @@ import er.extensions.foundation.ERXArrayUtilities;
  *
  */
 public class ERXTimeZoneDetector extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ERXTimeZoneDetector.class);
+
 	public static final String TIMEZONE_SESSION_KEY = "detectedTimeZone";
 
 	private static final String TIMEZONE_DATA_KEY = "_timezone";
@@ -122,6 +138,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 	/**
 	 * Overridden to capture the time zone data being sent from the client.
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if (shouldPostData() && request.formValueForKey(TIMEZONE_DATA_KEY) != null) {
@@ -135,7 +152,14 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			boolean dst = "1".equals(data[1]);
 			boolean southern = "1".equals(data[2]);
 			TimeZone tz = zoneWithRawOffset(rawOffset, dst, southern);
-			session.setTimeZone(tz);
+			// Call ERXSession.setTimeZone() if tz is not null
+			// https://github.com/wocommunity/wonder/issues/774
+			if (tz != null) {
+				session.setTimeZone(tz);
+			}
+			else {
+				log.warn("Unable to find a timezone for '{}'.", zoneString);
+			}
 		}
 	}
 

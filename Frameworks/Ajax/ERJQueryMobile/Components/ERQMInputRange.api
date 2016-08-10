@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMInputRange" wocomponentcontent="false">
+    	<binding defaults="Boolean" name="disabled"/>
+        <binding defaults="Boolean" name="hideLabel"/>
+        <binding defaults="Boolean" name="inset"/>
+        <binding name="string"/>
+        <binding name="theme"/>
+        <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+    <binding name="min"/>
+        <validation message="'min' is a required binding.">
+            <unbound name="min"/>
+        </validation>
+        <binding name="max"/>
+        <validation message="'max' is a required binding.">
+            <unbound name="max"/>
+        </validation>
+    <binding name="themeTrack"/>
+    <binding defaults="Boolean" name="mini"/>
+    <binding name="name"/>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>

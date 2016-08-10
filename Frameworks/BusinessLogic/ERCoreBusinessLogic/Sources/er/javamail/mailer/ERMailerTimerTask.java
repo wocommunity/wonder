@@ -8,28 +8,28 @@ package er.javamail.mailer;
 
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Timer task used when running the ERMailer
  * in daemon mode.
  */
 public class ERMailerTimerTask extends TimerTask {
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERMailerTimerTask.class);
+    private static final Logger log = LoggerFactory.getLogger(ERMailerTimerTask.class);
 
     /**
      * Processes the outgoing mail.
      */
+    @Override
     public void run() {
-        if (log.isDebugEnabled()) log.debug("Timer firing to process outgoing mail.");
+        log.debug("Timer firing to process outgoing mail.");
 
         try {
             ERMailer.instance().processOutgoingMail();
         }
         catch ( Exception e ) {
-            log.error("run(): caught exception: " + e);    
+            log.error("run(): caught exception", e);
         }
     }
 }

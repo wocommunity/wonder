@@ -1,0 +1,49 @@
+{
+    attributes = (
+        {
+            columnName = expirationDate; 
+            name = expirationDate; 
+            prototypeName = dateTime; 
+            userInfo = {"_EntityModeler" = {documentation = "The date when the session expires."; }; }; 
+        }, 
+        {
+            columnName = intLock; 
+            name = intLock; 
+            prototypeName = intNumber; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "Since we can't lock on the sessionData blob, this column is locked and updated on each save. This is done to prevent cases where a session might be checked out twice before it is checked in."; 
+                }; 
+            }; 
+        }, 
+        {
+            columnName = sessionData; 
+            name = sessionData; 
+            prototypeName = blob; 
+            userInfo = {"_EntityModeler" = {documentation = "Holds the session data blob."; }; }; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = sessionID; 
+            name = sessionID; 
+            prototypeName = varchar50; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "The WOSession id.  Also the primary key for this table... which is generally a practice I oppose. But in this very narrow instance, having a natural key makes sense. You should never be making relationships to/from this table. This almost never happens. I'll probably regret making this a natural key one day."; 
+                }; 
+            }; 
+        }
+    ); 
+    attributesUsedForLocking = (intLock, sessionID); 
+    className = "er.persistentsessionstorage.model.ERSessionInfo"; 
+    classProperties = (expirationDate, intLock, sessionData, sessionID); 
+    externalName = ERSessionInfo; 
+    fetchSpecificationDictionary = {}; 
+    name = ERSessionInfo; 
+    primaryKeyAttributes = (sessionID); 
+    userInfo = {
+        "_EntityModeler" = {
+            documentation = "This EO maintains state information for a WO application. The session data blob is the serialized WOSession.  If you're making relationships to this EO in your model, you're probably doing something very wrong :)"; 
+        }; 
+    }; 
+}

@@ -1,1 +1,3 @@
-Java DB 10.4.2 libraries (derby.jar derbtools.jar) downloaded from http://developers.sun.com/javadb/downloads/index.jsp, November 20, 2008.
+Apache Derby
+http://db.apache.org/derby/
+Version 10.11.1.1 (August 26, 2014)

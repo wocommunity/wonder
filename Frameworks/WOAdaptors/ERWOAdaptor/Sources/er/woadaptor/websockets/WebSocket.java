@@ -1,6 +1,6 @@
 package er.woadaptor.websockets;
 
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.WebSocketFrame;
 
 
 public interface WebSocket {
@@ -24,7 +24,7 @@ public interface WebSocket {
 	/**
 	 * Method used to write WebSocketFrames to this socket's channel
 	 * 
-	 * @param message The message to send
+	 * @param frame The message to send
 	 */
 	public void sendFrame(WebSocketFrame frame);
 }

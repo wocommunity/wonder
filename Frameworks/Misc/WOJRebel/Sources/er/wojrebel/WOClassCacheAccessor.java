@@ -1,6 +1,7 @@
 package er.wojrebel;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.foundation.NSDictionary;
@@ -16,23 +17,37 @@ import com.webobjects.foundation._NSUtilities;
  */
 public class WOClassCacheAccessor {
 	private static boolean initialized = false;
-  private static _NSThreadsafeMutableDictionary classesByPartialName = null;
+  private static Object classesByPartialName = null;
   private static _NSThreadsafeMutableDictionary actionClassCache = null;
 
 	public static void setClassForName(Class<?> objectClass, String className) {
-		classesByPartialName.setObjectForKey(objectClass, className);
+		if (classesByPartialName instanceof _NSThreadsafeMutableDictionary) {
+			((_NSThreadsafeMutableDictionary)classesByPartialName).setObjectForKey(objectClass, className);
+		} else {
+			((Map)classesByPartialName).put(className, objectClass);
+		}
 	}
 
 	public static void removeClassForName(Object className) {
-		classesByPartialName.removeObjectForKey(className);
+		if (classesByPartialName instanceof _NSThreadsafeMutableDictionary) {
+			((_NSThreadsafeMutableDictionary)classesByPartialName).removeObjectForKey(className);
+		} else {
+			((Map)classesByPartialName).remove(className);
+		}
 	}
 
 	public static Class<?> classForName(String className) {
-	  return (Class<?>) classesByPartialName.objectForKey(className);
+		if (classesByPartialName instanceof _NSThreadsafeMutableDictionary) {
+			return (Class<?>) ((_NSThreadsafeMutableDictionary)classesByPartialName).objectForKey(className);
+		}
+		return (Class<?>) ((Map)classesByPartialName).get(className); 
 	}
 
 	public static NSDictionary getClassCache() {
-	  return classesByPartialName.immutableClone();
+		if (classesByPartialName instanceof _NSThreadsafeMutableDictionary) {
+			return new NSDictionary(((_NSThreadsafeMutableDictionary)classesByPartialName).immutableClone());
+		}
+		return new NSDictionary((Map)classesByPartialName);
 	}
 
 	public static void clearActionClassCache() {
@@ -46,7 +61,7 @@ public class WOClassCacheAccessor {
 	  try {
 	    Field f = _NSUtilities.class.getDeclaredField("_classesByPartialName");
 	    f.setAccessible(true);
-	    classesByPartialName = (_NSThreadsafeMutableDictionary) f.get(null);
+	    classesByPartialName = f.get(null);
 	    f = WOAction.class.getDeclaredField("_actionClasses");
 	    f.setAccessible(true);
 	    actionClassCache = (_NSThreadsafeMutableDictionary) f.get(null);

@@ -26,21 +26,21 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
- * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br />
+ * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br>
  * Very useful for debugging and testing. You can effectively dump a context for a given page configuration 
  * into a <code>.plist</code> file once you are content with your page, then make tons of changes to the rules 
  * and all the while test the changed value against all your stored dictionaries, which should make you 
- * more confident to make changes like <code>*true* => componentName = "D2WString" [100]</code><br />
- * Also, given a dictionary, you can re-create the rules for creating these entries with any given level.<br />
+ * more confident to make changes like <code>*true* =&gt; componentName = "D2WString" [100]</code><br>
+ * Also, given a dictionary, you can re-create the rules for creating these entries with any given level.<br>
  * Reads in your <code>d2wclientConfiguration.plists</code> files from every bundle and also reads in the values  
- * given in the <code>editors</code> and <code>supports</code> fields.<br />
- * So be sure to keep the entries to those files up to date :) <br />
-<code><pre>
+ * given in the <code>editors</code> and <code>supports</code> fields.<br>
+ * So be sure to keep the entries to those files up to date :)
+<pre><code>
  NSArray pageKeys = new NSArray(new Object [] {"pageWrapperName", "pageName", "headComponentName", "displayPropertyKeys"});
  NSArray componentKeys = new NSArray(new Object [] {"componentName", "customComponentName"});
  ERD2WContextDictionary dict = new ERD2WContextDictionary("CreateModuleGroup", pageKeys, componentKeys);
  String value = NSPropertyListSerialization.stringFromPropertyList(dict.dictionary());
- </pre></code>
+ </code></pre>
  * RENAMEME: to something more sensible??
  * @author ak
  */
@@ -217,7 +217,7 @@ public class ERD2WContextDictionary {
 
     protected void addPropertyKeys(NSMutableDictionary componentLevelKeys, NSArray array) {
         for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ) {
-            Object o = (Object)e.nextElement();
+            Object o = e.nextElement();
             if(o instanceof NSArray) {
                 addPropertyKeys(componentLevelKeys, (NSArray)o);
             } else {
@@ -259,7 +259,7 @@ public class ERD2WContextDictionary {
         for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
             Object o = e.nextElement();
             if(o instanceof NSArray) {
-                addRulesForPropertyKeys(level, rules, (NSArray)keys);
+                addRulesForPropertyKeys(level, rules, keys);
             } else {
                 String propertyKey = (String)o;
                 NSDictionary values = (NSDictionary)dictionary().valueForKeyPath("componentLevelKeys." + propertyKey);
@@ -282,6 +282,7 @@ public class ERD2WContextDictionary {
     	return NSPropertyListSerialization.stringFromPropertyList(dictionary());
     }
     
+    @Override
     public String toString() {
     	return context() + ": " + dictionaryString();
     }

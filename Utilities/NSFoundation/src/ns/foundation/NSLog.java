@@ -136,11 +136,11 @@ public final class NSLog {
     }
 
     public void appendln(double aValue) {
-      appendln(new Double(aValue));
+      appendln(Double.valueOf(aValue));
     }
 
     public void appendln(float aValue) {
-      appendln(new Float(aValue));
+      appendln(Float.valueOf(aValue));
     }
 
     public void appendln(int aValue) {

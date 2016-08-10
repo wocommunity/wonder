@@ -42,6 +42,12 @@ import er.extensions.localization.ERXLocalizer;
  * @author cug - Sep 20, 2007
  */
 public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * the batchnumbers to display, cached in this instance, resetted after completion
@@ -61,7 +67,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Standard constructor
 	 * 
-	 * @param context
+	 * @param context the current context
 	 */
 	public ERXDirectActionBatchNavigationBar(WOContext context) {
 		super(context);
@@ -70,10 +76,11 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Reset the instance variables
 	 */
+	@Override
 	public void reset() {
 		// reset all ivars
-		this.dictInRepetition = null;
-		this.batchNumbers = null;
+		dictInRepetition = null;
+		batchNumbers = null;
 	}
 
 	/**
@@ -113,21 +120,21 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 */
 	public NSArray<NSDictionary<String, Object>> batchNumbers() {
 
-		if (this.batchNumbers == null) {
+		if (batchNumbers == null) {
 			NSMutableArray<NSDictionary<String, Object>> tmpArray = new NSMutableArray<NSDictionary<String, Object>>();
 
 			// get some stuff into the primitives for easy access
-			int currentBatchIndex = this.currentBatchIndex().intValue();
+			int currentBatchIndex = currentBatchIndex().intValue();
 
-			int batchSize = this.batchSize().intValue();
-			int numberOfObjects = this.numberOfObjects().intValue();
+			int batchSize = batchSize().intValue();
+			int numberOfObjects = numberOfObjects().intValue();
 
 			int tmp = currentBatchIndex % 9;
 			if (tmp == 0)
 				tmp = 9;
 
 			int batchIndex = currentBatchIndex - tmp + 1;
-			int maxPages = this.numberOfBatches(numberOfObjects, batchSize);
+			int maxPages = numberOfBatches(numberOfObjects, batchSize);
 
 			int batchStart = batchIndex;
 			int batchEnd = 0;
@@ -143,8 +150,8 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				// TODO cug: showing 9 page numbers right now as a default, maybe make this configurable
 
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(batchIndex), "batchNumber");
-				entry.setObjectForKey(new Integer(batchIndex).toString(), "batchString");
+				entry.setObjectForKey(Integer.valueOf(batchIndex), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(batchIndex).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disable");
 
 				tmpArray.addObject(entry);
@@ -157,8 +164,8 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				// we add page number 1 at the start and some dots between 1 and the other numbers
 
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(1), "batchNumber");
-				entry.setObjectForKey(new Integer(1).toString(), "batchString");
+				entry.setObjectForKey(Integer.valueOf(1), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(1).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disabled");
 
 				tmpArray.insertObjectAtIndex(entry, 0);
@@ -167,7 +174,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 					// there are batches hidden, so we add the dots in here
 
 					entry = new NSMutableDictionary<String, Object>();
-					entry.setObjectForKey(new Integer(0), "batchNumber");
+					entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 					entry.setObjectForKey("...", "batchString");
 					entry.setObjectForKey(Boolean.TRUE, "disabled");
 
@@ -184,7 +191,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
 
 				entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(0), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 				entry.setObjectForKey("...", "batchString");
 				entry.setObjectForKey(Boolean.TRUE, "disabled");
 
@@ -203,7 +210,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				tmpArray.addObject(entry);
 			}
 
-			this.batchNumbers = tmpArray.immutableClone();
+			batchNumbers = tmpArray.immutableClone();
 		}
 		return batchNumbers;
 	}
@@ -214,7 +221,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @author cug - Nov 20, 2007
 	 */
 	public boolean hasMoreThanOneBatch() {
-		if (this.batchNumbers() != null && this.batchNumbers().count() > 1) {
+		if (batchNumbers() != null && batchNumbers().count() > 1) {
 			return true;
 		}
 		return false;
@@ -227,7 +234,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true if "showBatchNavigationForSinglePage" is true or there is more than one page
 	 */
 	public boolean showNavigationBar() {
-		return this.hasMoreThanOneBatch() || this.showBatchNavigationForSinglePage();
+		return hasMoreThanOneBatch() || showBatchNavigationForSinglePage();
 	}
 
 	/**
@@ -236,7 +243,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true for the selected batch (page)
 	 */
 	public boolean isSelected() {
-		return (this.dictInRepetition.valueForKey("batchNumber").equals(this.currentBatchIndex()));
+		return dictInRepetition.valueForKey("batchNumber").equals(currentBatchIndex());
 	}
 
 	/**
@@ -245,7 +252,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the previous batch number
 	 */
 	public Integer previousBatch() {
-		return new Integer(this.currentBatchIndex().intValue() - 1);
+		return Integer.valueOf(currentBatchIndex().intValue() - 1);
 	}
 
 	/**
@@ -254,15 +261,16 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the number for the next batch
 	 */
 	public Integer nextBatch() {
-		return new Integer(this.currentBatchIndex().intValue() + 1);
+		return Integer.valueOf(currentBatchIndex().intValue() + 1);
 	}
 
 	/**
 	 * Returns the number of the last page
 	 * 
+	 * @return the number of the last page
 	 */
 	public Integer lastBatch() {
-		return new Integer(this.numberOfBatches(numberOfObjects().intValue(), batchSize()));
+		return Integer.valueOf(numberOfBatches(numberOfObjects().intValue(), batchSize()));
 	}
 
 	/**
@@ -271,7 +279,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true for the last batch
 	 */
 	public boolean isLastBatch() {
-		return this.currentBatchIndex().intValue() == this.numberOfBatches(numberOfObjects().intValue(), batchSize());
+		return currentBatchIndex().intValue() == numberOfBatches(numberOfObjects().intValue(), batchSize());
 	}
 
 	/**
@@ -280,20 +288,19 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true for the first batch
 	 */
 	public boolean isFirstBatch() {
-		return this.currentBatchIndex().intValue() == 1;
+		return currentBatchIndex().intValue() == 1;
 	}
 
 	/**
 	 * Convenience method to get the localizer.
 	 * 
 	 */
+	@Override
 	public ERXLocalizer localizer() {
-		if (this.context().hasSession()) {
+		if (context().hasSession()) {
 			return ERXLocalizer.currentLocalizer();
 		}
-		else {
-			return ERXLocalizer.localizerForLanguages(this.context().request().browserLanguages());
-		}
+		return ERXLocalizer.localizerForLanguages(context().request().browserLanguages());
 	}
 
 	// *******************************************************************
@@ -305,7 +312,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return a direct action name
 	 */
 	public String actionName() {
-		return this.stringValueForBinding(ACTION_NAME_KEY);
+		return stringValueForBinding(ACTION_NAME_KEY);
 	}
 
 	/**
@@ -314,7 +321,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param name - a direct action name
 	 */
 	public void setActionName(String name) {
-		this.setValueForBinding(name, ACTION_NAME_KEY);
+		setValueForBinding(name, ACTION_NAME_KEY);
 	}
 
 	/**
@@ -323,11 +330,10 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return a name for a subclass of WODirectAction 
 	 */
 	public String actionClass() {
-		if (this.stringValueForBinding(ACTION_CLASS_KEY) != null) {
-			return this.stringValueForBinding(ACTION_CLASS_KEY);
+		if (stringValueForBinding(ACTION_CLASS_KEY) != null) {
+			return stringValueForBinding(ACTION_CLASS_KEY);
 		}
-		else
-			return "DirectAction";
+		return "DirectAction";
 	}
 
 	/**
@@ -336,7 +342,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param className - name for the directAction class
 	 */
 	public void setActionClass(String className) {
-		this.setValueForBinding(className, ACTION_CLASS_KEY);
+		setValueForBinding(className, ACTION_CLASS_KEY);
 	}
 
 	/**
@@ -345,16 +351,16 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the batch size 
 	 */
 	public Integer batchSize() {
-		return new Integer(this.intValueForBinding(BATCH_SIZE_KEY, defaultBatchSize));
+		return Integer.valueOf(intValueForBinding(BATCH_SIZE_KEY, defaultBatchSize));
 	}
 
 	/**
 	 * Set the size of the batches to create the pager
 	 *  
-	 * @param size
+	 * @param size number of items per batch
 	 */
 	public void setBatchSize(Integer size) {
-		this.setValueForBinding(size, BATCH_SIZE_KEY);
+		setValueForBinding(size, BATCH_SIZE_KEY);
 	}
 
 	/**
@@ -363,7 +369,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return total number of objects
 	 */
 	public Integer numberOfObjects() {
-		return new Integer(this.intValueForBinding(NUMBER_OF_OBJECTS_KEY, 0));
+		return Integer.valueOf(intValueForBinding(NUMBER_OF_OBJECTS_KEY, 0));
 	}
 
 	/**
@@ -372,7 +378,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param n
 	 */
 	public void setNumberOfObjects(Integer n) {
-		this.takeValueForKey(n, NUMBER_OF_OBJECTS_KEY);
+		takeValueForKey(n, NUMBER_OF_OBJECTS_KEY);
 	}
 
 	/**
@@ -381,7 +387,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the current batch index
 	 */
 	public Integer currentBatchIndex() {
-		return new Integer(this.intValueForBinding(CURRENT_BATCH_INDEX_KEY, 0));
+		return Integer.valueOf(intValueForBinding(CURRENT_BATCH_INDEX_KEY, 0));
 	}
 
 	/**
@@ -390,7 +396,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param index - the index to set
 	 */
 	public void setCurrentBatchIndex(Integer index) {
-		this.setValueForBinding(index, CURRENT_BATCH_INDEX_KEY);
+		setValueForBinding(index, CURRENT_BATCH_INDEX_KEY);
 	}
 
 	/**
@@ -400,16 +406,16 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 */
 	@SuppressWarnings("unchecked")
 	public NSDictionary<String, Object> additionalUrlParameters() {
-		return (NSDictionary<String, Object>) this.valueForBinding(ADDITIONAL_URL_PARAMETERS_KEY);
+		return (NSDictionary<String, Object>) valueForBinding(ADDITIONAL_URL_PARAMETERS_KEY);
 	}
 
 	/**
 	 * Set the parameters to add to each link
 	 * 
-	 * @param dict
+	 * @param dict parameters
 	 */
 	public void setAdditionalUrlParameters(NSDictionary<String, Object> dict) {
-		this.setValueForBinding(dict, ADDITIONAL_URL_PARAMETERS_KEY);
+		setValueForBinding(dict, ADDITIONAL_URL_PARAMETERS_KEY);
 	}
 
 	/**
@@ -418,16 +424,16 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return css class name
 	 */
 	public String containerCssClass() {
-		return this.stringValueForBinding(CONTAINER_CSS_CLASS_KEY, "ERXDABatchNav");
+		return stringValueForBinding(CONTAINER_CSS_CLASS_KEY, "ERXDABatchNav");
 	}
 
 	/**
 	 * Set the class name for the surrounding div
 	 * 
-	 * @param cssClass
+	 * @param cssClass CSS class for container element
 	 */
 	public void setContainerCssClass(String cssClass) {
-		this.takeValueForKey(cssClass, CONTAINER_CSS_CLASS_KEY);
+		takeValueForKey(cssClass, CONTAINER_CSS_CLASS_KEY);
 	}
 
 	/**
@@ -436,7 +442,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the value for the binding
 	 */
 	public Boolean showPageString() {
-		return new Boolean(this.booleanValueForBinding(SHOW_PAGE_STRING_KEY, false));
+		return Boolean.valueOf(booleanValueForBinding(SHOW_PAGE_STRING_KEY, false));
 	}
 
 	/**
@@ -445,7 +451,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param flag
 	 */
 	public void setShowPageString(Boolean flag) {
-		this.setValueForBinding(flag, SHOW_PAGE_STRING_KEY);
+		setValueForBinding(flag, SHOW_PAGE_STRING_KEY);
 	}
 
 	/**
@@ -453,7 +459,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * 
 	 */
 	public String forwardString() {
-		return this.stringValueForBinding(FORWARD_STRING, "forward&nbsp;&raquo;");
+		return stringValueForBinding(FORWARD_STRING, "forward&nbsp;&raquo;");
 	}
 
 	/**
@@ -462,14 +468,14 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param s
 	 */
 	public void setForwardString(String s) {
-		this.setValueForBinding(s, FORWARD_STRING);
+		setValueForBinding(s, FORWARD_STRING);
 	}
 
 	/**
 	 * the string for the "back" link
 	 */
 	public String backString() {
-		return this.stringValueForBinding(BACK_STRING, "&laquo;&nbsp;back");
+		return stringValueForBinding(BACK_STRING, "&laquo;&nbsp;back");
 	}
 
 	/**
@@ -478,7 +484,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param s
 	 */
 	public void setBackString(String s) {
-		this.setValueForBinding(s, BACK_STRING);
+		setValueForBinding(s, BACK_STRING);
 	}
 
 	/**
@@ -487,7 +493,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true for showing the numbers, defaults to true
 	 */
 	public Boolean showPageNumbers() {
-		return new Boolean(this.booleanValueForBinding(SHOW_PAGE_NUMBERS, true));
+		return Boolean.valueOf(booleanValueForBinding(SHOW_PAGE_NUMBERS, true));
 	}
 
 	/**
@@ -496,7 +502,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param flag
 	 */
 	public void setShowPageNumbers(Boolean flag) {
-		this.setValueForBinding(flag, SHOW_PAGE_NUMBERS);
+		setValueForBinding(flag, SHOW_PAGE_NUMBERS);
 	}
 
 	/**
@@ -506,7 +512,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return value for the showBatchNavigationForSinglePage binding
 	 */
 	public Boolean showBatchNavigationForSinglePage() {
-		return this.booleanValueForBinding(SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE, true) ? Boolean.TRUE : Boolean.FALSE;
+		return booleanValueForBinding(SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE, true) ? Boolean.TRUE : Boolean.FALSE;
 	}
 
 	/**
@@ -516,7 +522,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @param flag
 	 */
 	public void setShowBatchNavigationForSinglePage(Boolean flag) {
-		this.setValueForBinding(flag, SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE);
+		setValueForBinding(flag, SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE);
 	}
 
 	// *************************************************************************

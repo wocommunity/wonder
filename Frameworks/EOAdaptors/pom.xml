@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>eoadaptors</artifactId>
 	<packaging>pom</packaging>
@@ -12,7 +12,8 @@
 	<modules>
 		<module>JavaERJDBCAdaptor</module>
 		<module>JavaFSAdaptor</module>
+		<module>JavaLuceneAdaptor</module>
 		<module>JavaMemoryAdaptor</module>
-		<module>JavaRESTAdaptor</module>
+		<module>JavaNeo4JAdaptor</module>
 	</modules>
 </project>

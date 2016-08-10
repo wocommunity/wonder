@@ -1,17 +1,19 @@
 package er.extensions.foundation;
 
 import java.io.File;
+import java.util.UUID;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Allows you to store a large amount of files and folders without the hassles
  * of directory size limitations. The files are stored by an abstract 
- * "key" which is by default a {@link ERXRandomGUID}.<br />
+ * "key" which is by default a {@link ERXRandomGUID}.
+ * <p>
  * It uses a factory to create the folder structure under the root
  * directory. With the default factory there will be directories for the first 
  * two characters and under these again directories for the next two characters 
- * of the GUID. <br />
+ * of the GUID. 
  * 
  * @author ak (original version by Dominik Westner)
  *
@@ -38,7 +40,7 @@ public class ERXFileRepository {
 	 * @return the new file
 	 */
 	public File createFile() {
-		return getFile(ERXRandomGUID.newGid());
+		return getFile(UUID.randomUUID().toString());
 	}
 	
 	/**
@@ -74,10 +76,10 @@ public class ERXFileRepository {
 
 	/**
 	 * Returns the repository that is registered under the given name.
-	 * @param name the name under which the respository is registered
+	 * @param name the name under which the repository is registered
 	 * @return the repository that is registered under the given name or null
 	 */
-	public static ERXFileRepository respository(String name) {
+	public static ERXFileRepository repository(String name) {
 		return (ERXFileRepository) _repositories.objectForKey(name);
 	}
 

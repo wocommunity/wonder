@@ -5,7 +5,7 @@
 		<binding name="d2wContext"/>
 		<binding name="condition" defaults="Boolean"/>
 
-		<validation message="&apos;d2wContext&apos; is a required binding">
+		<validation message="'d2wContext' is a required binding">
 			<unbound name="d2wContext"/>
 		</validation>
 	</wo>

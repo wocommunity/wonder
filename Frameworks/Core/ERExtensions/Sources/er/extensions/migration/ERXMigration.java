@@ -2,7 +2,8 @@ package er.extensions.migration;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOModel;
@@ -11,6 +12,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
@@ -24,14 +26,13 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * migration naming conventions, inherit from this class and put your SQL in a properly 
  * named text file (or more than one file, if you use database specific migrations).</p>
  * 
- * <p>If you need database specific migrations use</p>
+ * <p>If you need database specific migrations use:
  * 
- * <p><code>er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=true</code></p>
+ * <blockquote><code>er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=true</code></blockquote>
  * 
- * <p>in your Properties. The default is not to use database specific migrations. A filename
- * for a database specific migration is then for example</p>
- * <p><code>ClassnameX_FrontBase_Upgrade.migration</code> or</p>
- * <p><code>ClassnameX_Postgresql_Upgrade.migration</code></p>
+ * in your Properties. The default is not to use database specific migrations. A filename
+ * for a database specific migration is then, for example, <code>ClassnameX_FrontBase_Upgrade.migration</code> or
+ * <code>ClassnameX_Postgresql_Upgrade.migration</code>.
  * 
  * <p>For the database specific part of the filename, the databaseProductName as from the JDBC
  * adaptor is used. So make sure, you're using the correct filename. The migration will throw
@@ -40,11 +41,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * @author cug
  */
 public abstract class ERXMigration implements IERXMigration {
-
-	/**
-	 * Logging support
-	 */
-	private Logger log = Logger.getLogger(ERXMigration.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(ERXMigration.class);
 	
 	private Boolean _useDatabaseSpecificMigrations;
 
@@ -73,23 +70,21 @@ public abstract class ERXMigration implements IERXMigration {
 	public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable {
 		String sqlString = null;
 		if (useDatabaseSpecificMigrations()) {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Downgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Downgrade.migration");
 		}
 		else {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_Downgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_Downgrade.migration");
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + this.getClass().getName());
+			log.info("Applying migration for: {}", getClass());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
-				throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName() + "found for database: " + ERXJDBCUtilities.databaseProductName(channel));
+				throw new ERXMigrationFailedException("No downgrade for migration: " + getClass().getName() + "found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			else {
-				throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName());
-			}
+			throw new ERXMigrationFailedException("No downgrade for migration: " + getClass().getName());
 		}
 
 	}
@@ -101,23 +96,21 @@ public abstract class ERXMigration implements IERXMigration {
 
 		String sqlString = null;
 		if (useDatabaseSpecificMigrations()) {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Upgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Upgrade.migration");
 		}
 		else {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_Upgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_Upgrade.migration");
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + this.getClass().getName());
+			log.info("Applying migration for: {}", getClass());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
-				throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found for database: " + ERXJDBCUtilities.databaseProductName(channel));
+				throw new ERXMigrationFailedException("No upgrade for migration: " + getClass().getName() + " found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			else {
-				throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found.");
-			}
+			throw new ERXMigrationFailedException("No upgrade for migration: " + getClass().getName() + " found.");
 		}
 	}
 
@@ -125,31 +118,30 @@ public abstract class ERXMigration implements IERXMigration {
 	 * Checks in the current bundle for migration files corresponding to this classes name
 	 * 
 	 * @param migrationName
+	 * @return SQL string
 	 */
 	protected String getSQLForMigration(String migrationName) {
 		NSBundle bundle;
-		String migrationBundleName = this.migrationBundleName();
+		String migrationBundleName = migrationBundleName();
 		if (migrationBundleName == null) {
 			bundle = NSBundle.bundleForClass(getClass());
 		}
 		else {
-			bundle = NSBundle.bundleForName(this.migrationBundleName());
+			bundle = NSBundle.bundleForName(migrationBundleName());
 			if (bundle == null) {
-				bundle = NSBundle._appBundleForName(this.migrationBundleName());
+				bundle = NSBundle._appBundleForName(migrationBundleName());
 			}
 		}
-		NSArray resourcePaths = bundle.resourcePathsForResources("migration", null);
+		NSArray<String> resourcePaths = bundle.resourcePathsForResources("migration", null);
 
 		if (resourcePaths != null) {
-			for (int i = 0; i < resourcePaths.count(); i++) {
-				String currentPath = (String) resourcePaths.objectAtIndex(i);
-
+			for (String currentPath : resourcePaths) {
 				if (currentPath.endsWith(migrationName)) {
 					try {
 						return new String(bundle.bytesForResourcePath(currentPath), _NSStringUtilities.UTF8_ENCODING);
 					}
 					catch (UnsupportedEncodingException e) {
-						log.error(e, e);
+						log.error("Could not use UTF-8 encoding.", e);
 					}
 				}
 			}
@@ -160,16 +152,19 @@ public abstract class ERXMigration implements IERXMigration {
 	/**
 	 * The name to create the NSBundle for the current bundle, defaults to the
 	 * bundle that contains the migration class.
+	 * 
+	 * @return <code>null</code> 
 	 */
 	protected String migrationBundleName() {
 		return null;
 	}
 
 	protected boolean useDatabaseSpecificMigrations() {
-		if (this._useDatabaseSpecificMigrations == null) {
-			this._useDatabaseSpecificMigrations = new Boolean (Boolean.getBoolean("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations"));
+		if (_useDatabaseSpecificMigrations == null) {
+			_useDatabaseSpecificMigrations = Boolean.valueOf(
+					ERXProperties.booleanForKeyWithDefault("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations", false));
 		}
-		return this._useDatabaseSpecificMigrations.booleanValue();
+		return _useDatabaseSpecificMigrations.booleanValue();
 	}
 
 }

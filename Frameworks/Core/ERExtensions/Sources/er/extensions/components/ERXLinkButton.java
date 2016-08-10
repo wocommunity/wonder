@@ -157,16 +157,17 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		_value = _associations.removeObjectForKey("value");
 		
 		if(_action == null && _href == null && _pageName == null && _directActionName == null && _actionClass == null) {
-			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> Missing required attribute: 'action' or 'href' or 'pageName' or 'directActionName' or 'actionClass'").toString());
+			throw new WODynamicElementCreationException(new StringBuilder().append('<').append(getClass().getName()).append("> Missing required attribute: 'action' or 'href' or 'pageName' or 'directActionName' or 'actionClass'").toString());
 		}
 		if(_action != null && _href != null || _action != null && _pageName != null || _href != null && _pageName != null || _action != null && _directActionName != null || _href != null && _directActionName != null || _pageName != null && _directActionName != null || _action != null && _actionClass != null) {
-			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> At least two of these conflicting attributes are present: 'action', 'href', 'pageName', 'directActionName', 'actionClass'.").toString());
+			throw new WODynamicElementCreationException(new StringBuilder().append('<').append(getClass().getName()).append("> At least two of these conflicting attributes are present: 'action', 'href', 'pageName', 'directActionName', 'actionClass'.").toString());
 		}
 		if(_action != null && _action.isValueConstant()) {
-			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> 'action' is a constant.").toString());
+			throw new WODynamicElementCreationException(new StringBuilder().append('<').append(getClass().getName()).append("> 'action' is a constant.").toString());
 		}	
 	}
-	
+
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		//Do nothing
 	}
@@ -175,6 +176,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 	 * Overridden to perform the logging, propagating the action to sub-elements and returning the
 	 * current page if an empty page is returned from super.
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		boolean submit = submitInContext(context);
 		WOActionResults result = submit?invokeButtonAction(request, context):invokeLinkAction(request, context);
@@ -190,7 +192,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 				}
 			}
 			if (result != null && ERXSession.anySession() != null) {
-				ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+				ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 			}
 		}
 		return result;
@@ -239,12 +241,12 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 					invokedElement = (WOActionResults)_action.valueInComponent(component);
 				} else {
 					if(_pageName == null) {
-						throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> : Missing page name.").toString());
+						throw new IllegalStateException(new StringBuilder().append('<').append(getClass().getName()).append("> : Missing page name.").toString());
 					}
 					if(nextPageName != null) {
 						invokedElement = WOApplication.application().pageWithName(nextPageName, context);
 					} else {
-						throw new WOPageNotFoundException((new StringBuilder()).append("<").append(getClass().getName()).append("> : cannot find page.").toString());
+						throw new WOPageNotFoundException(new StringBuilder().append('<').append(getClass().getName()).append("> : cannot find page.").toString());
 					}
 				}
 			} else {
@@ -256,7 +258,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		return invokedElement;
 	}
-	
+
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		if(submitInContext(context)) {
@@ -279,7 +282,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			}
 		}
 	}
-	
+
+	@Override
 	public void appendChildrenToResponse(WOResponse response, WOContext context) {
 		_appendButtonOpenTagToResponse(response, context);
 		super.appendChildrenToResponse(response, context);
@@ -288,7 +292,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		_appendButtonCloseTagToResponse(response, context);
 	}
-	
+
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		if(!submitInContext(context) && !isDisabledInContext(context)) {
@@ -307,7 +312,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			_appendRelToResponse(response, context);
 		}
 	}
-	
+
+	@Override
 	protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
 		if(useIEConditionalsInContext(context) && submitInContext(context)) {
 			_appendNotIEOpenTagToResponse(response, context);
@@ -317,9 +323,9 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			_appendIEStringToResponse(response, context);
 			_appendNotIEOpenTagToResponse(response, context);
 		}
-
 	}
-	
+
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
 		if(useIEConditionalsInContext(context) && !submitInContext(context)) {
 			_appendNotIECloseTagToResponse(response, context);
@@ -494,7 +500,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			}
 		}
 	}
-	
+
+	@Override
     public String classInContext(WOContext context) {
         String value = super.classInContext(context);
         if(defaultButtonClass) {
@@ -541,7 +548,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		if(elementID != null) {
 			return elementID.toString();
 		}
-		throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> Cannot evaluate 'name' attribute, and context element ID is null.").toString());
+		throw new IllegalStateException(new StringBuilder().append('<').append(getClass().getName()).append("> Cannot evaluate 'name' attribute, and context element ID is null.").toString());
 	}
 	
 	protected String hrefInContext(WOContext context) {
@@ -583,9 +590,10 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		return value.toString();
 	}
-	
+
+	@Override
 	public String toString() {
-		return (new StringBuilder()).append("<").append(getClass().getName()).append(" action: ").append(_action).append(" actionClass: ").append(_actionClass).append(" href: ").append(_href).append(" value: ").append(_value).append(" queryDictionary: ").append(_queryDictionary).append(" otherQueryAssociations: ").append(_otherQueryAssociations).append(" pageName: ").append(_pageName).append(" fragmentIdentifier: ").append(_fragmentIdentifier).append(" disabled: ").append(_disabled).append(" secure: ").append(_secure).append(">").toString();
+		return new StringBuilder().append('<').append(getClass().getName()).append(" action: ").append(_action).append(" actionClass: ").append(_actionClass).append(" href: ").append(_href).append(" value: ").append(_value).append(" queryDictionary: ").append(_queryDictionary).append(" otherQueryAssociations: ").append(_otherQueryAssociations).append(" pageName: ").append(_pageName).append(" fragmentIdentifier: ").append(_fragmentIdentifier).append(" disabled: ").append(_disabled).append(" secure: ").append(_secure).append('>').toString();
 	}
 	
 	protected boolean defaultEscapeHTML() {
@@ -602,6 +610,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 	 * Overriding to prevent exceptions when actionClass or directActionName 
 	 * are bound, but resolve to null.
 	 */
+	@Override
 	protected String computeActionStringInContext(WOAssociation actionClass, WOAssociation directActionName, WOContext aContext) {
 
 		WOComponent aComponent = aContext.component();
@@ -612,14 +621,14 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		if (actionClass != null) {
 			anActionClassName = actionClass.valueInComponent(aComponent);
 			if (!(anActionClassName == null || anActionClassName instanceof String)) {
-				throw new IllegalArgumentException((new StringBuilder()).append("<").append(getClass().getName()).append("> Value for attribute named \"actionClass\" must be a string.  Received ").append(anActionClassName).toString());
+				throw new IllegalArgumentException(new StringBuilder().append('<').append(getClass().getName()).append("> Value for attribute named \"actionClass\" must be a string.  Received ").append(anActionClassName).toString());
 			}
 		}
 
 		if (directActionName != null) {
 			anActionName = directActionName.valueInComponent(aComponent);
 			if (!(anActionName == null || anActionName instanceof String)) {
-				throw new IllegalArgumentException((new StringBuilder()).append("<").append(getClass().getName()).append("> Value for attribute named \"directActionName\" must be a string.  Received ").append(anActionName).toString());
+				throw new IllegalArgumentException(new StringBuilder().append('<').append(getClass().getName()).append("> Value for attribute named \"directActionName\" must be a string.  Received ").append(anActionName).toString());
 			}
 		}
 
@@ -627,14 +636,14 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			if (anActionClassName.equals("DirectAction")) {
 				anActionString = anActionName;
 			} else {
-				anActionString = (new StringBuilder()).append(anActionClassName).append("/").append(anActionName).toString();
+				anActionString = new StringBuilder().append(anActionClassName).append('/').append(anActionName).toString();
 			}
 		} else if (anActionClassName != null) {
 			anActionString = anActionClassName;
 		} else if (anActionName != null) {
 			anActionString = anActionName;
 		} else {
-			throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> Both 'actionClass' and 'directActionName' are either absent or evaluated to null. Cannot generate dynamic url without an actionClass or directActionName.").toString());
+			throw new IllegalStateException(new StringBuilder().append('<').append(getClass().getName()).append("> Both 'actionClass' and 'directActionName' are either absent or evaluated to null. Cannot generate dynamic url without an actionClass or directActionName.").toString());
 		}
 
 		return (String) anActionString;

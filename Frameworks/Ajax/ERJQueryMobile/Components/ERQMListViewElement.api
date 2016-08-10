@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMListViewElement" wocomponentcontent="true">    <binding name="countBubble"/>
+    
+    <binding name="theme"/>
+    <binding name="filtertext"/>
+    <binding defaults="Boolean" name="isDivider"/>
+    <binding name="sideText"/>
+    
+    
+    
+    
+    <binding defaults="Actions" name="action"/>
+    <binding name="icon"/>
+    <binding defaults="Boolean" name="automaticDivider"/>
+    <binding defaults="Boolean" name="isInputContainer"/>
+    <binding name="linkResource"/>
+    <binding defaults="Boolean" name="isDialogCall"/>
+    <binding name="queryDictionary"/>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>

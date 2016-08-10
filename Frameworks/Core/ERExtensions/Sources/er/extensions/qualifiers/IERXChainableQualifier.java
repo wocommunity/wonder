@@ -1,12 +1,14 @@
 package er.extensions.qualifiers;
 
+import java.util.NoSuchElementException;
+
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
  * IERXQualifier is the definition of methods required for chainable
- * EOAndQualifier.
+ * EOQualifier.
  * 
  * @author mschrag
  */

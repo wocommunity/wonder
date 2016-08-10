@@ -13,13 +13,18 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 
 /**
  * This assignment calculates default page configuration
  * names for the current entity in the context.
  */
 public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"propertyKey", "object.entityName", "entity.name"});
@@ -51,7 +56,7 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
     public ERDDefaultConfigurationNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "entity.name" and 
      * "object.entityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

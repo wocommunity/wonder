@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo class="CCGoogleMap.java" wocomponentcontent="false">
+
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="lat"/>
+        
+        <binding name="lng"/>
+        
+        <binding name="type"/>
+        <binding name="zoom"/>
+    <binding name="address"/>
+    </wo>
+</wodefinitions>

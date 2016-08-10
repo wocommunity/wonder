@@ -9,17 +9,13 @@
 
 package com.amazon.s3;
 
-import java.net.HttpURLConnection;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * A Response object returned from AWSAuthConnection.get(). Exposes the
@@ -37,7 +33,7 @@ public class GetResponse extends Response {
 		if (connection.getResponseCode() < 400) {
 			Map metadata = extractMetadata(connection);
 			byte[] body = slurpInputStream(connection.getInputStream());
-			this.object = new S3Object(body, metadata);
+			object = new S3Object(body, metadata);
 		}
 	}
 

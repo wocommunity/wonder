@@ -1,0 +1,101 @@
+TaskProgressRefresh : AjaxUpdateContainer {
+	elementName = "div";
+	frequency = refreshInterval;
+	// stopped binding used for developing a custom CSS style-sheet
+	stopped = stayOnLongResponsePageIndefinitely;
+}
+
+NextPageActionURL: WOActionURL {
+	action = nextPage;
+}
+
+Finished : WOGenericContainer {
+	elementName = "td";
+	width = finishedPercentage;
+	class = "percentageFinished";
+}
+
+Unfinished : WOGenericContainer {
+	elementName = "td";
+	class = "percentageUnfinished";
+	omitTags = hideUnfinishedProgressTableCell;
+}
+
+ERXStyleSheet : ERXStyleSheet {
+  framework = styleSheetFramework;
+  filename = styleSheetFilename;
+}
+
+FutureHasStatus : ERXWOConditional {
+  condition = future.hasStatus;
+}
+
+FutureDoesNotHaveStatus : ERXElse {
+}
+
+FutureHasPercentComplete : ERXWOConditional {
+  condition = future.hasPercentComplete;
+}
+
+FutureDoesNotHavePercentComplete : ERXElse {
+}
+
+ControlScriptContent : WOString {
+  value = controlScriptContent;
+}
+
+StopControlUpdateContainer : AjaxUpdateContainer {
+  id = "stop-control-area";
+  class = "section";
+}
+
+FutureIsStoppable : ERXWOConditional {
+  condition = future.isStoppable;
+}
+
+WasStoppedByUser : ERXWOConditional {
+  condition = wasStoppedByUser;
+}
+
+ERXElse2 : ERXElse {
+}
+
+StopTaskUpdateHyperlink : AjaxUpdateLink {
+  action = stopTask;
+  class = "stop-link";
+  updateContainerID = "stop-control-area";
+}
+
+ApplicationIsDevelopmentMode : ERXWOConditional {
+  condition = application.isDevelopmentMode;
+}
+
+IsDebugMode : ERXWOConditional {
+  condition = isDebugMode;
+}
+
+NextPageForResultControllerClassSimpleName : WOString {
+  value = nextPageForResultController.class.simpleName; //VALID
+}
+
+TaskClassSimpleName : WOString {
+  value = task.class.simpleName; //VALID
+}
+
+FutureStatus : WOString {
+  value = future.status;
+  escapeHTML = false;
+}
+
+DefaultStatus : WOString {
+  value = defaultStatus;
+}
+
+FinishedPercentage : WOString {
+  value = finishedPercentage;
+  valueWhenEmpty = "0%";
+}
+
+ElapsedTime : WOString {
+  value = elapsedTime;
+}

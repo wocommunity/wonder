@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERCoolComponents=load
+er.extensions.ERCoolComponents.hasLocalization=false
+
 #########################################################################
 # CCAjaxLongResponsePage
 #########################################################################

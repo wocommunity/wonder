@@ -1,17 +1,16 @@
 package er.prototaculous.widgets;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.appserver.ERXWOContext;
-
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  *
  * Extending the api of WOSubmitButton
- *
  * 
  * @author mendis
  */
@@ -22,10 +21,6 @@ public class LightWindowButton extends LightWindow {
         super(context);
     }
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
     
     @Override
     public boolean isStateless() {
@@ -60,7 +55,7 @@ public class LightWindowButton extends LightWindow {
     @SuppressWarnings("unchecked")
 	public String href() {
     	if (hasBinding(Bindings.action))
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);

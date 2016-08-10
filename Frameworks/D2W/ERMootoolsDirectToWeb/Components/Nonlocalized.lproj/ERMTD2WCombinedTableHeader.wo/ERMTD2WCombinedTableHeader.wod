@@ -1,0 +1,36 @@
+InFormConditional : WOConditional {
+	condition = context.isInForm;
+}
+
+IsNotPropertySortable : WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+	negate = true;
+}
+
+IsPropertySortable : WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+}
+
+NotInFormConditional : WOConditional {
+	condition = context.isInForm;
+	negate = true;
+}
+
+PropertyName : ERMTD2WPropertyName {
+	localContext = d2wContext;
+}
+
+ToggleLink : MTAjaxUpdateLink {
+	action = toggleClicked;
+	class = toggleLinkClass;
+	updateContainerID = updateContainerID;
+}
+
+ToggleSubmit : MTAjaxSubmitButton {
+	action = toggleClicked;
+	button = false;
+	updateContainerID = updateContainerID;
+	class = toggleLinkClass;
+}

@@ -1,3 +1,8 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERModernDefaultSkin=load
+er.extensions.ERModernDefaultSkin.hasLocalization=false
+
+
 er.modern.look.skinframework = ERModernDefaultSkin
 
 # This enables rendering of the span tag inside the ERXNavigationMenuItem list elements

@@ -34,6 +34,13 @@ import er.taggable.model.ERTag;
  * @binding additionalQualifier an optional restricting qualifier
  */
 public class ERTagField extends er.extensions.components.ERXComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private String _id;
   private NSArray<String> _availableTags;
   private String _tags;
@@ -100,8 +107,8 @@ public class ERTagField extends er.extensions.components.ERXComponent {
   }
 
   public String javascriptAvailableTags() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("[");
+    StringBuilder sb = new StringBuilder();
+    sb.append('[');
     NSMutableArray<String> availableTags = availableTags().mutableClone();
     int availableTagsCount = availableTags.count();
     if (availableTagsCount > 0) {
@@ -111,11 +118,11 @@ public class ERTagField extends er.extensions.components.ERXComponent {
         availableTag = ERTag.escapeTagNamed(availableTag);
         availableTags.replaceObjectAtIndex(availableTag, tagNum);
       }
-      sb.append("'");
+      sb.append('\'');
       sb.append(availableTags.componentsJoinedByString("','"));
-      sb.append("'");
+      sb.append('\'');
     }
-    sb.append("]");
+    sb.append(']');
     return sb.toString();
   }
 

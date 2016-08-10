@@ -1,0 +1,77 @@
+{
+    // url for the index files
+    store = "file:///Library/Lucene/er.examples.textsearchdemo/movie";
+    
+    // entities in this index
+    entities = (Movie);
+    
+    // properties to index, these are key paths off the objects
+    // and are also used for the names of the index fields.
+    // these don't need to be attributes or relationships
+    // but can also be simple methods. In fact, if you have multiple
+    // entities in your index, you will need to support a common set of 
+    // these properties
+    
+    properties = {
+    
+    	// set the Field.Store option
+	//   store = "NO|YES|COMPRESS";
+	// 		NO - don't store this value
+	//			YES - do store this value
+	//			COMPRESS - store this value compressed - expect performance impact
+	// set the Field.Index options
+	//   index = "NO|ANALYZED|NOT_ANALYZED|ANALYZED_NO_NORMS|NOT_ANALYZED_NO_NORMS";
+	//			NO - don't index this value
+	//			ANALYZED (Was TOKENIZED) - index the tokens produced by running the value through an analyzer
+	//			NOT_ANALYZED (Was UN_TOKENIZED) - index the value as is (useful for id's, codes, etc)
+	//			ANALYZED_NO_NORMS - index the analyzed tokens, disable storing norms (index time boosts, doc size, etc)
+	//			NOT_ANALYZED_NO_NORMS (Was NO_NORMS) - index as is, disable storing norms
+	// set the Field.TermVector options
+	//   termVector = "NO|YES|WITH_POSITIONS|WITH_OFFSETS|WITH_POSITIONS_OFFSETS";
+	//			NO - don't store term vectors
+	//			YES - store term vector of each document (term vector contains term frequency etc)
+	//			WITH_POSITIONS - store term vector and token position information
+	//			WITH_OFFSETS - store term vector and token offset information
+	//			WITH_POSITIONS_OFFSETS - store term vector and token position and offset information
+	// which analyzer class to use. For german stuff, you'll
+	// use the org.apache.lucene.analysis.de.GermanAnalyzer.
+	// defaults to org.apache.lucene.analysis.standard.StandardAnalyzer
+	//   analyzer = com.foo.SomeAnalyzerClass;
+	// optional formater for the value
+	//   format = com.foo.SomeFormatClass;
+	// optional number format for the value
+	//   numberformat = "0";
+	// optional date format for the value
+	//   dateformat = "yyyy.mm.dd";
+		 
+		content = {
+		 	store = YES;
+    	 		index = ANALYZED;
+    	 		termVector = WITH_POSITIONS;
+		};
+		 
+		title = {
+    	 		store = YES;
+    	 		index = ANALYZED;
+    	 		termVector = WITH_POSITIONS;
+    	 	};
+    	 
+    	 	directors.fullName = {
+    	    		store = YES;
+    	 		index = ANALYZED;
+    	 		termVector = WITH_POSITIONS;
+    		};
+    	 
+    	 	roles.talent.fullName = {
+    	 		store = YES;
+    	 		index = ANALYZED;
+    	 		termVector = WITH_POSITIONS;
+    	 	};
+    	 
+    	 	studio.name = {
+		    store = YES;
+    	 		index = ANALYZED;
+    	 		termVector = WITH_POSITIONS;
+    	 	};
+	};
+}

@@ -1,34 +1,20 @@
 package er.directtoweb.components.misc;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
 
-import er.directtoweb.components.ERDCustomEditComponent;
-import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Image;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * This stateless component: <p>
- *  - displays an image with a given src, width & height <br/>
- *  - allows to zoom to a given height and width.
+ * This stateless component:
+ * <ul>
+ * <li>displays an image with a given src, width and height</li>
+ * <li>allows to zoom to a given height and width</li>
+ * </ul>
  * 
- * <p>
  * @binding src - source url for the image to be displaed. mandatory for this component to work properly.
  * @binding height - height of the image to be displayed in the page. 
  * @binding width- width of the image to be displayed in the page.
@@ -39,9 +25,15 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding enableZoomForImage - true/false. if true, clicking on thumbnail will popup the full size image. If false, clicking is not allowed. 
  * 
  * @author rajaram
- *
  */
 public class ERDZoomableImage extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public static final Logger log = Logger.getLogger(ERDZoomableImage.class);
     
     public ERDZoomableImage(WOContext context) {
@@ -88,7 +80,7 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
     
     /**
-     * @return {@link Boolean} true, if {@link ERDZoomableImage#thumnailSrc()} returns an empty or null string
+     * @return {@link Boolean} true, if {@link #thumnailSrc()} returns an empty or null string
      *                         false, otherwise
      */
     public boolean isThumbnailSrcNullOrEmpty() {
@@ -115,7 +107,7 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
 
     public String jsToZoomImage() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if(enableZoom()) {
             sb.append ("ZoomableImage.openImageFromURL('");
             sb.append(imageSrc()); 

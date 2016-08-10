@@ -1,0 +1,335 @@
+<wo:WOConditional condition = "$schedulerRunning">
+<link href='http://fonts.googleapis.com/css?family=Cabin&v1' rel='stylesheet' type='text/css'>
+<style>
+.fontCustom
+{
+	color:#666;
+	font-family: 'Cabin', arial, serif;
+}
+.custom{
+	background:#F6F6F6;
+
+	
+	text-shadow: 1px 1px 1px #FFF;
+filter: dropshadow(color=#a3a3a3, offx=1, offy=1);
+
+/*-webkit-box-shadow: inset 0px 0px 5px 1px #808080;
+-moz-box-shadow: inset 0px 0px 5px 1px #808080;
+box-shadow: inset 0px 0px 5px 1px #808080;*/
+
+	}
+.custom a{
+	text-decoration:none;
+	color:#333;
+}
+.custom a:hover{
+	text-decoration:none;
+	color:#04acb8;
+}	
+	
+.custom thead, .custom tfoot, th{
+		background:#596a72;
+		color:#FFF;
+		text-shadow: 2px 0px 1px #333;
+		padding:2px;
+			font-size:14px;
+
+		border-left:1px solid #677272;
+
+
+}	
+.custom td {
+	border:#FFF solid 1px;
+	padding:4px;
+	text-align:left;
+	font-size:12px;
+}	
+
+.custom caption
+{
+background: rgb(103,114,114); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(103,114,114,1) 0%, rgba(89,106,114,1) 45%, rgba(62,74,79,1) 45%, rgba(89,106,114,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(103,114,114,1)), color-stop(45%,rgba(89,106,114,1)), color-stop(45%,rgba(62,74,79,1)), color-stop(100%,rgba(89,106,114,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(103,114,114,1) 0%,rgba(89,106,114,1) 45%,rgba(62,74,79,1) 45%,rgba(89,106,114,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(103,114,114,1) 0%,rgba(89,106,114,1) 45%,rgba(62,74,79,1) 45%,rgba(89,106,114,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(103,114,114,1) 0%,rgba(89,106,114,1) 45%,rgba(62,74,79,1) 45%,rgba(89,106,114,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#677272', endColorstr='#596a72',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(103,114,114,1) 0%,rgba(89,106,114,1) 45%,rgba(62,74,79,1) 45%,rgba(89,106,114,1) 100%); /* W3C */
+
+
+-moz-border-radius-topleft: 7px;
+-moz-border-radius-topright: 7px;
+-moz-border-radius-bottomright: 0px;
+-moz-border-radius-bottomleft: 0px;
+-webkit-border-radius: 7px 7px 0px 0px;
+border-radius: 7px 7px 0px 0px;
+
+color:#FFF;
+		text-shadow: 2px 0px 1px #333;
+		padding:2px;
+		font-size:21px;
+
+border-bottom:1px solid #677272;
+}
+
+a.buttonCustom {
+		text-shadow: 2px 0px 1px #FFF;
+		padding:2px;
+		font-size:14px;
+		color:#666;
+		text-decoration:none;
+		padding:6px;
+		border:1px solid #c8d7dc;
+		 display:block;
+		 margin-bottom:8px;
+		 width: 100px;
+		-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+		
+background: rgb(242,245,246); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,245,246,1)), color-stop(37%,rgba(227,234,237,1)), color-stop(100%,rgba(200,215,220,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#c8d7dc',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* W3C */
+}
+
+
+a.ActionCustom {
+		text-shadow: 2px 0px 1px #FFF;
+		padding:2px;
+		font-size:12px;
+		color:#666;
+		text-decoration:none;
+		padding:6px;
+		border:1px solid #c8d7dc;
+		 display:block;
+		 margin-bottom:8px;
+		 
+		 
+		 
+		-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+		
+background: rgb(242,245,246); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(242,245,246,1) 0%, rgba(227,234,237,1) 37%, rgba(200,215,220,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,245,246,1)), color-stop(37%,rgba(227,234,237,1)), color-stop(100%,rgba(200,215,220,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#c8d7dc',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(242,245,246,1) 0%,rgba(227,234,237,1) 37%,rgba(200,215,220,1) 100%); /* W3C */
+}
+
+
+a.RunCustom {
+		text-shadow: 2px 0px 1px #96c56f;
+		padding:2px;
+		font-size:12px;
+		color:#FFF;
+		text-decoration:none;
+		padding:6px;
+		border:1px solid #96c56f;
+		 display:block;
+		 margin-bottom:8px;
+		 
+		 
+		 
+		-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+		
+background: rgb(169,219,128); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(169,219,128,1) 0%, rgba(150,197,111,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(169,219,128,1)), color-stop(100%,rgba(150,197,111,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(169,219,128,1) 0%,rgba(150,197,111,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(169,219,128,1) 0%,rgba(150,197,111,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(169,219,128,1) 0%,rgba(150,197,111,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a9db80', endColorstr='#96c56f',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(169,219,128,1) 0%,rgba(150,197,111,1) 100%); /* W3C */
+
+}
+
+
+a:hover.buttonCustom{
+	color:#04acb8;
+}
+
+
+</style>
+
+	<div class="link"><wo:hyperlink action = "$refresh" class="buttonCustom">Refresh content</wo:hyperlink></div><br/>
+	<div class="link"><wo:hyperlink action = "$displayDashboard" class="buttonCustom">Dashboard</wo:hyperlink></div>
+	<div class="link"><wo:hyperlink action = "$displayRunningJobs" class="buttonCustom">Running jobs</wo:hyperlink></div>
+	<div class="link"><wo:hyperlink action = "$displayScheduledJobs" class="buttonCustom">Scheduled jobs</wo:hyperlink></div>
+	<br/><br/>
+	<wo:WOConditional condition = "$dispDashboard">
+		<table summary="Dashboard" class="custom" cellspacing="0">
+	 	<thead>
+	    	<tr>
+	      		<th>Metadata</th>
+	      		<th>Value</th>
+	    	</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td>Scheduler name</td>
+			<td><wo:string value = "$scheduler.metaData.schedulerName"/></td>
+			</tr>
+			<tr>
+			<td>Scheduler instance ID</td>
+			<td><wo:string value = "$scheduler.metaData.schedulerInstanceId"/></td>
+			</tr>
+			<tr>
+			<td>Quartz scheduler version</td>
+			<td><wo:string value = "$scheduler.metaData.version"/></td>
+			</tr>
+			<tr>
+			<td>Scheduler started</td>
+			<td><wo:string value = "$scheduler.metaData.isStarted"/></td>
+			</tr>
+			<tr>
+			<td>Scheduler in standby mode</td>
+			<td><wo:string value = "$scheduler.metaData.isInStandbyMode"/></td>
+			</tr>
+			<tr>
+			<td>Thread pool size</td>
+			<td><wo:string value = "$scheduler.metaData.threadPoolSize"/></td>
+			</tr>
+			<tr>
+			<td>Running since</td>
+			<td><wo:string value = "$scheduler.metaData.runningSince"/></td>
+			</tr>
+			<tr>
+			<td>Number of jobs executed</td>
+			<td><wo:string value = "$scheduler.metaData.numberOfJobsExecuted"/></td>
+			</tr>
+		</tbody>
+	</table>
+</wo:WOConditional>
+<wo:WOConditional condition = "$dispRunningJobs">
+	<table summary="List of running jobs" class="custom" cellspacing="0">
+	<caption>
+	List of running jobs
+	</caption>
+	 	<thead>
+	    	<tr>
+	       		<th>Action</th>
+	      		<th>Group</th>
+	      		<th>Name</th>
+	      		<th>Fire time</th>
+	      		<th>Durable</th>
+	      		<th>Job class</th>
+	      		<th>Result</th>
+	      		<th>Data map</th>
+	     		<th>Priority</th>
+	     		<th>Next fire time</th>
+	     		<th>Trigger class</th>
+	    	</tr>
+		</thead>
+	 	<tfoot>
+	    	<tr>
+	       		<th>Action</th>
+	       		<th>Group</th>
+	      		<th>Name</th>
+	      		<th>Fire time</th>
+	      		<th>Durable</th>
+	      		<th>Job class</th>
+	      		<th>Result</th>
+	      		<th>Data map</th>
+	     		<th>Priority</th>
+	     		<th>Next fire time</th>
+	     		<th>Trigger class</th>
+	    	</tr>
+		</tfoot>
+	<wo:if condition = "$isJobsRunningListEmpty" negate = "$true">
+		<wo:if condition = "$hasErrorToDisplay" >
+		<br />Error message: + <wo:string value = "$errorMessage" /><br />
+		</wo:if>
+		<wo:repetition list="$jobsRunning" item="$aJobContext">
+		<tbody>
+		<tr>
+			<td><wo:WOHyperlink action = "$stopJobAction" class="ActionCustom">Stop</wo:WOHyperlink></td>
+			<td><wo:string value = "$aJobContext.jobDetail.key.group"/></td>
+			<td><wo:string value = "$aJobContext.jobDetail.key.name"/></td>
+			<td><wo:string value = "$aJobContext.fireTime"/></td>
+			<td><wo:string value = "$aJobContext.jobDetail.isDurable"/></td>
+			<td><wo:string value = "$aJobContext.jobDetail.jobClass.canonicalName"/></td>
+			<td><wo:string value = "$aJobContext.result"/></td>
+			<td><wo:repetition list="$jobDataMapKeys" item="$aKey">
+			key: <wo:string value = "$aKey"/><br/>info: <wo:string value = "$jobDataMapInfo"/><br/>
+			</wo:repetition></td>
+			<td><wo:string value = "$aJobContext.trigger.priority"/></td>
+			<td><wo:string value = "$aJobContext.trigger.nextFireTime"/></td>
+			<td><wo:string value = "$aJobContext.trigger.class.simpleName //VALID"/></td>
+		</tr>
+		</tbody>
+		</wo:repetition>
+	</wo:if>
+	<wo:else>
+		<tbody>
+		<tr>
+			<td>Empty list.</td>
+		</tr>
+		</tbody>
+	</wo:else>
+	</table>
+</wo:WOConditional>
+
+<wo:WOConditional condition = "$dispScheduledJobs">
+	<table summary="List of scheduled jobs" class="custom" cellspacing="0">
+	<caption>
+	List of scheduled jobs
+	</caption>
+	 	<thead>
+	    	<tr>
+	       		<th>Action</th>
+	     		<th>Group</th>
+	      		<th>Name</th>
+	      		<th>Durable</th>
+	      		<th>Class</th>
+	      		<th>Description</th>
+	      		<th># triggers</th>
+	      		<th>Prev. fire time #1</th>
+	      		<th>Next fire time #1</th>
+	    	</tr>
+		</thead>
+	 	<tfoot>
+	    	<tr>
+	       		<th>Action</th>
+	      		<th>Group</th>
+	      		<th>Name</th>
+	      		<th>Durable</th>
+	      		<th>Class</th>
+	      		<th>Description</th>
+	      		<th># triggers</th>
+	      		<th>Prev. fire time #1</th>
+	      		<th>Next fire time #1</th>
+	    	</tr>
+		</tfoot>
+		<tbody>
+		<wo:repetition list="$allJobs" item="$aJob">
+		<tr>
+			<td><wo:WOHyperlink action = "$jobAction" class="ActionCustom"><wo:string value = "$actionName"/><br /></wo:WOHyperlink><wo:WOHyperlink action="$runNowAction" class="RunCustom">run&nbsp;now</wo:WOHyperlink></td>
+			<td><wo:string value = "$aJob.key.group"/></td>
+			<td><wo:string value = "$aJob.key.name"/></td>
+			<td><wo:string value = "$aJob.isDurable"/></td>
+			<td><wo:string value = "$aJob.jobClass.canonicalName"/></td>
+			<td><wo:string value = "$aJob.description"/></td>
+			<td><wo:string value = "$triggersOfJob.count"/></td>
+			<td><wo:string value = "$firstTrigger.previousFireTime"/></td>
+			<td><wo:string value = "$firstTrigger.nextFireTime"/></td>
+		</tr>
+		</wo:repetition>					
+		</tbody>
+	</table>
+	</wo:WOConditional>
+	</wo:WOConditional>
+<wo:WOConditional condition = "$schedulerRunning" negate = "true">
+The scheduler is not running.
+</wo:WOConditional>
+	

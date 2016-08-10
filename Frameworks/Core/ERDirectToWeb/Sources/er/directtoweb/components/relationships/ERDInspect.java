@@ -16,14 +16,23 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.<br />
+ * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.
+ * 
  * @d2wKey destinationEntityName
  */
 public class ERDInspect extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ERDInspect(WOContext context) {
         super(context);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { 
         return false; 
     }

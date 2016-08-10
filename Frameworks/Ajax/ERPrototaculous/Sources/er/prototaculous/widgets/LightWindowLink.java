@@ -1,9 +1,12 @@
 package er.prototaculous.widgets;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.appserver.ERXWOContext;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
@@ -28,11 +31,6 @@ public class LightWindowLink extends LightWindow {
     }
     
     @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-    
-    @Override
     public boolean isStateless() {
     	return true;
     }
@@ -48,7 +46,7 @@ public class LightWindowLink extends LightWindow {
     	if (hasBinding(Bindings.href))
     		return (String) valueForBinding(Bindings.href);
     	else if (hasBinding(Bindings.action) || hasBinding(Bindings.pageName))
-    		return (String) ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary queryDictionary = (NSDictionary) valueForBinding(Bindings.queryDictionary);

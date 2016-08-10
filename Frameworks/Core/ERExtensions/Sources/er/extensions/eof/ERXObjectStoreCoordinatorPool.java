@@ -133,7 +133,7 @@ public class ERXObjectStoreCoordinatorPool {
         String sessionID = sessionID();
         EOObjectStore os = null;
         if (sessionID != null) {
-            os = (EOObjectStore) _oscForSession.get(sessionID);
+            os = _oscForSession.get(sessionID);
             if (os == null) {
             	os = currentThreadObjectStore();
                 _oscForSession.put(sessionID, os);

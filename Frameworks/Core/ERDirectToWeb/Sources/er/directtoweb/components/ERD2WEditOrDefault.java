@@ -17,12 +17,18 @@ import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Generic edit or default value component, uses other components like editNumber or editString.<br />
+ * Generic edit or default value component, uses other components like editNumber or editString.
  * @d2wKey displayValueForNull
  * @d2wKey innerComponentName
  * @d2wKey defaultValue
  */
 public class ERD2WEditOrDefault extends D2WComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WEditOrDefault(WOContext context) {super(context);}
     
@@ -40,6 +46,7 @@ public class ERD2WEditOrDefault extends D2WComponent {
 
     public Object defaultValue() { return d2wContext().valueForKey("defaultValue"); }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if (_selectionValue == null) {
             if ((defaultValue() == null && !objectPropertyValueIsNonNull()) || (defaultValue() != null &&
@@ -53,6 +60,7 @@ public class ERD2WEditOrDefault extends D2WComponent {
     }
     
     protected NSMutableArray validationExceptions = new NSMutableArray();
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         validationExceptions.removeAllObjects();
         super.takeValuesFromRequest(r, c);
@@ -66,6 +74,7 @@ public class ERD2WEditOrDefault extends D2WComponent {
         }
     }
 
+    @Override
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         validationExceptions.addObject(new ValidationExceptionHolder(e, value, keyPath));
     }

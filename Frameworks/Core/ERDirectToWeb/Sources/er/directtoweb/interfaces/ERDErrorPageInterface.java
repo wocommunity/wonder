@@ -7,9 +7,7 @@ import com.webobjects.directtoweb.ErrorPageInterface;
  * Not being able to do so makes localization a pain.
  *
  * @author ak on Thu Jan 29 2004
- * @project ERDirectToWeb
  */
-
 public interface ERDErrorPageInterface extends ErrorPageInterface {
     
     /** Sets the exception. */

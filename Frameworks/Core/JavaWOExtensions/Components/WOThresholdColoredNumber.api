@@ -6,15 +6,15 @@
 		<binding name="lowColor"/>
 		<binding name="threshold"/>
 
-		<validation message="&apos;threshold&apos; is a required binding">
+		<validation message="'threshold' is a required binding">
 			<unbound name="threshold"/>
 		</validation>
 
-		<validation message="&apos;highColor&apos; is a required binding">
+		<validation message="'highColor' is a required binding">
 			<unbound name="highColor"/>
 		</validation>
 
-		<validation message="&apos;lowColor&apos; is a required binding">
+		<validation message="'lowColor' is a required binding">
 			<unbound name="lowColor"/>
 		</validation>
 	</wo>

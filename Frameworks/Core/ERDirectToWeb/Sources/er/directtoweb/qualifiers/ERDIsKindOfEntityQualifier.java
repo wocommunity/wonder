@@ -15,11 +15,16 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
    we need to sublass one of the qualifier class of D2W in order for the LA code to work properly
 */
 /**
- * Tests if an object is a kind of an entity.<br />
- * 
+ * Tests if an object is a kind of an entity.
  */
 
 public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     private String _entityName;
     private String _keyPath;
@@ -34,6 +39,7 @@ public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
         _keyPath=(String)u.decodeObjectForKey("keyPath");
     }
 
+    @Override
     public boolean evaluateWithObject(Object o) {
         // FIXME here -- this could be sth else..
         D2WContext c=(D2WContext)o;
@@ -45,5 +51,6 @@ public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
         return e.name().equals(_entityName) ? true : (e.parentEntity()!= null ? isKindOfEntity(e.parentEntity()) : false);
     }
 
+    @Override
     public String toString() { return _keyPath+" isKindOfEntity "+_entityName; }    
 }

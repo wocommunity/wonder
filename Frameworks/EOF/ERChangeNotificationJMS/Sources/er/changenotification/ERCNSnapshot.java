@@ -29,6 +29,12 @@ import com.webobjects.foundation.NSNotification;
  * populate the dictionaries with the snapshots of updated enterprise objects. 
  */
 public class ERCNSnapshot implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final String INSERTED = "inserted";
     public static final String UPDATED = "updated";
@@ -89,7 +95,7 @@ public class ERCNSnapshot implements Serializable {
 
     public static boolean shouldApplyChangeFor(String operation) {
         ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
-        return configuration.changeTypesToSubscrive().containsObject(operation);
+        return configuration.changeTypesToSubscribe().containsObject(operation);
     }
 
     public static boolean shouldSynchronizeEntity(String entityName) {
@@ -162,30 +168,31 @@ public class ERCNSnapshot implements Serializable {
         return result.immutableClone();
     }
 
+    @Override
     public String toString() {
         if (_toString == null) {
-            StringBuffer sbuf = new StringBuffer();
-            sbuf.append("<").append(getClass().getName()).append("\n");
+            StringBuilder sbuf = new StringBuilder();
+            sbuf.append('<').append(getClass().getName()).append('\n');
             
-            sbuf.append(" sender: ").append(senderHost()).append(":")
-                .append(senderPort()).append("/").append(senderAppName()).append("\n");
+            sbuf.append(" sender: ").append(senderHost()).append(':')
+                .append(senderPort()).append('/').append(senderAppName()).append('\n');
             
             sbuf.append(" insertion: ").append(_summaryForChangeType(_shapshotsForInsertionGroupedByEntity));
             sbuf.append(" update: ").append(_summaryForChangeType(_shapshotsForUpdateGroupedByEntity));
             sbuf.append(" deletion: ").append(_summaryForChangeType(_globalIDsForDeletionGroupedByEntity));
             
-            sbuf.append(">");
+            sbuf.append('>');
             _toString = sbuf.toString();
         }
         return _toString;
     }
     
     private String _summaryForChangeType(NSDictionary objectsGroupedByEntity) {
-        StringBuffer sbuf = new StringBuffer();
+        StringBuilder sbuf = new StringBuilder();
         if (objectsGroupedByEntity.allKeys().count() == 0) {
             sbuf.append("none \n");
         } else {
-            sbuf.append("\n");
+            sbuf.append('\n');
             Enumeration entityNames = objectsGroupedByEntity.keyEnumerator();
             while (entityNames.hasMoreElements()) {
                 String entityName = (String)entityNames.nextElement();

@@ -1,10 +1,10 @@
 {
-	"IllegalCharacterInNumberException" = "De waarde <b>@@value@@</b> in <b>@@displayNameForProperty@@</b> is niet toegestaan.";
-	"InvalidDateFormatException" = "De waarde <b>@@value@@</b> in <b>@@displayNameForProperty@@</b> is geen geldige datum.";
+	"IllegalCharacterInNumberException" = "De waarde <b>@@escapedValue@@</b> in <b>@@displayNameForProperty@@</b> is niet toegestaan.";
+	"InvalidDateFormatException" = "De waarde <b>@@escapedValue@@</b> in <b>@@displayNameForProperty@@</b> is geen geldige datum.";
 	"InvalidNumberException" = "Deze waarde is geen getal.";
 	"MandatoryToManyRelationshipException" = "@@displayNameForProperty@@ moet ingevuld zijn.";
 	"MandatoryToOneRelationshipException" = "@@displayNameForProperty@@ moet ingevuld zijn.";
-	"NotANumberException" = "De waarde <b>@@value@@</b> is geen getal.";
+	"NotANumberException" = "De waarde <b>@@escapedValue@@</b> is geen getal.";
 	"NullPropertyException" = "Vul het veld <b>@@displayNameForProperty@@</b> in.";
 	"ObjectCannotBeDeletedException" = "Deze <b>@@displayNameForEntity@@</b> kan niet verwijderd worden, omdat u geen rechten hebt deze <b>@@displayNameForEntity@@</b> direct of een van de verwante objecten van <b>@@displayNameForEntity@@</b> te verwijderen.";
 	"ObjectRemovalException" = "<b>@@displayNameForEntity@@</b> kan niet verwijderd worden als <b>@@displayNameForProperty@@</b> nog bestaat.";

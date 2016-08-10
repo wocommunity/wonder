@@ -9,13 +9,13 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXExtensions;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -24,7 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public class ERXExceptionUtilities {
-	public static final Logger log = Logger.getLogger(ERXExceptionUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXExceptionUtilities.class);
 
 	/**
 	 * Implemented by any exception that you explicitly want to not appear in
@@ -43,10 +43,18 @@ public class ERXExceptionUtilities {
 	 * @author mschrag
 	 */
 	public static class HideStackTraceException extends NSForwardException {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public HideStackTraceException(Throwable cause) {
 			super(cause);
 		}
 
+		@Override
 		public void printStackTrace(PrintWriter s) {
 			s.println("[stack trace already printed]");
 		}
@@ -102,10 +110,13 @@ public class ERXExceptionUtilities {
 	 * @return the paragraph string
 	 */
 	public static String toParagraph(Throwable t, boolean removeHtmlTags) {
-		StringBuffer messageBuffer = new StringBuffer();
+		StringBuilder messageBuffer = new StringBuilder();
 		boolean foundInternalError = false;
 		Throwable throwable = t;
 		while (throwable != null) {
+			if (messageBuffer.length() > 0) {
+				messageBuffer.append(' ');
+			}
 			Throwable oldThrowable = ERXExceptionUtilities.getMeaningfulThrowable(throwable);
 			String message = throwable.getLocalizedMessage();
 			if (message == null) {
@@ -123,10 +134,7 @@ public class ERXExceptionUtilities {
 			message = message.trim();
 			messageBuffer.append(message);
 			if (!message.endsWith(".")) {
-				messageBuffer.append(". ");
-			}
-			else {
-				messageBuffer.append(" ");
+				messageBuffer.append('.');
 			}
 			throwable = ERXExceptionUtilities.getCause(oldThrowable);
 		}
@@ -176,7 +184,7 @@ public class ERXExceptionUtilities {
 	public static void logStackTrace() {
 		Exception e = new Exception("DEBUG");
 		e.fillInStackTrace();
-		ERXExceptionUtilities.log.error(null, e);
+		log.error("", e);
 	}
 
 	/**
@@ -240,20 +248,22 @@ public class ERXExceptionUtilities {
 					URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
 					if (path != null) {
 						try {
-							NSArray<String> skipPatternStrings = (NSArray<String>) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
+							NSArray<String> skipPatternStrings = (NSArray<String>) ERXFileUtilities.readPropertyListFromFileInFramework(skipPatternsFile, framework, (NSArray)null);
 							if (skipPatternStrings != null) {
 								for (String skipPatternString : skipPatternStrings) {
 									try {
 										mutableSkipPatterns.addObject(Pattern.compile(skipPatternString));
 									}
 									catch (Throwable patternThrowable) {
-										ERXExceptionUtilities.log.error("Skipping invalid exception pattern '" + skipPatternString + "' in '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+										log.error("Skipping invalid exception pattern '{}' in '{}' in the framework '{}' ({})",
+												skipPatternString, skipPatternsFile, framework, ERXExceptionUtilities.toParagraph(patternThrowable));
 									}
 								}
 							}
 						}
 						catch (Throwable patternThrowable) {
-							ERXExceptionUtilities.log.error("Failed to read pattern file '" + skipPatternsFile + "' in the framework '" + framework + "' (" + ERXExceptionUtilities.toParagraph(patternThrowable) + ")");
+							log.error("Failed to read pattern file '{}' in the framework '{}' ({})",
+									skipPatternsFile, framework, ERXExceptionUtilities.toParagraph(patternThrowable));
 						}
 					}
 				}

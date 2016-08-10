@@ -1,0 +1,22 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (id); 
+    className = "er.erxtest.model.Department"; 
+    classProperties = (employees, name); 
+    externalName = Department; 
+    fetchSpecificationDictionary = {}; 
+    name = Department; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Employee; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = departmentID; sourceAttribute = id; }); 
+            name = employees; 
+        }
+    ); 
+}

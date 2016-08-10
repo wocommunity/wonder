@@ -16,7 +16,6 @@
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
-	<classpathentry kind="lib" path="Libraries/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="Libraries/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
 	<classpathentry kind="output" path="bin"/>

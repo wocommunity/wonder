@@ -109,7 +109,7 @@ public class ERXWOResponseCache {
     
     
     public Policy policy() {
-        return this.policy;
+        return policy;
     }
 
     public void setPolicy(Policy policy) {

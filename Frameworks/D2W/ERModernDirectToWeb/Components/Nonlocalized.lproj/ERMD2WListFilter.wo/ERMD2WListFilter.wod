@@ -1,0 +1,13 @@
+form : WOForm {
+}
+
+observeField : AjaxObserveField {
+	updateContainerID = d2wContext.idForMainContainer;
+	observeFieldFrequency = 1;
+	action = search;
+}
+
+SearchField: WOTextField {
+	value = searchValue;
+	type = "search";
+}

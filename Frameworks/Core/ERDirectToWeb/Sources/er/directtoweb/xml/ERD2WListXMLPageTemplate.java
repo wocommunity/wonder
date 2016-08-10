@@ -8,7 +8,8 @@ package er.directtoweb.xml;
 import com.webobjects.appserver.WOContext;
 
 /**
- * List xml template.<br />
+ * List xml template.
+ * 
  * @d2wKey resolvedUnit
  * @d2wKey componentName
  * @d2wKey showHeader
@@ -23,6 +24,12 @@ import com.webobjects.appserver.WOContext;
  * @d2wKey pageWrapperName
  */
 public class ERD2WListXMLPageTemplate extends ERD2WListXMLPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WListXMLPageTemplate(WOContext context) {super(context);}
 }

@@ -1,0 +1,12 @@
+<script type = "text/javascript"><webobject name = "ToggleFunctionName"/> = function(actionUrl) { new Request.HTML({ update: '<webobject name = "ContainerID"></webobject>', url : actionUrl, method:'get', evalScripts: true }).send(); return true; };</script>
+<webobject name = "TreeNodeUpdater">
+	<webobject name = "TreeNodeRepetition">
+		<webobject name = "CloseCountRepetition"><webobject name = "CloseULLI"/></webobject>
+		<webobject name = "IsLeafConditional"><webobject name = "NodeItem"/><webobject name = "LeafImage"/><webobject name = "TreeNodeRenderer"/><webobject name = "CloseLI"/></webobject>
+		<webobject name = "IsNotLeafConditional">
+			<webobject name = "IsCollapsedConditional"><webobject name = "NodeItem"/><webobject name = "ExpandAction"><webobject name = "CollapsedImage"/></webobject><webobject name = "TreeNodeRenderer"/><webobject name = "CloseLI"/></webobject>
+			<webobject name = "IsExpandedConditional"><webobject name = "NodeItem"/><webobject name = "CollapseAction"><webobject name = "ExpandedImage"/></webobject><webobject name = "TreeNodeRenderer"/><webobject name = "OpenUL"/></webobject>
+		</webobject>
+	</webobject>
+	<webobject name = "CloseCountRepetition"><webobject name = "CloseULLI"/></webobject>
+</webobject>

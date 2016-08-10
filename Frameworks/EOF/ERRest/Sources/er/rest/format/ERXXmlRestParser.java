@@ -13,8 +13,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-import com.webobjects.appserver.WORequest;
-
 import er.rest.ERXRestContext;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
@@ -110,16 +108,6 @@ public class ERXXmlRestParser implements IERXRestParser {
 		}
 		
 		return requestNode;
-	}
-
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
-		return parseRestRequest(request.contentString(), delegate, context);
-	}
-
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate, ERXRestContext context) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate, context);
 	}
 	
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {

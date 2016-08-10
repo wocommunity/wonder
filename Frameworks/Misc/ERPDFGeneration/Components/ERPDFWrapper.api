@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="ERPDFWrapper" wocomponentcontent="true">    
       <binding defaults="Boolean" name="isSecure"/>

@@ -11,19 +11,19 @@
 		<binding name="maxColumns"/>
 		<binding name="cellBackgroundColor"/>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 
-		<validation message="&apos;item&apos; is a required binding">
+		<validation message="'item' is a required binding">
 			<unbound name="item"/>
 		</validation>
 
-		<validation message="&apos;item&apos; must be bound to a settable value">
+		<validation message="'item' must be bound to a settable value">
 			<unsettable name="item"/>
 		</validation>
 
-		<validation message="&apos;repetetions&apos; is a required binding">
+		<validation message="'repetetions' is a required binding">
 			<unbound name="repetetions"/>
 		</validation>
 	</wo>

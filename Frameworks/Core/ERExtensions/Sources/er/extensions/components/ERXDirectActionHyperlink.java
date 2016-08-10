@@ -8,8 +8,7 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -21,23 +20,24 @@ import er.extensions.eof.ERXEOEncodingUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * This component can be used for two things:<br/>
- * 1) Generating direct action urls for use in
- * components that are being e-mailed to people.
- * 2) Support for encoding enterprise objects in
+ * This component can be used for two things:
+ * <ol>
+ * <li>Generating direct action urls for use in
+ * components that are being e-mailed to people.</li>
+ * <li>Support for encoding enterprise objects in
  * the form values of generated urls.
  * At the moment this component still contains some
  * custy code that needs to be cleaned up before it
- * can really be used, like adding the .wo and .api files ;0.<br/>
- * <br/>
- * Synopsis:<br/>
+ * can really be used, like adding the .wo and .api files ;0.</li>
+ * </ol>
+ * <h3>Synopsis:</h3>
  * [actionClass=<i>anActionClass</i>];directActionName=<i>aDirectActionName</i>;[entityNameSeparator=<i>aSeparator</i>;]
  * [relative=<i>aBoolean</i>;][shouldEncryptObjectFormValues=<i>aBoolean</i>;][objectsForFormValues=<i>anArray</i>;]
  * [bindingDictionary=<i>aDictionary</i>;][unencryptedBindingDictionary=<i>aDictionary</i>;]
  *
  * @binding actionClass direct action class to be used
  * @binding directActionName direct action name
- * @binding entityNameSeparator separator used when constructiong urls with encoded enterprise objects
+ * @binding entityNameSeparator separator used when constructing urls with encoded enterprise objects
  * @binding relative generates relative or absolute url
  * @binding shouldEncryptObjectFormValues boolean flag that tells if the primary keys
  *		of the enterprise objects should be encrypted using blowfish
@@ -49,6 +49,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * 		form values
  */
 public class ERXDirectActionHyperlink extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     // Class instances -------------------------------------------------
 
@@ -58,9 +64,6 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     /** Key used to denote a suffix for a generated url string */ 
     // MOVEME: ERXWOUtilities
     public final static String SUFFIX_MARKER="**SUFFIX**";
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDirectActionHyperlink.class);
 
 	
     // Constructor -------------------------------------------------
@@ -82,7 +85,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
      * @return returns the value for binding: <b>entityNameSeparator</b>
      */
     public String entityNameSeparator() {
-        String separator = (String)this.valueForBinding("entityNameSeparator");
+        String separator = (String)valueForBinding("entityNameSeparator");
         if (separator == null)
             separator = ERXEOEncodingUtilities.entityNameSeparator();
         return separator;
@@ -164,14 +167,14 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         // Compose the direct action name from the bindings
         // Typically, something like "DirectActionClass/actionMethod".
         // Keep consistency with directActionName semantics as it is defined in directActionHref static method
-        if(this.hasBinding("actionClass")) {
-            StringBuffer daBuffer = new StringBuffer();
-            daBuffer.append(this.valueForBinding("actionClass"));
+        if(hasBinding("actionClass")) {
+            StringBuilder daBuffer = new StringBuilder();
+            daBuffer.append(valueForBinding("actionClass"));
             daBuffer.append('/');
-            daBuffer.append(this.valueForBinding("directActionName"));
+            daBuffer.append(valueForBinding("directActionName"));
             directActionName = daBuffer.toString();
         } else {
-            directActionName = (String)this.valueForBinding("directActionName");
+            directActionName = (String)valueForBinding("directActionName");
         }
 
         if((directActionName == null) || (directActionName.length() == 0))
@@ -190,11 +193,11 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
             formValuesObjects = allObjectsForFormValues();
 
         // Compose and return the final url
-        return directActionHyperlink(this.context(),
-                this.shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
+        return directActionHyperlink(context(),
+                shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
 		encryptedBindingDict, unencryptedBindingDict,
-                this.application().name(), directActionName,
-                this.relative(), null);
+                application().name(), directActionName,
+                relative(), null);
     }
 	
     // Class methods -------------------------------------------------
@@ -227,7 +230,10 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String appName, String daName,
                 boolean relative, String suffix) {
         StringBuffer result = new StringBuffer(ADAPTOR_PREFIX_MARKER);
-        result.append(".woa/wa/");
+        result.append(WOApplication.application().applicationExtension());
+        result.append('/');
+        result.append(WOApplication.application().directActionRequestHandlerKey());
+        result.append('/');
         result.append(daName);
         result.append('?');
 
@@ -238,8 +244,8 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = encryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
-                result.append(ERXCrypto.blowfishEncode(value));
+                result.append('=');
+                result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
 
@@ -250,7 +256,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = unencryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(value);
             }
         }

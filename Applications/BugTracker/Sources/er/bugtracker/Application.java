@@ -16,7 +16,6 @@ import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
-import er.rest.entityDelegates.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {
 
@@ -28,10 +27,13 @@ public class Application extends ERXApplication {
         ERXApplication.main(argv, Application.class);
     }
 
+   /**
+    * @deprecated We need to remove the call to ERXRestRequestHandler
+    */
+    @Deprecated
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.appserver.ERXWOContext");
-        registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(false, false), "rest");
         registerRequestHandler(new ERXDelayedRequestHandler(), ERXDelayedRequestHandler.KEY);
         setPageRefreshOnBacktrackEnabled(true);
         ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
@@ -43,6 +45,7 @@ public class Application extends ERXApplication {
         D2W.setFactory(new Factory());
     }
 
+    @Override
     public void finishInitialization() {
         if(ERXProperties.booleanForKeyWithDefault("BugTracker.processMails", false)) {
             reader = new MailReader(null);

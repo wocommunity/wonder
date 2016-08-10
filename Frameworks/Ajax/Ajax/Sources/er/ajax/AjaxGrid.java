@@ -36,7 +36,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * <p>
  * Navigation between batches is not implemented as implementing in it another
  * component bound to the display group will allow for a more flexible UI.
- * <p>
  * <h3>Configuration</h3>
  * Configuration is provided by an NSMutableDictionary and NSMutableArray data
  * structure. This reduces the number of bindings, eases keeping related lists
@@ -222,7 +221,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * <td>ajaxGridSelectRow</td>
  * <td>The td of cells containing the row selection link</td>
  * </tr>
- * </table
+ * </table>
  * <h3>Advanced Styling of the Grid</h3>
  * The grid contains several places were there are nested anonymous
  * <code>span</code> tags wrapping default text content. These are there so
@@ -284,6 +283,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author chill
  */
 public class AjaxGrid extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private WODisplayGroup displayGroup; // binding
 	private NSMutableArray selectedObjects; // binding
@@ -347,6 +352,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * @return false, AjaxGrid is manually synchronized
 	 */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -354,6 +360,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * Adds movecolumns.js to the header.
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		AjaxUtils.addScriptResourceInHead(context, response, "AjaxGrid.js");
@@ -565,7 +572,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * Returns TABLE_ID value from configurationData()
 	 * 
-	 * @return HTML ID for <table> implementing the grid
+	 * @return HTML ID for &lt;table&gt; implementing the grid
 	 */
 	public String tableID() {
 		return (String) configurationData().valueForKey(TABLE_ID);
@@ -819,7 +826,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ID to be used on AjaxUpdateLink bound to sortOrderUpdated() for currentColumn()
 	 */
 	public String currentColumnID() {
-		StringBuffer b = new StringBuffer(tableID());
+		StringBuilder b = new StringBuilder(tableID());
 		b.append("_SortBy_");
 		b.append(ERXStringUtilities.safeIdentifierName((String)currentColumn().objectForKey(TITLE)));
 		b.append(isCurrentColumnSortedAscending() ? "_Descending" : "_Ascending");

@@ -25,6 +25,13 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class ERXTimeDurationFormatter extends NumberFormat {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private final TimeUnit _timeUnit;
 	private final boolean _showLargestUnitOnly;
 	private final boolean _omitSecondsPart;
@@ -55,9 +62,9 @@ public class ERXTimeDurationFormatter extends NumberFormat {
 	public ERXTimeDurationFormatter(TimeUnit timeUnit, boolean showLargestUnitOnly, boolean omitSecondsPart) {
 		super();
 		
-		this._timeUnit = timeUnit;
-		this._showLargestUnitOnly = showLargestUnitOnly;
-		this._omitSecondsPart = omitSecondsPart;
+		_timeUnit = timeUnit;
+		_showLargestUnitOnly = showLargestUnitOnly;
+		_omitSecondsPart = omitSecondsPart;
 	}
 	
 

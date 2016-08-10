@@ -5,28 +5,25 @@ import java.util.concurrent.FutureTask;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
- * A FutureTask that implements @link {@link ERXStatusInterface} and @link
- * {@link ERXTaskPercentComplete} and @link {@link NSKeyValueCoding}. Additional
- * methods are provided in this FutureTask for checking if those interfaces are
- * implemented in the wrapped task and if so the values are
- * passed thru from the task.
+ * A FutureTask that implements {@link IERXStatus}, {@link IERXPercentComplete} and
+ * {@link NSKeyValueCoding}. Additional methods are provided in this FutureTask for checking
+ * if those interfaces are implemented in the wrapped task and if so the values are passed thru
+ * from the task.
  * 
  * Usage: 
- * <pre>
-			// If null, then submit the callable task
-			ERXFutureTask _future = new ERXFutureTask(callable);
-
-			ERXExecutorService.executorService().execute(_future);
-	</pre>
+ * <blockquote><pre>
+   // If null, then submit the callable task
+   ERXFutureTask _future = new ERXFutureTask(callable);
+   ERXExecutorService.executorService().execute(_future);
+   </pre></blockquote>
  * 
  * @author kieran
- * 
+ * @param <V> the result type returned by this ERXFutureTask's get method
  */
-public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionStateTransition, ERXStatusInterface,
-				ERXTaskPercentComplete, NSKeyValueCoding {
+public class ERXFutureTask<V> extends FutureTask<V> implements IERXExecutionStateTransition, IERXStatus, IERXPercentComplete, NSKeyValueCoding {
 	private final Object _task;
 
 	public ERXFutureTask(Callable<V> callable) {
@@ -44,17 +41,17 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
-		return (hasStatus() && _task != null) ? ((ERXStatusInterface) _task).status() : null;
+		return (hasStatus() && _task != null) ? ((IERXStatus) _task).status() : null;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
-		return (hasPercentComplete() && _task != null) ? ((ERXTaskPercentComplete) _task).percentComplete() : null;
+		return (hasPercentComplete() && _task != null) ? ((IERXPercentComplete) _task).percentComplete() : null;
 	}
 
 	public void takeValueForKey(Object value, String key) {
@@ -68,19 +65,20 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	private Boolean _hasStatus;
 
 	/**
-	 * @return whether the wrapped task has @link
-	 *         {@link ERXStatusInterface} interface
+	 * @return whether the wrapped task implements the {@link IERXStatus} interface
 	 */
 	public boolean hasStatus() {
 		if (_hasStatus == null) {
-			_hasStatus = Boolean.valueOf(_task instanceof ERXStatusInterface);
+			_hasStatus = Boolean.valueOf(_task instanceof IERXStatus);
 		} // ~ if (_hasStatus == null)
 		return _hasStatus.booleanValue();
 	}
 	
 	private Boolean _isStoppable;
 
-	/** @return true if the task bound to this Future implements the {@link IERXStoppable} interface */
+	/**
+	 * @return whether the wrapped task implements the {@link IERXStoppable} interface
+	 */
 	public boolean isStoppable() {
 		if (_isStoppable == null) {
 			_isStoppable = Boolean.valueOf(_task instanceof IERXStoppable);
@@ -91,26 +89,24 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	private Boolean _hasPercentComplete;
 
 	/**
-	 * @return whether the wrapped task has @link
-	 *         {@link ERXTaskPercentComplete} interface
+	 * @return whether the wrapped task implements the {@link IERXPercentComplete} interface
 	 */
 	public boolean hasPercentComplete() {
 		if (_hasPercentComplete == null) {
-			_hasPercentComplete = Boolean.valueOf(_task instanceof ERXTaskPercentComplete);
+			_hasPercentComplete = Boolean.valueOf(_task instanceof IERXPercentComplete);
 		}
 		return _hasPercentComplete;
 	}
 
 	public void afterExecute() {
-		if (_task instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition) _task).afterExecute();
+		if (_task instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition) _task).afterExecute();
 		}
-
 	}
 
 	public void beforeExecute() {
-		if (_task instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition) _task).beforeExecute();
+		if (_task instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition) _task).beforeExecute();
 		}
 	}
 	
@@ -118,5 +114,4 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	public String toString() {
 		return _task == null ? super.toString() : _task.toString();
 	}
-
 }

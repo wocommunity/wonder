@@ -79,6 +79,12 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  *
  */
 public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	protected final Logger log = Logger.getLogger(getClass());
 	
@@ -99,7 +105,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 		public static final String editorEditLabel = "editorEditLabel";
 		public static final String editorCancelLabel = "editorCancelLabel";
 		public static final String uploadDialogHeaderText = "uploadDialogHeaderText";
-	};
+	}
 	
 	private String _id;
 	private ERAttachment _newAttachment;
@@ -369,7 +375,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 */
     public String id() {
     	if (_id == null) {
-			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(this.context(), true));
+			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(context(), true));
 		}
 		return _id;
     }

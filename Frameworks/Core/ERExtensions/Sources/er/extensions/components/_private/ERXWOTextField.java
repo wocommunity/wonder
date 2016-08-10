@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.text.Format;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -19,6 +17,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
@@ -36,9 +35,6 @@ import er.extensions.validation.ERXValidationException;
  * @author ak
  */
 public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
-	
-    public static Logger log = Logger.getLogger(ERXWOTextField.class);
-    
 	protected WOAssociation _formatter;
 	protected WOAssociation _dateFormat;
 	protected WOAssociation _numberFormat;
@@ -51,22 +47,24 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		if(_value == null || !_value.isValueSettable())
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
 		
-		_formatter = (WOAssociation)_associations.removeObjectForKey("formatter");
-		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
-		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
-		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
-		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
-		_readonly = (WOAssociation)_associations.removeObjectForKey("readonly");
+		_formatter = _associations.removeObjectForKey("formatter");
+		_dateFormat = _associations.removeObjectForKey("dateformat");
+		_numberFormat = _associations.removeObjectForKey("numberformat");
+		_useDecimalNumber = _associations.removeObjectForKey("useDecimalNumber");
+		_blankIsNull = _associations.removeObjectForKey("blankIsNull");
+		_readonly = _associations.removeObjectForKey("readonly");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
 		}
 	}
 	
+	@Override
 	public String type() {
 		return "text";
 	}
 	   
+    @Override
     protected boolean isDisabledInContext(WOContext context) {
     	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
     	return disabled != null && disabled.booleanValueInComponent(context.component());
@@ -76,9 +74,10 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
     	return _readonly != null && _readonly.booleanValueInComponent(context.component());
     }
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
-		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
+		if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
 				String stringValue;
@@ -168,6 +167,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		Object valueInComponent = _value.valueInComponent(component);
@@ -218,7 +218,6 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 							stringValue = null;
 						} catch(ParseException parseexception) {
 							NSLog._conditionallyLogPrivateException(parseexception);
-							stringValue = null;
 						} finally {
 							tsFormat.setDefaultFormatTimeZone(formatZone);
 							tsFormat.setDefaultParseTimeZone(parseZone);
@@ -234,7 +233,6 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 						stringValue = null;
 					} catch(ParseException parseexception) {
 						NSLog._conditionallyLogPrivateException(parseexception);
-						stringValue = null;
 					}
 				}
 			}
@@ -248,26 +246,33 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer stringbuffer = new StringBuffer();
-		stringbuffer.append("<");
+		StringBuilder stringbuffer = new StringBuilder();
+		stringbuffer.append('<');
 		stringbuffer.append(getClass().getName());
-		stringbuffer.append(" formatter=" + _formatter);
-		stringbuffer.append(" dateFormat=" + _dateFormat);
-		stringbuffer.append(" numberFormat=" + _numberFormat);
-		stringbuffer.append(" useDecimalNumber=" + _useDecimalNumber);
-		stringbuffer.append(">");
+		stringbuffer.append(" formatter=");
+		stringbuffer.append(_formatter);
+		stringbuffer.append(" dateFormat=");
+		stringbuffer.append(_dateFormat);
+		stringbuffer.append(" numberFormat=");
+		stringbuffer.append(_numberFormat);
+		stringbuffer.append(" useDecimalNumber=");
+		stringbuffer.append(_useDecimalNumber);
+		stringbuffer.append('>');
 		return stringbuffer.toString();
 	}
 	
 	/**
 	 * Overridden to make output XML compatible.
 	 */
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-        WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new WOResponse() : woresponse;
+        WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new ERXResponse() : woresponse;
         super.appendToResponse(newResponse, wocontext);
         
         ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));

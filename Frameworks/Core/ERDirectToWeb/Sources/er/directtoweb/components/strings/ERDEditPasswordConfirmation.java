@@ -23,10 +23,14 @@ import er.extensions.validation.ERXValidationFactory;
  * @d2wKey length the length of the text field
  *
  * @author ak on Sun Aug 17 2003
- * @project ERDirectToWeb
  */
-
 public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDEditPasswordConfirmation.class);
@@ -58,6 +62,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         return passwordPropertyKey;
     }
 
+    @Override
     public Object objectKeyPathValue() {
         return passwordPropertyKey() == null || object() == null ? null : object().valueForKeyPath(passwordPropertyKey()); 
     }
@@ -82,6 +87,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         _passwordConfirm = value;
     }
 
+    @Override
     public void setObject(EOEnterpriseObject newObject) {
         if (newObject!=object()) {
             _passwordConfirm = null;
@@ -118,13 +124,15 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         }
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	checkPasswords();
 		}
     }
 
+    @Override
 	public void reset() {
 		ERXWOContext.contextDictionary().removeObjectForKey("ERDEditPassword");
 		super.reset();

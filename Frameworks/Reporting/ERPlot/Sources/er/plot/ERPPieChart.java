@@ -41,6 +41,12 @@ import er.extensions.foundation.ERXAssert;
  */
 
 public class ERPPieChart extends ERPChart {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[] {"PieChart", "PieChart3D", "RingChart"});
@@ -51,7 +57,13 @@ public class ERPPieChart extends ERPChart {
      * @author ak
      */
     public static class AccumulatingPieDataset extends DefaultPieDataset {
-        
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         /**
          * Overridden so it adds the value to the current value for the key instead of replacing it.
          */
@@ -60,7 +72,7 @@ public class ERPPieChart extends ERPChart {
     	public void setValue(Comparable key, Number value) {
     	    if(getIndex(key) >= 0) {
     	        Number oldValue = getValue(key);
-    	        value = new Double(value.doubleValue() + oldValue.doubleValue());
+    	        value = Double.valueOf(value.doubleValue() + oldValue.doubleValue());
     	    }
     	    super.setValue(key, value);
     	}
@@ -74,6 +86,7 @@ public class ERPPieChart extends ERPChart {
         super(context);
     }
     
+    @Override
     public String nameKey() {
         if(_nameKey == null) {
             _nameKey = (String)valueForBinding("nameKey");
@@ -82,6 +95,7 @@ public class ERPPieChart extends ERPChart {
         return _nameKey;
     }
 
+    @Override
     public String valueKey() {
         if(_valueKey == null) {
             _valueKey = (String)valueForBinding("valueKey");
@@ -90,6 +104,7 @@ public class ERPPieChart extends ERPChart {
         return _valueKey;
     }
 
+    @Override
     protected Dataset createDataset() {
         AccumulatingPieDataset dataset = new AccumulatingPieDataset();
          for(Enumeration<?> items = items().objectEnumerator(); items.hasMoreElements(); ) {
@@ -101,6 +116,7 @@ public class ERPPieChart extends ERPChart {
         return dataset;
     }
     
+    @Override
     public JFreeChart createChart() {
         JFreeChart chart = null;
         PieDataset dataset = (PieDataset)dataset();
@@ -119,6 +135,7 @@ public class ERPPieChart extends ERPChart {
         return chart;
     }
 
+    @Override
     protected NSArray<String> supportedTypes() {
         return SUPPORTED_TYPES;
     }

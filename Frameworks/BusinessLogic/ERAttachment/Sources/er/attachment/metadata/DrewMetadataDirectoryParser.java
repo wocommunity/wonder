@@ -1,7 +1,7 @@
 package er.attachment.metadata;
 
-import java.util.Iterator;
-
+import com.drew.lang.ByteArrayReader;
+import com.drew.lang.SequentialByteArrayReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifReader;
@@ -12,21 +12,19 @@ public class DrewMetadataDirectoryParser implements IERMetadataDirectoryParser {
     ERParsedMetadataDirectory parsedMetadataDirectory = null;
     
     Metadata metadata = new Metadata();
-    byte[] data = unparsedMetadata.getMetadata();
     String directoryName = unparsedMetadata.getDirectoryName();
     if (directoryName.equalsIgnoreCase(IERMetadataDirectory.EXIF)) {
-      new ExifReader(data).extract(metadata);
+      ByteArrayReader reader = new ByteArrayReader(unparsedMetadata.getMetadata());
+      new ExifReader().extract(reader, metadata);
       parsedMetadataDirectory = new ERParsedMetadataDirectory(directoryName);
     }
     else if (directoryName.equalsIgnoreCase(IERMetadataDirectory.IPTC)) {
-      new IptcReader(data).extract(metadata);
+      new IptcReader().extract(new SequentialByteArrayReader(unparsedMetadata.getMetadata()), metadata, unparsedMetadata.getMetadata().length);
       parsedMetadataDirectory = new ERParsedMetadataDirectory(directoryName);
     }
     
     if (parsedMetadataDirectory != null) {
-      Iterator directories = metadata.getDirectoryIterator();
-      while (directories.hasNext()) {
-        Directory directory = (Directory) directories.next();
+      for (Directory directory : metadata.getDirectories()) {
         DrewMetadataParser.fillInParsedMetadataDirectoryFromDrewMetadata(parsedMetadataDirectory, directory);
       }
     }

@@ -8,15 +8,15 @@
 		<binding name="showNavigation" defaults="Boolean"/>
 		<binding name="listLabel"/>
 
-		<validation message="&apos;model&apos; is a required binding">
+		<validation message="'model' is a required binding">
 			<unbound name="model"/>
 		</validation>
 
-		<validation message="&apos;listName&apos; is a required binding">
+		<validation message="'listName' is a required binding">
 			<unbound name="listName"/>
 		</validation>
 
-		<validation message="&apos;listLabel&apos; is a required binding">
+		<validation message="'listLabel' is a required binding">
 			<unbound name="listLabel"/>
 		</validation>
 	</wo>

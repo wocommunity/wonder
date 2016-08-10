@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-
 /**
  * Simple submit button wrapper around Prototypes Form.reset('formID');.  Does a client side
  * reset (to original values or to blank / no selection) of all of a form's inputs.
@@ -19,7 +18,13 @@ import com.webobjects.appserver.WOResponse;
  * @author Chuck Hill
  */
 public class AjaxResetButton extends WOComponent {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public static final String FORM_ID_BINDING = "formId";
     public static final String VALUE_BINDING = "value";
     public static final String CLEAR_BINDING = "clear";
@@ -31,6 +36,7 @@ public class AjaxResetButton extends WOComponent {
     /**
      * @return <code>true</code>
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -38,6 +44,7 @@ public class AjaxResetButton extends WOComponent {
     /**
      * Adds prototype.js to the header.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");

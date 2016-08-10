@@ -1,17 +1,12 @@
 package er.reporting;
 
-import org.apache.log4j.Logger;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
-import er.grouping.*;
+import er.grouping.DRGroup;
 
 public class WRLayoutEditor extends WOComponent  {
-    /** logging support */
-    private static final Logger log = Logger.getLogger(WRLayoutEditor.class);
-
     public DRGroup aGrp;
     public String dispType;
     public String areportStyle;
@@ -33,6 +28,7 @@ public class WRLayoutEditor extends WOComponent  {
         return _reportStyles;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

@@ -56,10 +56,10 @@ public class ERXYahooContentAnalysisService {
 
 		ERXMutableURL queryParameters = new ERXMutableURL();
 		queryParameters.setQueryParameter("appid", appid);
-		queryParameters.setQueryParameter("context", ERXStringUtilities.stripHtml(content));
+		queryParameters.setQueryParameter("context", ERXStringUtilities.stripHtml(content, false));
 		queryParameters.setQueryParameter("output", "xml");
 		if (context != null) {
-			queryParameters.setQueryParameter("context", ERXStringUtilities.stripHtml(context));
+			queryParameters.setQueryParameter("context", ERXStringUtilities.stripHtml(context, false));
 		}
 		String postData = queryParameters.toExternalForm();
 

@@ -3,7 +3,7 @@
 	<wo class = "ERXWOTemplate" wocomponentcontent = "true">
 		<binding name = "templateName"/>
 
-		<validation message = "&apos;templateName&apos; is a required binding">
+		<validation message = "'templateName' is a required binding">
 			<unbound name = "templateName"/>
 		</validation>
 	</wo>

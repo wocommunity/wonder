@@ -1,9 +1,7 @@
 package er.extensions.eof;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -29,10 +27,9 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 public abstract class ERXEntityOrder
 {
-
-    private static Logger logger = Logger.getLogger(ERXEntityOrder.class);
-    protected NSMutableDictionary groupedEntities = new NSMutableDictionary();
-    protected NSArray allEntities = null;
+    private static final Logger log = LoggerFactory.getLogger(ERXEntityOrder.class);
+    protected NSMutableDictionary<String, Integer> groupedEntities = new NSMutableDictionary<String, Integer>();
+    protected NSArray<EOEntity> allEntities = null;
 
 
     /**
@@ -63,7 +60,7 @@ public abstract class ERXEntityOrder
      *
      * @return dictionary of group numbers to entity names
      */
-    public NSMutableDictionary groupedEntities() {
+    public NSMutableDictionary<String, Integer> groupedEntities() {
         return groupedEntities;
     }
 
@@ -77,7 +74,7 @@ public abstract class ERXEntityOrder
      *
      * @return a dictionary keyed on dependencyKeyFor(EOEntity)
      */
-    protected abstract NSDictionary dependenciesByEntity();
+    protected abstract NSDictionary<String, NSSet<String>> dependenciesByEntity();
 
 
     /**
@@ -86,26 +83,26 @@ public abstract class ERXEntityOrder
      */
     protected void generateOrdering() {
 
-        NSDictionary dependencies = dependenciesByEntity();
-        NSMutableArray entities = allEntities().mutableClone();
+        NSDictionary<String, NSSet<String>> dependencies = dependenciesByEntity();
+        NSMutableArray<EOEntity> entities = allEntities().mutableClone();
         int groupNum = 1;
         while (entities.count() > 0) {
             // Entities that are eligible for this group are NOT added to the master list
             // immediately to avoid dependencies between entities in the same group
-            NSMutableDictionary groupDictionary = new NSMutableDictionary();
+            NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<String,Integer>();
 
-            Integer group = new Integer(groupNum++);
-            logger.trace("Building group " + group);
+            Integer group = Integer.valueOf(groupNum++);
+            log.trace("Building group {}", group);
 
             // Examine each entity not already in a group and add it to this group if
             // all of its dependencies are in previously processed groups.
             int index = 0;
             while (index < entities.count()) {
-                EOEntity entity = (EOEntity) entities.objectAtIndex(index);
-                logger.trace("Processing entity " + entity.name());
+                EOEntity entity = entities.objectAtIndex(index);
+                log.trace("Processing entity {}", entity.name());
 
                 if (hasDependenciesForEntity(dependencies, entity)) {
-                    logger.trace("Adding entity " + entity.name() + " to group " + group);
+                    log.trace("Adding entity {} to group {}", entity.name(), group);
                     groupDictionary.setObjectForKey(group, entity.name());
                     entities.removeObjectAtIndex(index);
                 }
@@ -117,12 +114,12 @@ public abstract class ERXEntityOrder
 
             // If an error is found, log out information to make debugging easier
             if (groupDictionary.count() == 0) {
-                logger.error("Stopping, circular relationships found for " + entities.valueForKey("name"));
-                NSSet remainingEntities = new NSSet((NSArray)entities.valueForKey("name"));
+                log.error("Stopping, circular relationships found for {}", entities.valueForKey("name"));
+                NSSet<String> remainingEntities = new NSSet<String>((NSArray<String>)entities.valueForKey("name"));
                 for (int i = 0; i < entities.count(); i++) {
-                    EOEntity entity = (EOEntity) entities.objectAtIndex(i);
-                    NSSet remainingDependencies = dependentEntities(dependencies, entity).setByIntersectingSet(remainingEntities);
-                    logger.error(entity.name() + " has dependencies on " + remainingDependencies);
+                    EOEntity entity = entities.objectAtIndex(i);
+                    NSSet<String> remainingDependencies = dependentEntities(dependencies, entity).setByIntersectingSet(remainingEntities);
+                    log.error("{} has dependencies on {}", entity.name(), remainingDependencies);
                 }
                 throw new RuntimeException("Circular relationships found for " + entities.valueForKey("name"));
             }
@@ -130,11 +127,12 @@ public abstract class ERXEntityOrder
             groupedEntities().addEntriesFromDictionary(groupDictionary);
         }
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("Entity groups in dependency order:");
+        if (log.isTraceEnabled()) {
+            log.trace("Entity groups in dependency order:");
             for (int i = 1; i < groupNum; i++) {
-                logger.trace("Group " + i + ": " + groupedEntities().allKeysForObject(new Integer(i)));
-                logger.trace("");
+                Integer iVal = Integer.valueOf(i);
+                log.trace("Group {}: {}", iVal, groupedEntities().allKeysForObject(iVal));
+                log.trace("");
             }
         }
      }
@@ -146,15 +144,14 @@ public abstract class ERXEntityOrder
      *
      * @return true if <code>groupedEntities()</code> has all the entities named in <code>dependentEntities(dependencies, entity)</code>.
      */
-    protected boolean hasDependenciesForEntity(NSDictionary dependencies, EOEntity entity) {
+    protected boolean hasDependenciesForEntity(NSDictionary<String, NSSet<String>> dependencies, EOEntity entity) {
         // Abstract entities etc may not have an entry
         if (dependentEntities(dependencies, entity) == null)
         {
             return true;
         }
 
-        for (Iterator nameIterator = dependentEntities(dependencies, entity).iterator(); nameIterator.hasNext();) {
-            String entityName = (String) nameIterator.next();
+        for (String entityName : dependentEntities(dependencies, entity)) {
             if (groupedEntities().objectForKey(entityName) == null) {
                 return false;
             }
@@ -170,8 +167,8 @@ public abstract class ERXEntityOrder
      *
      * @return set of names of entities that are dependent on entity
      */
-    protected NSSet dependentEntities(NSDictionary dependencies, EOEntity entity) {
-        return (NSSet) dependencies.objectForKey(dependencyKeyFor(entity));
+    protected NSSet<String> dependentEntities(NSDictionary<String, NSSet<String>> dependencies, EOEntity entity) {
+        return dependencies.objectForKey(dependencyKeyFor(entity));
     }
 
 
@@ -187,17 +184,16 @@ public abstract class ERXEntityOrder
 
 
     /**
-     * Creates list of all entities (ecluding prototype entities) in all models in <code>modelGroup</code>.
+     * Creates list of all entities (excluding prototype entities) in all models in <code>modelGroup</code>.
      *
      * @param modelGroup EOModelGroup to get list of all entities from
      */
     public void createListOfEntities(EOModelGroup modelGroup) {
-        NSArray arrayOfArrayOfEntites = (NSArray) modelGroup.models().valueForKey("entities");
-        NSArray entities = ERXArrayUtilities.flatten(arrayOfArrayOfEntites);
-        NSMutableArray filteredEntities = new NSMutableArray(entities.count());
+        NSArray<NSArray<EOEntity>> arrayOfArrayOfEntites = (NSArray<NSArray<EOEntity>>) modelGroup.models().valueForKey("entities");
+        NSArray<EOEntity> entities = ERXArrayUtilities.flatten(arrayOfArrayOfEntites);
+        NSMutableArray<EOEntity> filteredEntities = new NSMutableArray(entities.count());
 
-        for (Enumeration entityEnum = entities.objectEnumerator(); entityEnum.hasMoreElements();) {
-            EOEntity entity = (EOEntity) entityEnum.nextElement();
+        for (EOEntity entity : entities) {
             if ( ! ERXModelGroup.isPrototypeEntity(entity)) {
                 filteredEntities.addObject(entity);
             }
@@ -209,7 +205,7 @@ public abstract class ERXEntityOrder
     /**
      * @return list of all entities in all models in the model group
      */
-    public NSArray allEntities() {
+    public NSArray<EOEntity> allEntities() {
         return allEntities;
     }
 
@@ -226,11 +222,12 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) object1;
             EOEntity entity2 = (EOEntity) object2;
-            Number group1 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
-            Number group2 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
+            Number group1 = eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
+            Number group2 = eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
 
             return NSComparator.AscendingNumberComparator.compare(group1, group2);
         }
@@ -249,11 +246,12 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) object1;
             EOEntity entity2 = (EOEntity) object2;
-            Number group1 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
-            Number group2 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
+            Number group1 = eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
+            Number group2 = eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
 
             return NSComparator.DescendingNumberComparator.compare(group1, group2);
         }

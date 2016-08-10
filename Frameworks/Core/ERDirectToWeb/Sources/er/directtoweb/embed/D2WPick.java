@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.embed;
 
+import java.io.Serializable;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEmbeddedComponent;
@@ -19,13 +21,26 @@ import er.directtoweb.delegates.ERDBranchDelegate;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class D2WPick extends D2WEmbeddedComponent {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 public D2WPick(WOContext context) { super(context); }
     
-    static class _D2WPickActionDelegate implements NextPageDelegate {
+    static class _D2WPickActionDelegate implements NextPageDelegate, Serializable {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         public WOComponent nextPage(WOComponent sender) {
-            WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);
+            WOComponent target = D2WEmbeddedComponent.findTarget(sender);
             WOComponent nextPage = null;
             if (target.hasBinding("branchDelegate")) {
                 ERDBranchDelegate delegate = (ERDBranchDelegate)target.valueForBinding("branchDelegate");
@@ -59,7 +74,9 @@ public D2WPick(WOContext context) { super(context); }
     }
 
     // Need to do this so that the action binding is not mandatory
+    @Override
     public NextPageDelegate actionPageDelegate() { return _D2WPickActionDelegate.instance; }
+    @Override
     public NextPageDelegate newPageDelegate() { return _D2WPickActionDelegate.instance; }
     
 /*    public EODataSource dataSource() {

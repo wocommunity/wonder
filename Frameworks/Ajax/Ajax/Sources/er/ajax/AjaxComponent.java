@@ -13,13 +13,19 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * This abstract (by design) superclass component isolate general utility methods.
  * 
- * @author Jean-Francois Veillette <jean.francois.veillette@gmail.com>
+ * @author Jean-Francois Veillette &lt;jean.francois.veillette@gmail.com&gt;
  * @version $Revision $, $Date $ <br>
  *          &copy; 2006 OS communications informatiques, inc. http://www.os.ca
  *          Tous droits réservés.
  */
-
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public AjaxComponent(WOContext context) {
         super(context);
     }
@@ -60,7 +66,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     }
     
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
-		return valueForBinding(name, (Object)defaultValue);
+		return valueForBinding(name, defaultValue);
 	}
 
     protected void addScriptResourceInHead(WOResponse _response, String _fileName) {
@@ -83,12 +89,17 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * Execute the request, if it's coming from our action, then invoke the
      * ajax handler and put the key <code>AJAX_REQUEST_KEY</code> in the
      * request userInfo dictionary (<code>request.userInfo()</code>).
+     * 
+     * @param request the request
+     * @param context context of the transaction
+     * @return a WOActionResults containing the result of the request
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
         if (shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
-            AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
+            ERXAjaxApplication.enableShouldNotStorePage();
             if (result == null && !ERXAjaxApplication.isAjaxReplacement(request)) {
             	result = AjaxUtils.createResponse(request, context);
             }
@@ -123,10 +134,14 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
 
     /**
      * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
+     * 
+     * @param response the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
+     * @param context context of a transaction
      */
-    public void appendToResponse(WOResponse res, WOContext ctx) {
-        super.appendToResponse(res, ctx);
-        addRequiredWebResources(res);
+    @Override
+    public void appendToResponse(WOResponse response, WOContext context) {
+        super.appendToResponse(response, context);
+        addRequiredWebResources(response);
     }
 
 
@@ -138,14 +153,18 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
 	
     /**
      * Override this method to append the needed scripts for this component.
-     * @param res
+     * @param response
+     *            the response to write to
      */
-    protected abstract void addRequiredWebResources(WOResponse res);
+    protected abstract void addRequiredWebResources(WOResponse response);
     
     /**
      * Override this method to return the response for an Ajax request.
+     * 
      * @param request
+     *            the request
      * @param context
+     *            the context
      */
     public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 

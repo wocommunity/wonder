@@ -1,14 +1,10 @@
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
 public class TestItemState extends _TestItemState {
-    static final Logger log = Logger.getLogger(TestItemState.class);
-
-
     public static TestItemState OPEN;
     public static TestItemState BUG;
     public static TestItemState CLOSED;
@@ -18,6 +14,7 @@ public class TestItemState extends _TestItemState {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }
@@ -27,12 +24,13 @@ public class TestItemState extends _TestItemState {
     
     public static class TestItemStateClazz extends _TestItemStateClazz {
 
+    	@Override
     	public NSArray allObjects(EOEditingContext ec) {
     		return new NSArray(new Object[] {OPEN, BUG, CLOSED, REQ});
     	}
 
     	public TestItemState sharedStateForKey(String key) {
-            return (TestItemState)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
 
         public void initializeSharedData() {

@@ -21,6 +21,12 @@ import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 
 
 public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public final static Logger log = Logger.getLogger("er.directtoweb.rules.ERDDelayedSwitchAssignment");
@@ -40,7 +46,7 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
 
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary conditionAssignment = (NSDictionary)this.value();
+            NSDictionary conditionAssignment = (NSDictionary)value();
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
@@ -55,9 +61,10 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
     }
 
 
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSDictionary conditionAssignment = (NSDictionary)this.value();
+        NSDictionary conditionAssignment = (NSDictionary)value();
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSDictionary switchDictionary = (NSDictionary)conditionAssignment.objectForKey("switch");

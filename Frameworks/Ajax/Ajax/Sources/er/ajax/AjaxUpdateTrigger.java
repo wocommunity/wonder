@@ -1,6 +1,7 @@
 package er.ajax;
 
-import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -8,9 +9,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * AjaxUpdateTrigger is useful if you have multiple containers on a page
@@ -39,25 +40,26 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 		_resetAfterUpdate = (WOAssociation) associations.objectForKey("resetAfterUpdate");
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		WOComponent component = context.component();
-		NSArray updateContainerIDs = (NSArray) _updateContainerIDs.valueInComponent(component);
-		if (updateContainerIDs != null && updateContainerIDs.count() > 0) {
+		List<String> updateContainerIDs = (List<String>) _updateContainerIDs.valueInComponent(component);
+		if (updateContainerIDs != null && updateContainerIDs.size() > 0) {
 			AjaxUtils.appendScriptHeader(response);
-			Enumeration updateContainerIDEnum = updateContainerIDs.objectEnumerator();
-			while (updateContainerIDEnum.hasMoreElements()) {
-				String updateContainerID = (String) updateContainerIDEnum.nextElement();
+			Iterator<String> updateContainerIDEnum = updateContainerIDs.iterator();
+			while (updateContainerIDEnum.hasNext()) {
+				String updateContainerID = updateContainerIDEnum.next();
 				// PROTOTYPE FUNCTIONS
-				Object evalScripts = AjaxUtils.valueForBinding("evalScripts", "true", _associations, component);
+				Object evalScripts = ERXComponentUtilities.valueForBinding("evalScripts", "true", _associations, component);
 				response.appendContentString("if ($wi('" + updateContainerID + "')) { ");
-				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update, method: 'get' });\n");
+				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('data-updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update, method: 'get' });\n");
 				response.appendContentString(" }");
 			}
 			AjaxUtils.appendScriptFooter(response);
 	
 			if (_resetAfterUpdate != null && _resetAfterUpdate.booleanValueInComponent(component)) {
-				((NSMutableArray) updateContainerIDs).removeAllObjects();
+				updateContainerIDs.clear();
 			}
 		}
 	}

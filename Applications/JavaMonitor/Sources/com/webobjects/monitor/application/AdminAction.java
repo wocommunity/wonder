@@ -15,6 +15,9 @@ import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
+
 /**
  * <p>
  * The following direct actions were added to Monitor. They might be useful for
@@ -172,10 +175,11 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </tr>
  * <tr>
  * <td>bouncetype</td>
- * <td>graceful | shutdown</td>
+ * <td>graceful | shutdown | rolling</td>
  * <td>graceful bounces the application by starting a few instances per host and setting the rest to refusing sessions<br />
  * shutdown bounces the application by stopping all instances and then restarting them (use this if your<br />
  * application will migrate the database so the old application will crash)<br />
+ * rolling will start a few instances per host, then forcefully restart the existing instances one at a time<br/>
  * The default bouncetype is graceful.</td>
  * </tr>
  * <tr>
@@ -335,8 +339,7 @@ public class AdminAction extends WODirectAction {
     }
 
     public WOActionResults infoAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse();
         String result = "";
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
@@ -350,6 +353,12 @@ public class AdminAction extends WODirectAction {
             result += "\"deaths\": \"" + minstance.deathCount() + "\", ";
             result += "\"refusingNewSessions\": " + minstance.isRefusingNewSessions() + ", ";
             result += "\"scheduled\": " + minstance.isScheduled() + ", ";
+            result += "\"schedulingHourlyStartTime\": " + minstance.schedulingHourlyStartTime() + ", ";
+            result += "\"schedulingDailyStartTime\": " + minstance.schedulingDailyStartTime() + ", ";
+            result += "\"schedulingWeeklyStartTime\": " + minstance.schedulingWeeklyStartTime() + ", ";
+            result += "\"schedulingType\": \"" + minstance.schedulingType() + "\", ";
+            result += "\"schedulingStartDay\": " + minstance.schedulingStartDay() + ", ";
+            result += "\"schedulingInterval\": " + minstance.schedulingInterval() + ", ";
             result += "\"transactions\": \"" + minstance.transactions() + "\", ";
             result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
             result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
@@ -371,9 +380,7 @@ public class AdminAction extends WODirectAction {
     }
 
     public WOActionResults runningAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("YES");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("YES");
         String num = (String) context().request().formValueForKey("num");
     	int numberOfInstancesRequested = -1;
         if (num != null && !num.equals("") && !num.equalsIgnoreCase("all")) {
@@ -395,30 +402,26 @@ public class AdminAction extends WODirectAction {
         }
         if ((numberOfInstancesRequested == -1 && instancesAlive < instances.count()) || instancesAlive < numberOfInstancesRequested) {
         	woresponse.setContent("NO");
-            woresponse.setStatus(417);
+            woresponse.setStatus(ERXHttpStatusCodes.EXPECTATION_FAILED);
         }
         return woresponse;
     }
 
     public WOActionResults stoppedAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("YES");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("YES");
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
             if (minstance.state == MObject.DEAD)
                 continue;
             woresponse.setContent("NO");
-            woresponse.setStatus(417);
+            woresponse.setStatus(ERXHttpStatusCodes.EXPECTATION_FAILED);
             break;
         }
         return woresponse;
     }
 
     public WOActionResults bounceAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("OK");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("OK");
         String bouncetype = (String) context().request().formValueForKey("bouncetype");
         String maxwaitString = (String) context().request().formValueForKey("maxwait");
         if (bouncetype == null || bouncetype == "" || bouncetype.equalsIgnoreCase("graceful")) {
@@ -433,15 +436,46 @@ public class AdminAction extends WODirectAction {
 				}
         	}
         	applicationsPage().bounceShutdown(applications, maxwait);
+        } else if (bouncetype.equalsIgnoreCase("rolling")) {
+        	applicationsPage().bounceRolling(applications);
         } else {
         	woresponse.setContent("Unknown bouncetype");
-            woresponse.setStatus(406);
+            woresponse.setStatus(ERXHttpStatusCodes.NOT_ACCEPTABLE);
         }
         return woresponse;
     }
 
     public void clearDeathsAction() {
         applicationsPage().clearDeaths(instances);
+    }
+    
+    public void scheduleTypeAction() {
+        String scheduleType = (String) context().request().formValueForKey("scheduleType");
+        if (scheduleType != null && ("HOURLY".equals(scheduleType) ||  "DAILY".equals(scheduleType) || "WEEKLY".equals(scheduleType)))
+        		applicationsPage().scheduleType(instances, scheduleType);
+    }
+
+    public void hourlyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        String interval = (String) context().request().formValueForKey("interval");
+        if (beginScheduleWindow != null && endScheduleWindow != null && interval != null)
+        		applicationsPage().hourlyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(interval));
+    }
+
+    public void dailyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        if (beginScheduleWindow != null && endScheduleWindow != null)
+        		applicationsPage().dailyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow));
+    }
+    
+    public void weeklyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        String weekDay = (String) context().request().formValueForKey("weekDay");
+        if (beginScheduleWindow != null && endScheduleWindow != null && weekDay != null)
+        		applicationsPage().weeklyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(weekDay));
     }
 
     public void turnScheduledOnAction() {
@@ -480,10 +514,10 @@ public class AdminAction extends WODirectAction {
         applicationsPage().start(instances);
     }
 
-    protected void prepareApplications(NSArray nsarray) {
-        if (nsarray == null)
+    protected void prepareApplications(NSArray<String> appNames) {
+        if (appNames == null)
             throw new DirectActionException("at least one application name needs to be specified for type app", 406);
-        for (Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+        for (Enumeration enumeration = appNames.objectEnumerator(); enumeration.hasMoreElements();) {
             String s = (String) enumeration.nextElement();
             MApplication mapplication = siteConfig().applicationWithName(s);
             if (mapplication != null) {
@@ -495,11 +529,27 @@ public class AdminAction extends WODirectAction {
         }
 
     }
+    
+    protected void prepareApplicationsOnHosts(NSArray<String> appNames, NSArray<String> hostNames) {
+        if (appNames == null)
+            throw new DirectActionException("at least one application name needs to be specified for type app", 406);
+        for (Enumeration enumeration = appNames.objectEnumerator(); enumeration.hasMoreElements();) {
+            String s = (String) enumeration.nextElement();
+            MApplication mapplication = siteConfig().applicationWithName(s);
+            if (mapplication != null) {
+            	NSArray<MInstance> hostInstances = MInstance.HOST_NAME.in(hostNames).filtered(mapplication.instanceArray());
+            	instances.addObjectsFromArray(hostInstances);
+            }
+            else
+                throw new DirectActionException("Unknown application " + s, 404);
+        }
 
-    protected void prepareInstances(NSArray nsarray) {
-        if (nsarray == null)
+    }
+    
+    protected void prepareInstances(NSArray<String> appNamesAndNumbers) {
+        if (appNamesAndNumbers == null)
             throw new DirectActionException("at least one instance name needs to be specified for type ins", 406);
-        for (Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+        for (Enumeration enumeration = appNamesAndNumbers.objectEnumerator(); enumeration.hasMoreElements();) {
             String s = (String) enumeration.nextElement();
             MInstance minstance = siteConfig().instanceWithName(s);
             if (minstance != null)
@@ -528,11 +578,17 @@ public class AdminAction extends WODirectAction {
         if ("all".equalsIgnoreCase(s1)) {
             prepareApplications((NSArray) siteConfig().applicationArray().valueForKey("name"));
         } else {
-            NSArray nsarray = context().request().formValuesForKey("name");
-            if ("app".equalsIgnoreCase(s1))
-                prepareApplications(nsarray);
-            else if ("ins".equalsIgnoreCase(s1))
-                prepareInstances(nsarray);
+            NSArray appNames = context().request().formValuesForKey("name");
+            NSArray hosts = context().request().formValuesForKey("host");
+
+            if ("app".equalsIgnoreCase(s1)) {
+            	if (hosts == null || hosts.isEmpty()) {
+            		prepareApplications(appNames);
+            	} else {
+            		prepareApplicationsOnHosts(appNames, hosts);
+            	}
+            } else if ("ins".equalsIgnoreCase(s1))
+                prepareInstances(appNames);
             else
                 throw new DirectActionException("Invalid type " + s1, 406);
         }
@@ -550,8 +606,9 @@ public class AdminAction extends WODirectAction {
         return WOTaskdHandler.siteConfig();
     }
 
+    @Override
     public WOActionResults performActionNamed(String s) {
-        WOResponse woresponse = new WOResponse();
+        WOResponse woresponse = new ERXResponse();
         if (!siteConfig().isPasswordRequired() || siteConfig().compareStringWithPassword(context().request().stringFormValueForKey("pw"))) {
             try {
                 WOActionResults woactionresults = performMonitorActionNamed(s);
@@ -559,18 +616,17 @@ public class AdminAction extends WODirectAction {
                     woresponse = (WOResponse) woactionresults;
                 } else {
                     woresponse.setContent("OK");
-                    woresponse.setStatus(200);
                 }
             } catch (DirectActionException directactionexception) {
                 woresponse.setStatus(directactionexception.status);
                 woresponse.setContent(s + " action failed: " + directactionexception.getMessage());
             } catch (Exception throwable) {
-                woresponse.setStatus(500);
+                woresponse.setStatus(ERXHttpStatusCodes.INTERNAL_ERROR);
                 woresponse.setContent(s + " action failed: " + throwable.getMessage() + ". See Monitor's log for a stack trace.");
                 throwable.printStackTrace();
             }
         } else {
-            woresponse.setStatus(403);
+            woresponse.setStatus(ERXHttpStatusCodes.FORBIDDEN);
             woresponse.setContent("Monitor is password protected - password missing or incorrect.");
         }
         return woresponse;

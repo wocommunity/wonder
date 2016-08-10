@@ -8,7 +8,9 @@ package er.corebusinesslogic;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -23,7 +25,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXExtensions;
 import er.extensions.batching.ERXBatchNavigationBar;
 import er.extensions.components.ERXSortOrder;
 import er.extensions.eof.ERXConstant;
@@ -43,8 +44,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     //	Class Constant(s)
     //	---------------------------------------------------------------------------    
     
-    /** Logging support */
-    public static final Logger log = Logger.getLogger(ERCoreUserPreferences.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCoreUserPreferences.class);
 
     /** EOEncoding key */
     private final static String VALUE="_V";
@@ -109,14 +109,11 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     protected EOEnterpriseObject preferenceRecordForKey(String key, EOEditingContext ec) {
         EOEnterpriseObject result=null;
         if (key != null) {
-            if (log.isDebugEnabled())
-                log.debug("Preference value for Key = "+key);
+            log.debug("Preference value for key = {}", key);
             for (Enumeration e = preferences(ec).objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject pref = (EOEnterpriseObject)e.nextElement();
                 String prefKey = (String)pref.valueForKey("key");
-                if (log.isDebugEnabled()) {
-                    log.debug("prefKey \"" + prefKey + "\"");   
-                }
+                log.debug("prefKey '{}'", prefKey);
                 if (prefKey != null && prefKey.equals(key)) {
                     result = pref;
                     break;
@@ -157,13 +154,12 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 }
             }
         } catch(RuntimeException ex) {
-        	log.error("Error while getting preference " + key +  ": " + ex);
+        	log.error("Error while getting preference {}", key, ex);
         } finally {
             ec.unlock();
         }
         ec.dispose();
-        if (log.isDebugEnabled())
-            log.debug("Prefs vfk " + key + " = " + result);
+        log.debug("Prefs vfk {} = {}", key, result);
         return result;
     }
 
@@ -181,14 +177,12 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             if (pref != null) {
                 if (value != null) {
                     String encodedValue = encodedValue(value);
-                    if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
-                        if (log.isDebugEnabled())
-                            log.debug("Updating preference "+u+": "+key+"="+encodedValue);
+                    if (ObjectUtils.notEqual(encodedValue, pref.valueForKey("value"))) {
+                        log.debug("Updating preference {}: {}={}", u, key, encodedValue);
                         pref.takeValueForKey(encodedValue,"value");
                     }
                 } else {
-                    if (log.isDebugEnabled())
-                        log.debug("Removing preference "+u+": "+key);
+                    log.debug("Removing preference {}: {}", u, key);
                     ec.deleteObject(pref);
                 }
             } else if (value!=null) {
@@ -199,13 +193,13 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 pref.takeValueForKey(key,"key");
                 pref.takeValueForKey(encodedValue(value),"value");
                 if (log.isDebugEnabled())
-                    log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
+                    log.debug("Creating preference {}: {} - {} -- {}", u, key, value, encodedValue(value));
             }
             if (ec.hasChanges()) {
                 ec.saveChanges();
             }
         } catch(RuntimeException ex) {
-        	log.error("Error while setting preference " + key +  ": " + ex);
+        	log.error("Error while setting preference {}", key, ex);
         } finally {
             ec.unlock();
         }

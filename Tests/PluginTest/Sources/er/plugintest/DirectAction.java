@@ -4,8 +4,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 
 import er.extensions.appserver.ERXDirectAction;
-
-import er.plugintest.components.*;
+import er.plugintest.components.Main;
 
 public class DirectAction extends ERXDirectAction {
 	public DirectAction(WORequest request) {

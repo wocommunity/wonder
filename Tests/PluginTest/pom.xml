@@ -2,12 +2,12 @@
 	<parent>
 		<groupId>wonder.tests</groupId>
 		<artifactId>tests</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.tests</groupId>
-	<artifactId>ERXTest</artifactId>
+	<artifactId>PluginTest</artifactId>
 	<name>PluginTest Application</name>
 	<packaging>woapplication</packaging>
 

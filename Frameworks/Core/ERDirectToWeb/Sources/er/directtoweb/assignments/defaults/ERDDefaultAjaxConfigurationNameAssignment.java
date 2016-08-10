@@ -10,11 +10,17 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
  * Note: As they mirror the default configurations, the assignment class is separate (and a subclass).
  * This means that the default configurations can be overridden in the rules more gracefully.
  * 
- * @see ERDDefaultConfigurationNameAssignment
+ * @see er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
  * 
  * @author mendis
  */
 public class ERDDefaultAjaxConfigurationNameAssignment extends ERDDefaultConfigurationNameAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

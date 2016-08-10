@@ -20,9 +20,10 @@ package er.testrunner;
 
 import java.util.Enumeration;
 
-import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
+import junit.framework.TestCase;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -37,7 +38,7 @@ import er.extensions.eof.ERXEC;
  * Provides an editingContext that is disposed on every setup/tearDown.
  */
 public class ERXTestCase extends TestCase {
-    static Logger log = Logger.getLogger(ERXTestCase.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXTestCase.class);
     private EOEditingContext editingContext;
     private NSMutableArray persistentRootObjects;
 
@@ -45,6 +46,7 @@ public class ERXTestCase extends TestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         persistentRootObjects = new NSMutableArray();
@@ -68,7 +70,7 @@ public class ERXTestCase extends TestCase {
                     editingContext().deleteObject(eo);
                     editingContext().saveChanges();
                 } catch (Throwable e) {
-                    log.error("tearDown can't delete object because " + e);
+                    log.error("tearDown can't delete object.", e);
                     errorOccured = true;
                 }
             }
@@ -82,6 +84,7 @@ public class ERXTestCase extends TestCase {
         return !(globalId == null || globalId.isTemporary());
     }
 
+    @Override
     protected void tearDown() throws Exception {
         editingContext().revert();
         try {
@@ -94,6 +97,7 @@ public class ERXTestCase extends TestCase {
         super.tearDown();
     }
 
+    @Override
     public void runBare() throws Throwable {
         // We only want to see tearDown exceptions if runTest worked without exception
         setUp();
@@ -103,7 +107,7 @@ public class ERXTestCase extends TestCase {
             try {
                 tearDown();
             } catch (Throwable e2) {
-                log.error("WOUT  tearDown failure: " + e2);
+                log.error("WOUT  tearDown failure.", e2);
             }
             throw e;
         }

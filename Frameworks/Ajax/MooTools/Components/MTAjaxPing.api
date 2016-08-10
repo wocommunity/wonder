@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxPing" wocomponentcontent="true">    <binding name="cacheKey"/>
+        <binding name="frequency"/>
+        <binding name="id"/>
+        <binding name="onBeforeUpdate"/>
+        <binding name="stop"/>
+        <binding name="targetContainerID"/>
+    </wo>
+</wodefinitions>

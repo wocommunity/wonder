@@ -159,6 +159,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
       cache.stop();
     }
   
+  @Override
   protected void setUp() throws Exception {
       String name1 = "Company " + UUID.randomUUID().toString();
       editingContext = ERXEC.newEditingContext();
@@ -170,6 +171,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
       editingContext.saveChanges();
   }
 
+  @Override
   protected void tearDown() throws Exception {
       if (c1 != null) editingContext.deleteObject(c1);
       if (c2 != null) editingContext.deleteObject(c2);

@@ -1,5 +1,8 @@
 package er.directtoweb.delegates;
 
+import java.math.BigDecimal;
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOAttribute;
@@ -10,35 +13,33 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
+
 import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
-import java.math.BigDecimal;
-import java.util.Enumeration;
-
 /**
- * <p>A delegate class for validating user inputs before a query is executed.  Validation rules are derived from the D2W
- * context.</p>
- *
- * <p>To disallow a query with no user inputs, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' => allowsEmptyQueryValue = "false" (BooleanAssignment)</code></p>
- *
- * <p>To define a validation for a propertyKey, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => allowsEmptyQueryValue = "false" (BooleanAssignment)</code></p>
- *
- * <p>To define a minimum length validation for a (String) propertyKey, create a rule like:</p>
- *
- * <p><code>entity.name = 'Foo' and propertyKey = 'bar' => minimumInputLength = "3" (Assignment)</code></p>
- *
- * <p>Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
+ * A delegate class for validating user inputs before a query is executed.  Validation rules are derived from the D2W
+ * context.
+ * <p>
+ * To disallow a query with no user inputs, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' =&gt; allowsEmptyQueryValue = "false" (BooleanAssignment)</code>
+ * <p>
+ * To define a validation for a propertyKey, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' and propertyKey = 'bar' =&gt; allowsEmptyQueryValue = "false" (BooleanAssignment)</code>
+ * <p>
+ * To define a minimum length validation for a (String) propertyKey, create a rule like:
+ * <p>
+ * <code>entity.name = 'Foo' and propertyKey = 'bar' =&gt; minimumInputLength = "3" (Assignment)</code>
+ * <p>
+ * Subclasses wishing to implement custom validation logic should implement the {@link #validateQueryValues} method.
  * The implementation should catch validation exceptions and invoke
  * {@link er.directtoweb.pages.ERD2WPage#validationFailedWithException(Throwable, Object, String)} with any caught exceptions.  To customize
  * behavior, while retaining the default checks, extend {@link ERDQueryValidationDelegate.DefaultQueryValidationDelegate}
- * to perform custom validations and then call {@link #validateQueryValues} on the superclass.</p>
+ * to perform custom validations and then call {@link #validateQueryValues} on the superclass.
  *
  * @author Travis Cripps
  * @d2wKey displayPropertyKeys
@@ -140,8 +141,7 @@ public abstract class ERDQueryValidationDelegate {
     }
 
     /**
-     * Determines if the D2W context contains a validation definition for the provided
-     * {@see ValidationKeys validation key}.
+     * Determines if the D2W context contains a validation definition for the provided validation key}.
      * @param key to check
      * @return true if a validation definition for the given key exists
      */
@@ -243,9 +243,7 @@ public abstract class ERDQueryValidationDelegate {
 
         private ERD2WQueryPage queryPage;
 
-        /**
-         * @inheritDoc
-         */
+        @Override
         public void validateQueryValues(ERD2WQueryPage sender) {
             queryPage = sender;
             

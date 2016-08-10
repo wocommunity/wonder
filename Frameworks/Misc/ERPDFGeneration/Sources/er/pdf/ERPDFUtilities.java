@@ -3,18 +3,25 @@ package er.pdf;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.pdf.builder.FOPBuilder;
+import er.pdf.builder.FOPBuilderFactory;
 import er.pdf.builder.PDFBuilder;
 import er.pdf.builder.PDFBuilderFactory;
 
 public class ERPDFUtilities {
+	private static final Logger log = LoggerFactory.getLogger(ERPDFUtilities.class);
+
   private ERPDFUtilities() {
     // Utility class. Don't instantiate
   }
@@ -66,7 +73,7 @@ public class ERPDFUtilities {
    * @return an NSData object containing raw PDF data.
    */
   public static NSData htmlAsPdf(String content) {
-    return htmlAsPdf(content, "UTF-8", null, null);
+    return htmlAsPdf(content, CharEncoding.UTF_8, null, null);
   }
 
   /**
@@ -125,8 +132,42 @@ public class ERPDFUtilities {
       os.close();
       return new NSData(os.toByteArray());
     } catch (Exception e) {
-      throw NSForwardException._runtimeExceptionForThrowable(e);
+      throw com.webobjects.foundation.NSForwardException._runtimeExceptionForThrowable(e);
     }
   }
+  
+  
+  
+	/**
+	 * takes xml as a string and a transform document as a url and transforms it
+	 * to pdf like freakin' magic.
+	 * 
+	 * @param xml a string of xml to be passed into the transformation process 
+	 * @param fopxsl the location of the xml-&gt;fo transform sheet (should be in the classpath)
+	 * @param config dictionary of additional configuration elements for the fop engine 
+	 * @return NSData raw pdf file contents
+	 * @throws Throwable java.io.IOException 
+	 */
+	public static NSData xml2Fop2Pdf(String xml, String fopxsl, NSDictionary<String, Object> config) throws Throwable {
+		log.debug("xml2Fop2Pdf(String xml (length)={}, String fopxsl={}, NSDictionary<String,Object> config={}) - start", xml.length(), fopxsl, config);
+
+		NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
+		FOPBuilder fopb = FOPBuilderFactory.newBuilder();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			fopb.setConfiguration(_config);
+			fopb.setXML(xml);
+			fopb.setXSL(fopxsl);
+			fopb.createDocument(os);
+			os.close();
+			NSData returnNSData = new NSData(os.toByteArray());
+			log.debug("xml2Fop2Pdf(String, String, NSDictionary<String,Object>) - end - return value={}", returnNSData);
+			return returnNSData;
+		} catch (java.io.IOException e) {
+			log.error("xml2Fop2Pdf(String, String, NSDictionary<String,Object>)", e);
+
+			throw com.webobjects.foundation.NSForwardException._runtimeExceptionForThrowable(e);
+		}
+	}
 
 }

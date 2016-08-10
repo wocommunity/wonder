@@ -21,6 +21,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * given entity and calls the entitiesChanged method when the entity changes.
  * 
  * @author mschrag (mostly taken from ERXEnterpriseObjectCache, though)
+ * @param <T> 
  */
 public abstract class ERXEnterpriseObjectChangeListener<T extends EOEnterpriseObject> {
 	public static String ClearCacheNotification = "ERXEnterpriseObjectChangeListener.ClearCache";
@@ -126,7 +127,7 @@ public abstract class ERXEnterpriseObjectChangeListener<T extends EOEnterpriseOb
 	 *            the name of the changed entity
 	 * @return true if this change is relevant to this change listener
 	 */
-	@SuppressWarnings( { "cast", "unchecked" })
+	@SuppressWarnings( { "unchecked" })
 	protected boolean isRelevant(EOEditingContext editingContext, String changedEntityName) {
 		boolean relevant = false;
 		if (changedEntityName.equals(_entityName)) {

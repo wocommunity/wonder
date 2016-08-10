@@ -6,10 +6,7 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOContext;
 
 /** PayPalViewShoppingCartHyperlink is a WOComponent that allows you to embed text, an image, etc. inside the hyperlink, or assign the string through through its bindings.
  *
@@ -49,7 +46,7 @@ public class PayPalViewShoppingCartHyperlink extends PayPalSingleItemHyperlink {
      * @return String that contains the JavaScript code for the viewShoppingCart link
      */
     public String onClickString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("window.open('");
         sb.append(viewShoppingCartHref());

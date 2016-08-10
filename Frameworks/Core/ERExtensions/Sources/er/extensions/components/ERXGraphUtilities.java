@@ -11,7 +11,8 @@ package er.extensions.components;
 import java.awt.Color;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -21,13 +22,11 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Utility methods useful when using GifPlot.<br />
- * 
+ * Utility methods useful when using GifPlot.
  */
 
 public class ERXGraphUtilities {
-
-    public final static Logger log = Logger.getLogger(ERXGraphUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXGraphUtilities.class);
 
     public static final Integer fiftyOne = ERXConstant.integerForInt(51);
     public static final Integer oneHundredTwo = ERXConstant.integerForInt(102);
@@ -65,7 +64,7 @@ public class ERXGraphUtilities {
                 for (int i=1;i<=numberDesiredMonths;i++)
                     result.addObject(today.timestampByAddingGregorianUnits(0, (i * -1), 0, 0, 0, 0).toString());
                 _lastNMonthsAsStringsArray = result;
-                log.debug("*********** result for lastNMonthsAsStringsArray = " + result);
+                log.debug("*********** result for lastNMonthsAsStringsArray = {}", result);
             }
             return _lastNMonthsAsStringsArray;
         }
@@ -77,10 +76,10 @@ public class ERXGraphUtilities {
                 NSTimestamp today = new NSTimestamp();
                 for (int i=1;i<=numberDesiredMonths;i++)
                     result.addObject(today.timestampByAddingGregorianUnits(0, (i * -1), 0, 0, 0, 0));
-              //  log.debug("*********** today = " + today);
-               // log.debug("*********** numberDesiredMonths = " + numberDesiredMonths);
+              //  log.debug("*********** today = {}", today);
+               // log.debug("*********** numberDesiredMonths = {}", numberDesiredMonths);
                 _lastNMonthsArray = result;
-                log.debug("*********** result for lastNMonthsArray = " + result);
+                log.debug("*********** result for lastNMonthsArray = {}", result);
             }
             return _lastNMonthsArray;
         }

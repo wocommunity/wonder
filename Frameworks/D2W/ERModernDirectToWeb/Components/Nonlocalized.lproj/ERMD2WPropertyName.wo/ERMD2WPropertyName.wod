@@ -15,6 +15,11 @@ PropertyName: WOString {
 	escapeHTML = false;
 }
 
+abbr: WOGenericContainer {
+	elementName = "abbr";
+	title = localizedTitle;
+}
+
 ContextDictionaryRepetition : WORepetition {
 	list = contextDictionaryForPropertyKey.allKeys.@sortAsc.toString; //VALID
 	item = currentKey;

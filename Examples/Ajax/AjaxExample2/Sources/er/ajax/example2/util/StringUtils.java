@@ -28,7 +28,7 @@ public class StringUtils {
   }
 
   public static String randomString(int length) {
-    StringBuffer foo = new StringBuffer();
+	StringBuilder foo = new StringBuilder();
     for (int ii = 0; ii < length; ii++) {
       foo.append((char) (new Random().nextInt(74) + 48));
     }
@@ -40,11 +40,11 @@ public class StringUtils {
   }
 
   public static String randomStringAlphaNumeric(int length, String banCharacters) {
-    StringBuffer randomBuffer = new StringBuffer();
+	StringBuilder randomBuffer = new StringBuilder();
     do {
       randomBuffer.append(UUID.randomUUID().toString());
       if (banCharacters != null) {
-        randomBuffer = new StringBuffer(randomBuffer.toString().replaceAll("[" + banCharacters + "]", ""));
+        randomBuffer = new StringBuilder(randomBuffer.toString().replaceAll("[" + banCharacters + "]", ""));
       }
     } while (randomBuffer.length() < length);
     String randomStr = randomBuffer.toString();
@@ -91,7 +91,7 @@ public class StringUtils {
     }
     else {
       int len = string.length();
-      StringBuffer sb = new StringBuffer(len);
+      StringBuilder sb = new StringBuilder(len);
       // true if last char was blank
       boolean lastWasBlankChar = false;
       char c;
@@ -140,7 +140,7 @@ public class StringUtils {
             else {
               // Not 7 Bit use the unicode system
               sb.append("&#");
-              sb.append(new Integer(ci).toString());
+              sb.append(Integer.valueOf(ci).toString());
               sb.append(';');
             }
           }
@@ -167,7 +167,7 @@ public class StringUtils {
     }
     else {
       int len = string.length();
-      StringBuffer sb = new StringBuffer(len);
+      StringBuilder sb = new StringBuilder(len);
       char c;
       for (int i = 0; i < len; i++) {
         c = string.charAt(i);
@@ -207,7 +207,7 @@ public class StringUtils {
     try {
       byte[] _digest = MessageDigest.getInstance("MD5").digest(_encrypt.getBytes());
 
-      StringBuffer hexString = new StringBuffer();
+      StringBuilder hexString = new StringBuilder();
       for (int i = 0; i < _digest.length; i++) {
         String hexDigitStr = Integer.toHexString(0xFF & _digest[i]);
         if (hexDigitStr.length() == 1) {
@@ -280,7 +280,7 @@ public class StringUtils {
   }
 
   public static String toErrorString(Throwable _throwable) {
-    StringBuffer messageBuffer = new StringBuffer();
+	StringBuilder messageBuffer = new StringBuilder();
     boolean foundInternalError = false;
     Throwable t = _throwable;
     while (t != null) {
@@ -316,9 +316,7 @@ public class StringUtils {
     if (string != null) {
       return string.replace(" ", "");
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
   public static boolean empty(String str) {
@@ -338,7 +336,7 @@ public class StringUtils {
   }
 
   public static String fullName(String firstName, String lastName, String defaultDisplayName) {
-    StringBuffer displayNameBuffer = new StringBuffer();
+	StringBuilder displayNameBuffer = new StringBuilder();
     boolean hasFirstName = false;
     if (ComparisonUtils.notEmpty(firstName)) {
       displayNameBuffer.append(firstName);

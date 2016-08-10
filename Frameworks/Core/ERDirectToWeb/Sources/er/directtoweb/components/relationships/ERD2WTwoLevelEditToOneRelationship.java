@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditToOneRelationship;
 
 /**
- * Uses JSTwoLevelEditToOneRelationship to edit the relationship.<br />
+ * Uses JSTwoLevelEditToOneRelationship to edit the relationship.
  * 
  * @d2wKey sortKey
  * @d2wKey restrictingRelationshipSortKey
@@ -23,6 +23,12 @@ import com.webobjects.directtoweb.D2WEditToOneRelationship;
  * @d2wKey restrictingSecondarySortKey
  */
 public class ERD2WTwoLevelEditToOneRelationship extends D2WEditToOneRelationship {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ERD2WTwoLevelEditToOneRelationship(WOContext context) { super(context); }
 }

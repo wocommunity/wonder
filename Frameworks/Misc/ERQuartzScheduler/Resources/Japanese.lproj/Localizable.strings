@@ -1,0 +1,6 @@
+{
+	COScheduler.DefaultMailErrorMessage = "エラー・メッセージ: {0}。 使用時間 {1}";
+    COScheduler.DefaultMailShortMessage = "使用時間 {0}";
+    COScheduler.DefaultMailMessageWithMoreInfos = "詳細情報: {0}. 使用時間 {1}";
+    COScheduler.MailSubject = "ジョブ情報: {0} が完了しました。";
+}

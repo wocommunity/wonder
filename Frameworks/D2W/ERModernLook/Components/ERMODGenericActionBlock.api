@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="ERMODGenericActionBlock" wocomponentcontent="false">    <binding name="d2wContext"/>
         <validation message="'d2wContext' is a required binding.">

@@ -18,6 +18,13 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
 public class WXSortOrder extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected WODisplayGroup _displayGroup;
     protected String _key;
     protected String _displayKey;
@@ -29,6 +36,7 @@ public class WXSortOrder extends WOComponent {
     /////////////
     // No-Sync
     ////////////
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -95,22 +103,24 @@ public class WXSortOrder extends WOComponent {
         return null;
     }
 
-    protected NSArray _sortOrderingArray() {
-        return (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+    @SuppressWarnings("unchecked")
+	protected NSArray<EOSortOrdering> _sortOrderingArray() {
+        return (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
     }
 
-    protected NSMutableArray XX_sortOrderingArray() {
+    @SuppressWarnings("unchecked")
+	protected NSMutableArray<EOSortOrdering> XX_sortOrderingArray() {
         WODisplayGroup displayGroup = displayGroup();
-        NSArray orderingArray;
+        NSArray<EOSortOrdering> orderingArray;
         if (null!=displayGroup)
             orderingArray = displayGroup.sortOrderings();
         else
-            orderingArray = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+            orderingArray = (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
 
         if (null==orderingArray) {
-            orderingArray = new NSMutableArray();
+            orderingArray = new NSMutableArray<EOSortOrdering>();
         } else {
-            orderingArray = new NSMutableArray(orderingArray);
+            orderingArray = new NSMutableArray<EOSortOrdering>(orderingArray);
         }
 
         if (null!=displayGroup)
@@ -119,7 +129,7 @@ public class WXSortOrder extends WOComponent {
             setValueForBinding(orderingArray, "sortOrderings");
         }
 
-        return (NSMutableArray)orderingArray;
+        return (NSMutableArray<EOSortOrdering>)orderingArray;
     }
 
     protected void _removeOrderingWithKey(String aKey) {
@@ -138,7 +148,7 @@ public class WXSortOrder extends WOComponent {
     }
 
     protected void _makePrimaryOrderingWithSelector(NSSelector aSelector) {
-        NSMutableArray orderingArray = (NSMutableArray)_sortOrderingArray();
+        NSMutableArray<EOSortOrdering> orderingArray = (NSMutableArray<EOSortOrdering>)_sortOrderingArray();
         EOSortOrdering aNewOrdering = EOSortOrdering.sortOrderingWithKey(key(), 
             aSelector);
         orderingArray.insertObjectAtIndex(aNewOrdering, 0);

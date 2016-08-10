@@ -6,10 +6,12 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSNotification;
 
 /**
  * The PayPalNotificationListener class is a receiver for notifications from PayPalAction's ipnAction method, which broadcasts notifications of different events having to do with "Instant Payment Notification" transaction notifications from PayPal.  The observer gets registered to receive notifications, and the Delegate interface defines what it can do with the notifications.  If a delegate is registered and implements some subset of the methods defined in the PayPalNotificationListener.Delegate interface, PayPalNotificationListener invokes the appropriate method on the delegate object.

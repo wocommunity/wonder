@@ -3,7 +3,6 @@ package er.woinstaller.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -18,7 +17,6 @@ public class MultiBlockInputStream extends InputStream {
 		_inputSource = input;
 		List<BlockEntry> newList = new ArrayList<BlockEntry>();
 		newList.addAll(blockList);
-		Collections.sort(newList);
 		_blockList = newList;
 	}
 	
@@ -32,11 +30,10 @@ public class MultiBlockInputStream extends InputStream {
 		}
 		int result = _delegate.read();
 		if (result == -1) {
-			_delegate = getNextDelegate();
-			if (_delegate == null) {
-				return result;
-			}
-			return _delegate.read();
+		  _delegate = getNextDelegate();
+		  if (_delegate != null) {
+		    return _delegate.read();
+		  }
 		}
 		return result;
 	}
@@ -50,16 +47,20 @@ public class MultiBlockInputStream extends InputStream {
 			return -1;
 		}
 		
-		int result = _delegate.read(b, off, len);
-		if (result < len) {
-			_delegate = getNextDelegate();
-			if (_delegate == null) {
-				return result;
-			}
-			int result2 = _delegate.read(b, off+result, len-result);
-			if (result2 != -1) {
-				return result + result2;
-			}
+		int result = 0;
+		while (result < len) {
+		  result = _delegate.read(b, off, len);
+		  if (result < len) {
+		    int result2 = _delegate.read(b, off+result, len-result);
+		    if (result2 != -1) {
+		      result += result2;
+		    } else {
+		      _delegate = getNextDelegate();
+		      if (_delegate == null) {
+		        return result;
+		      }
+		    }
+		  }
 		}
 		return result;
 	}

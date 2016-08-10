@@ -13,11 +13,23 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Useful for picking a String from a list.<br />
+ * Useful for picking a String from a list.
  * 
+ * @binding item 
+ * @binding selection
+ * @binding explanationComponentName
+ * @binding choices List (NSDictionary) containing the list of string to display
+ * @binding cancelPage A WOComponent that is used when people click on Cancel button
+ * @binding nextPage A WOComponent that is used when people click on Next button
  */
 
 public class ERXStringListPicker extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXStringListPicker(WOContext aContext) {
         super(aContext);
@@ -40,7 +52,7 @@ public class ERXStringListPicker extends WOComponent {
 
     public Object selection() {
         if (_selection==null && list().count() > 0)
-                _selection = (String)list().objectAtIndex(0);
+                _selection = list().objectAtIndex(0);
         return _selection;
     }
     

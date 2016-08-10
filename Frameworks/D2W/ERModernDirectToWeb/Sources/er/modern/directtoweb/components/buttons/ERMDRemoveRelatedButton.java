@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -36,9 +34,8 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDRemoveRelatedButton.class);
-	
+    private static final long serialVersionUID = 1L;
+
 	public interface Keys extends ERMDActionButton.Keys {
 		public static final String removeButtonLabel = "removeButtonLabel";
 		public static final String cancelButtonLabel = "cancelButtonLabel";
@@ -69,6 +66,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * to be used in an edit form, the final commit will be handled buy the user save.
      * 
      */
+    @Override
     public WOActionResults deleteAction() {
     	return deleteObjectWithFinalCommit(false);
     }
@@ -90,6 +88,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * <p>
      * Defaults to "Remove"
      */
+    @Override
     public String buttonLabel() {
     	if (_buttonLabel == null) {
 			_buttonLabel = stringValueForBinding(Keys.removeButtonLabel, "Remove");
@@ -100,6 +99,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     /**
      * CSS class for the Remove button.
      */
+	@Override
 	public String buttonClass() {
 		String result = null;
 		if (  hasAnyAction() && !showDialog() ) {
@@ -116,6 +116,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Defaults to "Button ObjButton DeleteObjButton"
      * 
 	 */
+	@Override
 	public String activeButtonClass() {
 		if (_buttonClass == null) {
 			_buttonClass = stringValueForBinding(Keys.classForRemoveObjButton, "Button ObjButton DeleteObjButton");
@@ -129,6 +130,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Defaults to "Button ObjButton DisabledObjButton DisabledDeleteObjButton"
      * 
 	 */
+	@Override
 	public String disabledButtonClass() {
 		if (_disabledButtonClass == null) {
 			_disabledButtonClass = stringValueForBinding(Keys.classForDisabledRemoveObjButton, "Button ObjButton DisabledObjButton DisabledDeleteObjButton");
@@ -165,16 +167,17 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 	 */
 	public String removeButtonClass() {
 		if (_removeButtonClass == null) {
-			_removeButtonClass = stringValueForBinding(Keys.classForRemoveDialogButton, "Button DialogButton CancelDialogButton");
+			_removeButtonClass = stringValueForBinding(Keys.classForRemoveDialogButton, "Button DialogButton RemoveDialogButton");
 		}
 		return _removeButtonClass;
 	}
     
     /**
-     * Boolean used to hide/show the confirmation dialog's remove button. 
+     * Boolean used to hide/show the confirmation dialog's remove button.
      * 
-     * The remove button show only be displayed if the reverse relationship for the related eo is not
-     * mandatory and isEntityRemoveable returns true.
+     * The remove button should only be displayed if the relationship is not
+     * owned, the reverse relationship for the related EO not mandatory and
+     * isEntityRemoveable returns true.
      */
     public Boolean showRemoveButton() {
     	if (_showRemoveButton == null) {
@@ -186,12 +189,12 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     			EOEntity masterEntity = ERXEOAccessUtilities.entityForEo(masterObj);
     			EORelationship relationship = masterEntity.relationshipNamed(dds.detailKey());
     			EORelationship reverseRelationship = relationship.inverseRelationship();
-    			if(isRemoveable) {
-    				if(reverseRelationship == null) {
-    					_showRemoveButton = Boolean.TRUE;
-    				} else {
-    					_showRemoveButton = !reverseRelationship.isMandatory();
-    				}
+    			if(isRemoveable && !relationship.ownsDestination()) {
+                    if (reverseRelationship == null) {
+                        _showRemoveButton = Boolean.TRUE;
+                    } else {
+                        _showRemoveButton = !reverseRelationship.isMandatory();
+                    }
     			} else {
     				_showRemoveButton = Boolean.FALSE;
     			}
@@ -209,7 +212,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
     public Boolean showDeleteButton() {
     	if (_showDeleteButton == null) {
-    		_showDeleteButton = new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
+    		_showDeleteButton = Boolean.valueOf(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
     	}
     	return _showDeleteButton;
     }
@@ -223,6 +226,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * 		confirmRemoveRelatedMessage
      * 		confirmDeleteRelatedMessage
      */
+    @Override
     public String dialogMessage() {
     	if (_dialogMessage == null) {
     		Object result = null;

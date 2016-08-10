@@ -16,6 +16,12 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSLog;
 
 public abstract class WOLongResponsePage extends WOComponent implements Runnable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     static String WOMetaRefreshSenderId = "WOMetaRefresh";
     
@@ -81,7 +87,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
     }
 
     public double refreshInterval() {
-        return (double)_refreshInterval;
+        return _refreshInterval;
     }
 
 
@@ -131,6 +137,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         _done = true;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
 
         if (!_performingAction) {
@@ -181,6 +188,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         return refreshPageForStatus(aStatus);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         if (aContext.senderID().equals(WOMetaRefreshSenderId)) {
             // We recognized the elementID that was set for the meta refresh.
@@ -223,5 +231,5 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         return cancelPageForStatus(status());
     }
 
-    public abstract Object performAction() ;
+    public abstract Object performAction();
 }

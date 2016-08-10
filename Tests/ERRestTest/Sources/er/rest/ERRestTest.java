@@ -31,6 +31,7 @@ import er.rest.model.Person;
 public class ERRestTest extends TestCase {
     private EOObjectStoreCoordinator _osc;
 
+    @Override
     public void setUp() {
         System.setProperty("NSProjectBundleEnabled", "true");
         System.setProperty("NSPropertiesInitializationWarning", "false");

@@ -1,0 +1,73 @@
+{
+    attributes = (
+        {
+            columnName = "FIRST_NAME"; 
+            name = firstName; 
+            prototypeName = varchar50; 
+            width = 20; 
+        }, 
+        {
+            columnName = "LAST_NAME"; 
+            name = lastName; 
+            prototypeName = varchar50; 
+            width = 30; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            name = talentID; 
+            precision = 9; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID, firstName, lastName); 
+    className = "er.distribution.example.server.eo.Talent"; 
+    classProperties = (firstName, lastName, roles, moviesDirected, photo); 
+    externalName = TALENT; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (firstName, lastName, roles, moviesDirected, photo); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.Talent"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = Talent; 
+    primaryKeyAttributes = (talentID); 
+    relationships = (
+        {
+            definition = "toDirector.toMovie"; 
+            joinSemantic = EOInnerJoin; 
+            name = moviesDirected; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = TalentPhoto; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = photo; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = MovieRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = roles; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Director; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = toDirector; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+            propagatesPrimaryKey = Y; 
+        }
+    ); 
+}

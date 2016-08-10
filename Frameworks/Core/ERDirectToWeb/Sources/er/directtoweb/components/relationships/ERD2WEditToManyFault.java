@@ -22,6 +22,12 @@ import com.webobjects.directtoweb.EditRelationshipPageInterface;
  * @d2wKey editRelationshipConfigurationName
  */
 public class ERD2WEditToManyFault extends D2WEditToManyFault {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WEditToManyFault.class);
@@ -40,6 +46,7 @@ public class ERD2WEditToManyFault extends D2WEditToManyFault {
      * 
      * @return page to edit the relationship
      */
+    @Override
     public WOComponent editValues() {
         WOComponent editPage = null;
         String editRelationshipConfigurationName = (String)d2wContext().valueForKey("editRelationshipConfigurationName");

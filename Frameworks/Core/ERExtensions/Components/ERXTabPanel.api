@@ -19,7 +19,7 @@
 		<binding name="nonSelectedTabImageContainerClass"/>
 		<binding name="useFormSubmit" defaults="Boolean"/>
 
-		<validation message="&apos;tabs&apos; is a required binding">
+		<validation message="'tabs' is a required binding">
 			<unbound name="tabs"/>
 		</validation>
 	</wo>

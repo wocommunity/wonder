@@ -9,7 +9,8 @@ package er.extensions.foundation;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -20,18 +21,15 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.logging.ERXLogger;
 
 /** 
- * <code>Configuration Manager</code> handles rapid turnaround for 
- * system configuration as well as swizzling of the EOModel connection 
+ * Handles rapid turnaround for system configuration as well as swizzling of the EOModel connection
  * dictionaries. 
+ * <h3>Placing configuration parameters</h3> 
+ * You can provide the system configuration by the following ways:
  * <p>
- * <strong>Placing configuration parameters</strong>
- * <p> 
- * You can provide the system configuration by the following ways:<br/>
  * Note: This is the standard way for WebObjects 5.x applications.
  * <ul>
  *   <li><code>Properties</code> file under the Resources group of the  
@@ -41,28 +39,28 @@ import er.extensions.logging.ERXLogger;
  *       be available on some platforms at this moment.)</li>
  * 
  *   <li><code>WebObjects.properties</code> under the user home directory; 
- *       same format to Properties. <br/> 
+ *       same format to Properties.
+ *       <p> 
  *       Note that the user home directory depends on the user who 
  *       launch the application. They may change between the 
- *       developent and deployment time.</li>
+ *       development and deployment time.</li>
  * 
- *   <li>Command line arguments<br/>
- *       For example: <code>-WOCachingEnabled false -com.webobjects.pid $$</code></br>
+ *   <li>Command line arguments
+ *       <p>
+ *       For example: <code>-WOCachingEnabled false -com.webobjects.pid $$</code><br>
  *       Don't forget to put a dash "-" before the key.</li> 
  * </ul>
- * <p>
- * <strong>Loading order of the configuration parameters</strong>
- * <p>
+ * <h3>Loading order of the configuration parameters</h3>
  * When the application launches, configuration parameters will 
- * be loaded by the following order. ERXConfigurationManager trys 
+ * be loaded by the following order. ERXConfigurationManager tries 
  * to reload them by the exactly same order when one of those 
  * configuration files changes. 
- * <p>
- * 1. Properties in frameworks that the application links to<br/>
- * 2. Properties in the application<br/>
- * 3. WebObjects.properties under the home directory<br/>
- * 4. Command line arguments<br/>
- * <p>
+ * <ol>
+ * <li>Properties in frameworks that the application links to</li>
+ * <li>Properties in the application</li>
+ * <li>WebObjects.properties under the home directory</li>
+ * <li>Command line arguments</li>
+ * </ol>
  * If there is a conflicting parameter between the files and 
  * arguments, the latter one overrides the earlier one. 
  * <p>
@@ -72,13 +70,9 @@ import er.extensions.logging.ERXLogger;
  * the application Properties should be always loaded after 
  * all framework Properties are loaded. You can safely 
  * override parameters on the frameworks from the applications
- * Properties. 
+ * Properties.
  * 
- * 
- * 
- * <p>
- * <strong>Changing the connection dictionary</strong>
- * <p>
+ * <h3>Changing the connection dictionary</h3>
  * To do this for Oracle you can either specify on a per model basis 
  * or on a global basis.
  * <pre>
@@ -97,17 +91,15 @@ import er.extensions.logging.ERXLogger;
  * 
  * <strong>JDBC:</strong> same with dbConnectURLGLOBAL, or ER.DBURL
  * </pre>
- * 
- * <p>Prototypes can be swapped globally or per model either by 
+ * <p>
+ * Prototypes can be swapped globally or per model either by 
  * hydrating an archived prototype entity for a file or from 
- * another entity.</p>
+ * another entity.
  * 
  * @property er.extensions.ERXConfigurationManager.PropertiesTouchFile if this property is set to a file name, the application will register for notifications of changes to that file and when that file is touched, the application will re-load properties.
  */
 public class ERXConfigurationManager {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXConfigurationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXConfigurationManager.class);
 
     /** 
      * Notification posted when the configuration is updated.  
@@ -150,7 +142,7 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
      * @see #setCommandLineArguments
@@ -161,10 +153,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments as Properties. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
-     * @see #setCommandLineArguments
+     * @see #setCommandLineArguments(String[])
      */
     public Properties commandLineArgumentProperties() {
         return (Properties) _commandLineArgumentProperties.clone();
@@ -172,10 +164,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments as Properties. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
-     * @see #setCommandLineArguments
+     * @see #setCommandLineArguments(String[])
      */
     public Properties defaultProperties() {
         return (Properties) _defaultProperties.clone();
@@ -183,10 +175,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Sets the command line arguments. 
-     * {@link ERXApplication#main} will call this method 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} will call this method 
      * when the application starts up. 
      * 
-     * @see #commandLineArguments
+     * @see #commandLineArguments()
      */
     public void setCommandLineArguments(String [] newCommandLineArguments) {
     	_commandLineArguments = newCommandLineArguments;
@@ -248,7 +240,7 @@ public class ERXConfigurationManager {
             }
             else {
                 if (WOApplication.application() != null) {
-                    StringBuffer appSpecificTouchFile = new StringBuffer();
+                    StringBuilder appSpecificTouchFile = new StringBuilder();
                     
                     appSpecificTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
                     appSpecificTouchFile.append(WOApplication.application().name());
@@ -257,7 +249,7 @@ public class ERXConfigurationManager {
                     registerForFileNotification(appSpecificTouchFile.toString(), "updateAllSystemProperties");
                 }
                 
-                StringBuffer globalTouchFile = new StringBuffer();
+                StringBuilder globalTouchFile = new StringBuilder();
                 
                 globalTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
                 globalTouchFile.append(propertiesTouchFile.substring(appNamePlaceHolderIndex + appNamePlaceHolder.length()));
@@ -272,11 +264,10 @@ public class ERXConfigurationManager {
             ERXFileNotificationCenter.defaultCenter().addObserver(this,
                                                                   new NSSelector(callbackMethod, ERXConstant.NotificationClassArray),
                                                                   path);
-            log.debug("Registered: " + path);
+            log.debug("Registered: {}", path);
         } catch (Exception ex) {
             log.error("An exception occured while registering the observer for the "
-                      + "logging configuration file: " 
-                      + ex.getClass().getName() + " " + ex.getMessage());
+                      + "logging configuration file: {} {}", ex.getClass().getName(), ex.getMessage(), ex);
         }            
     }
 
@@ -311,7 +302,7 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link ERXLogger#configureLogging} to reconfigure 
+     * calls {@link er.extensions.logging.ERXLogger#configureLoggingWithSystemProperties()} to reconfigure 
      * the logging system. 
      * <p>
      * The configuration files: Properties and WebObjects.properties 
@@ -357,7 +348,7 @@ public class ERXConfigurationManager {
      * Path to the web server's document root.
      * This implementation tries first to resolve the
      * <code>application.name()+ "DocumentRoot"</code> property value,
-     * then the <code>ERXDocumentRoot</> property before
+     * then the <code>ERXDocumentRoot</code> property before
      * getting the <code>DocumentRoot</code> key in your WebServerConfig.plist in the
      * JavaWebObjects bundle.
      * @return to the web server's document root.
@@ -392,7 +383,7 @@ public class ERXConfigurationManager {
             try {
                 _hostName = java.net.InetAddress.getLocalHost().getHostName();
             } catch (java.net.UnknownHostException ehe) {
-                log.warn("Caught unknown host exception: " + ehe.getMessage());
+                log.warn("Caught unknown host exception.", ehe);
                 _hostName = "UnknownHost";
             }
         }
@@ -400,10 +391,10 @@ public class ERXConfigurationManager {
     }    
     
     /**
-     * Checks if the application is deployed as a servlet.
+     * Checks if the application <del>is</del> may be deployed as a servlet.
      * <p>
-     * The current implementation only checks if the application  
-     * is linked against <code>JavaWOJSPServlet.framework</code>. 
+     * The current implementation only checks if the application 
+     * is linked against <code>JavaWOJSPServlet.framework</code>.
      * 
      * @return true if the application is deployed as a servlet
      */

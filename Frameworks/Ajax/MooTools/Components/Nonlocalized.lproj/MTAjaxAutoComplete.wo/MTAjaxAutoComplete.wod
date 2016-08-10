@@ -1,0 +1,79 @@
+NotDisabled: WOConditional {
+	condition = ^disabled;
+	negate = true;
+}
+
+Disabled: WOConditional {
+	condition = ^disabled;
+}
+
+Content: WOComponentContent {
+}
+
+ShowItem: WOConditional {
+	condition = true;
+}
+
+ShowList : WOConditional {
+	condition = false;
+}
+
+TextField: WOTextField {
+	autocomplete = "off";
+	class = ^class;
+	id = fieldName;
+	disabled = ^disabled;
+	name = fieldName;
+	value = stringValue;
+	size= ^size;
+	onblur = ^onblur;
+	onchange = ^onchange;
+	onfocus = ^onfocus;
+	accesskey = ^accesskey;
+	tabindex = ^tabindex;
+	default = ^default;
+	style = ^style;
+	type = ^type;
+	results = ^results;
+}
+
+HasIndicator : WOConditional {
+	condition = ^indicatorFilename;
+}
+
+Indicator : WOImage {
+	id = indicatorName;
+	class = "autocomplete_indicator";
+	framework = ^indicatorFramework;
+	filename = ^indicatorFilename;
+	style = "display: none";
+}
+
+ZIndexContainer : WOGenericContainer {
+	elementName = "div";
+	id = zcontainerName;
+	style = "position: absolute; top: 0px; left: 0px; z-index: 1000;";
+}
+
+AutoCompleteContainer : WOGenericContainer {
+	elementName = "div";
+	class = "auto_complete";
+	id = divName;
+}
+
+ZIndexContainerName: WOString {
+	value = zcontainerName;
+}
+
+hasContainerId : WOConditional {
+	condition = ^containerId;
+}
+
+containerId : WOString {
+	value = ^containerId;
+}
+
+else : WOConditional {
+    condition = ^containerId;
+    negate = true;
+}

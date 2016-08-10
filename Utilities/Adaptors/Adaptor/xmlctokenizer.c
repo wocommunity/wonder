@@ -62,7 +62,13 @@ static XMLCUInt characterPropertiesTable[0x100];
 #else
 
 /* more tests, no multiply */
+#ifndef _XMLC_8BITCHAR_
 #define isLetter(x) ((x >='a' && x <='z') || (x >='A' && x <='Z') || (x >= 0x100))
+#else
+// 2009/04/23: 'x' is a char (= 8 bit) and the condition '(x >= 0x100)' 
+//             is not very useful in such a situation
+#define isLetter(x) ((x >='a' && x <='z') || (x >='A' && x <='Z'))
+#endif
 #define isNameStartChar(x) ((isLetter(x)) || (x == '_'))
 #define isDigit(x) ((x >='0') && (x <='9'))
 #define isNameChar(x) ((isNameStartChar(x)) || (isDigit(x)) || (x == ':') || (x == '_') || (x == '-') || (x == '.'))

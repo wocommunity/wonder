@@ -53,7 +53,7 @@ public class DirectAction extends WODirectAction  {
     static private Object[] appQueryKeys;
     static private Object[] instanceQueryKeys;
     static private NSDictionary successElement;
-    static private Object[] errorKeys;
+    static public Object[] errorKeys;
     static private String _accessDenied;
     static private String _invalidPassword;
     static private String _invalidXML;
@@ -467,7 +467,7 @@ public class DirectAction extends WODirectAction  {
             } else if (queryWotaskdString.equals("HOST")) {
                 // query - host.runningInstancesCount_W
                 if (hostResponse == null) {
-                    Integer runningInstances = new Integer(0);
+                    Integer runningInstances = Integer.valueOf(0);
                     String processorType = System.getProperties().getProperty("os.arch");
                     String operatingSystem = System.getProperties().getProperty("os.name") + " " + System.getProperties().getProperty("os.version");
 
@@ -678,15 +678,15 @@ public class DirectAction extends WODirectAction  {
 
                     NSMutableDictionary newStats = new NSMutableDictionary(5);
 
-                    newStats.takeValueForKey((String) statistics.valueForKey("StartedAt"), "startedAt");
+                    newStats.takeValueForKey(statistics.valueForKey("StartedAt"), "startedAt");
 
                     NSDictionary tempDict = (NSDictionary) statistics.valueForKey("Transactions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Transactions"), "transactions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Avg. Transaction Time"), "avgTransactionTime");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Avg. Idle Time"), "averageIdlePeriod");
+                    newStats.takeValueForKey(tempDict.valueForKey("Transactions"), "transactions");
+                    newStats.takeValueForKey(tempDict.valueForKey("Avg. Transaction Time"), "avgTransactionTime");
+                    newStats.takeValueForKey(tempDict.valueForKey("Avg. Idle Time"), "averageIdlePeriod");
 
                     tempDict = (NSDictionary) statistics.valueForKey("Sessions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Current Active Sessions"), "activeSessions");
+                    newStats.takeValueForKey(tempDict.valueForKey("Current Active Sessions"), "activeSessions");
 
                     anInstance.setStatistics(newStats);
                 } catch (Exception e) {
@@ -703,7 +703,6 @@ public class DirectAction extends WODirectAction  {
 
 
     private void syncSiteConfig(NSDictionary config) {
-        NSDictionary newConfig = config;
         Application theApplication = (Application) WOApplication.application();
         MSiteConfig aConfig = theApplication.siteConfig();
 
@@ -832,6 +831,7 @@ public class DirectAction extends WODirectAction  {
         } catch (InterruptedException ie) {}
     }
 
+    @Override
     public WOActionResults defaultAction() {
         // KH - make this faster as well :)
         Application theApplication = (Application) WOApplication.application();
@@ -915,7 +915,7 @@ public class DirectAction extends WODirectAction  {
         aResponse.appendContentString(xml);
         aResponse.setHeader("text/xml", "content-type");
         aResponse.setHeader(aFormat.format(new NSTimestamp()), "Last-Modified");
-        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
+        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("woConfigAction returned: " + xml);
 
         return aResponse;

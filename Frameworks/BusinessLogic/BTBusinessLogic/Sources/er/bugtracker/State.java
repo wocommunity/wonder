@@ -1,13 +1,10 @@
 // State.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.corebusinesslogic.ERCMailState;
 import er.extensions.eof.ERXConstant;
 
 /**
@@ -16,9 +13,6 @@ import er.extensions.eof.ERXConstant;
  *
  */
 public class State extends ERXConstant.StringConstant {
-    
-    static final Logger log = Logger.getLogger(State.class);
-
     public static State ANALYZE = new State("anzl", "Analyze", 1);
     public static State BUILD = new State("buld", "Build", 2);
     public static State VERIFY = new State("vrfy", "Verify", 3);
@@ -32,6 +26,7 @@ public class State extends ERXConstant.StringConstant {
         _sortOrder = sortOrder;
     }
     
+    @Override
     public int sortOrder() {
         return _sortOrder;
     }

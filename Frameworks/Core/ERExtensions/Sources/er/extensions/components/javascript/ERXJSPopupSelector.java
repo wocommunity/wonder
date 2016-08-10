@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -16,7 +17,7 @@ import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components._private.ERXWOForm;
 
 /**
- * Nice guy for performing actions when a popup item is selected.<br />
+ * Nice guy for performing actions when a popup item is selected.
  * 
  * @binding string
  * @binding list
@@ -24,16 +25,21 @@ import er.extensions.components._private.ERXWOForm;
  * @binding popupName
  * @binding doNotAddOneToComputedIndex" defaults="Boolean
  */
-
 public class ERXJSPopupSelector extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXJSPopupSelector.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJSPopupSelector.class);
 
 	public ERXJSPopupSelector(WOContext aContext) {
 		super(aContext);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -46,7 +52,7 @@ public class ERXJSPopupSelector extends WOComponent {
 		if (list != null && item != null) {
 			int index = list.indexOfObject(item);
 			if (index == -1) {
-				log.info(item + " could not be found in " + list);
+				log.info("{} could not be found in {}", item, list);
 			}
 			// by default we assume that there is one more item on top of the
 			// list (i.e. - none - or - pick one -)

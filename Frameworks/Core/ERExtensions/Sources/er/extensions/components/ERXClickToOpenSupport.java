@@ -27,7 +27,7 @@ public class ERXClickToOpenSupport {
 	/**
 	 * Shared pattern for the click-to-open parser.
 	 */
-	private static Pattern _tagPattern = Pattern.compile("<([a-z][a-z0-9]*:)?[a-z][a-z0-9]*\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	private static Pattern _tagPattern = Pattern.compile("<([a-z][a-z0-9_\\-]*:)?[a-z][a-z0-9_\\-]*\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);	
 
 	/**
 	 * The marker string that is temporarily written into the buffer for click-to-open support.

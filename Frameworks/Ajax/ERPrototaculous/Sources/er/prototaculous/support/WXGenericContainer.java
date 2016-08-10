@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * @author mendis
  * 
- * Note: it overloads the HTML5 ref attribute for the updateUrl.
+ * Note: it overloads the HTML5 ref attribute for the data-updateUrl.
  */
 public class WXGenericContainer extends WOComponent {
 	public boolean _omitTags;
@@ -68,7 +68,7 @@ public class WXGenericContainer extends WOComponent {
     }
     
     public String ref() {
-    	return isAjax() ? ERXWOContext.ajaxActionUrl(context()) : null;
+    	return isAjax() ? context().componentActionURL(application().ajaxRequestHandlerKey()) : null;
     }
     
     public boolean omitTags() {
@@ -77,7 +77,7 @@ public class WXGenericContainer extends WOComponent {
     
     // action 
     public WOActionResults invokeAction() {
-    	context()._setActionInvoked(true);
+    	context().setActionInvoked(true);
     	_setIsPage(true);
     	_omitTags = true;
     	return this;

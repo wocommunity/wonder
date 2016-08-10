@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxInPlace" wocomponentcontent="true">    <binding name="button"/>
+    <binding name="cancelAction"/>
+        <binding name="cancelClass"/>
+    <binding name="cancelLabel"/>
+    <binding name="canEdit"/>
+        <binding name="cancelUpdateContainerID"/>
+    <binding name="canSave"/>
+    <binding name="class"/>
+        <binding name="disabled"/>
+        <binding name="editAction"/>
+    <binding name="editClass"/>
+        <binding name="editing"/>
+        <binding name="editOnly"/>
+        <binding name="elementName"/>
+        <binding name="formSerializer"/>
+    <binding name="id"/>
+        <binding name="manualControl"/>
+        <binding name="manualEditControl"/>
+    <binding name="manualViewControl"/>
+    <binding name="onCancelClick"/>
+        <binding name="onCancelFailure"/>
+        <binding name="onCancelling"/>
+        <binding name="onCancelSuccess"/>
+        <binding name="onEditClick"/>
+        <binding name="onEditFailure"/>
+        <binding name="onEditing"/>
+        <binding name="onEditSuccess"/>
+        <binding name="onRefreshComplete"/>
+        <binding name="onSaveClick"/>
+        <binding name="onSaveFailure"/>
+        <binding name="onSaveSuccess"/>
+        <binding name="onSaving"/>
+        <binding name="onSubmit"/>
+        <binding name="saveAction"/>
+        <binding name="saveClass"/>
+        <binding name="saveLabel"/>
+        <binding name="saveUpdateContainerID"/>
+        <binding name="style"/>
+        <binding name="submitOnSave"/>
+    <binding name="formClass"/>
+    </wo>
+</wodefinitions>

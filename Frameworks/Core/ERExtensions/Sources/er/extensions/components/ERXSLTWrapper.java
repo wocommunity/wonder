@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,7 +24,8 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -39,6 +41,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXSimpleTemplateParser;
 
@@ -47,11 +50,13 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * This is pretty usefull in conjunction with DynaReporter when you want to use one of the 
  * zillion PDF libs. You can generate the content via DynaReporter and then transform the content
  * to a form that the PDF lib understands. Most likely this will be much easier than trying to re-generate
- * the report with XML. <br />
+ * the report with XML.
+ * <p>
  * Other uses include a simple transformation of the generated front end code to privide for "skinning".
  * As there is only so much you can do with CSS, you might need to structurally change the generated HTML prior
- * to handing it to the client.<br />
- * Note that XSLT engines vary <emp>greatly</emp> in speed. The default case of using Xalan which is included by WO
+ * to handing it to the client.
+ * <p>
+ * Note that XSLT engines vary <em>greatly</em> in speed. The default case of using Xalan which is included by WO
  * is probably not the best choice for a site with a little bit of traffic. 
  * Therefore there is an option where you can set the transformer factory name to use, you also need to include the 
  * corresponding jar into the classpath.
@@ -63,14 +68,18 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding data will be set to the transformed data (optional)
  * @binding stream will be set to the transformed data (optional)
  * @binding nocache flag that if set creates a new transformer instead of using the one in the cache. Useful when deleloping the stylesheet. 
+ *  
  * @author ak on 07.04.05
- * @project ERExtensions
  */
-
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXSLTWrapper.class);
 
 	private long start, current;
 	/**
@@ -141,7 +150,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 				// FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
 				EntityResolver resolver = new EntityResolver() {
 					public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
-						log.info(arg0 + "::" + arg1);
+						log.info("{}::{}", arg0, arg1);
 						InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
 						source.setSystemId(arg1);
 						return source;
@@ -158,17 +167,18 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	 * Overridden to get use apply the XLST transformation on the content.
 	 * @throws TransformerException 
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		start = System.currentTimeMillis(); current = start;
 		if (isEnabled()) {
-			WOResponse newResponse = new WOResponse();
+			ERXResponse newResponse = new ERXResponse();
 			newResponse.setContentEncoding(response.contentEncoding());
 
 			super.appendToResponse(newResponse, context);
 
 			if (log.isDebugEnabled()) {
 				String contentString = newResponse.contentString();
-				log.debug("Converting content string:\n" + contentString);
+				log.debug("Converting content string:\n{}", contentString);
 			}
 
 			try {
@@ -186,7 +196,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		} else {
 			super.appendToResponse(response, context);
 		}
-		log.debug("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
+		log.debug("Total: {}", System.currentTimeMillis() - start);  start = System.currentTimeMillis();
 	}
 
 	private static TemplatePool pool = new TemplatePool();
@@ -224,12 +234,10 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
 		//private static final WeakHashMap templates = new WeakHashMap();
 		private final Map   templates = new HashMap();
-		private static final Logger log       = Logger.getLogger(TemplatePool.class);
-		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
+		private static final Logger log = LoggerFactory.getLogger(TemplatePool.class);
+		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser();
 
-		private TemplatePool() {
-			// nothing
-		}
+		protected TemplatePool() {}
 
 		public Map getTemplates() {
 			return templates;
@@ -251,7 +259,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
 					TransformerFactory fac = TransformerFactory.newInstance();
 
-					log.debug("creating template for file " + filename + " in framework " + framework);
+					log.debug("creating template for file {} in framework {}", filename, framework);
 					InputStream is = rm.inputStreamForResourceNamed(filename, framework, null);
 					if (is == null) {
 						log.debug("trying with framework = null");
@@ -273,13 +281,13 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 				} catch (IOException e1) {
 					throw NSForwardException._runtimeExceptionForThrowable(e1);
 				} catch (TransformerConfigurationException tce) {
-					log.error("could not create template " + tce.getLocationAsString(), tce);
+					log.error("could not create template {}", tce.getLocationAsString(), tce);
 					log.error("  cause", tce.getCause());
 					if (tce.getCause() != null && tce.getCause() instanceof org.xml.sax.SAXParseException) {
 						org.xml.sax.SAXParseException e = (org.xml.sax.SAXParseException) tce.getCause();
-						log.error("SAXParseException: line " + e.getLineNumber() + ", column " + e.getColumnNumber());
+						log.error("SAXParseException: line {}, column {}", e.getLineNumber(), e.getColumnNumber());
 					}
-					log.error("this is the incorrect xsl:>>>" + s + "<<<");
+					log.error("this is the incorrect xsl:>>>{}<<<", s);
 					return null;
 				}
 			}
@@ -287,7 +295,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 			try {
 				return t.newTransformer();
 			} catch (TransformerConfigurationException tce) {
-				log.error("could not create template " + tce.getLocationAsString(), tce);
+				log.error("could not create template {}", tce.getLocationAsString(), tce);
 				log.error("  cause", tce.getCause());
 				return null;
 			}

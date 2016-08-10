@@ -1,11 +1,17 @@
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
 
-import er.ajax.*;
-import er.ajax.example.*;
-import er.extensions.eof.*;
+import er.ajax.AjaxModalDialog;
+import er.ajax.AjaxRequestHandler;
+import er.ajax.AjaxUtils;
+import er.ajax.example.Company;
+import er.ajax.example.Employee;
+import er.extensions.eof.ERXS;
 
 /**
  * Example usage of AjaxModalDialogOpener.  Not intended as a best practice example of WO coding...
@@ -88,7 +94,7 @@ public class ModalDialogOpenerExample extends ModalDialogExample {
     	catch (Exception e)
     	{
     		validationMessage = e.getMessage();
-        	AjaxModalDialog.update(context());
+        	AjaxModalDialog.update(context(), "Edit");
     	}
     }
     
@@ -105,7 +111,7 @@ public class ModalDialogOpenerExample extends ModalDialogExample {
     	catch (Exception e)
     	{
     		validationMessage = e.getMessage();
-        	AjaxModalDialog.update(context());
+        	AjaxModalDialog.update(context(), "Edit");
     	}
     }
     

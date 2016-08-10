@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -47,11 +46,17 @@ import er.extensions.appserver.ERXWOContext;
  * @binding style CSS style for the link
  *
  * @see AjaxModalDialog
- * @see <a href="http://www.wildbit.com/labs/modalbox"/>Modalbox Page</a>
+ * @see <a href="http://www.wildbit.com/labs/modalbox">Modalbox Page</a>
  * @see <a href="http://code.google.com/p/modalbox/">Google Group</a>
  * @author chill
  */
 public class AjaxModalDialogOpener extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Call this, from the action method only, to prevent the dialog from opening.  If there is an onFailure 
@@ -69,7 +74,8 @@ public class AjaxModalDialogOpener extends AjaxComponent {
     public AjaxModalDialogOpener(WOContext context) {
         super(context);
     }
-    
+
+    @Override
     public boolean isStateless() {
     	return true;
     }
@@ -79,6 +85,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 *
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if( ! booleanValueForBinding("enabled", true)) {
 			return;
@@ -132,12 +139,14 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		return (String) valueForBinding("dialogId");
 	}
 	
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 	}
 	
 	/**
 	 * Runs action and returns success status if enabled, otherwise returns failed status.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		if( booleanValueForBinding("enabled", true)) {
 			valueForBinding("action");
@@ -161,7 +170,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		// onSuccess callback handler to open AMD
 		StringBuilder sb = new StringBuilder(500);
 		sb.append(AjaxModalDialog.openDialogFunctionName(modalDialogId()));
-		sb.append("(");	
+		sb.append('(');	
 		
 		// Override for dialog name
 		if (hasBinding("title")) {	
@@ -172,5 +181,4 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 
 		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	}
-
 }

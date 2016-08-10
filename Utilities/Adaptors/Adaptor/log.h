@@ -38,7 +38,7 @@ and limitations under the License.
 extern const char * const WOLogLevel[];
 
 
-void WOLog_init(const char *logfile, const char *level);
+void WOLog_init(const char *logfile, const char *logflag, const char *level);
 
 void WOLog(int level, const char *format, ...);
 

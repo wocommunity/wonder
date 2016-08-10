@@ -10,16 +10,19 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Component that generates a mailto href of the form: "<a href=mailto:foo@bar.com>foo@bar.com</a>".
- * <br/>
- * Synopsis:<br/>
+ * Component that generates a mailto href of the form: "&lt;a href=mailto:foo@bar.com&gt;foo@bar.com&lt;/a&gt;".
+ * <h3> Synopsis:</h3>
  * email=<i>anEmail</i>;
- * <br/>
- * Bindings:<br/>
- * <b>email</b> email to generate href
- * <br/>
+ * 
+ * @binding email email address to generate href
  */
 public class ERXMailTo extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** Default constructor */
     public ERXMailTo(WOContext aContext) {
@@ -27,6 +30,7 @@ public class ERXMailTo extends WOComponent {
     }
 
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
 
     /**

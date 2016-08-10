@@ -59,7 +59,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 		ERXDummyRecord.registerDescriptionForClass(Test.class, null);
  * 		NSMutableArray l = new NSMutableArray();
  * 		for (int i = 0; i &gt; 5; i++) {
- * 			Test o = new Test("Foo "+ i, new Integer(i^i % (i+1)), i % 2 == 0? Boolean.TRUE : Boolean.FALSE);
+ * 			Test o = new Test("Foo "+ i, Integer.valueOf(i^i % (i+1)), i % 2 == 0? Boolean.TRUE : Boolean.FALSE);
  * 			l.addObject(o);
  * 		}
  * 		object = (Test) l.lastObject();
@@ -87,6 +87,12 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 
 public class ERXDummyRecord extends EOCustomObject {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Object object;
 
@@ -101,6 +107,12 @@ public class ERXDummyRecord extends EOCustomObject {
 	}
 	
 	public static class GlobalID extends EOGlobalID {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
 
 		private Object object;
 
@@ -108,6 +120,7 @@ public class ERXDummyRecord extends EOCustomObject {
 			object = o;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof GlobalID) {
 				GlobalID gid = (GlobalID) obj;
@@ -116,10 +129,12 @@ public class ERXDummyRecord extends EOCustomObject {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			return System.identityHashCode(object);
 		}
 
+		@Override
 		public boolean isTemporary() {
 			return true;
 		}
@@ -131,17 +146,20 @@ public class ERXDummyRecord extends EOCustomObject {
 			super(null, key);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			ERXDummyRecord eo = (ERXDummyRecord) object;
 			return NSKeyValueCoding.Utility.valueForKey(eo.object(), _key);
 		}
 
+		@Override
 		public void setValueInObject(Object value, Object object) {
 			ERXDummyRecord eo = (ERXDummyRecord) object;
 			NSKeyValueCoding.Utility.takeValueForKey(eo.object(), value, _key);
 		}
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		NSKeyValueCoding._KeyBinding result = new ProxyBinding(key);
 		return result;
@@ -264,7 +282,7 @@ public class ERXDummyRecord extends EOCustomObject {
 		EOClassDescription cd = null;
 		NSMutableArray objects = new NSMutableArray();
 		for (Enumeration iter = list.objectEnumerator(); iter.hasMoreElements();) {
-			Object o = (Object) iter.nextElement();
+			Object o = iter.nextElement();
 
 			EOEnterpriseObject eo = recordForObject(ec, o);
 			ec = eo.editingContext();

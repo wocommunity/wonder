@@ -10,17 +10,26 @@ import com.webobjects.directtoweb.QueryAllPageInterface;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+
+import er.extensions.eof.ERXEC;
 
 /**
  * Page that can query a set of entities.
  * It is like the D2WQueryAll page except that you can partition your entities into sections.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey queryConfigurationName
  * @d2wKey listConfigurationName
  */
 public class ERD2WQueryEntitiesPage extends ERD2WPage implements QueryAllPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERD2WQueryEntitiesPage.class);
@@ -54,7 +63,8 @@ public class ERD2WQueryEntitiesPage extends ERD2WPage implements QueryAllPageInt
         WOComponent result = null;
         if(entity() != null) {
             // construct datasource
-            queryDataSource = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
+        	EOEditingContext ec = ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
+            queryDataSource = new EODatabaseDataSource(ec, entity().name());
             queryDataSource.setAuxiliaryQualifier(displayGroup().qualifierFromQueryValues());
 
             ListPageInterface lpi;

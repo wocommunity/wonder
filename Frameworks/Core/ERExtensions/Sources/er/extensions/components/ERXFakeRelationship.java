@@ -8,7 +8,8 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -26,7 +27,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.<br />
+ * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.
  * 
  * @binding dataSource
  * @binding destinationDisplayKey
@@ -42,7 +43,14 @@ import er.extensions.eof.ERXEOControlUtilities;
  */
 
 public class ERXFakeRelationship extends WOComponent {
-    private static final Logger log = Logger.getLogger(ERXFakeRelationship.class.getName());
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(ERXFakeRelationship.class);
 
     // temps for our children
     NSArray theList;
@@ -67,9 +75,7 @@ public class ERXFakeRelationship extends WOComponent {
         super(context);
     }
 
-    public boolean isStateless() {
-        return false;
-    }
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -113,7 +119,7 @@ public class ERXFakeRelationship extends WOComponent {
 
     public static void setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
 	if(objects.count() > 0) {
-	    StringBuffer newValue = new StringBuffer();
+	    StringBuilder newValue = new StringBuilder();
 	    Enumeration e = objects.objectEnumerator();
 
 	    while(e.hasMoreElements()) {
@@ -151,7 +157,7 @@ public class ERXFakeRelationship extends WOComponent {
 	    try {
 		if(s.length() > 0) {
 		    if(!hasStringPk)  {
-			pkValue = new Integer(Integer.parseInt(s));
+			pkValue = Integer.valueOf(s);
 		    } else {
 			pkValue = s;
 		    }
@@ -159,7 +165,7 @@ public class ERXFakeRelationship extends WOComponent {
 		    selections.addObject(eo);
 		}
 	    } catch(Exception ex) {
-		log.warn(ex + " with pkValue " + pkValue);
+	    	log.warn("{} with pkValue {}", ex.getMessage(), pkValue);
 		// we do nothing here, when we reconstruct the array on setSelection, we simply ignore this value
 	    }
 	}
@@ -285,6 +291,7 @@ public class ERXFakeRelationship extends WOComponent {
 	uiStyle = null;
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }

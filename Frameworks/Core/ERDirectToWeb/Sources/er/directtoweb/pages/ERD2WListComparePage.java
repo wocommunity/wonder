@@ -19,6 +19,12 @@ import com.webobjects.foundation.NSMutableArray;
  * @d2wKey displayPropertyKeys
  */
 public class ERD2WListComparePage extends ERD2WListPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Public constructor
@@ -60,6 +66,7 @@ public class ERD2WListComparePage extends ERD2WListPage {
     }
 
     private NSArray _displayPropertyKeys;
+    @Override
     public NSArray displayPropertyKeys() {
         if (_displayPropertyKeys == null) {
             _displayPropertyKeys = (NSArray)d2wContext().valueForKey("displayPropertyKeys");
@@ -83,6 +90,7 @@ public class ERD2WListComparePage extends ERD2WListPage {
         d2wContext().takeValueForKey(null, "propertyKey");
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         prepare();
         super.appendToResponse(response, context);

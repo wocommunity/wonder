@@ -14,7 +14,10 @@ import javax.imageio.stream.ImageInputStream;
 
 import org.w3c.dom.Node;
 
-import com.drew.metadata.exif.ExifDirectory;
+import com.drew.lang.ByteArrayReader;
+import com.drew.lang.SequentialByteArrayReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifReader;
 import com.drew.metadata.iptc.IptcDirectory;
 import com.drew.metadata.iptc.IptcReader;
@@ -52,7 +55,7 @@ public class JAIMetadataParser implements IERMetadataParser {
                 rawAssetMetadata.addMetadata(iptcMetadataDirectory);
               }
 
-              ExifDirectory exifDirectory = getExifDirectory(metadataTree);
+              ExifIFD0Directory exifDirectory = getExifDirectory(metadataTree);
               if (exifDirectory != null) {
                 ERParsedMetadataDirectory exifMetadataDirectory = new ERParsedMetadataDirectory(IERMetadataDirectory.EXIF);
                 DrewMetadataParser.fillInParsedMetadataDirectoryFromDrewMetadata(exifMetadataDirectory, exifDirectory);
@@ -72,17 +75,19 @@ public class JAIMetadataParser implements IERMetadataParser {
     }
   }
 
-  private ExifDirectory getExifDirectory(Node node) {
+  private ExifIFD0Directory getExifDirectory(Node node) {
     if ("unknown".equals(node.getNodeName())) {
       if (Integer.parseInt(node.getAttributes().getNamedItem("MarkerTag").getNodeValue()) == EXIF) {
-        byte[] data = (byte[]) ((IIOMetadataNode) node).getUserObject();
-        return (ExifDirectory) new ExifReader(data).extract().getDirectory(ExifDirectory.class);
+    	ByteArrayReader reader = new ByteArrayReader((byte[]) ((IIOMetadataNode) node).getUserObject());
+    	Metadata metadata = new Metadata();
+    	new ExifReader().extract(reader, metadata);
+    	return metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       }
     }
 
     Node child = node.getFirstChild();
     while (child != null) {
-      ExifDirectory directory = getExifDirectory(child);
+      ExifIFD0Directory directory = getExifDirectory(child);
       if (directory != null) {
         return directory;
       }
@@ -94,9 +99,10 @@ public class JAIMetadataParser implements IERMetadataParser {
   private IptcDirectory getIptcDirectory(Node node) {
     if ("unknown".equals(node.getNodeName())) {
       if (Integer.parseInt(node.getAttributes().getNamedItem("MarkerTag").getNodeValue()) == IPTC) {
-        byte[] data = (byte[]) ((IIOMetadataNode) node).getUserObject();
-        IptcDirectory iptcDirectory = (IptcDirectory) new IptcReader(data).extract().getDirectory(IptcDirectory.class);
-        return iptcDirectory;
+        byte[] tagBytes = (byte[]) ((IIOMetadataNode) node).getUserObject();
+    	Metadata metadata = new Metadata();
+    	new IptcReader().extract(new SequentialByteArrayReader(tagBytes), metadata, tagBytes.length);
+        return metadata.getFirstDirectoryOfType(IptcDirectory.class);
       }
     }
 
@@ -109,11 +115,5 @@ public class JAIMetadataParser implements IERMetadataParser {
       child = child.getNextSibling();
     }
     return null;
-  }
-
-  private String suffix(File file) {
-    String s = file.getName();
-    int i = s.lastIndexOf('.');
-    return s.substring(i + 1);
   }
 }

@@ -18,11 +18,10 @@ import java.util.List;
 import java.util.SimpleTimeZone;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -45,7 +44,7 @@ public class ListBucketResponse extends Response {
                 xr.setErrorHandler(handler);
 
                 xr.parse(new InputSource(connection.getInputStream()));
-                this.entries = handler.getEntries();
+                entries = handler.getEntries();
             } catch (SAXException e) {
                 throw new RuntimeException("Unexpected error parsing ListBucket xml", e);
             }
@@ -62,58 +61,63 @@ public class ListBucketResponse extends Response {
         public ListBucketHandler() {
             super();
             entries = new ArrayList();
-            this.iso8601Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            this.iso8601Parser.setTimeZone(new SimpleTimeZone(0, "GMT"));
-            this.currText = new StringBuffer();
+            iso8601Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            iso8601Parser.setTimeZone(new SimpleTimeZone(0, "GMT"));
+            currText = new StringBuffer();
         }
 
+        @Override
         public void startDocument() {
             // ignore
         }
 
+        @Override
         public void endDocument() {
             // ignore
         }
 
+        @Override
         public void startElement(String uri, String name, String qName, Attributes attrs) {
             if (name.equals("Contents")) {
-                this.currEntry = new ListEntry();
+                currEntry = new ListEntry();
             } else if (name.equals("Owner")) {
-                this.currEntry.owner = new Owner();
+                currEntry.owner = new Owner();
             }
         }
 
+        @Override
         public void endElement(String uri, String name, String qName) {
             if (name.equals("Contents")) {
-                this.entries.add(this.currEntry);
+                entries.add(currEntry);
             } else if (name.equals("Key")) {
-                this.currEntry.key = this.currText.toString();
+                currEntry.key = currText.toString();
             } else if (name.equals("LastModified")) {
                 try {
-                    this.currEntry.lastModified = this.iso8601Parser.parse(this.currText.toString());
+                    currEntry.lastModified = iso8601Parser.parse(currText.toString());
                 } catch (ParseException e) {
                     throw new RuntimeException("Unexpected date format in list bucket output", e);
                 }
             } else if (name.equals("ETag")) {
-                this.currEntry.eTag = this.currText.toString();
+                currEntry.eTag = currText.toString();
             } else if (name.equals("Size")) {
-                this.currEntry.size = Long.parseLong(this.currText.toString());
+                currEntry.size = Long.parseLong(currText.toString());
             } else if (name.equals("ID")) {
-                this.currEntry.owner.id = this.currText.toString();
+                currEntry.owner.id = currText.toString();
             } else if (name.equals("DisplayName")) {
-                this.currEntry.owner.displayName = this.currText.toString();
+                currEntry.owner.displayName = currText.toString();
             } else if (name.equals("StorageClass")) {
-                this.currEntry.storageClass = this.currText.toString();
+                currEntry.storageClass = currText.toString();
             }
-            this.currText = new StringBuffer();
+            currText = new StringBuffer();
         }
 
+        @Override
         public void characters(char ch[], int start, int length) {
-            this.currText.append(ch, start, length);
+            currText.append(ch, start, length);
         }
 
         public List getEntries() {
-            return this.entries;
+            return entries;
         }
     }
 }

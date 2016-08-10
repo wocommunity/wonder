@@ -1,8 +1,8 @@
 package er.memoryadaptor;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -35,9 +35,9 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
   @Override
   public NSMutableArray<NSMutableDictionary<String, Object>> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification,
-      boolean shouldLock, EOEntity entity) {
+      boolean shouldLock, EOEntity entity, ERMemoryAdaptorContext context) {
     EREntityStore store = joinedStore(attributesToFetch, fetchSpecification, entity);
-    return store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
+    return store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity, context);
   }
 
   private EREntityStore joinedStore(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, EOEntity entity) {

@@ -87,18 +87,21 @@ public class ERXECLockingTestCase extends ERXTestCase {
 
         public long waitTime;
 
+        @Override
         public void lock() {
             beforeLock = true;
             super.lock();
             afterLock = true;
         }
 
+        @Override
         public void unlock() {
             beforeUnlock = true;
             super.unlock();
             afterUnlock = true;
         }
 
+        @Override
         protected boolean autoLock(String method) {
             beforeAutoLock = true;
             boolean result = super.autoLock(method);
@@ -110,6 +113,7 @@ public class ERXECLockingTestCase extends ERXTestCase {
             return result;
         }
 
+        @Override
         protected void autoUnlock(boolean wasLocked) {
             beforeAutoUnlock = true;
             super.autoUnlock(wasLocked);
@@ -157,7 +161,7 @@ public class ERXECLockingTestCase extends ERXTestCase {
                     return r;
                 }
                 
-            }, 1);
+            }, 20);
         } catch (TimeoutException e) {
             fail(e.getMessage());
         }

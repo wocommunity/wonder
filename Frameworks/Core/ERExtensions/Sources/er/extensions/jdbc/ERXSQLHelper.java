@@ -10,12 +10,16 @@ import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.MessageFormat;
+import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -47,7 +51,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -60,6 +63,7 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
@@ -86,8 +90,7 @@ public class ERXSQLHelper {
 		public static final int INET = 9001;
 	}
 	
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXSQLHelper.class);
 
 	private static Map<String, ERXSQLHelper> _sqlHelperMap = new HashMap<String, ERXSQLHelper>();
 
@@ -109,8 +112,8 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
-	 *            model should be used.
+	 *            statements should be generated or <code>null</code> if all entities
+	 *            in the model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
 	 * @param optionsCreate
@@ -126,7 +129,7 @@ public class ERXSQLHelper {
 	/**
 	 * Reimplementation that does not try to the shared objects. You should exit
 	 * soon after calling this, as it may or may not leave channels open. It is
-	 * simply to geenrate sql.
+	 * simply to generate sql.
 	 * 
 	 * @param model
 	 * @param coordinator
@@ -156,7 +159,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
@@ -236,14 +239,14 @@ public class ERXSQLHelper {
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		StringBuffer sqlBuffer = new StringBuffer();
+		StringBuilder sqlBuffer = new StringBuilder();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
 		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
 		sqlBuffer.append(creationScript);
 		
 		NSMutableArray<EOEntity> foreignKeyEntities = entities.mutableClone();
 		for (EOEntity entity : entities) {
-			for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+			for (EORelationship relationship : entity.relationships()) {
 				if (!relationship.isToMany()) {
 					EOEntity destinationEntity = relationship.destinationEntity();
 					if (destinationEntity.model() != entity.model()) {
@@ -291,7 +294,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
@@ -309,7 +312,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
@@ -327,7 +330,9 @@ public class ERXSQLHelper {
 	 * @param create
 	 *            add create statements
 	 * @param drop
-	 *            add drop statements <br/><br/>This method uses the following
+	 *            add drop statements
+	 *            <p>
+	 *            This method uses the following
 	 *            defaults options:
 	 *            <ul>
 	 *            <li>EOSchemaGeneration.DropTablesKey=YES if drop</li>
@@ -340,7 +345,6 @@ public class ERXSQLHelper {
 	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
 	 *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
 	 *            </ul>
-	 *            <br/><br>
 	 *            Possible values are <code>YES</code> and <code>NO</code>
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create
@@ -365,7 +369,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param databaseContext
 	 *            the databaseContext
@@ -396,7 +400,7 @@ public class ERXSQLHelper {
 		int i = 0;
 		String oldIndexName = null;
 		String lineSeparator = System.getProperty("line.separator");
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		String commandSeparator = commandSeparatorString();
 
@@ -413,7 +417,7 @@ public class ERXSQLHelper {
 				String key = keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
-					if (ERXStringUtilities.isDigitsOnly(numbers)) {
+					if (StringUtils.isNumeric(numbers)) {
 						String attributeNames = (String) d.objectForKey(key);
 						if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) {
 							continue;
@@ -430,8 +434,8 @@ public class ERXSQLHelper {
 							i = 0;
 						}
 						oldIndexName = indexName;
-						StringBuffer localBuf = new StringBuffer();
-						StringBuffer columnBuf = new StringBuffer();
+						StringBuilder localBuf = new StringBuilder();
+						StringBuilder columnBuf = new StringBuilder();
 						boolean validIndex = false;
 						localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
 						for (Enumeration<String> attributes = NSArray.componentsSeparatedByString(attributeNames, ",").objectEnumerator(); attributes.hasMoreElements();) {
@@ -459,7 +463,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -519,7 +523,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -530,7 +534,7 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the last of attributes to fetch for a fetch spec. The entity is
+	 * Returns the list of attributes to fetch for a fetch spec. The entity is
 	 * passed in here because it has likely already been looked up for the
 	 * particular fetch spec.
 	 * 
@@ -548,7 +552,7 @@ public class ERXSQLHelper {
 		}
 		else {
 			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
-			for (String rawRowKeyPath : (NSArray<String>) fetchSpec.rawRowKeyPaths()) {
+			for (String rawRowKeyPath : fetchSpec.rawRowKeyPaths()) {
 				rawRowAttributes.addObject(entity.anyAttributeNamed(rawRowKeyPath));
 			}
 			attributes = rawRowAttributes.immutableClone();
@@ -640,7 +644,7 @@ public class ERXSQLHelper {
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
-		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
+		if (spec.hints() != null && !spec.hints().isEmpty() && spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) != null) {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			sql = customQueryExpressionHintAsString(hint);
 		}
@@ -688,11 +692,32 @@ public class ERXSQLHelper {
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
-		StringBuffer sb = new StringBuffer();
+		return readFormatForAggregateFunction(functionName, columnName, aggregateName, false);
+	}
+	
+	/**
+	 * Returns the attribute read format for an aggregate function for a
+	 * particular column with a name.
+	 * 
+	 * @param functionName
+	 *            the aggregate function to generate
+	 * @param columnName
+	 *            the column name to aggregate on
+	 * @param aggregateName
+	 *            the name to assign to the aggregate result
+	 * @param usesDistinct
+	 *            <code>true</code> if function should be used on distinct values
+	 * @return the generated read format
+	 */
+	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName, boolean usesDistinct) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(functionName);
-		sb.append("(");
+		sb.append('(');
+		if (usesDistinct) {
+			sb.append("distinct ");
+		}
 		sb.append(columnName);
-		sb.append(")");
+		sb.append(')');
 		if (aggregateName != null) {
 			sb.append(" AS ");
 			sb.append(aggregateName);
@@ -789,13 +814,13 @@ public class ERXSQLHelper {
 		}
 		groupByBuffer.insert(0, " GROUP BY ");
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
 
 	/**
-	 * Adds a " having count(*) > x" clause to a group by expression.
+	 * Adds a " having count(*) &gt; x" clause to a group by expression.
 	 * 
 	 * @param selector
 	 *            the comparison selector -- just like EOKeyValueQualifier
@@ -808,13 +833,13 @@ public class ERXSQLHelper {
 		Integer integerValue = Integer.valueOf(value);
 		String operatorString = expression.sqlStringForSelector(selector, integerValue);
 
-		StringBuffer havingBuffer = new StringBuffer();
+		StringBuilder havingBuffer = new StringBuilder();
 		havingBuffer.append(" HAVING COUNT(*) ");
 		havingBuffer.append(operatorString);
-		havingBuffer.append(" ");
+		havingBuffer.append(' ');
 		havingBuffer.append(integerValue);
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
@@ -1058,7 +1083,7 @@ public class ERXSQLHelper {
 			}
 		}
 		catch (Exception e) {
-			ERXSQLHelper.log.error("Failed to sneakily execute adaptor.typeInfo().", e);
+			log.error("Failed to sneakily execute adaptor.typeInfo().", e);
 		}
 
 		if (externalType == null) {
@@ -1082,7 +1107,7 @@ public class ERXSQLHelper {
 			}
 			else {
 				externalType = defaultJDBCTypes.objectAtIndex(0);
-				ERXSQLHelper.log.warn("There was more than one type that in your database that maps to JDBC Type #" + jdbcType + ": " + defaultJDBCTypes + ". We guessed '" + externalType + "'. Cross your fingers.");
+				log.warn("There was more than one type that in your database that maps to JDBC Type #{}: {}. We guessed '{}'. Cross your fingers.", jdbcType, defaultJDBCTypes, externalType);
 			}
 		}
 
@@ -1108,30 +1133,22 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-				boolean usesDistinct=spec.usesDistinct();
+				boolean usesDistinct = spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
 				spec.setUsesDistinct(usesDistinct);
 			}
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
-			int index = statement.toLowerCase().indexOf(" from ");
+			String listString = sqlExpression.listString();
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
-				if (primaryKeyAttributeNames.count() > 1)
-					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
-				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " +
-						quoteColumnName("t0." + pkColumnName) 
-						+ ") ";
-			}
-			else {
+				countExpression = sqlForCountDistinct(entity);
+			} else {
 				countExpression = "count(*) ";
 			}
-			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
+			statement = statement.replace(listString, countExpression);
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
@@ -1173,7 +1190,31 @@ public class ERXSQLHelper {
 		}
 		return rowCount;
 	}
-	
+
+	/**
+	 * Returns the SQL to count the distinct number of rows. The general implementation doesn't
+	 * support composite primary keys and chooses only one primary key column when formatting the
+	 * SQL expression.
+	 * <p>
+	 * Concrete classes may override this implementation to add support for composite
+	 * primary keys according to their database specific SQL syntax.
+	 *
+	 * @param entity the base entity used in this query
+	 * @return the formatted SQL count using distinct for the given entity
+	 */
+	protected String sqlForCountDistinct(EOEntity entity) {
+		NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+
+		if (primaryKeyAttributeNames.count() > 1) {
+			log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
+		}
+
+		String pkAttributeName = primaryKeyAttributeNames.lastObject();
+		String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
+
+		return "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+	}
+
 	/**
 	 * Returns the syntax for using the given query as an aliased subquery in a from-clause.
 	 * 
@@ -1234,7 +1275,7 @@ public class ERXSQLHelper {
 		if (valueArray.count() == 0) {
 			return "0=1";
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		NSArray attributePath = ERXEOAccessUtilities.attributePathForKeyPath(e.entity(), key);
 		EOAttribute attribute = (EOAttribute) attributePath.lastObject();
 		String sqlName;
@@ -1247,7 +1288,7 @@ public class ERXSQLHelper {
 
 		int maxPerQuery = maximumElementPerInClause(e.entity());
 
-		// Need to wrap this SQL in parens if there are multiple grougps
+		// Need to wrap this SQL in parenthesis if there are multiple groups
 		if (valueArray.count() > maxPerQuery) {
 			sb.append(" ( ");
 		}
@@ -1256,7 +1297,7 @@ public class ERXSQLHelper {
 			int currentSize = (j + (maxPerQuery - 1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
 			sb.append(sqlName);
 			sb.append(" IN ");
-			sb.append("(");
+			sb.append('(');
 			for (int i = j; i < j + currentSize; i++) {
 				if (i > j) {
 					sb.append(", ");
@@ -1267,14 +1308,14 @@ public class ERXSQLHelper {
 				// EOAttribute.adaptorValueByConvertingAttributeValue() doesn't
 				// actually return a suitable value
 				if (value instanceof ERXConstant.NumberConstant) {
-					value = new Long(((Number) value).longValue());
+					value = Long.valueOf(((Number) value).longValue());
 				}
 				else {
 					value = formatValueForAttribute(e, value, attribute, key);
 				}
 				sb.append(value);
 			}
-			sb.append(")");
+			sb.append(')');
 			if (j < valueArray.count() - maxPerQuery) {
 				sb.append(" OR ");
 			}
@@ -1313,14 +1354,18 @@ public class ERXSQLHelper {
 		if (sql != null) {
 			char commandSeparatorChar = commandSeparatorChar();
 			Pattern commentPattern = commentPattern();
-			StringBuffer statementBuffer = new StringBuffer();
+			StringBuilder statementBuffer = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new StringReader(sql));
 			boolean inQuotes = false;
 
 			try {
 				String nextLine = reader.readLine();
 				while (nextLine != null) {
-					nextLine = nextLine.trim();
+					if(!inQuotes) {
+						nextLine = nextLine.trim(); // trim only if we not inQuotes
+					} else {
+						statementBuffer.append('\n'); // we are in Quotes but got a new Line
+					}
 					
 					// Skip blank lines and new lines starting with the comment pattern
 					if (nextLine.length() == 0 ||
@@ -1332,6 +1377,7 @@ public class ERXSQLHelper {
 					// Determine if the line ends inside a single quoted string
 					int length = nextLine.length();
 					char ch = 0;
+					char prev = 0;
 					for (int i = 0; i < length; i++) {
 						ch = nextLine.charAt(i);
 						// Determine if we are in a quoted string, but ignore escaped apostrophes, e.g. 'Mike\'s Code' 
@@ -1341,9 +1387,14 @@ public class ERXSQLHelper {
 						else if (ch == '\'') {
 							inQuotes = !inQuotes;
 						}
+						else if (ch == '-' && prev == '-' && !inQuotes) {
+							statementBuffer.deleteCharAt(statementBuffer.length() - 1);
+							break;
+						}
 						if (inQuotes || ch != commandSeparatorChar) {
 							statementBuffer.append(ch);
 						}
+						prev = ch;
 					}
 
 					// If we are not in a quoted string, either this is the end of the command or we need to 
@@ -1382,7 +1433,8 @@ public class ERXSQLHelper {
 	 *             if there is a problem reading the stream
 	 */
 	public NSArray<String> splitSQLStatementsFromInputStream(InputStream is) throws IOException {
-		return splitSQLStatements(ERXStringUtilities.stringFromInputStream(is));
+		String encoding = System.getProperty("file.encoding");
+		return splitSQLStatements(ERXStringUtilities.stringIsNullOrEmpty(encoding) ? ERXStringUtilities.stringFromInputStream(is) : ERXStringUtilities.stringFromInputStream(is, encoding));
 	}
 
 	/**
@@ -1598,12 +1650,10 @@ public class ERXSQLHelper {
 							sqlHelper = new MicrosoftSQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("h2")) {
-							log.warn("H2Helper");
 							sqlHelper = new H2SQLHelper();
-							
 						} 
 						else if (databaseProductName.equalsIgnoreCase("db2")) {
-								sqlHelper = new DB2SQLHelper();
+							sqlHelper = new DB2SQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("firebird")) {
 							sqlHelper = new FirebirdSQLHelper();
@@ -1648,23 +1698,23 @@ public class ERXSQLHelper {
 		/**
 		 * oracle 9 has a maximum length of 30 characters for table names,
 		 * column names and constraint names Foreign key constraint names are
-		 * defined like this from the plugin:<br/><br/>
+		 * defined like this from the plugin:
 		 * 
-		 * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
+		 * <pre><code>TABLENAME_FOEREIGNKEYNAME_FK</code></pre>
 		 * 
-		 * The whole statement looks like this:<br/><br/>
+		 * The whole statement looks like this:
 		 * 
-		 * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY
+		 * <pre><code>ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY
 		 * ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY
-		 * DEFERRED
+		 * DEFERRED</code></pre>
 		 * 
 		 * THIS means that the tablename and the columnname together cannot be
-		 * longer than 26 characters.<br/><br/>
-		 * 
+		 * longer than 26 characters.
+		 * <p>
 		 * This method checks each foreign key constraint name and if it is
 		 * longer than 30 characters its replaced with a unique name.
 		 * 
-		 * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+		 * @see ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
 		 */
 		@Override
 		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
@@ -1672,7 +1722,7 @@ public class ERXSQLHelper {
 			int i = 0;
 			String s = super.createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
 			NSArray a = NSArray.componentsSeparatedByString(s, "/");
-			StringBuffer buf = new StringBuffer(s.length());
+			StringBuilder buf = new StringBuilder(s.length());
 			Pattern pattern = Pattern.compile(".*ALTER TABLE .* ADD CONSTRAINT (.*) FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*");
 			Pattern pattern2 = Pattern.compile("(.*ALTER TABLE .* ADD CONSTRAINT ).*( FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*)");
 			String lineSeparator = System.getProperty("line.separator");
@@ -1714,7 +1764,7 @@ public class ERXSQLHelper {
 					buf.append(lineSeparator);
 				}
 				if (e.hasMoreElements()) {
-					buf.append("/");
+					buf.append('/');
 				}
 			}
 			return buf.toString();
@@ -1816,6 +1866,7 @@ public class ERXSQLHelper {
 			return externalType;
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}
@@ -1896,21 +1947,34 @@ public class ERXSQLHelper {
 			return sql != null && !sql.startsWith("--");
 		}
 
+		@Override
 		public int varcharLargeJDBCType() {
 			return Types.CLOB;
 		}
 
+		@Override
 		public int varcharLargeColumnWidth() {
 			return 0;
 		}
 
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
-			NSMutableArray<String> columnNames = new NSMutableArray<String>();
-			for (ColumnIndex columnIndex : columnIndexes) {
-				columnNames.addObject(columnIndex.columnName());
-			}
-			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE UNIQUE INDEX \""+indexName+"\" ON "+tableName+" (" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE INDEX \""+indexName+"\" ON "+tableName+	" ("+columnNames.componentsJoinedByString(", ")+")";
+		}
+		
+		/**
+		 * @see er.extensions.jdbc.ERXSQLHelper#sqlForGetNextValFromSequencedNamed(java.lang.String)
+		 */
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "VALUES (NEXT VALUE FOR " + sequenceName + ")"; 
 		}
 
 		@Override
@@ -1975,7 +2039,7 @@ public class ERXSQLHelper {
 
 		@Override
 		public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append("satisfies(");
 			sb.append(qualifier.indexName());
 			sb.append(", '");
@@ -2007,6 +2071,7 @@ public class ERXSQLHelper {
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
+		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "CREATE INDEX \""+indexName+"\" ON \""+tableName+"\" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
@@ -2070,6 +2135,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2088,21 +2154,21 @@ public class ERXSQLHelper {
 		}
 		
 		/**
-		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:<br/>
-		 * SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...<br/>
-		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:<br/>
-		 * SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...
+		 * FrontBase is exceedingly inefficient in processing OR clauses.   A query like this:
+		 * <pre><code>SELECT * FROM "Foo" t0 WHERE ( t0."oid" IN (431, 437, ...) OR t0."oid" IN (1479, 1480, 1481,...)...</code></pre>
+		 * Completely KILLS FrontBase (30+ seconds of 100%+ CPU usage). The same query rendered as:
+		 * <pre><code>SELECT * FROM "Foo" t0 WHERE t0."oid" IN (431, 437, ...) UNION SELECT * FROM "Foo" t0 WHERE t0."oid" IN (1479, 1480, 1481, ...)...</code></pre>
 		 * executes in less than a tenth of the time with less high CPU load.  Collapse all the ORs and INs into one and it is faster
 		 * still.  This has been tested with over 17,000 elements, so 15,000 seemed like a safe maximum.  I don't know what the actual
 		 * theoretical maximum is.
-		 * 
+		 * <p>
 		 * But... It looks to like the query optimizer will choose to NOT use an index if the number of elements in the IN gets close to, 
 		 * or exceeds, the number of rows (as in the case of a select based on FK with a large number of keys that don't match any rows).  In 
 		 * this case it seems to fall back to table scanning (or something dreadfully slow).  This only seems to have an impact when the number
 		 * of elements in the IN is greater than 1,000.  For larger sizes, the correct number for this method to return seems to depend on the
 		 * number of rows in the tables.  1/5th of the table size may be a good place to start looking for the upper bound.
 		 * 
-		 * @see ERXSQLHelper#maximumElementPerInClause()
+		 * @see ERXSQLHelper#maximumElementPerInClause(EOEntity)
 		 * 
 		 * @param entity EOEntity that can be used to fine-tune the result
 		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
@@ -2110,6 +2176,31 @@ public class ERXSQLHelper {
 		@Override
 		protected int maximumElementPerInClause(EOEntity entity) {
 			return 15000;
+		}
+		
+		/**
+		 * For BOOLEAN we take 'boolean' as external type. For any other
+		 * case, we pass it up to the default impl.
+		 * 
+		 * @param adaptor
+		 *            the adaptor to retrieve an external type for
+		 * @param jdbcType
+		 *            the JDBC type number
+		 * @return a guess at the external type name to use
+		 */
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.BOOLEAN) {
+				externalType = "boolean";
+			}
+			else if (jdbcType == Types.BINARY) {
+				externalType = "byte";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
 		}
 	}
 
@@ -2163,7 +2254,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 		
@@ -2172,7 +2263,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("CREATE INDEX `"+ indexName + "` ON `"+tableName+"` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 
@@ -2204,7 +2295,14 @@ public class ERXSQLHelper {
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
+		/**
+		 * The exception state string for unique constraint exceptions.
+		 * 
+		 * @see <a href="http://www.postgresql.org/docs/9.1/static/errcodes-appendix.html">Error codes</a>
+		 */
+		public static final String UNIQUE_CONSTRAINT_EXCEPTION_STATE = "23505";
 
+		public static final String UNIQUE_CONSTRAINT_MESSAGE_FORMAT = "ERROR: duplicate key value violates unique constraint \"{0}\"\n  Detail: Key ({1})=({2}) already exists.";
 		/**
 		 * Overriden to prevent the external time types set in 
 		 * {@link #externalTypeForJDBCType(JDBCAdaptor, int)} from being reset.
@@ -2222,20 +2320,6 @@ public class ERXSQLHelper {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
 		}
 		
-		@Override
-		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
-			// The Postgres Expression has a problem using bind variables so we
-			// have to get the formatted
-			// SQL string for a value instead. All Apple provided plugins must
-			// use the bind variables
-			// however. Frontbase can go either way
-			// MS: is expression always instanceof PostgresExpression for
-			// postgres?
-			// boolean isPostgres =
-			// e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
-			return expression.formatValueForAttribute(value, attribute);
-		}
-
 		@Override
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
@@ -2313,7 +2397,7 @@ public class ERXSQLHelper {
 		 * Creates unique index; stolen from the derby helper
 		 * 
 		 * @author cug - Jun 24, 2008
-		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(String, String, ColumnIndex...)
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -2343,7 +2427,51 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
+		
+		@Override
+		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+			if (throwable instanceof EOGeneralAdaptorException) {
+				EOGeneralAdaptorException gae = (EOGeneralAdaptorException) throwable;
+				if (gae.userInfo() != null) {
+					EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+					if (failedOperation != null) {
+						Throwable t = failedOperation.exception();
+						if (t instanceof JDBCAdaptorException) {
+							JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
+							SQLException sqlEx = jdbcEx.sqlException();
+							if (sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
+								String message = sqlEx.getMessage();
+								MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
+								try {
+									Object[] objs = format.parse(message);
+									String idx = (String) objs[0];
+									ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
+									String method = "UniqueConstraintException." + idx;
+									ERXValidationException ex = factory.createCustomException(null, method);
+									databaseContext.rollbackChanges();
+									throw ex;
+								} catch (ParseException e) {
+									log.warn("Error parsing unique constraint exception message: {}", message, e);
+								}
+							}
+						}
+					}
+				}
+			}
+			return false;
+		}
 
+		@Override
+		protected String sqlForCountDistinct(EOEntity entity) {
+			NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+			NSMutableArray<String> pkColumnNames = new NSMutableArray<String>(primaryKeyAttributeNames.size());
+
+			for (String pkAttributeName : primaryKeyAttributeNames) {
+				pkColumnNames.add(quoteColumnName("t0." + entity.attributeNamed(pkAttributeName).columnName()));
+			}
+
+			return "count(distinct (" + StringUtils.join(pkColumnNames, ", ") + ")) ";
+		}
 	}
 	
 	public static class FirebirdSQLHelper extends ERXSQLHelper {
@@ -2398,7 +2526,7 @@ public class ERXSQLHelper {
 		
 		/** 
 		 * Creates unique index; stolen from the derby helper
-		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(String, String, ColumnIndex...)
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -2428,6 +2556,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2482,6 +2611,26 @@ public class ERXSQLHelper {
 
 			return limitSqlBuilder.toString();
 		}
+
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
 	}
 
 	public static class NoSQLHelper extends ERXSQLHelper {
@@ -2570,6 +2719,7 @@ public class ERXSQLHelper {
 			return "dbupdater";
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}

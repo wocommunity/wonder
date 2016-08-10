@@ -23,18 +23,57 @@ import com.lowagie.text.pdf.PdfWriter;
  */
 public class ERPDFMerge {
 	
-	/**
+	/**<p>
 	 * Concatenates the list of streamOfPDFFiles into one PDF document that can
 	 * be accessed via outputStream. If paginate is true it adds page numbering
-	 * to the bottom right of each PDF page.
+	 * to the bottom right of each PDF page.</p>
+	 * <p>
+	 * This method creates a default iText Document object and passes it into concatPDFs(List, OutputStream, Document, boolean) method
+	 * </p>
 	 * 
 	 * @param streamOfPDFFiles
 	 * @param outputStream
 	 * @param paginate
 	 */
-	public static void concatPDFs(List<InputStream> streamOfPDFFiles, OutputStream outputStream, boolean paginate) {
+	public static void concatPDFs(List<InputStream> streamOfPDFFiles, OutputStream outputStream, boolean paginate) {	
+		ERPDFMerge.concatPDFs(streamOfPDFFiles, outputStream, new Document(), paginate);		
+	}
+	
+	/**
+	 * <p>
+	 * Concatenates a list of streamOfPDFFiles into one PDF document that can be
+	 * accessed through the outputStream.
+	 * </p>
+	 * <p>
+	 * The document arg is intended to give you control over the page size and
+	 * margins by allowing you to construct a document of your own parameters.
+	 * Other than that, it behaves the same as the concatPDFs method without the
+	 * document arg
+	 * </p>
+	 * <p>To use this version of the method, create a new Document and pass it in like this:
+	 * 
+	 * <pre>
+	com.lowagie.text.Document doc = new com.lowagie.text.Document(com.lowagie.text.PageSize.LETTER, 0.0F, 0.0F,0.0F,0.0F);
+	ERPDFMerge.concatPDFs(pdfsToCombine, output, doc, true);</pre>
+	
+	 * That creates a letter sized (8.5 in x 11 in) page with no margin (suitable for concatinating 8.5x11 pdfs that already have
+	 * their margins set.
+	 * 
+	 * 
+	 * @param streamOfPDFFiles
+	 * @param outputStream
+	 * @param document
+	 * @param paginate
+	 * 
+	 * @see com.lowagie.text.Document iText Document class
+	 * @see com.lowagie.text.PageSize Page Size class in iText
+	 * 
+	 * @author Larry Mills-Gahl &lt;lmg@webfarm.com&gt;
+	 */
+
+	public static void concatPDFs(List<InputStream> streamOfPDFFiles, OutputStream outputStream, Document document, boolean paginate) {
 		
-		Document document = new Document();
+		
 		try {
 			List<InputStream> pdfs = streamOfPDFFiles;
 			List<PdfReader> readers = new ArrayList<PdfReader>();

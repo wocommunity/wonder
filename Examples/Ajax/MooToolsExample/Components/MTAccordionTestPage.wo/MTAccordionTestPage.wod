@@ -1,0 +1,23 @@
+Accordion : MTAccordionContainer {
+	fixedHeight = "200";
+	onActive = "AccordionStateChange.onActive";
+	onBackground = "AccordionStateChange.onBackground";
+	elementClassName = "els";
+	togglerClassName = "togs";
+}
+
+Tab1 : MTAccordionComponent {
+	label = "Tab 1";
+}
+
+Tab2 : MTAccordionComponent {
+	label = "Tab 2";
+}
+
+Tab3 : MTAccordionComponent {
+	label = "Tab 3";
+}
+
+Tab4 : MTAccordionComponent {
+	label = "Tab 4";
+}

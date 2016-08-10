@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+        <wo class="ERDragAndDropUpload.java" wocomponentcontent="true">
+
+        <binding defaults="Boolean" name="disabled"/>
+    <binding name="storageType"/>
+        
+    <binding name="attachment"/>
+        <validation message="'attachment' must be bound to a settable value">
+            <unsettable name="attachment"/>
+        </validation>
+        <validation message="'attachment' is a required binding.">
+            <unbound name="attachment"/>
+        </validation>
+    <binding name="action"/>
+        <validation message="'action' is a required binding.">
+            <unbound name="action"/>
+        </validation>
+    <binding name="editingContext"/>
+        <validation message="'editingContext' is a required binding.">
+            <unbound name="editingContext"/>
+        </validation>
+    <binding name="configurationName"/>
+    <binding name="enterFunction"/>
+        <binding name="exitFunction"/>
+        <binding name="overFunction"/>
+    <binding name="completeFunction"/>
+        <binding name="completeAllFunction"/>
+        <binding name="errorFunction"/>
+    <binding name="accept"/>
+    </wo>
+</wodefinitions>

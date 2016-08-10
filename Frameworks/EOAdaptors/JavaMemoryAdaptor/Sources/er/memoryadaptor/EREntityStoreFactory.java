@@ -2,7 +2,6 @@ package er.memoryadaptor;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
@@ -147,7 +146,7 @@ public class EREntityStoreFactory {
   
   private NSSet<EOEntity> _relatedEntities(EOEntity entity) {
     NSMutableSet<EOEntity> entities = new NSMutableSet<EOEntity>();
-    for (EOAttribute attrib : (NSArray<EOAttribute>) entity.attributesToFetch()) {
+    for (EOAttribute attrib : entity.attributesToFetch()) {
       if (attrib.isDerived()) {
         attrib = entity._attributeForPath(attrib.definition());
         if (attrib != null)

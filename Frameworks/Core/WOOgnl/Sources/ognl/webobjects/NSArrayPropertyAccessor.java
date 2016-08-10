@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class NSArrayPropertyAccessor extends NSObjectPropertyAccessor {
 
+    @Override
     public Object getProperty( Object target, Object name ) throws OgnlException {
         if ( name instanceof String )
             return super.getProperty(target, name);
@@ -37,6 +38,7 @@ public class NSArrayPropertyAccessor extends NSObjectPropertyAccessor {
         throw new NoSuchPropertyException(target, name);
     }
 
+    @Override
     public void setProperty(Object target, Object name, Object value) throws OgnlException {
         if (name instanceof String ) {
             super.setProperty(target, name, value);

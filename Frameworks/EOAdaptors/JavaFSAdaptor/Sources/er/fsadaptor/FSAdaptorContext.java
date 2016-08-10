@@ -1,7 +1,3 @@
-
-/* FSAdaptorContext - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -15,28 +11,33 @@ public final class FSAdaptorContext extends EOAdaptorContext {
         super(anAdaptor);
     }
 
+    @Override
     public void beginTransaction() {
         if (!_hasTransaction) {
             _hasTransaction = true;
-            this.transactionDidBegin();
+            transactionDidBegin();
         }
     }
 
+    @Override
     public void commitTransaction() {
-        if (_hasTransaction == true) {
+        if (_hasTransaction) {
             _hasTransaction = false;
-            this.transactionDidCommit();
+            transactionDidCommit();
         }
     }
 
+    @Override
     public EOAdaptorChannel createAdaptorChannel() {
         return new FSAdaptorChannel(this);
     }
 
+    @Override
     public void handleDroppedConnection() {
         /* empty */
     }
 
+    @Override
     public void rollbackTransaction() {
         throw new UnsupportedOperationException("FSAdaptorContext.rollbackTransaction");
     }

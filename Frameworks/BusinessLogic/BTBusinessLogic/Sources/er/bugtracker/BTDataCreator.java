@@ -2,7 +2,8 @@ package er.bugtracker;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -16,7 +17,7 @@ import er.extensions.components.ERXLoremIpsumGenerator;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class BTDataCreator {
-	private static final Logger log = Logger.getLogger(BTDataCreator.class);
+	private static final Logger log = LoggerFactory.getLogger(BTDataCreator.class);
 
 	EOEditingContext ec;
 
@@ -107,7 +108,7 @@ public class BTDataCreator {
 		int maxComments = randomInt(20);
 		int last = 0;
 		for (int i = 0; i < maxComments; i++) {
-			Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
+			Comment comment = Comment.clazz.createAndInsertObject(ec);
 			int hours = last + randomInt(48);
 			comment.setDateSubmitted(bug.dateSubmitted().timestampByAddingGregorianUnits(0, 0, 0, hours, 0, 0));
 			comment.setOriginator(randomUser());
@@ -133,10 +134,10 @@ public class BTDataCreator {
 		requirementSubTypes = RequirementSubType.clazz.allObjects(ec).mutableClone();
 
 		int maxUsers = 20;
-		log.info("Creating users: " + maxUsers);
+		log.info("Creating users: {}", maxUsers);
 
 		for (int i = 100; i < 100 + maxUsers; i++) {
-			People user = (People) People.clazz.createAndInsertObject(ec);
+			People user = People.clazz.createAndInsertObject(ec);
 			users.addObject(user);
 			user.setLogin("user" + i);
 			user.setName(ERXStringUtilities.capitalizeAllWords(randomWords(20)) + " " + i);
@@ -153,7 +154,7 @@ public class BTDataCreator {
 		log.info("Creating releases, frameworks and components");
 
 		for (int i = 1; i < 10; i++) {
-			Release release = (Release) Release.clazz.createAndInsertObject(ec);
+			Release release = Release.clazz.createAndInsertObject(ec);
 			release.setName("Release R" + i / 2);
 			if (i % 2 == 0) {
 				release.setName("Release R" + i / 2 + ".1");
@@ -162,17 +163,17 @@ public class BTDataCreator {
 		}
 		NSTimestamp dateDue = new NSTimestamp().timestampByAddingGregorianUnits(0, 5, 0, 0, 0, 0);
 		for (int i = 8; i >= 0; i--) {
-			Release release = (Release) releases.objectAtIndex(i);
+			Release release = releases.objectAtIndex(i);
 			release.setDateDue(dateDue);
 			dateDue = dateDue.timestampByAddingGregorianUnits(0, -(randomInt(2) + 1), 0, 0, 0, 0);
 		}
 
 		for (int i = 0; i < 10; i++) {
-			Component component = (Component) Component.clazz.createAndInsertObject(ec);
+			Component component = Component.clazz.createAndInsertObject(ec);
 			component.setOwner(randomUser());
 			component.setTextDescription("Component " + i / 2);
 			if (i % 2 == 1) {
-				Component parent = (Component) components.lastObject();
+				Component parent = components.lastObject();
 				component.setParent(parent);
 				component.setTextDescription("Component " + i / 2 + ".1");
 			}
@@ -182,20 +183,20 @@ public class BTDataCreator {
 		String names[] = new String[] { "ERDirectToWeb", "ERCoreBusinessLogic", "BTBusinessLogic", "BugTracker" };
 		for (int i = 0; i < names.length; i++) {
 			String string = names[i];
-			Framework framework = (Framework) Framework.clazz.createAndInsertObject(ec);
+			Framework framework = Framework.clazz.createAndInsertObject(ec);
 			framework.setName(string);
-			framework.setOrdering(new Integer(i));
+			framework.setOrdering(Integer.valueOf(i));
 		}
 		log.info("Saving...");
 		ec.saveChanges();
 
 		int maxItems = maxUsers * 10;
 
-		log.info("Creating bugs: " + maxItems);
+		log.info("Creating bugs: {}", maxItems);
 
 		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
-			Bug bug = (Bug) Bug.clazz.createAndInsertObject(ec);
+			Bug bug = Bug.clazz.createAndInsertObject(ec);
 			bugs.addObject(bug);
 			bug.setDateSubmitted(randomTimestamp());
 			bug.setDateModified(bug.dateSubmitted().timestampByAddingGregorianUnits(0, 0, 0, randomInt(24 * 1000), 0, 0));
@@ -212,7 +213,7 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating requirements: " + maxItems);
+		log.info("Creating requirements: {}", maxItems);
 
 		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
@@ -236,11 +237,11 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating test items: " + maxItems * 2);
+		log.info("Creating test items: {}", maxItems * 2);
 
 		for (int i = 0; i < maxItems * 2; i++) {
 			People.clazz.setCurrentUser(randomUser());
-			TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(ec);
+			TestItem testItem = TestItem.clazz.createAndInsertObject(ec);
 			testItems.addObject(testItem);
 			TestItemState state = randomTestItemState();
 			Bug bug = null;
@@ -263,7 +264,7 @@ public class BTDataCreator {
 			testItem.setComponent(component);
 		}
 
-		People user = (People) People.clazz.createAndInsertObject(ec);
+		People user = People.clazz.createAndInsertObject(ec);
 		user.setLogin("admin");
 		user.setName("Administrator");
 		user.setEmail("dummy@localhost");

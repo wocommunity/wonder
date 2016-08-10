@@ -124,11 +124,11 @@ public final class BlendComposite implements Composite {
         return new BlendComposite(mode, alpha);
     }
 
-    public BlendComposite derive(@SuppressWarnings("hiding") BlendingMode mode) {
+    public BlendComposite derive(BlendingMode mode) {
         return this.mode == mode ? this : new BlendComposite(mode, getAlpha());
     }
 
-    public BlendComposite derive(@SuppressWarnings("hiding") float alpha) {
+    public BlendComposite derive(float alpha) {
         return this.alpha == alpha ? this : new BlendComposite(getMode(), alpha);
     }
 
@@ -181,7 +181,7 @@ public final class BlendComposite implements Composite {
 
         private BlendingContext(BlendComposite composite) {
             this.composite = composite;
-            this.blender = Blender.getBlenderFor(composite);
+            blender = Blender.getBlenderFor(composite);
         }
 
         public void dispose() {

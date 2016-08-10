@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMHeaderBar" wocomponentcontent="true">    
+    <binding defaults="Boolean" name="isFixed"/>
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+    <binding name="data-id"/>
+        <binding name="data-theme"/>
+        <binding defaults="Boolean" name="data-add-back-btn"/>
+        <binding name="data-back-btn-text"/>
+        <binding name="data-back-btn-theme"/>
+        <binding defaults="Boolean" name="isNavBar"/>
+        <binding defaults="Boolean" name="data-disable-page-zoom"/>
+        <binding defaults="Boolean" name="data-fullscreen"/>
+        <binding name="data-tap-toggle"/>
+        <binding name="data-transition"/>
+        <binding defaults="Boolean" name="data-update-page-padding"/>
+        <binding defaults="Boolean" name="data-visible-on-page-show"/>
+    <binding name="class"/>
+    <binding name="otherTagString"/>
+    </wo>
+</wodefinitions>

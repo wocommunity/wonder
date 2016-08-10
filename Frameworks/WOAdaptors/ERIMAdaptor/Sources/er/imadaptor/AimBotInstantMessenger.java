@@ -153,7 +153,7 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 		}
 
 		public void handleMessage(AIMBuddy buddy, String message) {
-			AimBotInstantMessenger.this.fireMessageReceived(buddy.getName(), message);
+			fireMessageReceived(buddy.getName(), message);
 		}
 
 		public void handleWarning(AIMBuddy buddy, int amount) {

@@ -1,0 +1,26 @@
+<wo:if condition = "$hasAction">
+  <webobject name = "LnkAction"><wo:WOComponentContent /></webobject>
+</wo:if>
+<wo:if condition = "$hasLinkResource">
+  <webobject name = "LnkResource"><wo:WOComponentContent /></webobject>
+</wo:if>
+<wo:if condition = "$hasHref">
+  <webobject name = "LnkLnk"><wo:WOComponentContent /></webobject>
+</wo:if>
+<wo:if condition = "$updateContainerID">
+  <script>
+    $('body').on( "pagecontainershow", function( event, ui ) {
+    	$('<wo:str value = "$jqJavaScriptElementID" />').click(function(event) {
+    		url = $(this).attr("href");
+    		/*url = url.replace(/\/wo\//, '/ajax/');*/
+    		url = url + '?_jqma=1';
+   			url = url + "&_ju=";
+   			url = url + '<wo:str value = "$updateContainerID" />';
+   			$(".ui-page").addClass('ui-disabled');
+   			$.mobile.loading( "show" );
+   			$('#<wo:str value = "$updateContainerID" />').load(url, function() { $.mobile.loading( "hide" ); $(".ui-page").removeClass('ui-disabled'); $('#<wo:str value = "$updateContainerID" />').trigger('create'); } );
+   			return false;
+    	});
+    } );
+  </script>
+</wo:if>

@@ -2,7 +2,8 @@ package er.extensions.migration;
 
 import java.sql.Types;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
@@ -37,12 +38,12 @@ import er.extensions.jdbc.ERXSQLHelper;
  *           acquire locks properly and you may end up with multiple instances
  *           attempting to create lock tables and/or failing to startup
  *           properly.
- * @property <ModelName>.InitialMigrationVersion the starting version number (in
+ * @property &lt;ModelName&gt;.InitialMigrationVersion the starting version number (in
  *           case you are retrofitting a project with migrations)
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
-	public static final Logger log = Logger.getLogger(ERXJDBCMigrationLock.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCMigrationLock.class);
 
 	private EOModel _lastUpdatedModel;
 	private EOModel _dbUpdaterModelCache;
@@ -86,7 +87,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			try {
 				EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 				NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
-				row.setObjectForKey(new Integer(1), "updateLock");
+				row.setObjectForKey(Integer.valueOf(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
 				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 				try {
@@ -107,17 +108,14 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 					}
 					if (nextRow == null) {
 						if (createIfMissing()) {
-							row.setObjectForKey(new Integer(initialVersionForModel(model)), "version");
+							row.setObjectForKey(Integer.valueOf(initialVersionForModel(model)), "version");
 							row.setObjectForKey(model.name(), "modelName");
 							try {
 								channel.insertRow(row, dbUpdaterEntity);
 							}
 							catch (EOGeneralAdaptorException e) {
 								// Assume this is the unique constraint on modelName that failed
-								if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-									ERXJDBCMigrationLock.log.info("Exception creating row for model '" + model.name() + 
-											", assuming another process has already added this and has the lock.", e);
-								}
+								log.info("Exception creating row for model '{}', assuming another process has already added this and has the lock.", model.name(), e);
 								return false;
 							}
 							count = 1;
@@ -126,9 +124,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 							throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".");
 						}
 					}
-					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-						ERXJDBCMigrationLock.log.info("Waiting on updateLock for model '" + model.name() + "' ...");
-					}
+					log.info("Waiting on updateLock for model '{}' ...", model.name());
 				}
 				channel.adaptorContext().commitTransaction();
 				channel.adaptorContext().beginTransaction();
@@ -145,13 +141,12 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		catch (Exception e) {
 			channel.adaptorContext().rollbackTransaction();
+			channel.adaptorContext().beginTransaction();
 			String createTableStatement = dbUpdaterCreateStatement(model, adaptor);
 			if (createTableIfMissing) {
 				try {
 					log.warn("Locking failed, but this might be OK if this is the first time you are running migrations.  If things keep running, it probably worked fine.  The original reason for the failure: ", e);
 					ERXJDBCUtilities.executeUpdateScript(channel, createTableStatement);
-					String uniqueModelNameIndex = ERXSQLHelper.newSQLHelper(model).sqlForCreateUniqueIndex("unique_model", migrationTableName(adaptor), "modelname");
-					ERXJDBCUtilities.executeUpdateScript(channel, uniqueModelNameIndex);
 					return _tryLock(channel, model, lockOwnerName, false);
 				}
 				catch (Throwable t) {
@@ -173,7 +168,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
-			row.setObjectForKey(new Integer(0), "updateLock");
+			row.setObjectForKey(Integer.valueOf(0), "updateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			channel.adaptorContext().commitTransaction();
@@ -246,7 +241,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
-			row.setObjectForKey(new Integer(versionNumber), "version");
+			row.setObjectForKey(Integer.valueOf(versionNumber), "version");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			int count;
 			try {
@@ -307,6 +302,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			modelNameAttribute.setWidth(100);
 			modelNameAttribute.setAllowsNull(false);
 			dbUpdaterEntity.addAttribute(modelNameAttribute);
+			dbUpdaterEntity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(modelNameAttribute));
 
 			EOAttribute versionAttribute = new EOAttribute();
 			if (isWonderPrototype) {
@@ -363,7 +359,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		flags.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		flags.setObjectForKey("NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		flags.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);

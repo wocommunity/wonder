@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * So for instance, if you are inside of an AjaxInPlace with the id "blogForm" you can do
  * 
  * <pre>
- * &lt:wo:AjaxFunctionLink action = "edit"&gt;
+ * &lt;wo:AjaxFunctionLink action = "edit"&gt;
  * </pre>
  * 
  * to go into edit mode.
@@ -39,11 +39,11 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 
 	public AjaxFunctionLink(String aName, NSDictionary associations, WOElement template) {
 		super("a", AjaxFunctionLink.processAssociations(associations), template);
-		_action = (WOAssociation) _associations.removeObjectForKey("action");
-		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
-		WOAssociation onclick = (WOAssociation) _associations.objectForKey("onclick");
+		_action = _associations.removeObjectForKey("action");
+		_updateContainerID = _associations.removeObjectForKey("updateContainerID");
+		WOAssociation onclick = _associations.objectForKey("onclick");
 		if (onclick == null) {
-			onclick = (WOAssociation) _associations.objectForKey("onClick");
+			onclick = _associations.objectForKey("onClick");
 		}
 		if (onclick != null && _action != null) {
 			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");
@@ -57,18 +57,21 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 		return _disabled != null && _disabled.booleanValueInComponent(context.component());
 	}
 
+	@Override
 	protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
 		if (!isDisabled(context)) {
 			super._appendOpenTagToResponse(response, context);
 		}
 	}
 
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
 		if (!isDisabled(context)) {
 			super._appendCloseTagToResponse(response, context);
 		}
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		if (!isDisabled(context)) {

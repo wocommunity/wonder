@@ -32,7 +32,7 @@ import er.extensions.foundation.ERXUtilities;
  * As an example, you may want to track stats on keypaths in your components.  In your
  * base components, you could add:
  * </p>
- * <code><pre>
+ * <pre><code>
  * public Object valueForKeyPath(String keyPath) {
  *   Object value;
  *   if (_shouldTrackStats) {
@@ -46,7 +46,7 @@ import er.extensions.foundation.ERXUtilities;
  *   }
  *   return value;
  * }
- * </pre></code>
+ * </code></pre>
  * 
  * @author anjo
  * @author mschrag
@@ -65,7 +65,7 @@ public class ERXStats {
     public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
     public static final String STATS_TRACE_COLLECTING_ENABLED_KEY = "er.extensions.erxStats.traceCollectingEnabled";
 
-	public static final Logger log = Logger.getLogger(ERXStats.class);
+    public static final Logger log = Logger.getLogger(ERXStats.class);
 
 	public interface Group {
 		public String Default = " ";
@@ -109,7 +109,7 @@ public class ERXStats {
 	 */
 	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
-		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), ERXStats.STATS_START_TIME_KEY);
+		ERXThreadStorage.takeValueForKey(Long.valueOf(System.currentTimeMillis()), ERXStats.STATS_START_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_LAST_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
@@ -354,7 +354,7 @@ public class ERXStats {
 								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms": "" ) + 
 								", total cnt/sum: " + statistics.allValues().valueForKeyPath("@sum.count") + "/" + statistics.allValues().valueForKeyPath("@sum.sum") +
 								" (cnt/sum : min/max/avg|trace cnt -> key) = " + result);
-						ERXThreadStorage.takeValueForKey(new Long(currentTime), ERXStats.STATS_LAST_TIME_KEY);
+						ERXThreadStorage.takeValueForKey(Long.valueOf(currentTime), ERXStats.STATS_LAST_TIME_KEY);
 					}
 				}
 			}
@@ -428,7 +428,7 @@ public class ERXStats {
 				_lastMark = 0;
 			}
 			else {
-				ERXStats.log.info("You called ERXStats.end before calling ERXStats.start.");
+				log.info("You called ERXStats.end before calling ERXStats.start.");
 			}
 		}
 

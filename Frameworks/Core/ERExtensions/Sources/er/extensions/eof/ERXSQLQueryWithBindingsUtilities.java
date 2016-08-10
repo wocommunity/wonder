@@ -4,7 +4,6 @@ package er.extensions.eof;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -15,15 +14,51 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStore;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-
 /**
  * This class allows SQL queries with binded variables to be run against the database. It's possible
- * to obtain EOs or raw rows, depending on the used method.
+ * to obtain EOs, raw rows or a batch iterator, depending on the used method.
+ * <p>
+ * Binded values are passed in using {@link ERXSQLBinding} implementations. Currently, there are two available
+ * implementations: {@link ERXKeyValueBinding} and {@link ERXObjectBinding}. The first one should be used if
+ * the binding matches a column modeled in an EOModel. This way, any data type conversions that would happen
+ * on normal EOF usage are also applied when generating the SQL query. An example of this can be converting a
+ * boolean value to a string or an integer. {@link ERXObjectBinding} can be used for non-modeled columns.
+ * Please read the {@link ERXObjectBinding} class documentation for important notes regarding some databases
+ * that expect SQL queries with binding typification.
+ * <p>
+ * This class is used by calling the most appropriate static method for the intended usage. Specific requirements
+ * for the SQL query resulting columns are detailed on each of the method's documentation. Generally, you need
+ * to provide a query returning the appropriate columns and using the '?' character for each binded value.
+ * Depending on the database plug-in being used, the '?' character will be automatically replaced by a different
+ * expression if the {@link ERXKeyValueBinding} class is used to wrap the binded value. In PostgreSQL, for instance,
+ * the '?' character could be replaced by '?::varchar(1000)'.
+ * <p>
+ * Here are some sample uses of this class:
+ * <pre><code>
+ *   // Obtains EOs that match the query
+ *   ERXSQLQueryWithBindingsUtilities.selectObjectsOfEntityForSqlWithBindings(editingContext(), Song.ENTITY_NAME,
+ *     "SELECT * FROM SONG WHERE FAVORITE = ? AND DURATION &gt; ? ORDER BY NUMBER ASC", true,
+ *     new ERXKeyValueBinding("favorite", true), new ERXKeyValueBinding("duration", 120));
+ *     
+ *   // Obtains raw rows for query
+ *   ERXSQLQueryWithBindingsUtilities.rawRowsForSqlWithBindings(editingContext(), Song.ENTITY_NAME,
+ *     "SELECT t0.NAME, t0.DURATION FROM SONG t0 WHERE COMPOSER = ?", new ERXKeyValueBinding("composer", "Mozart"));
+ *     
+ *   // Runs a query that returns no objects
+ *   ERXSQLQueryWithBindingsUtilities.runSqlQueryWithBindings(editingContext(), "SongsModel",
+ *     "DELETE FROM SONG WHERE FAVORITE = ?", new ERXKeyValueBinding("favorite", false));
+ *   
+ *   // Obtains ERXFetchSpecificationBatchIterator
+ *   // Note the query must obtain the primary key!
+ *   ERXSQLQueryWithBindingsUtilities.batchIteratorForObjectsWithSqlWithBindings(editingContext(), Employee.ENTITY_NAME,
+ *     "SELECT ID FROM EMPLOYEE WHERE HEIGHT &lt; ? AND FIRST_NAME = ? ORDER BY NUMBER DESC", false, 100,
+ *     new NSArray&lt;EOSortOrdering&gt;(new EOSortOrdering[] {new EOSortOrdering("number", EOSortOrdering.CompareDescending)}),
+ *     new ERXObjectBinding(190), new ERXKeyValueBinding("firstName", "John"));
+ * </code></pre>
  */
 public class ERXSQLQueryWithBindingsUtilities {
 
@@ -180,7 +215,7 @@ public class ERXSQLQueryWithBindingsUtilities {
 
         NSArray pkDicts = ec.objectsWithFetchSpecification(pkSpec);
         NSMutableArray pks = new NSMutableArray();
-        String pkAtttributeName = ((EOAttribute) entity.primaryKeyAttributes().lastObject()).name();
+        String pkAtttributeName = entity.primaryKeyAttributes().lastObject().name();
 
         for ( Enumeration rowEnumerator = pkDicts.objectEnumerator(); rowEnumerator.hasMoreElements(); ) {
             NSDictionary row = (NSDictionary) rowEnumerator.nextElement();
@@ -203,8 +238,7 @@ public class ERXSQLQueryWithBindingsUtilities {
      * @param ec
      *          The current editing context (used to obtain the correct OSC)
      * @param modelName
-     *          The name of a model affected by the query. This does not necessarily have to be accurate,
-     *          as this value is only used to find out the correct database that the query will be run against.
+     *          The name of the model (used to apply the query on the correct DB)
      * @param query
      *          The SQL query
      * @param bindings

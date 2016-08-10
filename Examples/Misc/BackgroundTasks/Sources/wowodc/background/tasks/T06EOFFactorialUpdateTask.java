@@ -4,7 +4,8 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.ResultItem;
@@ -15,12 +16,12 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXAbstractTask;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.ERXTask;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * This task iterates thru a the ResultItems related to a TaskInfo argument.
@@ -31,11 +32,9 @@ import er.extensions.foundation.ERXStatusInterface;
  * http://en.wikipedia.org/wiki/Factorial_prime
  * 
  * @author kieran
- *
  */
-public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callable<EOGlobalID>, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T06EOFFactorialUpdateTask.class);
+public class T06EOFFactorialUpdateTask extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
+	private static final Logger log = LoggerFactory.getLogger(T06EOFFactorialUpdateTask.class);
 	
 	// Duration of the example task in milliseconds
 	// Random between 5 and 15 seconds
@@ -72,8 +71,8 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 	
 	private final EOGlobalID _taskInfoGID;
 
-	public EOGlobalID call() {
-
+	@Override
+	public EOGlobalID _call() {
 		_elapsedTime = 0;
 		Format wholeNumberFormatter = new DecimalFormat("#,##0");
 		
@@ -95,7 +94,7 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 			ERXFetchSpecification<ResultItem> fs = taskInfo.fetchSpecificationForResultItems();
 			
 			// Batch iterator
-			ERXFetchSpecificationBatchIterator fsIterator = new ERXFetchSpecificationBatchIterator(fs, ec);
+			ERXFetchSpecificationBatchIterator<ResultItem> fsIterator = new ERXFetchSpecificationBatchIterator<ResultItem>(fs, ec);
 
 			// Loop for a period of time
 			while (fsIterator.hasNext() && !_isStopped) {
@@ -170,7 +169,7 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 			factorial = factorial * factor;
 			newDistance = Math.abs(numberToCheck - factorial);
 			
-			log.debug("factor: " + factor + "; factorial: " + factorial + "; distance: " + distance + "; new Distance: " + newDistance);
+			log.debug("factor: {}; factorial: {}; distance: {}; new Distance: {}", factor, factorial, distance, newDistance);
 		} while (newDistance < distance);
 		
 		// Upon exiting the loop, we will have gone one factor too far
@@ -187,19 +186,17 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 				resultItem.setIsFactorialPrime(Boolean.TRUE);
 			}
 		}
-		
-		
 	}
 	
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
@@ -212,7 +209,4 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-	
-	
-	
 }

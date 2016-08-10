@@ -1,8 +1,0 @@
-er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
-er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
-er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true
-#er.extensions.ERXWOForm.useIdInsteadOfNameTag=true
-er.extensions.ERXStyleSheet.xhtml=false
-er.extensions.components.ERXToManyRelationship.checkBoxComponentName=WXCheckboxList
-er.extensions.components.ERXToOneRelationship.radioButtonComponentName=WXRadioButtonList
-er.extensions.components._private.ERXSubmitButton.useIEFix=false

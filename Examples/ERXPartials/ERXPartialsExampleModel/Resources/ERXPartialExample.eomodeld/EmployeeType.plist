@@ -1,0 +1,22 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.example.erxpartials.model.EmployeeType"; 
+    classProperties = (name, "partial_EmployeePersons"); 
+    externalName = EmployeeType; 
+    fetchSpecificationDictionary = {}; 
+    name = EmployeeType; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = "Partial_EmployeePerson"; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = employeeTypeID; sourceAttribute = id; }); 
+            name = "partial_EmployeePersons"; 
+        }
+    ); 
+}

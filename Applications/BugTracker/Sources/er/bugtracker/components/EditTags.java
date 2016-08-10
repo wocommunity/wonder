@@ -1,5 +1,6 @@
 package er.bugtracker.components;
-import com.webobjects.appserver.*;
+
+import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.taggable.ERTaggable;

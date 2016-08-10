@@ -1,0 +1,41 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = PHOTO; 
+            externalType = blob; 
+            name = photo; 
+            prototypeName = blob; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID); 
+    className = "webobjectsexamples.businesslogic.eo.TalentPhoto"; 
+    classProperties = (photo, talent); 
+    externalName = "TALENT_PHOTO"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (photo, talent); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.common.TalentPhoto"; 
+        "_nameInObjectStore" = "TALENT_PHOTO"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = TalentPhoto; 
+    primaryKeyAttributes = (talentID); 
+    relationships = (
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}

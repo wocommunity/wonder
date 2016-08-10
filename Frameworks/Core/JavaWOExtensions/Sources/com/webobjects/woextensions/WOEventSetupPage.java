@@ -19,6 +19,13 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
 public class WOEventSetupPage extends WOEventPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public Class	currentClass;
     public String	currentEventDescription;
     public int		currentIndex;
@@ -77,12 +84,12 @@ public class WOEventSetupPage extends WOEventPage {
     }
     
     public NSArray currentEventDescriptions() {
-        NSMutableArray	descs;
-        NSDictionary	map;
+        NSMutableArray<String> descs;
+        NSDictionary<String,String> map;
 
         map = EOEvent.eventTypeDescriptions(currentClass);
 
-        descs = new NSMutableArray();
+        descs = new NSMutableArray<String>();
         descs.setArray(map.allValues());
         descs.removeObject(map.objectForKey(EOEvent.EventGroupName));
         try {

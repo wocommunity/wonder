@@ -16,6 +16,12 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSForwardException;
 
 public class D2WOgnlAssignment extends Assignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver) {
 		return new D2WOgnlAssignment(eokeyvalueunarchiver);
@@ -29,6 +35,7 @@ public class D2WOgnlAssignment extends Assignment {
 		super(key, value);
 	}
 
+	@Override
 	public Object fire(D2WContext c) {
 		// MS: This used to be in WOOGNL, but it required everyone who used WOOGNL to
 		// bring in all the D2W frameworks.  I've moved this over to ERD2W instead,

@@ -5,8 +5,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
-
 /**
  * <p>
  * ERXS provides lots of much shorter methods of constructing and using

@@ -6,8 +6,6 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.foundation.ERXPatcher;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches;
 import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.ActiveImage;
 /**
  * Active image that allows for a tooltip as a binding. Gets patched into the runtime 
@@ -21,9 +19,10 @@ public class ERXActiveImage extends ActiveImage {
 
     public ERXActiveImage(String tag, NSDictionary associations, WOElement element) {
         super(tag, associations, element);
-        _alt = (WOAssociation) _associations.removeObjectForKey("alt");
+        _alt = _associations.removeObjectForKey("alt");
      }
 
+    @Override
     protected void appendConstantAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
         super.appendConstantAttributesToResponse(woresponse, wocontext);
         if(_alt != null) {

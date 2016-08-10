@@ -90,7 +90,7 @@ public class ERXGoogleSpell {
 	public static String correct(String text, String lang, String hl, boolean escapeXml) throws CorrectionException {
 		Correction[] corrections = ERXGoogleSpell.suggestions(text, lang, hl, escapeXml);
 		int lastOffset = 0;
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		for (int correctionNum = 0; correctionNum < corrections.length; correctionNum++) {
 			Correction correction = corrections[correctionNum];
 			String[] suggestions = correction.suggestions();
@@ -167,7 +167,7 @@ public class ERXGoogleSpell {
 	 */
 	public static Correction[] suggestions(String text, String lang, String hl, boolean escapeXml) throws CorrectionException {
 		try {
-			StringBuffer request = new StringBuffer();
+			StringBuilder request = new StringBuilder();
 			request.append("<spellrequest textalreadyclipped=\"0\" ignoredups=\"1\" ignoredigits=\"1\" ignoreallcaps=\"0\"><text>");
 			if (escapeXml) {
 				request.append(ERXStringUtilities.escapeNonXMLChars(text));
@@ -285,6 +285,13 @@ public class ERXGoogleSpell {
 	 * @author mschrag
 	 */
 	public static class CorrectionException extends Exception {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Creates a new CorrectionException.
 		 * 

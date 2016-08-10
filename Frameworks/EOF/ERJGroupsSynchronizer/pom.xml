@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>eof</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.eof</groupId>
@@ -19,25 +19,14 @@
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>jgroups</groupId>
-			<artifactId>jgroups-all</artifactId>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<!-- BEGIN: Fix for jgroups-all transitive dependency problem  -->
-			<dependency>
-				<groupId>bsh</groupId>
-				<artifactId>bsh</artifactId>
-				<version>1.2-b3</version>
-			</dependency>
-			<!-- END: Fix for jgroups-all transitive dependency problem  -->
-		</dependencies>
-	</dependencyManagement>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>

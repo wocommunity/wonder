@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation._NSUtilities;
-import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 
 /**
  * HelperFunctionRegistry provides a central point for registering and resolving helper functions.
@@ -17,7 +18,7 @@ import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
  * @author mschrag
  */
 public class WOHelperFunctionRegistry {
-	public static Logger log = Logger.getLogger(WOHelperFunctionRegistry.class);
+	private static final Logger log = LoggerFactory.getLogger(WOHelperFunctionRegistry.class);
 
 	public static final String APP_FRAMEWORK_NAME = "app";
 
@@ -117,7 +118,7 @@ public class WOHelperFunctionRegistry {
 				helpedClass = keyBinding.valueType();
 			}
 			else {
-				WOHelperFunctionRegistry.log.warn("Unable to determine the value class of the keypath '" + keyPath + "' for the object " + targetObject);
+				log.warn("Unable to determine the value class of the keypath '{}' for the object {}", keyPath, targetObject);
 				helpedClass = Object.class;
 			}
 		}

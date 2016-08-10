@@ -5,11 +5,11 @@
 		<binding name="list"/>
 		<binding name="listConfigurationName"/>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 
-		<validation message="&apos;listConfigurationName&apos; is a required binding">
+		<validation message="'listConfigurationName' is a required binding">
 			<unbound name="listConfigurationName"/>
 		</validation>
 	</wo>

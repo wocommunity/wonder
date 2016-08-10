@@ -40,6 +40,12 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 // FIXME: Need a formal protocol for cancel vs. selection.
 public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface, EditRelationshipPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WPickListPage.class);
@@ -72,6 +78,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
      * 
      * @return if we have a nextPage set
      */
+    @Override
     public boolean showCancel() {
         return ((!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null) || cancelPage() !=null;
     }
@@ -92,10 +99,12 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         setSelectedObjects(selectedObjects);
     }
 
+    @Override
     public NSArray selectedObjects() {
         return super.selectedObjects();
     }
 
+    @Override
     public void setSelectedObjects(NSArray selectedObjects) {
         super.setSelectedObjects(selectedObjects);
     }
@@ -112,6 +121,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         _cancelPage = cp;
     }
 
+    @Override
     public WOComponent backAction() {
         if(_masterObject != null) {
             EOEditingContext ec = _masterObject.editingContext();
@@ -131,11 +141,13 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
 
     // Called by ERD2WListPage before the display group is updated
+    @Override
     protected void willUpdate() {
         super.willUpdate();
     }
     
     // Called by ERD2WListPage after the display group is updated
+    @Override
     protected void didUpdate() {
         super.didUpdate();
         // update our selection, so that we don't have any objects selected that are not visible on any page
@@ -233,6 +245,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         } else {
             objects = NSArray.EmptyArray;
         }
-        setSelectedObjects((NSArray)objects);
+        setSelectedObjects(objects);
      }
 }

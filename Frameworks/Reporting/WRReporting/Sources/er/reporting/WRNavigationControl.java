@@ -1,11 +1,15 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.*;
 import er.extensions.components.ERXStatelessComponent;
-import er.grouping.*;
+import er.grouping.DRCriteria;
+import er.grouping.DRGroup;
+import er.grouping.DRMasterCriteria;
+import er.grouping.DRReportModel;
 
 public class WRNavigationControl extends ERXStatelessComponent {
     public DRReportModel model;
@@ -18,6 +22,7 @@ public class WRNavigationControl extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         group = null;
@@ -64,23 +69,23 @@ public class WRNavigationControl extends ERXStatelessComponent {
     
     public void moveGroupToList(String dest) {
         if("Z".equals(dest)) {
-            this.model().addToZList(group);
+            model().addToZList(group);
             updateZList(group);
         } else if("H".equals(dest)) {
-            this.model().addToHList(group);
+            model().addToHList(group);
         } else {
-            this.model().addToVList(group);
+            model().addToVList(group);
         }
     }
     
     
     public WOComponent down() {
-        this.model().moveUpDimension(group, false, listLabel());
+        model().moveUpDimension(group, false, listLabel());
         return null;
     }
 
     public WOComponent up() {
-        this.model().moveUpDimension(group, true, listLabel());
+        model().moveUpDimension(group, true, listLabel());
         return null;
     }
 
@@ -178,13 +183,13 @@ public class WRNavigationControl extends ERXStatelessComponent {
 
 
     public boolean showZDimensions() {
-        if (this.model().zList().count() > 0 && "Z".equals(listLabel())) {
+        if (model().zList().count() > 0 && "Z".equals(listLabel())) {
             return true;
         }
         return false;
     }
 
     public boolean showNavigation() {
-        return valueForBooleanBinding("showNavigation");
+        return booleanValueForBinding("showNavigation");
     }
 }

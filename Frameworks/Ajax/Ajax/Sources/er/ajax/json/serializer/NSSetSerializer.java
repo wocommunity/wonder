@@ -17,11 +17,18 @@ import com.webobjects.foundation.NSSet;
 /**
  * Transforms NSSets between JavaScript and Java.
  * 
- * @author Jean-François Veillette <jfveillette@os.ca>
+ * @author Jean-François Veillette &lt;jfveillette@os.ca&gt;
  * @version $, $Date $ <br>
  *          &copy; 2005 OS Communications Informatiques, inc. Tous droits réservés.
  */
 class NSSetSerializer extends AbstractSerializer {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static Class[] _serializableClasses = new Class[] { NSSet.class, NSMutableSet.class };
 	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
 
@@ -33,6 +40,7 @@ class NSSetSerializer extends AbstractSerializer {
 		return _JSONClasses;
 	}
 
+	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && NSSet.class.isAssignableFrom(clazz)));
 	}

@@ -218,4 +218,19 @@
           </webobject>
   </webobject>
 </div>
+<script type="text/javascript">
+document.getElementById('appSettingsForm').onsubmit = function(event) {
+	var statsPassword = document.getElementById('statsPassword').value;
+	if (statsPassword && statsPassword.length != 0) {
+		var badChars = ['$', '&', '+', ',' ,'/' ,':', ';', '=', '?', '@', ' ', '<', '>', '#', '%'];
+		for (var i=0; i<badChars.length; i++) {
+			if (statsPassword.indexOf(badChars[i]) != -1) {
+				alert('WARNING: "Statistics Page Password" should not contain characters and have special meaning in URLs.');
+				break;
+			}
+		}
+	}
+	return true;
+}
+</script>
 </webobject>

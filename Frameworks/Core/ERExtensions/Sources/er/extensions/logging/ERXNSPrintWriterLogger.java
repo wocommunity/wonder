@@ -66,11 +66,13 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
         _printWriter = new PrintWriter(new OutputStreamWriter(System.out, encodingName), true);
     }
     
+    @Override
     public void appendln() {
         if (isEnabled())
             _printWriter.println();
     }
     
+    @Override
     public void appendln(Object object) {
         if (isEnabled()) {
             if (isVerbose()) 
@@ -79,6 +81,7 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
         }
     }
     
+    @Override
     public void flush() {
         _printWriter.flush();
     }

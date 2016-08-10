@@ -22,6 +22,7 @@ public class SPComponent extends ERXComponent {
 		return false;
 	}
 
+	@Override
 	public Session session() {
 		return (Session) super.session();
 	}

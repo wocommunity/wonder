@@ -14,19 +14,19 @@
 		<binding name="windowName"/>
 		<binding name="pageName" defaults="Page Names"/>
 
-		<validation message="&apos;windowName&apos; is a required binding">
+		<validation message="'windowName' is a required binding">
 			<unbound name="windowName"/>
 		</validation>
 
-		<validation message="&apos;width&apos; is a required binding">
+		<validation message="'width' is a required binding">
 			<unbound name="width"/>
 		</validation>
 
-		<validation message="&apos;height&apos; is a required binding">
+		<validation message="'height' is a required binding">
 			<unbound name="height"/>
 		</validation>
 
-		<validation message="&apos;action&apos; or &apos;pageName&apos; must be bound">
+		<validation message="'action' or 'pageName' must be bound">
 			<and>
 				<unbound name="action"/>
 				<unbound name="pageName"/>

@@ -7,9 +7,8 @@ package er.wopaypal;
 // Created by travis on Tue Feb 12 2002
 //
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import er.wopaypal.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSLog;
 
 /**
  *  The PayPalNotificationLogger class is simply an example of a delegate for the PayPalNotificationListener class.  In reality, a delegate can implement any or all of these methods from the PayPalNotificationListener.Delegate interface, and use whatever custom logic fits the need.  Examples would be logging the transactions to a database, a file, etc.
@@ -33,7 +32,7 @@ public class PayPalNotificationLogger {
     }
 
     public void processInvalidPaypalTransaction(WORequest aRequest) {
-        NSLog.out.appendln("PaypalNotificationLogger: Invalid Paypal transaction: " + aRequest.formValueForKey("txn_id") + " from i.p.: " + (((String)aRequest.headerForKey("REMOTE_ADDR") != null) ? (String)aRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
+        NSLog.out.appendln("PaypalNotificationLogger: Invalid Paypal transaction: " + aRequest.formValueForKey("txn_id") + " from i.p.: " + ((aRequest.headerForKey("REMOTE_ADDR") != null) ? (String)aRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
     }
 
     public void processPendingPaypalTransaction(WORequest aRequest) {

@@ -12,7 +12,6 @@ import org.jabsorb.serializer.UnmarshallException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -38,6 +37,7 @@ public class NSDictionarySerializer extends AbstractSerializer {
 	 */
 	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
 
+	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && NSDictionary.class.isAssignableFrom(clazz)));
 	}

@@ -1,0 +1,12 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERCaptcha=load
+er.extensions.ERCaptcha.hasLocalization=false
+
+#### ERReCaptcha
+#er.captcha.recaptcha.publicKey=
+#er.captcha.recaptcha.privateKey=
+
+#### ERCaptchaEngine
+er.captcha.ERCaptchaEngine.wordgenerator=BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz2346789
+
+java.awt.headless=true

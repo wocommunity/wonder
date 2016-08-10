@@ -26,27 +26,29 @@ import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes". <br />
- * A Process - or controller is an abstraction of a sequence of pages. For example, when you want to edit an object, you start at the edit page, make your change, save, get a confirmation page and finally go back to where you started. <br />
- * The major benefit against simply using pageConfigurations and NextPageDelegates is that it is very confusing to link them together in a flow of pages. The second benefit is that it inherits from branchDelegate, which lets you make up a very flexible UI, you can have page-level actions mixed into the property repetitions for example. Also, you get much more control of the flow of complex tasks where you simply would get lost when you use bare NextPageDelegates and you can more easily create custom pages in between the flow. And finally, they make for great re-use and testing, because you can simply fake the actions the user took.<br />
- * Controllers are instatiated via something like:<br /><code><pre>
+ * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes".
+ * <p>
+ * A Process - or controller is an abstraction of a sequence of pages. For example, when you want to edit an object, you start at the edit page, make your change, save, get a confirmation page and finally go back to where you started. <br>
+ * The major benefit against simply using pageConfigurations and NextPageDelegates is that it is very confusing to link them together in a flow of pages. The second benefit is that it inherits from branchDelegate, which lets you make up a very flexible UI, you can have page-level actions mixed into the property repetitions for example. Also, you get much more control of the flow of complex tasks where you simply would get lost when you use bare NextPageDelegates and you can more easily create custom pages in between the flow. And finally, they make for great re-use and testing, because you can simply fake the actions the user took.<br>
+ * Controllers are instatiated via something like:<pre><code>
  public WOActionResults TestEditAction() {
      ERD2WControllerFactory.ERCCreate erc = (ERD2WControllerFactory.ERCCreate)ERD2WControllerFactory.controllerFactory().controllerForName("CreateUser", session());
      erc.setFinalPage(previousPageFromRequest());
      erc.setPrimaryKeyValue(primaryKeyFromRequest());
      return (WOActionResults)erc.firstPage();
  }
- * </pre></code>
+ * </code></pre>
  * They can be subclassed and you can change the flow of your app without the need to create subclasses of your pages - which spares you the hassle to deal with the duplicated HTML.
- * A controller gets instantiated via a D2W rule like:<br />
- <code>(controllerName = "EditDocument") => controllerClassName = "er.directtoweb.ERD2WControllerFactory$ERCEdit"</code><br />
- and you might need supporting wildcard rules like the one for the pageConfigurations. Also, rules like:<br />
- <code>controllerName <> null => pageConfiguration = controllerName [KeyValueAssignment] [0]</code><br />
+ * A controller gets instantiated via a D2W rule like:<br>
+ <code>(controllerName = "EditDocument") =&gt; controllerClassName = "er.directtoweb.ERD2WControllerFactory$ERCEdit"</code><br>
+ and you might need supporting wildcard rules like the one for the pageConfigurations. Also, rules like:<br>
+ <code>controllerName &lt;&gt; null =&gt; pageConfiguration = controllerName [KeyValueAssignment] [0]</code><br>
 will spare you a lot of work.
 
  * The ERD2WControllerFactory is not heavily tested and the API might change. Especially that the controller subclasses are inner classes of this factory is subject to change. Feedback would be very welcome. 
+ *  
  * @author ak on Tue Apr 08 2003
- * @project AHApp
+ * 
  * @d2wKey pageConfiguration
  */
 public class ERD2WControllerFactory extends ERD2WFactory {
@@ -113,6 +115,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERD2WController extends ERDBranchDelegate {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected WOSession session;
         protected WOComponent finalPage;
         protected D2WContext d2wContext;
@@ -174,6 +183,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCCore extends ERD2WController {        
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCCore() {
         }
 
@@ -202,6 +218,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             return wocomponent;
         }
 
+        @Override
         public WOComponent firstPage() {
             return runWithPageConfiguration((String)d2wContext().valueForKey("pageConfiguration"));
         }
@@ -221,6 +238,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
 
     public static class ERCSingleObject extends ERCCore {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected Object pk;
         protected EOEnterpriseObject object;
         protected EOEditingContext editingContext;
@@ -229,6 +253,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             super();
         }
         
+        @Override
         public WOComponent runWithPageConfiguration(String value) {
             WOComponent start = super.runWithPageConfiguration(value);
             start.takeValueForKey(object(), "object");
@@ -267,6 +292,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
 
     public static class ERCInspect extends ERCSingleObject {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCInspect() {
             super();
         }
@@ -282,6 +314,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCEdit extends ERCSingleObject {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCEdit() {
             super();
         }
@@ -304,12 +343,20 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCCreate extends ERCEdit {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public EOEditingContext ec;
         
         public ERCCreate() {
             super();
         }
         
+        @Override
         public WOComponent runWithPageConfiguration(String value) {
             WOComponent start = super.runWithPageConfiguration(value);
             EOEnterpriseObject eo;
@@ -323,6 +370,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCQuery extends ERCCore { // implements firstPage()
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected EODataSource dataSource;
 
         public ERCQuery() {

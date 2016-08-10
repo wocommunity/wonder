@@ -9,8 +9,6 @@
 
 package com.amazon.s3;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class QueryStringAuthGenerator {
     private Long expires = null;
 
     // by default, expire in 1 minute.
-    private static final Long DEFAULT_EXPIRES_IN = new Long(60 * 1000);
+    private static final Long DEFAULT_EXPIRES_IN = Long.valueOf(60 * 1000);
 
     public QueryStringAuthGenerator(String awsAccessKeyId, String awsSecretAccessKey) {
         this(awsAccessKeyId, awsSecretAccessKey, true);
@@ -62,17 +60,17 @@ public class QueryStringAuthGenerator {
         this.server = server;
         this.port = port;
 
-        this.expiresIn = DEFAULT_EXPIRES_IN;
-        this.expires = null;
+        expiresIn = DEFAULT_EXPIRES_IN;
+        expires = null;
     }
 
     public void setExpires(long millisSinceEpoch) {
-        expires = new Long(millisSinceEpoch);
+        expires = Long.valueOf(millisSinceEpoch);
         expiresIn = null;
     }
 
     public void setExpiresIn(long millis) {
-        expiresIn = new Long(millis);
+        expiresIn = Long.valueOf(millis);
         expires = null;
     }
 
@@ -136,22 +134,22 @@ public class QueryStringAuthGenerator {
     }
 
     public String makeBareURL(String bucket, String key) {
-        StringBuffer buffer = new StringBuffer();
-        if (this.isSecure) {
+        StringBuilder buffer = new StringBuilder();
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
-        buffer.append(this.server).append(":").append(this.port).append("/").append(bucket);
-        buffer.append("/").append(Utils.urlencode(key));
+        buffer.append(server).append(':').append(port).append('/').append(bucket);
+        buffer.append('/').append(Utils.urlencode(key));
 
         return buffer.toString();
     }
 
     private String generateURL(String method, String path, Map headers) {
         long expires = 0L;
-        if (this.expiresIn != null) {
-            expires = System.currentTimeMillis() + this.expiresIn.longValue();
+        if (expiresIn != null) {
+            expires = System.currentTimeMillis() + expiresIn.longValue();
         } else if (this.expires != null) {
             expires = this.expires.longValue();
         } else {
@@ -162,28 +160,28 @@ public class QueryStringAuthGenerator {
         expires /= 1000;
 
         String canonicalString = Utils.makeCanonicalString(method, path, headers, ""+expires);
-        String encodedCanonical = Utils.encode(this.awsSecretAccessKey, canonicalString, true);
+        String encodedCanonical = Utils.encode(awsSecretAccessKey, canonicalString, true);
 
-        StringBuffer buffer = new StringBuffer();
-        if (this.isSecure) {
+        StringBuilder buffer = new StringBuilder();
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
 
-        buffer.append(this.server).append(":").append(this.port).append("/").append(path);
+        buffer.append(server).append(':').append(port).append('/').append(path);
 
         if (path.indexOf('?') == -1) {
             // no other query parameters
-            buffer.append("?");
+            buffer.append('?');
         } else {
             // there exist other query parameters
-            buffer.append("&");
+            buffer.append('&');
         }
 
         buffer.append("Signature=").append(encodedCanonical);
         buffer.append("&Expires=").append(expires);
-        buffer.append("&AWSAccessKeyId=").append(this.awsAccessKeyId);
+        buffer.append("&AWSAccessKeyId=").append(awsAccessKeyId);
 
         return buffer.toString();
     }

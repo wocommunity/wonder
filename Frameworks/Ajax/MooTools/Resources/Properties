@@ -1,0 +1,5 @@
+##  Properies Info
+er.extensions.load.Properties.framework.MooTools=load
+er.extensions.MooTools.hasLocalization=false
+
+er.ajax.AjaxFileRequestHandler.maxUploadSize=2000000

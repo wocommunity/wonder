@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.components.ERDCustomEditComponent;
 
 /**
- * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.<br />
+ * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.
  * 
  * @binding list
  * @binding listComponentName
@@ -25,6 +25,12 @@ import er.directtoweb.components.ERDCustomEditComponent;
  */
 
 public class ERDListPicker extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDListPicker(WOContext context) { super(context); }
     
@@ -59,7 +65,7 @@ public class ERDListPicker extends ERDCustomEditComponent {
     public WOComponent add() {
         NSArray existingList=(NSArray)objectKeyPathValue();
         if (!existingList.containsObject(item)&&item!=null)
-            ((EOEnterpriseObject)object()).addObjectToBothSidesOfRelationshipWithKey(item,key());        
+            object().addObjectToBothSidesOfRelationshipWithKey(item,key());        
         return listComponent();
     }
 }

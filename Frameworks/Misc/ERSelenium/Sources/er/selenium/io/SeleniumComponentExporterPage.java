@@ -23,8 +23,6 @@
 
 package er.selenium.io;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSTimestamp;
 
@@ -32,8 +30,13 @@ import er.extensions.components.ERXStatelessComponent;
 import er.selenium.SeleniumTest;
 
 public class SeleniumComponentExporterPage extends ERXStatelessComponent {
-	private static final Logger log = Logger.getLogger(SeleniumComponentExporterPage.class);
-	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SeleniumTest.Element element;
 	
 	protected SeleniumTest _test;

@@ -4,13 +4,20 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.migration.ERXMigrationDatabase;
+import er.extensions.migration.ERXMigrationDatabase.Migration;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;
-import er.extensions.migration.ERXMigrationDatabase.Migration;
 
 /**
+ * <span class="en">
  * Provides a base class for a migration that adds an attachment to an
  * existing table.
+ * </span>
+ * 
+ * <span class="ja">
+ * マイグレションの為のベース・クラスを提供しています。
+ * 存在テーブルにアタッチメントを追加します。
+ * </span>　
  * 
  * @author mschrag
  */
@@ -20,11 +27,19 @@ public abstract class ERAttachmentMigration extends Migration {
   private boolean _allowsNull;
 
   /**
+   * <span class="en">
    * Construct an ERAttachmentMigration.
    * 
    * @param tableName the name of the table to add an attachment to
    * @param columnName the name of the attachment foreign key column 
    * @param allowsNull whether or not the attachment is allowed to be null
+   * </span>
+   * 
+   * <span class="ja">
+   * @param tableName - アタッチメントを追加するテーブル名
+   * @param columnName - アタッチメント外部キーの名前
+   * @param allowsNull - アタッチメントが null 可能かどうか
+   * </span>
    */
   public ERAttachmentMigration(String tableName, String columnName, boolean allowsNull) {
     _tableName = tableName;

@@ -1,14 +1,21 @@
-<webobject name=HasPropertyName>
-	<webobject name = "FieldLabel">
-			<webobject name="PropertyName" />
-			<webobject name="DisplayMandatory"><abbr title="Required field">*</abbr></webobject>
-	</webobject>
-</webobject><webobject name=DebuggingEnabled><a onmouseout="this.innerHTML=this.innerHTML.replace('visibility: visible;','visibility: hidden;');" onmouseover="this.innerHTML=this.innerHTML.replace('visibility: hidden;','visibility: visible;');">?<span onclick="this.style.visibility='hidden'; return false;" style="position:absolute;visibility: hidden;">
-	<table class="D2WPropertyDebugInfo" onclick="this.style.visibility='hidden'; return false;">
-		<webobject name="ContextDictionaryRepetition">
-			<tr>
-				<th><webobject name="CurrentKey" /></th>
-				<td><webobject name="CurrentValue" /></td>
-			</tr>
-		</webobject>
-	</table></span></a></webobject>
+<webobject name = "HasPropertyName">
+  <webobject name = "FieldLabel">
+    <webobject name = "PropertyName" />
+    <webobject name = "DisplayMandatory">
+      <webobject name = "abbr">*</webobject>
+    </webobject>
+  </webobject>
+</webobject>
+<webobject name = "DebuggingEnabled">
+  <a class = "D2WPropertyDebugInfoToolTip">? 
+    <span>
+      <table class = "D2WPropertyDebugInfo">
+        <webobject name = "ContextDictionaryRepetition">
+          <tr>
+            <th><webobject name = "CurrentKey" /></th>
+            <td><webobject name = "CurrentValue" /></td>
+          </tr>
+        </webobject>
+      </table>
+    </span></a>
+</webobject>

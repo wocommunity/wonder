@@ -12,7 +12,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -22,7 +23,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -43,7 +43,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * The ERXSession aguments the regular WOSession object
+ * The ERXSession arguments the regular WOSession object
  * by adding a few nice additions. Of interest, notifications
  * are now posted when a session when a session
  * goes to sleep, David Neumann's browser backtracking detection
@@ -54,13 +54,15 @@ import er.extensions.localization.ERXLocalizer;
  * support has been added.
  */
 public class ERXSession extends ERXAjaxSession implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-  /** logging support */
-  public static final Logger log = Logger.getLogger(ERXSession.class);
+  private static final Logger log = LoggerFactory.getLogger(ERXSession.class);
 
-  /** Notification name that is posted after a session wakes up. */
-  // DELETEME: Now we can use SessionDidRestoreNotification
-  public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
   /**
    * Notification name that is posted when a session is about to sleep.
    */
@@ -155,16 +157,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
       String currentLanguage = session._localizer.language();
       session._localizer = ERXLocalizer.localizerForLanguage(currentLanguage);
-      if (log.isDebugEnabled()) {
-        log.debug("Detected changes in the localizers. Reset reference to " + currentLanguage + " localizer for session " + session.sessionID());
-      }
+      log.debug("Detected changes in the localizers. Reset reference to {} localizer for session {}", currentLanguage, session.sessionID());
     }
 
     /** 
      * registers this observer object for 
-     * {@link ERXLocalizer.LocalizationDidResetNotification} 
+     * {@link er.extensions.localization.ERXLocalizer#LocalizationDidResetNotification}
      */
-    private void registerForLocalizationDidResetNotification() {
+    protected void registerForLocalizationDidResetNotification() {
       NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), ERXLocalizer.LocalizationDidResetNotification, null);
     }
   }
@@ -173,7 +173,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Method to get the current localizer for this
    * session. If local instance variable is null
    * then a localizer is fetched for the session's
-   * <code>languages</code> array. See {@link ERXLocalizer}
+   * <code>languages</code> array. See {@link er.extensions.localization.ERXLocalizer}
    * for more information about using a localizer.
    * @return the current localizer for this session
    */
@@ -201,7 +201,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Cover method to set the current localizer
    * to the localizer for that language.
    * <p>
-   * Also updates languages list with the new single language. 
+   * Also updates languages list with the new single language.
    * 
    * @param language to set the current localizer for.
    * @see #language
@@ -240,6 +240,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @see #language
    * @see #setLanguage
    */
+  @Override
   public void setLanguages(NSArray languageList) {
     super.setLanguages(languageList);
     ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguages(languageList);
@@ -258,15 +259,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /**
    * Returns the NSArray of language names available for  
    * this application. This is simply a cover method of 
-   * {@link ERXLocalizer#availableLanguages}, 
+   * {@link er.extensions.localization.ERXLocalizer#availableLanguages},
    * but will be convenient for binding to dynamic elements 
    * like language selector popup. 
    * 
    * @return   NSArray of language name strings available 
    *           for this application
    * @see      #availableLanguagesForThisSession 
-   * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
+   * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForTheApplication() {
     return ERXLocalizer.availableLanguages();
@@ -276,19 +276,18 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Returns the NSArray of language names available for 
    * this particular session. 
    * The resulting array is an intersect of web browser's 
-   * language array ({@link ERXRequest#browserLanguages}) 
+   * language array ({@link ERXRequest#browserLanguages()}) 
    * and localizer's available language array 
-   * ({@link ERXLocalizer#availableLanguages}). 
+   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages()}).
    * <p>
    * Note that the order of the resulting language names  
-   * is not defined at this morment.
+   * is not defined at this moment.
    * 
    * @return   NSArray of language name strings available 
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
-   * @see      ERXRequest#browserLanguages
-   * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
+   * @see      ERXRequest#browserLanguages()
+   * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForThisSession() {
     NSArray browserLanguages = null;
@@ -356,10 +355,11 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
   /**
    * Ensures that the returned editingContext was created with
-   * the {@link ERXEC} factory.
+   * the {@link er.extensions.eof.ERXEC} factory.
    * @return the session's default editing context with
    * 		the default delegate set.
    */
+  @Override
   public EOEditingContext defaultEditingContext() {
     if (!_editingContextWasCreated) {
       setDefaultEditingContext(newDefaultEditingContext());
@@ -368,6 +368,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return super.defaultEditingContext();
   }
 
+  @Override
   public void setDefaultEditingContext(EOEditingContext ec) {
     _editingContextWasCreated = true;
     super.setDefaultEditingContext(ec);
@@ -386,8 +387,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       // FIXME: Shouldn't be hardcoded form value.
       String js = request.stringFormValueForKey("javaScript");
       if (js != null) {
-        if (log.isDebugEnabled())
-          log.debug("Received javascript form value " + js);
+        log.debug("Received javascript form value {}", js);
       }
       else {
         try {
@@ -419,16 +419,17 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Overridden to provide a few checks to
    * see if javascript is enabled.
    */
+  @Override
   public void awake() {
     super.awake();
     ERXSession.setSession(this);
     ERXLocalizer.setCurrentLocalizer(localizer());
-    NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
+    NSNotificationCenter.defaultCenter().postNotification(SessionDidRestoreNotification, this);
 
     WORequest request = context() != null ? context().request() : null;
     if (request != null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
       if ((request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
-        log.debug("Form values " + request.formValues());
+        log.debug("Form values {}", request.formValues());
       else
         log.debug("Multipart Form values found");
     }
@@ -441,6 +442,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Overridden to post the notification that
    * the session will sleep.
    */
+  @Override
   public void sleep() {
     NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
     super.sleep();
@@ -452,9 +454,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     removeObjectForKey("ERXActionLogging");
   }
 
-  /** override this method in order to provide a different name for the WorkerThread for this rr loop
-   * very useful for logging stuff: assign a log statement to a log entry. Something useful could be:
-   * <code>return session().sessionID() + valueForKeyPath("user.username");
+  /**
+   * Override this method in order to provide a different name for the WorkerThread for this
+   * request-response loop very useful for logging stuff: assign a log statement to a log entry.
+   * Something useful could be:
+   * 
+   * <blockquote><code>return session().sessionID() + valueForKeyPath("user.username");</code></blockquote>
+   * 
+   * @return name of the current thread
    */
   public String threadName() {
     return Thread.currentThread().getName();
@@ -536,6 +543,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @param aRequest current request
    * @param aContext current context
    */
+  @Override
   public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
     messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
     super.takeValuesFromRequest(aRequest, aContext);
@@ -547,6 +555,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @param aResponse current response object
    * @param aContext current context object
    */
+  @Override
   public void appendToResponse(WOResponse aResponse, WOContext aContext) {
     messageEncoding().setEncodingToResponse(aResponse);
     super.appendToResponse(aResponse, aContext);
@@ -554,6 +563,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   /**
    * Bringing application into KVC.
+   * 
+   * @return the application object
    */
   public ERXApplication application() {
 	  return ERXApplication.erxApplication();
@@ -562,6 +573,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /**
    * Overrides terminate to free up resources and unregister for notifications.
    */
+  @Override
   public void terminate() {
     if (_observer != null) {
       NSNotificationCenter.defaultCenter().removeObserver(_observer);
@@ -571,9 +583,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       ERXBrowserFactory.factory().releaseBrowser(_browser);
       _browser = null;
     }
-    if (log.isDebugEnabled()) {
-      log.debug("Will terminate, sessionId is " + sessionID());
-    }
+    log.debug("Will terminate, sessionId is {}", sessionID());
     super.terminate();
   }
 
@@ -653,14 +663,15 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     stream.defaultReadObject();
     if (_serializableLanguageName != null)
       setLanguage(_serializableLanguageName);
-    if (log.isDebugEnabled())
-      log.debug("Session has been deserialized: " + toString());
+    log.debug("Session has been deserialized: {}", this);
   }
 
+  @Override
   public NSTimestamp _birthDate() {
 	  return super._birthDate();
   }
   
+  @Override
   public String toString() {
     String superString = super.toString();
     String thisString = " localizer=" + (_localizer == null ? "null" : _localizer.toString()) + " messageEncoding=" + (_messageEncoding == null ? "null" : _messageEncoding.toString()) + " browser=" + (_browser == null ? "null" : _browser.toString());
@@ -676,8 +687,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return toStr;
   }
   
-  // @Override
-  // override removed for 5.4 
+  @Override
   public EOEditingContext newDefaultEditingContext() {
     return ERXEC.newEditingContext();
   }
@@ -706,7 +716,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * will be sent over HTTP.  So if someone manages to do an HTTP injection that causes an HTTP 
    * request to be made, they can compromise your session id. For example, if you have a CMS on 
    * https://www.mycms.com and you set a session id, and I hack in and trick your site and manage to 
-   * do an injection where i do an <img src="http://www.mycms.com/whatever"/> in the content, like I post 
+   * do an injection where i do an &lt;img src="http://www.mycms.com/whatever"/&gt; in the content, like I post 
    * in a comment and you don't strip out HTML tags.  secure-only just gives you peace-of-mind.  If you 
    * intended the cookies to only be behind HTTPS, secure-only makes it actually true and enforced.
    * 
@@ -719,25 +729,23 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   public boolean useSecureSessionCookies() {
 	  return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useSecureSessionCookies", false);
   }
+  
+  /**
+   * Override and return true, or set er.extensions.ERXSession.useHttpOnlySessionCookies if you want http-only session
+   * and instance cookies. This prevents the XSS attack. Note that after setting this true, you will not allowed to
+   * read this cookies from yours javascript code.
+   * 
+   * @return whether or not http-only cookies are enabled
+   */
+  public static boolean useHttpOnlySessionCookies() {
+      return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useHttpOnlySessionCookies", false);
+  }
 
   protected void _convertSessionCookiesToSecure(WOResponse response) {
-	    if(storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
-			for (WOCookie cookie : (NSArray<WOCookie>)response.cookies()) {
-				String sessionIdKey;
-				String instanceIdKey;
-				if (ERXApplication.isWO54()) {
-					try {
-						sessionIdKey = (String)WOApplication.class.getMethod("sessionIdKey").invoke(WOApplication.application());
-						instanceIdKey = (String)WOApplication.class.getMethod("instanceIdKey").invoke(WOApplication.application());
-					}
-					catch (Throwable e) {
-						throw new NSForwardException(e);
-					}
-				}
-				else {
-					sessionIdKey = WORequest.SessionIDKey;
-					instanceIdKey = WORequest.InstanceKey;
-				}
+	    if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+			for (WOCookie cookie : response.cookies()) {
+				String sessionIdKey = application().sessionIdKey();
+				String instanceIdKey = application().instanceIdKey();
 				String cookieName = cookie.name();
 				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
 					 cookie.setIsSecure(true);
@@ -746,12 +754,28 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 		}
   }
   
+  protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
+      if (storesIDsInCookies()) {
+          for (WOCookie cookie : response.cookies()) {
+              String sessionIdKey = application().sessionIdKey();
+              String instanceIdKey = application().instanceIdKey();
+              String cookieName = cookie.name();
+              if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
+                  cookie.setIsHttpOnly(true);
+              }
+          }
+      }
+  }
+  
   @Override
 	public void _appendCookieToResponse(WOResponse response) {
 		super._appendCookieToResponse(response);
 		if (useSecureSessionCookies()) {
 			_convertSessionCookiesToSecure(response);
 		}
+        if (useHttpOnlySessionCookies()) {
+            _convertSessionCookiesToHttpOnly(response);
+        }		
 	}
   
   @Override
@@ -760,6 +784,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 		if (useSecureSessionCookies()) {
 			_convertSessionCookiesToSecure(response);
 		}
+        if (useHttpOnlySessionCookies()) {
+            _convertSessionCookiesToHttpOnly(response);
+        }		
 	}
   	  	
   	public TimeZone timeZone() {
@@ -785,4 +812,37 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   		}
   		return autoAdjustTimeZone;
   	}
+  	
+  //********************************************************************
+  //  Current D2W Look for this Session 
+  //  Because it is possible to have different Looks depends on the User
+  //********************************************************************
+
+  /**
+   * set the current Look for this Session
+   * 
+   * <pre>
+   * 90 : *true* =&gt; look = "session.currentD2WLook" 
+   *    [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment]
+   * </pre>
+   * 
+   * @param currentD2WLook - Look Name
+   */
+  public void setCurrentD2WLook(String currentD2WLook) {
+    this.currentD2WLook = currentD2WLook;
+  }
+
+  /**
+   * Get the current Look for this Session.
+   * 
+   * @return Look Name
+   */
+  public String currentD2WLook() {
+    if(ERXStringUtilities.stringIsNullOrEmpty(currentD2WLook)) {
+      currentD2WLook = "ERModernLook";
+    }
+    return currentD2WLook;
+  }
+  private String currentD2WLook = null;
+  	
 }

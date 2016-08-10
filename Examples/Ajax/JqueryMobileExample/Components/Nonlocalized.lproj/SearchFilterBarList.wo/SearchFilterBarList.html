@@ -1,0 +1,10 @@
+<wo:JQPageWrapper title = "Search Filter Bar List">
+  <wo:ERQMListView data-filter = "true" data-filter-label = "Name" data-filter-placeholder = "Type a name">
+    <wo:foreach list = "$talents" item = "$oneTalent">
+      <wo:ERQMListViewElement action = "$doShowOneTalentAction">
+        <wo:str value = "$oneTalent.firstName" />
+        <wo:str value = "$oneTalent.lastName" />
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

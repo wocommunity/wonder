@@ -15,7 +15,8 @@ SUCH DAMAGE.
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -26,12 +27,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.monitor._private.MInstance;
-import com.webobjects.monitor._private.MSiteConfig;
 
 public class LifebeatRequestHandler extends WORequestHandler {
-    
-    private static final Logger log = Logger.getLogger(LifebeatRequestHandler.class);
-    
+    private static final Logger log = LoggerFactory.getLogger(LifebeatRequestHandler.class);
     
     InetAddress myInetAddress;
     String myName;
@@ -58,9 +56,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
         DieResponse.setHTTPVersion("HTTP/1.0");
     }
 
+    @Override
     public WOResponse handleRequest(WORequest aRequest) {
-        WOResponse aResponse  = null;
-
         // Sadly, we do regenerate in the case of random lifebeats. Hopefully this won't be too often.
         // Didn't pull this out so that we can rely on isUsingWebServer to catch some bad requests
         if ( (!aRequest.isUsingWebServer()) && (WOHostUtilities.isLocalInetAddress(aRequest._originatingAddress(), true)) ) {
@@ -69,9 +66,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 synchronized(lock) {
                     return _handleRequest(aRequest);
                 }
-            } else {
-                return _handleRequest(aRequest);
             }
+            return _handleRequest(aRequest);
         }
         return null;
     }
@@ -85,7 +81,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         NSArray values = NSArray.componentsSeparatedByString(aRequest.queryString(), "&");
         if ( (values == null) || (values.count() != 4) ) {
             theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-            log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
+            log.error("{}: Received bad lifebeat: {}", myName, aRequest.queryString());
         } else {
             String notificationType = (String)values.objectAtIndex(0);
             String instanceName = (String)values.objectAtIndex(1);
@@ -118,7 +114,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 aResponse = null;
             } else {
                 theApplication.siteConfig().globalErrorDictionary.takeValueForKey((myName + ": Received bad lifebeat: " + aRequest.queryString()), aRequest.queryString());
-                log.error(myName + ": Received bad lifebeat: " + aRequest.queryString());
+                log.error("{}: Received bad lifebeat: {}", myName, aRequest.queryString());
             }
         }
         if ("HTTP/1.0".equals(aRequest.httpVersion())) {
@@ -132,7 +128,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         try {
            return InetAddress.getByName(name);
         } catch (UnknownHostException uhe) {
-            log.error("Unknown host: " + name);
+            log.error("Unknown host: {}", name);
         }
         return null;
     }
@@ -169,9 +165,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 instance.updateRegistration(new NSTimestamp());
                 // This call will reset shouldDie status!;
                 return !instance.shouldDieAndReset();
-            } else {
-                ((Application) WOApplication.application()).localMonitor().registerUnknownInstance(instanceName, host, port);
             }
+            ((Application) WOApplication.application()).localMonitor().registerUnknownInstance(instanceName, host, port);
         } finally {
             theApplication._lock.endReading();
         }
@@ -196,7 +191,9 @@ public class LifebeatRequestHandler extends WORequestHandler {
     }
 
     private void registerCrash(String instanceName, String host, String port) {
-        // app will stop in a bad way - notify if necessary
+    	NSLog.err.appendln("App '" + instanceName + "' on " + host + ":" + port + " received 'willCrash' notification.");
+    	
+    	// app will stop in a bad way - notify if necessary
         InetAddress hostAddress = addressForName(host);
 
         theApplication._lock.startReading();

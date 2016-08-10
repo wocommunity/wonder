@@ -1,6 +1,6 @@
 package com.webobjects.jdbcadaptor;
 
-import java.util.Iterator;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
@@ -32,6 +32,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         super(adaptor);
     }
     
+	@Override
 	public String _columnCreationClauseForAttribute(EOAttribute attribute) {
 		return addCreateClauseForAttribute(attribute).toString();
 	}
@@ -49,6 +50,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return _enableIdentifierQuoting.booleanValue();
     }
 
+    @Override
     protected String formatTableName(String name) {
         if (!enableIdentifierQuoting()) {
             return name;
@@ -58,28 +60,26 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return "\"" + components.componentsJoinedByString("\".\"") + "\"";
     }
 
+    @Override
     protected String formatColumnName(String name) {
         if (!enableIdentifierQuoting()) {
             return name;
         }
         return "\"" + name + "\"";
     }
-    
-    public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
-        if (group == null)
+
+    @Override
+    public NSArray<EOSQLExpression> _foreignKeyConstraintStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+        if (entityGroup == null)
             return NSArray.EmptyArray;
-        NSMutableArray result = new NSMutableArray();
-        NSMutableSet generatedStatements = new NSMutableSet();
-        int i = 0;
-        for (int groupCount = group.count(); i < groupCount; i++) {
-            EOEntity currentEntity = (EOEntity) group.objectAtIndex(i);
+        NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
+        NSMutableSet<String> generatedStatements = new NSMutableSet<String>();
+        for (EOEntity currentEntity : entityGroup) {
             if (currentEntity.externalName() != null) {
-                NSArray relationships = currentEntity.relationships();
-                int relCount = relationships.count();
-                for (int j = 0; j < relCount; j++) {
-                    EORelationship currentRelationship = ((EORelationship) relationships.objectAtIndex(j));
+                NSArray<EORelationship> relationships = currentEntity.relationships();
+                for (EORelationship currentRelationship : relationships) {
                     if (_shouldGenerateForeignKeyConstraints(currentRelationship)) {
-                        NSArray statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
+                        NSArray<EOSQLExpression> statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
                         if (!generatedStatements.containsObject(statements.valueForKey("statement"))) {
                             result.addObjectsFromArray(statements);
                             generatedStatements.addObject(statements.valueForKey("statement"));
@@ -121,12 +121,14 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
-    public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
-        NSMutableSet sequenceNames = new NSMutableSet();
-        NSMutableArray results = new NSMutableArray();
-        int count = entityGroup.count();
-        for (int i = 0; i < count; i++) {
-            EOEntity entity = (EOEntity) entityGroup.objectAtIndex(i);
+    @Override
+    public NSArray<EOSQLExpression> dropPrimaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+        if (entityGroup == null) {
+            return NSArray.EmptyArray;
+        }
+        NSMutableSet<String> sequenceNames = new NSMutableSet<String>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        for (EOEntity entity : entityGroup) {
             String sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
             if (!sequenceNames.containsObject(sequenceName)) {
                 sequenceNames.addObject(sequenceName);
@@ -144,16 +146,18 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
-    public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
-        NSMutableArray results = new NSMutableArray();
-        int count = entityGroup.count();
-        for (int i = 0; i < count; i++) {
-            EOEntity entity = (EOEntity) entityGroup.objectAtIndex(i);
+    @Override
+    public NSArray<EOSQLExpression> dropTableStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+        if (entityGroup == null) {
+            return NSArray.EmptyArray;
+        }
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        for (EOEntity entity : entityGroup) {
             // timc 2006-11-06 create result here so we can check for
             // enableIdentifierQuoting while building the statement
-            PostgresqlExpression result = new PostgresqlExpression(entity);
-            String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
-            if(entityUsesSeparateTable(entity)) {
+            if (entityUsesSeparateTable(entity)) {
+                PostgresqlExpression result = new PostgresqlExpression(entity);
+                String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
                 result.setStatement("DROP TABLE " + tableName + " CASCADE");
                 results.addObject(result);
             }
@@ -169,32 +173,24 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      *            the relationship, as represented by EOF
      * @return the array of SQL statements
      */
-    public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
-        NSArray superResults;
-        NSMutableArray results;
-        int count;
-        int i;
-        EOSQLExpression expression;
-
-        results = new NSMutableArray();
-        superResults = super.foreignKeyConstraintStatementsForRelationship(relationship);
-
-        count = superResults.count();
-        for (i = 0; i < count; i++) {
-            expression = (EOSQLExpression) superResults.objectAtIndex(i);
+    @Override
+    public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSArray<EOSQLExpression> superResults = super.foreignKeyConstraintStatementsForRelationship(relationship);
+        for (EOSQLExpression expression : superResults) {
             String s = expression.statement();
-            s = replaceStringByStringInString(") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED", s);
+            s = StringUtils.replace(s, ") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED");
             expression.setStatement(s);
             results.addObject(expression);
             // timc 2006-11-06 check for enableIdentifierQuoting
             String tableNameWithoutSchemaName = externalNameForEntityWithoutSchema(relationship.entity());
             String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
-            s = replaceStringByStringInString("ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName, s);
+            s = StringUtils.replace(s, "ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName);
             expression.setStatement(s);
-            NSArray columnNames = ((NSArray) relationship.sourceAttributes().valueForKey("columnName"));
-            StringBuffer sbColumnNames = new StringBuffer();
+            NSArray<String> columnNames = ((NSArray<String>) relationship.sourceAttributes().valueForKey("columnName"));
+            StringBuilder sbColumnNames = new StringBuilder();
             for (int j = 0; j < columnNames.count(); j++) {
-                sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String) columnNames.objectAtIndex(j)));
+                sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName(columnNames.objectAtIndex(j)));
             }
             String indexName = externalNameForEntityWithoutSchema(relationship.entity()) + "_" + columnNames.componentsJoinedByString("_") + "_idx";
             results.addObject(createExpression(expression.entity(), "CREATE INDEX " + indexName + " ON " + tableName + "( " + sbColumnNames.toString() + " )"));
@@ -221,20 +217,10 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
-    public NSArray primaryKeyConstraintStatementsForEntityGroup(NSArray entityGroup) {
-        EOEntity entity;
-        int count;
-        int i;
-        NSMutableArray results;
-        NSArray priKeyAttributes;
-        EOAttribute priKeyAttribute;
-        int priKeyAttributeCount;
-        int j;
-
-        results = new NSMutableArray();
-        count = entityGroup.count();
-        for (i = 0; i < count; i++) {
-            entity = (EOEntity) entityGroup.objectAtIndex(i);
+    @Override
+    public NSArray<EOSQLExpression> primaryKeyConstraintStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        for (EOEntity entity : entityGroup) {
             if (!entityUsesSeparateTable(entity))
                 continue;
             // timc 2006-11-06 create result here so we can check for
@@ -243,21 +229,21 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             String constraintName = result.sqlStringForSchemaObjectName(externalNameForEntityWithoutSchema(entity) + "_pk");
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-            StringBuffer statement = new StringBuffer("ALTER TABLE ");
+            StringBuilder statement = new StringBuilder("ALTER TABLE ");
             statement.append(tableName);
             statement.append(" ADD CONSTRAINT ");
             statement.append(constraintName);
             statement.append(" PRIMARY KEY (");
-            priKeyAttributes = entity.primaryKeyAttributes();
-            priKeyAttributeCount = priKeyAttributes.count();
-            for (j = 0; j < priKeyAttributeCount; j++) {
-                priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(j);
+            NSArray<EOAttribute> priKeyAttributes = entity.primaryKeyAttributes();
+            int priKeyAttributeCount = priKeyAttributes.count();
+            for (int j = 0; j < priKeyAttributeCount; j++) {
+                EOAttribute priKeyAttribute = priKeyAttributes.objectAtIndex(j);
                 String attributeName = result.sqlStringForAttribute(priKeyAttribute);
                 statement.append(attributeName);
                 if (j < priKeyAttributeCount - 1) {
                     statement.append(", ");
                 } else {
-                    statement.append(")");
+                    statement.append(')');
                 }
             }
             result.setStatement(statement.toString());
@@ -275,7 +261,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     protected boolean isInEntityModeler(EOModel model) {
       boolean inEntityModeler = false;
       if (model != null) {
-        NSDictionary userInfo = model.userInfo();
+        NSDictionary<String, Object> userInfo = model.userInfo();
         NSDictionary entityModelerDict = (NSDictionary) userInfo.objectForKey("_EntityModeler");
         if (entityModelerDict != null) {
           Boolean inEntityModelerBoolean = (Boolean)entityModelerDict.objectForKey("inEntityModeler");
@@ -295,31 +281,21 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
-    public NSArray primaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
-        EOEntity entity;
-        int count;
-        int i;
-        NSMutableArray results;
-        NSArray priKeyAttributes;
-        EOAttribute priKeyAttribute;
-        String sequenceName;
-
-        NSMutableSet sequenceNames = new NSMutableSet();
-        results = new NSMutableArray();
-        count = entityGroup.count();
-        for (i = 0; i < count; i++) {
-            entity = (EOEntity) entityGroup.objectAtIndex(i);
-            priKeyAttributes = entity.primaryKeyAttributes();
+    @Override
+    public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+        NSMutableSet<String> sequenceNames = new NSMutableSet<String>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        for (EOEntity entity : entityGroup) {
+            NSArray<EOAttribute> priKeyAttributes = entity.primaryKeyAttributes();
             if (priKeyAttributes.count() == 1) {
-                priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(0);
+                EOAttribute priKeyAttribute = priKeyAttributes.objectAtIndex(0);
                 
                 // Q: Don't create a sequence for non number primary keys
                 if (priKeyAttribute.adaptorValueType() != EOAttribute.AdaptorNumberType) {
                 	continue;
                 }
-                String sql;
 
-                sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
+                String sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
                 if (!sequenceNames.containsObject(sequenceName)) {
                     sequenceNames.addObject(sequenceName);
                     // timc 2006-11-06 create result here so we can check for
@@ -328,7 +304,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                     String attributeName = result.sqlStringForAttribute(priKeyAttribute);
                     String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-                    sql = "CREATE SEQUENCE " + sequenceName;
+                    String sql = "CREATE SEQUENCE " + sequenceName;
                     results.addObject(createExpression(entity, sql));
 
                     sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + attributeName + ") FROM " + tableName + "))";
@@ -364,16 +340,14 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     /**
      * Quote table name if necessary
      */
-    public NSArray createTableStatementsForEntityGroup(NSArray entityGroup) {
-		NSMutableSet columnNames = new NSMutableSet();
+    @Override
+    public NSArray<EOSQLExpression> createTableStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+		NSMutableSet<String> columnNames = new NSMutableSet<String>();
 		StringBuffer aStatement = new StringBuffer(128);
 		if (entityGroup != null && entityGroup.count() > 0) {
-			EOSQLExpression sqlExpr = _expressionForEntity((EOEntity) entityGroup.objectAtIndex(0));
-			for (Iterator entityIterator = entityGroup.iterator(); entityIterator.hasNext();) {
-				EOEntity entity = (EOEntity) entityIterator.next();
-				Iterator attributeIterator = entity.attributes().iterator();
-				while (attributeIterator.hasNext()) {
-					EOAttribute attribute = (EOAttribute) attributeIterator.next();
+			EOSQLExpression sqlExpr = _expressionForEntity(entityGroup.objectAtIndex(0));
+			for (EOEntity entity : entityGroup) {
+				for (EOAttribute attribute : entity.attributes()) {
 					String columnName = attribute.columnName();
 					if (!attribute.isDerived() && !attribute.isFlattened() && columnName != null && columnName.length() > 0 && !columnNames.contains(columnName)) {
 						sqlExpr.appendItemToListString(_columnCreationClauseForAttribute(attribute), aStatement);
@@ -381,9 +355,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 					}
 				}
 			}
-			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(this.formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
 		}
-		return new NSArray();
+		return NSArray.EmptyArray;
 	}
     
     /**
@@ -396,12 +370,13 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 	 * @param buffer
 	 *            string to have the replacement done on it
 	 * @return string after having all of the replacement done.
+	 * @deprecated use {@link StringUtils#replace(String, String, String)} instead
 	 */
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while (begin < length) {
@@ -435,19 +410,20 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       }
       return attribute.externalType();
     }
-    
-    public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
-      NSArray statements;
+
+    @Override
+    public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
+      NSArray<EOSQLExpression> statements;
       if (allowsNull) {
-        statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " drop not null"));
+        statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " drop not null"));
       } else {
-        statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " set not null"));
+        statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " set not null"));
       }
       return statements;
     }
 
     @Override
-    public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
+    public NSArray<EOSQLExpression> statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
       EOAttribute attr = new EOAttribute();
       attr.setName(columnName);
       attr.setColumnName(columnName);
@@ -464,28 +440,29 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
           usingClause = " USING " + usingExpression;
         }
       }
-      NSArray statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
+      NSArray<EOSQLExpression> statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
       return statements;
     }
-    
-    public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
-      return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
+
+    @Override
+    public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+      return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
     }
 
     @Override
-    public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
+    public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
       String clause = _columnCreationClauseForAttribute(attribute);
-      return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
+      return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
     }
 
     @Override
-    public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
+    public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+    	return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
     }
     
     @Override
-    public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
-    	return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
+    public NSArray<EOSQLExpression> statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
+    	return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
     }
 
 /*
@@ -500,93 +477,99 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     }
 */
 
+    @Override
     public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options)
-    {
-/* 741*/        StringBuffer result = new StringBuffer();
-/* 744*/        if(options == null)
-/* 745*/            options = NSDictionary.EmptyDictionary;
-/* 747*/        NSArray statements = schemaCreationStatementsForEntities(allEntities, options);
-/* 748*/        int i = 0;
-/* 748*/        for(int count = statements.count(); i < count; i++)
-/* 749*/            appendExpressionToScript((EOSQLExpression)statements.objectAtIndex(i), result);
+ {
+        StringBuffer result = new StringBuffer();
+        if (options == null)
+            options = NSDictionary.EmptyDictionary;
+        NSArray statements = schemaCreationStatementsForEntities(allEntities, options);
+        int i = 0;
+        for (int count = statements.count(); i < count; i++)
+            appendExpressionToScript((EOSQLExpression) statements.objectAtIndex(i),
+                    result);
 
-/* 751*/        return new String(result);
+        return result.toString();
     }
 
+    @Override
     public NSArray schemaCreationStatementsForEntities(NSArray allEntities, NSDictionary options)
-    {
-/* 879*/        NSMutableArray result = new NSMutableArray();
-/* 880*/        if(allEntities == null || allEntities.count() == 0)
-/* 881*/            return result;
-/* 883*/        if(options == null)
-/* 884*/            options = NSDictionary.EmptyDictionary;
-/* 889*/        NSDictionary connectionDictionary = ((EOEntity)allEntities.lastObject()).model().connectionDictionary();
-/* 892*/        boolean createDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options, "createDatabase", false);
-/* 893*/        boolean dropDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options, "dropDatabase", false);
-/* 895*/        if(createDatabase || dropDatabase)
-        {
-/* 896*/            boolean adminCommentsNeeded = false;
-/* 897*/            NSArray dropDatabaseStatements = null;
-/* 898*/            NSArray createDatabaseStatements = null;
-/* 900*/            if(dropDatabase)
-            {
-/* 901*/                dropDatabaseStatements = dropDatabaseStatementsForConnectionDictionary(connectionDictionary, null);
-/* 903*/                if(dropDatabaseStatements == null)
-/* 904*/                    dropDatabaseStatements = new NSArray(_expressionForString("/* The 'Drop Database' option is unavailable. */"));
-/* 907*/                else
-/* 907*/                    adminCommentsNeeded = true;
+ {
+        NSMutableArray result = new NSMutableArray();
+        if (allEntities == null || allEntities.count() == 0)
+            return result;
+        if (options == null)
+            options = NSDictionary.EmptyDictionary;
+        NSDictionary connectionDictionary = ((EOEntity) allEntities.lastObject()).model()
+                .connectionDictionary();
+        boolean createDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "createDatabase", false);
+        boolean dropDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "dropDatabase", false);
+        if (createDatabase || dropDatabase) {
+            boolean adminCommentsNeeded = false;
+            NSArray dropDatabaseStatements = null;
+            NSArray createDatabaseStatements = null;
+            if (dropDatabase) {
+                dropDatabaseStatements = dropDatabaseStatementsForConnectionDictionary(
+                        connectionDictionary, null);
+                if (dropDatabaseStatements == null)
+                    dropDatabaseStatements = new NSArray(
+                            _expressionForString("/* The 'Drop Database' option is unavailable. */"));
+                else
+                    adminCommentsNeeded = true;
             }
-/* 911*/            if(createDatabase)
-            {
-/* 912*/                createDatabaseStatements = createDatabaseStatementsForConnectionDictionary(connectionDictionary, null);
-/* 914*/                if(createDatabaseStatements == null)
-/* 915*/                    createDatabaseStatements = new NSArray(_expressionForString("/* The 'Create Database' option is unavailable. */"));
-/* 918*/                else
-/* 918*/                    adminCommentsNeeded = true;
+            if (createDatabase) {
+                createDatabaseStatements = createDatabaseStatementsForConnectionDictionary(
+                        connectionDictionary, null);
+                if (createDatabaseStatements == null)
+                    createDatabaseStatements = new NSArray(
+                            _expressionForString("/* The 'Create Database' option is unavailable. */"));
+                else
+                    adminCommentsNeeded = true;
             }
-/* 922*/            if(adminCommentsNeeded)
-/* 923*/                result.addObject(_expressionForString("/* connect as an administrator */"));
-/* 926*/            if(dropDatabaseStatements != null)
-/* 927*/                result.addObjectsFromArray(dropDatabaseStatements);
-/* 930*/            if(createDatabaseStatements != null)
-/* 931*/                result.addObjectsFromArray(createDatabaseStatements);
-/* 934*/            if(adminCommentsNeeded)
-/* 935*/                result.addObject(_expressionForString("/* connect as the user from the connection dictionary */"));
+            if (adminCommentsNeeded)
+                result.addObject(_expressionForString("/* connect as an administrator */"));
+            if (dropDatabaseStatements != null)
+                result.addObjectsFromArray(dropDatabaseStatements);
+            if (createDatabaseStatements != null)
+                result.addObjectsFromArray(createDatabaseStatements);
+            if (adminCommentsNeeded)
+                result.addObject(_expressionForString("/* connect as the user from the connection dictionary */"));
         }
-/* 939*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "dropPrimaryKeySupport", true))
-        {
-/* 940*/            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
-/* 941*/            result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(entityGroups));
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "dropPrimaryKeySupport", true)) {
+            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
+            result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(entityGroups));
         }
-/* 944*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "dropTables", true))
-        {
-/* 945*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
-/* 946*/            result.addObjectsFromArray(dropTableStatementsForEntityGroups(entityGroups));
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options, "dropTables", true)) {
+            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+            result.addObjectsFromArray(dropTableStatementsForEntityGroups(entityGroups));
         }
-/* 949*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "createTables", true))
-        {
-/* 950*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
-/* 951*/            result.addObjectsFromArray(createTableStatementsForEntityGroups(entityGroups));
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options, "createTables", true)) {
+            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+            result.addObjectsFromArray(createTableStatementsForEntityGroups(entityGroups));
         }
-/* 954*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "createPrimaryKeySupport", true))
-        {
-/* 955*/            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
-/* 956*/            result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(entityGroups));
-                }
-/* 959*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "primaryKeyConstraints", true))
-                {
-/* 960*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
-/* 961*/            result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(entityGroups));
-                }
-/* 964*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "foreignKeyConstraints", false))
-                {
-/* 965*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
-/* 966*/            int i = 0;
-/* 966*/            for(int iCount = entityGroups.count(); i < iCount; i++)
-/* 967*/                result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray)entityGroups.objectAtIndex(i)));
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "createPrimaryKeySupport", true)) {
+            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
+            result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(entityGroups));
+        }
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "primaryKeyConstraints", true)) {
+            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+            result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(entityGroups));
+        }
+        if (_NSDictionaryUtilities.boolValueForKeyDefault(options,
+                "foreignKeyConstraints", false)) {
+            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+            int i = 0;
+            for (int iCount = entityGroups.count(); i < iCount; i++)
+                result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray) entityGroups
+                        .objectAtIndex(i)));
 
-                }
-/* 970*/        return result;
-            }
+        }
+        return result;
+    }
 
 }

@@ -1,9 +1,9 @@
 /*
-© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+¬© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (“Apple”) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple’s copyrights in this original Apple software (the “Apple Software”), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
-public class MObject extends Object implements NSKeyValueCoding {
+public class MObject implements NSKeyValueCoding {
 
     /********** Useful Statics **********/
     public static NSArray loadSchedulerArray = new NSArray <Object>(new Object[]{"Default" , "Round Robin" , "Random" , "Load Average", "Custom"});
@@ -27,7 +27,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     
     public static NSArray hostTypeArray = new NSArray <Object>(new Object[]{"MacOSX" , "Windows" , "Unix"});
     
-    public static NSArray urlVersionArray = new NSArray <Object>(new Object[]{new Integer(4), new Integer(3)});
+    public static NSArray urlVersionArray = new NSArray <Object>(new Object[]{Integer.valueOf(4), Integer.valueOf(3)});
     
     protected static String[] weekNames = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     public static NSArray weekArray = new NSArray <String>(weekNames);
@@ -38,8 +38,8 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static NSArray timeOfDayArray = new NSArray <String>(timesOfDay);
 
     protected static Integer[] schedulingIntervals =
-        new Integer[]{new Integer(1), new Integer(2), new Integer(3), new Integer(4),
-                      new Integer(6), new Integer(8), new Integer(12) };
+        new Integer[]{Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4),
+                      Integer.valueOf(6), Integer.valueOf(8), Integer.valueOf(12) };
     public static NSArray schedulingIntervalArray = new NSArray<Integer>(schedulingIntervals);
     
     public static NSArray schedulingTypeArray = new NSArray<Object>(new Object[]{"HOURLY", "DAILY", "WEEKLY"});
@@ -65,8 +65,8 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static int DEAD = 4;
     public static int CRASHING = 5;
 
-    public static String _emptyString = new String("");
-    public static Integer _zeroInteger = new Integer(0);
+    public static String _emptyString = "";
+    public static Integer _zeroInteger = Integer.valueOf(0);
 
     public static String directActionString = "/cgi-bin/WebObjects/wotaskd.woa/wa/monitorRequest";
     public static String adminActionStringPrefix = "/cgi-bin/WebObjects/";
@@ -95,16 +95,15 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer validatedInteger(Integer value) {
         if (value == null) {
             return value;
-        } else {
-            return new Integer(Math.abs(value.intValue()));
         }
+        return Integer.valueOf(Math.abs(value.intValue()));
     }
 
     public static Integer validatedUrlVersion(Integer version) {
         if (version != null) {
             int intVal = version.intValue();
             if (intVal != 3 && intVal != 4) {
-                return new Integer(4);
+                return Integer.valueOf(4);
             }
         }
         return version;
@@ -135,10 +134,9 @@ public class MObject extends Object implements NSKeyValueCoding {
         } catch (Exception e) {}
 
         if (intVal < 1) {
-            return new Integer(30);
-        } else {
-            return value;
+            return Integer.valueOf(30);
         }
+        return value;
     }
 
     public static String validatedSchedulingType(String value) {
@@ -155,7 +153,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer validatedSchedulingStartTime(Integer value) {
         if (value != null) {
             int intVal = value.intValue();
-            if ( (intVal >= 1) && (intVal <= 24) ) {
+            if ( (intVal >= 0) && (intVal <= 23) ) {
                 return value;
             }
         }
@@ -166,7 +164,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer morphedSchedulingStartTime(String value) {
         int i = MObject.timeOfDayArray.indexOfObject(value);
         if (i != NSArray.NotFound) {
-            return new Integer(i);
+            return Integer.valueOf(i);
         }
         return null;
     }
@@ -196,7 +194,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer morphedSchedulingStartDay(String value) {
         int i = MObject.weekArray.indexOfObject(value);
         if (i != NSArray.NotFound) {
-            return new Integer(i);
+            return Integer.valueOf(i);
         }
         return null;
     }

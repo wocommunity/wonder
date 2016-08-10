@@ -3,6 +3,7 @@ package er.modern.directtoweb.components.query;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WUtils;
 
+import er.coolcomponents.CCDatePicker;
 import er.directtoweb.components.ERDCustomQueryComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXValueUtilities;

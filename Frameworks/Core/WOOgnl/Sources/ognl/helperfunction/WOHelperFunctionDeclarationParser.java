@@ -40,6 +40,7 @@ public class WOHelperFunctionDeclarationParser {
 		return declarations;
 	}
 
+	@Override
 	public String toString() {
 		return "<WOHelperFunctionDeclarationParser quotedStrings = " + _quotedStrings.toString() + ">";
 	}
@@ -52,8 +53,8 @@ public class WOHelperFunctionDeclarationParser {
 	}
 
 	private String _removeOldStyleCommentsFromString(String str) {
-		StringBuffer stringbuffer = new StringBuffer(100);
-		StringBuffer stringbuffer1 = new StringBuffer(100);
+		StringBuilder stringbuffer = new StringBuilder(100);
+		StringBuilder stringbuffer1 = new StringBuilder(100);
 		StringTokenizer tokenizer = new StringTokenizer(str, "/", true);
 		int state = WOHelperFunctionDeclarationParser.STATE_OUTSIDE;
 		try {
@@ -83,7 +84,7 @@ public class WOHelperFunctionDeclarationParser {
 
 				case STATE_INSIDE_COMMENT:
 					stringbuffer1.append(token);
-					String s2 = new String(stringbuffer1);
+					String s2 = stringbuffer1.toString();
 					if (s2.endsWith("*/") && !s2.equals("/*/")) {
 						state = WOHelperFunctionDeclarationParser.STATE_OUTSIDE;
 					}
@@ -95,13 +96,12 @@ public class WOHelperFunctionDeclarationParser {
 		catch (NoSuchElementException e) {
 			log.debug("Parsing failed.", e);
 		}
-		return _NSStringUtilities.stringFromBuffer(stringbuffer);
+		return stringbuffer.toString();
 	}
 
 	private String _removeNewStyleCommentsAndQuotedStringsFromString(String declarationsStr) {
 		String escapedQuoteStr = _NSStringUtilities.replaceAllInstancesOfString(declarationsStr, "\\\"", WOHelperFunctionDeclarationParser.ESCAPED_QUOTE_STRING);
-		StringBuffer declarationWithoutCommentsBuffer = new StringBuffer(100);
-		// StringBuffer stringbuffer1 = new StringBuffer(100);
+		StringBuilder declarationWithoutCommentsBuffer = new StringBuilder(100);
 		StringTokenizer tokenizer = new StringTokenizer(escapedQuoteStr, "/\"", true);
 		try {
 			while (tokenizer.hasMoreTokens()) {
@@ -110,9 +110,6 @@ public class WOHelperFunctionDeclarationParser {
 					token = tokenizer.nextToken("\n");
 					if (token.startsWith("/")) {
 						token = _NSStringUtilities.replaceAllInstancesOfString(token, WOHelperFunctionDeclarationParser.ESCAPED_QUOTE_STRING, "\\\"");
-						// stringbuffer1.append('/');
-						// stringbuffer1.append(token);
-						// stringbuffer1.append('\n');
 						declarationWithoutCommentsBuffer.append('\n');
 						tokenizer.nextToken();
 					}
@@ -145,7 +142,7 @@ public class WOHelperFunctionDeclarationParser {
 		catch (NoSuchElementException e) {
 			log.debug("Parsing failed.", e);
 		}
-		return _NSStringUtilities.stringFromBuffer(declarationWithoutCommentsBuffer);
+		return declarationWithoutCommentsBuffer.toString();
 	}
 
 	private NSMutableDictionary parseDeclarationsWithoutComments(String declarationWithoutComment) throws WOHelperFunctionDeclarationFormatException {
@@ -233,7 +230,7 @@ public class WOHelperFunctionDeclarationParser {
 		WOAssociation association = null;
 		if (associationValue != null && associationValue.startsWith("~")) {
 			int associationValueLength = associationValue.length();
-			StringBuffer ognlValue = new StringBuffer();
+			StringBuilder ognlValue = new StringBuilder();
 			int lastIndex = 0;
 			int index = 0;
 			while ((index = associationValue.indexOf(WOHelperFunctionDeclarationParser.QUOTED_STRING_KEY, lastIndex)) != -1) {
@@ -289,8 +286,14 @@ public class WOHelperFunctionDeclarationParser {
 				association = WOHelperFunctionAssociation.associationWithValue(quotedString);
 			}
 			else if (_NSStringUtilities.isNumber(associationValue)) {
-				Integer integer = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
-				association = WOHelperFunctionAssociation.associationWithValue(integer);
+				Number number = null;
+				if (associationValue != null && associationValue.contains(".")) {
+					number = Double.valueOf(associationValue);
+				}
+				else {
+					number = WOShared.unsignedIntNumber(Integer.parseInt(associationValue));
+				}
+				association = WOHelperFunctionAssociation.associationWithValue(number);
 			}
 			else if ("true".equalsIgnoreCase(associationValue) || "yes".equalsIgnoreCase(associationValue)) {
 				association = WOConstantValueAssociation.TRUE;
@@ -307,7 +310,7 @@ public class WOHelperFunctionDeclarationParser {
 
 	private NSMutableDictionary _rawDeclarationsWithoutComment(String declarationStr) {
 		NSMutableDictionary declarations = new NSMutableDictionary();
-		StringBuffer declarationWithoutCommentBuffer = new StringBuffer(100);
+		StringBuilder declarationWithoutCommentBuffer = new StringBuilder(100);
 		StringTokenizer tokenizer = new StringTokenizer(declarationStr, "{", true);
 		try {
 			while (tokenizer.hasMoreTokens()) {
@@ -320,7 +323,7 @@ public class WOHelperFunctionDeclarationParser {
 					else {
 						tokenizer.nextToken();
 					}
-					String declarationWithoutComment = _NSStringUtilities.stringFromBuffer(declarationWithoutCommentBuffer);
+					String declarationWithoutComment = declarationWithoutCommentBuffer.toString();
 					if (declarationWithoutComment.startsWith(";")) {
 						declarationWithoutComment = declarationWithoutComment.substring(1);
 					}

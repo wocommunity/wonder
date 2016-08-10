@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERAttachment;
+import er.attachment.model.ERCloudFilesAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
 import er.attachment.model.ERPendingAttachment;
@@ -74,6 +75,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       _processors.setObjectForKey(new ERDatabaseAttachmentProcessor(), ERDatabaseAttachment.STORAGE_TYPE);
       _processors.setObjectForKey(new ERS3AttachmentProcessor(), ERS3Attachment.STORAGE_TYPE);
       _processors.setObjectForKey(new ERFileAttachmentProcessor(), ERFileAttachment.STORAGE_TYPE);
+      _processors.setObjectForKey(new ERCloudFilesAttachmentProcessor(), ERCloudFilesAttachment.STORAGE_TYPE);
     }
     return _processors;
   }
@@ -150,7 +152,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     }
 
     String filenameHash = ERXCrypto.shaEncode(recommendedFileName);
-    StringBuffer hashPathBuffer = new StringBuffer();
+    StringBuilder hashPathBuffer = new StringBuilder();
     hashPathBuffer.append(filenameHash.charAt(0));
     hashPathBuffer.append('/');
     hashPathBuffer.append(filenameHash.charAt(1));
@@ -425,6 +427,13 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @author mschrag
    */
   public static class ERXAttachmentExceedsLengthException extends ERXValidationException {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
     private long _maxSize;
     private String _recommendedFileName;
     

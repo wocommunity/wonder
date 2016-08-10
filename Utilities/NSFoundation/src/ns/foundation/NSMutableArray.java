@@ -207,11 +207,6 @@ public class NSMutableArray<E> extends NSArray<E> {
     return e;
   }
 
-  @Deprecated
-  public E replaceObjectAtIndex(int index, E object) {
-    return replaceObjectAtIndex(object, index);
-  }
-
   public void replaceObjectsInRange(NSRange range, NSArray<E> otherArray, NSRange otherRange) {
     if (range == null || otherRange == null)
       throw new IllegalArgumentException("Both ranges cannot be null");

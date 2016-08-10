@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WGroupingListPage;
 
 /**
- * Displays a groups of objects grouped by a key.<br />
+ * Displays a groups of objects grouped by a key.
+ * <p>
  * Actually, this component uses none of the variables and methods defined here,
  * as all the work is done by the ERDGroupingListPageRepetition that should be set
  * in the rules when a "ListGroupSomeEntity" page configuration is called up.
@@ -29,6 +30,12 @@ import er.directtoweb.pages.ERD2WGroupingListPage;
  * @d2wKey pageWrapperName
  */
 public class ERD2WGroupingListPageTemplate extends ERD2WGroupingListPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WGroupingListPageTemplate(WOContext context) { super(context); }
 }

@@ -29,9 +29,9 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 
 	public AjaxToggleLink(String aName, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super("a", AjaxToggleLink.processAssociations(associations), template);
-		_effect = (WOAssociation) _associations.removeObjectForKey("effect");
-		_duration = (WOAssociation) _associations.removeObjectForKey("duration");
-		_toggleID = (WOAssociation) _associations.removeObjectForKey("toggleID");
+		_effect = _associations.removeObjectForKey("effect");
+		_duration = _associations.removeObjectForKey("duration");
+		_toggleID = _associations.removeObjectForKey("toggleID");
 		if (_associations.objectForKey("onclick") != null) {
 			throw new WODynamicElementCreationException("You cannot bind 'onclick' on AjaxToggleLink.");
 		}

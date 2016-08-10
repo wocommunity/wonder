@@ -8,8 +8,6 @@
 /* MacBinarySwissArmyKnife.java created by travis on Wed 20-Sep-2000 */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSRange;
 
@@ -23,15 +21,10 @@ import com.webobjects.foundation.NSRange;
  */
 
 /**
- * Useful for extracting files from binhexed files, ie when a Mac user uploads a file.<br />
- * 
+ * Useful for extracting files from binhexed files, ie when a Mac user uploads a file.
  */
 
 public class ERXMacBinarySwissArmyKnife {
-
-    /////////////////////////////////////////  log4j category  //////////////////////////////////////
-    public final static Logger log = Logger.getLogger(ERXMacBinarySwissArmyKnife.class);
-
     /**
     ** Offsets in header where the fields are located.
      */
@@ -149,8 +142,7 @@ public class ERXMacBinarySwissArmyKnife {
     private static String formatExplained( int format ) {
         if ( format > 0 )
             return ( "MacBinary-" + format );
-        else
-            return ( errorText[ -format ] );
+        return ( errorText[ -format ] );
     }
 
     public boolean isMacBinary(NSData fileData) {
@@ -287,7 +279,7 @@ public class ERXMacBinarySwissArmyKnife {
     public long
         getUIntAt( int offset )
     {
-            long value = 0xFFFFFFFFL & (long) getIntAt( offset );
+            long value = 0xFFFFFFFFL & getIntAt( offset );
             return ( value );
     }
 

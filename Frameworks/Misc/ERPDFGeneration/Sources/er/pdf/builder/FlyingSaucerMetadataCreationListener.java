@@ -91,16 +91,16 @@ public class FlyingSaucerMetadataCreationListener extends DefaultPDFCreationList
 			String name = thisNode.getAttribute("name");
 			String content = thisNode.getAttribute("content");
 			if (name.length() != 0 && content.length() != 0) {
-				this.headMetaTags.setProperty(name, content);
+				headMetaTags.setProperty(name, content);
 			}
 		}
 
 		// No title meta tag given --> take it from title tag
-		if (this.headMetaTags.getProperty("title") == null) {
+		if (headMetaTags.getProperty("title") == null) {
 			Element titleTag =
 					(Element) headTag.getElementsByTagName("title").item(0);
 			if (titleTag != null) {
-				this.headMetaTags.setProperty("title", titleTag.getTextContent());
+				headMetaTags.setProperty("title", titleTag.getTextContent());
 			}
 		}
 
@@ -114,9 +114,9 @@ public class FlyingSaucerMetadataCreationListener extends DefaultPDFCreationList
 				(Enumeration<String>) headMetaTags.propertyNames();
 
 		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
+			String key = e.nextElement();
 			PdfString val =
-					new PdfString(this.headMetaTags.getProperty(key),
+					new PdfString(headMetaTags.getProperty(key),
 							PdfObject.TEXT_UNICODE);
 			iTextRenderer.getWriter().setViewerPreferences(
 					PdfWriter.DisplayDocTitle);

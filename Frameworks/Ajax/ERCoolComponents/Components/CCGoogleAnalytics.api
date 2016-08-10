@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+        <wo class="CCGoogleMap.java" wocomponentcontent="false">
+
+        <binding name="uaid"/>
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    <validation message="'uaid' is a required binding.">
+            <unbound name="uaid"/>
+        </validation>
+    </wo>
+</wodefinitions>

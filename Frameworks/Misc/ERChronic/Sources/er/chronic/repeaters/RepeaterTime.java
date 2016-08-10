@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 import er.chronic.Options;
 import er.chronic.tags.Pointer;
-import er.chronic.tags.Scalar;
 import er.chronic.tags.Pointer.PointerType;
+import er.chronic.tags.Scalar;
 import er.chronic.utils.Span;
 import er.chronic.utils.StringUtils;
 import er.chronic.utils.Tick;

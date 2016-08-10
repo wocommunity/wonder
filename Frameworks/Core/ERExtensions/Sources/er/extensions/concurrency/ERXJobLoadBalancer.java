@@ -11,7 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
@@ -53,7 +54,7 @@ public class ERXJobLoadBalancer {
   
     
     private final static String SHARED_ROOT_LOCATION = "er.extensions.ERXJobLoadBalancer.RootLocation";
-    private static final Logger log = Logger.getLogger(ERXJobLoadBalancer.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXJobLoadBalancer.class);
     /*
      * How old an entry in the shared state has to be before we consider its author dead
      */
@@ -69,6 +70,7 @@ public class ERXJobLoadBalancer {
         public int _index;
         public int _modulo;
         public JobSet(int i, int m) { _index=i; _modulo=m; }  
+        @Override
         public String toString() { return index()+" mod "+modulo(); }
         
         public int index() { return _index; }
@@ -90,6 +92,7 @@ public class ERXJobLoadBalancer {
         String _type;
         String _id;
         public WorkerIdentification(String t, String i) { _type = t; _id=i; } 
+        @Override
         public String toString() { return type()+"-"+id(); }
         public String id() { return _id; }
         public String type() { return _type; }
@@ -127,7 +130,7 @@ public class ERXJobLoadBalancer {
         // to do specify TTL per type?
         Long result=(Long)_ttlsPerType.get(type);
         if (result==null) {
-            result=new Long(ERXProperties.longForKeyWithDefault(DEFAULT_DEAD_TIMEOUT_MILLIS, 60000)); // 1mn by default
+            result = Long.valueOf(ERXProperties.longForKeyWithDefault(DEFAULT_DEAD_TIMEOUT_MILLIS, 60000L)); // 1mn by default
             _ttlsPerType.put(type, result);
         }
         return result.longValue();
@@ -138,7 +141,7 @@ public class ERXJobLoadBalancer {
      * @param ttl (in milliseconds)
      */
     public void setTtlForWorkerType(String type, long ttl) {
-    		_ttlsPerType.put(type, new Long(ttl));
+    		_ttlsPerType.put(type, Long.valueOf(ttl));
     }
 
     protected String pathForWorkerIdentification(WorkerIdentification workerId) {
@@ -156,9 +159,7 @@ public class ERXJobLoadBalancer {
         String pathForEntry = pathForWorkerIdentification(workerId);
         File entryFile = new File(pathForEntry);
         final File tempFile = new File(pathForEntry + "." + System.currentTimeMillis());
-        if (log.isDebugEnabled()) {
-            log.debug("Writing Entry at "+tempFile.getPath()+": "+workerId);
-        }
+        log.debug("Writing Entry at {}: {}", tempFile, workerId);
         ObjectOutputStream out=null;
         try {
             // First make sure we have a directory
@@ -171,17 +172,15 @@ public class ERXJobLoadBalancer {
             out.writeLong(now);
             // 2. write my Id
             out.writeUTF(workerId.id());
-            if (log.isDebugEnabled()) {
-                log.debug("Wrote to "+tempFile.getPath());
-            }
+            log.debug("Wrote to {}", tempFile);
 
             out.close();
             out=null;
             tempFile.renameTo(entryFile);
         } catch (FileNotFoundException e) {
-            log.error("Writing to "+tempFile.getPath()+" caught:"+e);
+            log.error("Writing to {}", tempFile, e);
         } catch (IOException e2) {
-            log.error("Writing to "+tempFile.getPath()+" caught:"+e2);
+            log.error("Writing to {}", tempFile, e2);
         } finally {
             if (out!=null)
                 try {
@@ -220,7 +219,7 @@ public class ERXJobLoadBalancer {
             try {
                 in = new ObjectInputStream(new FileInputStream(friend));                                                                                                                                                                      
                 long entryCreationTime = in.readLong();
-                String friendId = (String)in.readUTF();
+                String friendId = in.readUTF();
                 if ((now-entryCreationTime)<ttl) {
                     aliveFriendsCount++;
                     if (friendId.compareTo(workerId.id())<0) {
@@ -229,7 +228,7 @@ public class ERXJobLoadBalancer {
                 } else {
                 	// we found a dead worker - remove his entry to keep the shared directory clean
                 	if (!friend.delete()) {
-                		log.info("Could not delete dead worker entry: "+friend.getAbsolutePath());
+                		log.info("Could not delete dead worker entry: {}", friend);
                 	}
                 }
             } catch (FileNotFoundException e) {

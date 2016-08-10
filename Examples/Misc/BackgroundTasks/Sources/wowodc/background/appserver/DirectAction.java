@@ -1,11 +1,11 @@
 package wowodc.background.appserver;
 
+import wowodc.background.components.Main;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 
 import er.extensions.appserver.ERXDirectAction;
-
-import wowodc.background.components.Main;
 
 public class DirectAction extends ERXDirectAction {
 	public DirectAction(WORequest request) {
@@ -14,6 +14,6 @@ public class DirectAction extends ERXDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 }

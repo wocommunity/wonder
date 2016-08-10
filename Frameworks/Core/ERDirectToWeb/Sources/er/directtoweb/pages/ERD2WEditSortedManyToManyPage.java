@@ -47,6 +47,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey maxBrowserSize
  */
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     // this pages allows the editing of a sorted many-to-many relationship
     // d2wContext keys:
@@ -77,7 +83,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
     	EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false);  // a non-validating context
-        EOEnterpriseObject newObject=(EOEnterpriseObject)EOUtilities.localInstanceOfObject(ec,eo);
+        EOEnterpriseObject newObject=EOUtilities.localInstanceOfObject(ec,eo);
         setObject(newObject);
         _relationshipKey = relationshipKey;
 
@@ -264,7 +270,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public Integer itemHashCode(){
-        return new Integer(browserItem.hashCode());
+        return Integer.valueOf(browserItem.hashCode());
     }
 
     public void updateEOsOrdering(){
@@ -404,9 +410,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                log.debug("indexKey = "+indexKey());
            } 
             if(selectedIndex!=0){
-                objectAtIndex(selectedIndex-1).takeValueForKey(new Integer(selectedIndex),
+                objectAtIndex(selectedIndex-1).takeValueForKey(Integer.valueOf(selectedIndex),
                                                                indexKey());
-                browserSelection().takeValueForKey(new Integer(selectedIndex-1),
+                browserSelection().takeValueForKey(Integer.valueOf(selectedIndex-1),
                                                    indexKey());
             }
             
@@ -427,9 +433,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             int lastIndex =
                 ((Integer)lastObject.valueForKey(indexKey())).intValue();
             if(selectedIndex!=lastIndex){
-                objectAtIndex(selectedIndex+1).takeValueForKey(new Integer(selectedIndex),
+                objectAtIndex(selectedIndex+1).takeValueForKey(Integer.valueOf(selectedIndex),
                                                                indexKey());
-                browserSelection().takeValueForKey(new Integer(selectedIndex+1),
+                browserSelection().takeValueForKey(Integer.valueOf(selectedIndex+1),
                                                    indexKey());
             }
         }
@@ -467,7 +473,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             if(log.isDebugEnabled()){
                 log.debug("object's hashCode is "+indexObject.hashCode());
             }
-            if( (new Integer(indexObject.hashCode())).toString().equals(hashCode)){
+            if( (Integer.toString(indexObject.hashCode())).equals(hashCode)){
                 result = indexObject;
                 break;
             }
@@ -486,9 +492,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return result;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c){
         if(((ERXSession)session()).javaScriptEnabled()){
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                 e.hasMoreElements();){
                 result.append(e.nextElement().hashCode()+",");

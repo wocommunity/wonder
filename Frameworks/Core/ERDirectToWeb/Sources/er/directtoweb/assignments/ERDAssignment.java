@@ -29,6 +29,12 @@ import er.extensions.localization.ERXLocalizer;
 //		that way all of the subclasses don't have to implement decodeWithKeyValueUnarchiver
 // ENHANCEME: Also should have a weak hash map implementation for caching created assignments.
 public abstract class ERDAssignment extends Assignment implements ERDComputingAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging supprt */
     public final static Logger log = Logger.getLogger("er.directtoweb.rules.ERDAssignment");
@@ -63,8 +69,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Gets the localizer for a given context.
      * The default implementation just returns
      * the localizer for the current session of
-     * the given context. This method belongs to
-     * {@link ERDLocaizableInterface}.
+     * the given context. 
      * @param c current context
      * @return localizer for the preferred language
      *		of the session. 
@@ -77,8 +82,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Returns a localized value for a given key in a given
      * context if localization is enabled. This implementation
      * calls <code>localizedStringForKeyWithDefault</code> on the
-     * localizer for the given context. This method belongs to 
-     * {@link ERDLocalizableInterface}.
+     * localizer for the given context. 
      * @param key to be looked up on the context
      * @param c current context
      * @return localized version of the given key returning the key 
@@ -95,8 +99,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Returns a localized value for a given key in a given
      * context if localization is enabled. This implementation
      * calls <code>valueForKeyPath</code> on the
-     * localizer for the given context. This method belongs to 
-     * {@link ERDLocaizableInterface}.
+     * localizer for the given context. 
      * @param key to be looked up on the context
      * @param c current context
      * @return localized version of the given key if localization .
@@ -151,6 +154,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * @param c current D2W context
      * @return result of firing the assignment.
      */
+    @Override
     public Object fire(D2WContext c) {
         Object result = null;
         try {
@@ -164,7 +168,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
             + e.getTargetException()+ " assignment was " + this + "\n\n" + "Target exception backtrace: "
             + ERXUtilities.stackTrace(e.getTargetException()));
         } catch (Exception e) {
-            log.error("Exception occurred in ERDAssignment of class: " + this.getClass().getName() 
+            log.error("Exception occurred in ERDAssignment of class: " + getClass().getName() 
             + ": " + e.toString() + " keyForMethodLookup(): " + keyForMethodLookup(c) + " assignment was " + this);
         }
         return result;

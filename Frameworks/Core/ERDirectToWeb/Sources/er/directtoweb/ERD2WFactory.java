@@ -42,11 +42,12 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
 
 /**
- * Not used at the moment, but shows how it might be used in the future. <br />
- *  
+ * Not used at the moment, but shows how it might be used in the future.
  */
 
 public class ERD2WFactory extends D2W {
+
+	@Override
     protected void init() {
         D2WModel model = D2WModel.defaultModel();
         if (!(model instanceof ERD2WModel)) {
@@ -56,34 +57,42 @@ public class ERD2WFactory extends D2W {
         super.init();
     }
     
+	@Override
     public EditPageInterface editPageForEntityNamed(String entityName, WOSession session) {
 		return (EditPageInterface) pageForConfigurationNamed("Edit" + entityName, session);
 	}
 
+	@Override
 	public EditRelationshipPageInterface editRelationshipPageForEntityNamed(String entityName, WOSession session) {
 		return (EditRelationshipPageInterface) pageForConfigurationNamed("EditRelationship" + entityName, session);
 	}
 
+	@Override
 	public InspectPageInterface inspectPageForEntityNamed(String entityName, WOSession session) {
 		return (InspectPageInterface) pageForConfigurationNamed("Inspect" + entityName, session);
 	}
 
+	@Override
 	public ConfirmPageInterface confirmPageForEntityNamed(String entityName, WOSession session) {
 		return (ConfirmPageInterface) pageForConfigurationNamed("Confirm" + entityName, session);
 	}
 
+	@Override
 	public ListPageInterface listPageForEntityNamed(String entityName, WOSession session) {
 		return (ListPageInterface) pageForConfigurationNamed("List" + entityName, session);
 	}
 
+	@Override
 	public QueryAllPageInterface queryAllPage(WOSession session) {
 		return (QueryAllPageInterface) pageForConfigurationNamed("QueryAll", session);
 	}
 
+	@Override
 	public QueryPageInterface queryPageForEntityNamed(String entityName, WOSession session) {
 		return (QueryPageInterface) pageForConfigurationNamed("Query" + entityName, session);
 	}
 
+	@Override
 	public SelectPageInterface selectPageForEntityNamed(String entityName, WOSession session) {
 		return (SelectPageInterface) pageForConfigurationNamed("Select" + entityName, session);
 	}
@@ -113,6 +122,7 @@ public class ERD2WFactory extends D2W {
         return _privateContext;
     }
 
+    @Override
     public NSArray visibleEntityNames(WOSession s) {
         return D2WUtils.visibleEntityNames(privateContext(s));
     }
@@ -126,6 +136,7 @@ public class ERD2WFactory extends D2W {
         return defaultListPageDisplayGroupDelegate;
     }
 
+	@Override
     public WOComponent defaultPage(WOSession wosession) {
         D2WContext d2wcontext = ERD2WContext.newContext(wosession);
         return pageWithContextTaskEntity(d2wcontext, d2wcontext.startupTask(), d2wcontext.startupEntityName(), wosession.context());
@@ -163,6 +174,7 @@ public class ERD2WFactory extends D2W {
         }
     }
 
+	@Override
     public WOComponent pageForConfigurationNamed(String name, WOSession s) {
         myCheckRules();
         D2WContext d2wcontext = ERD2WContext.newContext(s.context().session());
@@ -205,6 +217,7 @@ public class ERD2WFactory extends D2W {
         return eo;
     }
 
+	@Override
     public EditPageInterface editPageForNewObjectWithEntityNamed(String entityName, WOSession session) {
         EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed("Create" + entityName, session);
         EOEditingContext peerContext = ERXEC.newEditingContext(session.defaultEditingContext().parentObjectStore());
@@ -214,6 +227,7 @@ public class ERD2WFactory extends D2W {
         return epi;
     }
 
+	@Override
     public EditPageInterface editPageForNewObjectWithConfigurationNamed(String configurationName, WOSession session) {
         EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed(configurationName, session);
         EOEditingContext peerContext = ERXEC.newEditingContext(session.defaultEditingContext().parentObjectStore());
@@ -224,6 +238,7 @@ public class ERD2WFactory extends D2W {
         return epi;
     }
 
+	@Override
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {
     	String pageConfiguration = ERXStringUtilities.capitalize(task) + (entityName == null ? ""  : entityName);
         return pageForConfigurationNamed(pageConfiguration, session);

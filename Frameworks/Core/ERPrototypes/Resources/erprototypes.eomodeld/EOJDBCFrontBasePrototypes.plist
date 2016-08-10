@@ -52,12 +52,14 @@
             externalType = DATE; 
             name = date; 
             valueClassName = NSCalendarDate; 
+            valueType = D; 
         }, 
         {
             columnName = ""; 
             externalType = TIMESTAMP; 
             name = dateTime; 
             valueClassName = NSCalendarDate; 
+            valueType = T; 
         }, 
         {
             columnName = ""; 
@@ -170,7 +172,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaLocalDateTime; 
             columnName = ""; 
-            externalType = TIMESTAMP; 
+            externalType = "TIMESTAMP WITH TIME ZONE"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalDateTime; 
             valueClassName = "org.joda.time.LocalDateTime"; 
@@ -182,7 +184,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaLocalTime; 
             columnName = ""; 
-            externalType = TIME; 
+            externalType = "TIME WITH TIME ZONE"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalTime; 
             valueClassName = "org.joda.time.LocalTime"; 
@@ -359,6 +361,13 @@
             valueClassName = NSString; 
             valueType = c; 
             width = 10000000; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = BYTE; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (boolean, id); 
@@ -429,6 +438,7 @@
             osType, 
             shortString, 
             type, 
+            uuid, 
             varchar10, 
             varchar100, 
             varchar1000, 
@@ -441,7 +451,7 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCFrontBasePrototypes; 
-    primaryKeyAttributes = (eofKey, id); 
+    primaryKeyAttributes = (eofKey, id, uuid); 
     userInfo = {
         exampleConnectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/DatabaseName"; }; 
     }; 

@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSArray;
 /**
  * Helper class to allow us to access protected stuff in EOAccess.
  * @author ak
- *
  */
 public class ERXEOAccessHelper {
 	/*
@@ -47,10 +46,16 @@ public class ERXEOAccessHelper {
 	/**
 	 * Helper to fix prefetching fetch spec to abstract entities. when batch
 	 * fetching across flattened relationships and targeting abstract entities,
-	 * we end up with GIDs that contain the abstract, no the concrete. So the
+	 * we end up with GIDs that contain the abstract, not the concrete. So the
 	 * objects can't be instantiated. If we add the schema based qualifier to
 	 * the relationship beforehand, everything works as expected.
 	 * @author ak
+	 * @param dbc database context
+	 * @param fetchSpec original fetch specification
+	 * @param relationshipName relationship name to abstract entity
+	 * @param sourceObjects unused
+	 * @param context unused
+	 * @return adjusted fetch specification
 	 */
 	public static EOFetchSpecification adjustPrefetching(EODatabaseContext dbc, EOFetchSpecification fetchSpec, String relationshipName, NSArray sourceObjects, EOEditingContext context) {
 		if (fetchSpec.prefetchingRelationshipKeyPaths().count() > 0) {

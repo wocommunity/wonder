@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  ERMailDeliveryHTML.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -15,9 +13,15 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
 /**
+ * <div class="en">
  * This ERMailDelivery subclass is specifically crafted for HTML messages using a WOComponent as rendering device.
+ * </div>
  * 
- * @author Camille Troillard <tuscland@mac.com>
+ * <div class="ja">
+ * HTML メッセージに使用する ERMailDelivery サブクラス
+ * </div>
+ * 
+ * @author Camille Troillard &lt;tuscland@mac.com&gt;
  */
 public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	protected static Factory factory;
@@ -32,9 +36,17 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	private String _hiddenPlainTextContent;
 
 	/**
+	 * <div class="en">
 	 * Gets the current factory. If the factory is unset, sets it to the default factory.
+	 * </div>
 	 * 
-	 * @return the current factory
+	 * <div class="ja">
+	 * カレント・ファクトリーを戻します。
+	 * ファクトリーがセットされていない場合、デフォルト・ファクトリーが使用される
+	 * </div>
+	 * 
+	 * @return <div class="en">the current factory</div>
+	 *         <div class="ja">カレント・ファクトリー</div>
 	 */
 	public static Factory factory() {
 		if (factory == null)
@@ -44,10 +56,16 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <div class="en">
 	 * Sets the factory.
+	 * </div>
 	 * 
-	 * @param value
-	 *            the factory to use
+	 * <div class="ja">
+	 * ファクトリーをセットします。
+	 * </div>
+	 * 
+	 * @param value <div class="en">the factory to use</div>
+	 *              <div class="ja">使用されるファクトリー</div>
 	 */
 	public static void setFactory(Factory value) {
 		factory = value;
@@ -58,25 +76,47 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <div class="en">
 	 * Sets the Plain text preamble that will be displayed set in top of HTML source. Non-HTML compliant mail readers
 	 * can at least display this message.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * HTML ソースの前に標準テキストをセットします。
+	 * HTML 表示が不可能なメール・ソフトウェアでも標準テキストが表示できるようになります。
+	 * </div>
 	 */
 	public void setHiddenPlainTextContent(String content) {
 		_hiddenPlainTextContent = content;
 	}
 
 	/**
+	 * <div class="en">
 	 * Sets the HTML content. Note that if you set the WOComponent to be used when rendering the message this content
 	 * will be ignored.
+	 * </div>
 	 * 
-	 * @param content
-	 *            HTML content to be used
+	 * <div class="ja">
+	 * HTML コンテントをセットします。
+	 * 注意：レンダリングに WOComponent を使用される場合にはこのコンテントが無視されます。
+	 * </div>
+	 * 
+	 * @param content <div class="en">HTML content to be used</div>
+	 *                <div class="ja">使用される HTML コンテント</div>
 	 */
 	public void setHTMLContent(String content) {
 		_htmlContent = content;
 	}
 
-	/** Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. */
+	/** 
+	 * <div class="en">
+	 * Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. 
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * ERMailDelivery の新規メール・インスタンスを作成します。hasHiddenPlainTextContent を null にします。
+	 * </div>
+	 */
 	@Override
 	public void newMail() {
 		super.newMail();
@@ -86,8 +126,8 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 
 	protected String htmlContent() {
 		String htmlContent = null;
-		if (this.component() != null) {
-			htmlContent = this.componentContentString();
+		if (component() != null) {
+			htmlContent = componentContentString();
 		}
 		else {
 			htmlContent = _htmlContent;
@@ -96,9 +136,15 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <div class="en">
 	 * Pre-processes the mail before it gets sent.
+	 * </div>
 	 * 
-	 * @see ERMailDelivery#prepareMail
+	 * <div class="ja">
+	 * メールが送信される前の前処理
+	 * </div>
+	 * 
+	 * @see ERMailDelivery#prepareMail()
 	 */
 	@Override
 	protected DataHandler prepareMail() throws MessagingException {
@@ -106,7 +152,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 		MimeBodyPart textPart = null;
 		MimeBodyPart htmlPart = null;
 
-		this.mimeMessage().setSentDate(new Date());
+		mimeMessage().setSentDate(new Date());
 		multipart = new MimeMultipart("alternative");
 
 		// set the plain text part
@@ -128,7 +174,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 		htmlPart = new MimeBodyPart();
 
 		// Set the content of the html part
-		htmlPart.setContent(this.htmlContent(), "text/html; charset=\"" + charset() + "\"");
+		htmlPart.setContent(htmlContent(), "text/html; charset=\"" + charset() + "\"");
 
 		// Inline attachements
 		if (inlineAttachments().count() == 0) {
@@ -140,7 +186,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 			relatedMultiparts.addBodyPart(htmlPart);
 
 			// add each inline attachments to the message
-			for (ERMailAttachment attachment : this.inlineAttachments()) {
+			for (ERMailAttachment attachment : inlineAttachments()) {
 				BodyPart bp = attachment.getBodyPart();
 				relatedMultiparts.addBodyPart(bp);
 			}
@@ -156,15 +202,29 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 
 	public static interface Factory {
 		/**
+		 * <div class="en">
 		 * Vends a new instance of an HTML mail delivery.
+		 * </div>
 		 * 
-		 * @return a new instance
+		 * <div class="ja">
+		 * HTML メールの新規インスタンスを作成します。
+		 * </div>
+		 * 
+		 * @return <div class="en">a new instance</div>
+		 *         <div class="ja">新規インスタンス</div>
 		 */
 		public ERMailDeliveryHTML newHTMLMailDelivery();
 	}
 
 	/**
+	 * <div class="en">
 	 * The default factory. Vends the ERMailDeliveryHTML object back.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * デフォルト・ファクトリー
+	 * ERMailDeliveryHTML オブジェクトが戻ります。
+	 * </div>
 	 */
 	public static class DefaultFactory implements Factory {
 		public ERMailDeliveryHTML newHTMLMailDelivery() {

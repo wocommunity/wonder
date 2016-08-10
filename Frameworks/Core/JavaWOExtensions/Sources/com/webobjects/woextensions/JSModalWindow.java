@@ -11,11 +11,19 @@ import com.webobjects.appserver.WOContext;
 
 
 public class JSModalWindow extends JSComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public JSModalWindow(WOContext aContext)  {
         super(aContext);
     }
 
 
+    @Override
     public String contextComponentActionURL(){
         // Return the javascript function to the HREF, getting the URL for the action
         // from the invokeAction setting in the context
@@ -23,8 +31,7 @@ public class JSModalWindow extends JSComponent {
     }
 
     public String windowInfo() {
-
-            // Generate the javascript window details
+        // Generate the javascript window details
         return "toolbar="+((null!=valueForBinding("showToolbar")) ? "yes" : "no")+
         ",location="+((null!=valueForBinding("showLocation")) ? "yes" : "no")+
         ",status="+((null!=valueForBinding("showStatus")) ? "yes" : "no")+

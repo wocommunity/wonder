@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker.components;
+
 import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
@@ -18,10 +19,12 @@ public class PriorityComponent extends ERDCustomEditComponent {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -29,7 +32,8 @@ public class PriorityComponent extends ERDCustomEditComponent {
     private Bug bug() {
         return (Bug)object();
     }
-    
+
+    @Override
     public String name() {
         return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(bug().priority().textDescription());
     }

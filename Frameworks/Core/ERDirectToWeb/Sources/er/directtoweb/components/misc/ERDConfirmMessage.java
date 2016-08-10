@@ -21,11 +21,15 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Confirming an action template.<br />
- * 
+ * Confirming an action template.
  */
-
 public class ERDConfirmMessage extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDConfirmMessage(WOContext context) { super(context); }
     
@@ -33,13 +37,17 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     public final static Logger log = Logger.getLogger(ERDConfirmMessage.class);
     
     public String message;
-    
+
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     // Ok to do this, if they enter text then everything is A OK.
+    @Override
     public void awake() { message = hasBinding("defaultMessage") ? (valueForBinding("defaultMessage") == null ? "" : (String)valueForBinding("defaultMessage")) : ""; }
-    
+
+    @Override
     public void reset() {
         super.reset();
         _confirmMessageKey = null;
@@ -116,7 +124,8 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
         }
         return _confirmMessageTextfieldMaxlength;
     }
-    
+
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
         if (list().count() > 0) {

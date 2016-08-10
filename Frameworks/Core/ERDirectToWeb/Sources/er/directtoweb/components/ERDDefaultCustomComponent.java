@@ -14,22 +14,28 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
- * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.<br />
- * 
+ * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.
  */
-
 public class ERDDefaultCustomComponent extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDDefaultCustomComponent(WOContext context) { super(context); }
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERDDefaultCustomComponent.class);
 
+    @Override
     public boolean isStateless() { return true; }
 
     public EOEnterpriseObject object() { return (EOEnterpriseObject)valueForBinding("object"); }
     public String key() { return (String)valueForBinding("key"); }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         log.warn("Using default custom component for object: " + object() + " and key: " + key());
         super.appendToResponse(response, context);

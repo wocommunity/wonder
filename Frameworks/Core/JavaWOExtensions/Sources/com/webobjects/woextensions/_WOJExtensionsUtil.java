@@ -8,12 +8,18 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSMutableArray;
 
-public class _WOJExtensionsUtil extends Object {
+/**
+ * <span class="ja">
+ *  woextensions の private クラス
+ * </span>
+ */
+public class _WOJExtensionsUtil {
 
     public static boolean booleanValue(Object associationValue) {
         boolean associationEvaluation = true;
@@ -50,17 +56,15 @@ public class _WOJExtensionsUtil extends Object {
         return associationEvaluation;
     }
 
-    protected static void _sortEOsUsingSingleKey(NSMutableArray array, String aKey) throws NSComparator.ComparisonException {
-        
-        NSArray orderings = new NSArray(EOSortOrdering.sortOrderingWithKey(aKey, EOSortOrdering.CompareAscending));
-
+    protected static void _sortEOsUsingSingleKey(NSMutableArray<? extends EOEnterpriseObject> array, String aKey) throws NSComparator.ComparisonException {
+        NSArray<EOSortOrdering> orderings = new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(aKey, EOSortOrdering.CompareAscending));
         EOSortOrdering.sortArrayUsingKeyOrderArray(array, orderings);
     }
 
     protected static Object valueForBindingOrNull(String binding,WOComponent component) {
         // wod bindings of the type binding = null are converted to False Boolean
         // associations, which isn't always what we want. This utility method
-        // assumes that a Boolean value means the binding value was intented to
+        // assumes that a Boolean value means the binding value was intended to
         // be null
         if (binding == null) {
             return null;

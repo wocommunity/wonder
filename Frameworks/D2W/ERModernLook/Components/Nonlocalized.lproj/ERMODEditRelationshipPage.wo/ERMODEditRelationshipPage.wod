@@ -69,7 +69,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-QueryComponent: ERMD2WQuery {
+QueryComponent: ERXD2WQuery {
     pageConfiguration = d2wContext.queryEmbeddedConfigurationName;
 	action = queryAction;
 	entityName = entity.name;
@@ -115,21 +115,21 @@ InnerWrapper : WOGenericContainer {
 
 RepetitionUpdateContainer : AjaxUpdateContainer {
     elementName = "div";
-    id = d2wContext.idForRepetitionContainer;
+    id = idForRepetitionContainer;
 }
 
 ToManyListRepetition: WOSwitchComponent {
     WOComponentName = d2wContext.toManyRepetitionComponentName;
     d2wContext = localContext;
     displayGroup = relationshipDisplayGroup;
-    updateContainerID = d2wContext.idForRepetitionContainer;
+    updateContainerID = idForRepetitionContainer;
 }
 
 ToOneListRepetition: WOSwitchComponent {
     WOComponentName = d2wContext.toOneRepetitionComponentName;
     d2wContext = localContext;
     displayGroup = relationshipDisplayGroup;
-    updateContainerID = d2wContext.idForRepetitionContainer;
+    updateContainerID = idForRepetitionContainer;
 }
 
 ShowBottomBatchNavBar : WOConditional {
@@ -154,12 +154,12 @@ NavigationBar: WOSwitchComponent {
     WOComponentName = d2wContext.batchNavigationBarComponentName;
     displayGroup = relationshipDisplayGroup;
     d2wContext = d2wContext;
-    updateContainerID = d2wContext.idForRepetitionContainer;
+    updateContainerID = idForRepetitionContainer;
 }
 
 BatchSizeControl : ERMDBatchSizeControl {
   displayGroup = relationshipDisplayGroup;
-  updateContainerID = d2wContext.idForRepetitionContainer;
+  updateContainerID = idForRepetitionContainer;
   d2wContext = d2wContext;
 }
 
@@ -219,5 +219,5 @@ ListNotEmpty: WOConditional {
 }
 
 ShowFind: WOConditional {
-	condition = d2wContext.shouldShowQueryRelatedButton;
+	condition = shouldShowQueryRelatedButton;
 }

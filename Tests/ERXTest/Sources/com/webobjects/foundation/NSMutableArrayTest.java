@@ -3,6 +3,7 @@ package com.webobjects.foundation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
@@ -107,6 +108,22 @@ public class NSMutableArrayTest extends ERXTestCase {
 		assertEquals("abc", array.get(0));
 	}
 
+	public void testAddAllSubList() {
+		NSMutableArray<String> array = new NSMutableArray<String>();
+		NSMutableArray<String> otherArray = new NSMutableArray<String>();
+		otherArray.add("a");
+		otherArray.add("b");
+		otherArray.add("c");
+		otherArray.add("d");
+		otherArray.add("e");
+		List<String> subList = otherArray.subList(1, 4);
+		array.addAll(subList);
+		assertEquals(3, array.size());
+		assertEquals("b", array.get(0));
+		assertEquals("c", array.get(1));
+		assertEquals("d", array.get(2));
+	}
+
 	public void testAddAllIntCollection() {
 		NSMutableArray<String> array = new NSMutableArray<String>("ghi");
 		List<String> arrayList = new ArrayList<String>();
@@ -116,7 +133,22 @@ public class NSMutableArrayTest extends ERXTestCase {
 		assertEquals(3, array.size());
 		assertEquals("abc", array.get(0));
 	}
-	
+
+	public void testAddAllIntSubList() {
+		NSMutableArray<String> array = new NSMutableArray<String>("x");
+		NSMutableArray<String> otherArray = new NSMutableArray<String>();
+		otherArray.add("a");
+		otherArray.add("b");
+		otherArray.add("c");
+		otherArray.add("d");
+		otherArray.add("e");
+		List<String> subList = otherArray.subList(1, 4);
+		array.addAll(0, subList);
+		assertEquals(4, array.size());
+		assertEquals("b", array.get(0));
+		assertEquals("x", array.get(3));
+	}
+
 	public void testAddObject() {
 		NSMutableArray<String> array = new NSMutableArray<String>();
 		array.addObject("abc");
@@ -392,7 +424,17 @@ public class NSMutableArrayTest extends ERXTestCase {
     } catch (NullPointerException e) {
     }
   }
-  
+
+	public void testSubListAddToJavaCollection() {
+		NSMutableArray<String> array = new NSMutableArray<String>(new String[] { "abc", "def", "ghi", "jkl" });
+		List<String> sublist = array.subList(2, 4);
+		Vector<String> javaCollection = new Vector<String>();
+		javaCollection.addAll(sublist);
+		assertEquals(2, javaCollection.size());
+		assertEquals("ghi", javaCollection.get(0));
+		assertEquals("jkl", javaCollection.get(1));
+	}
+
 	public void testSortUsingComparator() throws ComparisonException {
 		NSMutableArray<String> array = new NSMutableArray<String>(new String[] { "abc", "def" });
 

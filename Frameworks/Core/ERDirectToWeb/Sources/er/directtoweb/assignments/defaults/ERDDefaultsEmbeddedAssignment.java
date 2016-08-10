@@ -5,7 +5,9 @@
 // Created by ak on Tue Apr 23 2002
 //
 package er.directtoweb.assignments.defaults;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
@@ -18,7 +20,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -33,9 +34,14 @@ import er.extensions.localization.ERXLocalizer;
 //   pageConfiguration = "ListEmbeddedStudios" => displayPropertyKeys = (name, @sum.movies.revenue)
 
 public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    static final Logger log = Logger.getLogger(ERDDefaultsEmbeddedAssignment.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey", "pageConfiguration"});
@@ -69,7 +75,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
     public ERDDefaultsEmbeddedAssignment (String key, Object value) { super(key,value); }
     
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "propertyKey", "object.entityName",
      * and "embeddedEntityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.
@@ -88,6 +94,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @param c a D2W context
      * @return localizer for the session stored in the context.
      */
+    @Override
     public ERXLocalizer localizerForContext(D2WContext c) {
         return ERXLocalizer.currentLocalizer();
     }
@@ -122,7 +129,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             // FIXME: Should try for the 'object' in the context and use the
             //		model group from the object's ec.
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
-            log.debug("embeddedEntityName = " + entityName);
+            log.debug("embeddedEntityName = {}", entityName);
             NSMutableArray classProperties = e.classPropertyNames().mutableClone();
             NSArray relationships = (NSArray)e.relationships().valueForKey("name");
             classProperties.removeObjectsInArray(relationships);
@@ -165,7 +172,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             }
             if (result==null) {
                 result=c.relationship();
-                log.warn(propertyKey + "-" + rawObject);
+                log.warn("{}-{}", propertyKey, rawObject);
             }
             if (result != null)
                 result = ((EORelationship)result).destinationEntity().name();
@@ -221,6 +228,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return key for method lookup, in this case the 
      *		<code>value</code> of the assignment is returned.
      */
+    @Override
     public String keyForMethodLookup(D2WContext c) {
         return (String)value();
     }

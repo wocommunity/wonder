@@ -9,12 +9,15 @@ import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
 
 /**
- * Bounces an application gracefully. It does so by staring at least one new instance
+ * Bounces an application gracefully. It does so by starting at least one inactive instance
  * per active host (or 10 % of the total active instance count), waiting
  * until they have started, then refusing sessions for all old instances and
  * turning scheduling on for all but the number of instances we started
  * originally. The next effect should be that the new users get the new app,
  * old instances die in due time and then restart when the sessions stop.
+ * 
+ * You must have at least one inactive instance in order to perform a graceful bounce.
+ * 
  * You may or may not need to set ERKillTimer to prevent totally
  * long-running sessions to keep the app from dying.
  *
@@ -26,6 +29,7 @@ public class GracefulBouncer extends ApplicationStarter {
         super(app);
     }
 
+    @Override
     protected void bounce() throws InterruptedException {
 
         NSArray<MInstance> instances = application().instanceArray().immutableClone();
@@ -53,6 +57,13 @@ public class GracefulBouncer extends ApplicationStarter {
                 currentInstances.addObject(instance);
             }
         }
+        
+        if (inactiveInstancesByHost.isEmpty()) {
+        	addObjectsFromArrayIfAbsentToErrorMessageArray(
+        			new NSArray<String>("You must have at least one inactive instance to perform a graceful bounce."));
+        	return;
+        }
+        
         int numToStartPerHost = 1;
         if (activeHosts.count() > 0) {
             numToStartPerHost = (int) (runningInstances.count() / activeHosts.count() * .1);
@@ -72,19 +83,18 @@ public class GracefulBouncer extends ApplicationStarter {
                 NSArray<MInstance> inactiveInstances = inactiveInstancesByHost.objectForKey(host);
                 if (inactiveInstances != null && inactiveInstances.count() >= i) {
                     MInstance instance = inactiveInstances.objectAtIndex(i);
-                    log("Adding instance " + instance.displayName() + " on host " + host.addressAsString());
+                    log("Starting inactive instance " + instance.displayName() + " on host " + host.addressAsString());
                     startingInstances.addObject(instance);
                 } else {
-                    log("Not enough instances on host: " + host.addressAsString());
+                    log("Not enough inactive instances on host: " + host.addressAsString());
                 }
             }
         }
         for (MInstance instance : startingInstances) {
             if (useScheduling) {
                 instance.setSchedulingEnabled(Boolean.TRUE);
-            } else {
-                instance.setAutoRecover(Boolean.TRUE);
             }
+            instance.setAutoRecover(Boolean.TRUE);
         }
         handler().sendUpdateInstancesToWotaskds(startingInstances, activeHosts.allObjects());
         handler().sendStartInstancesToWotaskds(startingInstances, activeHosts.allObjects());
@@ -117,9 +127,8 @@ public class GracefulBouncer extends ApplicationStarter {
             for (MInstance instance : currentInstances) {
                 if (useScheduling) {
                     instance.setSchedulingEnabled(Boolean.FALSE);
-                } else {
-                    instance.setAutoRecover(Boolean.FALSE);
                 }
+                instance.setAutoRecover(Boolean.FALSE);
             }
         }
 
@@ -143,9 +152,8 @@ public class GracefulBouncer extends ApplicationStarter {
                 MInstance instance = currentInstances.objectAtIndex(i);
                 if (useScheduling) {
                     instance.setSchedulingEnabled(Boolean.TRUE);
-                } else {
-                    instance.setAutoRecover(Boolean.TRUE);
                 }
+                instance.setAutoRecover(Boolean.TRUE);
                 restarting.addObject(instance);
             }
         }

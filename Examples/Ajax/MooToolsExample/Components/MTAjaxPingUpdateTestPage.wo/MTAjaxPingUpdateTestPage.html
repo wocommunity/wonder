@@ -1,0 +1,11 @@
+<wo:Main pageTitle = "Ajax Ping Update Test">
+	<h2>Ajax Ping Update</h2>
+	<hr/>
+	<p>Should work identical to the original.  Just changed the AUCs to MTAUCs and update the JavaScript in AjaxPingUpdate to call the MooTools JS object.</p>
+	<hr/>
+	<wo:MTAjaxPing id = "RandomStringsContainer" cacheKey = "$randomStrings.count">
+		<wo:loop list = "$randomStrings" item = "$randomString">
+			<wo:str value = "$randomString" /><br/>
+		</wo:loop>
+	</wo:MTAjaxPing>
+</wo:Main>

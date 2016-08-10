@@ -3,8 +3,6 @@ package er.extensions.foundation;
 import java.text.Collator;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -21,10 +19,6 @@ import er.extensions.localization.ERXLocalizer;
  */
 
 public class ERXComparisonSupport {
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXComparisonSupport.class);
-    
     private static Class stringClass = String.class;
 
     private static final int MAGIC = -42;
@@ -44,6 +38,7 @@ public class ERXComparisonSupport {
      */
     protected static class StringQualifierSupport extends EOQualifier.ComparisonSupport {
 
+        @Override
         public boolean _compareWithArbitrarySelector(Object aLeft, Object aRight, NSSelector aSelector) {
             if(aSelector.name().equals(ERXRegExQualifier.MatchesSelectorName)) {
                 aSelector = ERXRegExQualifier.MatchesSelector;
@@ -74,6 +69,7 @@ public class ERXComparisonSupport {
             return MAGIC;
         }
 
+        @Override
         protected int _genericCompareTo(Object object1, Object object2) {
         	// AK: unfortunately, the is no combination that allows us to keep
         	// sorting by case, but disregard the Umlaut characters. So
@@ -90,6 +86,7 @@ public class ERXComparisonSupport {
         	return super._genericCompareTo(object1, object2);
         }
 
+        @Override
         protected int _genericCaseInsensitiveCompareTo(Object object1, Object object2) {
             int i = _handleNulls(object1, object2);
             if (i != MAGIC)

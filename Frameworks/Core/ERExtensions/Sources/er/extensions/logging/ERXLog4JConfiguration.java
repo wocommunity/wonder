@@ -36,6 +36,12 @@ import er.extensions.foundation.ERXArrayUtilities;
  * WOCaching is disabled when the conf file changes it will get reloaded.
  */
 public class ERXLog4JConfiguration extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * A representation of the various Logger levels.
@@ -112,7 +118,7 @@ public class ERXLog4JConfiguration extends WOComponent {
 
     public LoggerLevel newLoggerLevel = null;
 
-    private NSArray _appenders;
+    private transient NSArray _appenders;
     public AppenderSkeleton anAppender;
     public Level aLevel;
     public LoggerLevel aLoggerLevel;
@@ -428,6 +434,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     	return result;
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
             super.appendToResponse(response, context);
@@ -479,6 +486,7 @@ public class ERXLog4JConfiguration extends WOComponent {
         return PageSection.LOGGERS == _activeSection ? "active" : null;
     }
 
+    @Override
     public void awake() {
         super.awake();
 

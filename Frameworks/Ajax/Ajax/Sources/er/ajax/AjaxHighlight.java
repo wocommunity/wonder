@@ -101,6 +101,7 @@ public class AjaxHighlight extends WODynamicGroup {
 		_hideEffect = (WOAssociation) associations.valueForKey("hideEffect");
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 		AjaxUtils.addScriptResourceInHead(context, response, "effects.js");

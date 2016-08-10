@@ -24,17 +24,14 @@ import er.extensions.foundation.ERXStringUtilities;
  * earlier on the page that this conflict will not be resolved. You will have to
  * define an accesskey for the conflicting button as well. If you don't want a
  * hot key, bind accesskey to the empty string.
- * 
  * <p>
  * The default is to use the u (underline) element to identify the hot key in
  * the button text. Use the accesskeyElement binding to specify a different
  * element. The element can be decorated with other attributes, e.g.
  * 
- * <pre>
+ * <pre><code>
  * accesskeyElement = &quot;span style='text-decoration: underline;'&quot;;
- * </pre>
- * 
- * </p>
+ * </code></pre>
  * 
  * <p>
  * You can have this class replace WOSubmitButton via
@@ -42,7 +39,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * "WOSubmitButton"); or use it explicitly by name in your WOD. It works best
  * (does the most work for you) if you use it with the value attribute. No self
  * configuring is done if there is any content between the open and close tags.
- * </p>
  * 
  * @binding accesskey optional key for hot key, "" to disable hot key
  * @binding accesskeyElement optional element name and decoration to wrap hot
@@ -62,8 +58,8 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 	public ERXAccessibleSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(name, associations, template);
 
-        _accesskey = (WOAssociation)_associations.removeObjectForKey("accesskey");
-        _accesskeyElement = (WOAssociation)_associations.removeObjectForKey("accesskeyElement");
+        _accesskey = _associations.removeObjectForKey("accesskey");
+        _accesskeyElement = _associations.removeObjectForKey("accesskeyElement");
         if(_accesskeyElement == null) {
         	_accesskeyElement = new WOConstantValueAssociation("u");
         }
@@ -141,16 +137,16 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 		String accesskeyElement = accesskeyElement(component);
 		int index = value.indexOf(accessKey);
 		if (index != -1) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append(value.substring(0, index));
-			sb.append("<");
+			sb.append('<');
 			sb.append(accesskeyElement);
-			sb.append(">");
+			sb.append('>');
 			sb.append(accessKey);
 			sb.append("</");
 			int coIndex = accesskeyElement.indexOf(' ');
 			sb.append(coIndex == -1 ? accesskeyElement : accesskeyElement.substring(0, coIndex));
-			sb.append(">");
+			sb.append('>');
 			sb.append(value.substring(index + 1));
 			value = sb.toString();
 		}
@@ -162,6 +158,7 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 	 *
 	 * @see er.extensions.components._private.ERXSubmitButton#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		if (accesskey(context.component()) != null) {
@@ -174,6 +171,7 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 	 *
 	 * @see er.extensions.components._private.ERXSubmitButton#appendAttributesToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+    @Override
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
     	super.appendAttributesToResponse(response, context);
     	response._appendTagAttributeAndValue("accesskey", accesskey(context.component()), false);
@@ -184,6 +182,7 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
      *
      * @see er.extensions.components._private.ERXSubmitButton#appendChildrenToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
      */
+    @Override
     public void appendChildrenToResponse(WOResponse response, WOContext context) {
         if(hasChildrenElements()) {
             super.appendChildrenToResponse(response, context);

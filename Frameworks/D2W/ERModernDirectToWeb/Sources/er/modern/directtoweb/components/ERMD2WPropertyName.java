@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.components.ERD2WPropertyName;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Modern property name component.
@@ -17,6 +18,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @d2wKey hidePropertyName
  * @d2wKey displayRequiredMarker
  * @d2wKey keyPathsWithValidationExceptions
+ * @d2wKey idForPropertyContainer
  * 
  * 
  * @author davidleber
@@ -24,7 +26,9 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERMD2WPropertyName extends ERD2WPropertyName {
 	
-    public ERMD2WPropertyName(WOContext context) {
+	private static final long serialVersionUID = 1L;
+
+	public ERMD2WPropertyName(WOContext context) {
         super(context);
     }
 
@@ -43,14 +47,20 @@ public class ERMD2WPropertyName extends ERD2WPropertyName {
 		return result;
 	}
    
-	public String fieldLabelForValue() {
-		return isEditing() ? d2wContext().displayNameForProperty() : null;
-	}
-	
+    public String fieldLabelForValue() {
+        return isEditing() ? (String) d2wContext().valueForKey("idForPropertyContainer")
+                : null;
+    }
+
+    public String localizedTitle() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(
+                "Required field");
+    }
+
+	@Override
 	public boolean isEditing() {
 		String task = d2wContext().task();
 		return "edit".equals(task) || "query".equals(task);
 	}
-    
     
 }

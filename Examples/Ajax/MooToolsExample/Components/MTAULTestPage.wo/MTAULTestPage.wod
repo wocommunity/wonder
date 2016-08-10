@@ -1,0 +1,90 @@
+ConfirmMTAUC : MTAjaxUpdateContainer {
+	id = "ConfirmMTAUC";
+}
+
+ConfirmMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	effect = "highlight";
+	updateContainerID = "ConfirmMTAUC";
+	onClickBefore = "confirm('Update Time?')";
+} 
+
+HighlighMTAUC : MTAjaxUpdateContainer {
+	id = "HighlightAUC";
+}
+
+HighlightMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	effect = "highlight";
+	updateContainerID = "HighlightAUC";
+}
+
+MorphMTAUC : MTAjaxUpdateContainer {
+	class = "redBackground";
+	id = "MorphMTAUC";
+
+}
+
+MorphMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	beforeEffect = "morph";
+	beforeEffectDuration = "long";
+	beforeEffectStart = "greenBackground";
+	effect = "morph";
+	effectDuration = "long";
+	effectStart = "redBackground";
+	updateContainerID = "MorphMTAUC";
+}
+
+SimpleMTAUC : MTAjaxUpdateContainer {
+	id = "SimpleMTAUC";
+}
+
+SimpleMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	updateContainerID = "SimpleMTAUC";
+}
+
+SlideMTAUC : MTAjaxUpdateContainer {
+	id = "SlideMTAUC";
+}
+
+SlideMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	beforeEffect = "slide";
+	beforeEffectDuration = "long";
+	beforeEffectProperty = "out";
+	effect = "slide";
+	effectDuration = "long";
+	effectProperty = "in";
+	effectSlideMode = "horizontal";
+	updateContainerID = "SlideMTAUC";
+}
+
+SpinnerMTAUC : MTAjaxUpdateContainer {
+	id = "SpinnerMTAUC";
+}
+
+SpinnerMTAUL : MTAjaxUpdateLink {
+	action = updateTimeSlow;
+	useSpinner = true;
+	spinnerTarget = "links";
+	spinnerOptions = "{ containerPosition: { position: 'center', offset: { y: -100 } }}";
+	updateContainerID = "SpinnerMTAUC";
+}
+
+TweenMTAUC : MTAjaxUpdateContainer {
+	id = "TweenMTAUC";
+}
+
+TweenMTAUL : MTAjaxUpdateLink {
+	action = updateTime;
+	beforeEffect = "tween";
+	beforeEffectProperty = "opacity";
+	beforeEffectStart = "1, 0";
+	afterEffect = "tween";
+	afterEffectDuration = "long";
+	afterEffectProperty = "opacity";
+	afterEffectStart = "1";
+	updateContainerID = "TweenMTAUC";	
+}

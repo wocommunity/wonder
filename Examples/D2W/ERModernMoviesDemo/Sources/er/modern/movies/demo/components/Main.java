@@ -1,6 +1,7 @@
 package er.modern.movies.demo.components;
 
 import com.webobjects.appserver.WOContext;
+
 import er.extensions.components.ERXStatelessComponent;
 
 public class Main extends ERXStatelessComponent {

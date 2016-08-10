@@ -3,8 +3,11 @@ package er.extensions.appserver;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -15,11 +18,17 @@ import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.appserver._private.WOURLValuedElementData;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
 
@@ -35,13 +44,16 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class ERXResourceManager extends WOResourceManager {
-	private static Logger log = Logger.getLogger(ERXResourceManager.class);
+	private static Logger log = LoggerFactory.getLogger(ERXResourceManager.class);
 	private WODeployedBundle TheAppProjectBundle;
-	private _NSThreadsafeMutableDictionary _urlValuedElementsData;
-	private IVersionManager _versionManager;
+	private _NSThreadsafeMutableDictionary<String, WOURLValuedElementData> _urlValuedElementsData;
+	private IVersionManager _versionManager;	
+	private final _NSThreadsafeMutableDictionary _myFrameworkProjectBundles = new _NSThreadsafeMutableDictionary(new NSMutableDictionary(128));
+	private static final NSDictionary<String, String> _mimeTypes = _additionalMimeTypes();
 
 	protected ERXResourceManager() {
 		TheAppProjectBundle = _initAppBundle();
+		_initFrameworkProjectBundles();
 		try {
 			Field field = WOResourceManager.class.getDeclaredField("_urlValuedElementsData");
 			field.setAccessible(true);
@@ -99,32 +111,92 @@ public class ERXResourceManager extends WOResourceManager {
 		return _versionManager;
 	}
 
+    private void _initFrameworkProjectBundles()
+    {
+        NSBundle aBundle = null;
+        NSArray aFrameworkBundleList = NSBundle.frameworkBundles();
+        for(Enumeration aBundleEnumerator = aFrameworkBundleList.objectEnumerator(); aBundleEnumerator.hasMoreElements(); _erxCachedBundleForFrameworkNamed(aBundle.name()))
+            aBundle = (NSBundle)aBundleEnumerator.nextElement();
+
+    }
+
 	private static WODeployedBundle _initAppBundle() {
 		Object obj = null;
 		try {
 			WODeployedBundle wodeployedbundle = WODeployedBundle.deployedBundle();
 			obj = wodeployedbundle.projectBundle();
 			if (obj != null) {
-				NSLog.err.appendln("Application project found: Will locate resources in '" + ((WOProjectBundle) obj).projectPath() + "' rather than '" + wodeployedbundle.bundlePath() + "' .");
+				log.warn("Application project found: Will locate resources in '{}' rather than '{}'.", ((WOProjectBundle) obj).projectPath(), wodeployedbundle.bundlePath());
 			}
 			else {
 				obj = wodeployedbundle;
 			}
 		}
 		catch (Exception exception) {
-			NSLog.err.appendln("<WOResourceManager> Unable to initialize AppProjectBundle for reason:" + exception.toString());
-			if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 0L)) {
-				NSLog.debug.appendln(exception);
-			}
+			log.error("<WOResourceManager> Unable to initialize AppProjectBundle for reason:", exception);
 			throw NSForwardException._runtimeExceptionForThrowable(exception);
 		}
-		return ((WODeployedBundle) (obj));
+		return (WODeployedBundle) obj;
 	}
 
+	
+    private static WODeployedBundle _locateBundleForFrameworkNamed(String aFrameworkName)
+    {
+        WODeployedBundle aBundle = null;
+        aBundle = ERXDeployedBundle.deployedBundleForFrameworkNamed(aFrameworkName);
+        if(aBundle == null)
+        {
+            NSBundle nsBundle = NSBundle.bundleForName(aFrameworkName);
+            if(nsBundle != null)
+                aBundle = _bundleWithNSBundle(nsBundle);
+        }
+        return aBundle;
+    }
+
+    private static WODeployedBundle _bundleWithNSBundle(NSBundle nsBundle)
+    {
+        WODeployedBundle aBundle = null;
+        WODeployedBundle aDeployedBundle = ERXDeployedBundle.bundleWithNSBundle(nsBundle);
+        WODeployedBundle aProjectBundle = aDeployedBundle.projectBundle();
+        if(aProjectBundle != null)
+        {
+            if(WOApplication._isDebuggingEnabled())
+                NSLog.debug.appendln((new StringBuilder()).append("Framework project found: Will locate resources in '").append(aProjectBundle.bundlePath()).append("' rather than '").append(aDeployedBundle.bundlePath()).append("' .").toString());
+            aBundle = aProjectBundle;
+        } else
+        {
+            aBundle = aDeployedBundle;
+        }
+        return aBundle;
+    }
+
+    public NSArray _frameworkProjectBundles()
+    {
+        return _myFrameworkProjectBundles.immutableClone().allValues();
+    }
+
+    public WODeployedBundle _erxCachedBundleForFrameworkNamed(String aFrameworkName)
+    {
+        WODeployedBundle aBundle = null;
+        if(aFrameworkName != null)
+        {
+            aBundle = (WODeployedBundle)_myFrameworkProjectBundles.objectForKey(aFrameworkName);
+            if(aBundle == null)
+            {
+                aBundle = _locateBundleForFrameworkNamed(aFrameworkName);
+                if(aBundle != null)
+                    _myFrameworkProjectBundles.setObjectForKey(aBundle, aFrameworkName);
+            }
+        }
+        if(aBundle == null)
+            aBundle = TheAppProjectBundle;
+        return aBundle;
+    }
+	
 	private String _cachedURLForResource(String name, String bundleName, NSArray languages, WORequest request) {
 		String result = null;
 		if (bundleName != null) {
-			WODeployedBundle wodeployedbundle = _cachedBundleForFrameworkNamed(bundleName);
+			WODeployedBundle wodeployedbundle = _erxCachedBundleForFrameworkNamed(bundleName);
 			if (wodeployedbundle != null) {
 				result = wodeployedbundle.urlForResource(name, languages);
 			}
@@ -153,7 +225,8 @@ public class ERXResourceManager extends WOResourceManager {
 		return result;
 	}
 
-	public String urlForResourceNamed(String name, String bundleName, NSArray languages, WORequest request) {
+	@Override
+	public String urlForResourceNamed(String name, String bundleName, NSArray<String> languages, WORequest request) {
 		String completeURL = null;
 		if (request == null || request.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
 			completeURL = _cachedURLForResource(name, bundleName, languages, request);
@@ -169,26 +242,22 @@ public class ERXResourceManager extends WOResourceManager {
 				cacheDataIfNotInCache(fileURL);
 			}
 			String encoded = WOURLEncoder.encode(fileURL);
-			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
-			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled() && ERXApplication.isWO54()) {
-				// AK: 5.4
+			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled()) {
 				key = "_wr_";
 			}
-			if (request != null) {
-				context = (WOContext) request.valueForKey("context");
-			}
+			WOContext context = (WOContext) request.valueForKey("context");
 			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
 			if (context != null) {
 				completeURL = context.urlWithRequestHandlerKey(key, null, wodata);
 			}
 			else {
-				StringBuffer stringbuffer = new StringBuffer(request.applicationURLPrefix());
-				stringbuffer.append('/');
-				stringbuffer.append(key);
-				stringbuffer.append('?');
-				stringbuffer.append(wodata);
-				completeURL = stringbuffer.toString();
+				StringBuilder sb = new StringBuilder(request.applicationURLPrefix());
+				sb.append('/');
+				sb.append(key);
+				sb.append('?');
+				sb.append(wodata);
+				completeURL = sb.toString();
 			}
 			// AK: TODO get rid of regex
 			int offset = completeURL.indexOf("?wodata=file%3A");
@@ -196,15 +265,26 @@ public class ERXResourceManager extends WOResourceManager {
 				completeURL = completeURL.replaceFirst("\\?wodata=file%3A", "/wodata=");
 				if (completeURL.indexOf("/wodata=") > 0) {
 					completeURL = completeURL.replaceAll("%2F", "/");
+					// SWK: On Windows we have /C%3A/ changed to /C:
+					completeURL = completeURL.replaceAll("%3A", ":");
 				}
 			}
 		}
 		completeURL = _versionManager.versionedUrlForResourceNamed(completeURL, name, bundleName, languages, request);
+		completeURL = _postprocessURL(completeURL, bundleName);
 		return completeURL;
+	}
+	
+	protected String _postprocessURL(String url, String bundleName) {
+		if (WOApplication.application() instanceof ERXApplication) {
+			WODeployedBundle bundle = _cachedBundleForFrameworkNamed(bundleName);
+			return ERXApplication.erxApplication()._rewriteResourceURL(url, bundle);
+		}
+		return url;
 	}
 
 	private WOURLValuedElementData cachedDataForKey(String key) {
-		WOURLValuedElementData data = (WOURLValuedElementData) _urlValuedElementsData.objectForKey(key);
+		WOURLValuedElementData data = _urlValuedElementsData.objectForKey(key);
 		if (data == null && key != null && key.startsWith("file:") && ERXApplication.isDevelopmentModeSafe()) {
 			data = cacheDataIfNotInCache(key);
 		}
@@ -212,23 +292,34 @@ public class ERXResourceManager extends WOResourceManager {
 	}
 
 	protected WOURLValuedElementData cacheDataIfNotInCache(String key) {
-		WOURLValuedElementData data = (WOURLValuedElementData) _urlValuedElementsData.objectForKey(key);
+		WOURLValuedElementData data = _urlValuedElementsData.objectForKey(key);
 		if (data == null) {
 			String contentType = contentTypeForResourceNamed(key);
 			data = new WOURLValuedElementData(null, contentType, key);
-			if (data != null) {
-				_urlValuedElementsData.setObjectForKey(data, key);
-			}
+			_urlValuedElementsData.setObjectForKey(data, key);
 		}
 		return data;
 	}
 
+	@Override
 	public WOURLValuedElementData _cachedDataForKey(String key) {
 		WOURLValuedElementData wourlvaluedelementdata = null;
 		if (key != null) {
 			wourlvaluedelementdata = cachedDataForKey(key);
 		}
 		return wourlvaluedelementdata;
+	}
+
+	/**
+	 * Overrides the original implementation appending the additionalMimeTypes to the content types dictionary.
+	 *
+	 * @return a dictionary containing the original mime types supported along with the additional mime types
+	 * contributed by this class.
+	 * @see com.webobjects.appserver.WOResourceManager#_contentTypesDictionary()
+	 */
+	@Override
+	public NSDictionary _contentTypesDictionary() {
+		return ERXDictionaryUtilities.dictionaryWithDictionaryAndDictionary(_mimeTypes, super._contentTypesDictionary());
 	}
 
 	/**
@@ -253,8 +344,8 @@ public class ERXResourceManager extends WOResourceManager {
 		boolean resourceIsSecure = (secure == null) ? requestIsSecure : secure.booleanValue();
 		if ((resourceIsSecure && ERXProperties.stringForKey("er.extensions.ERXResourceManager.secureResourceUrlPrefix") == null) || (!resourceIsSecure && ERXProperties.stringForKey("er.extensions.ERXResourceManager.resourceUrlPrefix") == null)) {
 			StringBuffer sb = new StringBuffer();
-      String serverPortStr = context.request()._serverPort();
-      int serverPort = (serverPortStr == null) ? 0 : Integer.parseInt(serverPortStr);
+			String serverPortStr = context.request()._serverPort();
+			int serverPort = (serverPortStr == null) ? 0 : Integer.parseInt(serverPortStr);
 			context.request()._completeURLPrefix(sb, resourceIsSecure, serverPort);
 			sb.append(url);
 			completeUrl = sb.toString();
@@ -291,7 +382,7 @@ public class ERXResourceManager extends WOResourceManager {
 		 *            the request
 		 * @return a versioned variant of the resourceUrl
 		 */
-		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray languages, WORequest request);
+		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray<String> languages, WORequest request);
 	}
 
 	/**
@@ -303,7 +394,7 @@ public class ERXResourceManager extends WOResourceManager {
 		/**
 		 * @return resourceUrl
 		 */
-		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray languages, WORequest request) {
+		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray<String> languages, WORequest request) {
 			return resourceUrl;
 		}
 	}
@@ -325,6 +416,7 @@ public class ERXResourceManager extends WOResourceManager {
 	 * @author mschrag
 	 */
 	public static class PropertiesVersionManager implements IVersionManager {
+		private static Logger log = LoggerFactory.getLogger(ERXResourceManager.class);
 		private String _defaultVersion;
 
 		public PropertiesVersionManager() {
@@ -335,7 +427,7 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 		}
 
-		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray languages, WORequest request) {
+		public String versionedUrlForResourceNamed(String resourceUrl, String name, String bundleName, NSArray<String> languages, WORequest request) {
 			if (bundleName == null) {
 				bundleName = "app";
 			}
@@ -354,10 +446,34 @@ public class ERXResourceManager extends WOResourceManager {
 					resourceUrl = url.toExternalForm();
 				}
 				catch (MalformedURLException e) {
-					ERXResourceManager.log.error("Failed to construct URL from '" + resourceUrl + "'.", e);
+					log.error("Failed to construct URL from '{}'.", resourceUrl, e);
 				}
 			}
 			return resourceUrl;
 		}
+	}
+	
+	/**
+	 * Overridden to supply additional mime types that are not present in the
+	 * JavaWebObjects framework.
+	 * @param aResourcePath file path of the resource, or just file name of the resource,
+	 *        as only the extension is required
+	 * @return HTTP content type for the named resource specified by <code>aResourcePath</code>
+	 */
+	@Override
+	public String contentTypeForResourceNamed(String aResourcePath) {
+		String aPathExtension = NSPathUtilities.pathExtension(aResourcePath);
+		if(aPathExtension != null && aPathExtension.length() != 0) {
+			String mime = _mimeTypes.objectForKey(aPathExtension.toLowerCase());
+			if(mime != null) {
+				return mime;
+			}
+		}
+		return super.contentTypeForResourceNamed(aResourcePath);
+	}
+	
+	private static NSDictionary<String, String> _additionalMimeTypes() {
+		NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, CharEncoding.UTF_8);
+		return plist;
 	}
 }

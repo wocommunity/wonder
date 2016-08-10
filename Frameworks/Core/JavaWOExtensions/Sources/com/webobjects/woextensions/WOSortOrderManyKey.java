@@ -18,6 +18,13 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
 public class WOSortOrderManyKey extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected String _currentKey;
     protected String _selectedKey;
     // ** Internal Caching
@@ -31,10 +38,12 @@ public class WOSortOrderManyKey extends WOComponent {
       return _currentKey;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _currentKey=null;
         _selectedKey=null;
@@ -97,9 +106,9 @@ public class WOSortOrderManyKey extends WOComponent {
         int anIndex = 0;
         EOSortOrdering aSortOrdering = null;
         WODisplayGroup aDisplayGroup = displayGroup();
-        NSArray sortOrderings = aDisplayGroup.sortOrderings();
+        NSArray<EOSortOrdering> sortOrderings = aDisplayGroup.sortOrderings();
         if (sortOrderings!=null) {
-            NSMutableArray aSortOrderingArray = sortOrderings.mutableClone();
+            NSMutableArray<EOSortOrdering> aSortOrderingArray = sortOrderings.mutableClone();
             Enumeration anEnumerator = aSortOrderingArray.objectEnumerator();
             while (anEnumerator.hasMoreElements()) {
                 aSortOrdering = (EOSortOrdering) anEnumerator.nextElement();
@@ -116,12 +125,12 @@ public class WOSortOrderManyKey extends WOComponent {
     protected void _makePrimarySortOrderingWithSelector(NSSelector aSelector) {
         String aKey = _selectedKey;
         WODisplayGroup aDisplayGroup = displayGroup();
-        NSArray sortOrderings = aDisplayGroup.sortOrderings();
-        NSMutableArray aSortOrderingArray;
+        NSArray<EOSortOrdering> sortOrderings = aDisplayGroup.sortOrderings();
+        NSMutableArray<EOSortOrdering> aSortOrderingArray;
         if (sortOrderings!=null) {
-            aSortOrderingArray = new NSMutableArray(sortOrderings);
+            aSortOrderingArray = new NSMutableArray<EOSortOrdering>(sortOrderings);
         } else {
-            aSortOrderingArray = new NSMutableArray();
+            aSortOrderingArray = new NSMutableArray<EOSortOrdering>();
         }
         EOSortOrdering aNewSortOrdering = EOSortOrdering.sortOrderingWithKey(aKey, aSelector);
         aSortOrderingArray.insertObjectAtIndex(aNewSortOrdering, 0);

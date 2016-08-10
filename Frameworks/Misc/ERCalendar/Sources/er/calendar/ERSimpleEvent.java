@@ -1,7 +1,7 @@
 package er.calendar;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * ERSimpleEvent is an simple implementation of an event class,
@@ -13,11 +13,11 @@ import com.webobjects.appserver.*;
  * <p>
  * Subclass ERSimpleEvent if more advanced features are needed.
  *
- * @author 	Johan Carlberg <johan@oops.se>
+ * @author 	Johan Carlberg &lt;johan@oops.se&gt;
  * @version 	1.0, 2002-09-30
  */
 
-public class ERSimpleEvent extends Object implements ERCalendarEvent {
+public class ERSimpleEvent implements ERCalendarEvent {
     protected NSTimestamp endTime;
     protected NSTimestamp startTime;
     protected String status;
@@ -32,10 +32,10 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
      *				event
      * @param	aUniqueId	a persistent, globally unique identifier
      *				for this event
-     * @see	ERCalendarEvent#startTime
-     * @see	ERCalendarEvent#endTime
-     * @see	ERCalendarEvent#summary
-     * @see	ERCalendarEvent#uniqueId
+     * @see	ERCalendarEvent#startTime()
+     * @see	ERCalendarEvent#endTime()
+     * @see	ERCalendarEvent#summary()
+     * @see	ERCalendarEvent#uniqueId()
      */
     public ERSimpleEvent (NSTimestamp aStartTime, NSTimestamp anEndTime, String aSummary, String aUniqueId) {
 	startTime = aStartTime;
@@ -47,7 +47,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return	always returns <code>false</code>.
      *		ERSimpleEvent doesn't support whole-day events.
-     * @see     ERCalendarEvent#wholeDay
+     * @see     ERCalendarEvent#wholeDay()
      */
     public boolean wholeDay() {
 	return false;
@@ -56,7 +56,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return  the start time of this event as specified in the
      * {@link #ERSimpleEvent(NSTimestamp, NSTimestamp, String, String) constructor}
-     * @see     ERCalendarEvent#startTime
+     * @see     ERCalendarEvent#startTime()
      */
     public NSTimestamp startTime() {
 	return startTime;
@@ -65,7 +65,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return  the end time of this event as specified in the
      * {@link #ERSimpleEvent(NSTimestamp, NSTimestamp, String, String) constructor}
-     * @see     ERCalendarEvent#endTime
+     * @see     ERCalendarEvent#endTime()
      */
     public NSTimestamp endTime() {
 	return endTime;
@@ -75,7 +75,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
      * @return  the change counter of this event.
      *		Computed from the current time, and will increase every
      *		ten seconds.
-     * @see     ERCalendarEvent#sequence
+     * @see     ERCalendarEvent#sequence()
      */
     public int sequence() {
 	return (int)(new NSTimestamp().getTime() / 10000);
@@ -84,7 +84,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return  <code>null</code> since ERSimpleEvent doesn't support
      *		event status.
-     * @see     ERCalendarEvent#status
+     * @see     ERCalendarEvent#status()
      */
     public String status() {
 	return status;
@@ -93,7 +93,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return  the summary of this event as specified in the
      * {@link #ERSimpleEvent(NSTimestamp, NSTimestamp, String, String) constructor}
-     * @see     ERCalendarEvent#summary
+     * @see     ERCalendarEvent#summary()
      */
     public String summary() {
 	return summary;
@@ -102,7 +102,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
     /**
      * @return  the unique id of this event as specified in the
      * {@link #ERSimpleEvent(NSTimestamp, NSTimestamp, String, String) constructor}
-     * @see     ERCalendarEvent#uniqueId
+     * @see     ERCalendarEvent#uniqueId()
      */
     public String uniqueId() {
 	return uniqueId;

@@ -1,0 +1,8 @@
+<webobject name = "ToggleLink"><webobject name = "LabelContent"><webobject name = "ToggleLinkString" /></webobject></webobject>
+<webobject name = "AjaxUpdateContainer">
+  <webobject name = "Expanded"><webobject name = "Content" /></webobject>
+  <webobject name="IsAjaxRequest"><script type="text/javascript">
+      MTAjaxUtils.toggleClassName('<webobject name = "LinkID" />', 'expanded', <webobject name = "ExpandedValue" />);
+      <webobject name="HasEscapedLinkString">document.id('<webobject name = "LinkID" />').set('html', MTAjaxUtils.decode('<webobject name = "EscapedLinkString" />'));</webobject>
+  </script></webobject>
+</webobject>

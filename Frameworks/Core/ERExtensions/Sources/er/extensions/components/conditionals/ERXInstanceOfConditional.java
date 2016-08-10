@@ -16,8 +16,11 @@ import com.webobjects.foundation.NSForwardException;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * Conditional component that tests if an object is an instance of a given class
- * or interface <br/> Synopsis:<br/> object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
+ * Conditional component that tests if an object can be cast to the given class or interface without causing a ClassCastException.
+ *
+ * <h3>Synopsis:</h3>
+ * <blockquote>object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]</blockquote>
+ *
  * @binding object object to test
  * @binding className class or interface name
  * @binding negate Inverts the sense of the conditional.

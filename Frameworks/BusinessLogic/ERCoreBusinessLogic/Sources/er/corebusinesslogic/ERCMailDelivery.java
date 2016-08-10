@@ -8,7 +8,8 @@ package er.corebusinesslogic;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -34,8 +35,7 @@ public class ERCMailDelivery {
     //	Class Constant(s)
     //	---------------------------------------------------------------------------
 
-    /** logging supprt */
-    public static final Logger log = Logger.getLogger(ERCMailDelivery.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCMailDelivery.class);
 
     //	===========================================================================
     //	Class Variable(s)
@@ -68,7 +68,7 @@ public class ERCMailDelivery {
      * @return comma separated and cleaned up list of email addresses
      */
     public static String commaSeparatedListFromArray(NSArray a) {
-        StringBuffer result=new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (a!=null) {
             for (Enumeration e=a.objectEnumerator(); e.hasMoreElements(); ) {
                 String address=(String)e.nextElement();
@@ -124,13 +124,10 @@ public class ERCMailDelivery {
                                        EOEditingContext ec) {
         ERCMailMessage mailMessage = null;
 
-        if (log.isDebugEnabled()) {
-            log.debug("Sending email title \"" + title + "\" from \"" + from + "\" to \"" + to + "\" cc \""
-                      + cc + "\" bcc \"" + bcc + "\"");
-            log.debug("Email message: " + message);
-        }
+        log.debug("Sending email title '{}' from '{}' to '{}' cc '{}' bcc '{}'", title, from, to, cc, bcc);
+        log.debug("Email message: {}", message);
         if (usesMail()) {
-            mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
+            mailMessage = ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
             String safeTitle = title != null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
             mailMessage.setTitle(safeTitle);
             mailMessage.setFromAddress(from);
@@ -168,12 +165,12 @@ public class ERCMailDelivery {
                                                        String message,
                                                        NSArray filePaths,
                                                        EOEditingContext ec) {
-        ERCMailMessage mailMessage = this.composeEmail(from, to, cc, bcc, title, message, ec);
+        ERCMailMessage mailMessage = composeEmail(from, to, cc, bcc, title, message, ec);
 
         for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
              filePathEnumerator.hasMoreElements();) {
             String filePath = (String)filePathEnumerator.nextElement();
-            ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
+            ERCMessageAttachment attachment = ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
             attachment.setFilePath(filePath);
             mailMessage.addToBothSidesOfAttachments(attachment);
         }
@@ -207,7 +204,7 @@ public class ERCMailDelivery {
         } else {
             WOContext context = component.context();
             // Emails should generate complete urls
-            context._generateCompleteURLs ();
+            context.generateCompleteURLs();
             message = component.generateResponse().contentString();
         }
         return composeEmail(from, to, cc, bcc, title, message, ec);
@@ -236,10 +233,9 @@ public class ERCMailDelivery {
                                                  EOEditingContext ec) {
         WOComponent component = ERXApplication.instantiatePage(componentName);
         if (component == null) {
-            log.warn("Created null component for name \"" + componentName + "\"");
+            log.warn("Created null component for name '{}'", componentName);
         } else if (log.isDebugEnabled()) {
-            log.debug("Created component with name \"" + componentName + "\" class name \""
-                      + component.getClass().getName() + "\"");
+            log.debug("Created component with name '{}' class name '{}'", componentName, component.getClass().getName());
         }
         if (bindings != null && bindings.count() > 0){
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
@@ -282,7 +278,7 @@ public class ERCMailDelivery {
         if(plainTextComponent!=null){
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
             WOContext context = plainTextComponent.context();
-            context._generateCompleteURLs ();
+            context.generateCompleteURLs();
             result.setPlainText(plainTextComponent.generateResponse().contentString());
         }
         return result;
@@ -315,7 +311,7 @@ public class ERCMailDelivery {
         if ( plainTextComponent != null ) {
             WOContext context = plainTextComponent.context();
             
-            context._generateCompleteURLs();
+            context.generateCompleteURLs();
             result.setPlainText(plainTextComponent.generateResponse().contentString());
         }
         

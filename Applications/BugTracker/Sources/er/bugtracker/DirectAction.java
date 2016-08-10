@@ -91,7 +91,7 @@ public class DirectAction extends ERD2WDirectAction {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
-            EOUtilities.rawRowsForSQL(ec, (String) EOModelGroup.defaultGroup().modelNames().lastObject(), "select count(*) from PRIORITY", null);
+            EOUtilities.rawRowsForSQL(ec, EOModelGroup.defaultGroup().modelNames().lastObject(), "select count(*) from PRIORITY", null);
             result = pageWithName("ERXSuccess");
         } catch (Exception e) {
             
@@ -114,8 +114,8 @@ public class DirectAction extends ERD2WDirectAction {
                 clearPrimaryKey = clearPrimaryKey.trim();
                 ec.lock();
                 try {
-                    Integer clearPrimaryKeyInt = new Integer(clearPrimaryKey);
-                    user = (People) People.clazz.objectWithPrimaryKeyValue(ec, clearPrimaryKeyInt);
+                    Integer clearPrimaryKeyInt = Integer.valueOf(clearPrimaryKey);
+                    user = People.clazz.objectWithPrimaryKeyValue(ec, clearPrimaryKeyInt);
                 } catch (NumberFormatException NFe) {
                     // WOApplication.application().logString(NFe.toString());
                 } finally {
@@ -148,8 +148,8 @@ public class DirectAction extends ERD2WDirectAction {
             EOEditingContext ec = ERXEC.newEditingContext();
             ec.lock();
             try {
-                Integer bugId = new Integer(numberFromRequest);
-                Bug bug =  (Bug)Bug.clazz.objectWithPrimaryKeyValue(ec, bugId);
+                Integer bugId = Integer.valueOf(numberFromRequest);
+                Bug bug =  Bug.clazz.objectWithPrimaryKeyValue(ec, bugId);
                 if (bug == null) {
                     result = errorPage("Bug not found", session);
                 } else {
@@ -203,6 +203,7 @@ public class DirectAction extends ERD2WDirectAction {
         return entranceTemplate(result);
     }
 
+    @Override
     public WOActionResults defaultAction() {
         // the reason for this redirect is that the session cookie and the
         // 'remember my login cookie'
@@ -213,6 +214,7 @@ public class DirectAction extends ERD2WDirectAction {
         return page;
     }
 
+    @Override
     public WOActionResults logoutAction() {
     	WORedirect redirect = (WORedirect) pageWithName("WORedirect");
     	redirect.setUrl(context().directActionURLForActionNamed("entrance", null));

@@ -23,10 +23,10 @@
     <p>This page automatically updates every <webobject name = "RefreshRate"></webobject> seconds.</p>
 </webobject>
 <webobject name = "HasBouncer"><div>Bouncer: <webobject name = "Bouncer"/></div></webobject>
-<p><webobject name = "RefreshLink">Refresh Now</webobject> | 
+<p><webobject name = "RefreshLink">Refresh</webobject> | 
 	<webobject name = "ShowDetailStatistics">
-		<webobject name="ShowStatistics">Hide Details</webobject>
-		<webobject name="NotShowStatistics">Show Details</webobject>
+		<webobject name="ShowStatistics">Hide Stats</webobject>
+		<webobject name="NotShowStatistics">Show Stats</webobject>
     </webobject></p>
 
 <span class="error"><webobject name = "MessageString"></webobject>
@@ -130,25 +130,26 @@
       <td class="NextShutDown">
         <webobject name = "NextShutdown"></webobject>
       </td>
-      <td>
+      <td class="DeathCount">
         <webobject name = "ShouldDisplayDeathDetailLink">
+          <span class="Deaths"><webobject name = "InstDeathCount"></webobject></span>
           <webobject name = "InstDeathDetailLink">
-            <webobject name = "InstDeathCount"></webobject>
+            (Details)
           </webobject>
         </webobject>
         <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
       </td>
 <!--       Statistics       -->
-      <webobject name = "ShowStatistics"><td>
+      <webobject name = "ShowStatistics"><td class="TransactionsCount">
         <webobject name = "InstTransactions"></webobject>
       </td>
-      <td>
+      <td class="ActiveSessionCount">
         <webobject name = "InstActiveSessions"></webobject>
       </td>
-      <td>
+      <td class="AverageTransactionsCount">
         <webobject name = "InstAverageTransaction"></webobject>
       </td>
-      <td>
+      <td class="AverageIdlePeriod">
         <webobject name = "InstAverageIdle"></webobject>
       </td>
     </webobject>
@@ -222,20 +223,20 @@
         </div>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td class="AllBounce"><webobject name = "BounceLink">Bounce</webobject></td>
+      <td class="AllBounce"><webobject name = "BounceLink">Bounce</webobject>&nbsp;<webobject name = "BounceHelpLink"><webobject name="HelpImage"/></webobject></td>
       <td class="AllClearDeaths"><webobject name = "ClearDeathsLink">Clear Deaths</webobject></td>
 <!--       Statistics All       -->
    <webobject name = "ShowStatistics">
-      <td>
+      <td class="TotalTransactionCount">
         <webobject name = "TotalTransactions"></webobject>
       </td>
-      <td>
+      <td class="TotalActiveSessions">
         <webobject name = "TotalActiveSessions"></webobject>
       </td>
-      <td>
+      <td class="TotalAverageTransaction">
         <webobject name = "TotalAverageTransaction"></webobject>
       </td>
-      <td>
+      <td class="TotalAverageIdleTime">
         <webobject name = "TotalAverageIdleTime"></webobject>
       </td>
     </webobject>
@@ -249,6 +250,19 @@
         <webobject name = "ConfigureLink"><span>Configure</span></webobject></td>
       <td><webobject name = "InstDeleteAllLink"><span>Delete</span></webobject></td>
     </tr>
+    
+    <wo:if condition="$showDetailStatistics">
+    <tr class="TotalsForRunningInstances">
+    	<td colspan="10" class="label">Running Sessions</td>
+    	<td class="TotalTransactionCount"><webobject name = "TotalTransactionsForActiveInstances"></webobject></td>
+      	<td class="TotalActiveSessions"><webobject name = "ActiveSessionsForActiveInstances"></webobject></td>
+      	<td class="TotalAverageTransaction"></td>
+      	<td class="TotalAverageIdleTime"></td>
+      	
+  		<td colspan="2"></td>
+    </tr>
+    </wo>
+    
   </webobject>
 </table>
 </div>

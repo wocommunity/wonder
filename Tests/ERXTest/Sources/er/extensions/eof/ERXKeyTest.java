@@ -1,7 +1,5 @@
 package er.extensions.eof;
 
-import static org.junit.Assert.*;
-
 import java.math.BigDecimal;
 
 import org.junit.After;
@@ -72,6 +70,7 @@ public class ERXKeyTest extends ERXTestCase {
 	private static final NSArray<Integer> simpleNumbers = new NSArray<Integer>(Integer.valueOf(1),Integer.valueOf(2),Integer.valueOf(3),Integer.valueOf(4),Integer.valueOf(5));
 
 	
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		ec = ERXEC.newEditingContext();
@@ -132,6 +131,7 @@ public class ERXKeyTest extends ERXTestCase {
 		ec.saveChanges();		
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		roles = null;
@@ -139,37 +139,52 @@ public class ERXKeyTest extends ERXTestCase {
 		shinraNonManager = null;
 		shinraNonManagerNames = null;
 		tyrellEmployees = null;
+
 		paychecks = null;
 
-		acme.delete();
-		shinraInc.delete();
-		tyrellCorp.delete();
-		sortCo.delete();
+		if (ERXTestCase.adaptorName().equals("JDBC")) {
+
+			ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "Company"), "delete from Company");
+			ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "Employee"), "delete from Employee");
+                	ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "EmployeeHI"), "delete from EmployeeHI");
+                	ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "EmployeeVI"), "delete from EmployeeVI");
+                	ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "EmployeeRole"), "delete from EmployeeRole");
+			ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "Paycheck"), "delete from Paycheck");
+			ERXEOAccessUtilities.evaluateSQLWithEntity(ec, ERXEOAccessUtilities.entityNamed(ec, "Role"), "delete from Role");
+
+		}
+
+		if (ERXTestCase.adaptorName().equals("Memory")) {
+
+			shinraInc.delete();
+			tyrellCorp.delete();
+			sortCo.delete();
 		
-		moe.delete();
-		larry.delete();
-		curly.delete();
-		tyrell.delete();
-		deckard.delete();
-		rachael.delete();
-		rufus.delete();
-		rude.delete();
-		elena.delete();
-		sephiroth.delete();
-		aaBb.delete();
-		Abba.delete();
+			moe.delete();
+			larry.delete();
+			curly.delete();
+			tyrell.delete();
+			deckard.delete();
+			rachael.delete();
+			rufus.delete();
+			rude.delete();
+			elena.delete();
+			sephiroth.delete();
+			aaBb.delete();
+			Abba.delete();
+
+			paycheck5000.delete();
+			paycheck10000.delete();
+			paycheck15000.delete();
 		
-		paycheck5000.delete();
-		paycheck10000.delete();
-		paycheck15000.delete();
-		
-		headHunter.delete();
-		bigBoss.delete();
-		accountant.delete();
-		doctor.delete();
-		barber.delete();
-		
-		ec.saveChanges();
+			headHunter.delete();
+			bigBoss.delete();
+			accountant.delete();
+			doctor.delete();
+			barber.delete();
+
+			ec.saveChanges();
+		}
 	}
 
 	@Test
@@ -250,9 +265,9 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtFlatten() {
-		NSArray<Paycheck> shinraPaychecks = (NSArray<Paycheck>) Company.EMPLOYEES.dot(Employee.PAYCHECKS).atFlatten().valueInObject(shinraInc);
+		NSArray<Paycheck> shinraPaychecks = Company.EMPLOYEES.dot(Employee.PAYCHECKS).atFlatten().arrayValueInObject(shinraInc);
 		assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(paychecks, shinraPaychecks));
-		NSArray<Employee> duplicateEmployees = (NSArray<Employee>) Company.EMPLOYEES.dot(Employee.COMPANY).dot(Company.EMPLOYEES).atFlatten().valueInObject(shinraInc);
+		NSArray<Employee> duplicateEmployees = Company.EMPLOYEES.dot(Employee.COMPANY).dot(Company.EMPLOYEES).atFlatten().arrayValueInObject(shinraInc);
 		assertEquals(16, duplicateEmployees.count());
 	}
 
@@ -288,7 +303,7 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtLimitInteger() {
-		NSArray<Employee> employees = (NSArray<Employee>) Company.EMPLOYEES.atLimit(Integer.valueOf(2)).valueInObject(shinraInc);
+		NSArray<Employee> employees = Company.EMPLOYEES.atLimit(Integer.valueOf(2)).arrayValueInObject(shinraInc);
 		assertTrue(employees.count() == 2);
 	}
 	
@@ -394,7 +409,7 @@ public class ERXKeyTest extends ERXTestCase {
 		o = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).valueInObject(shinraInc);
 		NSArray<?> d4 = (NSArray<?>) o;
 		assertTrue(d4.count() == 4);
-		NSArray<BigDecimal> d2 = (NSArray<BigDecimal>) Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atRemoveNullValues().valueInObject(shinraInc);
+		NSArray<BigDecimal> d2 = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atRemoveNullValues().arrayValueInObject(shinraInc);
 		NSArray<BigDecimal> d2plus = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atRemoveNullValues(new ERXKey<NSArray<BigDecimal>>("plus")).valueInObject(shinraInc);
 		assertEquals(d2, d2plus);
 	}
@@ -413,7 +428,7 @@ public class ERXKeyTest extends ERXTestCase {
 		Object o = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).valueInObject(shinraInc);
 		NSArray<?> d4 = (NSArray<?>) o;
 		assertTrue(d4.count() == 4);
-		NSArray<BigDecimal> d2 = (NSArray<BigDecimal>) Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atRemoveNullValues().valueInObject(shinraInc);
+		NSArray<BigDecimal> d2 = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atRemoveNullValues().arrayValueInObject(shinraInc);
 		assertTrue(d2.count() == 2);
 	}
 
@@ -439,8 +454,8 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testReverse() {
-		NSArray<Employee> shinraAsc = (NSArray<Employee>) Company.EMPLOYEES.atSortAsc(Employee.FIRST_NAME).valueInObject(shinraInc);
-		NSArray<Employee> shinraDescReverse = (NSArray<Employee>) Company.EMPLOYEES.atSortDesc(Employee.FIRST_NAME).valueInObject(shinraInc);
+		NSArray<Employee> shinraAsc = Company.EMPLOYEES.atSortAsc(Employee.FIRST_NAME).arrayValueInObject(shinraInc);
+		NSArray<Employee> shinraDescReverse = Company.EMPLOYEES.atSortDesc(Employee.FIRST_NAME).arrayValueInObject(shinraInc);
 		shinraDescReverse = (NSArray<Employee>) ERXKey.reverse().valueInObject(shinraDescReverse);
 		assertEquals(shinraAsc, shinraDescReverse);
 	}
@@ -465,9 +480,9 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtSort() {
-		NSArray<Employee> first = (NSArray<Employee>) Company.EMPLOYEES.atSort(Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> first = Company.EMPLOYEES.atSort(Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(Abba, aaBb), first);
-		NSArray<Employee> last = (NSArray<Employee>) Company.EMPLOYEES.atSort(Employee.LAST_NAME,Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> last = Company.EMPLOYEES.atSort(Employee.LAST_NAME,Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(aaBb, Abba), last);
 	}
 
@@ -481,9 +496,9 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtSortAsc() {
-		NSArray<Employee> first = (NSArray<Employee>) Company.EMPLOYEES.atSortAsc(Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> first = Company.EMPLOYEES.atSortAsc(Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(Abba, aaBb), first);
-		NSArray<Employee> last = (NSArray<Employee>) Company.EMPLOYEES.atSortAsc(Employee.LAST_NAME,Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> last = Company.EMPLOYEES.atSortAsc(Employee.LAST_NAME,Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(aaBb, Abba), last);
 	}
 
@@ -497,9 +512,9 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtSortDesc() {
-		NSArray<Employee> first = (NSArray<Employee>) Company.EMPLOYEES.atSortDesc(Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> first = Company.EMPLOYEES.atSortDesc(Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(aaBb, Abba), first);
-		NSArray<Employee> last = (NSArray<Employee>) Company.EMPLOYEES.atSortDesc(Employee.LAST_NAME,Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> last = Company.EMPLOYEES.atSortDesc(Employee.LAST_NAME,Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(Abba, aaBb), last);
 	}
 
@@ -513,17 +528,17 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtSortInsensitiveAsc() {
-		NSArray<Employee> first = (NSArray<Employee>) Company.EMPLOYEES.atSortInsensitiveAsc(Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> first = Company.EMPLOYEES.atSortInsensitiveAsc(Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(aaBb, Abba), first);
-		NSArray<Employee> last = (NSArray<Employee>) Company.EMPLOYEES.atSortInsensitiveAsc(Employee.LAST_NAME,Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> last = Company.EMPLOYEES.atSortInsensitiveAsc(Employee.LAST_NAME,Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(Abba, aaBb), last);
 	}
 
 	@Test
 	public void testSortInsensitiveDesc() {
-		NSArray<Employee> first = (NSArray<Employee>) Company.EMPLOYEES.atSortInsensitiveDesc(Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> first = Company.EMPLOYEES.atSortInsensitiveDesc(Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(Abba, aaBb), first);
-		NSArray<Employee> last = (NSArray<Employee>) Company.EMPLOYEES.atSortInsensitiveDesc(Employee.LAST_NAME,Employee.FIRST_NAME).valueInObject(sortCo);
+		NSArray<Employee> last = Company.EMPLOYEES.atSortInsensitiveDesc(Employee.LAST_NAME,Employee.FIRST_NAME).arrayValueInObject(sortCo);
 		assertEquals(new NSArray<Employee>(aaBb, Abba), last);
 	}
 
@@ -580,10 +595,10 @@ public class ERXKeyTest extends ERXTestCase {
 
 	@Test
 	public void testAtUnique() {
-		NSArray<Role> uniqueRoles = (NSArray<Role>) Company.EMPLOYEES.dot(Employee.ROLES).atFlatten().atUnique().valueInObject(shinraInc);
+		NSArray<Role> uniqueRoles = Company.EMPLOYEES.dot(Employee.ROLES).atFlatten().atUnique().arrayValueInObject(shinraInc);
 		assertTrue(ERXArrayUtilities.arraysAreIdenticalSets(uniqueRoles, roles));
 		assertTrue(uniqueRoles.count() == 3);
-		NSArray<NSArray<Role>> roleArrays = (NSArray<NSArray<Role>>) Company.EMPLOYEES.dot(Employee.ROLES).atUnique().atFlatten().valueInObject(shinraInc);
+		NSArray<Role> roleArrays = Company.EMPLOYEES.dot(Employee.ROLES).atUnique().atFlatten().arrayValueInObject(shinraInc);
 		assertTrue(roleArrays.count() == 6);
 	}
 

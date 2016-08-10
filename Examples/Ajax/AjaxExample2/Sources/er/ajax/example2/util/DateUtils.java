@@ -183,7 +183,7 @@ public class DateUtils {
   public static NSArray<Integer> years(int _year, int _offset, int _count) {
     NSMutableArray<Integer> years = new NSMutableArray<Integer>();
     for (int i = 0; i < _count; i++) {
-      years.addObject(new Integer(_year + _offset + i));
+      years.addObject(Integer.valueOf(_year + _offset + i));
     }
     return years;
   }
@@ -207,7 +207,7 @@ public class DateUtils {
   }
 
   public static String getDurationAsString(NSTimestamp _startTime, NSTimestamp _endTime) {
-    StringBuffer buff = new StringBuffer();
+	StringBuilder buff = new StringBuilder();
     long seconds = getDurationInSeconds(_startTime, _endTime);
     long hours = seconds / 3600;
     long minutes = (seconds % 3600) / 60;

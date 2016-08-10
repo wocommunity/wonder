@@ -8,19 +8,19 @@
 		<binding name="popupName"/>
 		<binding name="doNotAddOneToComputedIndex" defaults="Boolean"/>
 
-		<validation message="&apos;string&apos; is a required binding">
+		<validation message="'string' is a required binding">
 			<unbound name="string"/>
 		</validation>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 
-		<validation message="&apos;selectsItem&apos; is a required binding">
+		<validation message="'selectsItem' is a required binding">
 			<unbound name="selectsItem"/>
 		</validation>
 
-		<validation message="&apos;popupName&apos; is a required binding">
+		<validation message="'popupName' is a required binding">
 			<unbound name="popupName"/>
 		</validation>
 	</wo>

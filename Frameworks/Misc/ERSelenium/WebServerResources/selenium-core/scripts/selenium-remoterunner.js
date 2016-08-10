@@ -22,10 +22,6 @@ workingColor = "#DEE7EC";
 doneColor = "#FFFFCC";
 
 var injectedSessionId;
-var cmd1 = document.createElement("div");
-var cmd2 = document.createElement("div");
-var cmd3 = document.createElement("div");
-var cmd4 = document.createElement("div");
 
 var postResult = "START";
 var debugMode = false;
@@ -33,6 +29,16 @@ var relayToRC = null;
 var proxyInjectionMode = false;
 var uniqueId = 'sel_' + Math.round(100000 * Math.random());
 var seleniumSequenceNumber = 0;
+var cmd8 = "";
+var cmd7 = "";
+var cmd6 = "";
+var cmd5 = "";
+var cmd4 = "";
+var cmd3 = "";
+var cmd2 = "";
+var cmd1 = "";
+var lastCmd = "";
+var lastCmdTime = new Date();
 
 var RemoteRunnerOptions = classCreate();
 objectExtend(RemoteRunnerOptions.prototype, URLConfiguration.prototype);
@@ -52,8 +58,12 @@ objectExtend(RemoteRunnerOptions.prototype, {
         return this._getQueryParameter("driverUrl");
     },
 
+    // requires per-session extension Javascript as soon as this Selenium
+    // instance becomes aware of the session identifier
     getSessionId: function() {
-        return this._getQueryParameter("sessionId");
+        var sessionId = this._getQueryParameter("sessionId");
+        requireExtensionJs(sessionId);
+        return sessionId;
     },
 
     _acquireQueryString: function () {
@@ -108,13 +118,6 @@ function runSeleniumTest() {
     commandFactory.registerAll(selenium);
 
     currentTest = new RemoteRunner(commandFactory);
-
-    if (document.getElementById("commandList") != null) {
-        document.getElementById("commandList").appendChild(cmd4);
-        document.getElementById("commandList").appendChild(cmd3);
-        document.getElementById("commandList").appendChild(cmd2);
-        document.getElementById("commandList").appendChild(cmd1);
-    }
 
     var doContinue = runOptions.getContinue();
     if (doContinue != null) postResult = "OK";
@@ -209,26 +212,37 @@ objectExtend(RemoteRunner.prototype, {
                 cmdText += ', ' + command.value;
             }
         }
-        cmdText += ")";
-        if (cmdText.length >40) {
-            cmdText = cmdText.substring(0,40);
-            cmdText += "...";
+        if (cmdText.length > 70) {
+            cmdText = cmdText.substring(0, 70) + "...\n";
+        } else {
+            cmdText += ")\n";
         }
-        this.commandNode.appendChild(document.createTextNode(cmdText));
-        this.commandNode.style.backgroundColor = workingColor;
-        if (document.getElementById("commandList") != null) {
-            document.getElementById("commandList").removeChild(cmd1);
-            document.getElementById("commandList").removeChild(cmd2);
-            document.getElementById("commandList").removeChild(cmd3);
-            document.getElementById("commandList").removeChild(cmd4);
+
+        if (cmdText == lastCmd) {
+	        var rightNow = new Date();
+	        var msSinceStart = rightNow.getTime() - lastCmdTime.getTime();
+	        var sinceStart = msSinceStart + "ms";
+	        if (msSinceStart > 1000) {
+		        sinceStart = Math.round(msSinceStart / 1000) + "s";
+		    }
+            cmd1 = "Same command (" + sinceStart + "): " + lastCmd;
+        } else {
+	        lastCmdTime = new Date();
+            cmd8 = cmd7;
+            cmd7 = cmd6;
+            cmd6 = cmd5;
+            cmd5 = cmd4;
             cmd4 = cmd3;
             cmd3 = cmd2;
             cmd2 = cmd1;
-            cmd1 = this.commandNode;
-            document.getElementById("commandList").appendChild(cmd4);
-            document.getElementById("commandList").appendChild(cmd3);
-            document.getElementById("commandList").appendChild(cmd2);
-            document.getElementById("commandList").appendChild(cmd1);
+            cmd1 = cmdText;
+        }
+        lastCmd = cmdText;
+        
+        if (! proxyInjectionMode) {
+            var commandList = document.commands.commandList;
+            commandList.value = cmd8 + cmd7 + cmd6 + cmd5 + cmd4 + cmd3 + cmd2 + cmd1;
+            commandList.scrollTop = commandList.scrollHeight;
         }
     },
 
@@ -259,7 +273,7 @@ objectExtend(RemoteRunner.prototype, {
     commandError : function(message) {
         postResult = "ERROR: " + message;
         this.commandNode.style.backgroundColor = errorColor;
-        this.commandNode.title = message;
+        this.commandNode.titcle = message;
     },
 
     testComplete : function() {
@@ -279,8 +293,14 @@ objectExtend(RemoteRunner.prototype, {
                     return;
                 }
                 var command = this._extractCommand(this.xmlHttpForCommandsAndResults);
-                this.currentCommand = command;
-                this.continueTestAtCurrentCommand();
+                if (command.command == 'retryLast') {
+                    setTimeout(fnBind(function() {
+                        sendToRC("RETRY", "retry=true", fnBind(this._HandleHttpResponse, this), this.xmlHttpForCommandsAndResults, true);
+                    }, this), 1000);
+                } else {
+                    this.currentCommand = command;
+                    this.continueTestAtCurrentCommand();
+                }
             }
             // Not OK 
             else {
@@ -294,7 +314,15 @@ objectExtend(RemoteRunner.prototype, {
     },
 
     _extractCommand : function(xmlHttp) {
-        var command;
+        var command, text, json;
+        text = command = xmlHttp.responseText;
+        if (/^json=/.test(text)) {
+            eval(text);
+            if (json.rest) {
+                eval(json.rest);
+            }
+            return json;
+        }
         try {
             var re = new RegExp("^(.*?)\n((.|[\r\n])*)");
             if (re.exec(xmlHttp.responseText)) {
@@ -371,39 +399,11 @@ function sendToRC(dataToBePosted, urlParms, callback, xmlHttpObject, async) {
     url = addUrlParams(url);
     url += "&sequenceNumber=" + seleniumSequenceNumber++;
     
-    var wrappingCallback;
-    if (callback == null) {
-        callback = function() {};
-        wrappingCallback = callback;
-    } else {
-        wrappingCallback = function() {
-            if (xmlHttpObject.readyState == 4) {
-                if (xmlHttpObject.status == 200) {
-                    var retry = false;
-                    if (typeof currentTest != 'undefined') {
-                        var command = currentTest._extractCommand(xmlHttpObject);
-                            //console.log("*********** " + command.command + " | " + command.target + " | " + command.value);
-                        if (command.command == 'retryLast') {
-                            retry = true;
-                        }
-                    }
-                    if (retry) {
-                        setTimeout(fnBind(function() {
-                            sendToRC("RETRY", "retry=true", callback, xmlHttpObject, async);
-                        }, this), 1000);
-                    } else {
-                        callback();
-                    }
-                }
-            }
-        }
-    }
-    
     var postedData = "postedData=" + encodeURIComponent(dataToBePosted);
 
     //xmlHttpObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttpObject.open("POST", url, async);
-    xmlHttpObject.onreadystatechange = wrappingCallback;
+    if (callback) xmlHttpObject.onreadystatechange = callback;
     xmlHttpObject.send(postedData);
     return null;
 }
@@ -561,6 +561,44 @@ Selenium.prototype.doSetContext = function(context) {
     }
 };
 
+/**
+ * Adds a script tag referencing a specially-named user extensions "file". The
+ * resource handler for this special file (which won't actually exist) will use
+ * the session ID embedded in its name to retrieve per-session specified user
+ * extension javascript.
+ *
+ * @param sessionId
+ */
+function requireExtensionJs(sessionId) {
+    var src = 'scripts/user-extensions.js[' + sessionId + ']';
+    if (document.getElementById(src) == null) {
+        var scriptTag = document.createElement('script');
+        scriptTag.language = 'JavaScript';
+        scriptTag.type = 'text/javascript';
+        scriptTag.src = src;
+        scriptTag.id = src;
+        var headTag = document.getElementsByTagName('head')[0];
+        headTag.appendChild(scriptTag);
+    }
+}
+
+Selenium.prototype.doAttachFile = function(fieldLocator,fileLocator) {
+   /**
+   * Sets a file input (upload) field to the file listed in fileLocator
+   *
+   *  @param fieldLocator an <a href="#locators">element locator</a>
+   *  @param fileLocator a URL pointing to the specified file. Before the file
+   *  can be set in the input field (fieldLocator), Selenium RC may need to transfer the file  
+   *  to the local machine before attaching the file in a web page form. This is common in selenium
+   *  grid configurations where the RC server driving the browser is not the same
+   *  machine that started the test.
+   *
+   *  Supported Browsers: Firefox ("*chrome") only.
+   *   
+   */
+   // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us! 
+};
+
 Selenium.prototype.doCaptureScreenshot = function(filename) {
     /**
     * Captures a PNG screenshot to the specified file.
@@ -569,3 +607,89 @@ Selenium.prototype.doCaptureScreenshot = function(filename) {
     */
     // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
 };
+
+Selenium.prototype.doCaptureScreenshotToString = function() {
+    /**
+    * Capture a PNG screenshot.  It then returns the file as a base 64 encoded string. 
+    * 
+    * @return string The base 64 encoded string of the screen shot (PNG file)
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doCaptureEntirePageScreenshotToString = function(kwargs) {
+    /**
+    * Downloads a screenshot of the browser current window canvas to a 
+    * based 64 encoded PNG file. The <em>entire</em> windows canvas is captured,
+    * including parts rendered outside of the current view port.
+    *
+	* Currently this only works in Mozilla and when running in chrome mode. 
+    * 
+    * @param kwargs  A kwargs string that modifies the way the screenshot is captured. Example: "background=#CCFFDD". This may be useful to set for capturing screenshots of less-than-ideal layouts, for example where absolute positioning causes the calculation of the canvas dimension to fail and a black background is exposed  (possibly obscuring black text).
+    *
+    * @return string The base 64 encoded string of the page screenshot (PNG file)
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doShutDownSeleniumServer = function(keycode) {
+    /**
+    * Kills the running Selenium Server and all browser sessions.  After you run this command, you will no longer be able to send
+    * commands to the server; you can't remotely start the server once it has been stopped.  Normally
+    * you should prefer to run the "stop" command, which terminates the current browser session, rather than 
+    * shutting down the entire server.
+    *
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doRetrieveLastRemoteControlLogs = function() {
+    /**
+    * Retrieve the last messages logged on a specific remote control. Useful for error reports, especially
+    * when running multiple remote controls in a distributed environment. The maximum number of log messages
+    * that can be retrieve is configured on remote control startup.
+    *
+    * @return string The last N log messages as a multi-line string.
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyDownNative = function(keycode) {
+    /**
+    * Simulates a user pressing a key (without releasing it yet) by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyUpNative = function(keycode) {
+    /**
+    * Simulates a user releasing a key by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyPressNative = function(keycode) {
+    /**
+    * Simulates a user pressing and releasing a key by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+

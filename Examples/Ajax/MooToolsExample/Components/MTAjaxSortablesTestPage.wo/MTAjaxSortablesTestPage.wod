@@ -1,0 +1,28 @@
+ASB : MTAjaxSubmitButton {
+	action = saveChanges;
+	class = "btn btn-primary";
+	updateContainerID = "UpdateContainer";
+	spinnerOptions = "{ containerPosition: { position: 'leftCenter'  }}";
+	useSpinner = true;
+	value = "Update List"
+}
+
+SortableListA : MTAjaxSortableList {
+	action = saveChanges;
+	clone = "true";
+	id = "exampleListA";
+	listClass = "unstyled";
+	listElementName = "ul";
+	listItemElementName = "li";
+	list = listA;
+	item = repetitionListItemA;
+	listItemIDKeyPath = "id";
+	opacity = "0.8";
+	updateContainerID = "UpdateContainer";
+	var = "MySortables";
+}
+
+ListItemNameA : WOImage {
+	class = "thumbnail";
+	src = repetitionListItemA.url;
+}

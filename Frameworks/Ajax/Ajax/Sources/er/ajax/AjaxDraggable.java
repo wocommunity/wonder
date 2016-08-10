@@ -72,6 +72,13 @@ import com.webobjects.foundation.NSMutableDictionary;
  *          Set binding to "'someID'" to scroll the element with ID "someID"
  */
 public class AjaxDraggable extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
   private String _id;
 
@@ -79,28 +86,28 @@ public class AjaxDraggable extends AjaxComponent {
     super(context);
   }
   
+  @Override
   public void awake() {
       super.awake();
   }
 
+  @Override
   public void reset() {
       _id = null;
       super.reset();
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-  
+  @SuppressWarnings("unchecked")
   public static Object draggableObjectForPage(WOComponent page, String draggableID) {
     Object droppedObject = null;
-    Map componentDraggablesMap = (Map)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+    Map<WOComponent, Map<String, Object>> componentDraggablesMap = (Map<WOComponent, Map<String, Object>>)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
     if (componentDraggablesMap != null) {
-      Map draggablesMap = (Map) componentDraggablesMap.get(page);
+      Map<String, Object> draggablesMap = componentDraggablesMap.get(page);
       if (draggablesMap != null) {
         droppedObject = draggablesMap.get(draggableID);
       }
@@ -108,18 +115,20 @@ public class AjaxDraggable extends AjaxComponent {
     return droppedObject;
   }
   
+  @Override
+  @SuppressWarnings("unchecked")
   public void appendToResponse(WOResponse res, WOContext ctx) {
     if (canGetValueForBinding("draggableObject")) {
       Object draggableObject = valueForBinding("draggableObject");
       WOComponent page = context().page();
-      Map componentDraggablesMap = (Map)ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+      Map<WOComponent, Map<String, Object>> componentDraggablesMap = (Map<WOComponent, Map<String, Object>>) ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       if (componentDraggablesMap == null) {
-        componentDraggablesMap = new WeakHashMap();
+        componentDraggablesMap = new WeakHashMap<WOComponent, Map<String, Object>>();
         ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       }
-      Map draggablesMap = (Map) componentDraggablesMap.get(page);
+      Map<String, Object> draggablesMap = componentDraggablesMap.get(page);
       if (draggablesMap == null) {
-        draggablesMap = new HashMap();
+        draggablesMap = new HashMap<String, Object>();
         componentDraggablesMap.put(page, draggablesMap);
       }
       String id = draggableID();
@@ -133,8 +142,8 @@ public class AjaxDraggable extends AjaxComponent {
     super.appendToResponse(res, ctx);
   }
 
-  public NSDictionary createAjaxOptions() {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+  public NSDictionary<String, String> createAjaxOptions() {
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 	// PROTOTYPE OPTIONS
     ajaxOptionsArray.addObject(new AjaxOption("starteffect", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
@@ -147,7 +156,7 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
 
@@ -182,6 +191,7 @@ public class AjaxDraggable extends AjaxComponent {
     return draggableID;
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
 	addScriptResourceInHead(res, "effects.js");
@@ -189,8 +199,8 @@ public class AjaxDraggable extends AjaxComponent {
 	addScriptResourceInHead(res, "wonder.js");
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
-
 }

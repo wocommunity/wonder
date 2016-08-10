@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
 	<wo class="AjaxFlickrBatchNavigation" wocomponentcontent="false">
 		<binding name="displayGroup"/>
@@ -34,5 +34,7 @@
 	    <binding name="parentActionName"/>
 	    <binding name="maxNumberOfObjects"/>
 	    <binding name="numberOfObjectsPerBatch"/>
+    <binding name="batchSizes"/>
+    <binding name="showBatchSizes"/>
     </wo>
 </wodefinitions>

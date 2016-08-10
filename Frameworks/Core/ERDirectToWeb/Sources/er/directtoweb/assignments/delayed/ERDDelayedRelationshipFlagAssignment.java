@@ -9,17 +9,21 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.directtoweb.components.relationships.ERD2WDisplayRelationshipFlag;
-
 /**
  * Creates the needed values to have dymamic values in a list page repetition. 
  * Answers on displayPropertyKeys and displayNameForProperty.
- * @see ERD2WDisplayRelationshipFlag for more info
+ * @see er.directtoweb.components.relationships.ERD2WDisplayRelationshipFlag for more info
  * @author ak 
  *
  */
 public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDelayedRelationshipFlagAssignment(eokeyvalueunarchiver);
     }
@@ -30,6 +34,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
     public ERDDelayedRelationshipFlagAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRelationshipFlagAssignment(String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String path = keyPath();
         if("displayPropertyKeys".equals(path)) {
@@ -48,7 +53,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
                     }
                     if(objects != null) {
                         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
-                            Object o = (Object) e.nextElement();
+                            Object o = e.nextElement();
                             result.addObject(key + ".@" + o);
                         }
                     }

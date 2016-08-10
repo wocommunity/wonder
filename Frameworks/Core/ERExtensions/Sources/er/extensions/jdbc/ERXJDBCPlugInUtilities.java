@@ -38,11 +38,12 @@ public class ERXJDBCPlugInUtilities {
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) ((NSArray)object1).objectAtIndex(0);
             EOEntity entity2 = (EOEntity) ((NSArray)object2).objectAtIndex(0);
-            Number group1 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
-            Number group2 = (Number) eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
+            Number group1 = eRXEntityOrder.groupedEntities().objectForKey(entity1.name());
+            Number group2 = eRXEntityOrder.groupedEntities().objectForKey(entity2.name());
 
             return NSComparator.AscendingNumberComparator.compare(group1, group2);
         }

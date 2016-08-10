@@ -1,0 +1,107 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+<h1>XISS</h1>
+
+<p>XISS は Java の簡易 xml パーサと生成ライブラリです。このライブラリの目的は Java で簡単な API で XML ドキュメントの生成です。
+XISS は W3C DOM API のすべての機能を搭載していません。もっと凄い機能が必要な場合には JDOM を使います。
+簡単なドキュメントをコードで作成する必要がある場合にはとても便利なライブラリーになります。</p>
+
+<h2>生成</h2>
+
+<p>XISS でドキュメントを生成するには複数の方法があります。</p>
+
+<p>一番シンプルな方法です：</p>
+
+<pre>
+<code>
+ERXML.Doc doc = ERXML.doc(
+    ERXML.comment("This is the structure for a person"),
+    ERXML.e("person",
+        ERXML.e("first-name", "Mike"),
+        ERXML.e("last-name", "Schrag"),
+        ERXML.e("addresses",
+            ERXML.e("address",
+                ERXML.a("location", "Home"),
+                ERXML.e("address", "100 Main St."),
+                ERXML.e("city", "Richmond"),
+                ERXML.e("state", "VA"),
+                ERXML.e("zip", "23233")
+            ),
+            ERXML.cdata("This is a cdata section! <test> of cdata!")
+        )
+    )
+);
+</code>
+</pre>
+
+<p>次はもっと冗長な方法です：</p>
+The other way is more verbose, but will always format properly in your IDE:
+
+<pre>
+<code>
+ERXML.Doc doc = ERXML.doc();
+doc.comment("This is the structure for a person");
+ERXML.E person = doc.root("person");
+{
+  person.e("first-name", "Bob");
+  person.e("last-name").setText("Jones");
+  person.comment("This is the structure for addresses");
+  ERXML.E addresses = person.e("addresses");
+  {
+    ERXML.E homeAddress = addresses.e("address").set("location", "Home");
+    {
+      homeAddress.e("address", "100 Main St");
+      homeAddress.e("city", "Richmond");
+      homeAddress.e("state", "VA");
+      homeAddress.e("zip", "23233");
+    }
+    addresses.cdata("This is a cdata section! <test> of cdata!");
+  }
+}
+</code>
+</pre>
+
+<h2>パス</h2>
+
+<p>基本的には内部で W3C DOM パス機能が使われていますが、もっと簡単に扱えるためにラップされています：</p>
+
+<pre>
+<code>
+ERXML.Doc doc = ERXML.doc(String)
+ERXML.Doc doc = ERXML.doc(File)
+ERXML.Doc doc = ERXML.doc(Reader)
+</code>
+</pre>
+
+<h2>出力</h2>
+
+<p>XISS DOM オブジェクトの toString は奇麗な出力 XML フォーマットになります：</p>
+
+<code>System.out.println(doc);</code>
+
+<pre>
+<code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- This is the structure for a person --&gt;
+&lt;person&gt;
+  &lt;first-name&gt;Bob&lt;/first-name&gt;
+  &lt;last-name&gt;Jones&lt;/last-name&gt;
+  &lt;!-- This is the structure for addresses --&gt;
+  &lt;addresses&gt;
+    &lt;address location="Home"&gt;
+      &lt;address&gt;100 Main St&lt;/address&gt;
+      &lt;city&gt;Richmond&lt;/city&gt;
+      &lt;state&gt;VA&lt;/state&gt;
+      &lt;zip&gt;23233&lt;/zip&gt;
+    &lt;/address&gt;
+    &lt;![CDATA[This is a cdata section! &lt;test&gt; of cdata!]]&gt;
+  &lt;/addresses&gt;
+&lt;/person&gt;
+</code>
+</pre>
+
+</body>
+</html>

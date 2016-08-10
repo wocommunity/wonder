@@ -15,11 +15,15 @@ import com.webobjects.foundation.NSArray;
 import er.directtoweb.components.ERDCustomQueryComponent;
 
 /**
- * Custom query component that let's the user select from an arbitrary list.<br />
- * 
+ * Custom query component that let's the user select from an arbitrary list.
  */
-
 public class ERD2WPickFromList extends ERDCustomQueryComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WPickFromList(WOContext context) { super(context); }
     // lets you pick from either an arbitrary list or a pool of shared EOs
@@ -27,7 +31,9 @@ public class ERD2WPickFromList extends ERDCustomQueryComponent {
     public Object item; 
 
     // can't be stateless!
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     private String _sharedEOsEntityName;
@@ -49,7 +55,7 @@ public class ERD2WPickFromList extends ERDCustomQueryComponent {
             result=EOUtilities.objectsForEntityNamed(EOSharedEditingContext.defaultSharedEditingContext(),
                                                      sharedEOsEntityName());
         } else {
-            result=(NSArray)valueForBinding("list");            
+            result=(NSArray)valueForBinding("list");
         }
         return result;
     }

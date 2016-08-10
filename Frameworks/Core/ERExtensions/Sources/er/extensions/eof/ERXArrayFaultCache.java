@@ -2,8 +2,6 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAccessArrayFaultHandler;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -32,7 +30,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXArrayFaultCache {
     
     private NSMutableDictionary cache = new NSMutableDictionary();
-    private static final Logger log = Logger.getLogger(ERXArrayFaultCache.class);
     
     /**
      * Register the to-many faults by entity name and relationship name. The entries
@@ -74,7 +71,7 @@ public class ERXArrayFaultCache {
             EOKeyGlobalID sourceGid = handler.sourceGlobalID();
             EOEditingContext ec = handler.editingContext();
             synchronized (cache) {
-                NSDictionary entries = (NSDictionary) relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
+                NSDictionary entries = relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
                 if(entries != null) {
                     NSArray gids = (NSArray) entries.objectForKey(sourceGid);
                     if(gids != null) {

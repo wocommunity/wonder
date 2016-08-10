@@ -36,7 +36,7 @@ public class AjaxValue {
 	/**
 	 * Creates AjaxValue for value with the type guessed at.
 	 * 
-	 * @see AjaxValue#AjaxValue(er.ajax.AjaxOption.Type, Object)
+	 * @see #AjaxValue(er.ajax.AjaxOption.Type, Object)
 	 *
 	 * @param value the value to make into an AjaxValue
 	 */
@@ -49,7 +49,7 @@ public class AjaxValue {
 	 * the actual type will be inferred if value is String, Number, Boolean, NSArray, NSDictionary, 
 	 * or AjaxValue (if value is an AjaxValue then both type and value are taken from value).
 	 * 
-	 * @see AjaxValue#AjaxValue(Object)
+	 * @see #AjaxValue(Object)
 	 * @see AjaxOption.Type
 	 * 
 	 * @param type one of AjaxOption.Type constants from AjaxOption
@@ -120,17 +120,17 @@ public class AjaxValue {
 		else if (type == AjaxOption.ARRAY) {
 			if (_value instanceof NSArray) {
 				NSArray arrayValue = (NSArray) _value;
-				StringBuffer sb = new StringBuffer();
-				sb.append("[");
+				StringBuilder sb = new StringBuilder();
+				sb.append('[');
 				Enumeration objEnum = arrayValue.objectEnumerator();
 				while (objEnum.hasMoreElements()) {
 					Object o = objEnum.nextElement();
 					sb.append(new AjaxValue(o).javascriptValue());
 					if (objEnum.hasMoreElements()) {
-						sb.append(",");
+						sb.append(',');
 					}
 				}
-				sb.append("]");
+				sb.append(']');
 				strValue = sb.toString();
 			}
 			else {
@@ -140,20 +140,20 @@ public class AjaxValue {
 		else if (type == AjaxOption.DICTIONARY) {
 			if (_value instanceof NSDictionary) {
 				NSDictionary dictValue = (NSDictionary) _value;
-				StringBuffer sb = new StringBuffer();
-				sb.append("{");
+				StringBuilder sb = new StringBuilder();
+				sb.append('{');
 				Enumeration keyEnum = dictValue.keyEnumerator();
 				while (keyEnum.hasMoreElements()) {
 					Object key = keyEnum.nextElement();
 					Object value = dictValue.objectForKey(key);
 					sb.append(new AjaxValue(key).javascriptValue());
-					sb.append(":");
+					sb.append(':');
 					sb.append(new AjaxValue(value).javascriptValue());
 					if (keyEnum.hasMoreElements()) {
-						sb.append(",");
+						sb.append(',');
 					}
 				}
-				sb.append("}");
+				sb.append('}');
 				strValue = sb.toString();
 			}
 			else {
@@ -168,17 +168,17 @@ public class AjaxValue {
 					strValue = new AjaxValue(AjaxOption.STRING, arrayValue.objectAtIndex(0)).javascriptValue();
 				}
 				else if (count > 0) {
-					StringBuffer sb = new StringBuffer();
-					sb.append("[");
+					StringBuilder sb = new StringBuilder();
+					sb.append('[');
 					Enumeration objEnum = arrayValue.objectEnumerator();
 					while (objEnum.hasMoreElements()) {
 						Object o = objEnum.nextElement();
 						sb.append(new AjaxValue(AjaxOption.STRING, o).javascriptValue());
 						if (objEnum.hasMoreElements()) {
-							sb.append(",");
+							sb.append(',');
 						}
 					}
-					sb.append("]");
+					sb.append(']');
 					strValue = sb.toString();
 				}
 				else {

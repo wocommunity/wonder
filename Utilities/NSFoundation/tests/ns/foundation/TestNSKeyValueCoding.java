@@ -26,7 +26,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
   private static final BigInteger FORTY_TWO_BIG_INTEGER = BigInteger.valueOf(42L);
   private static final String FORTY_TWO_STRING = "42";
   private static final Character FORTY_TWO_CHAR = (char)42;
-  private static final Integer FORTY_TWO = new Integer(42);
+  private static final Integer FORTY_TWO = Integer.valueOf(42);
   private static final Short FORTY_TWO_SHORT = FORTY_TWO.shortValue();
   private static final Long FORTY_TWO_LONG = Long.valueOf(FORTY_TWO.longValue());
   private static final Float FORTY_TWO_FLOAT = Float.valueOf(FORTY_TWO.floatValue());

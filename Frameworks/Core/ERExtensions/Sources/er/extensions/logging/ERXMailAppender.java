@@ -50,7 +50,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *	ExceptionPage - name of the exception page, is unset, <br>
  *	Title - Title of the email messages, if not specified the title will be a
  *		truncated version of the log message.<br>
- *	Qualifier - qualifier that defines if the event should be logged.<br>
+ *	Qualifier - qualifier that defines if the event should be logged.
  */
 
 public class ERXMailAppender extends AppenderSkeleton {
@@ -135,7 +135,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      */
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
-        this.realQualifier = null;
+        realQualifier = null;
     }
     
     /**
@@ -376,7 +376,7 @@ public class ERXMailAppender extends AppenderSkeleton {
             LogLog.error("Attempting to log an event with a null domain name and a null from address!");
         } else if (toAddressesAsArray().count() == 0) {
             LogLog.error("Attempting to log with an empty array of toAddresses");
-        } else if (this.layout == null) {
+        } else if (layout == null) {
             LogLog.warn("Attempting to log an event to an ERCMailMessageAppender without a layout specified.");
         } else {
             conditionsChecked = true;
@@ -398,6 +398,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      *
      * @param event current logging event
      */
+    @Override
     public void append(LoggingEvent event) {
         if (conditionsChecked || checkConditions()) {
             if(event.getLevel().equals(Level.ERROR) 
@@ -417,7 +418,7 @@ public class ERXMailAppender extends AppenderSkeleton {
         if (getTitle() != null) {
             composeTitle = getTitle();
         } else {
-            StringBuffer temp = new StringBuffer();
+            StringBuilder temp = new StringBuilder();
             if (titleIncludesPriorityLevelAsBoolean()) {
                 temp.append(event.getLevel().toString() + ": ");
             }
@@ -460,7 +461,7 @@ public class ERXMailAppender extends AppenderSkeleton {
             result.setObjectForKey(composeTitle, "errorMessage");
         }
 
-        String message = this.layout.format(event);
+        String message = layout.format(event);
         if(message != null) {
             result.setObjectForKey(message, "formattedMessage");
         }
@@ -489,12 +490,13 @@ public class ERXMailAppender extends AppenderSkeleton {
      * Where the actual logging event is processed and a
      * mail message is generated.
      * @param event logging event
+     * @return mail body
      */
     public String composeMessage(LoggingEvent event) {
         String result;
         if(getExceptionPageName() != null && ERXValueUtilities.booleanValue(formatAsError())) {
             NSDictionary dict = composeExceptionPageDictionary(event);
-            WOComponent page = (WOComponent)ERXApplication.instantiatePage(exceptionPageName);
+            WOComponent page = ERXApplication.instantiatePage(exceptionPageName);
 
             for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements();) {
                 String key = (String) keys.nextElement();
@@ -516,7 +518,7 @@ public class ERXMailAppender extends AppenderSkeleton {
                 }
             }
         } else {
-            result = this.layout.format(event);
+            result = layout.format(event);
             result = result + "\n" + ERXUtilities.stackTrace();
         }
         return result;

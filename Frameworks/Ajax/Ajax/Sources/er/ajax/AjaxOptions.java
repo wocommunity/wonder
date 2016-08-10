@@ -9,7 +9,6 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -35,26 +34,25 @@ import com.webobjects.foundation.NSMutableDictionary;
  * <pre>
  *  AjaxOptions.appendToResponse(createAjaxOptions(), context.response(), context);
  * </pre>
- * </p>
  * 
  * <p>
  * Example (and fictitious) usage code:
- * <pre>
- * 	public NSDictionary createAjaxOptions(WOComponent component) {
- *		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
- *		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
- *		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
- *		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
- *		ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
- *      ...
- *		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
- *		return options;
- *	}
+ * <pre><code>
+ * public NSDictionary createAjaxOptions(WOComponent component) {
+ *     NSMutableArray&lt;AjaxOption&gt; ajaxOptionsArray = new NSMutableArray&lt;AjaxOption&gt;();
+ *     ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+ *     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
+ *     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
+ *     ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
+ *     ...
+ *     NSMutableDictionary&lt;String, String&gt; options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+ *     return options;
+ * }
  *
  * response.appendContentString("AUC.registerPeriodic('" + id + "'," + canStop + "," + stopped + ",");
  * AjaxOptions.appendToResponse(options, response, context);
  * response.appendContentString(");");
- * </pre>
+ * </code></pre>
  * 
  * @see AjaxOption
  * @see AjaxValue
@@ -69,6 +67,7 @@ public class AjaxOptions extends WODynamicElement {
     _children = children;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     response.appendContentCharacter('{');
     NSMutableDictionary options = _bindings;

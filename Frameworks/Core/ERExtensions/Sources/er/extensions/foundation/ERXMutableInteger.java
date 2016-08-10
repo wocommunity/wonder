@@ -102,6 +102,7 @@ public class ERXMutableInteger {
      *
      * @return   a string representation of the value of this object.
      */
+    @Override
     public String toString() {
         return Integer.toString(_value);
     }

@@ -14,13 +14,13 @@ import org.json.JSONObject;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.components.ERXDynamicURL;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
 
@@ -196,19 +196,20 @@ public class JSONRequestHandler extends WORequestHandler {
 			try {
 				String inputString = request.contentString();
 				JSONObject input = new JSONObject(inputString);
-				String wosid = request.cookieValueForKey("wosid");
-				if (wosid == null) {
+				String sessionIdKey = WOApplication.application().sessionIdKey();
+				String sessionId = request.cookieValueForKey(sessionIdKey);
+				if (sessionId == null) {
 					ERXMutableURL url = new ERXMutableURL();
 					url.setQueryParameters(request.queryString());
-					wosid = url.queryParameter("wosid");
-					if (wosid == null && input.has("wosid")) {
-						wosid = input.getString("wosid");
+					sessionId = url.queryParameter(sessionIdKey);
+					if (sessionId == null && input.has(sessionIdKey)) {
+						sessionId = input.getString(sessionIdKey);
 					}
 				}
-				context._setRequestSessionID(wosid);
+				context._setRequestSessionID(sessionId);
 				WOSession session = null;
 				if (context._requestSessionID() != null) {
-					session = WOApplication.application().restoreSessionWithID(wosid, context);
+					session = WOApplication.application().restoreSessionWithID(sessionId, context);
 				}
 				if (session != null) {
 					session.awake();
@@ -216,7 +217,7 @@ public class JSONRequestHandler extends WORequestHandler {
 				try {
 					JSONComponentCallback componentCallback = null;
 					
-					ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
+					WODynamicURL url = request._uriDecomposed();
 					String requestHandlerPath = url.requestHandlerPath();
 					JSONRPCBridge jsonBridge;
 					if (requestHandlerPath != null && requestHandlerPath.length() > 0) {
@@ -276,7 +277,7 @@ public class JSONRequestHandler extends WORequestHandler {
 					if (context._session() != null) {
 						WOSession contextSession = context._session();
 						// If this is a new session, then we have to force it to be a cookie session
-						if (wosid == null) {
+						if (sessionId == null) {
 							boolean storesIDsInCookies = contextSession.storesIDsInCookies();
 							try {
 								contextSession.setStoresIDsInCookies(true);
@@ -290,14 +291,9 @@ public class JSONRequestHandler extends WORequestHandler {
 							contextSession._appendCookieToResponse(response);
 						}
 					}
-					if (output != null) {
-						response.appendContentString(output.toString());
-					}
-
-					if (response != null) {
-						response._finalizeInContext(context);
-						response.disableClientCaching();
-					}
+					response.appendContentString(output.toString());
+					response._finalizeInContext(context);
+					response.disableClientCaching();
 				}
 				finally {
 					try {
@@ -353,6 +349,13 @@ public class JSONRequestHandler extends WORequestHandler {
 	}
 
 	protected static class LRUMap<U, V> extends LinkedHashMap<U, V> {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		private int _maxSize;
 
 		public LRUMap(int maxSize) {
@@ -367,6 +370,13 @@ public class JSONRequestHandler extends WORequestHandler {
 	}
 
 	protected static class JSONComponentCallback implements InvocationCallback {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		private WOContext _context;
 
 		public JSONComponentCallback(WOContext context) {

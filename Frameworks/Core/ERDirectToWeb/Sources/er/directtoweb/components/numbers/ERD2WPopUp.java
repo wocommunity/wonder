@@ -15,11 +15,17 @@ import er.extensions.eof.ERXConstant;
 
 /**
  * Popup used for picking a number or some other value by 
- * using the key restrictedChoiceKey.<br />
+ * using the key restrictedChoiceKey.
  * You should use ERD2WEditToOneRelationship, though.
  * @d2wKey restrictedChoiceKey
  */
 public class ERD2WPopUp extends ERD2WStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public ERD2WPopUp(WOContext context) { super(context); }
 
@@ -36,7 +42,7 @@ public class ERD2WPopUp extends ERD2WStatelessComponent {
 			arr.addObject(ERXConstant.integerForInt(5));
 			result = arr;
 		}
-		return (NSArray)result;
+		return result;
 	}
 
 	public Object choice() {

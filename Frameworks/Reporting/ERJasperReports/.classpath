@@ -16,7 +16,6 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-beanutils-1.8.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-digester-1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.0.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-javaflow-20060411.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jxl-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jfreechart-1.0.12.jar"/>
@@ -24,11 +23,13 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/jaxen-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jcommon-1.0.15.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/iText-2.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.5-FINAL-20090928.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jpa.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-ext.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-3.7.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-applet-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-fonts-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-javaflow-4.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

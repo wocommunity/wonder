@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -16,7 +15,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
-import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
@@ -123,7 +121,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
             }
         }
 
-        private static Observer observer;
+        private static volatile Observer observer;
         
         public static void install()  {
             if(observer == null) {
@@ -148,8 +146,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 }
             }
         }
-    };
-
+    }
      
     public static abstract class Processor {
         
@@ -171,57 +168,66 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 perform(ec, (ERXEnterpriseObject)eo);
             }
         }
-    };
+    }
 
     public static Processor FlushCachesProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.flushCaches();
         }
     };
 
     public static Processor WillInsertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willInsert();
         }
     };
 
     public static Processor DidInsertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didInsert();
         }
     };
 
     public static Processor WillUpdateProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willUpdate();
         }
     };
 
     public static Processor DidUpdateProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didUpdate();
         }
     };
 
     public static Processor WillDeleteProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willDelete();
         }
     };
 
     public static Processor DidDeleteProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didDelete(ec);
         }
     };
 
     public static Processor WillRevertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willRevert();
         }
     };
 
     public static Processor DidRevertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didRevert(ec);
         }
@@ -293,7 +299,9 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract Logger getClassLog();
 
     /**
-     * self is usefull for directtoweb purposes
+     * self is useful for D2W purposes
+     * 
+     * @return the EO itself
      */
     public abstract ERXEnterpriseObject self();
 
@@ -407,7 +415,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void addObjectsToBothSidesOfRelationshipWithKey(
-            NSArray objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -417,7 +425,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void removeObjectsFromBothSidesOfRelationshipWithKey(
-            NSArray objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -426,7 +434,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to be removed from both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void removeObjectsFromPropertyWithKey(NSArray objects,
+    public abstract void removeObjectsFromPropertyWithKey(NSArray<? extends EOEnterpriseObject> objects,
             String key);
 
     /**
@@ -470,7 +478,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Takes the primary key of the object and encrypts it
-     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
+     * with the blowfish cipher using {@link er.extensions.crypting.ERXCrypto ERXCrypto}.
      * @return blowfish encrypted primary key
      */
     public abstract String encryptedPrimaryKey();
@@ -483,9 +491,11 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract Object foreignKeyForRelationshipWithKey(String rel);
 
     /**
-     * Returns the names of all primary key attributes. 
+     * Returns the names of all primary key attributes.
+     * 
+     * @return list of attribute names
      */
-    public abstract NSArray primaryKeyAttributeNames();
+    public abstract NSArray<String> primaryKeyAttributeNames();
 
     /**
      * Determines what the value of the given key is in the committed
@@ -497,21 +507,27 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Returns an EO in the same editing context as the caller.
+     * 
+     * @param eo to local instance
      * @return an EO in the same editing context as the caller.
      */
-    public abstract EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo);
+    public abstract <T extends EOEnterpriseObject> T localInstanceOf(T eo);
 
     /**
      * Returns this EO in the supplied editing context.
+     * 
+     * @param ec editing context to local instance in
      * @return this EO in the supplied editing context.
      */
-    public abstract EOEnterpriseObject localInstanceIn(EOEditingContext ec);
+	public EOEnterpriseObject localInstanceIn(EOEditingContext ec);
 
     /**
      * Returns an array of EOs in the same editing context as the caller.
-     * @return  array of EOs in the same editing context as the caller.
+     * 
+     * @param eos array of EOs to local instance
+     * @return array of EOs in the same editing context as the caller.
      */
-    public abstract NSArray localInstancesOf(NSArray eos);
+    public abstract <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos);
 
     /**
      * Computes the current set of changes that this object has from the
@@ -519,7 +535,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @return a dictionary holding the changed values from the currently
      *         committed snapshot.
      */
-    public abstract NSDictionary changesFromCommittedSnapshot();
+    public abstract NSDictionary<String, Object> changesFromCommittedSnapshot();
 
     /**
      * Simple method that will return if the parent object store of this object's editing
@@ -539,12 +555,6 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      */
     public abstract ERXEnterpriseObject refetchObjectFromDBinEditingContext(
             EOEditingContext ec);
-
-    /**
-     * Cover method to return <code>toString</code>.
-     * @return the results of calling toString.
-     */
-    public abstract String description();
 
     /**
      * Returns the super classes implementation of toString
@@ -583,35 +593,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * a null editing context.
      * @return if the object is a new enterprise object.
      */
-
     public abstract boolean isNewObject();
-
-    /**
-     * Debugging method that will be called on an object before it is
-     * saved to the database if the property key: <b>ERDebuggingEnabled</b>
-     * is enabled. This allows for adding in a bunch of expensive validation
-     * checks that should only be enabled in development and testing
-     * environments.
-     * @throws NSValidation.ValidationException if the object is not consistent
-     */
-    // CHECKME: This method was very useful at NS, might not be as useful here.
-    public abstract void checkConsistency()
-            throws NSValidation.ValidationException;
-
-    /**
-     * This method is very similar to the <code>checkConsistency</code> method
-     * except that this method is only called from an outside process, usually
-     * a batch process, to verify that the data this object holds is consistent.
-     * JUnit tests are great for testing that all of the methods of a single
-     * object function correctly, batch checking of consistency is a good way
-     * of checking that all of the data in a given database is consistent. Hopefully
-     * in the future we will add a batch check consistency application to demonstrate
-     * the use of this method.
-     * @throws NSValidation.ValidationException if the object fails consistency
-     */
-    public abstract void batchCheckConsistency()
-            throws NSValidation.ValidationException;
-
 	
     /**
      * Toggles whether or not inverse relationships should be updates.  This is

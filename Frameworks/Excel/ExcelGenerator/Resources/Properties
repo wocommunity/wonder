@@ -1,3 +1,8 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ExcelGenerator=load
+er.extensions.ExcelGenerator.hasLocalization=false
+
+
 # Add framework properties here
 
 # These properties are loaded into the Java system properties for applications linking against this framework

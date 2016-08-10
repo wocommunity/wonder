@@ -1,5 +1,6 @@
 package er.ajax.json.client;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
@@ -12,26 +13,29 @@ import er.extensions.components.ERXComponent;
  * there is one).
  * 
  * <code>
- * var jsonClient = <wo:StatelessJSONClient/>;
+ * var jsonClient = &lt;wo:StatelessJSONClient/&gt;;
  * </code>
  * 
  * @author mschrag
  * @binding callback the initialization callback
  */
 public class AjaxStatelessJSONClient extends ERXComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AjaxStatelessJSONClient(WOContext context) {
 		super(context);
-	}
-
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	public boolean global() {
 		return booleanValueForBinding("global", false);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -50,7 +54,8 @@ public class AjaxStatelessJSONClient extends ERXComponent {
 
 		String queryString = null;
 		if (wocontext.request().sessionID() != null && wocontext.session().storesIDsInURLs()) {
-			queryString = "wosid=" + wocontext.request().sessionID();
+			String sessionIdKey = WOApplication.application().sessionIdKey();
+			queryString = sessionIdKey + "=" + wocontext.request().sessionID();
 		}
 
 		String componentName = jsonComponent();

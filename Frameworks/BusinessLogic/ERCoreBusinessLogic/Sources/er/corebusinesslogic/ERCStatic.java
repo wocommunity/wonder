@@ -1,7 +1,6 @@
 // ERCStatic.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -22,10 +21,13 @@ import er.extensions.foundation.ERXProperties;
  * @property er.corebusinesslogic.ERCStatic.UseSeparateChannel
  */
 public class ERCStatic extends _ERCStatic {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCStatic.class);
-        
     // Class methods go here
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
@@ -167,10 +169,12 @@ public class ERCStatic extends _ERCStatic {
 
     public static ERCStaticClazz clazz = new ERCStaticClazz();
 
+    @Override
     public String toString() {
         return entityName()+": "+key()+"="+value();
     }
 
+    @Override
     public String userPresentableDescription() {
         return toString();
     }    

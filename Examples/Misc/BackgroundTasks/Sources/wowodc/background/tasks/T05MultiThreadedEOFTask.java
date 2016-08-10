@@ -8,7 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.ResultItem;
@@ -19,12 +20,12 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXAbstractTask;
 import er.extensions.concurrency.ERXExecutorService;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.ERXTask;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * A task that <em>returns</em> an EOGlobalID result.
@@ -45,11 +46,9 @@ import er.extensions.foundation.ERXStatusInterface;
  * for every
  * 
  * @author kieran
- *
  */
-public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable<EOGlobalID>, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T05MultiThreadedEOFTask.class);
+public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
+	private static final Logger log = LoggerFactory.getLogger(T05MultiThreadedEOFTask.class);
 	
 	// Duration of the example task in milliseconds
 	// Random between 5 and 15 seconds
@@ -101,7 +100,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	/**
 	 * Use a demo duration parameter rather than default random demo duration.
 	 * 
-	 * @param demoTaskDuration
+	 * @param demoTaskDuration duration in milliseconds
 	 */
 	public T05MultiThreadedEOFTask(long demoTaskDuration) {
 		_taskDuration = demoTaskDuration;
@@ -109,8 +108,9 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	
 	private EOGlobalID _resultGid;
 
-	public EOGlobalID call() throws Exception {
-		// Start at zero to guage performance rate with different numbers of threads and OSCs
+	@Override
+	public EOGlobalID _call() throws Exception {
+		// Start at zero to gauge performance rate with different numbers of threads and OSCs
 		//_startNumber = Utilities.newStartNumber();
 		_elapsedTime = 0;
 		Format wholeNumberFormatter = new DecimalFormat("#,##0");
@@ -151,8 +151,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 					try {
 						Future<?> future = ChildTaskPool.EXECUTOR_SERVICE.submit(childTask);
 						
-						if (log.isInfoEnabled())
-							log.info("Submitted task corresponding to " + future);
+						log.info("Submitted task corresponding to {}", future);
 						isRejected = false;
 						childFutures.add(future);
 						
@@ -191,7 +190,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			}
 			
 			// Complete the stats
-			// Refresh it sinece the object has been already updated (its relationship) and saved on ChildThreads
+			// Refresh it since the object has been already updated (its relationship) and saved on ChildThreads
 			ERXEOControlUtilities.refreshObject(taskInfo);
 			taskInfo.setEndNumber(_endNumber);
 			taskInfo.setEndTime(new NSTimestamp());
@@ -210,7 +209,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	/**
 	 * Removes completed futures from the futures array.
 	 * 
-	 * @param futures
+	 * @param futures array of futures
 	 */
 	public void removeCompletedFutures(NSMutableArray<Future<?>> futures) {
 		Iterator<Future<?>> iterator = futures.iterator();
@@ -232,14 +231,14 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	}
 	
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
@@ -270,9 +269,8 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	 * Note we declare this as a non-static inner class so that the child thread can update the parent thread _count (for demo of volatile)
 	 * 
 	 * @author kieran
-	 *
 	 */
-	private class ChildPrimeTask extends ERXAbstractTask implements Runnable, ERXStatusInterface , ERXTaskPercentComplete {
+	private class ChildPrimeTask extends ERXTask implements Runnable, IERXStatus, IERXPercentComplete {
 		
 		private final int _childID;
 		private EOGlobalID _childTaskInfoGID = null;
@@ -300,11 +298,12 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			return "Checking " + _childCurrentNumber + " in range " + _childFromNumber + " - " + _childToNumber;
 		}
 
-		public void run() {
+		@Override
+		public void _run() {
 			EOEditingContext ec = newEditingContext();
 			ec.lock();
 			try {
-				log.info("Started child in " + Thread.currentThread().getName() + " with OSC " + ec.parentObjectStore());
+				log.info("Started child in {} with OSC {}", Thread.currentThread().getName(), ec.parentObjectStore());
 				
 				TaskInfo taskInfo = (TaskInfo) ec.faultForGlobalID(_childTaskInfoGID, ec);
 				
@@ -315,10 +314,10 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 					resultItem.setNumberToCheck(_childCurrentNumber);
 
 					if (Utilities.isPrime(_childCurrentNumber)) {
-						log.info("==>> " + _childCurrentNumber + " is a PRIME number.");
+						log.info("==>> {} is a PRIME number.", _childCurrentNumber);
 						resultItem.setIsPrime(Boolean.TRUE);
 					} else {
-						log.debug(_childCurrentNumber + " is not a prime number but is a COMPOSITE number.");
+						log.debug("{} is not a prime number but is a COMPOSITE number.", _childCurrentNumber);
 						resultItem.setIsPrime(Boolean.FALSE);
 					}
 					
@@ -334,7 +333,6 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			} finally {
 				ec.unlock();
 			}
-			
 		}
 		
 		// 
@@ -355,9 +353,5 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			}
 			return _toString;
 		}
-		
 	}
-	
-	
-	
 }

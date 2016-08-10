@@ -6,8 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -49,7 +53,6 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDDeletionDelegate;
 import er.directtoweb.interfaces.ERDEditObjectDelegate;
 import er.directtoweb.interfaces.ERDListPageInterface;
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.appserver.ERXSession;
@@ -90,6 +93,12 @@ import er.extensions.statistics.ERXStats;
  * @d2wKey showBatchNavigation
  */
 public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
@@ -109,7 +118,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	public ERD2WListPage(WOContext c) {
 		super(c);
 		_sessionID = c.session().sessionID();
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	/* Not necessary -- NSNotificationCenter uses weak references
@@ -174,7 +183,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * display.
 	 */
 	public void editingContextDidSaveChanges(NSNotification notif) {
-	    if(sessionID() == ERXSession.currentSessionID()) {
+	    if (Objects.equals(sessionID(), ERXSession.currentSessionID())) {
 	        _hasToUpdate = true;
 	    }
 	}
@@ -183,6 +192,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Checks if the entity is read only, meaning that you can't edit it's
 	 * objects.
 	 */
+	@Override
 	public boolean isEntityReadOnly() {
 		boolean flag = super.isEntityReadOnly();
 		flag = !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !flag);
@@ -190,6 +200,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return flag;
 	}
 
+	@Override
 	public boolean isEntityEditable() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), false);
 	}
@@ -292,7 +303,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/** * end of reimplementation */
-
+	@Override
 	public String urlForCurrentState() {
 		return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
 	}
@@ -331,6 +342,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	// This will allow d2w pages to be listed on a per configuration basis in
 	// stats collecting.
+	@Override
 	public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
 		String descriptionForResponse = (String) d2wContext().valueForKey("pageConfiguration");
 		/*
@@ -385,7 +397,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * @param sortKey the sort key to validate
 	 * @return true if the sort key is valid, false if not
 	 */
-	protected boolean isValidSortKey(NSArray displayPropertyKeys, String sortKey) {
+	protected boolean isValidSortKey(NSArray<String> displayPropertyKeys, String sortKey) {
 	  boolean validSortOrdering = false;
 	  try {
 	    if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
@@ -399,13 +411,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	  
 	  if (!validSortOrdering) {
 	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
-	    validSortOrdering = false;
+		    validSortOrdering = false;
+		  }
+		  return validSortOrdering;
 	  }
-	  return validSortOrdering;
-  }
 
 	@SuppressWarnings("unchecked")
-  public NSArray<EOSortOrdering> sortOrderings() {
+	public NSArray<EOSortOrdering> sortOrderings() {
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey("sortOrdering");
@@ -440,6 +452,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return null;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest r, WOContext c) {
 		setupPhase();
 		super.takeValuesFromRequest(r, c);
@@ -473,26 +486,29 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		}
 	}
 	
+	@Override
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
 		fetchIfNecessary();
 		return super.invokeAction(r, c);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse r, WOContext c) {
 		setupPhase();
 		_rowFlip = true;
 		fetchIfNecessary();
 
 		// GN: reset the displayed batch if it is out of range
-		if (this.displayGroup() != null && this.displayGroup().currentBatchIndex() > this.displayGroup().batchCount()) {
-			this.displayGroup().setCurrentBatchIndex(1);
+		if (displayGroup() != null && displayGroup().currentBatchIndex() > displayGroup().batchCount()) {
+			displayGroup().setCurrentBatchIndex(1);
 		}
 		super.appendToResponse(r, c);
 	}
 
 	protected Object dataSourceState;
 
+	@Override
 	public void setDataSource(EODataSource eodatasource) {
 		EODatabaseDataSource ds = (eodatasource instanceof EODatabaseDataSource) ? (EODatabaseDataSource) eodatasource : null;
 		Object newDataSourceState = null;
@@ -514,11 +530,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			// sort order keys required it leads to a KVC error later on. We fix
 			// this here to re-init
 			// the sort ordering from the rules.
-			if (old != null && eodatasource != null && ERXExtensions.safeDifferent(eodatasource.classDescriptionForObjects(), old.classDescriptionForObjects())) {
+			if (old != null && eodatasource != null && !Objects.equals(eodatasource.classDescriptionForObjects(), old.classDescriptionForObjects())) {
 				setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
 			}
 		}
-		
 	}
 
 	protected void willUpdate() {
@@ -661,6 +676,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Should we show the cancel button? It's only visible when we have a
 	 * nextPage set up.
 	 */
+	@Override
 	public boolean showCancel() {
 		return nextPage() != null;
 	}
@@ -690,13 +706,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		String result = "";
 		NSDictionary targetDictionary = (NSDictionary) d2wContext().valueForKey("targetDictionary");
 		if (targetDictionary != null) {
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append(targetDictionary.valueForKey("targetName") != null ? targetDictionary.valueForKey("targetName") : "foobar");
 			buffer.append(":width=");
 			buffer.append(targetDictionary.valueForKey("width") != null ? targetDictionary.valueForKey("width") : "{window.screen.width/2}");
 			buffer.append(", height=");
 			buffer.append(targetDictionary.valueForKey("height") != null ? targetDictionary.valueForKey("height") : "{myHeight}");
-			buffer.append(",");
+			buffer.append(',');
 			buffer.append((targetDictionary.valueForKey("scrollbars") != null && targetDictionary.valueForKey("scrollbars") == "NO") ? " " : "scrollbars");
 			buffer.append(", {(isResizable)?'resizable':''}, status");
 			result = buffer.toString();
@@ -785,4 +801,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
         return delegate;
     }
+    
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+	}
+	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
+	}
 }

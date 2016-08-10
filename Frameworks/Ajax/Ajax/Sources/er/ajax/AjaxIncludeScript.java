@@ -32,6 +32,7 @@ public class AjaxIncludeScript extends AjaxDynamicElement {
     _framework = (WOAssociation)associations.objectForKey("framework");
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     WOComponent component = context.component();
     String name = (String)_name.valueInComponent(component);
@@ -44,6 +45,7 @@ public class AjaxIncludeScript extends AjaxDynamicElement {
     addScriptResourceInHead(context, res, framework, name);
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
       return null;
   }

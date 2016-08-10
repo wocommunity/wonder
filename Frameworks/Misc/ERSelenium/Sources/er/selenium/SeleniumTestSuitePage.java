@@ -26,7 +26,8 @@ package er.selenium;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -34,7 +35,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXUtilities;
 import er.selenium.filters.SeleniumCompositeTestFilter;
 import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;
@@ -44,7 +44,14 @@ import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumTestExporter;
 
 public class SeleniumTestSuitePage extends ERXStatelessComponent {	
-	private static final Logger log = Logger.getLogger(SeleniumTestSuitePage.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTestSuitePage.class);
 	
 	// NSProjectBundleEnabled is true if we have the newer "bundle-less builds" WOLips feature in use
 	// and that expects the FBL project layout, so the default location is different to a built runtime bundle
@@ -163,7 +170,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     			SeleniumTest test = new SeleniumTestFileProcessor(testFile, context().request().formValueForKey("noFilters") == null ? testFilter() : null).process();
     			return exporter.process(test);
     		} catch (Exception e) {
-    			log.debug(ERXUtilities.stackTrace(e));
+    			log.debug("Test export failed.", e);
     			throw new RuntimeException("Test export failed", e);
     		}
     	} else {

@@ -12,7 +12,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.directtoweb.ERD2WContextDictionary;
 import er.directtoweb.ERD2WContextDictionary.Configuration;
 import er.extensions.appserver.ERXWOContext;
 
@@ -27,6 +26,12 @@ import er.extensions.appserver.ERXWOContext;
  * @d2wKey object
  */
 public class ERD2WCheatSheet extends D2WComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public static Configuration configuration;
 
@@ -41,19 +46,23 @@ public class ERD2WCheatSheet extends D2WComponent {
 		}
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 	
+	@Override
 	public D2WContext localContext() {
 		_localContext = (D2WContext) valueForBinding("localContext");
         return _localContext;
     }
 	
+	@Override
 	public D2WContext d2wContext() {
         return localContext();
     }
 
+	@Override
 	public EOEnterpriseObject object() {
 		return (EOEnterpriseObject) d2wContext().valueForKey("object");
 	}

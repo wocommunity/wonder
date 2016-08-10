@@ -222,7 +222,6 @@ int main() {
     int i;
 #endif
     const char *config_url, *username, *password, *config_options;
-		char *content_buffer;
     strtbl *options = NULL;
     int exit_status = 0;
 

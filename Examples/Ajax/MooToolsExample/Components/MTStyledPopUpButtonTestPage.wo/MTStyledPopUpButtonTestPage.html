@@ -1,0 +1,22 @@
+<wo:Main pageTitle = "Media Box Advanced - A Lightbox Variant For MooTools">	
+	<h2>MTStyledPopUpButton</h2>
+	<hr />
+	<p>MTStyledPopUpButton is a non-obtrusive image dropdown menu that extends and replaces a standard HTML Select control.  Based upon "FancySelect" @ <a href = "https://github.com/lorenzos/FancySelect/wiki" target = "_blank">https://github.com/lorenzos/FancySelect/wiki</a></p>
+	<hr/>
+	<h3>Sample using a component action.</h3>
+	<wo:form action = "$selectFruit" class = "well form-inline">
+		<label>Select your favorite fruit:</label>
+		<webobject name = "MTStyledPopUpButton" />
+		<webobject name = "SubmitButton"></webobject>
+	</wo:form>
+	<h3>Sample using a direct action.</h3>
+	<wo:form directActionName = "PageAction/MTStyledPopUpButtonTestPage" class = "well form-inline" method = "GET">
+		<label>Select your favorite fruit:</label>
+		<webobject name = "MTStyledSelectedValuePopUpButton" />
+		<webobject name = "DirectActionSubmitButton"></webobject>
+	</wo:form>
+	<wo:ERXNonNullConditional condition = "$selectedItem">
+		<hr/>
+		<h2>Your favorite fruit is: <wo:str value = "$selectedItem" /></h2>
+	</wo:ERXNonNullConditional>	
+</wo:Main>	

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTJSDatePicker" wocomponentcontent="true">    <binding name="allowEmpty"/>
+        <binding name="animationDuration"/>
+        <binding name="days"/>
+        <binding name="dayShort"/>
+        <binding name="debug"/>
+        <binding name="format"/>
+        <binding name="inputOutputFormat"/>
+        <binding name="maxDate"/>
+        <binding name="minDate"/>
+        <binding name="months"/>
+        <binding name="monthShort"/>
+        <binding name="onClose"/>
+        <binding name="onSelect"/>
+        <binding name="onShow"/>
+        <binding name="pickerClass"/>
+        <binding name="positionOffset"/>
+        <binding name="startDay"/>
+        <binding name="startView"/>
+        <binding name="timePicker"/>
+        <binding name="timePickerOnly"/>
+        <binding name="toggleElements"/>
+        <binding name="useFadeInOut"/>
+        <binding name="yearPicker"/>
+        <binding name="yearsPerPage"/>
+    <binding name="useDefaultCSS"/>
+    </wo>
+</wodefinitions>

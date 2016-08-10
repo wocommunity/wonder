@@ -6,37 +6,43 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import java.util.Objects;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXExtensions;
-
 /**
- * Sets a key value when the hyperlink is clicked.<br />
+ * Sets a key value when the hyperlink is clicked.
  * 
- * @binding value
- * @binding binding
+ * @binding value The value to set when the hyperlink is set
+ * @binding binding The method to call to set the value
  * @binding string optional link text
  * @binding action optional action
  * @binding class optional css class name
  */
-
 public class ERXHyperlinkKeyValueSetter extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXHyperlinkKeyValueSetter(WOContext aContext) {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() { return true; }
-    
+
     public WOActionResults action() {
         setValueForBinding(valueForBinding("value"), "binding");
         return (WOActionResults) (canGetValueForBinding("action") ? valueForBinding("action") : null);
     }
-    
+
     public boolean disabled() {
     	Object val = valueForBinding("binding");
-    	return ERXExtensions.safeEquals(val, valueForBinding("value"));
+    	return Objects.equals(val, valueForBinding("value"));
     }
 }

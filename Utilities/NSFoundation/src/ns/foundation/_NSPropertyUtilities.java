@@ -49,7 +49,7 @@ public abstract class _NSPropertyUtilities {
         return (T) _NSUtilities.convertNumberIntoCompatibleValue((Number)value, (Class<Number>)newValueType);
       if (value instanceof Boolean)
         return (T) _NSUtilities.convertNumberIntoCompatibleValue(_NSUtilities.convertBooleanIntoNumberValue((Boolean)value), (Class<Number>)newValueType);
-      return (T) _NSUtilities.convertNumberIntoCompatibleValue(new Double(value.toString()), (Class<Number>)newValueType);
+      return (T) _NSUtilities.convertNumberIntoCompatibleValue(Double.valueOf(value.toString()), (Class<Number>)newValueType);
     }
     if (_NSUtilities._isClassABoolean(newValueType)) {
       if (value instanceof Number)

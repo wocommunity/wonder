@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERXWOBrowser" wocomponentcontent="false">
+        <binding defaults="Boolean" name="disabled"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="id"/>
+        <binding name="title"/>
+        <binding name="list"/>
+        <binding name="item"/>
+        <binding name="displayString"/>
+        <binding defaults="Boolean" name="multiple"/>
+        <binding name="size"/>
+        <binding defaults="Boolean" name="escapeHTML"/>
+        <binding name="selections"/>
+        <binding name="selectedValues"/>
+        <binding name="name"/>
+        <binding name="value"/>
+		<validation message="Cannot have both 'selections' and 'selectedValues'.">
+			<count test="!=1">
+				<bound name="selections"/>
+				<bound name="selectedValues"/>
+			</count>
+		</validation>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+    </wo>
+</wodefinitions>

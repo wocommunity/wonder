@@ -7,10 +7,10 @@
 package er.extensions.crypting;
 
 import java.io.IOException;
-import java.security.Key;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.codec.binary.Base64;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -37,9 +37,6 @@ import er.extensions.foundation.ERXStringUtilities;
  *           er.extensions.ERXCrypto.crypter.DES)
  */
 public class ERXCrypto {
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
-
 	/**
 	 * The constant for the DES encryption algorithm.
 	 */
@@ -163,11 +160,9 @@ public class ERXCrypto {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA");
 			md.update(v.getBytes());
-			String hashedPassword = new String(md.digest());
-			sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
-			base64HashedPassword = enc.encode(hashedPassword.getBytes());
+			base64HashedPassword = Base64.encodeBase64String(md.digest()); 
 		}
-		catch (java.security.NoSuchAlgorithmException e) {
+		catch (NoSuchAlgorithmException e) {
 			throw new NSForwardException(e, "Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
 		}
 		return base64HashedPassword;
@@ -265,7 +260,7 @@ public class ERXCrypto {
 			md.update(buf);
 			return ERXStringUtilities.byteArrayToHexString(md.digest());
 		}
-		catch (java.security.NoSuchAlgorithmException ex) {
+		catch (NoSuchAlgorithmException ex) {
 			throw new NSForwardException(ex, "Couldn't find the algorithm '" + algorithmName
 					+ "'; perhaps you do not have the SunJCE security provider installed properly?");
 		}
@@ -278,36 +273,17 @@ public class ERXCrypto {
 	 * @return the encoded string
 	 */
 	public static String base64Encode(byte[] byteArray) {
-		sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
-		String base64String = enc.encode(byteArray);
-		return base64String;
+		return Base64.encodeBase64String(byteArray);
 	}
 	
 	/**
 	 * Base64url encodes the passed in byte[]
 	 * 
-	 * @param byteArray the byte array to url encode
+	 * @param byteArray the byte array to URL encode
 	 * @return the encoded string
 	 */
 	public static String base64urlEncode(byte[] byteArray) {
-		String base64String = base64Encode(byteArray);
-		StringBuffer sb = new StringBuffer(base64String.length());
-		for (int i = 0; i < base64String.length(); i++) {
-			char ch = base64String.charAt(i);
-			if (ch == '+') {
-				sb.append('-');
-			}
-			else if (ch == '/') {
-				sb.append('_');
-			}
-			else if (ch == '\r' || ch == '\n') {
-				// Do nothing
-			}
-			else if (ch != '=') {
-				sb.append(ch);
-			}
-		}
-		return sb.toString();
+		return Base64.encodeBase64URLSafeString(byteArray);
 	}
 
 	/**
@@ -317,127 +293,14 @@ public class ERXCrypto {
 	 * @return a byte array of the decoded string
 	 * @throws IOException if the decode fails
 	 */
+	// TODO remove throws declaration when API change is possible
 	public static byte[] base64Decode(String s) throws IOException {
-		sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
-		byte[] raw = enc.decodeBuffer(s);
-		return raw;
-	}
-	
-	/**
-	 * Base64url decodes the passed in String
-	 * 
-	 * @param s the string to url decode
-	 * @return a byte array of the decoded string
-	 * @throws IOException if the decode fails
-	 */
-	public static byte[] base64urlDecode(String s) throws IOException {
-		int length = s.length();
-		StringBuffer sb = new StringBuffer(length);
-		int i = 0;
-		while (i < length || (i & 2) != 0) {
-			if (i >= length) {
-				sb.append('=');
-			} else {
-				char ch = s.charAt(i);
-				if (ch == '-') {
-					sb.append('+');
-				}
-				else if (ch == '_') {
-					sb.append('/');
-				}
-				else {
-					sb.append(ch);
-				}
-			}
-			i++;
-		}
-		return base64Decode(sb.toString());
+		return Base64.decodeBase64(s);
 	}
 
-	/**
-	 * @deprecated use <code>ERXStringUtilities.byteArrayToHexString</code>
-	 *             instead.
-	 */
-	@Deprecated
-	public static String bytesToString(byte[] bytes) {
-		return ERXStringUtilities.byteArrayToHexString(bytes);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static String base64EncryptedString(String clearText) {
-		return ERXCrypto.crypterForAlgorithm(ERXCrypto.DES).encrypt(clearText);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static String base64EncryptedString(String clearText, Key secretKey) {
-		return ((ERXDESCrypter) ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)).encrypt(clearText, secretKey);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static String decryptedBase64String(String encryptedText) {
-		return ERXCrypto.crypterForAlgorithm(ERXCrypto.DES).decrypt(encryptedText);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static String decryptedBase64String(String encryptedText, Key secretKey) {
-		return ((ERXDESCrypter) ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)).decrypt(encryptedText, secretKey);
-	}
-
-	/**
-	 * @deprecated use ERXBlowfishCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH)
-	 */
-	@Deprecated
-	public static String blowfishEncode(String clearText) {
-		return ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(clearText);
-	}
-
-	/**
-	 * @deprecated use ERXBlowfishCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH)
-	 */
-	@Deprecated
-	public static String blowfishDecode(String encryptedText) {
-		return ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).decrypt(encryptedText);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static void setSecretKeyPathFramework(String secretKeyPathFramework) {
-		((ERXDESCrypter) ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)).setSecretKeyPathFramework(secretKeyPathFramework);
-	}
-
-	/**
-	 * @deprecated use ERXDESCrypter and/or
-	 *             ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)
-	 */
-	@Deprecated
-	public static void setSecretKeyPath(String secretKeyPath) {
-		((ERXDESCrypter) ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)).setSecretKeyPath(secretKeyPath);
-	}
-	
 	/**
 	 * Run this with ERXMainRunner passing in the plaintext you want to encrypt
-	 * using the default crypter.  This is useful if you are using encrypted 
+	 * using the default crypter. This is useful if you are using encrypted 
 	 * properties and you need a quick way to know what to set the property
 	 * value to.
 	 * 

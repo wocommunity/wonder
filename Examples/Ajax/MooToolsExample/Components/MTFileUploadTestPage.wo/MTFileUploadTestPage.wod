@@ -1,0 +1,41 @@
+FinishedImage : WOResourceURL {
+	filename = "img/progress-bar.gif";
+}
+
+UnfinishedImage : WOResourceURL {
+	filename = "img/progress-remainder.gif";
+}
+
+CanceledConditional : WOConditional {
+	condition = uploadProgress.canceled;
+}
+
+FailedConditional : WOConditional {
+	condition = uploadProgress.failed;
+}
+
+SucceededConditional : WOConditional {
+	condition = uploadProgress.succeeded;
+}
+
+UploadDoneConditional : WOConditional {
+	condition = uploadProgress.done;
+}
+
+AjaxFileUpload : MTAjaxFileUpload {
+	allowCancel = true;
+	formClass = "well form-inline";
+	linkClass = "btn btn-warning";
+	uploadProgress = uploadProgress;
+	finishedAction = uploadFinished;
+}
+
+AjaxProgress : MTAjaxProgressBar {
+	progress = progress;
+	progressBarContainerClass = "progress progress-info progress-striped active";
+	finishedFunction = "alert('Done!')";
+}
+
+FailureMessage : WOString {
+	value = uploadProgress.failure.message;
+}

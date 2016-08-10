@@ -12,14 +12,19 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.validation.ERXExceptionHolder;
 
-// Stateless version of D2WCustomComponentWithArgs
 /**
- * Stateless version of D2WCustomComponentWithArgs.<br />
+ * Stateless version of D2WCustomComponentWithArgs.
  * @d2wKey customComponentName
  * @d2wKey propertyKey
  * @d2wKey extraBindings
  */
 public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessComponent implements ERXExceptionHolder {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WStatelessCustomComponentWithArgs(WOContext context) { super(context); }
 
@@ -38,10 +43,12 @@ public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessCompone
     // Done this way so that subClasses can always get the original valueForBinding.
     public Object originalValueForBinding(String binding) { return super.valueForBinding(binding); }
 
+    @Override
     public Object valueForBinding(String binding) {
         return hasBinding(binding) ? originalValueForBinding(binding) : d2wContext().valueForKey(binding);
     }
 
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -51,6 +58,7 @@ public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessCompone
             ((ERXExceptionHolder)parent()).clearValidationFailed();
     }
 
+    @Override
     public void reset() {
         _extraBindings=null;
         super.reset();

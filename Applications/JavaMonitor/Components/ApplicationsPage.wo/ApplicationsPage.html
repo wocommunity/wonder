@@ -12,8 +12,8 @@
     <th>&nbsp;</th>
   </tr>
   <webobject name = "ApplicationsRepetition">
-    <tr>
-      <td>
+    <tr class="application">
+      <td class="applicationName">
         <webobject name = "AppIsRunning">
           <webobject name = "ApplicationNameLink" />
         </webobject>
@@ -21,14 +21,23 @@
           <webobject name = "ApplicationName" />
         </webobject>
       </td>
-      <td><webobject name = "RunningInstancesCount" /></td>
-      <td><webobject name = "TotalInstancesCount" /></td>
+      <td class="RunningInstanceCount"><webobject name = "RunningInstancesCount" /></td>
+      <td class="ConfiguredInstanceCount"><webobject name = "ConfiguredInstanceCount" /></td>
       <td><webobject name = "AppDetailsLink"><span>View Details</span></webobject></td>
       <td><webobject name = "ConfigureLink"><span>Configure</span></webobject></td>
       <td><webobject name = "DeleteLink"><span>Delete</span></webobject></td>
       <td><webobject name = "BounceLink"><span>Bounce</span></webobject></td>
     </tr>
   </webobject>
+  <tr class="Totals">
+      <td class="applicationName">Totals</td>
+      <td class="RunningInstanceCount"><webobject name = "TotalsRunningInstanceCount"></webobject></td>
+      <td class="ConfiguredInstanceCount"><webobject name = "TotalsConfiguredInstanceCount"></webobject></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+  </tr>
 </table>
 </div>
 <div class="Box AddApplicationBox">

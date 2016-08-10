@@ -89,7 +89,6 @@ public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
   /**
    * Returns an ImageMagick metadata parser.
    * 
-   * @property er.attachment.ImageProcessor.imageMagickBinFolder the ImageMagick bin folder
    * @return an ImageMagick image processor
    * @throws IOException if an ImageMagick cannot be created
    */

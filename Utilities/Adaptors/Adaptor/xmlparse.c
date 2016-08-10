@@ -36,7 +36,9 @@ and limitations under the License.
 #include <sys/types.h>
 #ifdef WIN32
 #ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
+#if !defined(MINGW)
 #include <winnt-pdo.h>
+#endif
 #endif
 #ifndef strncasecmp
 #define strncasecmp _strnicmp
@@ -178,7 +180,7 @@ static int xml_parseConfiguration(char *buf, int len)
    if (error != 0) {
       /* config error */
       WOLog(WO_ERR,"Error parsing configuration: %s", xmlcParserErrorDescription(error));
-      if ((intptr_t)config.errorLocation < (intptr_t)buf + len)
+      if ((void *)config.errorLocation < (void *)buf + len)
       {
          char *badconfig = WOMALLOC((len+1)*sizeof(char));
          strncpy(badconfig, buf, len);

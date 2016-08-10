@@ -1,1 +1,5 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERWOAdaptor=load
+er.extensions.ERWOAdaptor.hasLocalization=false
+
 WOAdaptor WONettyAdaptor

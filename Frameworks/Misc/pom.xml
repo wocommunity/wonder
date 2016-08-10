@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>misc</artifactId>
 	<packaging>pom</packaging>
@@ -13,14 +12,17 @@
 	<modules>
 		<module>ERCalendar</module>
 		<module>ERCaptcha</module>
+		<module>ERCayenne</module>
+		<module>ERDistribution</module>
 		<module>ERChronic</module>
-		<module>ERDirectToRest</module>
-		<module>ERDivaliteLook</module>
-		<module>EROpenID</module>
+		<module>ERFirebug</module>
+		<module>ERJaxWS</module>
 		<module>ERPDFGeneration</module>
+		<module>ERPersistentSessionStorage</module>
 		<module>ERProfiling</module>
+		<module>ERQuartzScheduler</module>
 		<module>ERSelenium</module>
-		<module>ERWorkerChannel</module>
+		<module>ERXiss</module>
 		<module>JavaMonitorFramework</module>
 		<module>SnapshotExplorer</module>
 		<module>WOJRebel</module>

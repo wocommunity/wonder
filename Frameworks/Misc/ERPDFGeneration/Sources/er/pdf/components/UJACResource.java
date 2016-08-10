@@ -25,13 +25,14 @@ public abstract class UJACResource extends WOHTMLDynamicElement {
 
   public UJACResource(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
     super(name, associations, template);
-    _source = (WOAssociation) _associations.removeObjectForKey("source");
-    _framework = (WOAssociation) _associations.removeObjectForKey("framework");
+    _source = _associations.removeObjectForKey("source");
+    _framework = _associations.removeObjectForKey("framework");
     if(_source == null) {
       throw new WODynamicElementCreationException("'source' must be bound: " + this);
     }
   }
 
+  @Override
   public void appendAttributesToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     String href = (String)_source.valueInComponent(component);

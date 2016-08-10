@@ -166,8 +166,14 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
-	},
+        var link=document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("type", "text/css");
+        link.setAttribute("href", css);
+        if (typeof link!="undefined") {
+            document.getElementsByTagName("head")[0].appendChild(link);
+        }
+    },
 	
 	loadedCSS: function(request) {
 		var inlineStyle = new Element("style", {"type": "text/css"});
@@ -233,7 +239,7 @@ var AjaxOptions = {
 
 var AjaxUpdateContainer = {
 	registerPeriodic: function(id, canStop, stopped, options) {
-		var url = $(id).getAttribute('updateUrl');
+		var url = $(id).getAttribute('data-updateUrl');
 		var updater;
 		if (!canStop) {
 			updater = new Ajax.PeriodicalUpdater(id, url, options);
@@ -310,7 +316,7 @@ var AjaxUpdateContainer = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var actionUrl = updateElement.getAttribute('updateUrl');
+		var actionUrl = updateElement.getAttribute('data-updateUrl');
 		if (options && options['_r']) {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
@@ -336,7 +342,7 @@ var AjaxUpdateLink = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink._update(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
@@ -703,7 +709,7 @@ AjaxPeriodicUpdater.prototype = {
 	},
 	
 	start: function() {
-		var actionUrl = $(this.id).getAttribute('updateUrl');
+		var actionUrl = $(this.id).getAttribute('data-updateUrl');
 		actionUrl = actionUrl.addQueryParameters('_u='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
@@ -816,13 +822,23 @@ Ajax.StoppedPeriodicalUpdater = Class.create(Ajax.Base, {
 });
 
 var AjaxHintedText = {
-    register : function(name) {
-        name = name ? "form#" + name : "form";
-        var e = new Object();
-        e[name + " input"] = AjaxHintedText.textBehaviour;
-        e[name + " textarea"] = AjaxHintedText.textBehaviour;
-        e[name + ""] = AjaxHintedText.formBehaviour;
-        Behaviour.register(e);
+    register: function(tag, id) {
+      $$(tag + "#" + id).each(function(script, index) {
+          Element.select($(script), 'input', 'textarea').each(function(el, index) {
+              AjaxHintedText.textBehaviour(el);
+          });
+          Element.select($(script), 'form').each(function(form, index) {
+              AjaxHintedText.formBehaviour(form);     
+          });
+      });
+    },
+    registerForm : function(formselector) {
+      $$(formselector).each(function(form,index) {
+            Element.select(form,'input','textarea').each(function(el, index) {
+              AjaxHintedText.textBehaviour(el);
+          });
+          AjaxHintedText.formBehaviour(form);     
+      });
     },
     textBehaviour : function(e) {
         if(!e.getAttribute('default')) {
@@ -830,12 +846,13 @@ var AjaxHintedText = {
         }
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
-            if(e.value == "") {
+            if(e.value == "" ||
+               e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 Element.addClassName(e, 'ajax-hinted-text-with-default');
-                e.value = e.getAttribute('default');
-            } else {
+                  e.value = e.getAttribute('default');
+              } else {
                 Element.removeClassName(e, 'ajax-hinted-text-with-default');
-            }
+              }
         }
         e.showTextValue = function() {
             Element.removeClassName(e, 'ajax-hinted-text-with-default');
@@ -962,6 +979,8 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 });
 
 var AjaxBusy = {
+	spinners: {},
+	
 	requestContainer: function(request) {
 		var updateContainer;
 		if (request && request.container && request.container.success) {
@@ -970,11 +989,19 @@ var AjaxBusy = {
 		return updateContainer;
 	},
 	
-	register: function(busyClass, busyAnimationElement, watchContainerID, onCreateCallback, onCompleteCallback) {
+	register: function(busyClass, busyAnimationElement, watchContainerID, onCreateCallback, onCompleteCallback, useSpinJS, spinOpts) {
 		Ajax.Responders.register({
 			onCreate: function(request, transport) {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
+	     		if (useSpinJS == true) {
+	     			var spinner = AjaxBusy.spinners[busyAnimationElement];
+	     			if (spinner == undefined) {
+	     				spinner = new Spinner(spinOpts);
+	     				AjaxBusy.spinners[busyAnimationElement] = spinner;
+	     			}
+	     			spinner.spin($(busyAnimationElement));
+	     		}
 			  	if (busyClass && updateContainer) {
 						Element.addClassName(updateContainer, busyClass);
 			   	}
@@ -1003,6 +1030,14 @@ var AjaxBusy = {
 			   	if (onCompleteCallback) {
 			   		onCompleteCallback(request, transport);
 			   	}
+			   	
+	     		if (useSpinJS == true) {
+	     			var spinner = AjaxBusy.spinners[busyAnimationElement];
+	     			if (spinner) {
+	     				AjaxBusy.spinners[busyAnimationElement] = undefined;
+	     				setTimeout(function() { spinner.stop(); }, 500);
+	     			}
+	     		}
 			  }
 			}
 	  });

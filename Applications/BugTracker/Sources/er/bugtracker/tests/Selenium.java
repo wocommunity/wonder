@@ -1,6 +1,7 @@
 package er.bugtracker.tests;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOCookie;
@@ -24,7 +25,7 @@ import er.extensions.foundation.ERXUtilities;
 import er.selenium.SeleniumAction;
 
 public class Selenium extends SeleniumAction  {
-	public final static Logger log = Logger.getLogger(Selenium.class);
+	private final static Logger log = LoggerFactory.getLogger(Selenium.class);
 	
 	public static final String USERNAME = "sel_name";
 	public static final String PASSWORD = "sel_pass";
@@ -51,19 +52,19 @@ public class Selenium extends SeleniumAction  {
 	        } finally {
 	            ec.unlock();
 	        }
-	        log.debug("People " + USERNAME + " deleted");
+	        log.debug("People {} deleted", USERNAME);
 	    }
 	}
 	
 	private People addTestPeople(boolean isAdmin) {
 		EOEditingContext ec = ERXEC.newEditingContext();
-		People people = (People) People.clazz.createAndInsertObject(ec);
+		People people = People.clazz.createAndInsertObject(ec);
 		people.setName(NAME);
 		people.setLogin(USERNAME);
 		people.setPassword(PASSWORD);
 		people.setIsAdmin(isAdmin);
 		ec.saveChanges();
-		log.debug("People " + USERNAME + " added");
+		log.debug("People {} added", USERNAME);
 		return people;
 	}
 	

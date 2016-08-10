@@ -8,15 +8,15 @@
 		<binding name="trashcanExplanation"/>
 		<binding name="noTrashcanExplanation"/>
 
-		<validation message="&apos;object&apos; is a required binding">
+		<validation message="'object' is a required binding">
 			<unbound name="object"/>
 		</validation>
 
-		<validation message="&apos;dataSource&apos; is a required binding">
+		<validation message="'dataSource' is a required binding">
 			<unbound name="dataSource"/>
 		</validation>
 
-		<validation message="&apos;d2wContext&apos; is a required binding">
+		<validation message="'d2wContext' is a required binding">
 			<unbound name="d2wContext"/>
 		</validation>
 	</wo>

@@ -9,6 +9,7 @@ import er.bugtracker.TestItem;
 
 public class TestItemDelegate extends BranchDelegate {
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         return super.defaultBranchChoices(context);
     }

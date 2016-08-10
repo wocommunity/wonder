@@ -86,10 +86,6 @@ ToggleLink : WOHyperlink {
 	pageName = "ToggleExample";
 }
 
-GoogleMapsLink : WOHyperlink {
-	pageName = "AjaxGMapExample";
-}
-
 AjaxGridLink: WOHyperlink {
 	pageName = "AjaxGridExample";
 }
@@ -151,8 +147,4 @@ AjaxDatePicker: WOHyperlink {
 
 JSONExample : WOHyperlink {
 	pageName = "JSONExample";
-}
-
-ComponentReveal : WOHyperlink {
-	pageName = "ComponentRevealExample";
 }

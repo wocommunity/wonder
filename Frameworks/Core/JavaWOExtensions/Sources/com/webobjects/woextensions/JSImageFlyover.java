@@ -11,19 +11,27 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
 public class JSImageFlyover extends JSComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public String uniqueID;
    
     public JSImageFlyover(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         // We need to give each image a unique name, with considerations that there might be
         // more than one ImageFlyover per page.
 
-        StringBuffer uniqueIDBuffer = new StringBuffer("ImageFlyover");
+    	StringBuilder uniqueIDBuffer = new StringBuilder("ImageFlyover");
         uniqueIDBuffer.append(context.contextID());
-        uniqueIDBuffer.append("_");
+        uniqueIDBuffer.append('_');
         uniqueIDBuffer.append(context.elementID().replace('.', '_'));
         uniqueID = uniqueIDBuffer.toString();
         super.appendToResponse(response, context);
@@ -48,6 +56,7 @@ public class JSImageFlyover extends JSComponent {
         return uniqueID+".src='"+_url("unselectedImage")+"'";
     }
 
+    @Override
     public String imageLocation() {
         // Return the base image (what the hyperlink starts with) to the WOImage
         return _url("unselectedImage");

@@ -1,19 +1,16 @@
 // TestItem.java
 // 
 package er.bugtracker;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.bugtracker.People.Key;
 import er.extensions.eof.ERXQ;
 
 public class TestItem extends _TestItem {
-    static final Logger log = Logger.getLogger(TestItem.class);
-
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setState(TestItemState.OPEN);

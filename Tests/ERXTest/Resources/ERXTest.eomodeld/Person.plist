@@ -1,0 +1,33 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (firstName, id, lastName); 
+    className = EOGenericRecord; 
+    classProperties = (employeeVIs, firstName, lastName); 
+    externalName = Person; 
+    fetchSpecificationDictionary = {}; 
+    name = Person; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = EmployeeVI; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = id; }); 
+            name = employeeVIs; 
+        }
+    ); 
+}

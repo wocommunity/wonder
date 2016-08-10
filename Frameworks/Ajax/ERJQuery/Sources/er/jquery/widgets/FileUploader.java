@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -18,34 +19,33 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponseRewriter;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Encapsulation of @see <a href="http://valums.com/ajax-upload/">Ajax Upload</a>			
- * @binding			onChange			
- * @binding			onSubmit			
- * @binding			onComplete		
- * @binding			allowedExtensions           E.g: "['jpg', 'jpeg', 'png', 'gif']"	
+ * Encapsulation of @see <a href="http://valums.com/ajax-upload/">Ajax Upload</a>
+ * @binding			onChange
+ * @binding			onSubmit
+ * @binding			onComplete
+ * @binding			allowedExtensions           E.g: "['jpg', 'jpeg', 'png', 'gif']"
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
  * @property 		WOFileUpload.sizeLimit		Max file upload size permitted
  * 
  * @author mendis
  * 
- * NOTES: 
+ * NOTES:
  * 
- * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
+ * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may
  * need to use an alternative WOAdaptor. e.g: ERWOAdaptor
  * 
  * 2. Use of ERXSession breaks IE6-8 compatibility. Use WOSession instead.
  *
  */
 public abstract class FileUploader extends WOComponent {
-	private static Logger log = Logger.getLogger(FileUploader.class);
+	private static final Logger log = LoggerFactory.getLogger(FileUploader.class);
 	
 	private static boolean useUnobtrusively = ERXProperties.booleanForKeyWithDefault("er.jquery.useUnobtrusively", true);
 
@@ -86,7 +86,7 @@ public abstract class FileUploader extends WOComponent {
 		return false;
 	}
 
-	// accessors	
+	// accessors
 	public String id() {
 		return _id() == null ? "fu" + ERXStringUtilities.safeIdentifierName(context().elementID()) : _id();
 	}
@@ -146,7 +146,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
 	private String href() {
-		return ERXWOContext.ajaxActionUrl(context());
+		return context().componentActionURL(application().ajaxRequestHandlerKey());
 	}
 	
 	// R&R
@@ -161,7 +161,7 @@ public abstract class FileUploader extends WOComponent {
     }
     
     @Override
-    public WOActionResults invokeAction(WORequest request, WOContext context) {         
+    public WOActionResults invokeAction(WORequest request, WOContext context) {
     	if (context.senderID().equals(context.elementID())) {
         	WOResponse response = WOApplication.application().createResponseInContext(context);
 
@@ -189,7 +189,7 @@ public abstract class FileUploader extends WOComponent {
 				aFileName = (String) request.formValueForKey(FormKeys.qqfile);
 				anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
 	        } else {
-	        	log.error("Unable to obtain filename from form values: " + request.formValueKeys());
+	        	log.error("Unable to obtain filename from form values: {}", request.formValueKeys());
 	        	return;
 	        }
 
@@ -204,7 +204,7 @@ public abstract class FileUploader extends WOComponent {
 					setData(request.content());
 
 			} else {
-				if (aFileName != null && aFileName.length() > 0) {					
+				if (aFileName != null && aFileName.length() > 0) {
 					if (hasBinding(Bindings.inputStream)) {
 						setValueForBinding(anInputStream, Bindings.inputStream);
 					} else {
@@ -217,17 +217,22 @@ public abstract class FileUploader extends WOComponent {
 							} catch (IOException e) {
 								exception = new RuntimeException("Couldn't write input stream to output stream: " + e);
 								throw exception;
+							} finally {
+								try { anOutputStream.close(); } catch (IOException e) {}
+								try { anInputStream.close(); } catch (IOException e) {}
 							}
 						} else {
 							if (hasBinding(Bindings.finalFilePath)) {
 								localFilePath = finalFilePath();
 								setValueForBinding(null, Bindings.finalFilePath);
-							} 
+							}
 							try {
 								tempFile = ERXFileUtilities.writeInputStreamToTempFile(anInputStream, context.session().sessionID(), ".tmp");
 							} catch (IOException e) {
 								exception = new RuntimeException("Couldn't write input stream to temp file: " + e);
 								throw exception;
+							} finally {
+								try { anInputStream.close(); } catch (IOException e) {}
 							}
 						}
 
@@ -256,7 +261,9 @@ public abstract class FileUploader extends WOComponent {
 					catch (IOException e) {
 						exception = new RuntimeException("Error skipping empty file upload: " + e);
 						throw exception;
-					} 
+					} finally {
+						try { anInputStream.close(); } catch (IOException e) {}
+					}
 				}
 			}
 

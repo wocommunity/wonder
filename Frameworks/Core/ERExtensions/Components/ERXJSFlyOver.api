@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><wodefinitions>
         <wo class="ERXJSFlyOver.java" wocomponentcontent="false">
 
         <binding defaults="Boolean" name="needsClick"/><validation message="&amp;apos;needsClick&amp;apos; is a required binding"><unbound name="needsClick"/></validation></wo>

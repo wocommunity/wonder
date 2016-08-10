@@ -6,8 +6,10 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
-import java.util.*;
+import java.util.Properties;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 final class ERCNConfigurationV1 extends ERCNConfiguration {
 

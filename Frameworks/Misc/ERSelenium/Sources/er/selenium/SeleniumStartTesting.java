@@ -23,26 +23,22 @@
 
 package er.selenium;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
+
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * DirectAction that starts testing. 
  * Has wa/SeleniumStartTesting, wa/SeleniumStartTesting/run and wa/SeleniumStartTesting/edit.
  */
 public class SeleniumStartTesting extends WODirectAction {
-	private static final Logger log = Logger.getLogger(SeleniumStartTesting.class);
-	
 	public static final String RESULTS_FILE_KEY = "resultsFile";
 	
 	public SeleniumStartTesting(WORequest request) {
@@ -70,8 +66,8 @@ public class SeleniumStartTesting extends WODirectAction {
         // url = url.replaceFirst(".*?selenium-core/TestRunner.html", "chrome://selenium-ide/content/selenium/TestRunner.html");
         return url;
 	}
-	
-	// @Override
+
+	@Override
 	public WOActionResults defaultAction() {
 		return runAction();
 	}
@@ -83,9 +79,7 @@ public class SeleniumStartTesting extends WODirectAction {
     }
     
     private WOActionResults html(String url) {
-        WOResponse response = new WOResponse();
-        response.appendContentString("<html><body><a href='" + url + "'>go</a><body></html>");
-        return response;
+        return new ERXResponse("<html><body><a href='" + url + "'>go</a><body></html>");
     }
     
     private WOActionResults result(String suite, boolean edit) {
@@ -104,9 +98,10 @@ public class SeleniumStartTesting extends WODirectAction {
         return result(null, false);
     }
 
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
         if("default".equals(anActionName)) {
             anActionName = null;

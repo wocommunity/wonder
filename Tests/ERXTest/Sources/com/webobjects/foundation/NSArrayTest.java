@@ -161,16 +161,11 @@ public class NSArrayTest extends ERXTestCase {
   }
 
   public void testNSArrayListOfQextendsEBooleanNull() {
-    try {
-      new NSArray<String>((List<String>)null, true);
-      fail("NullPointerException expected");
-    } catch (NullPointerException e) {
-    }
-    try {
-      new NSArray<String>((List<String>)null, false);
-      fail("NullPointerException expected");
-    } catch (NullPointerException e) {
-    }  
+    NSArray<String> array1 = new NSArray<String>((List<String>)null, true);
+    assertEquals(0, array1.count());
+    
+    NSArray<String> array2 = new NSArray<String>((List<String>)null, false);
+    assertEquals(0, array2.count()); 
   }
   
   public void testNSArrayListOfQextendsEBooleanInvalid() {
@@ -194,11 +189,8 @@ public class NSArrayTest extends ERXTestCase {
   }
 
   public void testNSArrayCollectionOfQextendsENull() {
-    try {
-      new NSArray<String>((List<String>)null);
-      fail("NullPointerException expected");
-    } catch (NullPointerException e) {
-    }
+    NSArray<String> array = new NSArray<String>((List<String>)null);
+    assertEquals(0, array.size());
   }
   
   public void testNSArrayCollectionOfQextendsEInvalid() {
@@ -224,17 +216,11 @@ public class NSArrayTest extends ERXTestCase {
   }
 
   public void testNSArrayCollectionOfQextendsEBooleanNull() {
-    try {
-      new NSArray<String>((Collection<String>)null, true);
-      fail("NullPointerException expected");
-    } catch (NullPointerException e) {
-    }
+    NSArray<String> array1 = new NSArray<String>((Collection<String>)null, true);
+    assertEquals(0, array1.size());
 
-    try {
-      new NSArray<String>((Collection<String>)null, false);
-      fail("NullPointerException expected");
-    } catch (NullPointerException e) {
-    }
+    NSArray<String> array2 = new NSArray<String>((Collection<String>)null, false);
+    assertEquals(0, array2.size());
   }
   
   public void testNSArrayCollectionOfQextendsEBooleanInvalid() {

@@ -1,12 +1,4 @@
-//
-// Sources/ag/kcmedia/ERXIFrame.java: Class file for WO Component 'ERXIFrame'
-// Project DevStudio
-//
-// Created by ak on Thu Jul 25 2002
-//
 package er.extensions.components;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -18,6 +10,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.appserver.ERXResponse;
 
 /**
  * IFRAME that can use its own contents to render when none of the other
@@ -34,8 +28,6 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 	WOAssociation _src;
 	WOAssociation _pageName;
 	WOAssociation _action;
-
-	private static final Logger log = Logger.getLogger(ERXIFrame.class);
 
 	public ERXIFrame(String name, NSDictionary<String, WOAssociation> associations, WOElement parent) {
 		super("iframe", associations, parent);
@@ -61,7 +53,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 				else if (_action != null) {
 					return (WOActionResults) _action.valueInComponent(component);
 				} else {
-					WOResponse response = new WOResponse();
+					ERXResponse response = new ERXResponse();
 					//AK: we might want to be able to set this...
 					response.appendContentString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 					response.appendContentString("<html><body style='border:0; margin: 0; padding: 0; width:100%; height: 100%'>");
@@ -72,12 +64,10 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 					comp.setComponent(context.page());
 					return comp;
 				}
-			} else {
-				return invokeChildrenAction(request, context);
 			}
-		} else {
-			return null;
+			return invokeChildrenAction(request, context);
 		}
+		return null;
 	}
 	
 	public void doAppendChildrenToResponse(WOResponse response, WOContext context) {
@@ -97,7 +87,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 			src = (String) _src.valueInComponent(component);
 		}
 		else {
-			src = (String) context.componentActionURL();
+			src = context.componentActionURL();
 		}
 		response.appendContentString(" src=\"");
     	response.appendContentHTMLAttributeValue(src);

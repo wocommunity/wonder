@@ -6,11 +6,11 @@
 		<binding name="item"/>
 		<binding name="negate" defaults="Boolean"/>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 
-		<validation message="&apos;item&apos; is a required binding">
+		<validation message="'item' is a required binding">
 			<unbound name="item"/>
 		</validation>
 	</wo>

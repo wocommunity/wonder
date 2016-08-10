@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
 	<wo class="AjaxSortableList.java" wocomponentcontent="true">
 		<binding name="id"/>
@@ -53,5 +53,9 @@
         <validation message="'index' must be bound to a settable value">
             <unsettable name="index"/>
         </validation>
+    <binding name="movingClass"/>
+        <binding name="starteffect"/>
+        <binding name="endeffect"/>
+        <binding name="reverteffect"/>
     </wo>
 </wodefinitions>

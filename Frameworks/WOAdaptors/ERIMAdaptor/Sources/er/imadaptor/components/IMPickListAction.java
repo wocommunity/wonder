@@ -1,8 +1,9 @@
 package er.imadaptor.components;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang.StringUtils;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -10,11 +11,15 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.foundation.ERXStringUtilities;
 import er.imadaptor.InstantMessengerAdaptor;
 
 public class IMPickListAction extends WOComponent {
-	private static Logger log = Logger.getLogger(IMPickListAction.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Object _repetitionItem;
 	private int _index;
@@ -73,7 +78,7 @@ public class IMPickListAction extends WOComponent {
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		String actionUrl = context._componentActionURL(false);
+		String actionUrl = context.componentActionURL(WOApplication.application().componentRequestHandlerKey(), false);
 		response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
 		super.appendToResponse(response, context);
 	}
@@ -86,7 +91,7 @@ public class IMPickListAction extends WOComponent {
 			NSArray list = (NSArray) valueForBinding("list");
 			NSArray selectedObjects;
 			Object selectedObject;
-			if (ERXStringUtilities.isDigitsOnly(message)) {
+			if (StringUtils.isNumeric(message)) {
 				int selectionIndex = Integer.parseInt(message) - 1;
 				if (selectionIndex >= 0 && selectionIndex < list.count()) {
 					selectedObject = list.objectAtIndex(selectionIndex);

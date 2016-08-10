@@ -2,8 +2,6 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -26,13 +24,17 @@ import er.extensions.validation.ERXValidationFactory;
  * @property er.corebusinesslogic.ERCMailMessage.ShouldGzipContent
  */
 public class ERCMailMessage extends _ERCMailMessage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     //	===========================================================================
     //	Class Constant(s)
     //	---------------------------------------------------------------------------
-        
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";
@@ -89,6 +91,7 @@ public class ERCMailMessage extends _ERCMailMessage {
      * 'Ready To Be Sent'.
      * @param anEditingContext inserted into
      */
+    @Override
     public void init(EOEditingContext anEditingContext) {
         super.init(anEditingContext);
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
@@ -122,17 +125,6 @@ public class ERCMailMessage extends _ERCMailMessage {
     // IMPLEMENTME: MarkReadInterface
     public void markReadBy(EOEnterpriseObject by) {
     	setIsRead(true);
-    }
-
-    /**
-     * Use setIsRead(boolean)
-     * @deprecated setIsRead
-     */
-    public void setReadAsBoolean(boolean read) {
-        setIsRead(read);
-    }
-    public boolean isReadAsBoolean() {
-        return ERXValueUtilities.booleanValue(isRead());
     }
 
     public NSArray toAddressesAsArray() {
@@ -174,41 +166,43 @@ public class ERCMailMessage extends _ERCMailMessage {
      * @return very verbose description of the mail message.
      */
     public String longDescription() {
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("To: ");
         sb.append(toAddresses());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("cc: ");
         sb.append(ccAddresses());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("Created: ");
         sb.append(created());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("Title: ");
         sb.append(title());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("Text: ");
         sb.append(text());
-        sb.append("\n");
+        sb.append('\n');
         return sb.toString();
     }
 
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("To: ");
         sb.append(toAddresses());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("cc: ");
         sb.append(ccAddresses());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("Created: ");
         sb.append(created());
-        sb.append("\n");
+        sb.append('\n');
         sb.append("Title: ");
         sb.append(title());
         return sb.toString();
     }
 
+    @Override
     public String toLongString() {
         return toString();
     }
@@ -256,6 +250,7 @@ public class ERCMailMessage extends _ERCMailMessage {
         return validateEmptyStringForKey(newValue, "toAddresses");
     }
 
+    @Override
     public void validateForSave() throws NSValidation.ValidationException {
         final String text = text();
         final String plainText = plainText();
@@ -302,16 +297,18 @@ public class ERCMailMessage extends _ERCMailMessage {
         takeStoredValueForKey(valueToSet, key);
     }
 
+    @Override
     public String text() {
     	String value = null;
     	if (contentGzipped()) {
-    		value = (String)storedGzippedValueForKey("textCompressed");
+    		value = storedGzippedValueForKey("textCompressed");
     	} else {
     		value = (String)storedValueForKey(Key.TEXT);
     	}
     	return value;
     }
     
+    @Override
     public void setText(String aValue) {
     	if (contentGzipped()) {
     		takeStoredGzippedValueForKey(aValue, "textCompressed");
@@ -320,6 +317,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     	}
     }
     
+    @Override
     public void willInsert() {
     	super.willInsert();
     	NSTimestamp now = new NSTimestamp();
@@ -327,6 +325,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     	setLastModified(now);
     }
     
+    @Override
     public void willUpdate() {
     	super.willUpdate();
     	setLastModified(new NSTimestamp());

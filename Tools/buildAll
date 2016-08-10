@@ -1,0 +1,36 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo ""
+    echo "Cleans and build the Wonder frameworks and runs ant tests. See the ReadMe.txt for more info."
+    echo ""
+    exit 0
+fi
+
+if [ ! -f "Build/build/build.xml" ]; then
+    echo ""
+    echo "Please execute from within a checked-out Wonder directory. For example, you can do:"
+    echo ""
+    echo "    % git clone https://github.com/wocommunity/wonder"
+    echo "    % cd wonder"
+    echo "    % ./Tools/buildAll"
+    echo ""
+    exit 0
+fi
+
+if [ ! -d logs ]; then
+    mkdir logs
+fi
+
+chmod +w Frameworks/Misc/WOJRebel/manifest.mf
+chmod +w Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+
+script logs/log_buildAll_`date +%Y%m%d_%H%M%S`.txt ant clean frameworks applications examples tests tests.run
+
+git checkout Frameworks/Misc/WOJRebel/manifest.mf
+chmod -w Frameworks/Misc/WOJRebel/manifest.mf
+
+git checkout Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+chmod -w Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+
+exit 0

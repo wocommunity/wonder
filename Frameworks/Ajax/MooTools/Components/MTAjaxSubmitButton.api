@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxSubmitButton" wocomponentcontent="true">    <binding name="action"/>
+        <binding name="afterEffect"/>
+        <binding name="afterEffectID"/>
+        
+        <binding name="beforeEffect"/>
+        <binding name="beforeEffectDuration"/>
+        <binding name="beforeEffectID"/>
+        
+        <binding name="button"/>
+        <binding name="class"/>
+        <binding name="effect"/>
+        <binding name="elementName"/>
+        <binding name="formName"/>
+        <binding name="formSerializer"/>
+        <binding name="functionName"/>
+        <binding name="id"/>
+        <binding name="name"/>
+        <binding name="onCancel"/>
+        <binding name="onClick"/>
+        <binding name="onClickBefore"/>
+        <binding name="onClickServer"/>
+        <binding name="onComplete"/>
+        <binding name="onException"/>
+        <binding name="onFailure"/>
+        <binding name="onRequest"/>
+        <binding name="onSuccess"/>
+        <binding name="showUI"/>
+        <binding name="style"/>
+        <binding name="updateContainerID"/>
+        
+        <binding name="value"/>
+    <binding name="async"/>
+    <binding name="afterEffectDuration"/>
+    </wo>
+</wodefinitions>

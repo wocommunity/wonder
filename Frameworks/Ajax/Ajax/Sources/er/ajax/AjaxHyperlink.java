@@ -55,14 +55,14 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		sb.append(actionUrl);
 		sb.append("', ");
 		AjaxOptions.appendToBuffer(options, sb, context);
-		sb.append(")");
+		sb.append(')');
 		String onClick = (String) valueForBinding("onClick", context.component());
 		if (onClick != null) {
-			sb.append(";");
+			sb.append(';');
 			sb.append(onClick);
 		}
 		if (onClickBefore != null) {
-			sb.append("}");
+			sb.append('}');
 		}
 		return sb.toString();
 	}
@@ -80,6 +80,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		return options;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 
@@ -124,11 +125,13 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		super.appendToResponse(response, context);
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse res, WOContext context) {
 		addScriptResourceInHead(context, res, "prototype.js");
 		addScriptResourceInHead(context, res, "effects.js");
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);

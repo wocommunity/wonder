@@ -24,7 +24,6 @@ public class EditOwner extends D2WComponent {
 		super(c);
 	}
 
-	/** @TypeInfo People */
 	public EOEnterpriseObject localOriginator() {
 		if (object() != null && ((Bug) object()).originator() != null)
 			return EOUtilities.localInstanceOfObject(session().defaultEditingContext(), ((Bug) object()).originator());

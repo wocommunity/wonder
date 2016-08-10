@@ -16,6 +16,7 @@ FileUpload : WOFileUpload {
 	class = ^class;
 	style = ^style;
 	title = ^title;
+	name = ^name;
 }
 
 AjaxFileUpload : WOSwitchComponent {

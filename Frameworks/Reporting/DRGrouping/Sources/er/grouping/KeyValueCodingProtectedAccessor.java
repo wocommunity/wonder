@@ -6,37 +6,43 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.grouping;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
-
-    public static final Logger cat = Logger.getLogger(KeyValueCodingProtectedAccessor.class);
+    private static final Logger log = LoggerFactory.getLogger(KeyValueCodingProtectedAccessor.class);
     
     public KeyValueCodingProtectedAccessor() { super(); }
 
+    @Override
     public Object fieldValue(Object object, Field field) throws IllegalArgumentException, IllegalAccessException {
-        //cat.warn("FieldValue, field: " + field.toString() + " object: " + object.toString());
+        //log.warn("FieldValue, field: {} object: {}", field, object);
         return field.get(object);
     }
 
+    @Override
     public void setFieldValue(Object object, Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
-        //cat.warn("SetFieldValue, field: " + field.toString() + " value: " + value + " object: " + object.toString());
+        //log.warn("SetFieldValue, field: {} value: {} object: {}", field, value, object);
         field.set(object, value);
     }
 
+    @Override
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
-        //cat.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
+        //log.warn("MethodValue, method: {} object: {}", method, object);
         return method.invoke(object,  (Object[])null);
     }
 
+    @Override
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
-        //cat.warn("SetMethodValue, method: " + method.toString() + " value: " + value + " object: " + object.toString());
+        //log.warn("SetMethodValue, method: {} value: {} object: {}", method, value, object);
         method.invoke(object, new Object[] {value});
     }
 }

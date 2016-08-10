@@ -1,0 +1,67 @@
+About Project Wonder
+--------------------
+
+Project Wonder is the largest open source collection of reusable WebObjects frameworks, applications and 
+extensions. Also included in the Wonder collection are deployment software and web server adaptors. 
+
+Project Wonder builds upon, extends and enhances WebObjects, along with automatically patching bugs in the core WebObjects frameworks. If you know Java, then Project Wonder is a very powerful and productive set of frameworks to build and deploy everything from basic dynamic web applications to high traffic, scalable multi-function server applications.
+
+What Can I Create With Project Wonder?
+---------------------------------------
+
+* *Classic Web Applications*. Everything you need to integrate with popular SQL database servers, server dynamic web pages, including Ajax functionality, and manage session-based user interaction with your application via a web browser.
+* *Server Applications* that service requests from custom client front ends. iTunes itself is an example of a desktop application that interacts with a Project Wonder based serverside application.
+* *REST server*. Everything you need to quickly build a database-backed server application that integrates with REST clients in many popular request/response formats including xml, json, and plist.
+
+Pre-requisites
+--------------
+
+To be proficent in developing web applications with Project Wonder, the following foundation skills and knowledge will be helpful:
+
+### The Basics
+
+* HTML
+* CSS
+* Java
+
+### Even Better
+
+* SQL
+* JavaScript
+* Design Patterns
+* git
+
+Getting Started
+--------------------
+
+If you are new to Project Wonder you should look at the community's [Getting Started Guide](http://wiki.wocommunity.org/display/documentation/Home)
+
+Wiki
+--------------------
+
+Check the [community wiki](http://wiki.wocommunity.org/display/documentation/Home) for more details on Project Wonder.
+
+Typical Deployment Stack
+-------------------------
+
+* Database Server (MySQL, PostgreSQL, Oracle, MS SQL Server, etc.)
+* Application Server (Project Wonder application on Linux or OS X. Some people even deploy on Windows)
+* Apache Server (Apache with WebObjects adaptor module, mod_WebObjects)
+
+Depending on your traffic and application load, the entire stack can run on as little as a 512MB Linux VPS or on a setup that includes thousands of servers that share the load of each component in the stack.
+
+Building from Source
+--------------------
+
+See BUILD.txt to find out how to build Wonder.
+
+
+Binaries
+--------------------
+
+Binaries can be downloaded from the [releases page](https://github.com/wocommunity/wonder/releases) or [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+
+Changelog
+--------------------
+
+You can find changelogs for older releases in the Wiki section or for more recent releases on the [releases page](https://github.com/wocommunity/wonder/releases).

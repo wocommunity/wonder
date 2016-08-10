@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo class="ERFOPWrapper.java" wocomponentcontent="false">
+
+        <binding name="author"/>
+        <binding name="creator"/>
+        <binding defaults="Boolean" name="enabled"/>
+        <binding name="filename"/>
+        <binding name="keywords"/>
+        <binding name="outputTarget"/>
+        <binding name="targetResolution"/>
+        <binding name="title"/>
+        <binding name="xml2fopXsl"/>
+    </wo>
+</wodefinitions>

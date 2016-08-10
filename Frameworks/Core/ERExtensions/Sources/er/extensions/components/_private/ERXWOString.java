@@ -2,7 +2,8 @@ package er.extensions.components._private;
 
 import java.text.Format;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -29,8 +30,7 @@ import er.extensions.formatters.ERXTimestampFormatter;
  * @author ak
  */
 public class ERXWOString extends WODynamicElement {
-
-    public static final Logger log = Logger.getLogger(ERXWOString.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXWOString.class);
 
     protected WOAssociation _dateFormat;
     protected WOAssociation _numberFormat;
@@ -62,6 +62,7 @@ public class ERXWOString extends WODynamicElement {
                 + "> ( cannot have 'dateFormat' and 'numberFormat' or 'formatter' attributes at the same time."); }
     }
 
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOComponent component = wocontext.component();
         Object valueInComponent = null;
@@ -137,7 +138,7 @@ public class ERXWOString extends WODynamicElement {
 
                 } else {
                     if (valueInComponent != null) {
-                        log.debug("no formatter found!" + valueInComponent);
+                        log.debug("no formatter found! {}", valueInComponent);
                     }
                 }
             }

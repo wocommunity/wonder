@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -30,13 +31,16 @@ import er.extensions.foundation.ERXStringUtilities;
  * after it has already been "drawn" by previous components.
  * 
  * @author mschrag
- * @property er.extensions.loadOnDemand if true, javascript files included in Ajax responses will be loaded on-demand (defaults to true) 
- * @property er.ajax.secureResources if true, load all resources with https (default false) 
+ * @property er.extensions.loadOnDemand if <code>true</code>, javascript files included in Ajax responses will be loaded on-demand (defaults to <code>true</code>) 
+ * @property er.ajax.secureResources if <code>true</code>, load all resources with https (default false) 
  * @property er.ajax.AJComponent.htmlCloseHead the tag to insert in front of (defaults to &lt;/head&gt;)
- * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute if true, type="text/javascript" will be added to injected script tags (defaults true)
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute if <code>true</code>, <i>type="text/javascript"</i>
+ *           will be added to injected script tags (defaults <code>false</code>). For valid HTML you have to set this to
+ *           <code>true</code> for HTML4 and XHTML but HTML5 will default to <i>text/javascript</i> if that attribute
+ *           is missing.
  */
 public class ERXResponseRewriter {
-	public static final Logger log = Logger.getLogger(ERXResponseRewriter.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXResponseRewriter.class);
 
 	private static final String ADDED_RESOURCES_KEY = "ERXResponseRewriter.addedResources";
 
@@ -92,7 +96,7 @@ public class ERXResponseRewriter {
 	
 	/**
 	 * ERXResponseRewriter uses the ContextObserver to reset the topIndex value at the end 
-	 * of the request.  You should not need to invoke this class directly.
+	 * of the request. You should not need to invoke this class directly.
 	 */
 	public static class ContextObserver {
 		public void didHandleRequest(NSNotification n) {
@@ -117,11 +121,11 @@ public class ERXResponseRewriter {
 		 * the addition completely.
 		 * 
 		 * @param framework
-		 *            the requested framework of the addition (can be null)
+		 *            the requested framework of the addition (can be <code>null</code>)
 		 * @param fileName
 		 *            the requested fileName of the addition (can be a URL,
 		 *            absolute path, or relative resource path)
-		 * @return true if the resource should be added
+		 * @return <code>true</code> if the resource should be added
 		 */
 		public boolean responseRewriterShouldAddResource(String framework, String fileName);
 
@@ -132,11 +136,11 @@ public class ERXResponseRewriter {
 		 * "app" "prototype.js".
 		 * 
 		 * @param framework
-		 *            the requested framework of the addition (can be null)
+		 *            the requested framework of the addition (can be <code>null</code>)
 		 * @param fileName
 		 *            the requested fileName of the addition (can be a URL,
 		 *            absolute path, or relative resource path)
-		 * @return an alternative Resource, or null to use the requested
+		 * @return an alternative Resource, or <code>null</code> to use the requested
 		 *         resource
 		 */
 		public ERXResponseRewriter.Resource responseRewriterWillAddResource(String framework, String fileName);
@@ -187,7 +191,7 @@ public class ERXResponseRewriter {
 	 * 
 	 * @param delegate
 	 *            the response rewriter delegate to be used by this Application,
-	 *            or null to use the default
+	 *            or <code>null</code> to use the default
 	 */
 	public static void setDelegate(ERXResponseRewriter.Delegate delegate) {
 		ERXResponseRewriter._delagate = delegate;
@@ -197,7 +201,7 @@ public class ERXResponseRewriter {
 	 * Returns the page userInfo for the page component of the given context. If
 	 * this is the first request for the page user info for a non-ajax request,
 	 * the user info will be cleared (so that reloading a page doesn't make the
-	 * system believe it has already rendered script and css tags, for
+	 * system believe it has already rendered script and CSS tags, for
 	 * instance). If you do not want this behavior, use pageUserInfo(WOContext)
 	 * instead.
 	 * 
@@ -207,7 +211,12 @@ public class ERXResponseRewriter {
 	 */
 	public static NSMutableDictionary<String, Object> ajaxPageUserInfo(WOContext context) {
 		WOComponent page = context.page();
-		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._ajaxPageUserInfos.get(page);
+		ERXSession session = ERXSession.session();
+		boolean sessionStoresPageInfo = session != null && session.storesPageInfo();
+		@SuppressWarnings("null")
+		Map<WOComponent, NSMutableDictionary<String, Object>> pageInfoDict =
+				sessionStoresPageInfo ? session.pageInfoDictionary() : ERXResponseRewriter._ajaxPageUserInfos;
+		NSMutableDictionary<String, Object> pageInfo = pageInfoDict.get(page);
 		String contextID = context.contextID();
 		if (contextID == null) {
 			contextID = "none";
@@ -218,7 +227,7 @@ public class ERXResponseRewriter {
 		if (pageInfo == null) {
 			pageInfo = new NSMutableDictionary<String, Object>();
 			pageInfo.setObjectForKey(contextID, ERXResponseRewriter.ORIGINAL_CONTEXT_ID_KEY);
-			ERXResponseRewriter._ajaxPageUserInfos.put(page, pageInfo);
+			pageInfoDict.put(page, pageInfo);
 		}
 		return pageInfo;
 	}
@@ -258,6 +267,8 @@ public class ERXResponseRewriter {
 	 * Returns the tag name that scripts and resources should be inserted above.
 	 * Defaults to &lt;/head&gt;, but this can be overridden by setting the
 	 * property er.ajax.AJComponent.htmlCloseHead.
+	 * 
+	 * @return string that closes the part where resources are inserted into
 	 */
 	public static String _htmlCloseHeadTag() {
 		String closeHeadTag = ERXProperties.stringForKeyWithDefault("er.ajax.AJComponent.htmlCloseHead", "</head>");
@@ -319,13 +330,13 @@ public class ERXResponseRewriter {
 	 * HTML tag.
 	 * 
 	 * @param response
-	 *            the WOResponse
+	 *            the response
 	 * @param context
-	 *            the WOContext
+	 *            the context
 	 * @param content
-	 *            the content to insert.
+	 *            the content to insert
 	 * @param tag
-	 *            the tag to insert before (in html syntax)
+	 *            the tag to insert before (in HTML syntax)
 	 * @param tagMissingBehavior
 	 *            how to handle the case where the tag is missing
 	 * @return whether or not the content was inserted
@@ -344,7 +355,14 @@ public class ERXResponseRewriter {
 			tagIndex = -1;
 		}
 		if (tagIndex >= 0) {
-			response.setContent(ERXStringUtilities.insertString(responseContent, content, tagIndex));
+			int insertIndex = tagIndex;
+			if (content.toLowerCase().startsWith("<link") || content.toLowerCase().startsWith("<style")) {
+				int scriptIndex = responseContent.toLowerCase().indexOf("<script");
+				if (scriptIndex > 0 && scriptIndex < insertIndex) {
+					insertIndex = scriptIndex;
+				}
+			}
+			response.setContent(ERXStringUtilities.insertString(responseContent, content, insertIndex));
 			inserted = true;
 		}
 		else if (tagMissingBehavior == TagMissingBehavior.Inline) {
@@ -374,7 +392,7 @@ public class ERXResponseRewriter {
 			// IGNORE
 		}
 		else if (tagMissingBehavior == TagMissingBehavior.SkipAndWarn) {
-			ERXResponseRewriter.log.warn("There was no " + tag + ", so your content did not get added: " + content);
+			log.warn("There was no {}, so your content did not get added: {}", tag, content);
 		}
 		else {
 			throw new IllegalArgumentException("Unknown tag missing missing: " + tagMissingBehavior + ".");
@@ -383,7 +401,7 @@ public class ERXResponseRewriter {
 	}
 	
 	/**
-	 * Adds a script tag with a correct resource url into the html head tag if
+	 * Adds a script tag with a correct resource URL into the HTML head tag if
 	 * it isn't already present in the response, or inserts an Ajax OnDemand tag
 	 * if the current request is an Ajax request.
 	 * 
@@ -431,7 +449,7 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Adds a stylesheet link tag with a correct resource url in the html head
+	 * Adds a stylesheet link tag with a correct resource URL in the HTML head
 	 * tag if it isn't already present in the response.
 	 * 
 	 * @param context
@@ -441,14 +459,14 @@ public class ERXResponseRewriter {
 	 * @param framework
 	 *            the framework that contains the file
 	 * @param fileName
-	 *            the name of the css file to add
+	 *            the name of the CSS file to add
 	 */
 	public static void addStylesheetResourceInHead(WOResponse response, WOContext context, String framework, String fileName) {
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName, null);
 	}
 
 	/**
-	 * Adds a stylesheet link tag with a correct resource url in the html head
+	 * Adds a stylesheet link tag with a correct resource URL in the HTML head
 	 * tag if it isn't already present in the response.
 	 * 
 	 * @param context
@@ -458,9 +476,9 @@ public class ERXResponseRewriter {
 	 * @param framework
 	 *            the framework that contains the file
 	 * @param fileName
-	 *            the name of the css file to add
+	 *            the name of the CSS file to add
 	 * @param media
-	 *            the media type of the stylesheet (or null for default)
+	 *            the media type of the stylesheet (or <code>null</code> for default)
 	 */
 	public static void addStylesheetResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String media) {
 		String cssStartTag;
@@ -477,29 +495,25 @@ public class ERXResponseRewriter {
 		else {
 			cssEndTag = "\">";
 		}
-		// MS: It looks like all the browsers can load CSS inline, so we don't
-		// even need all this.
-		// String fallbackStartTag;
-		// String fallbackEndTag;
-		// if (ERXAjaxApplication.isAjaxRequest(context.request())) {
-		// fallbackStartTag = "<script>AOD.loadCSS('";
-		// fallbackEndTag = "')</script>";
-		// }
-		// else {
-		// fallbackStartTag = null;
-		// fallbackEndTag = null;
-		// }
-		// ERXResponseRewriter.addResourceInHead(response, context, framework,
-		// fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag,
-		// TagMissingBehavior.SkipAndWarn);
+		String fallbackStartTag = null;
+		String fallbackEndTag = null;
+
+		if (ERXAjaxApplication.isAjaxRequest(context.request()) && ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemand", true)) {
+			if (ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemandDuringReplace", false)) {
+				boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+				fallbackStartTag = (appendTypeAttribute ? "<script type=\"text/javascript\">AOD.loadCSS('" : "<script>AOD.loadCSS('");
+				fallbackEndTag = "')</script>";
+			}
+		}
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag, TagMissingBehavior.Inline);
 		
 		// Q: We use TagMissingBehaviour.Inline in case this is called from inside the 
 		// HEAD tag and there is no close tag yet
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Inline);
+//		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Inline);
 	}
 
 	/**
-	 * Adds javascript code in a script tag in the html head tag (without a
+	 * Adds javascript code in a script tag in the HTML head tag (without a
 	 * name). If you call this method multiple times with the same script code,
 	 * it will add multiple times. To prevent this, call
 	 * addScriptCodeInHead(WOResponse, String, String) passing in a name for
@@ -507,6 +521,8 @@ public class ERXResponseRewriter {
 	 * 
 	 * @param response
 	 *            the response to write into
+	 * @param context
+	 *            the context
 	 * @param script
 	 *            the javascript code to insert
 	 */
@@ -515,11 +531,13 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Adds javascript code in a script tag in the html head tag or inline if
+	 * Adds javascript code in a script tag in the HTML head tag or inline if
 	 * the request is an Ajax request.
 	 * 
 	 * @param response
 	 *            the response to write into
+	 * @param context
+	 *            the context
 	 * @param script
 	 *            the javascript code to insert
 	 * @param scriptName
@@ -536,14 +554,14 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Adds a reference to an arbitrary file with a correct resource url wrapped
-	 * between startTag and endTag in the html head tag if it isn't already
+	 * Adds a reference to an arbitrary file with a correct resource URL wrapped
+	 * between startTag and endTag in the HTML head tag if it isn't already
 	 * present in the response.
 	 * 
-	 * @param context
-	 *            the context
 	 * @param response
 	 *            the response
+	 * @param context
+	 *            the context
 	 * @param framework
 	 *            the framework that contains the file
 	 * @param fileName
@@ -561,7 +579,7 @@ public class ERXResponseRewriter {
 	 * Returns the resources that have been added to the head of this page.
 	 * 
 	 * @param context
-	 *            the WOContext
+	 *            the context
 	 * @return the resources that have been added to the head of this page.
 	 */
 	@SuppressWarnings("unchecked")
@@ -578,9 +596,13 @@ public class ERXResponseRewriter {
 	/**
 	 * Returns whether or not the given resource has been added to the HEAD tag.
 	 * 
+	 * @param context
+	 *            the context
+	 * @param frameworkName
+	 *            the framework name of the resource
 	 * @param resourceName
 	 *            the name of the resource to check
-	 * @return true if the resource has been added to head
+	 * @return <code>true</code> if the resource has been added to head
 	 */
 	public static boolean isResourceAddedToHead(WOContext context, String frameworkName, String resourceName) {
 		NSMutableSet<String> addedResources = ERXResponseRewriter.resourcesAddedToHead(context);
@@ -592,7 +614,7 @@ public class ERXResponseRewriter {
 	 * added to the head of this page.
 	 * 
 	 * @param context
-	 *            the WOContext
+	 *            the context
 	 * @param frameworkName
 	 *            the framework name of the resource
 	 * @param resourceName
@@ -604,14 +626,25 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Adds a reference to an arbitrary file with a correct resource url wrapped
-	 * between startTag and endTag in the html head tag if it isn't already
+	 * Adds a reference to an arbitrary file with a correct resource URL wrapped
+	 * between startTag and endTag in the HTML head tag if it isn't already
 	 * present in the response.
 	 * 
 	 * @param response
+	 *            the response
+	 * @param context
+	 *            the context
+	 * @param framework
+	 *            the framework that contains the file
 	 * @param fileName
+	 *            the name of the file to add
 	 * @param startTag
+	 *            the HTML to prepend before the URL
 	 * @param endTag
+	 *            the HTML to append after the URL
+	 * @param tagMissingBehavior
+	 *            how to handle the case where the tag is missing
+	 * 
 	 * @return whether or not the content was added
 	 */
 	public static boolean addResourceInHead(WOResponse response, WOContext context, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
@@ -619,19 +652,26 @@ public class ERXResponseRewriter {
 	}
 
 	/**
-	 * Adds a reference to an arbitrary file with a correct resource url wrapped
-	 * between startTag and endTag in the html head tag if it isn't already
+	 * Adds a reference to an arbitrary file with a correct resource URL wrapped
+	 * between startTag and endTag in the HTML head tag if it isn't already
 	 * present in the response.
 	 * 
 	 * @param response
-	 * @param context 
-	 * @param framework 
+	 *            the response
+	 * @param context
+	 *            the context
+	 * @param framework
+	 *            the framework that contains the file
 	 * @param fileName
+	 *            the name of the file to add
 	 * @param startTag
+	 *            the HTML to prepend before the URL
 	 * @param endTag
+	 *            the HTML to append after the URL
 	 * @param fallbackStartTag
 	 * @param fallbackEndTag
 	 * @param tagMissingBehavior
+	 *            how to handle the case where the tag is missing
 	 * 
 	 * @return whether or not the content was added
 	 */
@@ -696,5 +736,29 @@ public class ERXResponseRewriter {
 			}
 		}
 		return inserted;
+	}
+	
+	/**
+	 * Appends a script tag with or without type attribute depending on the
+	 * corresponding property value.
+	 * 
+	 * @param response response object to add opening script tag to
+	 */
+	public static void appendScriptTagOpener(WOResponse response) {
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		if (appendTypeAttribute) {
+			response.appendContentString("<script type=\"text/javascript\">");
+		} else {
+			response.appendContentString("<script>");
+		}
+	}
+	
+	/**
+	 * Appends the closing script tag to the given response.
+	 * 
+	 * @param response response object to add closing script tag to
+	 */
+	public static void appendScriptTagCloser(WOResponse response) {
+		response.appendContentString("</script>");
 	}
 }

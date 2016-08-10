@@ -12,9 +12,12 @@ import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXKeyGlobalID;
 
 public class ERCAuditTrailEntry extends _ERCAuditTrailEntry {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrailEntry.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final ERCAuditTrailEntryClazz clazz = new ERCAuditTrailEntryClazz();
 
@@ -25,6 +28,7 @@ public class ERCAuditTrailEntry extends _ERCAuditTrailEntry {
     public interface Key extends _ERCAuditTrailEntry.Key {
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         EOEnterpriseObject user = ERCoreBusinessLogic.actor(ec);

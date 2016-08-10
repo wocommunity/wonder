@@ -11,8 +11,6 @@ import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.ERDirectToWeb;
-import er.extensions.foundation.ERXValueUtilities;
-
 
 /**
  * A component to encapsulate the repetition over "extra" display property keys.  The property keys
@@ -25,6 +23,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey propertyKey
  */
 public class ERD2WExtraDisplayPropertyKeysComponent extends D2WComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
     
     private String _extraPropertiesKey;
     

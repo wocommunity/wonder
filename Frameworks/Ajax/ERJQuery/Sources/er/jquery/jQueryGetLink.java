@@ -6,8 +6,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * A jQuery.get() as a link
  * @see jQueryGet
@@ -30,11 +28,6 @@ public class jQueryGetLink extends jQueryGet {
     public static interface Bindings extends jQueryGet.Bindings {
     	public static final String queryDictionary = "queryDictionary";
     	public static final String confirmMessage = "confirmMessage";
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override
@@ -72,7 +65,7 @@ public class jQueryGetLink extends jQueryGet {
     
     public String href() {
     	if (hasBinding(Bindings.action)) {
-    		return ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	} else if (hasBinding(Bindings.directActionName)) {
     		NSDictionary queryDictionary = hasBinding(Bindings.queryDictionary) ? queryDictionary() : null;
     		return context().directActionURLForActionNamed(directActionName(), queryDictionary);
@@ -85,7 +78,7 @@ public class jQueryGetLink extends jQueryGet {
     
     // actions
     public WOActionResults invokeAction() {
-    	context()._setActionInvoked(true);
+    	context().setActionInvoked(true);
 		if (hasBinding(Bindings.action))  {
 			WOActionResults action = action();
 			if (action instanceof WOComponent)  ((WOComponent) action)._setIsPage(true);	// cache is pageFrag cache

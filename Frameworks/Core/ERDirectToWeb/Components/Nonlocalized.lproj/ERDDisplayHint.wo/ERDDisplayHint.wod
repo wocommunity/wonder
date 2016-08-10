@@ -1,0 +1,11 @@
+CanDisplay : WOConditional {
+	condition = displayHint;
+}
+
+HasHint : WOConditional {
+	condition = ^d2wContext.hint;
+}
+
+VALUE : ERXLocalizedString {
+	value = stringForHint;
+}

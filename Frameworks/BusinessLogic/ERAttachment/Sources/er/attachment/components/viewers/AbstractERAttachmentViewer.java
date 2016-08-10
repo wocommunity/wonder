@@ -19,6 +19,13 @@ import er.extensions.components.ERXStatelessComponent;
  * @binding height (optional) if displaying an image, sets the image height
  */
 public abstract class AbstractERAttachmentViewer extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
   public AbstractERAttachmentViewer(WOContext context) {
     super(context);

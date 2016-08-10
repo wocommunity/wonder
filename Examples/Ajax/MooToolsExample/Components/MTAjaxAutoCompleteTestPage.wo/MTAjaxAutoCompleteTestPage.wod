@@ -1,0 +1,32 @@
+ComplexAjaxAutoComplete: MTAjaxAutoComplete {
+	list = currentValues;
+	value = value;
+	item = currentValue;
+	selection = selectedValue;
+}
+
+Item : WOString {
+	value = currentValue.name;
+}
+
+ItemLength : WOString {
+	value = currentValue.value;
+}
+
+SimpleAjaxAutoComplete: MTAjaxAutoComplete {
+	list = currentValues2;
+	value = value2;
+	item = currentValue;
+	displayString = currentValue.name;
+	selection = selectedValue2;
+}
+
+SubmitButton : WOSubmitButton {
+  action = submitted;
+}
+
+WOForm : WOForm {
+	class = "well";
+}
+
+

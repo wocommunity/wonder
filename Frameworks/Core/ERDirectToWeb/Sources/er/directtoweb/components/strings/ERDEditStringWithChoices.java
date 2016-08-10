@@ -24,12 +24,18 @@ import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Provides a toOne relationship-like component except the value is pushed in as a string.<br />
+ * Provides a toOne relationship-like component except the value is pushed in as a string.
+ * <p>
  * The coices can be either given as an NSDictionary with {key1=val1;key2=val2...}, an NSArray of
  * NSDictionaries with ({key1=val1;},{key2=val2;}...) or a means not yet clear to me (ak:).
  */
-
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
@@ -39,7 +45,9 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public String entityForReportName;
     public ERXKeyValuePair currentElement;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
     
     protected NSArray _availableElements;
@@ -82,6 +90,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
         return _availableElements;
     }
 
+    @Override
     public void reset(){
         super.reset();
         _availableElements = null;
@@ -111,9 +120,10 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
    }
 
     /** Extends the parent implementation in order to force validation. */
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	try {
         		object().validateTakeValueForKeyPath(objectPropertyValue(), key());
         	} catch (NSValidation.ValidationException e) {

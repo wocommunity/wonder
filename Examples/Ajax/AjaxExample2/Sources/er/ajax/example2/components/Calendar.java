@@ -24,7 +24,7 @@ public class Calendar extends AjaxWOWODCPage {
   }
 
   public String dayClass() {
-    StringBuffer dayClass = new StringBuffer();
+	StringBuilder dayClass = new StringBuilder();
     dayClass.append("day");
     if (_repetitionDay.weekend()) {
       dayClass.append(" weekend");

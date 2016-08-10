@@ -1,12 +1,12 @@
 package er.grouping;
 
-import java.text.*;
+import java.text.Format;
 
-import org.apache.log4j.Logger;
-
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * The "value" for the {@link DRMasterCriteria}. For example, given
@@ -15,13 +15,11 @@ import er.extensions.*;
  * Some DRCriteria have very high scores and so always end up on the bottom;
  * for example: "OTHER" and "TOTAL". <br />
  * For numeric DRCriteria, the value is a really huge number and
- * 1 + a really huge number ({@link MAXNUMBER}), respectively.
- * For alpha DRCriteria. the value is a long word filled with z's ({@link MAXSTRING})
+ * 1 + a really huge number ({@link #MAXNUMBER}), respectively.
+ * For alpha DRCriteria. the value is a long word filled with z's ({@link #MAXSTRING})
  * and the same with one z concatenated, respectively.
  */
-public class DRCriteria extends Object  {
-    private static final Logger log = Logger.getLogger(DRCriteria.class);
-
+public class DRCriteria {
     protected NSDictionary _valueDict;
     
     // The keys in the dict are DRSubMasterCriteria in the masterCriteria
@@ -125,6 +123,7 @@ public class DRCriteria extends Object  {
         return _valueDict;
     }
 
+    @Override
     public String toString() {
         return  "<DRCriteria valueDict: " + _valueDict + "; >";
     }
@@ -189,7 +188,7 @@ public class DRCriteria extends Object  {
         Object high = dict.objectForKey("H");
         Object low = dict.objectForKey("L");
 
-        String calFormat = this.calendarFormatForDates();
+        String calFormat = calendarFormatForDates();
         Format formatter = DRCriteria.formatterForFormat(calFormat);
 
         if (high instanceof NSTimestamp) {
@@ -204,7 +203,7 @@ public class DRCriteria extends Object  {
             lowString = low.toString();
         }
         
-        lbl = lbl + lowString + this.rangeSeparator() + highString;
+        lbl = lbl + lowString + rangeSeparator() + highString;
         return lbl;
     }
 
@@ -220,13 +219,13 @@ public class DRCriteria extends Object  {
                 Object rawVal = _valueDict.objectForKey(smc.keyDesc());
 
                 if (rawVal instanceof NSDictionary) {
-                    lbl = lbl.concat(this.labelForDict((NSDictionary)rawVal));
+                    lbl = lbl.concat(labelForDict((NSDictionary)rawVal));
                 } else {
                     lbl = lbl.concat(smc.lookUpKeyForValue(rawVal));
                 }
 
                 if (!(i == (cnt-1))) {
-                    lbl = lbl.concat(this.compoundSeparator());
+                    lbl = lbl.concat(compoundSeparator());
                 }
 
             }
@@ -253,26 +252,26 @@ public class DRCriteria extends Object  {
                     if (subMcs.count() > 1 || _masterCriteria.isString()) {
                         scr = MAXSTRING;
                     } else {
-                        scr = new Double(MAXNUMBER+1);
+                        scr = Double.valueOf(MAXNUMBER+1);
                     }
                 } else if (_valueDict.objectForKey("TOTAL") != null) {
                     if (subMcs.count() > 1 || _masterCriteria.isString()) {
                         scr = MAXSTRING.concat("z");
                     } else {
-                        scr = new Double(MAXNUMBER+2);
+                        scr = Double.valueOf(MAXNUMBER+2);
                     }
                 } else if (subMcs.count() > 1) {
-                    scr = this.label().toLowerCase();
+                    scr = label().toLowerCase();
                 } else if (rawVal instanceof NSDictionary) {
                     Object v = ((NSDictionary)rawVal).objectForKey("L");
                     //OWDebug.println(1, "v:"+v);
                     try{
                         if (v instanceof String)
-                            scr = new Double((String)v);
+                            scr = Double.valueOf((String)v);
                         else
                             scr = DRValueConverter.converter().numberForValue(v);
                     } catch(NumberFormatException e) {
-                        scr = new Double(-1.0*MAXNUMBER);
+                        scr = Double.valueOf(-1.0*MAXNUMBER);
                     }
                 } else if(rawVal instanceof String){
                     scr = ((String)rawVal).toLowerCase();

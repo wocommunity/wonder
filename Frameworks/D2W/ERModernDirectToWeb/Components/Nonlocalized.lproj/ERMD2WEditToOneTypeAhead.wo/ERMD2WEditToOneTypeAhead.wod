@@ -1,3 +1,8 @@
+ERMD2WEditToOneTypeAhead : AjaxUpdateContainer {
+  id = updateContainerID;
+  class = "ERMD2WEditToOneTypeAhead";
+}
+
 SearchTermSelected : AjaxSubmitButton {
   updateContainerID = d2wContext.idForMainContainer;
   functionName = searchTermSelectedFunctionName;
@@ -33,4 +38,12 @@ RemoveObjectButton : ERMDRemoveRelatedButton {
 
 ERXNonNullConditional : ERXNonNullConditional {
   condition = currentSelection;
+}
+
+ShowNewButton: WOConditional {
+	condition = isEntityCreatable;
+}
+
+ShowInspectButton: WOConditional {
+	condition = isEntityInspectable;
 }

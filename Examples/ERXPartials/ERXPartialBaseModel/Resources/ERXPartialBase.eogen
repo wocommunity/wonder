@@ -1,0 +1,1 @@
+  -destination GeneratedEOs -extension java -java -javaTemplate _WonderEntity.java -model Resources/ERXPartialBase.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose -loadModelGroup -define-copyrightBy "Global Village Consulting." -define-copyrightYear 2012

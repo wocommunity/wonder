@@ -18,6 +18,12 @@ import com.webobjects.foundation.NSArray;
  * new caching scheme.
  */
 public class ERDTabDictionaryComputer extends TabDictionaryComputer implements ERDComputingAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** Holds the keys this assignment is dependent upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "displayPropertyKeys" });
@@ -48,7 +54,7 @@ public class ERDTabDictionaryComputer extends TabDictionaryComputer implements E
     public ERDTabDictionaryComputer (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "displayPropertyKeys". 
      * This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

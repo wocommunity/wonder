@@ -1,0 +1,32 @@
+<wo:JQPageWrapper title = "Form List Mini">
+  <wo:form action = "$doSaveAction">
+    <wo:ERQMListView data-inset = "true">
+      <wo:ERQMListViewElement> <wo:ERQMInputText data-mini = "true" label = "String Input:" value = "$stringField" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputText data-mini = "true" value = "$textField" label = "Textarea:" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputSearch data-mini = "true" value = "$searchField" label = "Search Input:" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMInputFlipSwitch data-mini = "true" value = "$flipSwitch" label = "Flip switch:" stringOff = "OFF" stringOn = "ON" /> </wo:ERQMListViewElement>
+      <!--  -->
+      <wo:ERQMListViewElement>
+        <wo:ERQMCheckboxList mini = "true" string = "Choose Your Favorite:" list = "$allCheckboxList1" item = "$oneStringObject" selections = "$selectedCheckboxList1"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMCheckboxList mini = "true" string = "Font styling:" list = "$allCheckboxList2" item = "$oneStringObject" selections = "$selectedCheckboxList2" isHorizontal = "true"><wo:str value = "$oneStringObject" /></wo:ERQMCheckboxList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMRadioList mini = "true" string = "Choose a pet:" list = "$allRadioList1" item = "$oneStringObject" selection = "$selectedRadioElement1"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMRadioList mini = "true" string = "Layout view:" list = "$allRadioList2" item = "$oneStringObject" selection = "$selectedRadioElement2" isHorizontal = "true"><wo:str value = "$oneStringObject" /></wo:ERQMRadioList>
+      </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton data-mini = "true" label = "Choose shipping method:" list = "$allPopUpList1" selection = "$selectedPopUpElement1" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton data-mini = "true" label = "Custom Menu :" list = "$allPopUpList1" selection = "$selectedPopUpElement2" data-native-menu = "true" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement> <wo:ERQMPopUpButton data-mini = "true" label = "JQM Style Menu :" list = "$allPopUpList1" selection = "$selectedPopUpElement3" data-native-menu = "false" /> </wo:ERQMListViewElement>
+      <wo:ERQMListViewElement>
+        <wo:ERQMGrid columnCount = "2">
+          <wo:ERQMGridBlock blockNumber = "1"><wo:ERQMButton data-mini = "true" linkResource = "da://default" string = "Cancel" data-theme = "a" /></wo:ERQMGridBlock>
+          <wo:ERQMGridBlock blockNumber = "2"><webobject name = "SAVE_ACTION" /></wo:ERQMGridBlock>
+        </wo:ERQMGrid>
+      </wo:ERQMListViewElement>
+    </wo:ERQMListView>
+  </wo:form>
+</wo:JQPageWrapper>

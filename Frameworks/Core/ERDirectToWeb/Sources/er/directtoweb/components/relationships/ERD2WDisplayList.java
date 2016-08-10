@@ -13,15 +13,23 @@ import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
- * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />
- * RENAMEME: ERDDisplayList
+ * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.
  */
-
+// TODO rename to ERDDisplayList
 public class ERD2WDisplayList extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayList(WOContext context) { super(context); }
-    
+
+    @Override
     public boolean isStateless() { return true; }
+
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray listToDisplay() {

@@ -48,7 +48,9 @@ and limitations under the License.
 #include <time.h>
 #if defined(WIN32)
 #ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
+#if !defined(MINGW)
 #include <winnt-pdo.h>
+#endif
 #endif
 #include <windows.h>
 #include <io.h>
@@ -71,7 +73,7 @@ and limitations under the License.
  */
 extern server_rec *_webobjects_server;
 #elif defined(IIS)
-#include <httpext.h>
+// #include <httpext.h> // deactivated anyway
 /*
  *	to log properly into IIS's error.lgo
  */
@@ -101,7 +103,7 @@ const char * const WOLogLevel[] = {"Debug", "Info", "Warn",  "Error", "User", ""
 
 static int baselevel = WO_DBG;
 
-void WOLog_init(const char *logfile, const char *level)
+void WOLog_init(const char *logfile, const char *logflag, const char *level)
 {
    int i;
    int fd;
@@ -112,7 +114,11 @@ void WOLog_init(const char *logfile, const char *level)
     *	the file we stat() to see if we should log
     */
 #ifndef	ALWAYS_LOG
-   sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
+   if (logflag != NULL) {
+       strcpy(logFlag, logflag);
+   } else {
+       sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
+   }
 #endif
 
    /*
@@ -166,7 +172,10 @@ static int shouldLog()
    if (statTime < now) {
       struct stat statbuf;
       statTime = now + STATINTERVAL;		/* reset timer */
-      _shouldLog = ( (stat(logFlag,&statbuf) == 0) && (statbuf.st_uid == 0) );
+      _shouldLog = (stat(logFlag,&statbuf) == 0);
+      #ifndef WIN32
+      _shouldLog = _shouldLog && (statbuf.st_uid == 0);  // requesting root ownership does not make sense under Win32
+      #endif
    }
    WA_unlock(logMutex);
    return _shouldLog;
@@ -237,7 +246,7 @@ void WOLog(int level, const char *format, ...)
 #if defined(Netscape)
       log_error(0,"WebObjects",NULL,NULL,str->text);
 #elif defined(APACHE)
-      ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, str->text);
+      ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "%s", str->text);
 #elif defined(IIS)
       /*
        *	again, we're stymied because we don't have a ptr to the

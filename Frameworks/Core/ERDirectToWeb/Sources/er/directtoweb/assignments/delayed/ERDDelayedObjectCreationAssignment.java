@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSDictionary;
  * can be used in two different manner. The first is by just
  * specifing the class name as a string, ie "foo.bar.MyClass". This
  * will create an instance of the MyClass object. The second form
- * allows one to specify the object to be created in a dictionary format:
+ * allows one to specify the object to be created in a dictionary format:<pre><code>
  * {
  * 	className = "foo.bar.MyClass";
  *	arguments = ( {
@@ -30,13 +30,19 @@ import com.webobjects.foundation.NSDictionary;
  *			className = "java.lang.String";
  *			contextKey = "propertyKey";
  * 		});
- * }
+ * }</code></pre>
  *
  * This will create an object of type MyClass using the constructor:
  * MyClass(WOSession session, String key), using the arguments found
  * by resolving the contextKey off of the current {@link D2WContext context}.
  */
 public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     //	===========================================================================
     //	Class variable(s)
@@ -90,6 +96,7 @@ public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
      * @param context current context
      * @return newly created object
      */
+    @Override
     public Object fireNow(D2WContext context) {
         Object createdObject = null;
         try {

@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaMonitorFramework"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
@@ -12,5 +11,11 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="WOFramework/ERRest"/>
+	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
+	<classpathentry kind="lib" path="Libraries/bcprov-jdk15-140.jar"/>
+	<classpathentry kind="lib" path="Libraries/mina-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="Libraries/sshd-core-0.7.0.jar"/>
+	<classpathentry kind="lib" path="Libraries/sshd-pam-0.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

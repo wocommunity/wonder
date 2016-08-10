@@ -1,9 +1,0 @@
-InspectButton : AjaxUpdateLink {
-  action = buttonAction;
-  updateContainerID = d2wContext.idForMainContainer;
-  class = "Button OptionButton InspectButton";
-}
-
-EditButtonLabel : ERXLocalizedString {
-  value = d2wContext.inspectButtonLabel;
-}

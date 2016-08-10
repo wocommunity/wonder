@@ -2,6 +2,9 @@ package er.extensions.partials;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -23,14 +26,22 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.foundation.ERXProperties;
 
 /**
- * ERXPartialInitializer is registered at startup and is responsible for merging
- * partial entities together into a single entity.
+ * <p>
+ * For overview information on partials, read the {@code package.html} in
+ * {@code er.extensions.partials}.
+ * </p>
+ * 
+ * <p>
+ * {@code ERXPartialInitializer} is registered at startup and is responsible for
+ * merging partial entities together into a single entity.
+ * </p>
  * 
  * @property er.extensions.partials.enabled
- *
  * @author mschrag
  */
 public class ERXPartialInitializer {
+	private static final Logger log = LoggerFactory.getLogger(ERXModelGroup.class);
+
 	private static final ERXPartialInitializer _initializer = new ERXPartialInitializer();
 
 	private NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>> _partialsForEntity = new NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>>();
@@ -82,7 +93,7 @@ public class ERXPartialInitializer {
 					if (partialEntityName != null) {
 						EOEntity partialEntity = modelGroup.entityNamed(partialEntityName);
 						if (partialEntity == null) {
-							throw new IllegalArgumentException("The entity '" + partialExtensionEntity.name() + "' claimed to be a partialEntity for the entity '" + partialEntity.name() + "', but there is no entity of that name.");
+							throw new IllegalArgumentException("The entity '" + partialExtensionEntity.name() + "' claimed to be a partialEntity for the entity '" + partialEntityName + "', but there is no entity of that name.");
 						}
 
 						Enumeration partialAttributes = partialExtensionEntity.attributes().objectEnumerator();
@@ -102,7 +113,8 @@ public class ERXPartialInitializer {
 								partialEntity.addAttribute(primaryAttribute);
 							}
 							else {
-								ERXModelGroup.log.debug("Skipping partial attribute " + partialExtensionEntity.name() + "." + partialAttribute.name() + " because " + partialEntity.name() + " already has an attribute of the same name.");
+								log.debug("Skipping partial attribute {}.{} because {} already has an attribute of the same name.",
+										partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
 							}
 						}
 
@@ -118,7 +130,8 @@ public class ERXPartialInitializer {
 								partialEntity.addRelationship(primaryRelationship);
 							}
 							else {
-								ERXModelGroup.log.debug("Skipping partial relationship " + partialExtensionEntity.name() + "." + partialRelationship.name() + " because " + partialEntity.name() + " already has a relationship of the same name.");
+								log.debug("Skipping partial relationship {}.{} because {} already has a relationship of the same name.",
+										partialExtensionEntity.name(), partialRelationship.name(), partialEntity.name());
 							}
 						}
 

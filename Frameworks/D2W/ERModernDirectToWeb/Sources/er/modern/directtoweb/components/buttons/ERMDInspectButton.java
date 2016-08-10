@@ -1,7 +1,5 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
@@ -25,12 +23,8 @@ import er.extensions.eof.ERXEOControlUtilities;
  * @d2wKey inspectButtonLabel
  * 
  * @author davidleber
- * @project ERModernDirectToWeb
  */
 public class ERMDInspectButton extends ERMDActionButton {
-	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDInspectButton.class);
 	
 	public interface Keys extends ERMDActionButton.Keys {
 		public static final String inspectButtonLabel = "inspectButtonLabel";
@@ -102,6 +96,4 @@ public class ERMDInspectButton extends ERMDActionButton {
         epi.setObject(object());
         return (WOActionResults)epi;
     }
-
-	
 }

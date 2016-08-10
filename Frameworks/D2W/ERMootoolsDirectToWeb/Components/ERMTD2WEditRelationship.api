@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERMTD2WEditRelationship" wocomponentcontent="false">    <binding name="datasource"/>
+    <binding name="displayKeys"/>
+    <binding name="entityName"/>
+    <binding name="list"/>
+    <binding name="masterObject"/>
+    <binding name="nextPage"/>
+    <binding name="nextPageDelegate"/>
+    <binding name="pageConfiguration"/>
+    <binding name="relationshipKey"/>
+    <binding name="settings"/>
+    </wo>
+</wodefinitions>

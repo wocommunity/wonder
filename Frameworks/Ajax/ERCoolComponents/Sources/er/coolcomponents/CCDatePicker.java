@@ -2,8 +2,7 @@ package er.coolcomponents;
 
 import java.text.SimpleDateFormat;
 
-import org.apache.log4j.Logger;
-
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
@@ -15,6 +14,10 @@ import er.extensions.components.ERXStatelessComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper around http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5/
@@ -53,8 +56,14 @@ import er.extensions.localization.ERXLocalizer;
  *
  */
 public class CCDatePicker extends ERXStatelessComponent {
-	
-	static final Logger log = Logger.getLogger(CCDatePicker.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LoggerFactory.getLogger(CCDatePicker.class);
 
 	public static final String FRAMEWORK_NAME = "ERCoolComponents";
 	public static final String CSS_FILENAME = "datepicker.css";
@@ -89,8 +98,9 @@ public class CCDatePicker extends ERXStatelessComponent {
      * Adds date-picker.js to the header or includes it in an Ajax friendly manner.
      *
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
-     * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
+     * @see er.extensions.appserver.ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context)
     {
     	if (booleanValueForBinding("injectStylesheet")) {
@@ -98,7 +108,7 @@ public class CCDatePicker extends ERXStatelessComponent {
     		String cssFilename = stringValueForBinding("cssFile", CSS_FILENAME);
     		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, cssFilename);
     	}
-    	String datepickerjsName = ERXApplication.isDevelopmentModeSafe() ? "datepicker_lg.js" : "datepicker.js";
+        String datepickerjsName = ERXApplication.isDevelopmentModeSafe() ? "datepicker_lg.js" : "datepicker.js";
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, datepickerjsName);
         String langScript = ERXLocalizer.currentLocalizer().languageCode() + ".js";
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "lang/" + langScript);
@@ -106,7 +116,7 @@ public class CCDatePicker extends ERXStatelessComponent {
     }
     
 	public String dateformat() {
-		String format = (String) stringValueForBinding("dateformat");
+		String format = stringValueForBinding("dateformat");
 		if (format == null) {
 			format = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
@@ -122,27 +132,25 @@ public class CCDatePicker extends ERXStatelessComponent {
 		setValueForBinding(value, "dateformat");
 	}
 	
-	/**
-	 * 
-	 */
 	public String dateFormatString() {
 		String result = dateformat();
-		result = ERXStringUtilities.replaceStringByStringInString("-", "-ds", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%a", "-D", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%A", "-l", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%b", "-M", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%B", "-F", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%d", "-d", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%e", "-j", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%m", "-m", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%y", "-y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%Y", "-Y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%w", "-w", result);
 		
-		result = ERXStringUtilities.replaceStringByStringInString(" ", "-sp", result);
-		result = ERXStringUtilities.replaceStringByStringInString(".", "-dt", result);
-		result = ERXStringUtilities.replaceStringByStringInString("/", "-sl", result);
-		result = ERXStringUtilities.replaceStringByStringInString(",", "-cc", result);
+		result = StringUtils.replace(result, "-", "-ds");
+		result = StringUtils.replace(result, "%a", "-D");
+		result = StringUtils.replace(result, "%A", "-l");
+		result = StringUtils.replace(result, "%b", "-M");
+		result = StringUtils.replace(result, "%B", "-F");
+		result = StringUtils.replace(result, "%d", "-d");
+		result = StringUtils.replace(result, "%e", "-j");
+		result = StringUtils.replace(result, "%m", "-m");
+		result = StringUtils.replace(result, "%y", "-y");
+		result = StringUtils.replace(result, "%Y", "-Y");
+		result = StringUtils.replace(result, "%w", "-w");
+		result = StringUtils.replace(result, " ", "-sp");
+		result = StringUtils.replace(result, ".", "-dt");
+		result = StringUtils.replace(result, "/", "-sl");
+		result = StringUtils.replace(result, ",", "-cc");
+
 		
 		if (result.indexOf("-") == 0) {
 			// strip off leading "-"
@@ -151,7 +159,6 @@ public class CCDatePicker extends ERXStatelessComponent {
 		
 //		NSLog.out.appendln("dateformat: " + result);
 		return result;
-		
 	}
 	
 	public String datePickerCreateScript() {
@@ -270,5 +277,24 @@ public class CCDatePicker extends ERXStatelessComponent {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		return formatter.format(ts);
 	}
+
+    /**
+     * Overridden so that parent will handle in the same manner as if this were a dynamic element.
+     * @param t the exception thrown during validation
+     * @param value the given value to be validated
+     * @param keyPath the key path associated with this value, identifies the property of an object
+     */
+	@Override
+    public void validationFailedWithException(Throwable t, Object value, String keyPath) {
+    	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
+    		ValidationException e = (ValidationException) t;
+    		WOAssociation valueAssociation = (WOAssociation) _keyAssociations.valueForKey("value");
+    		if (valueAssociation != null) {
+    			keyPath = valueAssociation.keyPath();
+    		}
+    		t = new ValidationException(e.getMessage(), e.object(), keyPath);
+    	}
+    	parent().validationFailedWithException(t, value, keyPath);
+    }
 
 }

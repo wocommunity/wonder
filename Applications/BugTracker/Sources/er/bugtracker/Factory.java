@@ -25,7 +25,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.bugtracker.pages.ReportPage;
 import er.directtoweb.ERD2WFactory;
-import er.directtoweb.delegates.ERDObjectWasCreatedDelegate;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.directtoweb.pages.ERD2WInspectPage;
 import er.directtoweb.pages.ERD2WQueryPage;
@@ -59,6 +58,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
      * the actual item starts with the new one. This leads to ListRecentBug stying selected, even when 
      * the user goes to an edit page.
      */
+    @Override
     public WOComponent pageWithContextTaskEntity(D2WContext d2wcontext, String task, String entity, WOContext wocontext) {
     	WOComponent nextPage = super.pageWithContextTaskEntity(d2wcontext, task, entity, wocontext);
     	if (nextPage instanceof D2WPage) {
@@ -159,7 +159,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateComponent");
         Component eo = (Component) page.object();
         applyCurrentUser(eo, Component.Key.OWNER);
-        return (WOComponent) page;
+        return page;
     }
 
     public WOComponent listComponents() {
@@ -170,9 +170,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     
     public WOComponent createPeople() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreatePeople");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
+        EOEnterpriseObject eo = page.object();
         //applyCurrentUser(eo, "owner");
-        return (WOComponent) page;
+        return page;
     }
     
     public WOComponent signUp() {
@@ -187,7 +187,6 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         }
         page.setNextPageDelegate(new NextPageDelegate() {
 
-			// @Override
 			public WOComponent nextPage(WOComponent arg0) {
 				if(page.objectWasSaved()) {
 					session().finishSignUp();
@@ -200,7 +199,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         	
         });
         //applyCurrentUser(eo, "owner");
-        return (WOComponent) page;
+        return page;
     }
 
     public WOComponent listPeoples() {
@@ -211,9 +210,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     
     public WOComponent createFramework() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateFramework");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
+        EOEnterpriseObject eo = page.object();
         applyCurrentUser(eo, Framework.Key.OWNER);
-        return (WOComponent) page;
+        return page;
     }
 
     public WOComponent listFrameworks() {
@@ -224,10 +223,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     
     public WOComponent createRequirement() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateRequirement");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
+        EOEnterpriseObject eo = page.object();
         applyCurrentUser(eo, Requirement.Key.ORIGINATOR);
         applyCurrentUser(eo, Requirement.Key.OWNER);
-        return (WOComponent) page;
+        return page;
      }
 
     public WOComponent listMyRequirements() {
@@ -260,16 +259,16 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     public WOComponent queryRequirements() {
-        return (WOComponent) pageForConfigurationNamed("QueryRequirement");
+        return pageForConfigurationNamed("QueryRequirement");
     }
 
     /// Test item stuff
 
     public WOComponent createTestItem() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateTestItem");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
+        EOEnterpriseObject eo = page.object();
         applyCurrentUser(eo, TestItem.Key.OWNER);
-        return (WOComponent) page;
+        return page;
     }
     
     public WOComponent createBugFromTestItem(TestItem testItem) {
@@ -281,7 +280,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
             People user = People.clazz.currentUser(peer);
             Component component = testItem.component();
 
-            Bug bug = (Bug) Bug.clazz.createAndInsertObject(peer);
+            Bug bug = Bug.clazz.createAndInsertObject(peer);
             testItem.setState(TestItemState.BUG);
 
             bug.setTextDescription("[From Test #" + testItem.primaryKey()+"]");
@@ -303,7 +302,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         peer.lock();
         try {
             bug = (Bug) bug.localInstanceIn(peer);
-            TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(peer);
+            TestItem testItem = TestItem.clazz.createAndInsertObject(peer);
             testItem.setComponent(bug.component());
             String description = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CreateTestItemFrom"+bug.entityName()+".templateString", bug);
             testItem.setTextDescription(description);
@@ -331,7 +330,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     public WOComponent queryTestItems() {
-        return (WOComponent) pageForConfigurationNamed("QueryTestItem");
+        return pageForConfigurationNamed("QueryTestItem");
     }
 
     /// Release stuff 
@@ -351,8 +350,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
     public WOComponent createRelease() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateRelease");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
-        return (WOComponent) page;
+        EOEnterpriseObject eo = page.object();
+        return page;
     }
     
     public WOComponent trackRelease() {
@@ -390,7 +389,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         Bug bug = (Bug) page.object();
         applyCurrentUser(bug, Bug.Key.ORIGINATOR);
         applyCurrentUser(bug, Bug.Key.OWNER);
-        return (WOComponent) page;
+        return page;
     }
 
 
@@ -457,7 +456,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         } else {
             EOArrayDataSource ds = Bug.clazz.newArrayDataSource(session().defaultEditingContext());
             ds.setArray(bugs);
-            ListPageInterface lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed("Bug", session());
+            ListPageInterface lpi = D2W.factory().listPageForEntityNamed("Bug", session());
             lpi.setDataSource(ds);
             lpi.setNextPage(currentPage());
             result = (WOComponent) lpi;
@@ -473,7 +472,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         try {
             bug = (Bug) bug.localInstanceIn(peer);
             bug.close();
-            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToClose", bug);
+            epi=editPageNamed("Edit" +bug.entityName()+ "ToClose", bug);
             epi.setObject(bug);
             epi.setNextPage(currentPage());
         } finally {
@@ -489,7 +488,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         peer.lock();
         try {
             bug = (Bug) bug.localInstanceIn(peer);
-            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToComment", bug);
+            epi=editPageNamed("Edit" +bug.entityName()+ "ToComment", bug);
             epi.setObject(bug);
             epi.setNextPage(currentPage());
         } finally {
@@ -506,7 +505,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         try {
             bug = (Bug) bug.localInstanceIn(peer);
             bug.reopen();
-            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToReopen", bug);
+            epi=editPageNamed("Edit" +bug.entityName()+ "ToReopen", bug);
             epi.setObject(bug);
             epi.setNextPage(currentPage());
         } finally {
@@ -524,7 +523,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         try {
             bug = (Bug) bug.localInstanceIn(peer);
             bug.rejectVerification();
-            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToReject", bug);
+            epi=editPageNamed("Edit" +bug.entityName()+ "ToReject", bug);
             epi.setObject(bug);
             epi.setNextPage(currentPage());
         } finally {

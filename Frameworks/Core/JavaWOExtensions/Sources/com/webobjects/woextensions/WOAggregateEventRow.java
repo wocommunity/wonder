@@ -12,24 +12,41 @@ import com.webobjects.eocontrol.EOAggregateEvent;
 import com.webobjects.eocontrol.EOEvent;
 
 public class WOAggregateEventRow extends WOEventRow {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public WOAggregateEventRow(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         // Do not sync with the bindings
         return false;
     }
 
+    /** 
+     * <span class="ja">object としてバインディングされている EOAggregateEvent を戻します。</span>
+     */
     public EOAggregateEvent object()
     {
         return (EOAggregateEvent)_WOJExtensionsUtil.valueForBindingOrNull("object",this);
     }
 
+    /** 
+     * <span class="ja">WOEventDisplayPage コントロールを戻します </span>
+     */
     public WOEventDisplayPage controller()    {
         return (WOEventDisplayPage)_WOJExtensionsUtil.valueForBindingOrNull("controller",this);
     }
 
+    /** 
+     * <span class="ja">表示モードを戻します </span>
+     */
     public int displayMode()
     {
         int result = 1;
@@ -44,11 +61,17 @@ public class WOAggregateEventRow extends WOEventRow {
         return result;
     }
     
+    /** 
+     * <span class="ja">イベント </span>
+     */
     public EOEvent event()
     {
-        return (EOEvent)object().events().objectAtIndex(0);
+        return object().events().objectAtIndex(0);
     }
 
+    /** 
+     * <span class="ja">表示するコンポーネント名 </span>
+     */
     public String displayComponentName()
     {
         WOEventDisplayPage ctr;

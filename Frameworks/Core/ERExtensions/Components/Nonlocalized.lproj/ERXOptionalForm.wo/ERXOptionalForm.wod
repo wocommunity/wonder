@@ -34,6 +34,7 @@ form: WOForm {
 	actionClass = ^actionClass;
 	style = ^style;
 	class = ^class;
+	fragmentIdentifier = ^fragmentIdentifier;
 }
 
 form2: WOForm {
@@ -43,4 +44,5 @@ form2: WOForm {
 	enctype = ^enctype;
 	style = ^style;
 	class = ^class;
+	fragmentIdentifier = ^fragmentIdentifier;
 }

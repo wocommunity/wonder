@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -32,13 +33,13 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -53,15 +54,17 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author dscheck
  */
 public class ERDSavedQueriesComponent extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final Logger log = Logger.getLogger(ERDSavedQueriesComponent.class);
 
     public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
     public static final EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
-
-    /** @deprecated  use {@link #originalEOKVArchivingTimestampSupport} */
-    public static final EOKeyValueArchiving.Support originalEOKVArchiningTimestampSupport = originalEOKVArchivingTimestampSupport;
-    /** @deprecated  use {@link #newEOKVArchivingTimestampSupport} */
-    public static final EOKeyValueArchiving.Support newEOKVArchiningTimestampSupport = newEOKVArchivingTimestampSupport;
 
 	public ERDSavedQueriesComponent(WOContext context) {
 		super(context);
@@ -122,7 +125,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 		}
 
 		protected static String logDictionary(String title, NSDictionary dictionary, String indentStr) {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 
 			buf.append("\r\n" + indentStr + "==========" + ((title != null) ? title : "") + "==================\r\n");
 			buf.append(indentStr + "Dictionary dump, count=" + dictionary.count() + "\r\n");
@@ -314,6 +317,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
             setQueryBindings((NSDictionary) decodeDictionaryWithEOs((NSDictionary)unarchiver.decodeObjectForKey("queryBindings")));
 		}
 
+		@Override
 		public String toString() {
 			return "SavedQuery: " + hashCode() + " dict=" + dict;
 		}
@@ -350,12 +354,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
             EOAttribute primaryKeyAttribute;
             EOEnterpriseObject eo = null;
             if (entity != null) {
-                primaryKeyAttribute = ERXArrayUtilities.firstObject((NSArray<EOAttribute>)entity.primaryKeyAttributes());
+                primaryKeyAttribute = ERXArrayUtilities.firstObject(entity.primaryKeyAttributes());
                 Object primaryKeyObject = pk;
                 if (log.isDebugEnabled()) log.debug("decodeEO with dict: " + dictionary);
 
                 if (primaryKeyAttribute != null && !String.class.getName().equals(primaryKeyAttribute.className())) {
-                    primaryKeyObject = ERXConstant.integerForString(pk);
+                    primaryKeyObject = ERXStringUtilities.integerWithString(pk);
                 }
 
                 try {
@@ -429,10 +433,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	public static class _TimestampSupport extends EOKeyValueArchiving.Support {
 		private static NSTimestampFormatter _formatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
 
+		@Override
 		public void encodeWithKeyValueArchiver(Object receiver, EOKeyValueArchiver archiver) {
 			archiver.encodeObject(_formatter.format(receiver), "value");
 		}
 
+		@Override
 		public Object decodeObjectWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
 			try {
 				return _formatter.parseObject((String) unarchiver.decodeObjectForKey("value"));
@@ -488,8 +494,8 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	 *            ERCoreUserPreferences set
 	 * @param pageConfigurationName
 	 *            {@link String}
-	 * @return {@link NSDictionary} <br/>
-	 *         key - {@link String} name of savedQuery <br/>
+	 * @return {@link NSDictionary} <br>
+	 *         key - {@link String} name of savedQuery <br>
 	 *         value - {@link SavedQuery}
 	 */
 	public static NSDictionary savedQueriesForPageConfigurationNamed(WOSession session, String pageConfigurationName) {
@@ -531,15 +537,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	}
 
 	/** component does not synchronize variables */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 
-	/** component is not stateless */
-	public boolean isStateless() {
-		return false;
-	}
-
+	@Override
 	public void sleep() {
 		needsAutoSubmit = false;
 		super.sleep();
@@ -750,7 +753,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	    requestParams.setObjectForKey(pageConfiguration(), RequestParams.PageConfiguration);
 	    requestParams.setObjectForKey(d2wContext().entity().name(), RequestParams.EntityName);
 	    try {
-	        requestParams.setObjectForKey(URLEncoder.encode(selectedSavedQuery.name(), "UTF-8"), RequestParams.SavedQueryName);
+	        requestParams.setObjectForKey(URLEncoder.encode(selectedSavedQuery.name(), CharEncoding.UTF_8), RequestParams.SavedQueryName);
 	    } catch(UnsupportedEncodingException e) {
 	        log.warn("error generating bookmarkable url", e);
 	    }

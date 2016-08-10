@@ -1,0 +1,12 @@
+#### loading Information
+er.extensions.load.Properties.database=app
+
+#### FrontBase ?
+#dbConnectURLGLOBAL=jdbc:Frontbase://localhost/Movies/isolation=read_committed/locking=optimistic
+#dbConnectUserGLOBAL=_SYSTEM
+#dbConnectPasswordGLOBAL=
+
+
+#### Embedded H2 Database
+#dbConnectURLGLOBAL = jdbc:h2:file:~/simpleblogH2db
+dbConnectPluginGLOBAL = H2PlugIn

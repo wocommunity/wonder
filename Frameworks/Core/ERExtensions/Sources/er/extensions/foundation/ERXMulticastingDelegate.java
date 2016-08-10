@@ -244,7 +244,7 @@ public abstract class ERXMulticastingDelegate {
 
     protected boolean booleanPerform(String methodName, Object args[], boolean defaultResult)
     {
-        Boolean result = (Boolean) perform(methodName, args, new Boolean(defaultResult));
+        Boolean result = (Boolean) perform(methodName, args, Boolean.valueOf(defaultResult));
         return result != null ? result.booleanValue() : false;
     }
 

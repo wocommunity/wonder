@@ -1,6 +1,6 @@
-
 package er.coolcomponents;
 
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -10,16 +10,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxUtils;
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXStringUtilities;
 
-
 /**
  * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are
  * similar to a WOPopUpButton. For a bunch of example uses and example CSS modifications, check out <a
- * href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page<a>.
+ * href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page</a>.
  * 
  * @binding id the id of the segmented slider (or one will be generated)
  * @binding list the list of options
@@ -34,6 +32,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class CCSegmentedSlider extends ERXComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String _id;
 
@@ -105,7 +109,7 @@ public class CCSegmentedSlider extends ERXComponent {
 	public boolean isChecked() {
 		Object selection = valueForBinding("selection");
 		Object item = valueForBinding("item");
-		return ERXExtensions.safeEquals(selection, item);
+		return Objects.equals(selection, item);
 	}
 
 

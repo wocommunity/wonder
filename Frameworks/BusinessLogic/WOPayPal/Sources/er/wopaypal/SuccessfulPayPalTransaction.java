@@ -6,10 +6,8 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 /** SuccessfulPayPalTransaction is a very simple component to which the application will return your customers after a successful PayPal transaction, if you don't tell it to return a different one.  See returnAction in the PayPalAction class.
  */

@@ -5,6 +5,11 @@ AttributeRepetition: WORepetition {
 	index = index;
 }
 
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 AttributeRepetitionDiv : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForAttributeRepetitionWrapper;

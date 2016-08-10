@@ -43,19 +43,23 @@ public class ERXWOTemplate extends WODynamicElement {
        return (String) _templateName.valueInComponent(component);
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	_template.takeValuesFromRequest(worequest, wocontext);
     }
     
+    @Override
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
     	WOActionResults results = _template.invokeAction(worequest, wocontext);
     	return results;
     }
     
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
     	_template.appendToResponse(woresponse, wocontext);
     }
     
+    @Override
     public String toString() {
     	return "<" + getClass().getName() + "@" + System.identityHashCode(this) + " : " + _templateName  + ">";
     }

@@ -8,7 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOEntity;
@@ -127,7 +128,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @author mschrag
  */
 public class ERXMigrator {
-	public static final Logger log = Logger.getLogger(ERXMigrator.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrator.class);
 
 	/**
 	 * Symbolic version number for migrating to "the latest" version.
@@ -167,10 +168,10 @@ public class ERXMigrator {
 	@SuppressWarnings("unchecked")
 	public void migrateToLatest() {
 		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
-		NSArray<String> modelNames;
+		NSArray<String> modelNames = NSArray.EmptyArray;
 		String modelNamesStr = ERXProperties.stringForKey("er.migration.modelNames");
 		if (modelNamesStr == null) {
-			ERXMigrator.log.warn("er.migration.modelNames is not set, defaulting to modelGroup.models() order instead.");
+			log.warn("er.migration.modelNames is not set, defaulting to modelGroup.models() order instead.");
 			modelNames = modelGroup.modelNames();
 		}
 		else {
@@ -228,8 +229,8 @@ public class ERXMigrator {
 			editingContext.lock();
 			try {
 				try {
-					if (ERXMigrator.log.isInfoEnabled()) {
-						ERXMigrator.log.info("Running post migration for " + modelVersion.model().name() + " version " + modelVersion.version() + " ...");
+					if (log.isInfoEnabled()) {
+						log.info("Running post migration for {} version {} ...", modelVersion.model().name(), modelVersion.version());
 					}
 					postMigration.postUpgrade(editingContext, modelVersion.model());
 					editingContext.saveChanges();
@@ -272,7 +273,7 @@ public class ERXMigrator {
 					if (model == null) {
 						throw new IllegalArgumentException("There is no model named '" + modelName + "' in this model group.");
 					}
-					_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations);
+					_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations, skipModelNames);
 				}
 			}
 
@@ -289,7 +290,7 @@ public class ERXMigrator {
 						EOEntity parentEntity = entity.parentEntity();
 						if (parentEntity != null && !parentEntity.model().equals(model)) {
 							EOModel parentModel = parentEntity.model();
-							_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations);
+							_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations, skipModelNames);
 						}
 						Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
 						while (relationshipsEnum.hasMoreElements()) {
@@ -297,11 +298,11 @@ public class ERXMigrator {
 							EOEntity destinationEntity = relationship.destinationEntity();
 							if (destinationEntity != null && !destinationEntity.model().equals(model)) {
 								EOModel destinationModel = destinationEntity.model();
-								_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations);
+								_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations, skipModelNames);
 							}
 						}
 					}
-					_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations);
+					_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations, skipModelNames);
 					processedModelNames.add(modelName);
 				}
 				pendingModelNames.addAll(versions.keySet());
@@ -318,26 +319,34 @@ public class ERXMigrator {
 	}
 
 	protected boolean canMigrateModel(EOModel model) {
-		boolean canMigrateModel = false;
 		String adaptorName = model.adaptorName();
 		if ("Memory".equals(adaptorName)) {
-			canMigrateModel = true;
+			return true;
 		}
-		else if ("JDBC".equals(adaptorName)) {
+		if ("JDBC".equals(adaptorName)) {
 			String url = (String)model.connectionDictionary().objectForKey(JDBCAdaptor.URLKey);
-			if (url != null && url.toLowerCase().startsWith("jdbc:")) {
-				canMigrateModel = true;
+			if ((url != null && url.toLowerCase().startsWith("jdbc:"))) {
+				return true;
+			}
+			String dataSourceJndiName = (String) model.connectionDictionary().objectForKey(JDBCAdaptor.DataSourceJndiNameKey);
+			if(dataSourceJndiName != null) {
+				return true;
 			}
 		}
-		return canMigrateModel;
+		return false;
 	}
 	
-	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations) throws InstantiationException, IllegalAccessException {
+	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations,  NSArray<String> skipModelNames) throws InstantiationException, IllegalAccessException {
 		if (!canMigrateModel(model)) {
 			return;
 		}
 		
 		String modelName = model.name();
+
+		if (skipModelNames.containsObject(modelName)) {
+			log.error("'{}' was in skipModelNames, but got passed to the _buildDependenciesForModel anyway...", modelName);
+			return;
+		}
 
 		Integer migratorVersion = versions.get(modelName);
 		if (migratorVersion == null) {
@@ -351,19 +360,15 @@ public class ERXMigrator {
 				String erMigrationClassName = migrationClassPrefix + versionNum;
 				String vendorMigrationClassName = migrationClassPrefix + ERXJDBCUtilities.databaseProductName(model) + versionNum;
 				Class erMigrationClass;
-				if (ERXMigrator.log.isDebugEnabled()) {
-					ERXMigrator.log.debug("Looking for migration '" + erMigrationClassName + "' ...");
-				}
+				log.debug("Looking for migration '{}' ...", erMigrationClassName);
 				erMigrationClass = _NSUtilities.classWithName(erMigrationClassName);
 				if (erMigrationClass == null) {
-					if (ERXMigrator.log.isDebugEnabled()) {
-						ERXMigrator.log.debug("Looking for vendor-specific migration '" + vendorMigrationClassName + "' ...");
-					}
+					log.debug("Looking for vendor-specific migration '{}' ...", vendorMigrationClassName);
 					erMigrationClass = _NSUtilities.classWithName(vendorMigrationClassName);
 				}
 				if (erMigrationClass != null) {
 					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
-					versions.put(modelName, new Integer(versionNum));
+					versions.put(modelName, Integer.valueOf(versionNum));
 					NSArray<ERXModelVersion> migrationDependencies = migration.modelDependencies();
 					if (migrationDependencies != null) {
 						Enumeration<ERXModelVersion> migrationDependenciesEnum = migrationDependencies.objectEnumerator();
@@ -371,7 +376,7 @@ public class ERXMigrator {
 							ERXModelVersion modelVersion = migrationDependenciesEnum.nextElement();
 							EOModel dependsOnModel = modelVersion.model();
 							int dependsOnVersion = modelVersion.version();
-							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
+							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations,  skipModelNames);
 						}
 					}
 
@@ -379,10 +384,8 @@ public class ERXMigrator {
 				}
 				else {
 					done = true;
-					if (ERXMigrator.log.isDebugEnabled()) {
-						ERXMigrator.log.debug("  Migration " + erMigrationClassName + " and/or " + vendorMigrationClassName + " do not exist.");
-					}
-					versions.put(modelName, new Integer(ERXMigrator.LATEST_VERSION));
+					log.debug("  Migration {} and/or {} do not exist.", erMigrationClassName, vendorMigrationClassName);
+					versions.put(modelName, Integer.valueOf(ERXMigrator.LATEST_VERSION));
 				}
 			}
 		}
@@ -395,35 +398,6 @@ public class ERXMigrator {
 	 */
 	protected EOEditingContext newEditingContext() {
 		return ERXEC.newEditingContext();
-	}
-	
-	/**
-	 * ModelVersion represents a particular version of an EOModel.
-	 * 
-	 * @author mschrag
-	 * @deprecated Use er.extensions.migration.ERXModelVersion instead
-	 */
-	@Deprecated
-	public static class ModelVersion extends ERXModelVersion {
-		/**
-		 * @param model
-		 *            a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(EOModel model, int version) {
-			super(model, version);
-		}
-
-		/**
-		 * @param modelName
-		 *            the name of a model
-		 * @param version
-		 *            the version of that model
-		 */
-		public ModelVersion(String modelName, int version) {
-			super(modelName, version);
-		}
 	}
 
 	protected static class ERXMigrationAction extends ChannelAction {
@@ -467,23 +441,19 @@ public class ERXMigrator {
 					int currentVersion = _migrationLock.versionNumber(channel, model);
 					int nextVersion = _modelVersion.version();
 					if (currentVersion < nextVersion) {
-						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info("Upgrading " + model.name() + " to version " + nextVersion + " with migration '" + _migration + "'");
-						}
+						log.info("Upgrading {} to version {} with migration '{}'.", model.name(), nextVersion, _migration);
 						_migration.upgrade(_editingContext, channel, model);
 						_migrationLock.setVersionNumber(channel, model, nextVersion);
 						_editingContext.saveChanges();
 						channel.adaptorContext().commitTransaction();
 						channel.adaptorContext().beginTransaction();
-						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info(model.name() + " is now version " + nextVersion);
-						}
+						log.info("{} is now version {}", model.name(), nextVersion);
 						if (_migration instanceof IERXPostMigration) {
 							_postMigrations.put((IERXPostMigration) _migration, _modelVersion);
 						}
 					}
 					else {
-						ERXMigrator.log.debug("Already upgraded " + model.name() + " to " + nextVersion + ", skipping");
+						log.debug("Already upgraded {} to {}, skipping", model.name(), nextVersion);
 					}
 				}
 				catch (Throwable t) {

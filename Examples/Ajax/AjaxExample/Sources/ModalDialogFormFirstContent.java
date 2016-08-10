@@ -1,8 +1,10 @@
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSLog;
 
-import er.ajax.*;
+import er.ajax.AjaxModalDialog;
 
 
 /**

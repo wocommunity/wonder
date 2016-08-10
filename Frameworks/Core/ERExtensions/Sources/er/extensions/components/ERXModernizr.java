@@ -1,6 +1,5 @@
 package er.extensions.components;
 
-import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -19,7 +18,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * capabilities a client browser has and then posts those values back
  * to the server to store them on the session. To use it, just drop it
  * in your page wrapper. For storage, this component relies on the
- * {@link ERXSession#objectStore()}. At the moment the modernizr data
+ * {@link er.extensions.appserver.ERXSession#objectStore()}. At the moment the modernizr data
  * is stored on the session, a notification is fired using the session
  * as the notification object. This is to permit logging of modernizr data
  * for later analysis. It also permits you to copy the modernizer data
@@ -28,7 +27,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * <p>It is recommended that in your ERXSession subclass, you set
  * <code>_javaScriptEnabled == Boolean.FALSE;</code> in the constructor.  
- * By default, it will be set to true when {@link ERXSession#javaScriptEnabled()} 
+ * By default, it will be set to true when {@link er.extensions.appserver.ERXSession#javaScriptEnabled()} 
  * is called. This component will set the value to true whenever the 
  * modernizr data updates as a result of an ajax call... thus ensuring 
  * no false positives.</p>
@@ -48,6 +47,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author Ramsey Gurley
  */
 public class ERXModernizr extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	//TODO add support for additional tests
 	
 	public static final String FRAMEWORK_NAME_PROPERTY = "er.extensions.components.ERXModernizr.modernizrFrameworkName";
@@ -117,6 +123,7 @@ public class ERXModernizr extends ERXStatelessComponent {
 	/**
 	 * Overridden to capture the modernizr data being sent from the client.
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if(shouldPostData()) {

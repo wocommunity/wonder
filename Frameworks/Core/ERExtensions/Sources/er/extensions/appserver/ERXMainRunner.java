@@ -35,6 +35,7 @@ public class ERXMainRunner extends ERXApplication {
 		setAutoOpenInBrowser(false);
 	}
 	
+	@Override
 	public void didFinishLaunching() {
 		super.didFinishLaunching();
 		try {

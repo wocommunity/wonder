@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * Similar in nature to a key-value assignment, but allows you to construct arbitrary method invocations to
  * resolve rules.  As a somewhat contrived example, assume we're inferring on the componentName rule:
  * <P>
- * <code>entity.name = 'Person' and propertyKey = 'username' -> componentName = (object, componentForKey, propertyKey)</code>
+ * <code>entity.name = 'Person' and propertyKey = 'username' -&gt; componentName = (object, componentForKey, propertyKey)</code>
  *
  * <P>
  *
@@ -44,6 +44,12 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * </ul>
  */
 public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDelayedSelectorInvocationAssignment(eokeyvalueunarchiver);
@@ -61,6 +67,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
         return DefaultImplementation.dependentKeys(this, keyPath);
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         return DefaultImplementation.fire(this, c);
     }
@@ -141,7 +148,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                 }
 
                 if ( _log.isDebugEnabled() ) {
-                    final StringBuffer sb = new StringBuffer("(");
+                    final StringBuilder sb = new StringBuilder('(');
 
                     if ( arguments != null ) {
                         for ( int i = 0; i < arguments.length; i++ ) {
@@ -150,7 +157,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                             sb.append(arguments[i]);
                         }
                     }
-                    sb.append(")");
+                    sb.append(')');
 
                     _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfArguments + " arguments: " + sb);
                 }

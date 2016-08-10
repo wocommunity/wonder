@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMHtmlTemplate" wocomponentcontent="true">    <binding name="title"/>
+    <binding name="theme"/>
+    </wo>
+</wodefinitions>

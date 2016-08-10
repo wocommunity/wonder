@@ -4,20 +4,18 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>ajax</artifactId>
 	<packaging>pom</packaging>
 	<name>Ajax Frameworks</name>
 	<modules>
 		<module>Ajax</module>
-		<module>AjaxLook</module>
 		<module>ERCoolComponents</module>
-		<module>ERDivaLook</module>
-		<module>ERIUI</module>
 		<module>ERJQuery</module>
+		<module>ERJQueryMobile</module>
 		<module>ERPrototaculous</module>
 		<module>GoogleChart</module>
-		<module>YUI</module>
+		<module>MooTools</module>
 	</modules>
 </project>

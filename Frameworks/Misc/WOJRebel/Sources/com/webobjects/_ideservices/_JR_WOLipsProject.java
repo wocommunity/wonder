@@ -120,6 +120,6 @@ public class _JR_WOLipsProject extends _PBProject {
   @Override
   public NSMutableDictionary filesTable() {
     refreshIfNecessary();
-    return (NSMutableDictionary)super.filesTable();
+    return super.filesTable();
   }
 }

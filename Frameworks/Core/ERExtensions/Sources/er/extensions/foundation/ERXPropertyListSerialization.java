@@ -37,8 +37,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -63,40 +66,37 @@ import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSUtilities;
 
 /**
- * <p>
  * This class provides static methods that convert between property lists and their string representations, which can be either strings or NSData objects. A property list is a structure that represents organized data. It can be built from a combination of NSArray, NSDictionary, String, and NSData
  * objects.
- * </p>
  * <p>
  * The string representation can be in XML or the ASCII plist format. To distinguish between the two formats, the parser that converts strings to property lists finds out whether the string starts with <code>&lt;?xml</code>. A discussion of the ASCII plist format,
  * <em>A Primer on ASCII Property Lists</em>, is available in the Mac OS X section of the Apple Developer Connection website. A discussion of XML property lists, <em>Property List Services</em>, is also available in the same area of the Apple Developer Connection website.
- * </p>
+ * <p>
  * Some methods do not support XML property list representations, specifically <code>booleanForString</code> and <code>intForString</code>. Also note that XML property lists de-serialize 'integer' value types to java.math.BigInteger and 'real' value types ot java.math.BigDecimal.
  * <p>
  * The ERXPropertyListSerialization class cannot be instantiated. There is an alternative Binary plist format.
- * </p></br>
- *JSON Serialization Example:
+ * <h3>JSON Serialization Example:</h3>
  *
- * <pre>
- * NSDictionary dict<String,Object> = new NSDictionary<String,Object>(new String[] { "one", "two" }, new Object[] {new Integer(1), new Integer(2)});
+ * <pre><code>
+ * NSDictionary dict&lt;String,Object&gt; = new NSDictionary&lt;&gt;(new String[] { "one", "two" }, new Object[] {Integer.valueOf(1), Integer.valueOf(2)});
  * String jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(dict);
- * </pre>
+ * </code></pre>
  *
- * JSON Deserialization Example:
+ * <h3>JSON Deserialization Example:</h3>
  *
- * <pre>
+ * <pre><code>
  * NSDictionary&lt;String, Object&gt;	result	= ERXPropertyListSerialization.&lt;String, Object&gt; dictionaryForJSONString(jsonString);
- * </pre>
+ * </code></pre>
  *
- * If you know that you are recieving a JSON array, you can use the convenience API:
+ * If you know that you are receiving a JSON array, you can use the convenience API:
  *
- * <pre>
+ * <pre><code>
  * NSArray	result	= ERXPropertyListSerialization.arrayForJSONString(jsonString);
- * </pre>
+ * </code></pre>
  *
- * Binary PList Example:
+ * <h3>Binary PList Example:</h3>
  *
- * <pre>
+ * <pre><code>
  * try {
  * 	URLConnection conn = url.openConnection();
  * 	InputStream is = conn.getInputStream();
@@ -106,11 +106,11 @@ import com.webobjects.foundation._NSUtilities;
  * } catch (IOException e) {
  * 	e.printStackTrace();
  * }
- * </pre>
+ * </code></pre>
  *
- * Serialization to an OutputStream:
+ * <h3>Serialization to an OutputStream:</h3>
  *
- * <pre>
+ * <pre><code>
  * File tempFile = File.createTempFile(&quot;myPlist&quot;, &quot;plist&quot;);
  * FileOutputStream out = null;
  * try {
@@ -123,7 +123,7 @@ import com.webobjects.foundation._NSUtilities;
  * 		out.close();
  * 	}
  * }
- * </pre>
+ * </code></pre>
  *
  * @see #booleanForString
  * @see #intForString
@@ -131,7 +131,7 @@ import com.webobjects.foundation._NSUtilities;
  * @see PListFormat#NSPropertyListXMLFormat_v1_0
  */
 public class ERXPropertyListSerialization {
-	static org.apache.log4j.Logger	logger							= org.apache.log4j.Logger.getLogger(ERXPropertyListSerialization.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXPropertyListSerialization.class);
 
 	/**
 	 *
@@ -234,7 +234,7 @@ public class ERXPropertyListSerialization {
 	 * This class is intentionally undocumented
 	 */
 	public static class _XML extends _PListParser {
-		private static org.apache.log4j.Logger	logger2	= org.apache.log4j.Logger.getLogger(_XML.class);
+		private static final Logger log = LoggerFactory.getLogger(_XML.class);
 
 		/**
 		 *
@@ -251,7 +251,7 @@ public class ERXPropertyListSerialization {
 		 */
 		@SuppressWarnings("unqualified-field-access")
 		public static class DictionaryParser extends DefaultHandler {
-			private static org.apache.log4j.Logger	logger1							= org.apache.log4j.Logger.getLogger(DictionaryParser.class);
+			private static final Logger log = LoggerFactory.getLogger(DictionaryParser.class);
 
 			static String							PUBLIC_APPLE_COMPUTER_PLIST_1_0	= "-//Apple Computer//DTD PLIST 1.0//EN";
 
@@ -559,7 +559,7 @@ public class ERXPropertyListSerialization {
 					}
 					return;
 				}
-				this.saveCharContent();
+				saveCharContent();
 				switch (aType) {
 					case PLIST:
 						// This has been taken care of before
@@ -736,13 +736,13 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public void error(SAXParseException exception) throws SAXException {
-				logger1.error("Parse error : ", exception);
+				log.error("Parse error : ", exception);
 				// throw exception;
 			}
 
 			@Override
 			public void fatalError(SAXParseException exception) throws SAXException {
-				logger1.error("Parse fatal error : ", exception);
+				log.error("Parse fatal error : ", exception);
 				throw exception;
 			}
 
@@ -805,11 +805,11 @@ public class ERXPropertyListSerialization {
 							lastNode.setTagOpen(false);
 							break;
 						case STRING:
-							lastNode.setValue(this.unescapeString(_curChars.toString()));
+							lastNode.setValue(unescapeString(_curChars.toString()));
 							lastNode.setTagOpen(false);
 							break;
 						case KEY:
-							lastNode.setValue(this.unescapeString(_curChars.toString()));
+							lastNode.setValue(unescapeString(_curChars.toString()));
 							lastNode.setTagOpen(false);
 							break;
 						case DATE:
@@ -850,12 +850,12 @@ public class ERXPropertyListSerialization {
 							break;
 						case DATA:
 							try {
-								StringBuffer stringbuffer = new StringBuffer(_curChars.length());
+								StringBuilder stringbuffer = new StringBuilder(_curChars.length());
 								for (int i = 0; i < _curChars.length(); i++)
 									if (!Character.isWhitespace(_curChars.charAt(i)))
 										stringbuffer.append(_curChars.charAt(i));
 
-								byte abyte0[] = stringbuffer.toString().getBytes("US-ASCII");
+								byte abyte0[] = stringbuffer.toString().getBytes(CharEncoding.US_ASCII);
 								byte abyte64[] = _NSBase64.decode(abyte0);
 								if (abyte64 != null && abyte64.length > 0) {
 									lastNode.setValue(new NSData(abyte64));
@@ -874,7 +874,7 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public void warning(SAXParseException exception) throws SAXException {
-				logger1.warn("Parse warning : ", exception);
+				log.warn("Parse warning : ", exception);
 				// throw exception;
 			}
 
@@ -921,7 +921,7 @@ public class ERXPropertyListSerialization {
 				try {
 					_parserFactory = SAXParserFactory.newInstance();
 				} catch (Exception exception) {
-					logger2.warn("Exception ", exception);
+					log.warn("Exception ", exception);
 				}
 			}
 			return _parserFactory;
@@ -935,7 +935,7 @@ public class ERXPropertyListSerialization {
 				try {
 					return _XML.parserFactory().newSAXParser();
 				} catch (Exception exception) {
-					logger2.warn("Exception ", exception);
+					log.warn("Exception ", exception);
 				}
 			}
 			return null;
@@ -945,11 +945,11 @@ public class ERXPropertyListSerialization {
 		public Object parseStringIntoPlist(String string) {
 			DictionaryParser dictionaryParser = new DictionaryParser();
 			try {
-				SAXParser parser = this.newSAXParser();
+				SAXParser parser = newSAXParser();
 				if (parser != null)
 					parser.parse(new InputSource(new StringReader(string)), dictionaryParser);
 			} catch (SAXException exception) {
-				logger2.warn("Exception ", exception);
+				log.warn("Exception ", exception);
 				if (exception instanceof SAXParseException) {
 					throw new RuntimeException("Parsing failed in line " + ((SAXParseException) exception).getLineNumber() + ", column "
 							+ ((SAXParseException) exception).getColumnNumber(), exception);
@@ -970,12 +970,12 @@ public class ERXPropertyListSerialization {
 				return null;
 			StringBuffer stringbuffer = new StringBuffer(128);
 			stringbuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-			this._appendNewLineToStringBuffer(stringbuffer, 0);
+			_appendNewLineToStringBuffer(stringbuffer, 0);
 			stringbuffer.append("<!DOCTYPE plist PUBLIC \"" + DictionaryParser.PUBLIC_APPLE_PLIST_1_0 + "\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");
-			this._appendNewLineToStringBuffer(stringbuffer, 0);
+			_appendNewLineToStringBuffer(stringbuffer, 0);
 			stringbuffer.append("<plist version=\"1.0\">");
-			this._appendNewLineToStringBuffer(stringbuffer, 0);
-			this._appendObjectToStringBuffer(plist, stringbuffer, 1);
+			_appendNewLineToStringBuffer(stringbuffer, 0);
+			_appendObjectToStringBuffer(plist, stringbuffer, 1);
 			stringbuffer.append("</plist>");
 			return stringbuffer.toString();
 		}
@@ -1007,31 +1007,31 @@ public class ERXPropertyListSerialization {
 		}
 
 		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.STRING.openTag());
-			stringbuffer.append(this.escapeString(s));
+			stringbuffer.append(escapeString(s));
 			stringbuffer.append(DictionaryParser.XMLNode.Type.STRING.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendIntegerToStringBuffer(Number s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.INTEGER.openTag());
 			stringbuffer.append(s.toString());
 			stringbuffer.append(DictionaryParser.XMLNode.Type.INTEGER.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendFloatToStringBuffer(Number s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.REAL.openTag());
 			stringbuffer.append(s.toString());
 			stringbuffer.append(DictionaryParser.XMLNode.Type.REAL.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendBooleanToStringBuffer(Boolean s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			if (s.booleanValue()) {
 				stringbuffer.append(DictionaryParser.XMLNode.Type.TRUE.openTag());
 				stringbuffer.append(DictionaryParser.XMLNode.Type.TRUE.closeTag());
@@ -1039,19 +1039,19 @@ public class ERXPropertyListSerialization {
 				stringbuffer.append(DictionaryParser.XMLNode.Type.FALSE.openTag());
 				stringbuffer.append(DictionaryParser.XMLNode.Type.FALSE.closeTag());
 			}
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendDateToStringBuffer(Date s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATE.openTag());
 			stringbuffer.append(_dateFormat.format(s));
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATE.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendDataToStringBuffer(NSData s, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATA.openTag());
 			try {
 				stringbuffer.append(new String(_NSBase64.encode(s.bytes()), _NSStringUtilities.UTF8_ENCODING));
@@ -1060,37 +1060,37 @@ public class ERXPropertyListSerialization {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATA.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
 		private void _appendArrayToStringBuffer(List<?> vector, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.ARRAY.openTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 			for (Iterator<?> iterator = vector.iterator(); iterator.hasNext();) {
 				_appendObjectToStringBuffer(iterator.next(), stringbuffer, i + 1);
 			}
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.ARRAY.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
         private void _appendNSArrayToStringBuffer(NSArray vector, StringBuffer stringbuffer, int i) {
-            this._appendIndentationToStringBuffer(stringbuffer, i);
+            _appendIndentationToStringBuffer(stringbuffer, i);
             stringbuffer.append(DictionaryParser.XMLNode.Type.ARRAY.openTag());
-            this._appendNewLineToStringBuffer(stringbuffer, i);
+            _appendNewLineToStringBuffer(stringbuffer, i);
             for (Enumeration iterator = vector.objectEnumerator(); iterator.hasMoreElements();) {
                 _appendObjectToStringBuffer(iterator.nextElement(), stringbuffer, i + 1);
             }
-            this._appendIndentationToStringBuffer(stringbuffer, i);
+            _appendIndentationToStringBuffer(stringbuffer, i);
             stringbuffer.append(DictionaryParser.XMLNode.Type.ARRAY.closeTag());
-            this._appendNewLineToStringBuffer(stringbuffer, i);
+            _appendNewLineToStringBuffer(stringbuffer, i);
         }
 
 		private void _appendDictionaryToStringBuffer(Map<?, ?> table, StringBuffer stringbuffer, int i) {
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DICTIONARY.openTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 			for (Iterator<?> iterator = table.keySet().iterator(); iterator.hasNext();) {
 				Object key = iterator.next();
 
@@ -1099,23 +1099,23 @@ public class ERXPropertyListSerialization {
 					key = NULL;
 				}
 
-				this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+				_appendIndentationToStringBuffer(stringbuffer, i + 1);
 				stringbuffer.append(DictionaryParser.XMLNode.Type.KEY.openTag());
-				stringbuffer.append(this.escapeString(key.toString()));
+				stringbuffer.append(escapeString(key.toString()));
 				stringbuffer.append(DictionaryParser.XMLNode.Type.KEY.closeTag());
-				this._appendNewLineToStringBuffer(stringbuffer, i + 1);
+				_appendNewLineToStringBuffer(stringbuffer, i + 1);
 				_appendObjectToStringBuffer((key.equals(NULL) ? table.get(null) : table.get(key)), stringbuffer, i + 1);
-				this._appendNewLineToStringBuffer(stringbuffer, i + 1);
+				_appendNewLineToStringBuffer(stringbuffer, i + 1);
 			}
-			this._appendIndentationToStringBuffer(stringbuffer, i);
+			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DICTIONARY.closeTag());
-			this._appendNewLineToStringBuffer(stringbuffer, i);
+			_appendNewLineToStringBuffer(stringbuffer, i);
 		}
 
         private void _appendNSDictionaryToStringBuffer(NSDictionary table, StringBuffer stringbuffer, int i) {
-            this._appendIndentationToStringBuffer(stringbuffer, i);
+            _appendIndentationToStringBuffer(stringbuffer, i);
             stringbuffer.append(DictionaryParser.XMLNode.Type.DICTIONARY.openTag());
-            this._appendNewLineToStringBuffer(stringbuffer, i);
+            _appendNewLineToStringBuffer(stringbuffer, i);
             for (Enumeration iterator = table.keyEnumerator(); iterator.hasMoreElements();) {
                 Object key = iterator.nextElement();
 
@@ -1124,21 +1124,21 @@ public class ERXPropertyListSerialization {
                     key = NULL;
                 }
 
-                this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+                _appendIndentationToStringBuffer(stringbuffer, i + 1);
                 stringbuffer.append(DictionaryParser.XMLNode.Type.KEY.openTag());
-                stringbuffer.append(this.escapeString(key.toString()));
+                stringbuffer.append(escapeString(key.toString()));
                 stringbuffer.append(DictionaryParser.XMLNode.Type.KEY.closeTag());
-                this._appendNewLineToStringBuffer(stringbuffer, i + 1);
+                _appendNewLineToStringBuffer(stringbuffer, i + 1);
                 _appendObjectToStringBuffer((key.equals(NULL) ? table.objectForKey(null) : table.objectForKey(key)), stringbuffer, i + 1);
-                this._appendNewLineToStringBuffer(stringbuffer, i + 1);
+                _appendNewLineToStringBuffer(stringbuffer, i + 1);
             }
-            this._appendIndentationToStringBuffer(stringbuffer, i);
+            _appendIndentationToStringBuffer(stringbuffer, i);
             stringbuffer.append(DictionaryParser.XMLNode.Type.DICTIONARY.closeTag());
-            this._appendNewLineToStringBuffer(stringbuffer, i);
+            _appendNewLineToStringBuffer(stringbuffer, i);
         }
 
 		/**
-		 * Validate the string. We need to watch out for the entity references &, <, >, ' and ";
+		 * Validate the string. We need to watch out for the entity references &amp;, &lt;, &gt;, ' and ";
 		 *
 		 * @param toValidate
 		 * @return result string
@@ -1424,7 +1424,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {
@@ -1460,7 +1460,7 @@ public class ERXPropertyListSerialization {
 			if (plist == null)
 				return null;
 			StringBuffer buffer = new StringBuffer(128);
-			this._appendObjectToStringBuffer(plist, buffer, 0, suppressWhitespace);
+			_appendObjectToStringBuffer(plist, buffer, 0, suppressWhitespace);
 			return buffer.toString();
 		}
 
@@ -1474,8 +1474,8 @@ public class ERXPropertyListSerialization {
 			_startOfLineCharIndex = 0;
 			aobj[0] = null;
 			int i = 0;
-			i = this._readObjectIntoObjectReference(charArray, i, aobj);
-			i = this._skipWhitespaceAndComments(charArray, i);
+			i = _readObjectIntoObjectReference(charArray, i, aobj);
+			i = _skipWhitespaceAndComments(charArray, i);
 			if (i != EOT) {
 				throw new IllegalArgumentException("parseStringIntoPlist parsed an object, but there's still more text in the string. A plist should contain only one top-level object. Line number: "
 						+ _lineNumber + ", column: " + (i - _startOfLineCharIndex) + ".");
@@ -1562,11 +1562,11 @@ public class ERXPropertyListSerialization {
 					c >>= '\004';
 					byte byte3 = (byte) (c & 0xf);
 					c >>= '\004';
-					stringbuffer.append("\\U");
-					stringbuffer.append(this._hexDigitForNibble(byte3));
-					stringbuffer.append(this._hexDigitForNibble(byte2));
-					stringbuffer.append(this._hexDigitForNibble(byte1));
-					stringbuffer.append(this._hexDigitForNibble(byte0));
+					stringbuffer.append("\\u");
+					stringbuffer.append(_hexDigitForNibble(byte3));
+					stringbuffer.append(_hexDigitForNibble(byte2));
+					stringbuffer.append(_hexDigitForNibble(byte1));
+					stringbuffer.append(_hexDigitForNibble(byte0));
 				}
 			}
 			stringbuffer.append('"');
@@ -1581,8 +1581,8 @@ public class ERXPropertyListSerialization {
 				byte byte1 = (byte) (byte0 & 0xf);
 				byte0 >>= 4;
 				byte byte2 = (byte) (byte0 & 0xf);
-				stringbuffer.append(this._hexDigitForNibble(byte2));
-				stringbuffer.append(this._hexDigitForNibble(byte1));
+				stringbuffer.append(_hexDigitForNibble(byte2));
+				stringbuffer.append(_hexDigitForNibble(byte1));
 			}
 
 			stringbuffer.append('>');
@@ -1591,7 +1591,7 @@ public class ERXPropertyListSerialization {
 
 		/*
 		 * There are a couple of popular ways to serialize dates. This adheres http://www.json.org/json.js For example, this would serialize Dates as ISO strings. Date.prototype.toJSON = function (key) { function f(n) { // Format integers to have at least two digits. return n < 10 ? '0' + n : n; }
-		 * return this.getUTCFullYear() + '-' + f(this.getUTCMonth() + 1) + '-' + f(this.getUTCDate()) + 'T' + f(this.getUTCHours()) + ':' + f(this.getUTCMinutes()) + ':' + f(this.getUTCSeconds()) + 'Z'; };
+		 * return getUTCFullYear() + '-' + f(getUTCMonth() + 1) + '-' + f(getUTCDate()) + 'T' + f(getUTCHours()) + ':' + f(getUTCMinutes()) + ':' + f(getUTCSeconds()) + 'Z'; };
 		 */
 		private void _appendDateToStringBuffer(Date date, StringBuffer stringbuffer) {
 			stringbuffer.append('"');
@@ -1607,15 +1607,15 @@ public class ERXPropertyListSerialization {
 					if (k > 0)
 						stringbuffer.append(',');
 					if (!suppressWhitespace) {
-						this._appendNewLineToStringBuffer(stringbuffer, i);
-						this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+						_appendNewLineToStringBuffer(stringbuffer, i);
+						_appendIndentationToStringBuffer(stringbuffer, i + 1);
 					}
-					this._appendObjectToStringBuffer(nsarray.get(k), stringbuffer, i + 1, suppressWhitespace);
+					_appendObjectToStringBuffer(nsarray.get(k), stringbuffer, i + 1, suppressWhitespace);
 				}
 
 				if (!suppressWhitespace) {
-					this._appendNewLineToStringBuffer(stringbuffer, i);
-					this._appendIndentationToStringBuffer(stringbuffer, i);
+					_appendNewLineToStringBuffer(stringbuffer, i);
+					_appendIndentationToStringBuffer(stringbuffer, i);
 				}
 			}
 			stringbuffer.append(']');
@@ -1629,15 +1629,15 @@ public class ERXPropertyListSerialization {
                     if (k > 0)
                         stringbuffer.append(',');
                     if (!suppressWhitespace) {
-                        this._appendNewLineToStringBuffer(stringbuffer, i);
-                        this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+                        _appendNewLineToStringBuffer(stringbuffer, i);
+                        _appendIndentationToStringBuffer(stringbuffer, i + 1);
                     }
-                    this._appendObjectToStringBuffer(nsarray.objectAtIndex(k), stringbuffer, i + 1, suppressWhitespace);
+                    _appendObjectToStringBuffer(nsarray.objectAtIndex(k), stringbuffer, i + 1, suppressWhitespace);
                 }
 
                 if (!suppressWhitespace) {
-                    this._appendNewLineToStringBuffer(stringbuffer, i);
-                    this._appendIndentationToStringBuffer(stringbuffer, i);
+                    _appendNewLineToStringBuffer(stringbuffer, i);
+                    _appendIndentationToStringBuffer(stringbuffer, i);
                 }
             }
             stringbuffer.append(']');
@@ -1653,12 +1653,12 @@ public class ERXPropertyListSerialization {
 						throw new IllegalArgumentException(
 								"JSON Property list generation failed while attempting to write hashtable. Non-String key found in Hashtable. Property list dictionaries must have String's as keys.");
 					if (!suppressWhitespace) {
-						this._appendNewLineToStringBuffer(stringbuffer, i);
-						this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+						_appendNewLineToStringBuffer(stringbuffer, i);
+						_appendIndentationToStringBuffer(stringbuffer, i + 1);
 					}
-					this._appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
+					_appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
 					stringbuffer.append(" : ");
-					this._appendObjectToStringBuffer(nsdictionary.get(obj), stringbuffer, i + 1, suppressWhitespace);
+					_appendObjectToStringBuffer(nsdictionary.get(obj), stringbuffer, i + 1, suppressWhitespace);
 
 					if (iteration.hasNext()) {
 						stringbuffer.append(',');
@@ -1666,8 +1666,8 @@ public class ERXPropertyListSerialization {
 				}
 
 				if (!suppressWhitespace) {
-					this._appendNewLineToStringBuffer(stringbuffer, i);
-					this._appendIndentationToStringBuffer(stringbuffer, i);
+					_appendNewLineToStringBuffer(stringbuffer, i);
+					_appendIndentationToStringBuffer(stringbuffer, i);
 				}
 			}
 
@@ -1684,12 +1684,12 @@ public class ERXPropertyListSerialization {
                         throw new IllegalArgumentException(
                                 "JSON Property list generation failed while attempting to write hashtable. Non-String key found in Hashtable. Property list dictionaries must have String's as keys.");
                     if (!suppressWhitespace) {
-                        this._appendNewLineToStringBuffer(stringbuffer, i);
-                        this._appendIndentationToStringBuffer(stringbuffer, i + 1);
+                        _appendNewLineToStringBuffer(stringbuffer, i);
+                        _appendIndentationToStringBuffer(stringbuffer, i + 1);
                     }
-                    this._appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
+                    _appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
                     stringbuffer.append(" : ");
-                    this._appendObjectToStringBuffer(nsdictionary.objectForKey(obj), stringbuffer, i + 1, suppressWhitespace);
+                    _appendObjectToStringBuffer(nsdictionary.objectForKey(obj), stringbuffer, i + 1, suppressWhitespace);
 
                     if (iteration.hasMoreElements()) {
                         stringbuffer.append(',');
@@ -1697,8 +1697,8 @@ public class ERXPropertyListSerialization {
                 }
 
                 if (!suppressWhitespace) {
-                    this._appendNewLineToStringBuffer(stringbuffer, i);
-                    this._appendIndentationToStringBuffer(stringbuffer, i);
+                    _appendNewLineToStringBuffer(stringbuffer, i);
+                    _appendIndentationToStringBuffer(stringbuffer, i);
                 }
             }
 
@@ -1717,12 +1717,12 @@ public class ERXPropertyListSerialization {
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
-			aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+			aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 			if (aBufferIndex == EOT || aBufferIndex >= ac.length)
 				aobj[0] = null;
 			else if (ac[aBufferIndex] == '"') {
 				StringBuffer buffer = new StringBuffer(64);
-				aBufferIndex = this._readQuotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
+				aBufferIndex = _readQuotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
 				aobj[0] = buffer.toString();
 				// // detect date strings
 				// String theString = buffer.toString();
@@ -1733,7 +1733,7 @@ public class ERXPropertyListSerialization {
 				// ts = new NSTimestamp(_dateFormat.parse(theString));
 				// aobj[0] = ts;
 				// } catch (ParseException e) {
-				// logger.error("Failed to parse JSON date string " + theString + " returning raw string instead.", e);
+				// logger.error("Failed to parse JSON date string {} returning raw string instead.", theString, e);
 				// aobj[0] = theString;
 				// }
 				// } else {
@@ -1742,19 +1742,19 @@ public class ERXPropertyListSerialization {
 				// }
 			} else if (ac[aBufferIndex] == '<') {
 				NSMutableData data = new NSMutableData(_lengthOfData(ac, aBufferIndex));
-				aBufferIndex = this._readDataContentsIntoData(ac, aBufferIndex, data);
+				aBufferIndex = _readDataContentsIntoData(ac, aBufferIndex, data);
 				aobj[0] = data;
 			} else if (ac[aBufferIndex] == '[') {
 				NSMutableArray<Object> array = new NSMutableArray<Object>();
-				aBufferIndex = this._readArrayContentsIntoArray(ac, aBufferIndex, array);
+				aBufferIndex = _readArrayContentsIntoArray(ac, aBufferIndex, array);
 				aobj[0] = array;
 			} else if (ac[aBufferIndex] == '{') {
 				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<Object, Object>();
-				aBufferIndex = this._readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
+				aBufferIndex = _readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
 				aobj[0] = dictionary;
 			} else {
 				StringBuffer buffer = new StringBuffer(64);
-				aBufferIndex = this._readUnquotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
+				aBufferIndex = _readUnquotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
 				String theString = buffer.toString();
 				if ("true".equals(theString)) {
 					aobj[0] = Boolean.TRUE;
@@ -1770,7 +1770,7 @@ public class ERXPropertyListSerialization {
 							aobj[0] = new BigInteger(theString);
 						}
 					} catch (Exception exception) {
-						logger.error("Exception ", exception);
+						log.error("Exception ", exception);
 						aobj[0] = theString;
 					}
 				}
@@ -1795,7 +1795,7 @@ public class ERXPropertyListSerialization {
 
 		private int _readQuotedStringIntoStringBuffer(char ac[], int index, StringBuffer stringbuffer) {
 			int aBufferIndex = index;
-			this._saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
+			_saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
 			int j = ++aBufferIndex;
 			while (aBufferIndex < ac.length && ac[aBufferIndex] != '"')
 				if (ac[aBufferIndex] == '\\') {
@@ -1832,13 +1832,13 @@ public class ERXPropertyListSerialization {
 									"Property list parsing failed while attempting to read quoted string. Input exhausted before escape sequence was completed. Opening quote was at "
 											+ _savedIndexesAsString() + ".");
 						aBufferIndex++;
-						if (!this._isHexDigit(ac[aBufferIndex]) || !this._isHexDigit(ac[aBufferIndex + 1]) || !this._isHexDigit(ac[aBufferIndex + 2]) || !this._isHexDigit(ac[aBufferIndex + 3]))
+						if (!_isHexDigit(ac[aBufferIndex]) || !_isHexDigit(ac[aBufferIndex + 1]) || !_isHexDigit(ac[aBufferIndex + 2]) || !_isHexDigit(ac[aBufferIndex + 3]))
 							throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read quoted string. Improperly formed \\U type escape sequence. At line number: "
 									+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-						byte byte0 = this._nibbleForHexDigit(ac[aBufferIndex]);
-						byte byte1 = this._nibbleForHexDigit(ac[aBufferIndex + 1]);
-						byte byte2 = this._nibbleForHexDigit(ac[aBufferIndex + 2]);
-						byte byte3 = this._nibbleForHexDigit(ac[aBufferIndex + 3]);
+						byte byte0 = _nibbleForHexDigit(ac[aBufferIndex]);
+						byte byte1 = _nibbleForHexDigit(ac[aBufferIndex + 1]);
+						byte byte2 = _nibbleForHexDigit(ac[aBufferIndex + 2]);
+						byte byte3 = _nibbleForHexDigit(ac[aBufferIndex + 3]);
 						stringbuffer.append((char) ((byte0 << 12) + (byte1 << 8) + (byte2 << 4) + byte3));
 						aBufferIndex += 4;
 					} else if (ac[aBufferIndex] >= '0' && ac[aBufferIndex] <= '7') {
@@ -1858,7 +1858,7 @@ public class ERXPropertyListSerialization {
 							k += ai[i1];
 						}
 
-						stringbuffer.append(this._nsToUnicode(k));
+						stringbuffer.append(_nsToUnicode(k));
 					} else {
 						stringbuffer.append(ac[aBufferIndex]);
 						if (ac[aBufferIndex] == '\n') {
@@ -1888,7 +1888,7 @@ public class ERXPropertyListSerialization {
 			int aBufferIndex = index;
 			int j = 0;
 			boolean isHexDigit;
-			for (aBufferIndex++; aBufferIndex < ac.length && ((isHexDigit = this._isHexDigit(ac[aBufferIndex])) || this._isWhitespace(ac[aBufferIndex])); aBufferIndex++)
+			for (aBufferIndex++; aBufferIndex < ac.length && ((isHexDigit = _isHexDigit(ac[aBufferIndex])) || _isWhitespace(ac[aBufferIndex])); aBufferIndex++)
 				if (isHexDigit)
 					j++;
 
@@ -1913,10 +1913,10 @@ public class ERXPropertyListSerialization {
 				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (ac[aBufferIndex] == '>')
 					break;
-				byte byte0 = this._nibbleForHexDigit(ac[aBufferIndex]);
+				byte byte0 = _nibbleForHexDigit(ac[aBufferIndex]);
 				aBufferIndex++;
 				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
-				byte byte1 = this._nibbleForHexDigit(ac[aBufferIndex]);
+				byte byte1 = _nibbleForHexDigit(ac[aBufferIndex]);
 				aBufferIndex++;
 				nsmutabledata.appendByte((byte) ((byte0 << 4) + byte1));
 			} while (true);
@@ -1928,7 +1928,7 @@ public class ERXPropertyListSerialization {
 			Object aobj[] = new Object[1];
 			aBufferIndex++;
 			nsmutablearray.removeAllObjects();
-			aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+			aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 			do {
 				if (aBufferIndex == EOT || ac[aBufferIndex] == ']') {
 					break;
@@ -1939,7 +1939,7 @@ public class ERXPropertyListSerialization {
 								+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 					}
 					aBufferIndex++;
-					aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+					aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 					if (aBufferIndex == EOT) {
 						throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read array. Input exhausted before end of array was found. At line number: "
 								+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
@@ -1947,11 +1947,11 @@ public class ERXPropertyListSerialization {
 				}
 				if (ac[aBufferIndex] != ']') {
 					aobj[0] = null;
-					aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj);
+					aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj);
 					if (aobj[0] == null)
 						throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read array. Failed to read content object. At line number: " + _lineNumber
 								+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-					aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+					aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 					nsmutablearray.addObject(aobj[0]);
 				}
 			} while (true);
@@ -1971,29 +1971,29 @@ public class ERXPropertyListSerialization {
 				for (Enumeration<?> enumeration = nsmutabledictionary.keyEnumerator(); enumeration.hasMoreElements(); nsmutabledictionary.removeObjectForKey(enumeration.nextElement())) {/**/}
 			}
 
-			for (aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex); aBufferIndex != EOT && ac[aBufferIndex] != '}';) {
-				aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj); // key
+			for (aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex); aBufferIndex != EOT && ac[aBufferIndex] != '}';) {
+				aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj); // key
 				if (aobj[0] == null || !(aobj[0] instanceof String))
 					throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read dictionary. Failed to read key or key is not a String. At line number: "
 							+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT || ac[aBufferIndex] != ':') {
-					logger.info("Exception for key=" + aobj[0] + " with unparsed values=" + new StringBuilder().append(ac, aBufferIndex, ac.length - aBufferIndex));
+					log.info("Exception for key={} with unparsed values={}", aobj[0], new StringBuilder().append(ac, aBufferIndex, ac.length - aBufferIndex));
 
 					throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read dictionary. Read key " + aobj[0] + " with no value. At line number: " + _lineNumber
 							+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".  Parsed '" + ac[aBufferIndex] + "' instead.");
 				}
 				aBufferIndex++;
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT) {
 					throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read dictionary. Encountered unexpected end of file while reading key " + aobj[0]
 							+ " with no value. At line number: " + _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 				}
-				aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj1); // value
+				aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj1); // value
 				if (aobj1[0] == null)
 					throw new IllegalArgumentException("JSON Property list parsing failed while attempting to read dictionary. Failed to read value. At line number: " + _lineNumber + ", column: "
 							+ (aBufferIndex - _startOfLineCharIndex) + ".");
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT) {
 					throw new IllegalArgumentException("Unexpected end of JSON string");
 				}
@@ -2005,7 +2005,7 @@ public class ERXPropertyListSerialization {
 				}
 
 				aBufferIndex++;
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				nsmutabledictionary.setObjectForKey(aobj1[0], aobj[0]);
 			}
 
@@ -2024,7 +2024,7 @@ public class ERXPropertyListSerialization {
 		private int _checkForWhitespaceOrComment(char ac[], int index) {
 			if (index == EOT || index >= ac.length)
 				return _C_NON_COMMENT_OR_SPACE;
-			if (this._isWhitespace(ac[index]))
+			if (_isWhitespace(ac[index]))
 				return _C_WHITESPACE;
 			if (index + 1 < ac.length) {
 				if (ac[index] == '/' && ac[index + 1] == '/')
@@ -2037,18 +2037,18 @@ public class ERXPropertyListSerialization {
 
 		private int _skipWhitespaceAndComments(char ac[], int index) {
 			int aBufferIndex = index;
-			for (int j = this._checkForWhitespaceOrComment(ac, aBufferIndex); j != _C_NON_COMMENT_OR_SPACE; j = this._checkForWhitespaceOrComment(ac, aBufferIndex)) {
+			for (int j = _checkForWhitespaceOrComment(ac, aBufferIndex); j != _C_NON_COMMENT_OR_SPACE; j = _checkForWhitespaceOrComment(ac, aBufferIndex)) {
 				switch (j) {
 					case _C_WHITESPACE: // '\002'
-						aBufferIndex = this._processWhitespace(ac, aBufferIndex);
+						aBufferIndex = _processWhitespace(ac, aBufferIndex);
 						break;
 
 					case _C_SINGLE_LINE_COMMENT: // '\003'
-						aBufferIndex = this._processSingleLineComment(ac, aBufferIndex);
+						aBufferIndex = _processSingleLineComment(ac, aBufferIndex);
 						break;
 
 					case _C_MULTI_LINE_COMMENT: // '\004'
-						aBufferIndex = this._processMultiLineComment(ac, aBufferIndex);
+						aBufferIndex = _processMultiLineComment(ac, aBufferIndex);
 						break;
 				}
 			}
@@ -2057,7 +2057,7 @@ public class ERXPropertyListSerialization {
 
 		private int _processWhitespace(char ac[], int index) {
 			int aBufferIndex = index;
-			for (; aBufferIndex < ac.length && this._isWhitespace(ac[aBufferIndex]); aBufferIndex++) {
+			for (; aBufferIndex < ac.length && _isWhitespace(ac[aBufferIndex]); aBufferIndex++) {
 				if (ac[aBufferIndex] == '\n') {
 					_lineNumber++;
 					_startOfLineCharIndex = aBufferIndex + 1;
@@ -2074,7 +2074,7 @@ public class ERXPropertyListSerialization {
 
 		private int _processMultiLineComment(char ac[], int index) {
 			int aBufferIndex = index;
-			this._saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
+			_saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
 			for (aBufferIndex += 2; aBufferIndex + 1 < ac.length && (ac[aBufferIndex] != '*' || ac[aBufferIndex + 1] != '/'); aBufferIndex++) {
 				if (ac[aBufferIndex] == '/' && ac[aBufferIndex + 1] == '*') {
 					throw new IllegalArgumentException("JSON Property list parsing does not support embedded multi line comments.The first opening comment was at " + _savedIndexesAsString()
@@ -2357,7 +2357,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {
@@ -2392,7 +2392,7 @@ public class ERXPropertyListSerialization {
 			if (plist == null)
 				return null;
 			StringBuffer buffer = new StringBuffer(128);
-			this._appendObjectToStringBuffer(plist, buffer, 0);
+			_appendObjectToStringBuffer(plist, buffer, 0);
 			return buffer.toString();
 		}
 
@@ -2409,8 +2409,8 @@ public class ERXPropertyListSerialization {
 				_startOfLineCharIndex = 0;
 				aobj[0] = null;
 				int i = 0;
-				i = this._readObjectIntoObjectReference(charArray, i, aobj);
-				i = this._skipWhitespaceAndComments(charArray, i);
+				i = _readObjectIntoObjectReference(charArray, i, aobj);
+				i = _skipWhitespaceAndComments(charArray, i);
 				if (i != EOT) {
 					throw new IllegalArgumentException(
 							"parseStringIntoPlist parsed an object, but there's still more text in the string. A plist should contain only one top-level object. Line number: " + _lineNumber
@@ -2428,8 +2428,8 @@ public class ERXPropertyListSerialization {
 					_startOfLineCharIndex = 0;
 					aobj[0] = null;
 					int i = 0;
-					i = this._readObjectIntoObjectReference(charArray, i, aobj);
-					i = this._skipWhitespaceAndComments(charArray, i);
+					i = _readObjectIntoObjectReference(charArray, i, aobj);
+					i = _skipWhitespaceAndComments(charArray, i);
 					if (i != EOT) {
 						throw new IllegalArgumentException(
 								"parseStringIntoPlist parsed an object, but there's still more text in the string. A plist should contain only one top-level object. Line number: " + _lineNumber
@@ -2449,8 +2449,8 @@ public class ERXPropertyListSerialization {
 					_startOfLineCharIndex = 0;
 					aobj[0] = null;
 					int i = 0;
-					i = this._readObjectIntoObjectReference(charArray, i, aobj);
-					i = this._skipWhitespaceAndComments(charArray, i);
+					i = _readObjectIntoObjectReference(charArray, i, aobj);
+					i = _skipWhitespaceAndComments(charArray, i);
 					if (i != EOT) {
 						throw new IllegalArgumentException(
 								"parseStringIntoPlist parsed an object, but there's still more text in the string. A plist should contain only one top-level object. Line number: " + _lineNumber
@@ -2536,10 +2536,10 @@ public class ERXPropertyListSerialization {
 					byte byte3 = (byte) (c & 0xf);
 					c >>= '\004';
 					stringbuffer.append("\\U");
-					stringbuffer.append(this._hexDigitForNibble(byte3));
-					stringbuffer.append(this._hexDigitForNibble(byte2));
-					stringbuffer.append(this._hexDigitForNibble(byte1));
-					stringbuffer.append(this._hexDigitForNibble(byte0));
+					stringbuffer.append(_hexDigitForNibble(byte3));
+					stringbuffer.append(_hexDigitForNibble(byte2));
+					stringbuffer.append(_hexDigitForNibble(byte1));
+					stringbuffer.append(_hexDigitForNibble(byte0));
 				}
 			}
 			stringbuffer.append('"');
@@ -2553,8 +2553,8 @@ public class ERXPropertyListSerialization {
 				byte byte1 = (byte) (byte0 & 0xf);
 				byte0 >>= 4;
 				byte byte2 = (byte) (byte0 & 0xf);
-				stringbuffer.append(this._hexDigitForNibble(byte2));
-				stringbuffer.append(this._hexDigitForNibble(byte1));
+				stringbuffer.append(_hexDigitForNibble(byte2));
+				stringbuffer.append(_hexDigitForNibble(byte1));
 			}
 
 			stringbuffer.append('>');
@@ -2567,13 +2567,13 @@ public class ERXPropertyListSerialization {
 				for (int k = 0; k < j; k++) {
 					if (k > 0)
 						stringbuffer.append(',');
-					this._appendNewLineToStringBuffer(stringbuffer, i);
-					this._appendIndentationToStringBuffer(stringbuffer, i + 1);
-					this._appendObjectToStringBuffer(nsarray.get(k), stringbuffer, i + 1);
+					_appendNewLineToStringBuffer(stringbuffer, i);
+					_appendIndentationToStringBuffer(stringbuffer, i + 1);
+					_appendObjectToStringBuffer(nsarray.get(k), stringbuffer, i + 1);
 				}
 
-				this._appendNewLineToStringBuffer(stringbuffer, i);
-				this._appendIndentationToStringBuffer(stringbuffer, i);
+				_appendNewLineToStringBuffer(stringbuffer, i);
+				_appendIndentationToStringBuffer(stringbuffer, i);
 			}
 			stringbuffer.append(')');
 		}
@@ -2585,13 +2585,13 @@ public class ERXPropertyListSerialization {
                 for (int k = 0; k < j; k++) {
                     if (k > 0)
                         stringbuffer.append(',');
-                    this._appendNewLineToStringBuffer(stringbuffer, i);
-                    this._appendIndentationToStringBuffer(stringbuffer, i + 1);
-                    this._appendObjectToStringBuffer(nsarray.objectAtIndex(k), stringbuffer, i + 1);
+                    _appendNewLineToStringBuffer(stringbuffer, i);
+                    _appendIndentationToStringBuffer(stringbuffer, i + 1);
+                    _appendObjectToStringBuffer(nsarray.objectAtIndex(k), stringbuffer, i + 1);
                 }
 
-                this._appendNewLineToStringBuffer(stringbuffer, i);
-                this._appendIndentationToStringBuffer(stringbuffer, i);
+                _appendNewLineToStringBuffer(stringbuffer, i);
+                _appendIndentationToStringBuffer(stringbuffer, i);
             }
             stringbuffer.append(')');
         }
@@ -2605,15 +2605,15 @@ public class ERXPropertyListSerialization {
 					if (!(obj instanceof String))
 						throw new IllegalArgumentException(
 								"Property list generation failed while attempting to write hashtable. Non-String key found in Hashtable. Property list dictionaries must have String's as keys.");
-					this._appendNewLineToStringBuffer(stringbuffer, i);
-					this._appendIndentationToStringBuffer(stringbuffer, i + 1);
-					this._appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
+					_appendNewLineToStringBuffer(stringbuffer, i);
+					_appendIndentationToStringBuffer(stringbuffer, i + 1);
+					_appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
 					stringbuffer.append(" = ");
-					this._appendObjectToStringBuffer(nsdictionary.get(obj), stringbuffer, i + 1);
+					_appendObjectToStringBuffer(nsdictionary.get(obj), stringbuffer, i + 1);
 				}
 
-				this._appendNewLineToStringBuffer(stringbuffer, i);
-				this._appendIndentationToStringBuffer(stringbuffer, i);
+				_appendNewLineToStringBuffer(stringbuffer, i);
+				_appendIndentationToStringBuffer(stringbuffer, i);
 			}
 			stringbuffer.append('}');
 		}
@@ -2627,15 +2627,15 @@ public class ERXPropertyListSerialization {
                     if (!(obj instanceof String))
                         throw new IllegalArgumentException(
                                 "Property list generation failed while attempting to write hashtable. Non-String key found in Hashtable. Property list dictionaries must have String's as keys.");
-                    this._appendNewLineToStringBuffer(stringbuffer, i);
-                    this._appendIndentationToStringBuffer(stringbuffer, i + 1);
-                    this._appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
+                    _appendNewLineToStringBuffer(stringbuffer, i);
+                    _appendIndentationToStringBuffer(stringbuffer, i + 1);
+                    _appendStringToStringBuffer((String) obj, stringbuffer, i + 1);
                     stringbuffer.append(" = ");
-                    this._appendObjectToStringBuffer(nsdictionary.objectForKey(obj), stringbuffer, i + 1);
+                    _appendObjectToStringBuffer(nsdictionary.objectForKey(obj), stringbuffer, i + 1);
                 }
 
-                this._appendNewLineToStringBuffer(stringbuffer, i);
-                this._appendIndentationToStringBuffer(stringbuffer, i);
+                _appendNewLineToStringBuffer(stringbuffer, i);
+                _appendIndentationToStringBuffer(stringbuffer, i);
             }
             stringbuffer.append('}');
         }
@@ -2652,28 +2652,28 @@ public class ERXPropertyListSerialization {
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
-			aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+			aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 			if (aBufferIndex == EOT || aBufferIndex >= ac.length)
 				aobj[0] = null;
 			else if (ac[aBufferIndex] == '"') {
 				StringBuffer buffer = new StringBuffer(64);
-				aBufferIndex = this._readQuotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
+				aBufferIndex = _readQuotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
 				aobj[0] = buffer.toString();
 			} else if (ac[aBufferIndex] == '<') {
 				NSMutableData data = new NSMutableData(_lengthOfData(ac, aBufferIndex));
-				aBufferIndex = this._readDataContentsIntoData(ac, aBufferIndex, data);
+				aBufferIndex = _readDataContentsIntoData(ac, aBufferIndex, data);
 				aobj[0] = data;
 			} else if (ac[aBufferIndex] == '(') {
 				NSMutableArray<Object> array = new NSMutableArray<Object>();
-				aBufferIndex = this._readArrayContentsIntoArray(ac, aBufferIndex, array);
+				aBufferIndex = _readArrayContentsIntoArray(ac, aBufferIndex, array);
 				aobj[0] = array;
 			} else if (ac[aBufferIndex] == '{') {
 				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<Object, Object>();
-				aBufferIndex = this._readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
+				aBufferIndex = _readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
 				aobj[0] = dictionary;
 			} else {
 				StringBuffer buffer = new StringBuffer(64);
-				aBufferIndex = this._readUnquotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
+				aBufferIndex = _readUnquotedStringIntoStringBuffer(ac, aBufferIndex, buffer);
 				aobj[0] = buffer.toString();
 			}
 			return aBufferIndex < ac.length ? aBufferIndex : EOT;
@@ -2696,7 +2696,7 @@ public class ERXPropertyListSerialization {
 
 		private int _readQuotedStringIntoStringBuffer(char ac[], int index, StringBuffer stringbuffer) {
 			int aBufferIndex = index;
-			this._saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
+			_saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
 			int j = ++aBufferIndex;
 			while (aBufferIndex < ac.length && ac[aBufferIndex] != '"')
 				if (ac[aBufferIndex] == '\\') {
@@ -2732,13 +2732,13 @@ public class ERXPropertyListSerialization {
 									"Property list parsing failed while attempting to read quoted string. Input exhausted before escape sequence was completed. Opening quote was at "
 											+ _savedIndexesAsString() + ".");
 						aBufferIndex++;
-						if (!this._isHexDigit(ac[aBufferIndex]) || !this._isHexDigit(ac[aBufferIndex + 1]) || !this._isHexDigit(ac[aBufferIndex + 2]) || !this._isHexDigit(ac[aBufferIndex + 3]))
+						if (!_isHexDigit(ac[aBufferIndex]) || !_isHexDigit(ac[aBufferIndex + 1]) || !_isHexDigit(ac[aBufferIndex + 2]) || !_isHexDigit(ac[aBufferIndex + 3]))
 							throw new IllegalArgumentException("Property list parsing failed while attempting to read quoted string. Improperly formed \\U type escape sequence. At line number: "
 									+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-						byte byte0 = this._nibbleForHexDigit(ac[aBufferIndex]);
-						byte byte1 = this._nibbleForHexDigit(ac[aBufferIndex + 1]);
-						byte byte2 = this._nibbleForHexDigit(ac[aBufferIndex + 2]);
-						byte byte3 = this._nibbleForHexDigit(ac[aBufferIndex + 3]);
+						byte byte0 = _nibbleForHexDigit(ac[aBufferIndex]);
+						byte byte1 = _nibbleForHexDigit(ac[aBufferIndex + 1]);
+						byte byte2 = _nibbleForHexDigit(ac[aBufferIndex + 2]);
+						byte byte3 = _nibbleForHexDigit(ac[aBufferIndex + 3]);
 						stringbuffer.append((char) ((byte0 << 12) + (byte1 << 8) + (byte2 << 4) + byte3));
 						aBufferIndex += 4;
 					} else if (ac[aBufferIndex] >= '0' && ac[aBufferIndex] <= '7') {
@@ -2758,7 +2758,7 @@ public class ERXPropertyListSerialization {
 							k += ai[i1];
 						}
 
-						stringbuffer.append(this._nsToUnicode(k));
+						stringbuffer.append(_nsToUnicode(k));
 					} else {
 						stringbuffer.append(ac[aBufferIndex]);
 						if (ac[aBufferIndex] == '\n') {
@@ -2788,7 +2788,7 @@ public class ERXPropertyListSerialization {
 			int aBufferIndex = index;
 			int j = 0;
 			boolean isHexDigit;
-			for (aBufferIndex++; aBufferIndex < ac.length && ((isHexDigit = this._isHexDigit(ac[aBufferIndex])) || this._isWhitespace(ac[aBufferIndex])); aBufferIndex++)
+			for (aBufferIndex++; aBufferIndex < ac.length && ((isHexDigit = _isHexDigit(ac[aBufferIndex])) || _isWhitespace(ac[aBufferIndex])); aBufferIndex++)
 				if (isHexDigit)
 					j++;
 
@@ -2813,10 +2813,10 @@ public class ERXPropertyListSerialization {
 				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (ac[aBufferIndex] == '>')
 					break;
-				byte byte0 = this._nibbleForHexDigit(ac[aBufferIndex]);
+				byte byte0 = _nibbleForHexDigit(ac[aBufferIndex]);
 				aBufferIndex++;
 				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
-				byte byte1 = this._nibbleForHexDigit(ac[aBufferIndex]);
+				byte byte1 = _nibbleForHexDigit(ac[aBufferIndex]);
 				aBufferIndex++;
 				nsmutabledata.appendByte((byte) ((byte0 << 4) + byte1));
 			} while (true);
@@ -2828,7 +2828,7 @@ public class ERXPropertyListSerialization {
 			Object aobj[] = new Object[1];
 			aBufferIndex++;
 			nsmutablearray.removeAllObjects();
-			aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+			aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 			do {
 				if (aBufferIndex == EOT || ac[aBufferIndex] == ')')
 					break;
@@ -2837,18 +2837,18 @@ public class ERXPropertyListSerialization {
 						throw new IllegalArgumentException("Property list parsing failed while attempting to read array. No comma found between array elements. At line number: " + _lineNumber
 								+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 					aBufferIndex++;
-					aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+					aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 					if (aBufferIndex == EOT)
 						throw new IllegalArgumentException("Property list parsing failed while attempting to read array. Input exhausted before end of array was found. At line number: " + _lineNumber
 								+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 				}
 				if (ac[aBufferIndex] != ')') {
 					aobj[0] = null;
-					aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj);
+					aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj);
 					if (aobj[0] == null)
 						throw new IllegalArgumentException("Property list parsing failed while attempting to read array. Failed to read content object. At line number: " + _lineNumber + ", column: "
 								+ (aBufferIndex - _startOfLineCharIndex) + ".");
-					aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+					aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 					nsmutablearray.addObject(aobj[0]);
 				}
 			} while (true);
@@ -2867,30 +2867,30 @@ public class ERXPropertyListSerialization {
 			if (nsmutabledictionary.count() != 0) {
 				for (Enumeration<?> enumeration = nsmutabledictionary.keyEnumerator(); enumeration.hasMoreElements(); nsmutabledictionary.removeObjectForKey(enumeration.nextElement())) {/**/}
 			}
-			for (aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex); aBufferIndex != EOT && ac[aBufferIndex] != '}';) {
-				aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj);
+			for (aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex); aBufferIndex != EOT && ac[aBufferIndex] != '}';) {
+				aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj);
 				if (aobj[0] == null || !(aobj[0] instanceof String))
 					throw new IllegalArgumentException("Property list parsing failed while attempting to read dictionary. Failed to read key or key is not a String. At line number: " + _lineNumber
 							+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT || ac[aBufferIndex] != '=')
 					throw new IllegalArgumentException("Property list parsing failed while attempting to read dictionary. Read key " + aobj[0] + " with no value. At line number: " + _lineNumber
 							+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 				aBufferIndex++;
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT)
 					throw new IllegalArgumentException("Property list parsing failed while attempting to read dictionary. Read key " + aobj[0] + " with no value. At line number: " + _lineNumber
 							+ ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
-				aBufferIndex = this._readObjectIntoObjectReference(ac, aBufferIndex, aobj1);
+				aBufferIndex = _readObjectIntoObjectReference(ac, aBufferIndex, aobj1);
 				if (aobj1[0] == null)
 					throw new IllegalArgumentException("Property list parsing failed while attempting to read dictionary. Failed to read value. At line number: " + _lineNumber + ", column: "
 							+ (aBufferIndex - _startOfLineCharIndex) + ".");
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				if (aBufferIndex == EOT || ac[aBufferIndex] != ';')
 					throw new IllegalArgumentException("Property list parsing failed while attempting to read dictionary. Read key and value with no terminating semicolon. At line number: "
 							+ _lineNumber + ", column: " + (aBufferIndex - _startOfLineCharIndex) + ".");
 				aBufferIndex++;
-				aBufferIndex = this._skipWhitespaceAndComments(ac, aBufferIndex);
+				aBufferIndex = _skipWhitespaceAndComments(ac, aBufferIndex);
 				nsmutabledictionary.setObjectForKey(aobj1[0], aobj[0]);
 			}
 
@@ -2904,7 +2904,7 @@ public class ERXPropertyListSerialization {
 		private int _checkForWhitespaceOrComment(char ac[], int index) {
 			if (index == EOT || index >= ac.length)
 				return _C_NON_COMMENT_OR_SPACE;
-			if (this._isWhitespace(ac[index]))
+			if (_isWhitespace(ac[index]))
 				return _C_WHITESPACE;
 			if (index + 1 < ac.length) {
 				if (ac[index] == '/' && ac[index + 1] == '/')
@@ -2917,18 +2917,18 @@ public class ERXPropertyListSerialization {
 
 		private int _skipWhitespaceAndComments(char ac[], int index) {
 			int aBufferIndex = index;
-			for (int j = this._checkForWhitespaceOrComment(ac, aBufferIndex); j != _C_NON_COMMENT_OR_SPACE; j = this._checkForWhitespaceOrComment(ac, aBufferIndex)) {
+			for (int j = _checkForWhitespaceOrComment(ac, aBufferIndex); j != _C_NON_COMMENT_OR_SPACE; j = _checkForWhitespaceOrComment(ac, aBufferIndex)) {
 				switch (j) {
 					case _C_WHITESPACE: // '\002'
-						aBufferIndex = this._processWhitespace(ac, aBufferIndex);
+						aBufferIndex = _processWhitespace(ac, aBufferIndex);
 						break;
 
 					case _C_SINGLE_LINE_COMMENT: // '\003'
-						aBufferIndex = this._processSingleLineComment(ac, aBufferIndex);
+						aBufferIndex = _processSingleLineComment(ac, aBufferIndex);
 						break;
 
 					case _C_MULTI_LINE_COMMENT: // '\004'
-						aBufferIndex = this._processMultiLineComment(ac, aBufferIndex);
+						aBufferIndex = _processMultiLineComment(ac, aBufferIndex);
 						break;
 				}
 			}
@@ -2937,7 +2937,7 @@ public class ERXPropertyListSerialization {
 
 		private int _processWhitespace(char ac[], int index) {
 			int aBufferIndex = index;
-			for (; aBufferIndex < ac.length && this._isWhitespace(ac[aBufferIndex]); aBufferIndex++) {
+			for (; aBufferIndex < ac.length && _isWhitespace(ac[aBufferIndex]); aBufferIndex++) {
 				if (ac[aBufferIndex] == '\n') {
 					_lineNumber++;
 					_startOfLineCharIndex = aBufferIndex + 1;
@@ -2954,7 +2954,7 @@ public class ERXPropertyListSerialization {
 
 		private int _processMultiLineComment(char ac[], int index) {
 			int aBufferIndex = index;
-			this._saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
+			_saveIndexes(aBufferIndex, _lineNumber, _startOfLineCharIndex);
 			for (aBufferIndex += 2; aBufferIndex + 1 < ac.length && (ac[aBufferIndex] != '*' || ac[aBufferIndex + 1] != '/'); aBufferIndex++) {
 				if (ac[aBufferIndex] == '/' && ac[aBufferIndex + 1] == '*') {
 					throw new IllegalArgumentException("Property list parsing does not support embedded multi line comments.The first opening comment was at " + _savedIndexesAsString()
@@ -3005,7 +3005,7 @@ public class ERXPropertyListSerialization {
 	/***/
 
 	/**
-	 * Description of the binary plist format derived from http://cvs.opendarwin.org/cgi-bin/cvsweb.cgi/~checkout~/src/CoreFoundation/Parsing.subproj/CFBinaryPList.c?rev=1.1.1.3&content-type=text/plain EBNF description of the file format:
+	 * Description of the binary plist format derived from http://cvs.opendarwin.org/cgi-bin/cvsweb.cgi/~checkout~/src/CoreFoundation/Parsing.subproj/CFBinaryPList.c?rev=1.1.1.3&amp;content-type=text/plain EBNF description of the file format:
 	 *
 	 * <pre>
 	 * bplist ::= header objectTable offsetTable trailer
@@ -3317,7 +3317,7 @@ public class ERXPropertyListSerialization {
 					} else {
 						buf.append(_objectTable.get(_keyref[i]));
 					}
-					buf.append(":");
+					buf.append(':');
 					if (_objref[i] < 0 || _objref[i] >= _objectTable.size()) {
 						buf.append("#" + _objref[i]);
 					} else if (_objectTable.get(_objref[i]) == this) {
@@ -3338,13 +3338,13 @@ public class ERXPropertyListSerialization {
 				for (int i = 0; i < _keyref.length; i++) {
 
 					if (_keyref[i] < 0 || _keyref[i] >= _objectTable.size()) {
-						logger.error("Object table is in illegal state.  The key reference " + i + " is larger than the object table size " + _objectTable.size());
+						log.error("Object table is in illegal state.  The key reference {} is larger than the object table size {}", i, _objectTable.size());
 					} else if (_objectTable.get(_keyref[i]) == this) {
-						logger.warn("Encountered reference to 'self' in object table.");
+						log.warn("Encountered reference to 'self' in object table.");
 					}
 					String key = (String) _objectTable.get(_keyref[i]);
 					if (_objref[i] < 0 || _objref[i] >= _objectTable.size()) {
-						logger.error("Object table is in illegal state.  The object reference " + i + " is larger than the object table size " + _objectTable.size());
+						log.error("Object table is in illegal state.  The object reference {} is larger than the object table size {}", i, _objectTable.size());
 					}
 					Object value = _objectTable.get(_objref[i]);
 
@@ -3440,12 +3440,12 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public String toString() {
-				return this.toString(2);
+				return toString(2);
 			}
 
 			public String toString(int objectRefSize) {
 				NSMutableData data = new NSMutableData(1024);
-				this.appendToData(data, objectRefSize);
+				appendToData(data, objectRefSize);
 				return "[" + data.length() + "] " + data._hexString();
 			}
 
@@ -3727,23 +3727,23 @@ public class ERXPropertyListSerialization {
 			PListType type = typeForObject(object);
 			switch (type) {
 				case STRING: {
-					objectList.add(new EncodedObject(this.encodeString((String) object)));
+					objectList.add(new EncodedObject(encodeString((String) object)));
 					break;
 				}
 				case INTEGER: {
-					objectList.add(new EncodedObject(this.encodeInt(((Number) object).longValue())));
+					objectList.add(new EncodedObject(encodeInt(((Number) object).longValue())));
 					break;
 				}
 				case FLOAT: {
-					objectList.add(new EncodedObject(this.encodeReal(((Number) object).doubleValue())));
+					objectList.add(new EncodedObject(encodeReal(((Number) object).doubleValue())));
 					break;
 				}
 				case DATE: {
-					objectList.add(new EncodedObject(this.encodeDate((Date) object)));
+					objectList.add(new EncodedObject(encodeDate((Date) object)));
 					break;
 				}
 				case BOOLEAN: {
-					objectList.add(new EncodedObject(this.encodeBoolean(((Boolean) object).booleanValue())));
+					objectList.add(new EncodedObject(encodeBoolean(((Boolean) object).booleanValue())));
 					break;
 				}
 				case DATA: {
@@ -3753,7 +3753,7 @@ public class ERXPropertyListSerialization {
 					} else {
 						theBytes = (byte[]) object;
 					}
-					objectList.add(new EncodedObject(this.encodeData(theBytes)));
+					objectList.add(new EncodedObject(encodeData(theBytes)));
 					break;
 				}
 				case DICTIONARY: {
@@ -3762,13 +3762,13 @@ public class ERXPropertyListSerialization {
     
     					// 1. append dictionary markers here which includes the count
     					int count = dict.size();
-    					EncodedDictionary dictionary = new EncodedDictionary(this.encodeCount(count, Type.kCFBinaryPlistMarkerDict));
+    					EncodedDictionary dictionary = new EncodedDictionary(encodeCount(count, Type.kCFBinaryPlistMarkerDict));
     					objectList.add(dictionary);
     
     					// 2. write keys and values
     					for (Object aKey : dict.keySet()) {
-    						dictionary.addKeyRef(this.encodeObject(aKey, objectList, uniquingTable));
-    						dictionary.addValueRef(this.encodeObject(dict.get(aKey), objectList, uniquingTable));
+    						dictionary.addKeyRef(encodeObject(aKey, objectList, uniquingTable));
+    						dictionary.addValueRef(encodeObject(dict.get(aKey), objectList, uniquingTable));
     					}
 				    }
 				    else {
@@ -3776,14 +3776,14 @@ public class ERXPropertyListSerialization {
                         
                         // 1. append dictionary markers here which includes the count
                         int count = dict.count();
-                        EncodedDictionary dictionary = new EncodedDictionary(this.encodeCount(count, Type.kCFBinaryPlistMarkerDict));
+                        EncodedDictionary dictionary = new EncodedDictionary(encodeCount(count, Type.kCFBinaryPlistMarkerDict));
                         objectList.add(dictionary);
     
                         // 2. write keys and values
                         for (Enumeration keyEnum = dict.keyEnumerator(); keyEnum.hasMoreElements(); ) {
                             Object aKey = keyEnum.nextElement();
-                            dictionary.addKeyRef(this.encodeObject(aKey, objectList, uniquingTable));
-                            dictionary.addValueRef(this.encodeObject(dict.objectForKey(aKey), objectList, uniquingTable));
+                            dictionary.addKeyRef(encodeObject(aKey, objectList, uniquingTable));
+                            dictionary.addValueRef(encodeObject(dict.objectForKey(aKey), objectList, uniquingTable));
                         }
 				    }
 					break;
@@ -3793,25 +3793,25 @@ public class ERXPropertyListSerialization {
     					// 1. append array markers here
     					List<?> list = (List<?>) object;
     					int count = list.size();
-    					EncodedArray array = new EncodedArray(this.encodeCount(count, Type.kCFBinaryPlistMarkerArray));
+    					EncodedArray array = new EncodedArray(encodeCount(count, Type.kCFBinaryPlistMarkerArray));
     					objectList.add(array);
     
     					// 2. write all values
     					for (Object aValue : list) {
-    						array.addValueRef(this.encodeObject(aValue, objectList, uniquingTable));
+    						array.addValueRef(encodeObject(aValue, objectList, uniquingTable));
     					}
 				    }
 				    else {
                         // 1. append array markers here
                         NSArray list = (NSArray) object;
                         int count = list.count();
-                        EncodedArray array = new EncodedArray(this.encodeCount(count, Type.kCFBinaryPlistMarkerArray));
+                        EncodedArray array = new EncodedArray(encodeCount(count, Type.kCFBinaryPlistMarkerArray));
                         objectList.add(array);
     
                         // 2. write all values
                         for (Enumeration valuesEnum = list.objectEnumerator(); valuesEnum.hasMoreElements(); ) {
                             Object aValue = valuesEnum.nextElement();
-                            array.addValueRef(this.encodeObject(aValue, objectList, uniquingTable));
+                            array.addValueRef(encodeObject(aValue, objectList, uniquingTable));
                         }
 				    }
 					break;
@@ -3821,43 +3821,43 @@ public class ERXPropertyListSerialization {
     					// 1. append set markers here
     					List<?> list = (List<?>) object;
     					int count = list.size();
-    					EncodedSet set = new EncodedSet(this.encodeCount(count, Type.kCFBinaryPlistMarkerSet));
+    					EncodedSet set = new EncodedSet(encodeCount(count, Type.kCFBinaryPlistMarkerSet));
     					objectList.add(set);
     
     					// 2. write all values
     					for (Object aValue : list) {
-    						set.addValueRef(this.encodeObject(aValue, objectList, uniquingTable));
+    						set.addValueRef(encodeObject(aValue, objectList, uniquingTable));
     					}
 				    }
 				    else {
                         // 1. append set markers here
                         NSArray list = (NSArray) object;
                         int count = list.count();
-                        EncodedSet set = new EncodedSet(this.encodeCount(count, Type.kCFBinaryPlistMarkerSet));
+                        EncodedSet set = new EncodedSet(encodeCount(count, Type.kCFBinaryPlistMarkerSet));
                         objectList.add(set);
     
                         // 2. write all values
                         for (Enumeration valuesEnum = list.objectEnumerator(); valuesEnum.hasMoreElements(); ) {
                             Object aValue = valuesEnum.nextElement();
-                            set.addValueRef(this.encodeObject(aValue, objectList, uniquingTable));
+                            set.addValueRef(encodeObject(aValue, objectList, uniquingTable));
                         }
 				    }
 					break;
 				}
 				case NULL: {
-					objectList.add(new EncodedObject(this.encodeNull()));
+					objectList.add(new EncodedObject(encodeNull()));
 					break;
 				}
 				case UUID: {
-					objectList.add(new EncodedObject(this.encodeUUID((UUID) object)));
+					objectList.add(new EncodedObject(encodeUUID((UUID) object)));
 					break;
 				}
 				case FILL: {
-					objectList.add(new EncodedObject(this.encodeFillByte()));
+					objectList.add(new EncodedObject(encodeFillByte()));
 					break;
 				}
 				default: {
-					objectList.add(new EncodedObject(this.encodeString(object.toString())));
+					objectList.add(new EncodedObject(encodeString(object.toString())));
 					break;
 				}
 			}
@@ -3888,7 +3888,7 @@ public class ERXPropertyListSerialization {
 		 */
 		public void writePropertyListToStream(Object plist, OutputStream out) {
 			if (plist == null || out == null) {
-				logger.warn("Encountered empty plist or null outputstream, returning");
+				log.warn("Encountered empty plist or null outputstream, returning");
 				return;
 			}
 
@@ -3904,7 +3904,7 @@ public class ERXPropertyListSerialization {
 			// flatten plist into object table
 			List<EncodedObject> objectList = new ArrayList<EncodedObject>(512);
 			Map<Object, Long> uniquingTable = new HashMap<Object, Long>(2048);
-			long theTopObject = this.encodeObject(plist, objectList, uniquingTable);
+			long theTopObject = encodeObject(plist, objectList, uniquingTable);
 
 			// determine ref size
 			long numberOfObjects = objectList.size();
@@ -3958,7 +3958,6 @@ public class ERXPropertyListSerialization {
 		 * 
 		 * @param url the URL to load
 		 * @return the object represented by the given property list
-		 * @throws IOException if the loading fails
 		 */
 		public Object propertyListWithURL(URL url) {
 			try {
@@ -3982,7 +3981,6 @@ public class ERXPropertyListSerialization {
 		 * 
 		 * @param is the InputStream to load
 		 * @return the object represented by the given property list
-		 * @throws IOException if the loading fails
 		 */
 		public Object propertyListWithStream(InputStream is) {
 			try {
@@ -4003,7 +4001,7 @@ public class ERXPropertyListSerialization {
 		 */
 		protected Object _propertyListWithStream(InputStream is) throws IOException {
 			if (is == null) {
-				logger.error("The stream paramenter cannot be null.");
+				log.error("The stream paramenter cannot be null.");
 				return null;
 			}
 
@@ -4032,7 +4030,7 @@ public class ERXPropertyListSerialization {
 
 		public Document propertyListDocumentWithURL(URL url) {
 			if (url == null) {
-				logger.error("URL paramenter cannot be null");
+				log.error("URL paramenter cannot be null");
 				return null;
 			}
 
@@ -4054,7 +4052,7 @@ public class ERXPropertyListSerialization {
 		
 		public Document propertyListDocumentWithStream(InputStream is) {
 			if (is == null) {
-				logger.error("InputStream paramenter cannot be null");
+				log.error("InputStream paramenter cannot be null");
 				return null;
 			}
 
@@ -4185,29 +4183,29 @@ public class ERXPropertyListSerialization {
 
 			// validate trailer
 			if (numObjects < 1) {
-				logger.error("numObjects < 1");
+				log.error("numObjects < 1");
 				return false;
 			}
 			if (offsetTableOffset < 9) {
-				logger.error("offsetTableOffset < 9");
+				log.error("offsetTableOffset < 9");
 				return false;
 			}
 			if (offsetIntSize < 1) {
-				logger.error("offsetIntSize < 1");
+				log.error("offsetIntSize < 1");
 				return false;
 			}
 			if (objectRefSize < 1) {
-				logger.error("objectRefSize < 1");
+				log.error("objectRefSize < 1");
 				return false;
 			}
 			if (offsetTableOffset < 1) {
-				logger.error("offsetTableOffset < 1");
+				log.error("offsetTableOffset < 1");
 				return false;
 			}
 			int numberOfBytes = (int) offsetIntSize;
 			int expectedLength = (int) (offsetTableOffset + (numObjects * numberOfBytes) + 32);
 			if (theBytes.length != expectedLength) {
-				logger.error("bytes read do not correspond to the expected: " + expectedLength + " got: " + theBytes.length);
+				log.error("bytes read do not correspond to the expected: {} got: {}", expectedLength, theBytes.length);
 				return false;
 			}
 
@@ -4230,7 +4228,7 @@ public class ERXPropertyListSerialization {
 			// ----------------------
 			objectTable = new ArrayList<Object>((int) numObjects);
 			for (Long index : objectIndexTable) {
-				this.parseObject(theBytes, index.intValue());
+				parseObject(theBytes, index.intValue());
 			}
 
 			return parsed;
@@ -4387,7 +4385,7 @@ public class ERXPropertyListSerialization {
 			 * @return the fixedLength
 			 */
 			public boolean isFixedLength() {
-				return this._fixedLength;
+				return _fixedLength;
 			}
 
 			@Override
@@ -4498,13 +4496,13 @@ public class ERXPropertyListSerialization {
 		 */
 		private void parseObject(byte[] bytes, int startIndex) throws IOException {
 			int marker = (int) readByte(bytes, startIndex);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Marker=" + marker + " marker & 0xf0=" + (marker & 0xf0) + " (marker & 0xf0) >> 4)=" + ((marker & 0xf0) >> 4));
+			if (log.isDebugEnabled()) {
+				log.debug("Marker={} marker & 0xf0={} (marker & 0xf0) >> 4)={}", marker, (marker & 0xf0), ((marker & 0xf0) >> 4));
 			}
 
 			Type typeMarker = Type.typeForValue(marker & 0xf0);
 			if (typeMarker == null) {
-				logger.warn("Failed to translate binary plist marker " + marker);
+				log.warn("Failed to translate binary plist marker {}", marker);
 				return;
 			}
 			long count = marker & 0x0f;
@@ -4534,59 +4532,59 @@ public class ERXPropertyListSerialization {
 			switch (typeMarker) {
 				// translates kCFBinaryPlistMarkerNull, kCFBinaryPlistMarkerFalse, kCFBinaryPlistMarkerTrue,kCFBinaryPlistMarkerFill
 				case kCFBinaryPlistMarkerNull: {
-					this.parsePrimitive(bytes, index, marker);
+					parsePrimitive(bytes, index, marker);
 					break;
 				}
 				case kCFBinaryPlistMarkerInt: {
-					this.parseInt(bytes, index, marker);
+					parseInt(bytes, index, marker);
 					break;
 				}
 				case kCFBinaryPlistMarkerReal: {
-					this.parseReal(bytes, index, marker);
+					parseReal(bytes, index, marker);
 					break;
 				}
 					// See CFBinaryPlist.c
 				case kCFBinaryPlistMarkerDate: {
-					this.parseDate(bytes, index, marker);
+					parseDate(bytes, index, marker);
 					break;
 				}
 				case kCFBinaryPlistMarkerData: {
-					this.parseData(bytes, index, (int) count);
+					parseData(bytes, index, (int) count);
 					break;
 				}
 				case kCFBinaryPlistMarkerASCIIString: {
-					this.parseAsciiString(bytes, index, (int) count);
+					parseAsciiString(bytes, index, (int) count);
 					break;
 				}
 				case kCFBinaryPlistMarkerUnicode16String: {
-					this.parseUnicodeString(bytes, index, (int) count);
+					parseUnicodeString(bytes, index, (int) count);
 					break;
 				}
 				case kCFBinaryPlistMarkerUID: {
-					this.parseUUID(bytes, index, marker);
+					parseUUID(bytes, index, marker);
 					break;
 				}
 				case kCFBinaryPlistMarkerArray: {
-					this.parseArray(bytes, index, (int) count);
+					parseArray(bytes, index, (int) count);
 					break;
 				}
 				case kCFBinaryPlistMarkerSet: {
-					this.parseSet(bytes, index, (int) count);
+					parseSet(bytes, index, (int) count);
 					break;
 				}
 				case kCFBinaryPlistMarkerDict: {
-					this.parseDictionary(bytes, index, (int) count);
+					parseDictionary(bytes, index, (int) count);
 					break;
 				}
 				default: {
-					logger.debug("Fall through: Marker=" + marker + " marker & 0xf0=" + (marker & 0xf0) + " (marker & 0xf0) >> 4)=" + ((marker & 0xf0) >> 4));
-					logger.warn("Failed to translate binary plist marker " + typeMarker);
+					log.debug("Fall through: Marker={} marker & 0xf0={} (marker & 0xf0) >> 4)={}", marker, (marker & 0xf0), ((marker & 0xf0) >> 4));
+					log.warn("Failed to translate binary plist marker {}", typeMarker);
 				}
 			}
 		}
 
-		static void debugLog(String log) {
-			logger.info(log);
+		static void debugLog(String message) {
+			log.info(message);
 		}
 
 		/**
@@ -4741,9 +4739,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseAsciiString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = "UTF-8";
-			if (Charset.isSupported("ASCII")) {
-				encoding = "ASCII";
+			String encoding = CharEncoding.UTF_8;
+			if (Charset.isSupported("ASCII")) { // CHECKME isn't ASCII mandatory for any JVM?
+				encoding = CharEncoding.US_ASCII;
 			}
 			objectTable.add(new String(bytes, index, count, encoding));
 		}
@@ -4816,8 +4814,8 @@ public class ERXPropertyListSerialization {
 			NSTimestamp ts = new NSTimestamp((long)((date + kCFAbsoluteTimeIntervalSince1970) * 1000));
 			// objectTable.add(new Date(ts.getTime()));
 			objectTable.add(ts);
-			if (logger.isDebugEnabled()) {
-				logger.info("parseDate double=" + date + " long date=" + (long) date + " timestamp=" + ts + " converted=" + new Date(ts.getTime()));
+			if (log.isDebugEnabled()) {
+				log.info("parseDate double={} long date={} timestamp={} converted={}", date, (long) date, ts, new Date(ts.getTime()));
 			}
 		}
 
@@ -4864,9 +4862,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseUnicodeString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = "UTF-8";
-			if (Charset.isSupported("UTF-16BE")) {
-				encoding = "UTF-16BE";
+			String encoding = CharEncoding.UTF_8;
+			if (Charset.isSupported("UTF-16BE")) { // CHECKME isn't UTF-16BE mandatory for any JVM?
+				encoding = CharEncoding.UTF_16BE;
 			}
 			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
 			objectTable.add(new String(bytes, index, count * 2, encoding));
@@ -5060,19 +5058,19 @@ public class ERXPropertyListSerialization {
 		private byte[] encodeString(String value) {
 			try {
 				NSMutableData data = new NSMutableData(value.length() * 2);
-				String encoding = "UTF-8";
+				String encoding = CharEncoding.UTF_8;
 				// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
 				// This is true if UTF-8 encoding yield the same length as the char count.
 				byte[] theBytes = value.getBytes(encoding);
 	
 				if (theBytes.length == value.length()) {
-					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
+					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
 				} else {
 					if (Charset.isSupported("UTF-16BE")) {
-						encoding = "UTF-16BE";
+						encoding = CharEncoding.UTF_16BE;
 					}
 					theBytes = value.getBytes(encoding);
-					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
+					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
 				}
 				data.appendBytes(theBytes);
 				return data.bytes();
@@ -5107,7 +5105,7 @@ public class ERXPropertyListSerialization {
 		 */
 		private byte[] encodeData(byte[] theData) {
 			NSMutableData data = new NSMutableData(theData.length + 8);
-			data.appendBytes(this.encodeCount(theData.length, Type.kCFBinaryPlistMarkerData));
+			data.appendBytes(encodeCount(theData.length, Type.kCFBinaryPlistMarkerData));
 			data.appendBytes(theData);
 			return data.bytes();
 		}
@@ -5287,20 +5285,6 @@ public class ERXPropertyListSerialization {
 	}
 
 	/**
-	 * Converts the property list <code>object</code> into a string and returns it as an NSData object. This method uses the platform's default character encoding to convert the result string to byte.
-	 *
-	 * @deprecated Use dataFromPropertyList(Object object, String encoding) instead.
-	 * @param plist
-	 *            property list object
-	 * @return <code>object</code> converted to an NSData
-	 * @see #propertyListFromData(NSData, java.lang.String)
-	 */
-	@Deprecated
-	public static NSData dataFromPropertyList(Object plist) {
-		return dataFromPropertyList(plist, (String)null);
-	}
-
-	/**
 	 * Converts the property list <code>object</code> into a string using a character encoding and returns it as an NSData object.
 	 *
 	 * @param plist
@@ -5333,22 +5317,6 @@ public class ERXPropertyListSerialization {
 		_NSStreamingOutputData data = new _NSStreamingOutputData();
 		writePropertyListToStream(plist, data, type, encoding);
 		return data.dataNoCopy();
-	}
-
-	/**
-	 * Converts an NSData into a property list and returns it.
-	 * <p>
-	 * This method uses the platform's default character encoding to convert the bytes in <code>data</code> byte array to characters in a string representation.
-	 *
-	 * @deprecated Use propertyListFromData(NSData data, String encoding)
-	 * @param data
-	 *            the byte array to be converted to a property list
-	 * @return <code>data</code> as a property list
-	 * @see #dataFromPropertyList(Object, java.lang.String)
-	 */
-	@Deprecated
-	public static Object propertyListFromData(NSData data) {
-		return propertyListFromData(data, (String)null);
 	}
 
 	/**
@@ -5595,20 +5563,6 @@ public class ERXPropertyListSerialization {
 		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithURL(url);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
 	}
-
-	/**
-	 * Return NSDictionary for a valid plist when passed a binary plist stream.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return binary plists dictionary decoded as an NSDictionary or empty dictionary if invalid.
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryForBinaryStream(InputStream is) {
-		return dictionaryWithBinaryStream(is);
-	}
 	
 	/**
 	 * Return NSDictionary for a valid plist when passed a binary plist stream.
@@ -5627,19 +5581,6 @@ public class ERXPropertyListSerialization {
 		_BinaryPListParser parser = new _BinaryPListParser();
 		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
-	}
-
-	/**
-	 * Parse binary plist to XML Document
-	 *
-	 * @param url
-	 * @return Document for binary plist
-	 * @see Document
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static Document documentForBinaryPropertyListURL(URL url) {
-		return documentWithBinaryPropertyListURL(url);
 	}
 	
 	/**
@@ -5671,19 +5612,6 @@ public class ERXPropertyListSerialization {
 		_BinaryPListParser parser = new _BinaryPListParser();
 		NSArray<?> ret = (NSArray<?>)parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSArray.EmptyArray;
-	}
-
-	/**
-	 * Parse binary plist to XML Document
-	 *
-	 * @param url
-	 * @return Document for binary plist
-	 * @see Document
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static String xmlStringForBinaryPropertyListURL(URL url) {
-		return xmlStringWithBinaryPropertyListURL(url);
 	}
 		
 	/**
@@ -5790,23 +5718,6 @@ public class ERXPropertyListSerialization {
 	public static Object propertyListWithData(NSData data, PListFormat type, String encoding) {
 		return propertyListWithStream(data.stream(), type, encoding);
 	}
-
-	/**
-	 * For a specified property list format, write a plist to the provided outputstream.
-	 *
-	 * @param plist the object to write
-	 * @param out output stream for plist
-	 * @param type type of plist to generate
-	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
-	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
-	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
-	 * @see PListFormat#NSPropertyListOpenStepFormat
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static void propertyListWriteToStream(Object plist, OutputStream out, PListFormat type) {
-		writePropertyListToStream(plist, out, type, _NSStringUtilities.defaultEncoding());
-	}
 	
 	/**
 	 * For a specified property list format, write a plist to the provided outputstream.
@@ -5831,13 +5742,13 @@ public class ERXPropertyListSerialization {
 			case NSPropertyListBinaryFormat_v1_0:
 				_BinaryPListParser parser = new _BinaryPListParser();
 				if (plist instanceof Map<?, ?>) {
-					parser.writePropertyListToStream((Map<?, ?>)plist, out);
+					parser.writePropertyListToStream(plist, out);
 				} else if (plist instanceof NSDictionary) {
-	                parser.writePropertyListToStream((NSDictionary)plist, out);
+	                parser.writePropertyListToStream(plist, out);
 				} else if (plist instanceof List<?>) {
-					parser.writePropertyListToStream((List<?>) plist, out);
+					parser.writePropertyListToStream(plist, out);
                 } else if (plist instanceof NSArray) {
-                    parser.writePropertyListToStream((NSArray)plist, out);
+                    parser.writePropertyListToStream(plist, out);
 				}
 				break;
 
@@ -5887,34 +5798,6 @@ public class ERXPropertyListSerialization {
 				break;
 		}
 
-	}
-
-	/**
-	 * Read a plist from an InputStream and return NSDictionary of values.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return dictionary or null if there is an error with parsing
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryForInputStream(InputStream is) {
-		return dictionaryWithInputStream(is);
-	}
-	
-	/**
-	 * Read a plist from an InputStream and return NSDictionary of values.
-	 *
-	 * @param <K>
-	 * @param <V>
-	 * @param is
-	 * @return dictionary or null if there is an error with parsing
-	 * @since 5.5
-	 */
-	@Deprecated
-	public static <K, V> NSDictionary<K, V> dictionaryWithInputStream(InputStream is) {
-		return dictionaryWithInputStream(is, "UTF-8");
 	}
 	
 	/**

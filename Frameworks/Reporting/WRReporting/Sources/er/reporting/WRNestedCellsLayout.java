@@ -1,5 +1,5 @@
 package er.reporting;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for Wonder Component WRNestedCellsLayout.
@@ -19,6 +19,7 @@ public class WRNestedCellsLayout extends WRReport {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
 }

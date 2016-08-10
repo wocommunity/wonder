@@ -14,6 +14,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -25,45 +26,74 @@ import er.extensions.foundation.ERXStringUtilities;
 public class ERXDatabase extends EODatabase {
 	public static final String SnapshotCacheChanged = "SnapshotCacheChanged";
 	public static final String CacheChangeKey = "CacheChange";
-	
+	protected static int SnapshotCacheMapInitialCapacity = 1048576;
+	protected static float SnapshotCacheMapInitialLoadFactor = 0.75f;
+
 	private boolean _globalIDChanged;
 	private boolean _decrementSnapshot;
 
+	public static void setSnapshotCacheMapInitialCapacity( int capacity ) {
+		NSLog.out.appendln( "Setting SnapshotCacheMapInitialCapacity = " + capacity );
+		SnapshotCacheMapInitialCapacity = capacity;
+	}
+	
+	public static void setSnapshotCacheMapInitialLoadFactor( float loadFactor ) {
+		NSLog.out.appendln( "Setting SnapshotCacheMapInitialLoadFactor = " + loadFactor );
+		SnapshotCacheMapInitialLoadFactor = loadFactor;
+	}
+	
 	public ERXDatabase(EOAdaptor adaptor) {
 		super(adaptor);
 
 		// AK: huge performance optimization when you use badly distributed LONG keys
 
-		if(_snapshots instanceof NSMutableDictionary) {
-			_snapshots = new NSMutableDictionary() {
-				Map hashMap = new HashMap();
+		NSLog.out.appendln( "Using SnapshotCacheMapInitialCapacity = " + SnapshotCacheMapInitialCapacity );
+		NSLog.out.appendln( "Using SnapshotCacheMapInitialLoadFactor = " + SnapshotCacheMapInitialLoadFactor );
+		_snapshots = new NSMutableDictionary() {
+			/**
+			 * Do I need to update serialVersionUID?
+			 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+			 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+			 */
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				public Object objectForKey(Object key) {
-					return hashMap.get(key);
-				}
+			Map hashMap = new HashMap( SnapshotCacheMapInitialCapacity, SnapshotCacheMapInitialLoadFactor );
 
-				@Override
-				public void setObjectForKey(Object object, Object key) {
-					hashMap.put(key, object);
-				}
+			@Override
+			public Object objectForKey(Object key) {
+				return hashMap.get(key);
+			}
 
-				@Override
-				public Object removeObjectForKey(Object key) {
-					return hashMap.remove(key);
-				}
+			@Override
+			public void setObjectForKey(Object object, Object key) {
+				hashMap.put(key, object);
+			}
 
-				@Override
-				public NSDictionary immutableClone() {
-					return new NSDictionary(hashMap);
-				}
+			@Override
+			public Object removeObjectForKey(Object key) {
+				return hashMap.remove(key);
+			}
 
-				@Override
-				public NSArray allKeys() {
-					return new NSArray(hashMap.keySet());
-				}
-			};
-		}
+			@Override
+			public NSDictionary immutableClone() {
+				return new NSDictionary(hashMap);
+			}
+
+			@Override
+			public NSArray allKeys() {
+				return new NSArray(hashMap.keySet());
+			}
+
+			@Override
+			public int size() {
+				return hashMap.size();
+			}
+
+			@Override
+			public int count() {
+				return hashMap.size();
+			}
+		};
 	}
 
 	public ERXDatabase(EOModel model) {
@@ -80,22 +110,30 @@ public class ERXDatabase extends EODatabase {
 		_database.dispose();
 	}
 
+	public int snapshotCacheSize() {
+		return _snapshots.size();
+	}
+
 	public synchronized void _notifyCacheChange(CacheChange cacheChange) {
 		NSNotificationCenter.defaultCenter().postNotification(ERXDatabase.SnapshotCacheChanged, this, new NSDictionary(cacheChange, ERXDatabase.CacheChangeKey));
 	}
 
+	@Override
 	protected NSSet _cachedFetchAttributesForEntityNamed(String name) {
 		return super._cachedFetchAttributesForEntityNamed(name);
 	}
 
+	@Override
 	protected void _clearLastRecords() {
 		super._clearLastRecords();
 	}
 
+	@Override
 	protected _DatabaseRecord _fastHashGet(EOGlobalID gid) {
 		return super._fastHashGet(gid);
 	}
 
+	@Override
 	protected void _fastHashInsert(_DatabaseRecord rec, EOGlobalID gid) {
 		super._fastHashInsert(rec, gid);
 		if (_globalIDChanged) {
@@ -103,6 +141,7 @@ public class ERXDatabase extends EODatabase {
 		}
 	}
 
+	@Override
 	protected void _fastHashRemove(EOGlobalID gid) {
 		// if (_decrementSnapshot) {
 		// System.out.println("ERXDatabase._fastHashRemove: remove " + gid);
@@ -111,14 +150,17 @@ public class ERXDatabase extends EODatabase {
 		super._fastHashRemove(gid);
 	}
 
+	@Override
 	public void _forgetSnapshotForGlobalID(EOGlobalID gid) {
 		super._forgetSnapshotForGlobalID(gid);
 	}
 
+	@Override
 	protected void _freeToManyMap(_DatabaseRecord rec) {
 		super._freeToManyMap(rec);
 	}
 
+	@Override
 	public void _globalIDChanged(NSNotification notification) {
 		boolean oldGlobalIDChanged = _globalIDChanged;
 		_globalIDChanged = true;
@@ -130,6 +172,7 @@ public class ERXDatabase extends EODatabase {
 		}
 	}
 
+	@Override
 	public void recordSnapshotForGlobalID(NSDictionary snapshot, EOGlobalID gid) {
 		if (!ERXDatabaseContext.isFetching() && !(gid instanceof EOTemporaryGlobalID)) {
 			_notifyCacheChange(new SnapshotUpdated(gid, snapshot));
@@ -137,6 +180,7 @@ public class ERXDatabase extends EODatabase {
 		super.recordSnapshotForGlobalID(snapshot, gid);
 	}
 
+	@Override
 	public void recordSnapshotForSourceGlobalID(NSArray gids, EOGlobalID gid, String name) {
 		if (!ERXDatabaseContext.isFetching()) {
 			NSArray originalToManyGIDs = snapshotForSourceGlobalID(gid, name);
@@ -145,34 +189,42 @@ public class ERXDatabase extends EODatabase {
 		super.recordSnapshotForSourceGlobalID(gids, gid, name);
 	}
 
+	@Override
 	public int _indexOfRegisteredContext(EODatabaseContext context) {
 		return super._indexOfRegisteredContext(context);
 	}
 
+	@Override
 	protected EOGlobalID _recordedGIDForSnapshotWithGid(EOGlobalID gid) {
 		return super._recordedGIDForSnapshotWithGid(gid);
 	}
 
+	@Override
 	protected void _setTimestampForCachedGlobalID(EOGlobalID gid) {
 		super._setTimestampForCachedGlobalID(gid);
 	}
 
+	@Override
 	public int _snapshotCountForGlobalID(EOGlobalID gid) {
 		return super._snapshotCountForGlobalID(gid);
 	}
 
+	@Override
 	public EOAdaptor adaptor() {
 		return super.adaptor();
 	}
 
+	@Override
 	public void addModel(EOModel model) {
 		super.addModel(model);
 	}
 
+	@Override
 	public boolean addModelIfCompatible(EOModel model) {
 		return super.addModelIfCompatible(model);
 	}
 
+	@Override
 	public void decrementSnapshotCountForGlobalID(EOGlobalID gid) {
 		boolean oldDecrementSnapshot = _decrementSnapshot;
 		_decrementSnapshot = true;
@@ -184,110 +236,137 @@ public class ERXDatabase extends EODatabase {
 		}
 	}
 
+	@Override
 	public void dispose() {
 		super.dispose();
 	}
 
+	@Override
 	public EOEntity entityForObject(EOEnterpriseObject object) {
 		return super.entityForObject(object);
 	}
 
+	@Override
 	public EOEntity entityNamed(String entityName) {
 		return super.entityNamed(entityName);
 	}
 
+	@Override
 	public void forgetAllSnapshots() {
 		super.forgetAllSnapshots();
 	}
 
+	@Override
 	public void forgetSnapshotForGlobalID(EOGlobalID gid) {
 		super.forgetSnapshotForGlobalID(gid);
 	}
 
+	@Override
 	public void forgetSnapshotsForGlobalIDs(NSArray array) {
 		super.forgetSnapshotsForGlobalIDs(array);
 	}
 
+	@Override
 	public void handleDroppedConnection() {
 		super.handleDroppedConnection();
 	}
 
+	@Override
 	public void incrementSnapshotCountForGlobalID(EOGlobalID gid) {
 		super.incrementSnapshotCountForGlobalID(gid);
 	}
 
+	@Override
 	public void invalidateResultCache() {
 		super.invalidateResultCache();
 	}
 
+	@Override
 	public void invalidateResultCacheForEntityNamed(String name) {
 		super.invalidateResultCacheForEntityNamed(name);
 	}
 
+	@Override
 	public NSArray models() {
 		return super.models();
 	}
 
+	@Override
 	public void recordSnapshots(NSDictionary snapshots) {
 		super.recordSnapshots(snapshots);
 	}
 
+	@Override
 	public void recordToManySnapshots(NSDictionary snapshots) {
 		super.recordToManySnapshots(snapshots);
 	}
 
+	@Override
 	public void registerContext(EODatabaseContext context) {
 		super.registerContext(context);
 	}
 
+	@Override
 	public NSArray registeredContexts() {
 		return super.registeredContexts();
 	}
 
+	@Override
 	public void removeModel(EOModel model) {
 		super.removeModel(model);
 	}
 
+	@Override
 	public NSArray resultCacheForEntityNamed(String name) {
 		return super.resultCacheForEntityNamed(name);
 	}
 
+	@Override
 	public void setResultCache(NSArray cache, String name) {
 		super.setResultCache(cache, name);
 	}
 
+	@Override
 	public void setTimestampToNow() {
 		super.setTimestampToNow();
 	}
 
+	@Override
 	public NSDictionary snapshotForGlobalID(EOGlobalID gid, long timestamp) {
 		return super.snapshotForGlobalID(gid, timestamp);
 	}
 
+	@Override
 	public NSDictionary snapshotForGlobalID(EOGlobalID gid) {
 		return super.snapshotForGlobalID(gid);
 	}
 
+	@Override
 	public NSArray snapshotForSourceGlobalID(EOGlobalID gid, String name, long timestamp) {
 		return super.snapshotForSourceGlobalID(gid, name, timestamp);
 	}
 
+	@Override
 	public NSArray snapshotForSourceGlobalID(EOGlobalID gid, String name) {
 		return super.snapshotForSourceGlobalID(gid, name);
 	}
 
+	@Override
 	public NSDictionary snapshots() {
 		return super.snapshots();
 	}
 
+	@Override
 	public long timestampForGlobalID(EOGlobalID gid) {
 		return super.timestampForGlobalID(gid);
 	}
 
+	@Override
 	public long timestampForSourceGlobalID(EOGlobalID gid, String name) {
 		return super.timestampForSourceGlobalID(gid, name);
 	}
 
+	@Override
 	public void unregisterContext(EODatabaseContext context) {
 		super.unregisterContext(context);
 	}
@@ -303,6 +382,7 @@ public class ERXDatabase extends EODatabase {
 			return _gid;
 		}
 
+		@Override
 		public String toString() {
 			return "[" + ERXStringUtilities.getSimpleClassName(getClass()) + ": " + _gid + "]";
 		}
@@ -385,6 +465,7 @@ public class ERXDatabase extends EODatabase {
 			return _addedGIDs;
 		}
 
+		@Override
 		public String toString() {
 			return "[ToManySnapshotChanged: sourceGID = " + gid() + "; name = " + _name + "; added = " + ((_addedGIDs == null) ? 0 : _addedGIDs.count()) + "; removed = " + ((_removedGIDs == null) ? 0 : _removedGIDs.count()) + "; removeAll = " + _removeAll + "]";
 		}

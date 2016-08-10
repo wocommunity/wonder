@@ -1,0 +1,33 @@
+ACTION : ERXHyperlinkResource {
+	action = ^rightButton-action;
+	string = ^rightButton-title;
+	data-icon = ^rightButton-icon;
+	data-iconpos = ^rightButton-iconpos;
+	data-theme = ^rightButton-theme;
+	class = "ui-btn-right";	
+}
+
+LINK : ERXHyperlinkResource {
+	linkResource = ^rightButton-linkResource;
+	string = ^rightButton-title;
+	data-icon = ^rightButton-icon;
+	data-iconpos = ^rightButton-iconpos;
+	data-theme = ^rightButton-theme;
+	class = "ui-btn-right";	
+}
+
+HasBackButtonAnAction : WOConditional {
+	condition = hasBackButtonAction;
+}
+
+BackLink : WOHyperlink {
+	action = ^backButton-action;
+	data-theme = ^backButton-theme;
+	data-icon = "arrow-l";
+	data-iconpos = ^backButton-iconpos;
+}
+
+HasNoBackButtonAnAction : WOConditional {
+	condition = hasBackButtonAction;
+	negate = true;
+}

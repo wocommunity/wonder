@@ -5,11 +5,11 @@
 		<binding name = "allowBlanks"/>
 		<binding name = "action"/>
 		
-    <validation message = "&apos;action&apos; is a required binding">
+    <validation message = "'action' is a required binding">
       <unbound name = "action"/>
     </validation>
 		
-    <validation message = "&apos;value&apos; is a required binding">
+    <validation message = "'value' is a required binding">
       <unbound name = "value"/>
     </validation>
 	</wo>

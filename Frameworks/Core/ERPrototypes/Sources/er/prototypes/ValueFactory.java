@@ -4,18 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -35,10 +32,6 @@ import er.extensions.foundation.ERXMutableDictionary;
  * from values stored in the database.
  */
 public class ValueFactory {
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ValueFactory.class);
-	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	
 	public static Duration duration(String value) {
 		try {
 			Duration d = DatatypeFactory.newInstance().newDuration(value);
@@ -49,43 +42,25 @@ public class ValueFactory {
 	}
 	
 	public static LocalDate jodaLocalDate(Date value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.setTime(value);
-		int years = gc.get(Calendar.YEAR);
-		int months = gc.get(Calendar.MONTH) + 1;
-		int days = gc.get(Calendar.DAY_OF_MONTH);
-		LocalDate ld = new LocalDate(years, months, days);
+		LocalDate ld = new LocalDate(value.getTime());
 		return ld;
 	}
 	
 	public static LocalDateTime jodaLocalDateTime(Date value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.setTime(value);
-		int years = gc.get(Calendar.YEAR);
-		int months = gc.get(Calendar.MONTH) + 1;
-		int days = gc.get(Calendar.DAY_OF_MONTH);
-		int hours = gc.get(Calendar.HOUR_OF_DAY);
-		int minutes = gc.get(Calendar.MINUTE);
-		int seconds = gc.get(Calendar.SECOND);
-		int millis = gc.get(Calendar.MILLISECOND);
-		LocalDateTime ldt = new LocalDateTime(years, months, days, hours, minutes, seconds, millis);
+		LocalDateTime ldt = new LocalDateTime(value.getTime());
 		return ldt;
 	}
 	
 	public static LocalTime jodaLocalTime(Date value) {
-		GregorianCalendar gc = new GregorianCalendar(GMT);
-		gc.setTime(value);
-		int hours = gc.get(Calendar.HOUR_OF_DAY);
-		int minutes = gc.get(Calendar.MINUTE);
-		int seconds = gc.get(Calendar.SECOND);
-		int millis = gc.get(Calendar.MILLISECOND);
-		LocalTime time = new LocalTime(hours, minutes, seconds, millis);
+		LocalTime time = new LocalTime(value.getTime());
 		return time;
 	}
 
 	public static DateTime jodaDateTime(Date value) {
-		DateTime dt = new DateTime(value.getTime());
-		return dt;
+		long dateInMillis = value.getTime();
+		int offset = TimeZone.getDefault().getOffset(dateInMillis);
+		DateTime dateTime = new DateTime(dateInMillis + offset);
+		return dateTime;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -116,7 +91,7 @@ public class ValueFactory {
 			ois = new ObjectInputStream(bais);
 			Serializable obj = (Serializable)ois.readObject();
 			if(obj instanceof Collection) {
-				obj = (Serializable)Collections.unmodifiableCollection((Collection)obj);
+				obj = (Serializable)Collections.unmodifiableCollection((Collection<?>)obj);
 			}
 			return obj;
 		} catch(IOException e) {

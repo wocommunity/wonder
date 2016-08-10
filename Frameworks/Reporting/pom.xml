@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.frameworks</groupId>
@@ -13,7 +13,7 @@
 	<modules>
 		<module>DRGrouping</module>
 		<module>ERJasperReports</module>
-		<module>WRReporting</module>
 		<module>ERPlot</module>
+		<module>WRReporting</module>
 	</modules>
 </project>

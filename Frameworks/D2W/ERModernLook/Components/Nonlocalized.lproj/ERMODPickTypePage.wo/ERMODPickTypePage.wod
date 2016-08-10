@@ -29,7 +29,7 @@ Form1: WOForm {
 	multipleSubmit = true;
 }
 
-Help: ERDDebuggingHelp {
+Help: ERMDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

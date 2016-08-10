@@ -1,12 +1,6 @@
-//
-// ERD2WDebugFlags.java: Class file for WO Component 'ERD2WDebugFlags'
-// Project ERDirectToWeb
-//
-// Created by patrice on Wed Jul 24 2002
-//
-
-
 package er.directtoweb.components;
+
+import org.apache.log4j.Level;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -15,24 +9,29 @@ import com.webobjects.woextensions.WOStatsPage;
 import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;
+import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// This component can be used in the wrapper of a D2W app to provide convenient development time 
-//  (as flagged by WOCachingEnabled) access to
-//	the log4j configuration
-//	ERD2WDebuggingEnabled
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+/**
+ * This component can be used in the wrapper of a D2W app to provide convenient development time 
+ * (as flagged by WOCachingEnabled) access to the log4j configuration
+ * ERD2WDebuggingEnabled
+ */
 public class ERD2WDebugFlags extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDebugFlags(WOContext context) {
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -43,9 +42,14 @@ public class ERD2WDebugFlags extends WOComponent {
         return nextPage.submit();
     }
     
-    public WOComponent toggleD2WInfo() {
-        boolean currentState=ERDirectToWeb.d2wDebuggingEnabled(session());
+    public WOComponent toggleD2WInfo() {    
+        boolean currentState = ERDirectToWeb.d2wDebuggingEnabled(session());
+        Level level = currentState ? Level.INFO : Level.DEBUG;
+        ERDirectToWeb.debugLog.setLevel(level);
+        ERD2WModel.ruleTraceEnabledLog.setLevel(level);
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
+        ERDirectToWeb.setD2wComponentNameDebuggingEnabled(session(), !currentState);
+        ERDirectToWeb.setD2wPropertyKeyDebuggingEnabled(session(), !currentState);
         return null;
     }
 
@@ -100,11 +104,20 @@ public class ERD2WDebugFlags extends WOComponent {
 
     /**
      * Allow users to override when the debug flags show.  Defaults to showing when the application is running in
-     * {@link ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
+     * {@link er.extensions.appserver.ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
      * @return true when the debug flags should be displayed
      */
     public boolean shouldShow() {
         return ERXComponentUtilities.booleanValueForBinding(this, "shouldShow", ERXApplication.erxApplication().isDevelopmentMode());
+    }
+
+    /**
+     * Check if Selenium Framework is installed.
+     * 
+     * @return if Selenium Framework is Installed the <code>true</code> will return
+     */
+    public boolean hasSeleniumFramework() {
+      return ERXFrameworkPrincipal.hasFrameworkInstalled("ERSelenium");
     }
 
 }

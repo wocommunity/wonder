@@ -10,11 +10,16 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Provides localization to timestamp formatters.<br />
- * 
+ * Provides localization to timestamp formatters.
  */
 
 public class ERXTimestampFormatter extends NSTimestampFormatter {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** holds a reference to the repository */
 	private static final Hashtable _repository = new Hashtable();

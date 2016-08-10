@@ -5,8 +5,6 @@ import com.webobjects.appserver.WODisplayGroup;
 
 import er.directtoweb.components.misc.ERDSavedQueriesComponent;
 
-import org.apache.log4j.Logger;
-
 /**
  * This Component will store the forms values in the displayGroup of a Query Page into user preferences
  * under a saved name.  The list of saved queries will be available in the popup for future use.
@@ -20,8 +18,6 @@ import org.apache.log4j.Logger;
  */
 
 public class ERNEUSavedQueriesComponent extends ERDSavedQueriesComponent {
-    public static final Logger log = Logger.getLogger(ERNEUSavedQueriesComponent.class);
-
     //  For backward compatibility we need er.neutral.ERNEUSavedQueriesComponent.SavedQuery
     //  So that previously saved preferences can still be decoded
     //  The EOKeyValueUnarchiver uses the class name stored in the saved dictionary to instantiate the destination class

@@ -1,34 +1,37 @@
-<WEBOBJECT NAME="Show">
-<script>
-function ERD2WDebugFlags_cssDebug() {
-    var newSS;
-    newSS=document.getElementById('debug-stylesheet');
-    if(newSS){
-        newSS.href=null;
-        document.documentElement.childNodes[0].removeChild(newSS);
-    } else {
-        newSS=document.createElement('link');
-        newSS.rel='stylesheet';
-        newSS.type='text/css';
-        newSS.href='<webobject name="CSSUrl"></webobject>';
-        newSS.id='debug-stylesheet';
-        document.documentElement.childNodes[0].appendChild(newSS);
+<webobject name="Show">
+  <script>
+    function ERD2WDebugFlags_cssDebug() {
+        var newSS;
+        newSS=document.getElementById('debug-stylesheet');
+        if(newSS){
+            newSS.href=null;
+            document.documentElement.childNodes[0].removeChild(newSS);
+        } else {
+            newSS=document.createElement('link');
+            newSS.rel='stylesheet';
+            newSS.type='text/css';
+            newSS.href='<webobject name="CSSUrl" />';
+            newSS.id='debug-stylesheet';
+            document.documentElement.childNodes[0].appendChild(newSS);
+        }
     }
-}
-</script>
-<ul class="DebugFlags">
-	<li><WEBOBJECT NAME="Log4J">Log4J</WEBOBJECT></li>
-	<li><WEBOBJECT NAME="D2W">D2W</WEBOBJECT> </li>
-	<li><WEBOBJECT NAME="CSS">CSS</WEBOBJECT> </li>
-	<li><WEBOBJECT NAME="SQL">Toggle SQL (<webobject name="SQLEnabled"><span style="color: red;">ON</span></webobject><webobject name="SQLNotEnabled">off</webobject>)</WEBOBJECT></li>
-	<li><WEBOBJECT NAME="Clear">Clear D2W Cache</WEBOBJECT></li>
-	<li><webobject name="PageMetrics">Page Metrics (<webobject name="IfMetricsEnabled">on</webobject><webobject name="IfNotMetricsEnabled">off</webobject>)</webobject>
-		<webobject name="IfMetricsEnabled"> | <webobject name="DetailedPageMetrics"><webobject name="IfDetailedMetricsEnabled">Hide</webobject><webobject name="IfNotDetailedMetricsEnabled">Show</webobject> Details</webobject></webobject>
-	</li>
-	<li><WEBOBJECT NAME="Dump">Created keys</WEBOBJECT></li>
-	<li><WEBOBJECT NAME="Localization">Localization</WEBOBJECT></li>
-	<li><WEBOBJECT NAME="WOStats">WOStats</WEBOBJECT></li>
-	<li><WEBOBJECT NAME="Test">Run Test</WEBOBJECT></li>
-</ul>
-</WEBOBJECT>
-
+  </script>
+  
+  <ul class="DebugFlags">
+    <li><webobject name="Clear"><webobject name="LOCALIZE_clear" /></webobject></li>
+    <li><webobject name="Log4J"><webobject name="LOCALIZE_log4j" /></webobject></li>
+    <li><webobject name="D2W"><webobject name="LOCALIZE_d2w" /></webobject></li>
+    <li><webobject name="CSS"><webobject name="LOCALIZE_css" /></webobject></li>
+    <li><webobject name="SQL"><webobject name="LOCALIZE_sql" /> (<webobject name="SQLEnabled"><span style="color: red;">ON</span></webobject><webobject name="SQLNotEnabled">off</webobject>)</webobject></li>
+    <li><webobject name="PageMetrics"><webobject name="LOCALIZE_metrics" /> (<webobject name="IfMetricsEnabled">on</webobject><webobject name="IfNotMetricsEnabled">off</webobject>)</webobject>
+		<webobject name="IfMetricsEnabled"> | 
+        <webobject name="DetailedPageMetrics">
+			<webobject name="IfDetailedMetricsEnabled"><webobject name="LOCALIZE_hide" /></webobject><webobject name="IfNotDetailedMetricsEnabled"><webobject name="LOCALIZE_show" /></webobject></webobject>
+      </webobject>
+    </li>
+    <li><webobject name="Dump"><webobject name="LOCALIZE_dump" /></webobject></li>
+    <li><webobject name="Localization"><webobject name="LOCALIZE_localize" /></webobject></li>
+    <li><webobject name="WOStats"><webobject name="LOCALIZE_stats" /></webobject></li>
+    <webobject name = "hasSelenium"><li><webobject name="Test"><webobject name="LOCALIZE_test" /></webobject></li></webobject>
+  </ul>
+</webobject>

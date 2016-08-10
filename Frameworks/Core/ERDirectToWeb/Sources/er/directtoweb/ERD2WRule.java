@@ -24,11 +24,18 @@ import er.extensions.foundation.ERXProperties;
  * We place rules with a <code>pageConfiguration</code> so high that they will be higher than rules with the same author setting
  * but lower than a rule with a higher setting.
  * </ul>
- * <br>In order to be usable with the D2WClient and Rule editor, we also patch the encoded 
+ * In order to be usable with the D2WClient and Rule editor, we also patch the encoded 
  * dictionary so these tools find no trace of the patched rules.
  * @author ak
  */
 public class ERD2WRule extends Rule {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private int _priority = -1;
     private String _assignmentClassName;
     private boolean patchRulePriority = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WRule.patchRulePriority", true);
@@ -73,6 +80,7 @@ public class ERD2WRule extends Rule {
      * Overridden to patch the normal rule class name into the generated dictionary.
      * @see com.webobjects.eocontrol.EOKeyValueArchiving#encodeWithKeyValueArchiver(com.webobjects.eocontrol.EOKeyValueArchiver)
      */
+    @Override
     public void encodeWithKeyValueArchiver (EOKeyValueArchiver eokeyvaluearchiver) {
         super.encodeWithKeyValueArchiver(eokeyvaluearchiver);
         ((NSMutableDictionary)eokeyvaluearchiver.dictionary()).setObjectForKey(Rule.class.getName(), "class");
@@ -82,6 +90,7 @@ public class ERD2WRule extends Rule {
      * Overridden to work around 
      * @see com.webobjects.directtoweb.Rule#priority()
      */
+    @Override
     public int priority() {
     	if (!patchRulePriority) {
     		// TC - Added for MZ because we have thousands of rules and don't want to comb through all of them to change their priorities.
@@ -128,9 +137,10 @@ public class ERD2WRule extends Rule {
     
     /**
      * Builds a string like:<br>
-     * <pre><code>   100: ((entity.name = 'Bug') and (task = 'edit')) => isInspectable = true [com.directtowen.BooleanAssignment]</code></pre>
+     * <pre><code>   100: ((entity.name = 'Bug') and (task = 'edit')) =&gt; isInspectable = true [com.directtowen.BooleanAssignment]</code></pre>
      * @return a nice description of the rule
      */
+    @Override
     public String toString() {
         String prefix = "      ";
         String rhsClass = assignmentClassName();

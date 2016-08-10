@@ -47,9 +47,9 @@ public class WOProjectBuilderAction extends WODirectAction {
         
         // String methodName = (String)request.stringFormValueForKey("methodName");
         line = request.numericFormValueForKey("line",new NSNumberFormatter("#0"));
-        filename = (String)request.stringFormValueForKey("filename");
-        errorMessage = (String)request.stringFormValueForKey("errorMessage");
-        fullClassName = (String)request.stringFormValueForKey("fullClassName");
+        filename = request.stringFormValueForKey("filename");
+        errorMessage = request.stringFormValueForKey("errorMessage");
+        fullClassName = request.stringFormValueForKey("fullClassName");
         WOResourceManager resources = WOApplication.application().resourceManager();
 
         // pay no attention to this use of protected API

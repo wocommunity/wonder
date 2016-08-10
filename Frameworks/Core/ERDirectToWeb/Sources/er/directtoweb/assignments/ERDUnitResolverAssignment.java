@@ -14,11 +14,16 @@ import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.assignments.delayed.ERDDelayedAssignment;
 
 /**
- * Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.<br />
- * 
+ * Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.
  */
 
 public class ERDUnitResolverAssignment extends ERDDelayedAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -46,6 +51,7 @@ public class ERDUnitResolverAssignment extends ERDDelayedAssignment {
      */
     public ERDUnitResolverAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String userInfoUnitString = (String)c.valueForKey("unit");
         if (userInfoUnitString == null)

@@ -4,17 +4,16 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>eof</artifactId>
 	<packaging>pom</packaging>
 	<name>EOF Frameworks</name>
 	<modules>
-		<module>ERCaching</module>
+		<module>ERAttributeExtension</module>
 		<module>ERChangeNotificationJMS</module>
 		<module>ERIndexing</module>
 		<module>ERJGroupsSynchronizer</module>
 		<module>ERRest</module>
-		<module>Validity</module>
 	</modules>
 </project>

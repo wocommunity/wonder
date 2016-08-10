@@ -2,6 +2,7 @@ package er.extensions.formatters;
 
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -13,8 +14,15 @@ import com.ibm.icu.util.ULocale;
  * @author chill
  */
 public class ERXOrdinalFormatter extends java.text.Format {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 
+	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
 		StringBuffer result = new StringBuffer();
 		if (obj != null) {
@@ -32,6 +40,7 @@ public class ERXOrdinalFormatter extends java.text.Format {
     /**
      * API conformance.
      */
+    @Override
     public Object parseObject(String source, ParsePosition pos)
     {
         throw new RuntimeException("Method not implemented");

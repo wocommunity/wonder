@@ -29,6 +29,8 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.CharEncoding;
+
 public class DictClient implements Serializable
 {
     private final static long serialVersionUID = 1;
@@ -51,14 +53,14 @@ public class DictClient implements Serializable
 
     public DictClient()
     {
-	this.host = DEFAULT_HOST;
-	this.port = DEFAULT_PORT;
+	host = DEFAULT_HOST;
+	port = DEFAULT_PORT;
     }
 
     public DictClient(String host)
     {
 	this.host = host;
-	this.port = DEFAULT_PORT;
+	port = DEFAULT_PORT;
     }
 
     public DictClient(String host , int port)
@@ -86,9 +88,9 @@ public class DictClient implements Serializable
 			   + host + ":" + port);
         sock = new Socket(host, port);
         in = new BufferedReader
-	    (new InputStreamReader(sock.getInputStream(), "UTF-8"));
+	    (new InputStreamReader(sock.getInputStream(), CharEncoding.UTF_8));
         out = new PrintWriter
-	    (new OutputStreamWriter(sock.getOutputStream(), "UTF-8"));
+	    (new OutputStreamWriter(sock.getOutputStream(), CharEncoding.UTF_8));
 	DictCommandResult r = new DictCommandResult(in.readLine());
 	if(r.code != DictCommandResult.BANNER) {
 	    close();
@@ -287,7 +289,7 @@ public class DictClient implements Serializable
 	    String rWord = line.substring((qoff = line.indexOf('"') + 1),
 					  (qoff = line.indexOf('"', qoff+1)));
 	    String rDb = line.substring(qoff+2, line.indexOf(' ', qoff+2));
-	    StringBuffer def = new StringBuffer();
+	    StringBuilder def = new StringBuilder();
 	    while(true) {
 		line = in.readLine();
 		if(line.equals(".")) break;

@@ -7,6 +7,9 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
@@ -58,6 +61,7 @@ public interface ERXLongResponseTask extends Runnable {
 			return _task;
 		}
 
+		@Override
 		public void run() {
 			try {
 				super.run();
@@ -85,7 +89,9 @@ public interface ERXLongResponseTask extends Runnable {
 	}
 
 	public abstract class DefaultImplementation implements Runnable, ERXLongResponseTask {
-		
+		private volatile EOObjectStore _parentObjectStore;
+		private Long _taskEditingContextTimestampLag;
+
 		
 		/** logging support */
 		public Logger log = Logger.getLogger(ERXUtilities.class);
@@ -191,7 +197,7 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 		
 		/**
-		 * Returns the exception that may have occurred in the {@link run()} method.
+		 * Returns the exception that may have occurred in the {@link #run()} method.
 		 */
 		protected Exception exception() {
 			return _exception;
@@ -211,7 +217,7 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 
 		/**
-		 * The abstract result object that has been returned by {@link performAction()}.
+		 * The abstract result object that has been returned by {@link #performAction()}.
 		 */
 		protected Object result() {
 			return _result;
@@ -231,7 +237,7 @@ public interface ERXLongResponseTask extends Runnable {
 
 		/**
 		 * Checks if the task was stopped externally.
-		 * @return true if {@link stop()} was called.
+		 * @return true if {@link #stop()} was called.
 		 */
 		protected boolean isCancelled() {
 			return _cancelled;
@@ -248,7 +254,7 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Stops the task. This just sets the cancel flag. Its up to you
 		 * to check in your task if you are interruptable. So you should
-		 * check {@link isCancelled()} in your {@link performAction()}.
+		 * check {@link #isCancelled()} in your {@link #performAction()}.
 		 */
 		public void stop() {
 			synchronized(this) {
@@ -258,14 +264,14 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 
 		/**
-		 * Default implementation of the {@link ERXLongResponseTask.start()} method.
+		 * Default implementation of the {@link ERXLongResponseTask#start()} method.
 		 * Creates a new thread unless there already exists one.
 		 */
 		public void start() {
 			try {
 				if(_thread == null) {
 					_thread = new WorkerThread(this);
-                    _thread.setName(this.toString());
+                    _thread.setName(toString());
 				}
 				if(!_thread.isAlive()) {
 					_thread.start();
@@ -279,7 +285,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Override this to return an exception page suitable for the 
 		 * given exception. This implementation just re-throws the exception.
 		 * @param exception
-		 * @return page for the exceptino
+		 * @return page for the exception
 		 */
 		protected WOComponent pageForException(Exception exception) {
 			throw new NSForwardException(exception, "<WOLongResponsePage> Exception occurred in long response thread: "+exception.toString());
@@ -288,7 +294,7 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Override this to return and modify the refresh page.
 		 * This is called while the task is still running. 
-		 * Note that is the place where you can call {@link ERXLongResponse.setRefreshInterval(int)} to
+		 * Note that is the place where you can call {@link ERXLongResponse#setRefreshInterval(int)} to
 		 * set the next refresh time.
 		 * @param aStatus
 		 */
@@ -300,9 +306,9 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Override this to return the page after the task was completed without 
 		 * beeing stopped. Whether or not this counts as a success should
 		 * be divined from the result object. This is the same object you 
-		 * return after being asked for {@link result()}.
+		 * return after being asked for {@link #result()}.
 		 * @param aResult some result object
-		 * @return result page for successfu completion
+		 * @return result page for successful completion
 		 */
 		protected WOComponent pageForResult(Object aResult)  {
 			return longResponse().context().page();
@@ -322,7 +328,6 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Default implementation that controls the pages returned on each iteration.
 		 */
-		
 		public WOComponent nextPage() {
 			Exception e = exception();
 			if (e != null) {
@@ -332,9 +337,8 @@ public interface ERXLongResponseTask extends Runnable {
 			if (isDone()) {
 				if (isCancelled()) {
 					return cancelPageForStatus(status());
-				} else {
-					return pageForResult(result());
 				}
+				return pageForResult(result());
 			}
 			return refreshPageForStatus(status());
 		}
@@ -344,6 +348,93 @@ public interface ERXLongResponseTask extends Runnable {
 		 * @return result of performing the action 
 		 */
 		public abstract Object performAction();
+
+		//---------------------- Copied from ERXTask -------------------------------------
+
+		/**
+		 * See Effective Java item #71 for explanation of this threadsafe lazy
+		 * initialization technique
+		 *
+		 * @return the parent, usually an {@link EOObjectStoreCoordinator} to
+		 *         partition the task's EOF intensive work form the rest of the app.
+		 */
+		protected final EOObjectStore parentObjectStore() {
+			EOObjectStore osc = _parentObjectStore;
+			if (osc == null) {
+				synchronized (this) {
+					osc = _parentObjectStore;
+					if (osc == null) {
+						_parentObjectStore = osc = ERXTaskObjectStoreCoordinatorPool.objectStoreCoordinator();
+					}
+				}
+			}
+			return osc;
+		}
+
+		/**
+		 * @param parentObjectStore
+		 *            the parent, usually an {@link EOObjectStoreCoordinator} to
+		 *            partition the task's EOF intensive work from the rest of the
+		 *            app. If you are going to manually set this, you should do it
+		 *            before starting the task.
+		 */
+		public final synchronized void setParentObjectStore(EOObjectStore parentObjectStore) {
+			_parentObjectStore = parentObjectStore;
+		}
+
+		/**
+		 * <strong>You must manually lock and unlock the editing context returned by
+		 * this method.</strong> It is not recommended that you depend on auto
+		 * locking in background threads.
+		 * 
+		 * Even though this method currently returns an auto-locking EC if
+		 * auto-locking is turned on for the app, a future update is planned that
+		 * will return a manually locking EC from this method even if auto-locking
+		 * is turned on for regular ECs used in normal request-response execution.
+		 * 
+		 * @return a new EOEditingContext.
+		 */
+		protected EOEditingContext newEditingContext() {
+			EOEditingContext ec = ERXEC.newEditingContext(parentObjectStore());
+			// if this is not a nested EC, we can set the fetch time stamp
+			if (!(parentObjectStore() instanceof EOEditingContext)) {
+				ec.setFetchTimestamp(taskEditingContextTimestampLag());
+			}
+			return ec;
+		}
+
+		/**
+		 * By design EOEditingContext's have a fetch timestamp (default is 1 hour)
+		 * that effectively creates an in-memory caching system for EOs. This works
+		 * great for users browsing through pages in the app. However, experience
+		 * has shown that background EOF tasks are performing updates based on the
+		 * state of other EOs, and thus we want to This is a long-running task. The
+		 * last thing I want to do is perform a long running task with stale EOs, so
+		 * we lazily create a fetch timestamp of the current time when we create the
+		 * first EC and thus ensure fresh data. Secondly, we continue, by default to
+		 * use this timestamp for the duration of the task since experience has
+		 * shown that by doing so we can prevent unnecessary database fetching
+		 * especially when our task is adding lots of items to a single relationship
+		 * in batches.
+		 * 
+		 * However if you want fresh data each time you create an EC in your task,
+		 * feel free to set the fetch time stamp to the current time in your task
+		 * each time you create a new EC.
+		 * 
+		 * For R-R ec's we prefer fresh data on new pages. However for long running
+		 * tasks, it is often best pick a single point in time, usually when the
+		 * first ec is created as the timestamp lag. This works well when we are
+		 * iterating and making new ec's especially if we are adding 100's of items
+		 * to a relationship and cycling ec's
+		 * 
+		 * @return the timestamp lag to use for new ec's created in the task thread.
+		 */
+		protected long taskEditingContextTimestampLag() {
+			if (_taskEditingContextTimestampLag == null) {
+				_taskEditingContextTimestampLag = Long.valueOf(System.currentTimeMillis());
+			}
+			return _taskEditingContextTimestampLag.longValue();
+		}
 
 	}
 }

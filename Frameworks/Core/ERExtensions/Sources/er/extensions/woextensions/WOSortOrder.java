@@ -36,16 +36,24 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.components.ERXStatelessComponent;
 
 /**
- * Almost direct port of WOSortOrder from WO 5's WOExtensions<br />
+ * Almost direct port of WOSortOrder from WO 5's WOExtensions
+ * 
  * @binding caseInsensitive is ordering case sensitive or not
  */
 
 public class WOSortOrder extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public WOSortOrder(WOContext aContext) {
         super(aContext);
     }
     
+    @Override
     public void reset() {
         _invalidateCaches();
     }
@@ -73,9 +81,8 @@ public class WOSortOrder extends ERXStatelessComponent {
         if (nsarray != null && nsarray.count() > 0) {
             EOSortOrdering eosortordering = (EOSortOrdering)nsarray.objectAtIndex(0);
             return eosortordering;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean _isCurrentKeyPrimary() {

@@ -51,7 +51,7 @@ public class _NSUtilities {
         return (T) convertNumberIntoCompatibleValue((Number)value, (Class<Number>)newValueType);
       if (value instanceof Boolean)
         return (T) convertNumberIntoCompatibleValue(convertBooleanIntoNumberValue((Boolean)value), (Class<Number>)newValueType);
-      return (T) convertNumberIntoCompatibleValue(new Double(value.toString()), (Class<Number>)newValueType);
+      return (T) convertNumberIntoCompatibleValue(Double.valueOf(value.toString()), (Class<Number>)newValueType);
     }
     if (_isClassABoolean(newValueType)) {
       if (value instanceof Number)
@@ -116,10 +116,10 @@ public class _NSUtilities {
       return (T) Byte.valueOf(((Number)value).byteValue());
     
     if (newValueType == Double.class || newValueType == double.class)
-      return (T) new Double(((Number)value).doubleValue());
+      return (T) Double.valueOf(((Number)value).doubleValue());
 
     if (newValueType == Float.class || newValueType == float.class)
-      return (T) new Float(((Number)value).floatValue());
+      return (T) Float.valueOf(((Number)value).floatValue());
 
     return (T) value;
   }

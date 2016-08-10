@@ -6,10 +6,14 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WOHTTPConnection;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.foundation.ERXProperties;
 
@@ -38,7 +42,7 @@ public class PayPalAction extends WODirectAction {
 
     /** Processor for Instant Payment Notifications
      * 
-     * The class takes the request and constructs a response that it then echoes back to PayPal, with the additional value "&cmd=_notify-validate.
+     * The class takes the request and constructs a response that it then echoes back to PayPal, with the additional value "&amp;cmd=_notify-validate.
      * 
      * PayPal will then send a one word code for the status of the transaction.  This method then parses for that word and sends the appropriate notification for the result, with the original WORequest object from PayPal attached to it (as the notification's object).
      * 
@@ -69,14 +73,14 @@ public class PayPalAction extends WODirectAction {
         	ppEchoConnection = new WOHTTPConnection(sandboxSite, 80); // our echo to PayPal
         } 
         // assemble User-Agent header
-        StringBuffer ua = new StringBuffer();
-        ua.append("WebObjects/ " + ERXProperties.webObjectsVersion() + " (");
+        StringBuilder ua = new StringBuilder();
+        ua.append("WebObjects/ 5.4 (");
         ua.append(System.getProperty("os.arch"));
         ua.append("; ");
         ua.append(System.getProperty("os.name"));
-        ua.append(" ");
+        ua.append(' ');
         ua.append(System.getProperty("os.version"));
-        ua.append(")");
+        ua.append(')');
 
         NSMutableDictionary headers = new NSMutableDictionary();
         headers.setObjectForKey("en", "Accept-Language");
@@ -130,7 +134,7 @@ public class PayPalAction extends WODirectAction {
             	NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification, ppIPNRequest);
             } else {
                 // received unaccepted response content string value -- log error and incoming i.p. address
-                NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + (((String)ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
+                NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + ((ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
             }
         } else {
             NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation connection failed.");
@@ -148,7 +152,7 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for successful PayPal transactions
      */
     public WOActionResults returnAction() {
-        String componentName = (String)System.getProperty("SuccessfulPayPalTransactionComponent");
+        String componentName = System.getProperty("SuccessfulPayPalTransactionComponent");
         if (componentName == null || componentName.equals("")) {
             componentName = "SuccessfulPayPalTransaction";
         }
@@ -164,7 +168,7 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for cancelled PayPal transactions
      */
     public WOActionResults cancelAction() {
-        String componentName = (String)System.getProperty("CancelledPayPalTransactionComponent");
+        String componentName = System.getProperty("CancelledPayPalTransactionComponent");
         if (componentName == null || componentName.equals("")) {
             componentName = "CancelledPayPalTransaction";
         }

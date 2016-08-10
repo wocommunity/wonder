@@ -16,7 +16,7 @@ import er.extensions.localization.ERXLocalizer;
 /**
  * This assignment runs it's value through the localizer and evaluates
  * it as a template before returning it. Meaning something like
- *   *true* => cancelCreationMessage = "ERD2W.cancelCreationMessage"
+ *   *true* =&gt; cancelCreationMessage = "ERD2W.cancelCreationMessage"
  * will look up "ERD2W.cancelCreationMessage", then look at the translation
  * and finally parses it with the D2WContext as a parameter.
  * Of course, you can also simply give it a string like
@@ -24,6 +24,12 @@ import er.extensions.localization.ERXLocalizer;
  */
 
 public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     static final Logger log = Logger.getLogger(ERDLocalizedAssignment.class);
@@ -55,7 +61,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
     public ERDLocalizedAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the template keys from the value of this assignment.
      * This array of keys is used when constructing the
      * significant keys for the passed in keyPath.
@@ -75,10 +81,11 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
         return ERXArrayUtilities.arrayWithoutDuplicates(dependentKeys);
     }
 
+    @Override
     public Object fire(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {
-            String format = (String)ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(key);
+            String format = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(key);
             log.debug("Fire for template \"" + key + "\": " + format);
         }
         return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);

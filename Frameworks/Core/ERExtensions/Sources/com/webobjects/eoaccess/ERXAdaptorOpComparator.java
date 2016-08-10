@@ -19,6 +19,7 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 	}
 
 	
+    @Override
     public int compare(Object object1, Object object2)
     	throws com.webobjects.foundation.NSComparator.ComparisonException {
 
@@ -87,13 +88,28 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 			return entity.name();
 		}
 		
-		// Handling for flattened attributes commented out due to 
-		// http://article.gmane.org/gmane.comp.web.webobjects.wonder-disc/8055 
-		// This needs further investigation.  Commenting this out may break vertical inheritance!
-		
-		// Flattened attributes are grouped together by entity so any element in changedValues will work
-		// EOAttribute attribute = entity.attributeNamed((String)adaptorOp.changedValues().allKeys().lastObject());
-		// return attribute.isFlattened() ? attribute.targetAttribute().entity().name() : entity.name();
+		// Flattened attributes are grouped together by entity so any attribute in changedValues should work
+		NSArray<String> attrNames = adaptorOp.changedValues().allKeys();
+		for(int i = 0; i < attrNames.count(); i++) {
+			EOAttribute attribute = entity.attributeNamed(attrNames.objectAtIndex(i));
+			/*
+			 * Sometimes attributes are named like "NeededByEOF0" for vertical inheritance. 
+			 * With single table inheritance, attributes names from other entities may appear. 
+			 * Better safe than sorry :) Keep checking until we find an attribute on the 
+			 * entity for the given attribute name.
+			 * 
+			 * Long discussion about this here:
+			 * http://article.gmane.org/gmane.comp.web.webobjects.wonder-disc/8055
+			 * 
+			 * I think this should do the trick and make vertical and single table happy :)
+			 */
+			if(attribute != null) {
+				if(!attribute.isFlattened()) {
+					return entity.name();
+				}
+				return attribute.targetAttribute().entity().name();
+			}
+		}
 		
 		return entity.name();
 	}

@@ -2,6 +2,9 @@ package er.corebusinesslogic.audittrail;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -35,7 +38,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @property er.corebusinesslogic.ERCAuditTrailClassName
  */
 public class ERCAuditTrailHandler {
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCAuditTrail.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCAuditTrail.class);
 
     private static final String ERXAUDIT_KEYS = "ERXAuditKeys";
 
@@ -81,7 +84,7 @@ public class ERCAuditTrailHandler {
                 }
             }
         }
-        log.info("Configuration : " + configuration);
+        log.info("Configuration: {}", configuration);
         NSNotificationCenter.defaultCenter().removeObserver(_handler, ERXModelGroup.ModelGroupAddedNotification, null);
         NSSelector sel = ERXSelectorUtilities.notificationSelector("handleSave");
         NSNotificationCenter.defaultCenter().addObserver(_handler, sel, ERXEC.EditingContextWillSaveChangesNotification, null);
@@ -119,10 +122,14 @@ public class ERCAuditTrailHandler {
                             }
                             if (rel.isToMany()) {
                                 EOEntity destinationEntity = rel.destinationEntity();
-                                Configuration destinationConfiguration = configureEntity(destinationEntity);
-                                String inverseName = rel.anyInverseRelationship().name();
-                                destinationConfiguration.notificationKeys.addObject(inverseName);
-                                source = rel.destinationEntity();
+                                // skip for self-referencing relationships, i.e. when 
+                                // the destination entity has already been configured
+                                if (configuration.objectForKey(destinationEntity.name()) == null) {
+                                    Configuration destinationConfiguration = configureEntity(destinationEntity);
+                                    String inverseName = rel.anyInverseRelationship().name();
+                                    destinationConfiguration.notificationKeys.addObject(inverseName);
+                                    source = rel.destinationEntity();
+                                }
                             } else {
                                 config.keys.addObject(rel.name());
                             }
@@ -140,7 +147,7 @@ public class ERCAuditTrailHandler {
         EOEditingContext ec = (EOEditingContext) n.object();
         if (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
             ec.processRecentChanges();
-            NSArray<EOEnterpriseObject> insertedObjects = (NSArray) ec.insertedObjects().immutableClone();
+            NSArray<EOEnterpriseObject> insertedObjects = ec.insertedObjects().immutableClone();
             for (EOEnterpriseObject eo : insertedObjects) {
                 if(ERCAuditTrailEntry.clazz.entityName().equals(eo.entityName())) {
                     ec.deleteObject(eo);
@@ -150,8 +157,8 @@ public class ERCAuditTrailHandler {
                 }
             }
             ec.processRecentChanges();
-            NSArray updatedObjects = (NSArray) ec.updatedObjects();
-            NSArray deletedObjects = (NSArray) ec.deletedObjects();
+            NSArray updatedObjects = ec.updatedObjects();
+            NSArray deletedObjects = ec.deletedObjects();
             handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
             handleSave(ec, EOEditingContext.UpdatedKey, updatedObjects);
             handleSave(ec, EOEditingContext.DeletedKey, deletedObjects);
@@ -271,7 +278,7 @@ public class ERCAuditTrailHandler {
         if (trail == null) {
             trail = ERCAuditTrail.clazz.createAuditTrailForObject(ec, eo);
         }
-        log.info(trail + " " + type + ": " + rec.permanentGlobalID() + " " + keyPath + " from " + oldValue + " to " + newValue);
+        log.info("{} {}: {} {} from {} to {}", trail, type, rec.permanentGlobalID(), keyPath, oldValue, newValue);
         if (oldValue instanceof ERXGenericRecord) {
             ERXGenericRecord rec1 = (ERXGenericRecord) oldValue;
             oldValue = ERXKeyGlobalID.globalIDForGID(rec1.permanentGlobalID()).asString();

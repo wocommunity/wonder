@@ -30,7 +30,7 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 	static final long serialVersionUID = 657069456L;
 	private static final String SerializationValuesFieldKey = "values";
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.eoaccess.ERXSingleValueID");
-	private static final ObjectStreamField serialPersistentFields[] = { new ObjectStreamField("values", ((Object) (new Object[0])).getClass()) };
+	private static final ObjectStreamField serialPersistentFields[] = { new ObjectStreamField(SerializationValuesFieldKey, Object[].class) };
 	
 	protected Object _value;
 
@@ -39,26 +39,31 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 		_value = value != null ? value : NSKeyValueCoding.NullValue;
 	}
 
+	@Override
 	public Object[] keyValues() {
 		return new Object[] {_value};
 	}
 
+	@Override
 	public Object[] _keyValuesNoCopy() {
 		return keyValues();
 	}
 
+	@Override
 	public final int keyCount() {
 		return 1;
 	}
 
+	@Override
 	public Object clone() {
 		ERXSingleValueID result = new ERXSingleValueID(_literalEntityName(), _value);
 		_prepClone(result);
 		return result;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		result.append('[');
 		result.append(getClass().getSimpleName());
 		result.append(':');
@@ -74,6 +79,7 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 		return result.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -103,14 +109,14 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		java.io.ObjectOutputStream.PutField fields = s.putFields();
-		fields.put("values", ((Object) (_keyValuesNoCopy())));
+		fields.put(SerializationValuesFieldKey, _keyValuesNoCopy());
 		s.writeFields();
 	}
 
 	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
-		Object[] values = (Object[]) (Object[]) fields.get("values", ((Object) (new Object[0])));
+		Object[] values = (Object[]) fields.get(SerializationValuesFieldKey, new Object[0]);
 		_value = values[0];
 	}
 

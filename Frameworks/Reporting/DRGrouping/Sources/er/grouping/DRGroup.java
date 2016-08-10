@@ -1,11 +1,14 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
-public class DRGroup extends Object  {
+public class DRGroup {
 
     protected DRReportModel _reportModel;
     protected DRMasterCriteria _masterCriteria;
@@ -45,7 +48,7 @@ public class DRGroup extends Object  {
         Enumeration anEnum = recs.objectEnumerator();
 
         if (amc.isPreset()) {
-            recGrpDict = this.childrenFromGroupCriteriaList();
+            recGrpDict = childrenFromGroupCriteriaList();
         } else {
             recGrpDict = new NSMutableDictionary();
         }
@@ -88,8 +91,8 @@ public class DRGroup extends Object  {
         _reportModel = aMod;
         _masterCriteria = amc;
         _useGroupTotal = _masterCriteria.shouldTotal();
-        this.resetDefaults();
-        _recordGroupDict = this.groupBy(_reportModel.records(), _masterCriteria);
+        resetDefaults();
+        _recordGroupDict = groupBy(_reportModel.records(), _masterCriteria);
         _masterCriteriaDrillDownList = DRGroup.drillDownListForMasterCriteriaList(_masterCriteria, _reportModel.criteriaList());
         _ordering = new NSArray(new EOSortOrdering("score", EOSortOrdering.CompareAscending));
     }
@@ -123,11 +126,11 @@ public class DRGroup extends Object  {
     /** Loops over each RecordGroup and group it. Init each new sub RecordGroup with empty record groups for each record group in the parent */
     
     public void groupSubRecordGroupsWithMasterCriteriaLookupDict(NSDictionary groupLookUpDict) {
-        Enumeration anEnum = this.recordGroupList().objectEnumerator();
+        Enumeration anEnum = recordGroupList().objectEnumerator();
 
         while (anEnum.hasMoreElements()) {
             DRRecordGroup recGrp = (DRRecordGroup)anEnum.nextElement();
-            NSMutableArray arr = new NSMutableArray(this.masterCriteriaDrillDownList());
+            NSMutableArray arr = new NSMutableArray(masterCriteriaDrillDownList());
             arr.removeObjectAtIndex(0);
             recGrp.groupSubRecordGroupGroupLookUpDict(arr, groupLookUpDict);
         }
@@ -136,7 +139,7 @@ public class DRGroup extends Object  {
 
     public NSArray sortedCriteriaList() {
         if (_sortedArray == null) {
-            _sortedArrayBase = EOSortOrdering.sortedArrayUsingKeyOrderArray(this.criteriaList(), _ordering);
+            _sortedArrayBase = EOSortOrdering.sortedArrayUsingKeyOrderArray(criteriaList(), _ordering);
             NSMutableArray sortedArray2 = new NSMutableArray(_sortedArrayBase);
             sortedArray2.addObject(DRCriteria.asTotalWithMasterCriteria(_masterCriteria));
             _sortedArray = new NSArray(sortedArray2);
@@ -150,7 +153,7 @@ public class DRGroup extends Object  {
     }
 
     public NSArray sortedCriteriaListBase() {
-        this.sortedCriteriaList();
+        sortedCriteriaList();
         return _sortedArrayBase;
     }
 
@@ -168,6 +171,7 @@ public class DRGroup extends Object  {
         }
         return _keyDesc;
     }
+    @Override
     public String toString() {
         return "<DRGroup masterCriteria: " + masterCriteria() + "; >";
     }

@@ -118,7 +118,6 @@
     (
        available, 
        configurationName, 
-       creationDate, 
        height, 
        id, 
        mimeType, 

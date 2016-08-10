@@ -6,13 +6,21 @@ import er.directtoweb.pages.ERD2WQueryEntitiesPage;
 
 /**
  * Class for DirectToWeb Component ERD2WQueryEntitiesPageTemplate.
+ * 
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey displayNameForEntity
  * @d2wKey textColor
  * @d2wKey backgroundColorForTable
  */
 public class ERD2WQueryEntitiesPageTemplate extends ERD2WQueryEntitiesPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /**
      * Public constructor
      * @param context the context

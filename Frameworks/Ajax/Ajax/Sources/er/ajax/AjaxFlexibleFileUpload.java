@@ -1,8 +1,10 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
@@ -10,11 +12,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.ajax.AjaxFileUpload;
-import er.ajax.AjaxUploadProgress;
-import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXRequest;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -61,17 +59,23 @@ import er.extensions.localization.ERXLocalizer;
  * @binding clearButtonClass class for the select file button (defaults to "Button ObjButton ClearUploadObjButton")
  * @binding clearUploadProgressOnSuccess if true, displays the select file button instead of the uploaded file name on completion of a successful upload
  * @binding mimeType set from the content-type of the upload header if available
+ * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs.
  * 
  * @author dleber
  * @author mschrag
  */
 public class AjaxFlexibleFileUpload extends AjaxFileUpload {
-	
-	protected final Logger log = Logger.getLogger(getClass());
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LoggerFactory.getLogger(AjaxFlexibleFileUpload.class);
 	
 	public static interface Keys {
 		public static final String name = "name";
-		public static final String wosid = "wosid";
 		public static final String selectFileLabel = "selectFileLabel";
 		public static final String cancelLabel = "cancelLabel";
 		public static final String clearLabel = "clearLabel";
@@ -94,8 +98,48 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearButtonClass = "clearButtonClass";
 		public static final String injectDefaultCSS = "injectDefaultCSS";
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
+		public static final String onClickBefore = "onClickBefore";
 	}
-	
+
+	/**
+	 * Wrapper class to expose only the methods we need to {@link AjaxProxy}.
+	 * 
+	 * @author paulh
+	 * @see <a href="https://github.com/wocommunity/wonder/issues/768">#768</a>
+	 */
+	public final class Proxy {
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public NSDictionary<String, ?> uploadState() {
+			return AjaxFlexibleFileUpload.this.uploadState();
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#cancelUpload()}.
+		 */
+		public void cancelUpload() {
+			AjaxFlexibleFileUpload.this.cancelUpload();
+			return;
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public WOActionResults clearFileResults() {
+			return AjaxFlexibleFileUpload.this.clearFileResults();
+		}
+	}
+
+	/**
+	 * Proxy used for method access by {@link AjaxProxy}
+	 */
+	public final Proxy proxy = new Proxy();
+
 	private String _refreshTime;
 	private String _clearLabel;
 	private String _cancelLabel;
@@ -139,17 +183,18 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      */
 	public String ajaxUploadScript() {
 		String result = "AUP.add('" + id() + "', " + ajaxProxyName() +", {" + ajaxUploadLabels() + "}, {" + options() + "}, {" + ajaxUploadOptions() + "});";
-		if (log.isDebugEnabled()) log.debug("AFU Create Script: " + result);
+		log.debug("AFU Create Script: {}", result);
 		return result;
 	}
 	
 	/**
-	 * Builds the array of required additional AjaxUpload data items (wosid, id).
+	 * Builds the array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 * 
-	 * @return array of required additional AjaxUpload data items (wosid, id).
+	 * @return array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 */
 	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>("wosid:'" + this.session().sessionID() + "'");
+		NSMutableArray<String> _data = new NSMutableArray<String>(WOApplication.application().sessionIdKey()
+				+ ":'" + session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
 		
@@ -182,6 +227,10 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     		_options.add("autoSubmit:false");
     	}
     	_options.add("onSubmit:" + onSubmitFunction());
+    	
+    	String onClickBefore = (String)valueForBinding(Keys.onClickBefore);
+    	if (onClickBefore != null) _options.addObject(String.format("onClickBefore:'%s'", onClickBefore.replaceAll("'", "\\\\'")));
+    	
     	return _options.immutableClone();
     }
     
@@ -226,22 +275,22 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	_options.addObject("allowcancel:" + valueForBinding(Keys.allowCancel));
       _options.add("clearUploadProgressOnSuccess:" + clearUploadProgressOnSuccess());
 
-    	String startedFunction = (String)this.valueForBinding(Keys.startedFunction);
+    	String startedFunction = (String)valueForBinding(Keys.startedFunction);
     	if (startedFunction != null) _options.addObject(String.format("startedFunction:%s", startedFunction));
     	
-    	String finishedFunction = (String)this.valueForBinding(Keys.finishedFunction);
+    	String finishedFunction = (String)valueForBinding(Keys.finishedFunction);
     	if (finishedFunction != null) _options.addObject(String.format("finishedFunction:%s", finishedFunction));
     	
-    	String failedFunction = (String)this.valueForBinding(Keys.failedFunction);
+    	String failedFunction = (String)valueForBinding(Keys.failedFunction);
     	if (failedFunction != null) _options.addObject(String.format("failedFunction:%s", failedFunction));
     	
-    	String canceledFunction = (String)this.valueForBinding(Keys.canceledFunction);
+    	String canceledFunction = (String)valueForBinding(Keys.canceledFunction);
     	if (canceledFunction != null) _options.addObject(String.format("canceledFunction:%s", canceledFunction));
     	
-    	String succeededFunction = (String)this.valueForBinding(Keys.succeededFunction);
+    	String succeededFunction = (String)valueForBinding(Keys.succeededFunction);
     	if (succeededFunction != null) _options.addObject(String.format("succeededFunction:%s", succeededFunction));
     	
-      String clearedFunction = (String)this.valueForBinding(Keys.clearedFunction);
+      String clearedFunction = (String)valueForBinding(Keys.clearedFunction);
       if (clearedFunction != null) _options.addObject(String.format("clearedFunction:%s", clearedFunction));
       
     	return _options;
@@ -284,17 +333,17 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public NSDictionary<String, ?> uploadState() {
 		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<String, String>();
-		AjaxUploadProgress progress = this.uploadProgress();
+		AjaxUploadProgress progress = uploadProgress();
 		if (progress != null) {
-			stateObj.takeValueForKey(this.progressAmount(), "progress");
+			stateObj.takeValueForKey(progressAmount(), "progress");
 			stateObj.takeValueForKey(progress.fileName(), "filename");
 		}
-		this.refreshState();
-		stateObj.takeValueForKey(new Integer(state.ordinal()), "state");
+		refreshState();
+		stateObj.takeValueForKey(Integer.valueOf(state.ordinal()), "state");
 		if (state == UploadState.CANCELED) {
 			stateObj.takeValueForKey(cancelUrl(), "cancelUrl");
 		}
-		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload2.uploadState: " + stateObj);
+		log.debug("AjaxFlexibleFileUpload2.uploadState: {}", stateObj);
 		return stateObj.immutableClone();
 	}
 	
@@ -303,7 +352,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	private void refreshState() {
 		state = UploadState.DORMANT;
-		AjaxUploadProgress progress = this.uploadProgress();
+		AjaxUploadProgress progress = uploadProgress();
 		if (progress != null) {
 			if (progress.isStarted()) {
 				state = UploadState.INPROGRESS;
@@ -324,9 +373,16 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 				} 
 			} else {
 				state = UploadState.STARTED;
+				// isDone can happen when a file with no EOF is upload
+				// isFailed can happen when the upload request handler throws an
+				//     exception before the upload started (wrong file extension uploaded or exceeds file size)
+				if (progress.isDone() || progress.isFailed()) {
+					state = UploadState.FAILED;
+					uploadFailed();
+				}
 			}
 		}
-		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload.refreshState: " + state);
+		log.debug("AjaxFlexibleFileUpload.refreshState: {}", state);
 	}
 	
 	/**
@@ -501,9 +557,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return url sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, Keys.wosid);
-		String url = ERXWOContext._directActionURL(context(), "ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()));
-		if (log.isDebugEnabled()) log.debug("URL: " + url);
+		NSDictionary<String, Object> queryParams = new NSDictionary<String, Object>(Boolean.FALSE, WOApplication.application().sessionIdKey());
+		String url = context()._directActionURL("ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()), 0, false);
+		log.debug("URL: {}", url);
 		return url;
 	}
 	
@@ -513,8 +569,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * Action called by the cancel upload button
 	 */
 	public void cancelUpload() {
-		if (this.uploadProgress() != null) {
-			this.uploadProgress().cancel();
+		if (uploadProgress() != null) {
+			uploadProgress().cancel();
 		}
 		state = UploadState.CANCELED;
 	}
@@ -548,6 +604,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	@Override
 	public WOActionResults uploadFailed() {
+		if (_progress != null && _progress.failure() != null && canSetValueForBinding("failure")) setValueForBinding(_progress.failure(), "failure");
 		clearUploadProgress();
 		return super.uploadFailed();
 	}
@@ -555,6 +612,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Hook for add-in action called when an upload succeeds.
 	 */
+	@Override
 	public WOActionResults uploadSucceeded() {
 		WOActionResults result = super.uploadSucceeded();
 		clearUploadProgress();
@@ -600,7 +658,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
   public Boolean clearUploadProgressOnSuccess() {
     if (_clearUploadProgressOnSuccess == null) {
       _clearUploadProgressOnSuccess = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.clearUploadProgressOnSuccess), Boolean.FALSE);
-      System.out.println("clearUploadProgressOnSuccess: " + _clearUploadProgressOnSuccess);
     }
     return _clearUploadProgressOnSuccess;
   }
@@ -619,13 +676,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public Integer progressAmount() {
 		Integer amount = null;
-		AjaxUploadProgress progress = this.uploadProgress();
+		AjaxUploadProgress progress = uploadProgress();
 		if (progress != null) {
 			if (!progress.isSucceeded()) {
 				int percent = (int)(progress.percentage() * 100);
-				amount = new Integer(percent);
+				amount = Integer.valueOf(percent);
 			} else {
-				amount = new Integer(100);
+				amount = Integer.valueOf(100);
 			}
 		}
 		return amount;
@@ -656,28 +713,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	}
 	
 	/**
-	 * Utility to return string value for binding or default value if no value is found
-	 * only really needed to support < WO5.4
-	 * @param key
-	 * @param defaultValue
-	 * @return value for binding or defaultValue
-	 */
-	private String stringValueForBinding(String key, String defaultValue) {
-		String result = (String) valueForBinding(key);
-		if (result == null) {
-			result = defaultValue;
-		}
-		return result;
-	}
-	
-	/**
 	 * Utility to return localized value from stringValueForBinding
 	 * @param key
 	 * @param defaultValue
 	 * @return localized value of binding key or defaultValue
 	 */
 	private String localizedStringForBinding(String key, String defaultValue) {
-		return localizedString(stringValueForBinding(key, defaultValue));
+		return localizedString(valueForStringBinding(key, defaultValue));
 	}
 	
 	/**
@@ -685,6 +727,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return string value for 'uploadLabel' binding
 	 */
+	@Override
 	public String uploadLabel() {
 		if (_uploadLabel == null) {
 			_uploadLabel = localizedStringForBinding(Keys.uploadLabel, "Upload");
@@ -735,7 +778,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String selectFileButtonClass() {
 		if (_selectFileButtonClass == null) {
-			_selectFileButtonClass = stringValueForBinding(Keys.selectFileButtonClass, "Button ObjButton SelectFileObjButton");
+			_selectFileButtonClass = valueForStringBinding(Keys.selectFileButtonClass, "Button ObjButton SelectFileObjButton");
 		}
 		return _selectFileButtonClass;
 	}
@@ -747,7 +790,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String uploadButtonClass() {
 		if (_uploadButtonClass == null) {
-			_uploadButtonClass = stringValueForBinding(Keys.uploadButtonClass, "Button ObjButton UploadFileObjButton");
+			_uploadButtonClass = valueForStringBinding(Keys.uploadButtonClass, "Button ObjButton UploadFileObjButton");
 		}
 		return _uploadButtonClass;
 	}
@@ -759,7 +802,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String cancelButtonClass() {
 		if (_cancelButtonClass == null) {
-			_cancelButtonClass = stringValueForBinding(Keys.cancelButtonClass, "Button ObjButton CancelUploadObjButton");
+			_cancelButtonClass = valueForStringBinding(Keys.cancelButtonClass, "Button ObjButton CancelUploadObjButton");
 		}
 		return _cancelButtonClass;
 	}
@@ -771,7 +814,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String clearButtonClass() {
 		if (_clearButtonClass == null) {
-			_clearButtonClass = stringValueForBinding(Keys.clearButtonClass, "Button ObjButton ClearUploadObjButton");
+			_clearButtonClass = valueForStringBinding(Keys.clearButtonClass, "Button ObjButton ClearUploadObjButton");
 		}
 		return _clearButtonClass;
 	}

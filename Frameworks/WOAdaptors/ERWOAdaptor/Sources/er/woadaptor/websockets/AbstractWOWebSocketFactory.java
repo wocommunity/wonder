@@ -20,7 +20,6 @@ public abstract class AbstractWOWebSocketFactory implements WebSocketFactory {
 	 * create method. Instead, override the {@link #create(Channel)} method
 	 * instead.
 	 */
-	@Override
 	public WebSocket create(Channel channel, HttpRequest req) {
 		ERXApplication._startRequest();
 		try {

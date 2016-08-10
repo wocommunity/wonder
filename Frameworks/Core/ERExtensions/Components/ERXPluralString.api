@@ -6,11 +6,11 @@
 		<binding name="count"/>
 		<binding name="showNumber" defaults="Boolean"/>
 
-		<validation message="&apos;count&apos; is a required binding">
+		<validation message="'count' is a required binding">
 			<unbound name="count"/>
 		</validation>
 
-		<validation message="&apos;value&apos; is a required binding">
+		<validation message="'value' is a required binding">
 			<unbound name="value"/>
 		</validation>
 	</wo>

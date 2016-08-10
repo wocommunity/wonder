@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERXHyperlinkResource" wocomponentcontent="true">
+    	<binding name="string"/>
+        <binding defaults="Boolean" name="disabled"/>
+        <binding name="linkResource"/>
+        <binding name="target"/>
+    	<binding name="style"/>
+        <binding defaults="Boolean" name="secure"/>
+        <binding name="queryDictionary"/>
+        <binding name="otherTagString"/>
+        <binding name="name"/>
+        <binding name="id"/>
+        <binding name="class"/>
+    <binding defaults="Actions" name="action"/>
+    </wo>
+</wodefinitions>

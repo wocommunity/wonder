@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>d2w</artifactId>
+		<version>7.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>wonder.d2w</groupId>
+	<artifactId>ERMootoolsDirectToWeb</artifactId>
+	<name>ERMootoolsDirectToWeb Framework</name>
+	<packaging>woframework</packaging>
+
+	<build>
+		<sourceDirectory>${project.basedir}/Sources</sourceDirectory>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.d2w</groupId>
+			<artifactId>ERModernDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+	</dependencies>
+</project>

@@ -48,7 +48,7 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	@Override
 	public void setConnectionDictionary(NSDictionary dictionary) {
 		if (dictionary == null) {
-			super.setConnectionDictionary((NSDictionary<String, Object>) NSDictionary.EmptyDictionary);
+			super.setConnectionDictionary(NSDictionary.EmptyDictionary);
 		} else {
 			super.setConnectionDictionary(dictionary);
 		}
@@ -91,7 +91,11 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	@Override
 	public void assertConnectionDictionaryIsValid() {
 		try {
-			File indexDirectory = new File(new URL((String) connectionDictionary().objectForKey("URL")).getFile());
+			String url = (String) connectionDictionary().objectForKey("URL");
+			if(url == null) {
+				throw new ERLuceneAdaptorException("URL can't be empty.");
+			}
+			File indexDirectory = new File(new URL(url).getFile());
 			_directory = FSDirectory.open(indexDirectory);
 		} catch (MalformedURLException e) {
 			throw new ERLuceneAdaptorException("Open Directory failed: " + e.getMessage(), e);
@@ -131,6 +135,7 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	}
 
 	// MS: This has to return null to prevent a stack overflow in 5.4.
+	@Override
 	public EOSynchronizationFactory schemaSynchronizationFactory() {
 		return null;
 	}

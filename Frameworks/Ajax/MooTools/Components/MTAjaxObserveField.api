@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxObserveField" wocomponentcontent="true">    <binding name="action"/>
+        <binding name="elementName"/>
+        <binding name="evalScripts"/>
+        <binding name="fullSubmit"/>
+        <binding name="id"/>
+        <binding name="observeDelay"/>
+        <binding name="observeFieldFrequency"/>
+        <binding name="observeFieldID"/>
+        <binding name="onBeforeSubmit"/>
+        <binding name="onComplete"/>
+        <binding name="onException"/>
+        <binding name="onFailure"/>
+        <binding name="onLoading"/>
+        <binding name="onSuccess"/>
+        <binding name="updateContainerID"/>
+    <binding name="onCancel"/>
+    <binding name="onRequest"/>
+    <binding name="async"/>
+    <binding name="useSpinner"/>
+        <binding name="spinnerTarget"/>
+        <binding name="spinnerOptions"/>
+    </wo>
+</wodefinitions>

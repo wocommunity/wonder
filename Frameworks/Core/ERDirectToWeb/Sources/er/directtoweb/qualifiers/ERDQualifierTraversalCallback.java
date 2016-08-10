@@ -17,7 +17,7 @@ import com.webobjects.eocontrol.EOOrQualifier;
 /**
  * Basic utility method used when traversing graphs
  * of qualifiers. This callback adds qualifiers from
- * D2W. See the class {@link er.extensions.ERXQualifierTraversal}.
+ * D2W. See the class {@link er.extensions.qualifiers.ERXQualifierTraversal}.
  */
 public class ERDQualifierTraversalCallback {
 

@@ -24,6 +24,7 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 	private EOEditingContext ec;
 	private Company co;
 
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
@@ -32,6 +33,7 @@ public class ERXKeyGlobalIDTest extends ERXTestCase {
 		ec.saveChanges();
 	}
 
+	@Override
 	public void tearDown() throws Exception {
 		super.tearDown();
 

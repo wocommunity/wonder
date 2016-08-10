@@ -1,0 +1,48 @@
+<wo:Main pageTitle = "$pageTitle">
+
+	<style type = "text/css">
+	
+		.redBackground {
+			display: block;
+			background-color: #F00;
+			border: 1px solid #000;
+			height: 20px;
+		}
+		
+		.greenBackground {
+			background-color: #6ec23e;
+			border: 4px dashed #F00;
+			height: 100px;
+		}
+
+	</style>
+
+	<h2>Ajax Update Link - Various Examples of Ajax Update Link</h2>
+	<hr/>
+	<p>These examples demonstrate AUL and the differences between Scriptaculous Effects and Various MooTools Fx</p>
+	<p>Check out the MooTools demo effects and documentation.</p>
+
+	<div id = "links">
+		<wo name = "SimpleMTAUL">Update Time (simple)</wo>
+		<wo name = "SimpleMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo><br/>
+		<hr/>
+		<wo name = "ConfirmMTAUL">Update Time (confirm)</wo>
+		<wo name = "ConfirmMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo><br/>
+		<hr/>
+		<wo name = "HighlightMTAUL">Update Time (highlight effect)</wo>
+		<wo name = "HighlighMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo>	
+		<hr/>
+		<wo name = "SlideMTAUL">Update Time (slide effect)</wo>
+		<wo name = "SlideMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo>	
+		<hr/>
+		<wo name = "TweenMTAUL">Update Time (tween - fade out/in)</wo>
+		<wo name = "TweenMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo><br/>
+		<hr/>
+		<wo name = "MorphMTAUL">Update Time (css morph)</wo>
+		<wo name = "MorphMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo><br/>
+		<hr/>
+		<wo name = "SpinnerMTAUL">Update Time (spinner)</wo>
+		<wo name = "SpinnerMTAUC"><wo:str value = "$now" dateformat = "%H:%M:%S" /></wo><br/>
+	</div>
+
+</wo:Main>

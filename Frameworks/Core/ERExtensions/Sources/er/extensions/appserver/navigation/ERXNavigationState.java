@@ -6,9 +6,11 @@
 //
 package er.extensions.appserver.navigation;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -18,10 +20,15 @@ import com.webobjects.foundation.NSRange;
 import er.extensions.foundation.ERXValueUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
-public class ERXNavigationState {
+public class ERXNavigationState implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXNavigationState.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigationState.class);
     
     protected NSArray _additionalState;
     protected NSArray _state;
@@ -42,8 +49,7 @@ public class ERXNavigationState {
     }
 
     public void setAdditionalState(NSArray value) {
-        if (log.isDebugEnabled())
-            log.debug("Setting additional navigation state: " + value);
+        log.debug("Setting additional navigation state: {}", value);
         _additionalState = value;
     }
 
@@ -58,18 +64,17 @@ public class ERXNavigationState {
             int index = currentNavigationLevel - 1;
             int length = navCount - currentNavigationLevel + 1;
             NSRange range = new NSRange(index, length);
-            log.debug("Range: " + range + " current: " + currentNavigationLevel + " navCount: " + navCount);
+            log.debug("Range: {} current: {} navCount: {}", range, currentNavigationLevel, navCount);
             itmesToBeShown = state().subarrayWithRange(range);
 
         }
-        log.debug("Nav state: " + state() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
+        log.debug("Nav state: {} current nav level: {} items: {}", state(), currentNavigationLevel, itmesToBeShown);
         return itmesToBeShown != null ? itmesToBeShown : NSArray.EmptyArray;
     }
 
     // Anytime we are setting the absolute we reset the relative.
     public void setState(NSArray navigationState) {
-        if (log.isDebugEnabled())
-            log.debug("Setting Navigation State: " + navigationState);
+        log.debug("Setting Navigation State: {}", navigationState);
         _state = navigationState;
         _additionalState = null;
     }
@@ -79,8 +84,8 @@ public class ERXNavigationState {
         }
     }
     public String stateAsString() {
-        if (this.state() != null) {
-            return this.state().componentsJoinedByString(".");
+        if (state() != null) {
+            return state().componentsJoinedByString(".");
         }
         return null;
     }
@@ -97,7 +102,7 @@ public class ERXNavigationState {
                 navState.addObject(state);
             setState(navState);
         } else {
-            log.error("Attempting to set the state: " + state + " for a negative level: " + level);
+            log.error("Attempting to set the state: {} for a negative level: {}", state, level);
         }
     }
 
@@ -111,9 +116,8 @@ public class ERXNavigationState {
             levelRoot = ERXNavigationManager.manager().rootNavigationItem();
         } else if (state().count() > level - 2) {
             levelRoot = ERXNavigationManager.manager().navigationItemForName(level(level - 2));
-            if (log.isDebugEnabled())
-                log.debug("Root name for level: " + (level - 2) + " state: " + state() + "root: "
-                          + (levelRoot != null ? levelRoot.name() : "<NULL>"));
+            log.debug("Root name for level: {} state: {} root: {}", level - 2, state(),
+                      (levelRoot != null ? levelRoot.name() : "<NULL>"));
         }
         NSArray children = null;
         if (levelRoot != null) {
@@ -135,13 +139,16 @@ public class ERXNavigationState {
                     if (o != null && o instanceof NSArray)
                         children = (NSArray)o;
                     else if (o != null && o instanceof String) {
-                        children = (NSArray)levelRoot.childrenChoices().objectForKey((String)o);
+                        children = (NSArray)levelRoot.childrenChoices().objectForKey(o);
                         if (children == null)
-                            log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
-                                     + " couldn't find children for choice key: " + (String)o);
+                            log.warn("For nav core object: {} and child binding: {} couldn't find children for choice key: {}",
+                                    levelRoot, levelRoot.childrenBinding(), o);
+                    } else if (o instanceof Boolean) {
+                    	String s = Boolean.toString((Boolean)o);
+                    	children = (NSArray)levelRoot.childrenChoices().objectForKey(s);
                     } else {
-                        log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
-                                 + " recieved binding object: " + o);
+                        log.warn("For nav core object: {} and child binding: {} recieved binding object: {}",
+                                levelRoot, levelRoot.childrenBinding(), o);
                     }
                 }
             }
@@ -156,13 +163,14 @@ public class ERXNavigationState {
                 if (item != null)
                     childNavItems.addObject(item);
                 else
-                    log.warn("Unable to find navigation item for name: " + childName);
+                    log.warn("Unable to find navigation item for name: {}", childName);
             }
             children = childNavItems;
         }
         return children;
     }
 
+    @Override
     public String toString() {
         return "\"" + stateAsString() + "\"";
     }

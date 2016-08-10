@@ -17,6 +17,7 @@ public class WOStats extends WODirectAction {
         super(aRequest);
     }
     
+    @Override
     public WOActionResults defaultAction()  {
         return pageWithName("WOStatsPage");
     }

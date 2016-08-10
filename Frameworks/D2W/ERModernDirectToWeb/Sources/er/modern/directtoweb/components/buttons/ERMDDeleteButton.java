@@ -1,12 +1,16 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EODetailDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -38,14 +42,11 @@ import er.extensions.localization.ERXLocalizer;
  * @d2wKey confirmDeleteMessage
  *
  * @author davidleber
- * @project ERModernDirectToWeb
  */
-
 public class ERMDDeleteButton extends ERMDActionButton {
 	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERMDDeleteButton.class);
-	
+    private static final long serialVersionUID = 1L;
+
 	public final static String DisplayGroupObjectDeleted = "DisplayGroupObjectDeleted";
 	
 	public interface Keys extends ERMDActionButton.Keys {
@@ -111,17 +112,38 @@ public class ERMDDeleteButton extends ERMDActionButton {
      * in-line confirmation dialog. Calls saveChanges on the parent ec if the finalCommit flag is true.
      */
     public WOActionResults deleteObjectWithFinalCommit(boolean finalCommit) {
-    	dataSource().deleteObject(object());
     	EOEnterpriseObject obj = (EOEnterpriseObject)d2wContext().valueForKey(Keys.objectPendingDeletion);
-    	obj.editingContext().deleteObject(obj);
-    	
+        EODataSource ds = dataSource();
+        
+        // check whether the relationship is marked "owns destination"
+        boolean isOwnsDestination = false;
+        if (ds != null && ds instanceof EODetailDataSource) {
+            EODetailDataSource dds = (EODetailDataSource) ds;
+            EOClassDescription masterClassDescription = dds.masterClassDescription();
+            isOwnsDestination = masterClassDescription
+                    .ownsDestinationObjectsForRelationshipKey(dds.detailKey());
+        }
+        
     	try {
-	    	obj.editingContext().saveChanges();
+    	    // with EODetailDatasource, calling deleteObject
+    	    // will only remove the object from the relationship
+    	    ds.deleteObject(object());
+
+    	    // for "owns destination" relationships, the following would
+    	    // fail as the object will already be marked as deleted in the
+    	    // parent EC
+            if (!isOwnsDestination) {
+                // actually delete the object in the nested EC
+                obj.editingContext().deleteObject(obj);
+                obj.editingContext().saveChanges();
+            } 
+	    	
 	    	if (displayGroup() != null && displayGroup().displayedObjects().count() == 0) {
 	    		displayGroup().displayPreviousBatch();
 	    	}
-	    	if (finalCommit) { // if we are editing, then don't save the parent ec.
-	    		object().editingContext().saveChanges();
+            if (finalCommit && !ERXEOControlUtilities.isNewObject(object())) {
+                // if we are editing a new object, then don't save
+	    	    object().editingContext().saveChanges();
 	    	}
 	    	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
 	    	postDeleteNotification();
@@ -146,7 +168,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
      * Utility method to post the delete notification to the parent component
      */
     public void postDeleteNotification() {
-    	Object obj = this.parentD2WPage();
+    	Object obj = parentD2WPage();
     	String OBJECT_KEY = "object";
     	NSMutableDictionary<String, Object> userInfo = new NSMutableDictionary<String, Object>(obj, OBJECT_KEY);
 		if (dataSource() instanceof EODetailDataSource) {
@@ -298,4 +320,15 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	return _dialogMessage;
     }
 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		EOEnterpriseObject eo = (EOEnterpriseObject) d2wContext().valueForKey(Keys.objectPendingDeletion);
+		out.writeObject(eo);		
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		EOEnterpriseObject eo = (EOEnterpriseObject) in.readObject();
+		d2wContext().takeValueForKey(eo, Keys.objectPendingDeletion);
+	}
 }

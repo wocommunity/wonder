@@ -1,5 +1,8 @@
 package com.secretpal.components.group;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.secretpal.SPUtilities;
 import com.secretpal.components.application.SPPage;
 import com.secretpal.model.SPEvent;
@@ -13,6 +16,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXEC;
 
 public class SPGroupEditPage extends SPPage {
+  private static final Logger log = LoggerFactory.getLogger(SPUtilities.class);
   private SPGroup _group;
   public SPMembership _membership;
   public String _inviteEmailAddresses;
@@ -104,7 +108,7 @@ public class SPGroupEditPage extends SPPage {
     catch (Exception e) {
       localMembership.person().setEmailDeliveryFailure(Boolean.TRUE);
       session().errors().addNotice("Failed to send invitation to '" + localMembership.personName() + "': " + e.getMessage());
-      SPUtilities.log.error("Failed to send invitation to '" + localMembership.personName() + "'.", e);
+      log.error("Failed to send invitation to '{}'.", localMembership.personName(), e);
     }
     return null;
   }

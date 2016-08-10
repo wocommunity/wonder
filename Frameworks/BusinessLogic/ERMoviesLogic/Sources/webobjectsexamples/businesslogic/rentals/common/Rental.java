@@ -1,7 +1,7 @@
 /*
- * Rental.java [JavaBusinessLogic Project] © Copyright 2005 Apple Computer, Inc. All rights reserved. IMPORTANT: This Apple software is supplied to you by Apple Computer, Inc. (“Apple”) in consideration of your agreement to the following terms, and your use, installation, modification or
+ * Rental.java [JavaBusinessLogic Project] ¬© Copyright 2005 Apple Computer, Inc. All rights reserved. IMPORTANT: This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or
  * redistribution of this Apple software constitutes acceptance of these terms. If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software. In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants
- * you a personal, non-exclusive license, under Apple’s copyrights in this original Apple software (the “Apple Software”), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software
+ * you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software
  * in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software. Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the
  * Apple Software without specific prior written permission from Apple. Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other
  * works in which the Apple Software may be incorporated. The Apple Software is provided by Apple on an "AS IS" basis. APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
@@ -13,29 +13,19 @@
 package webobjectsexamples.businesslogic.rentals.common;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Rental extends EOGenericRecord {
-	private static final long	serialVersionUID		= -6572273760378405850L;
+public class Rental extends _Rental {
 
-	public static final String	CustomerKey				= "customer";
+    private static final long serialVersionUID = 1L;
 
-	public static final String	DateOutKey				= "dateOut";
+    public static final String  IsOutKey                = "isOut";
 
-	public static final String	DateReturnedKey			= "dateReturned";
+    public static final String  IsOverdueKey            = "isOverdue";
 
-	public static final String	FeesKey					= "fees";
-
-	public static final String	UnitKey					= "unit";
-
-	public static final String	IsOutKey				= "isOut";
-
-	public static final String	IsOverdueKey			= "isOverdue";
-
-	private static final String	_CheckOutLengthKeyPath	= "unit.video.rentalTerms.checkOutLength";
+    private static final String	_CheckOutLengthKeyPath	= "unit.video.rentalTerms.checkOutLength";
 
 	public Rental() {
 		super();
@@ -56,30 +46,6 @@ public class Rental extends EOGenericRecord {
 			customer.validateForSave();
 		}
 		super.validateForSave();
-	}
-
-	public Customer customer() {
-		return (Customer) (storedValueForKey(CustomerKey));
-	}
-
-	public NSTimestamp dateOut() {
-		return (NSTimestamp) (storedValueForKey(DateOutKey));
-	}
-
-	public void setDateOut(NSTimestamp value) {
-		takeStoredValueForKey(value, DateOutKey);
-	}
-
-	public NSTimestamp dateReturned() {
-		return (NSTimestamp) (storedValueForKey(DateReturnedKey));
-	}
-
-	public void setDateReturned(NSTimestamp value) {
-		takeStoredValueForKey(value, DateReturnedKey);
-	}
-
-	public NSArray fees() {
-		return (NSArray) (storedValueForKey(FeesKey));
 	}
 
 	public NSTimestamp dateDue() {
@@ -113,7 +79,7 @@ public class Rental extends EOGenericRecord {
 
 	public void feePaid() {
 		if (dateReturned() != null) {
-			NSArray fees = fees();
+			NSArray<Fee> fees = fees();
 			if (fees != null) {
 				int count = fees.count();
 				for (int i = 0; i < count; i++) {
@@ -137,7 +103,7 @@ public class Rental extends EOGenericRecord {
 			Fee fee = new Fee(dateDue(), editingContext);
 			editingContext.insertObject(fee);
 			// manipulate relationship after inserting object
-			addObjectToBothSidesOfRelationshipWithKey(fee, FeesKey);
+			addObjectToBothSidesOfRelationshipWithKey(fee, FEES_KEY);
 		}
 	}
 }

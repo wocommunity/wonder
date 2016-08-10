@@ -43,6 +43,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey pageConfiguration
  */
 public class ERD2WPickTypePage extends ERD2WPage implements ERDPickPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WPickTypePage(WOContext context) {
         super(context);
@@ -134,6 +140,7 @@ public class ERD2WPickTypePage extends ERD2WPage implements ERDPickPageInterface
         return displayName != null ? displayName : " <null> ";
     }
 
+    @Override
     public WOComponent nextPage() {
         if (selections.count() == 0 && selectionManditory()) {
             errorMessage = choiceErrorMessage() != null ? choiceErrorMessage() : "Please make a selection before continuing";

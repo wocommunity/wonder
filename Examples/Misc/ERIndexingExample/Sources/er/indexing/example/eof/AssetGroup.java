@@ -1,12 +1,8 @@
 package er.indexing.example.eof;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
 
 public class AssetGroup extends _AssetGroup {
-
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AssetGroup.class);
-
     public static final AssetGroupClazz clazz = new AssetGroupClazz();
     public static class AssetGroupClazz extends _AssetGroup._AssetGroupClazz {
         /* more clazz methods here */
@@ -18,6 +14,7 @@ public class AssetGroup extends _AssetGroup {
      * Initializes the EO. This is called when an EO is created, not when it is 
      * inserted into an EC.
      */
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

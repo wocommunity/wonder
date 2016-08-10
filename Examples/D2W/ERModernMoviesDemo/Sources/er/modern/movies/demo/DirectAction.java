@@ -16,7 +16,7 @@ public class DirectAction extends ERD2WDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 	
     /**
@@ -26,6 +26,7 @@ public class DirectAction extends ERD2WDirectAction {
      * @param pageConfiguration
      * @return
      */
+    @Override
     protected boolean allowPageConfiguration(String pageConfiguration) {
         return false;
     }

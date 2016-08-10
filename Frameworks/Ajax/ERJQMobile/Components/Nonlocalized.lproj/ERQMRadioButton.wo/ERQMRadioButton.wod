@@ -1,0 +1,13 @@
+RBChecked : WORadioButton {
+	id = javaScriptElementID;
+	name = ^name;
+	checked = ^checked;
+	otherTagString = otherTagString;
+}
+RBValue : WORadioButton {
+	id = javaScriptElementID;
+	name = ^name;
+	selection = ^selection;
+	value = ^value;
+	otherTagString = otherTagString;
+}

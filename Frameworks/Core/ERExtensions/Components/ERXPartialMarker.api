@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="ERXPartialWrapper.java" wocomponentcontent="true">
+		<binding name="key"/>
+	<validation message="'key' is a required binding.">
+            <unbound name="key"/>
+        </validation>
+    </wo>
+</wodefinitions>

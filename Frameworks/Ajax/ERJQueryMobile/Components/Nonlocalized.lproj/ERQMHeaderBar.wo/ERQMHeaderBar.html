@@ -1,0 +1,14 @@
+<wo:genericContainer elementName="div" data-role="header" data-position="$dataPosition" data-theme="$^theme">
+  <wo:if condition="$^hasBackButton">
+  	<webobject name="HasBackButtonAnAction">
+  		<webobject name="BackLink"><wo:str value="$^backButton-title" valueWhenEmpty="$localizer.ERJQueryMobile.Back" /></webobject>
+  	</webobject><webobject name="HasNoBackButtonAnAction">
+		<wo:hyperlink href="#" data-theme="$^backButton-theme" data-icon="arrow-l" data-rel="back" data-iconpos = "$^backButton-iconpos"><wo:str value="$^backButton-title" valueWhenEmpty="$localizer.ERJQueryMobile.Back" /></wo:hyperlink>
+  	</webobject>
+  </wo:if>
+  <h1><wo:str value="$^string" /></h1>
+  <wo:if condition="$hasAction"><webobject name="ACTION" /></wo:if>
+  <wo:else>
+    <wo:if condition="$hasLinkResource"><webobject name="LINK" /></wo:if>
+  </wo:else>
+</wo:genericContainer>

@@ -3,8 +3,6 @@ package er.ajax;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
@@ -22,8 +20,8 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * You should open an Ajax.Request, implement onInteractive: and the do
  * something useful when you get new data. Changes should be pushed with
  * push(sessionID, someString);
- * <p>
- * TODO:
+ * <h3>TODO:</h3>
+ * <ul>
  * <li>currently the request stays open even when the client closed it (which is bad)
  * <li>implement a boundary scheme to tell when a "message" is complete. This
  * means we need a special Ajax.Request that does it.
@@ -31,14 +29,13 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * notifications).
  * <li>ask Frank about his EO layer
  * <li>use the request handler path as a "topic", so we can have more than one on a page.
+ * </ul>
  * 
  * @author ak
  */
 public class AjaxPushRequestHandler extends WORequestHandler {
 
 	public static final String AjaxCometRequestHandlerKey = "push";
-
-	protected static Logger log = Logger.getLogger(AjaxPushRequestHandler.class);
 
 	private static ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>> responses = new ConcurrentHashMap<String, ConcurrentHashMap<String, ERXKeepAliveResponse>>();
 
@@ -67,6 +64,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 * 
 	 * @param request the request
 	 */
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		String sessionID = request.sessionID();
 		String name = request.requestHandlerPath();
@@ -147,7 +145,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	public static void push(String sessionID, String name, String message) {
 		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
 		if (response != null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append(message.length());
 			sb.append(':');
 			response.push(sb.toString());
@@ -166,7 +164,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	public static void push(String sessionID, String name, NSData message) {
 		ERXKeepAliveResponse response = responseForSessionIDNamed(sessionID, name);
 		if (response != null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append(message.length());
 			sb.append(':');
 			response.push(sb.toString());

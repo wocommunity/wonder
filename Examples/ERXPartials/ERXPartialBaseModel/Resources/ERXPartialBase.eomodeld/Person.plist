@@ -1,0 +1,43 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = genderTypeID; 
+            name = genderTypeID; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (firstName, genderTypeID, id, lastName); 
+    className = "er.example.erxpartials.model.Person"; 
+    classProperties = (firstName, genderType, lastName); 
+    externalName = Person; 
+    fetchSpecificationDictionary = {}; 
+    name = Person; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = GenderType; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = genderTypeID; }); 
+            name = genderType; 
+        }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {parentClassName = "er.extensions.partials.ERXPartialGenericRecord"; }; 
+    }; 
+}

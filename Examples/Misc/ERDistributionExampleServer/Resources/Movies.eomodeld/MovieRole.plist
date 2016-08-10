@@ -1,0 +1,55 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            name = movieID; 
+            precision = 9; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "ROLE_NAME"; 
+            name = roleName; 
+            prototypeName = varchar50; 
+            width = 30; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            name = talentID; 
+            precision = 9; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID, movieID, roleName); 
+    className = "er.distribution.example.server.eo.MovieRole"; 
+    classProperties = (roleName, movie, talent); 
+    externalName = "MOVIE_ROLE"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (roleName, movie, talent); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.MovieRole"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = MovieRole; 
+    primaryKeyAttributes = (movieID, talentID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }, 
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}

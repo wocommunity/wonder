@@ -26,11 +26,13 @@ public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
         super(context);
     }
 
+    @Override
     public String defaultRowspan () {
         return ""+(currentSection()!=null && currentSection().keys!=null ? currentSection().keys.count() : 0)+2;
     }
 
 
+    @Override
     public WOComponent printerFriendlyVersion() {
         WOComponent result= ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
@@ -43,6 +45,7 @@ public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
         return "/nsi/section"+name+".gif";
     }
 
+    @Override
     public String saveButtonFileName() {
         return object()!=null && object().editingContext()!=null ?
         object().editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator ? "/nsi/buttonSave.gif" : "/nsi/buttonOK.gif" :
@@ -56,9 +59,12 @@ public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 
     public String cancelButtonFileName() { return shouldShowReturnButton() ? "/nsi/buttonReturn.gif" : "/nsi/buttonCancel.gif"; }
 
+    @Override
     public boolean useTabImages() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useTabImages")); }
+    @Override
     public boolean useTabSectionImages() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useTabSectionImages")); }
     
+    @Override
     public String tabComponentName() {
 	return useTabImages() ? IMAGE_TAB_COMPONENT_NAME : TEXT_TAB_COMPONENT_NAME;
     }

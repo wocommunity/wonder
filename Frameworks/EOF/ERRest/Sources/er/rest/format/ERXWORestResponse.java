@@ -25,4 +25,9 @@ public class ERXWORestResponse implements IERXRestResponse {
 	public void appendContentData(NSData data) {
 		_response.appendContentData(data);
 	}
+
+	@Override
+	public void setContentEncoding(String encoding) {
+		_response.setContentEncoding(encoding);
+	}
 }

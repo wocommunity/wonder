@@ -7,7 +7,6 @@ import com.webobjects.appserver.WOContext;
  * A page to monitor app processes, especially background processes
  *
  * @author kieran
- *
  */
 public class AppMonitor extends WOComponent {
     public AppMonitor(WOContext context) {

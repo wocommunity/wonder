@@ -104,6 +104,7 @@ int init_adaptor(struct _strtbl *options)
 {
     const char *logPath = NULL;
     const char *logLevel = NULL;
+    const char *logFlag = NULL;
     const char *stateFile = DEFAULT_STATE_FILE;
     const char *s;
     char *sharedS;
@@ -119,10 +120,11 @@ int init_adaptor(struct _strtbl *options)
     if (options) {
         logPath = st_valueFor(options, WOLOGPATH);
         logLevel = st_valueFor(options, WOLOGLEVEL);
+        logFlag = st_valueFor(options, WOLOGFLAG);
     }
 
     /* We initialize the logging subsystem early on, in order to get the log messages ... */
-    WOLog_init(logPath, logLevel);
+    WOLog_init(logPath, logFlag, logLevel);
 
     /* Initialize the string stuff early too, so we can log the config dictionary. */
     if (ret == 0)
@@ -286,7 +288,7 @@ int WOReadKeyFromConfiguration(const char *keyName, char *buffer, int bufferSize
                          &maxValueNameLength, &maxValueDataLength,
                          &securityDescriptor, &fileTime );
         memset(buffer,0,bufferSize);
-        result = RegQueryValueEx(newHandle, keyName, 0, &type, buffer, (LPDWORD)&bufferSize);
+        result = RegQueryValueEx(newHandle, keyName, 0, &type, (LPBYTE)buffer, (LPDWORD)&bufferSize);
         RegCloseKey( HKEY_LOCAL_MACHINE );	/* close the registry */
     }
 
@@ -322,7 +324,7 @@ const char *root()
     return _root;
 }
 
-#ifndef NSAPI_PUBLIC
+#if !defined(NSAPI_PUBLIC) && !defined(MINGW)
 /*
  * Provide our own strcasecmp unless we are building NSAPI.
  */

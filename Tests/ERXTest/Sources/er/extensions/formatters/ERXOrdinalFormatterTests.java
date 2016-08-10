@@ -1,8 +1,7 @@
 package er.extensions.formatters;
 
-import junit.framework.*;
-
-import er.erxtest.*;
+import junit.framework.Assert;
+import er.erxtest.ERXTestCase;
 
 
 /**

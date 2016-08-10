@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMButtonExternal" wocomponentcontent="true">
+        <binding name="id"/>
+        <binding name="string"/>
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Boolean" name="disabled"/>
+        <binding name="href"/>
+        <binding name="class"/>
+        <binding defaults="Boolean" name="isButton"/>
+        <binding name="linkResource"/>
+        <binding defaults="Boolean" name="data-corners"/>
+        <binding name="data-icon"/>
+        <binding name="data-iconpos"/>
+        <binding defaults="Boolean" name="data-iconshadow"/>
+        <binding defaults="Boolean" name="data-inline"/>
+        <binding defaults="Boolean" name="data-mini"/>
+        <binding defaults="Boolean" name="data-shadow"/>
+        <binding name="data-theme"/>
+        <binding name="otherTagString"/>
+        <binding defaults="Boolean" name="data-ajax"/>
+        <binding name="data-direction"/>
+        <binding defaults="Boolean" name="data-dom-cache"/>
+        <binding defaults="Boolean" name="data-prefetch"/>
+        <binding name="data-transition"/>
+        <binding name="data-position-to"/>
+    <binding name="queryDictionary"/>
+    </wo>
+</wodefinitions>

@@ -4,7 +4,7 @@
 
 		<binding name="localContext"/>
 
-		<validation message="&apos;localContext&apos; is a required binding">
+		<validation message="'localContext' is a required binding">
 			<unbound name="localContext"/>
 		</validation>
 	</wo>

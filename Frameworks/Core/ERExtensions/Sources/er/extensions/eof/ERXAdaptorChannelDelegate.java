@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseChannel;
@@ -23,16 +24,17 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * and the entity name matches the regular expression
  * <code>er.extensions.ERXSQLExpressionTracker.trace.entityMatchPattern</code>
  * then the SQL expression is logged together with the time used and the
- * parameters. <br />
+ * parameters.
+ * <p>
  * NOTE: To get patched into EOF, this class registers itself for the
  * <code>EODatabaseContext.DatabaseChannelNeededNotification</code>
  * notification and creates a new channel. If you would like to handle creation
  * of the channel yourself *and* you need the logging feature, you need to:
  * <ul>
  * <li>set the er.extensions.ERXAdaptorChannelDelegate.enabled=false in your
- * properties, which will prevent creation of the channel here
+ * properties, which will prevent creation of the channel here</li>
  * <li>create the channel yourself and set the delegate to
- * {@link new ERXAdaptorChannelDelegate()}
+ * {@link new ERXAdaptorChannelDelegate()}</li>
  * </ul>
  * otherwise you just need to set
  * er.extensions.ERXAdaptorChannelDelegate.enabled=true
@@ -40,8 +42,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * @author ak
  */
 public class ERXAdaptorChannelDelegate {
-
-	private static Logger log = Logger.getLogger(ERXAdaptorChannelDelegate.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXAdaptorChannelDelegate.class);
 
     private long _lastMilliseconds;
     
@@ -67,14 +68,14 @@ public class ERXAdaptorChannelDelegate {
     }
 
 	public void adaptorChannelDidEvaluateExpression(EOAdaptorChannel channel, EOSQLExpression expression) {
-		if (this.collectLastStatements()) {
+		if (collectLastStatements()) {
 			// this collects the last 10 statements executed for dumping them  
 			if (_lastStatements == null) {
 				_lastStatements = new LinkedList<String>();
 			}
 			_lastStatements.addLast(ERXEOAccessUtilities.createLogString(channel, expression, System.currentTimeMillis() - _lastMilliseconds));
 			
-			while (_lastStatements.size() > this.numberOfStatementsToCollect()) {
+			while (_lastStatements.size() > numberOfStatementsToCollect()) {
 				_lastStatements.removeFirst();
 			}
 		}
@@ -83,7 +84,7 @@ public class ERXAdaptorChannelDelegate {
 	
 	private int numberOfStatementsToCollect () {
 		if (_numberOfStatementsToCollect == null) {
-			_numberOfStatementsToCollect = new Integer (ERXProperties.intForKeyWithDefault("er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect", 10));
+			_numberOfStatementsToCollect = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect", 10));
 		}
 		return _numberOfStatementsToCollect.intValue();
 	}
@@ -120,16 +121,16 @@ public class ERXAdaptorChannelDelegate {
 	 * <code>er.extensions.ERXSQLExpressionTracker.collectLastStatements</code>
 	 * set to true to collect executed statements.
 	 */
-	public synchronized void dumpLastStatements () {
+	public synchronized void dumpLastStatements() {
 		log.info("******* dumping collected SQL statements *******");
-		if (this._lastStatements != null) {
+		if (_lastStatements != null) {
 			for (int i = 0; i < _lastStatements.size(); i++) {
-				log.info(_lastStatements.get(i));
+				log.info("{}", _lastStatements.get(i));
 			}
 		}
 		else {
 			log.info("No collected statements available.");
-			if (!this._collectLastStatements.booleanValue()) {
+			if (!_collectLastStatements.booleanValue()) {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
@@ -142,7 +143,7 @@ public class ERXAdaptorChannelDelegate {
 	 * @author cug - Jun 20, 2007
 	 * @return The last collected SQL statements.
 	 */
-	public LinkedList<String> lastStatements () {
-		return this._lastStatements;
+	public LinkedList<String> lastStatements() {
+		return _lastStatements;
 	}
 }

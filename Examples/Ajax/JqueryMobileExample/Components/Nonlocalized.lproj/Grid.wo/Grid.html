@@ -1,0 +1,78 @@
+<wo:JQPageWrapper title = "Grid">
+  <h1>Default HTML markup styling</h1>
+  <hr />
+  <h1>H1 Heading</h1>
+  <h2>H2 Heading</h2>
+  <h3>H3 Heading</h3>
+  <h4>H4 Heading</h4>
+  <h5>H5 Heading</h5>
+  <h6>H6 Heading</h6>
+  <p>This is a paragraph that contains 
+    <strong>strong</strong>, 
+    <em>emphasized</em>
+    and 
+    <a href = "#" class = "ui-link">linked</a>
+    text.</p>
+  <blockquote>How about some blockquote action with a 
+    <cite>cite</cite>
+  </blockquote>
+  <p>We add a few styles to 
+    <code>tables</code>
+    and 
+    <code>fieldsets</code>
+    to make them more legible, which are easily overridden with customs styles.</p>
+  <ul>
+    <li>Unordered list item 1</li>
+    <li>Unordered list item 1</li>
+  </ul>
+  <ol>
+    <li>Ordered list item 1</li>
+    <li>Ordered list item 1</li>
+  </ol>
+  <dl title = "Definition list">
+    <dt>Definition term</dt>
+    <dd>I'm the definition text</dd>
+    <dt>Definition term</dt>
+    <dd>I'm the definition text</dd>
+  </dl>
+  <h1>Layout grids</h1>
+  <hr />
+  <wo:ERQMGrid columnCount = "2">
+    <wo:ERQMGridBlock blockNumber = "1" data-theme = "a">
+      <strong>I'm Block A1</strong>
+      and text inside will wrap 
+    </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "2" data-theme = "b">
+      <strong>I'm Block B1</strong>
+      and text inside will wrap 
+    </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "1" data-theme = "a">
+      <strong>I'm Block A2</strong>
+      and text inside will wrap 
+    </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "2" data-theme = "b">
+      <strong>I'm Block B2</strong>
+      and text inside will wrap 
+    </wo:ERQMGridBlock>
+  </wo:ERQMGrid>
+  <wo:ERQMGrid columnCount = "2">
+    <wo:ERQMGridBlock blockNumber = "1"> <wo:ERQMButton linkResource = "da://default" string = "Cancel" data-theme = "c" /> </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "2"> <wo:ERQMButton linkResource = "da://default" string = "Submit" data-theme = "b" /> </wo:ERQMGridBlock>
+  </wo:ERQMGrid>
+  <h1>Collapsible content</h1>
+  <hr />
+  <wo:ERQMCollapsibleComponentContent string = "B" data-theme = "e" data-content-theme = "e" data-collapsed = "false">
+    <p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+    <wo:ERQMCollapsibleComponentContent string = "C" data-theme = "d" data-content-theme = "d" data-collapsed = "false">
+      <p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+    </wo:ERQMCollapsibleComponentContent>
+  </wo:ERQMCollapsibleComponentContent>
+  <wo:ERQMCollapsibleComponentContentGroup data-theme = "a" data-content-theme = "a">
+    <wo:ERQMCollapsibleComponentContent string = "A">
+      <p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+    </wo:ERQMCollapsibleComponentContent>
+    <wo:ERQMCollapsibleComponentContent string = "B">
+      <p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+    </wo:ERQMCollapsibleComponentContent>
+  </wo:ERQMCollapsibleComponentContentGroup>
+</wo:JQPageWrapper>

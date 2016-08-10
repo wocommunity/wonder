@@ -1,6 +1,6 @@
 package er.extensions.components._private;
 
-import java.io.IOException;
+import org.apache.commons.lang3.CharEncoding;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -46,15 +46,17 @@ public class ERXWOPasswordField extends WOInput {
     if (_value == null || !_value.isValueSettable()) {
       throw new WODynamicElementCreationException("<ERXWOPasswordField> 'value' attribute not present or is a constant.");
     }
-    _hiddenValue = (WOAssociation) _associations.removeObjectForKey("hiddenValue");
-    _hashValue = (WOAssociation) _associations.removeObjectForKey("hashValue");
-	_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+    _hiddenValue = _associations.removeObjectForKey("hiddenValue");
+    _hashValue = _associations.removeObjectForKey("hashValue");
+	_readonly = _associations.removeObjectForKey("readonly");
   }
 
+  @Override
   protected String type() {
     return "password";
   }
   
+  @Override
   protected boolean isDisabledInContext(WOContext context) {
   	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
   	return disabled != null && disabled.booleanValueInComponent(context.component());
@@ -64,9 +66,10 @@ public class ERXWOPasswordField extends WOInput {
   	return _readonly != null && _readonly.booleanValueInComponent(context.component());
   }
 
+  @Override
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
-    if (!isDisabledInContext(context) && context._wasFormSubmitted() && !isReadonlyInContext(context)) {
+    if (!isDisabledInContext(context) && context.wasFormSubmitted() && !isReadonlyInContext(context)) {
       String name = nameInContext(context, component);
       if (name != null) {
         String value = request.stringFormValueForKey(name);
@@ -75,7 +78,7 @@ public class ERXWOPasswordField extends WOInput {
           if (!value.equals(hiddenValue)) {
         	  boolean hashValue = (_hashValue != null && _hashValue.booleanValueInComponent(component));
         	  if (hashValue) {
-    			  value = ERXStringUtilities.md5Hex(value, "UTF-8");
+    			  value = ERXStringUtilities.md5Hex(value, CharEncoding.UTF_8);
         	  }
         	  _value.setValue(value, component);
           }
@@ -98,6 +101,7 @@ public class ERXWOPasswordField extends WOInput {
     return hiddenValue;
   }
 
+  @Override
   protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     String hiddenValue = hiddenValueInContext(context, component);
@@ -109,6 +113,7 @@ public class ERXWOPasswordField extends WOInput {
     }
   }
 
+  @Override
   protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
   }
 }

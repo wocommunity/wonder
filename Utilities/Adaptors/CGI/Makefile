@@ -2,7 +2,7 @@
 include ../make.config
 include ../Adaptor/make.preamble
 
-CFLAGS = -O2 -I../Adaptor $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DCGI
+CFLAGS += -O2 -I../Adaptor $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DCGI
 
 
 ifeq "MACOS" "$(OS)"
@@ -31,7 +31,7 @@ WebObjects${EXESUFFIX}: WebObjects.o ${COMMON_OBJFILES}
 	strip -S WebObjects${EXESUFFIX}
 else
 WebObjects${EXESUFFIX}: WebObjects.o ${COMMON_OBJFILES}
-	${CC} ${CFLAGS} ${LDFLAGS} -o WebObjects${EXESUFFIX} WebObjects.o ${COMMON_OBJFILES}
+	${CC} ${CFLAGS} ${LDFLAGS} -o WebObjects${EXESUFFIX} WebObjects.o ${COMMON_OBJFILES} ${LIBS}
 endif
 
 clean:

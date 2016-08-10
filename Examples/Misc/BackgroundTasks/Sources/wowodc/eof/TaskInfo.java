@@ -1,7 +1,5 @@
 package wowodc.eof;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -13,10 +11,6 @@ import er.extensions.eof.ERXQ;
 import er.extensions.eof.ERXUnmodeledToManyRelationship;
 
 public class TaskInfo extends _TaskInfo {
-	
-	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(TaskInfo.class);
-
 	// The first saved workflow state is after initial creation and prime check has been performed
 	public static String WORKFLOW_PROCESSING_PRIMES = "Processing Primes";
 	
@@ -156,5 +150,4 @@ public class TaskInfo extends _TaskInfo {
 	public void deleteAllResultItemsRelationships() {
 		resultItemsRelationship().deleteAllObjectsRelationships();
 	}
-	
 }

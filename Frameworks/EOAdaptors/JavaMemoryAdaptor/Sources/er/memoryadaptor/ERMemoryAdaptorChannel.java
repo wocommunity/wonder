@@ -35,11 +35,6 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     super(context);
     _fetchIndex = -1;
   }
-  
-  @Deprecated
-  public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
-    return adaptorContext()._newPrimaryKey(null, entity);
-  }
 
   @Override
   public ERMemoryAdaptorContext adaptorContext() {
@@ -128,7 +123,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   }
 
   @Override
-  public void selectAttributes(NSArray attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
+  public void selectAttributes(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
     if (entity == null) {
       throw new IllegalArgumentException("null entity.");
     }
@@ -141,7 +136,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
     try {
       _fetchIndex = 0;
-      _fetchedRows = store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
+      _fetchedRows = store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity, adaptorContext());
     }
     catch (EOGeneralAdaptorException e) {
       cancelFetch();

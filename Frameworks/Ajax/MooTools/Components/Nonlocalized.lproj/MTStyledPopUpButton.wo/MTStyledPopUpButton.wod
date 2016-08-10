@@ -1,0 +1,45 @@
+ID : WOString {
+	value = id;
+}
+
+Options : AjaxOptions {
+	options = createAjaxOptions;
+}
+
+SelectionPopUpButton : WOPopUpButton {
+	disabled = ^disabled;
+	displayString = ^displayString;
+	escapeHTML = ^escapeHTML;
+	id = id;
+	item = ^item;
+	list = ^list;
+	name = ^name;
+	noSelectionString = ^noSelectionString;
+	selection = ^selection;
+}
+
+SelectionNonNullConditional : WOConditional {
+	condition = selectionIsDefined;
+}
+
+SelectedValuePopUpButton : WOPopUpButton {
+	disabled = ^disabled;
+	displayString = ^displayString;
+	escapeHTML = ^escapeHTML;
+	id = id;
+	item = ^item;
+	list = ^list;
+	name = ^name;
+	noSelectionString = ^noSelectionString;
+	selectedValue = ^selectedValue;	
+	value = ^value;
+}
+
+SelectedValueNonNullConditional : WOConditional {
+	condition = selectedValueIsDefined;
+}
+
+ScriptContainer : WOGenericContainer {
+	elementName = "script";
+	type = "text/javascript";
+}

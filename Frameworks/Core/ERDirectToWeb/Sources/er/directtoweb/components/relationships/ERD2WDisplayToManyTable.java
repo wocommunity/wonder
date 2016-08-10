@@ -13,7 +13,8 @@ import com.webobjects.directtoweb.D2WDisplayToManyTable;
 import com.webobjects.directtoweb.InspectPageInterface;
 
 /**
- * Cleaned up some of the formatting on the original toMany table.<br />
+ * Cleaned up some of the formatting on the original toMany table.
+ * 
  * @d2wKey disabled
  * @d2wKey componentBorder
  * @d2wKey numCols
@@ -22,11 +23,18 @@ import com.webobjects.directtoweb.InspectPageInterface;
  * @d2wKey inspectConfigurationName
  */
 public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayToManyTable(WOContext context) {
         super(context);
     }
 
+    @Override
     public WOComponent inspectAction() {
         if(item!=null){
             String inspectConfigurationName=(String)d2wContext().valueForKey("inspectConfigurationName");

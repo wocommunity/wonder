@@ -1,6 +1,7 @@
 package webobjectsexamples.businesslogic.movies.common;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
@@ -9,7 +10,7 @@ import er.taggable.ERTaggable;
 import er.taggable.ERTaggableEntity;
 
 public class Movie extends _Movie {
-  private static Logger log = Logger.getLogger(Movie.class);
+  private static final Logger log = LoggerFactory.getLogger(Movie.class);
   
 	public ERTaggable<Movie> taggable() {
         return ERTaggable.taggable(this);
@@ -21,36 +22,32 @@ public class Movie extends _Movie {
     
     @SuppressWarnings("all")
     public String content() {
-    	if (log.isDebugEnabled()) {
-    		log.debug( "Movie.searchableContent: " + this.title() );
-    	}
-    	StringBuffer buffer = new StringBuffer();
+    	log.debug("Movie.searchableContent: {}", title());
+    	StringBuilder buffer = new StringBuilder();
     	
-    	buffer.append(this.title());
-    	buffer.append(" ");
+    	buffer.append(title());
+    	buffer.append(' ');
     	
-    	String studioName = (String)this.valueForKeyPath(Movie.STUDIO.dot(Studio.NameKey).toString());
+    	String studioName = (String)valueForKeyPath(Movie.STUDIO.dot(Studio.NameKey).toString());
     	if (studioName != null) {
     		buffer.append(studioName);
-    		buffer.append(" ");
+    		buffer.append(' ');
     	}
     	
-		NSArray directorNames = (NSArray)this.valueForKeyPath(Movie.DIRECTORS.dot("fullName").toString());
+		NSArray directorNames = (NSArray)valueForKeyPath(Movie.DIRECTORS.dot("fullName").toString());
 		if (directorNames != null && directorNames.count() > 0) {
 			buffer.append(directorNames.componentsJoinedByString(" "));
-			buffer.append(" ");
+			buffer.append(' ');
 		}
 		
-		NSArray talentNames = (NSArray)this.valueForKeyPath(Movie.ROLES.dot(MovieRole.TALENT).dot("fullName").toString());
+		NSArray talentNames = (NSArray)valueForKeyPath(Movie.ROLES.dot(MovieRole.TALENT).dot("fullName").toString());
 		if (talentNames != null && talentNames.count() > 0) {
 			String talentNamesString = talentNames.componentsJoinedByString(" ");
 			NSLog.out.appendln( "Movie.searchableContent: talent names: " + talentNamesString);
 			buffer.append(talentNamesString);
-			buffer.append(" ");
+			buffer.append(' ');
 		}
-		if (log.isDebugEnabled()) {
-			log.debug( "Movie.content: " + buffer );
-		}
+		log.debug( "Movie.content: {}", buffer );
     	return buffer.toString();
     }
 }

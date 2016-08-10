@@ -6,50 +6,70 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 
-import er.extensions.foundation.ERXStringUtilities;
-
 /**
- * Simple component that can convert a string that has
- * line breaks and tabs in it into an html string that
- * has <BR> and &nbsp instead. Very useful for preserving
- * line breaks that are typed into a WOTextBox.
- * <br/>
- * Synopsis:<br/>
+ * <p>
+ * Converts a string that has line breaks and tabs in it into a corresponding
+ * HTML string with <code>&lt;br /&gt;</code> and (five of)
+ * <code>&amp;nbsp;</code> instead. Useful, for example, for preserving line
+ * breaks that are typed into a {@code WOTextBox}. Note that this component
+ * renders its output via a {@code WOString} element with
+ * {@code escapeHTML=false}, which is a security risk if the value being
+ * rendered comes from an untrusted source.
+ * </p>
+ * 
+ * <h3>Synopsis</h3>
+ * <p>
  * value=<i>aString</i>;[valueWhenEmpty=<i>aString</i>;]
+ * </p>
  * 
  * @binding value string to be converted
- * @binding valueWhenEmpty if null or length of zero what to
- *		display
+ * @binding valueWhenEmpty what to display when <code>value</code> is null or
+ *          empty
  */
 public class ERXStringWithLineBreaks extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** holds the html-ified string */
+	/**
+	 * Holds the HTML-ified string
+	 */
     public String _value;
 
-    /**
-     * Public constructor
-     * @param context current context
-     */
+	/**
+	 * Constructor
+	 * 
+	 * @param context
+	 *            current context
+	 */
     public ERXStringWithLineBreaks(WOContext context) {
         super(context);
     }
     
-    /**
-     * Nulls out cached instance variable: _value
-     */
+	/**
+	 * Nulls out cached instance variable: _value
+	 */
+    @Override
     public void reset() {
         super.reset();
         _value = null;
     }
-    /**
-        * Converts '\r\n', '\n', '\r' into "&lt;br /&gt;" and
-     * converts '\t' into five non-breaking spaces.
-     * @return converts string bound to binding: <b>value</b>
-     * 		into html-ified line breaks.
-     */
+
+	/**
+	 * Converts '<code>\r\n</code>', '<code>\n</code>', '<code>\r</code>' into '
+	 * <code>&lt;br /&gt;</code>' and converts '<code>\t</code>' into five
+	 * non-breaking spaces.
+	 * 
+	 * @return converted string
+	 */
     // FIXME: Should use ERXSimpleHTMLFormatter
     public String value() {
         if (_value == null) {
@@ -65,19 +85,21 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
             result = (value instanceof String) ? (String)value : value.toString();
             result = WOMessage.stringByEscapingHTMLString(result);
             // FIXME: This could be optimized
-            result = ERXStringUtilities.replaceStringByStringInString("\r\n", "\r", result);
-            result = ERXStringUtilities.replaceStringByStringInString("\n", "\r", result);
-            result = ERXStringUtilities.replaceStringByStringInString("\r", br(), result);
-            result = ERXStringUtilities.replaceStringByStringInString("\t", tabs(), result);
+            result = StringUtils.replace(result, "\r\n", "\r");
+            result = StringUtils.replace(result, "\n", "\r");
+            result = StringUtils.replace(result, "\r", br());
+            result = StringUtils.replace(result, "\t", tabs());
         }
         return result;
     }
     
-    /**
-     * Set the value to be displayed.<br />
-     * This is useful when you want to return a string from a DirectAction for example for debugging purposes.
-     * @param newValue Object to display
-     */
+	/**
+	 * Sets the value to be displayed. This is useful when you want to return a
+	 * string from a DirectAction, for example, for debugging purposes.
+	 * 
+	 * @param newValue
+	 *            Object to display
+	 */
     public void setValue(Object newValue) {
         if(newValue != null) {
             _value = valueToString(newValue);
@@ -92,11 +114,12 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
         return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     }
     
-    /**
-     * Returns binding <b>valueWhenEmpty</b>.
-     * @return value to display when the string is empty
-     */
-    public Object valueWhenEmpty() {
-        return valueToString(objectValueForBinding("valueWhenEmpty"));
-    }
+	/**
+	 * Returns binding {@code valueWhenEmpty}.
+	 * 
+	 * @return value to display when the string is empty
+	 */
+	public Object valueWhenEmpty() {
+		return valueToString(objectValueForBinding("valueWhenEmpty"));
+	}
 }

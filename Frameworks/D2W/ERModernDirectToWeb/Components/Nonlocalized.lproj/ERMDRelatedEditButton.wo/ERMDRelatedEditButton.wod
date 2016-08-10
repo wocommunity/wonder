@@ -1,9 +1,0 @@
-EditButton : AjaxUpdateLink {
-  action = buttonAction;
-  updateContainerID = d2wContext.idForMainContainer;
-  class = "Button OptionButton EditButton";
-}
-
-EditButtonLabel : ERXLocalizedString {
-  value = d2wContext.editButtonLabel;
-}

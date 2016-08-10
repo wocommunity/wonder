@@ -13,8 +13,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.directtoweb.interfaces.ERDObjectSaverInterface;
 
 /**
- * Determines if the user wants the changes saved if so provides a confirm page, if note uses cancel delegate.<br />
- * 
+ * Determines if the user wants the changes saved if so provides a confirm page, if note uses cancel delegate.
  */
 
 public class ERDConfirmObjectWasSavedDelegate extends ERDConfirmObjectDelegate {
@@ -35,6 +34,7 @@ public class ERDConfirmObjectWasSavedDelegate extends ERDConfirmObjectDelegate {
         super(eo, confirmPageName, delegate, delegate);
     }
 
+    @Override
     public WOComponent nextPage(WOComponent sender) {
         boolean wasSaved = true;
         if (sender instanceof ERDObjectSaverInterface)

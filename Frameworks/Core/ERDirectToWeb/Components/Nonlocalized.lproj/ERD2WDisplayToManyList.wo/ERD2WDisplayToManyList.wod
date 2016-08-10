@@ -1,6 +1,10 @@
 ERListDisplay1: ERXListDisplay {
 	attribute = keyWhenRelationship;
 	list = list;
-	nullArrayDisplay = d2wContext.emptyArrayDisplayString;
+	emptyArrayDisplay = d2wContext.emptyArrayDisplayString;
+	separator = d2wContext.separator;
+	finalSeparator = d2wContext.finalSeparator;
+	escapeHTML = d2wContext.escapeHTML;
+
 }
 

@@ -1,13 +1,15 @@
 package er.ajax;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXBrowserFactory;
+import er.extensions.components._private.ERXWOForm;
 
 /**
  * Invisible form submit button that can be included as the first element in an Ajax submitted form so that hitting
@@ -18,7 +20,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding action the action to execute when this button is pressed
  * @binding id the HTML ID of this submit button
  * @binding class the HTML class of this submit button
- * @binding style the HTML style of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs.
  * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
@@ -60,6 +61,7 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         super(name, associations, children);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
 
@@ -127,10 +129,10 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
 
         AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-        onClickBuffer.append(")");
+        onClickBuffer.append(')');
         String onClick = (String) valueForBinding("onClick", component);
         if (onClick != null) {
-          onClickBuffer.append(";");
+          onClickBuffer.append(';');
           onClickBuffer.append(onClick);
         }
 
@@ -139,15 +141,14 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         }
 
         if (onClickBefore != null) {
-            onClickBuffer.append("}");
+            onClickBuffer.append('}');
         }
         onClickBuffer.append("; return false;");
         
         response.appendContentString("<input ");
         appendTagAttributeToResponse(response, "tabindex", "");
-        appendTagAttributeToResponse(response, "type", "image");
-        appendTagAttributeToResponse(response, "src", WOApplication.application().resourceManager().urlForResourceNamed("clear1x1.gif", "Ajax",
-                                                                                                                        component.session().languages(), context.request()));
+        appendTagAttributeToResponse(response, "type", "submit");
+
         String name = nameInContext(context, component);
         appendTagAttributeToResponse(response, "name", name);
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
@@ -166,17 +167,30 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         	appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
         }
         
-        // Force in a default style to control size and border
-        StringBuilder sb = new StringBuilder("height:1px; width:1px; border: none; ");
-        Object style = valueForBinding("style", component);
-        if (style != null) {
-        	sb.append(style);
-        }        
-        appendTagAttributeToResponse(response, "style", sb.toString());
+        appendTagAttributeToResponse(response, "style", "position:absolute;left:-10000px");
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
 
         response.appendContentString(" />");
-    }
 
+        // fix for IE < 9 that deactivates the standard submit routine of the form and
+        // triggers the onClick handler of this submit element instead if the return key
+        // is pressed within a textfield, radiobutton, checkbox or select
+        ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
+        if (browser.isIE() && browser.majorVersion().compareTo(Integer.valueOf(9)) < 0) {
+            if (!hasBinding("formName")) {
+                formName = ERXWOForm.formName(context, "");
+            }
+            AjaxUtils.appendScriptHeader(response);
+            response.appendContentString("\nEvent.observe(document." + formName + ", 'keypress', function(e){");
+            response.appendContentString("if(e.keyCode==13){"); // return key
+            response.appendContentString("var shouldFire=false;var t=e.target;var tn=t.tagName.toLowerCase();");
+            response.appendContentString("if(tn==='select'){shouldFire=true;}");
+            response.appendContentString("else if(tn==='input'){var ty=t.type.toLowerCase();");
+            response.appendContentString("if(ty==='text' || ty==='radio' || ty==='checkbox'){shouldFire=true;}}");
+            response.appendContentString("if(shouldFire){$$('[name=" + name + "]')[0].fireEvent('onClick');e.returnValue=false;}");
+            response.appendContentString("}});");
+            AjaxUtils.appendScriptFooter(response);
+        }
+    }
 }

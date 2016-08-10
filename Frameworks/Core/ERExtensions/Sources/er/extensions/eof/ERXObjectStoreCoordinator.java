@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import sun.misc.Signal;
@@ -108,6 +108,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * Overridden to emit log messages and push this instance to the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void lock() {
 		boolean tracing = ERXEC.markOpenLocks();
 		if (tracing) {
@@ -124,6 +125,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * Overridden to emit log messages and pull this instance from the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void unlock() {
 		boolean tracing = ERXEC.markOpenLocks();
 		if (lockingThread != null && lockingThread != Thread.currentThread()) {

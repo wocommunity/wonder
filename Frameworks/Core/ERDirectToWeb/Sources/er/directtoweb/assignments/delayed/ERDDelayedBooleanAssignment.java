@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -24,14 +25,18 @@ import er.extensions.foundation.ERXValueUtilities;
 //	falseValue - the value used if the condition returns false
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * Takes a condition and evalutaes this condition everytime the rule is asked for.<br />
- * 
+ * Takes a condition and evalutaes this condition everytime the rule is asked for.
  */
 
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger("er.directtoweb.rules.DelayedBooleanAssignment");
+    private static final Logger log = LoggerFactory.getLogger("er.directtoweb.rules.DelayedBooleanAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -60,7 +65,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
     public ERDDelayedBooleanAssignment(String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the value of the key "conditionKey" of the
      * value of this assignment. This key is used when constructing the 
      * significant keys for the passed in keyPath.
@@ -72,10 +77,10 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
         return new NSArray(booleanConditions.objectForKey("conditionKey"));
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         NSDictionary booleanConditions = (NSDictionary)value();
-        if (log.isDebugEnabled())
-            log.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
+        log.debug("Resolving delayed fire for boolean conditions: {}", booleanConditions);
         return ERXValueUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?
             booleanConditions.objectForKey("trueValue") : booleanConditions.objectForKey("falseValue");
 

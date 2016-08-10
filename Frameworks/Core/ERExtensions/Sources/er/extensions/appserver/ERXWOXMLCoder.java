@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Enumeration;
 
+import org.apache.commons.lang3.CharEncoding;
+
 import com.webobjects.appserver.xml.WOXMLCoder;
 import com.webobjects.appserver.xml.WOXMLDecoder;
 import com.webobjects.appserver.xml.WOXMLException;
@@ -32,13 +34,19 @@ public class ERXWOXMLCoder extends WOXMLCoder {
     private _MappingModel _mappingModel;
 
     /**
-     * Quick and dirty class to en- and decode the generic xml data to full-flegded objects that 
+     * Quick and dirty class to en- and decode the generic xml data to full-fledged objects that 
      * can be bound in the edit interface.
      * 
      *
      * @author ak
      */
     public static class XMLData extends NSMutableDictionary {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
 
         public XMLData() {
         }
@@ -68,8 +76,11 @@ public class ERXWOXMLCoder extends WOXMLCoder {
         }
 
         /**
-         * This works around a bug when the decoder reaches an emtpy tag an tries to create a dictionary from it.
+         * This works around a bug when the decoder reaches an empty tag an tries to create a dictionary from it.
+         * @param aValue value
+         * @param aKey key
          */
+        @Override
         public void takeValueForKey(Object aValue, String aKey) {
             if(aValue instanceof NSDictionary && ((NSDictionary)aValue).count() == 0) {
                 if(aValue.getClass() == NSMutableDictionary.class) {
@@ -81,6 +92,10 @@ public class ERXWOXMLCoder extends WOXMLCoder {
 
         /**
          * Serializes to an XML string for the given data object conforming to the supplied model.
+         * @param data 
+         * @param rootTag 
+         * @param mappingUrl 
+         * @return string representation
          */
         public static String stringForData(XMLData data, String rootTag, String mappingUrl) {
             data.prepareForCoding();
@@ -94,12 +109,13 @@ public class ERXWOXMLCoder extends WOXMLCoder {
          * Deserializes the given string to an instance of XMLData.
          * @param string
          * @param mappingUrl
+         * @return xml data object
          */
         public static XMLData dataForString(String string, String mappingUrl) {
             WOXMLDecoder decoder = WOXMLDecoder.decoderWithMapping(mappingUrl);
             XMLData data;
             try {
-            	data = (XMLData) decoder.decodeRootObject(new NSData(string.getBytes("UTF-8")));
+            	data = (XMLData) decoder.decodeRootObject(new NSData(string.getBytes(CharEncoding.UTF_8)));
             } catch (UnsupportedEncodingException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }
@@ -112,10 +128,12 @@ public class ERXWOXMLCoder extends WOXMLCoder {
         _mappingModel = _MappingModel.mappingModelWithXMLFile(s);
     }
 
+    @Override
     public String xmlTagForClassNamed(String className) {
         return _mappingModel.xmlTagForClassNamed(className);
     }
 
+    @Override
     public String xmlTagForPropertyKey(String key, String className) {
         return _mappingModel.xmlTagForPropertyKey(key, className);
     }
@@ -168,6 +186,7 @@ public class ERXWOXMLCoder extends WOXMLCoder {
         }
     }
 
+    @Override
     public void encodeObjectForKey(Object obj, String key) {
         String tag = _mappingModel.xmlTagForPropertyKey(key, encodedClassName());
         encodeObjectWithXMLTag(obj, tag, false, _MappingModel.OUTPUT_PROPERTY_TAG);
@@ -212,12 +231,12 @@ public class ERXWOXMLCoder extends WOXMLCoder {
                 if (obj instanceof String) {
                     _buffer.append(escapeString((String) obj));
                 } else if (obj instanceof NSTimestamp) {
-                    _buffer.append((NSTimestamp) obj);
+                    _buffer.append(obj);
                 } else if (obj instanceof Boolean) {
-                    _buffer.append((Boolean) obj);
+                    _buffer.append(obj);
                 } else if (obj instanceof Number) {
                     // FIXME AK: this will break when using BigDecimals and JDK 1.5
-                    _buffer.append((Number) obj);
+                    _buffer.append(obj);
                 } else if (codeBasedOnClass || _mappingModel.hasMappingForXMLTag(baseTag)) {
                     Enumeration contentKeys = codeBasedOnClass ? _mappingModel.contentsKeysForClassNamed(className) : _mappingModel.contentsKeysForXMLTag(baseTag);
                     contentKeys = sortedEnumeration(contentKeys);
@@ -262,34 +281,39 @@ public class ERXWOXMLCoder extends WOXMLCoder {
         }
     }
 
+    @Override
     public void encodeBooleanForKey(boolean flag, String s) {
         encodeStringInTag(flag ? "True" : "False", xmlTagForPropertyKey(s, encodedClassName()), "boolean");
     }
 
+    @Override
     public void encodeIntForKey(int i, String s) {
         encodeStringInTag(Integer.toString(i), xmlTagForPropertyKey(s, encodedClassName()), "int");
     }
 
+    @Override
     public void encodeFloatForKey(float f, String s) {
         encodeStringInTag(Float.toString(f), xmlTagForPropertyKey(s, encodedClassName()), "float");
     }
 
+    @Override
     public void encodeDoubleForKey(double d, String s) {
         encodeStringInTag(Double.toString(d), xmlTagForPropertyKey(s, encodedClassName()), "double");
     }
 
+    @Override
     protected void _encodeNullForKey(String s) {
         encodeStringInTag("null", s, "?");
     }
 
+    @Override
     public synchronized String encodeRootObjectForKey(Object obj, String s) {
         if (obj != null) {
             _buffer = new StringBuffer(1024);
             _buffer.append(xmlDeclaration);
             encodeObjectWithXMLTag(obj, "ignored", true, _MappingModel.OUTPUT_CLASS_TAG);
             return _buffer.toString();
-        } else {
-            return null;
         }
+        return null;
     }
 }

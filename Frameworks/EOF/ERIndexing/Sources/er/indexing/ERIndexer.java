@@ -2,7 +2,8 @@ package er.indexing;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -24,7 +25,7 @@ public class ERIndexer {
     
     private NSArray<ERAutoIndex> _indices;
     
-    private Logger log = Logger.getLogger(ERIndexer.class);
+    private static final Logger log = LoggerFactory.getLogger(ERIndexer.class);
 
     public ERIndexer(NSArray<ERAutoIndex> indices) {
         _indices = indices;
@@ -75,7 +76,7 @@ public class ERIndexer {
             } finally {
                 ec.unlock();
             }
-            log.info("Indexing " + entity.name() + " took: " + (System.currentTimeMillis() - start) + " ms");
+            log.info("Indexing {} took: {}ms", entity.name(), System.currentTimeMillis() - start);
         }
     }
 

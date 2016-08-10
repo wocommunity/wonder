@@ -459,7 +459,10 @@ Modalbox.Methods = {
 						this.currFocused--;
 					}
 				}
-				this.focusableElements[this.currFocused].focus();
+
+				var focusedElement = this.focusableElements[this.currFocused];
+				if(focusedElement) focusedElement.focus();
+
 				break;			
 			case Event.KEY_ESC:
 				// CH: Add Esc key handling start
@@ -523,7 +526,9 @@ Modalbox.Methods = {
 	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
-		if (!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase()))
+		var el = event.element();
+		if (!["input", "textarea", "select", "button"].include(el.tagName.toLowerCase())
+				&& !(el.contentEditable == 'true' || el.contentEditable == ''))
 			event.stop();
 	},
 	
@@ -621,7 +626,7 @@ Modalbox.Methods = {
 	// Added by TC.
 	__computeWidth: function() {
 		var newWidth;
-		if (this._initOptions.width) { // If there's an explicit width set, respect the value.
+		if (this._initOptions.width && this._initOptions.width != -1) { // If there's an explicit width set, respect the value.
 			newWidth = this.options.width;
 		} else { // If there's no explicit width, calculate it.
 			var cWidth = this.MBcontent.getWidth();

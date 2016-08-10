@@ -10,5 +10,8 @@
 		<binding name="target"/>
 		<binding name="shouldSubmitForm" defaults="Boolean"/>
 		<binding name="name"/>
+    <binding name="class"/>
+        <binding name="style"/>
+        <binding name="id"/>
     </wo>
 </wodefinitions>

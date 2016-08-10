@@ -32,8 +32,8 @@ public class Application extends ERXApplication {
 	  ERXApplication.log.info("Welcome to " + name() + " !");
 	  ERXRouteRequestHandler restHandler = new ERXRouteRequestHandler();
 	  restHandler.addRoute(new ERXRoute(TaskInfo.ENTITY_NAME, "/taskInfos", ERXRoute.Method.Post, TaskInfoController.class, "create"));
-    restHandler.addRoute(new ERXRoute(TaskInfo.ENTITY_NAME, "/taskInfos/{taskInfo:TaskInfo}", ERXRoute.Method.Get, TaskInfoController.class, "show"));
-    restHandler.addRoute(new ERXRoute(TaskInfo.ENTITY_NAME, "/taskInfos/{taskInfo:TaskInfo}/results", ERXRoute.Method.Get, TaskInfoController.class, "results"));
+	  restHandler.addRoute(new ERXRoute(TaskInfo.ENTITY_NAME, "/taskInfos/{taskInfo:TaskInfo}", ERXRoute.Method.Get, TaskInfoController.class, "show"));
+	  restHandler.addRoute(new ERXRoute(TaskInfo.ENTITY_NAME, "/taskInfos/{taskInfo:TaskInfo}/results", ERXRoute.Method.Get, TaskInfoController.class, "results"));
 	  registerRequestHandler(restHandler, ERXRouteRequestHandler.Key);	
 	  NSLog.out.appendln(restHandler.routes());
 	}
@@ -47,8 +47,6 @@ public class Application extends ERXApplication {
 	
 	@Override
 	public WOResponse handleSessionRestorationErrorInContext(WOContext aContext) {
-		return pageWithName(Main.class.getName(), aContext).generateResponse();
+		return pageWithName(Main.class, aContext).generateResponse();
 	}
-	
-	
 }

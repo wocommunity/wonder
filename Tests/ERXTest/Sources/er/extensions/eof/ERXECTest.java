@@ -1,16 +1,24 @@
 
 package er.extensions.eof;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import junit.framework.Assert;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 
 import er.erxtest.ERXTestCase;
 import er.erxtest.ERXTestUtilities;
 import er.erxtest.model.Company;
+import er.erxtest.model.Employee;
 
 public class ERXECTest extends ERXTestCase {
 
@@ -43,6 +51,69 @@ public class ERXECTest extends ERXTestCase {
         Assert.assertNotNull(ec3);
 
         Assert.assertEquals(parentEC3, ec3.parentObjectStore());
+    }
+    
+    public void testNestedECs() {
+    	try {
+	    	EOEditingContext ec = ERXEC.newEditingContext();
+    		Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
+    		c.setName("Name");
+    		ec.saveChanges();
+    		EOEditingContext nested = ERXEC.newEditingContext(ec);
+    		Company nestC = c.localInstanceIn(nested);
+    		Employee e = (Employee) EOUtilities.createAndInsertInstance(nested, Employee.ENTITY_NAME);
+    		e.setFirstName("First");
+    		e.setLastName("Last");
+    		e.setManager(Boolean.FALSE);
+    		e.addObjectToBothSidesOfRelationshipWithKey(nestC, Employee.COMPANY_KEY);
+    		nested.saveChanges();
+    		ec.saveChanges();
+	    	System.gc();
+    		c.delete();
+    		ec.saveChanges();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Assert.fail(e.getMessage());
+    	}
+    }
+    
+    public void testSerializablilty() throws IOException, ClassNotFoundException {
+		EOEditingContext ec = ERXEC.newEditingContext();
+		Company.createCompany(ec, "Some fruit company");
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = null;
+		NSData data = null;
+
+		try {
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(ec);
+			oos.flush();
+			byte[] bytes = baos.toByteArray();
+			data = new NSData(bytes);
+		} finally {
+			if (oos != null) {
+				oos.close();
+			}
+		}
+		
+		Object object = null;
+		byte[] bytes = data.bytes();
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+			object = ois.readObject();
+		} finally {
+			if (ois != null) {
+				ois.close();
+			}
+		}
+
+		EOEditingContext ec2 = (EOEditingContext) object;
+		
+		Assert.assertNotSame(ec, ec2);
+		ec.dispose();
+		ec2.saveChanges();
     }
 
 	/**
@@ -662,7 +733,7 @@ public class ERXECTest extends ERXTestCase {
 	}
 
 	/**
-	 * Test method for {@link er.extensions.eof.ERXEC#factory()}.
+	 * Test method for {@link er.extensions.eof.ERXEC#_factory()}.
 	 */
 	public void _testFactory() {
 		fail("Not yet implemented");

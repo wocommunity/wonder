@@ -24,6 +24,12 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * and its subclasses {@link WORequest} and {@link WOResponse}. 
  */
 public class ERXMessageEncoding implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     private String _encoding; 
     public String encoding() { return _encoding; }
@@ -122,7 +128,7 @@ public class ERXMessageEncoding implements Serializable {
             String key = (String)e.nextElement();
             d.setObjectForKey(newDefaultEncoding, key);
         }
-        _setLanguagesAndDefaultEncodings((NSDictionary)d);
+        _setLanguagesAndDefaultEncodings(d);
     }
 
     public static String defaultEncodingForLanguage(String language) {
@@ -141,7 +147,7 @@ public class ERXMessageEncoding implements Serializable {
         
         NSMutableDictionary d = new NSMutableDictionary(_languagesAndDefaultEncodings);
         d.setObjectForKey(encoding, language);
-        _languagesAndDefaultEncodings = (NSDictionary)d;
+        _languagesAndDefaultEncodings = d;
     }
 
     public static void setEncodingToResponse(WOResponse response, String encoding) {
@@ -185,6 +191,7 @@ public class ERXMessageEncoding implements Serializable {
     }
 
     private String _toString;
+    @Override
     public String toString() {
         if (_toString == null) {
             _toString = "<" + getClass().getName() 

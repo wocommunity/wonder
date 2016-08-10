@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 /**
  * This simple stateless component adds a javascript function
  * 'RandomizeLink' that will either add a dummy=0 or
- * change the previous value of a dummy=<some number>
+ * change the previous value of a dummy=&lt;some number&gt;
  * parameter of a hyperlink. This can be very useful
  * for making sure that the browser does not cache the return
  * value of a dynamic link.
@@ -20,6 +20,12 @@ import com.webobjects.appserver.WOContext;
 //FIXME: Should rename ERXJSLinkRandomizer
 //ENHANCEME: Might want to wrap this component in an only once per request conditional
 public class ERXLinkRandomizer extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Public constructor

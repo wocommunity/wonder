@@ -29,10 +29,15 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 
  */
-
-
 public class WOTabPanel extends WOComponent
 {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected static final String  _undefinedMarker="UNDEFINED";
 
     public Object  currentTab;
@@ -52,6 +57,7 @@ public class WOTabPanel extends WOComponent
         _tabNameKey=null;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -127,7 +133,7 @@ public class WOTabPanel extends WOComponent
     }
 
     public String submitActionName()  {
-        if (_submitActionName==_undefinedMarker) {
+        if (_undefinedMarker.equals(_submitActionName)) {
             if (hasBinding("submitActionName"))
                 _submitActionName=(String)_WOJExtensionsUtil.valueForBindingOrNull("submitActionName",this);
             else
@@ -158,7 +164,8 @@ public class WOTabPanel extends WOComponent
             return 2;
     }
 
-    public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
+    @Override
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         _tabs=null;
         currentTab=null;
         _selectedTab=null;

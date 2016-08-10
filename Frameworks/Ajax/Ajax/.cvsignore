@@ -1,9 +1,0 @@
-bin
-.WOLips
-PB.project
-*.xcodeproj
-*.pxbproj
-target
-build
-CPFileList.txt
-*.xcodeproj

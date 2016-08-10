@@ -11,11 +11,15 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * When returned will close the current page by calling <code>onload=window.close()</code>.
- * Useful for server side determining if a window should be closed.<br/>
- * <br/>
- * No Bindings.
+ * Useful for server side determining if a window should be closed.
  */
 public class ERXJSAutoClosePage extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String additionalJavaScript;
 	
@@ -26,6 +30,7 @@ public class ERXJSAutoClosePage extends WOComponent {
     }
     
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
     
     

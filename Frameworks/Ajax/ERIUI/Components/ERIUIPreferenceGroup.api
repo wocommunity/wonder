@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
-        <wo class="ERIUIPreferenceGroup.java" wocomponentcontent="true">
-
-        <binding name="title"/>
-    </wo>
-</wodefinitions>

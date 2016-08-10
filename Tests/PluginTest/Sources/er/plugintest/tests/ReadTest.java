@@ -1,12 +1,16 @@
 package er.plugintest.tests;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.eof.*;
-import er.plugintest.model.*;
+import er.extensions.eof.ERXBatchFetchUtilities;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.plugintest.model.City;
+import er.plugintest.model.Country;
+import er.plugintest.model.CountryLanguage;
 
 public class ReadTest extends PluginTest {
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxUpdateLink" wocomponentcontent="true">    <binding name="action"/>
+        <binding name="directActionName"/>
+        <binding name="updateContainerID"/>
+        <binding name="title"/>
+        <binding name="style"/>
+        <binding name="class"/>
+        <binding name="id"/>
+        <binding name="disabled"/>
+        <binding name="string"/>
+        <binding name="function"/>
+        <binding name="elementName"/>
+        <binding name="functionName"/>
+        <binding name="button"/>
+        <binding name="async"/>
+        <binding name="accesskey"/>
+        <binding name="onCancel"/>
+        <binding name="onComplete"/>
+        <binding name="onException"/>
+        <binding name="onFailure"/>
+        <binding name="onRequest"/>
+        <binding name="onSuccess"/>
+    <binding name="onClickBefore"/>
+    <binding name="onClick"/>
+    </wo>
+</wodefinitions>

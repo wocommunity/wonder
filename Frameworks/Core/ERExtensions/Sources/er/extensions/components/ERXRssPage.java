@@ -23,6 +23,12 @@ import com.webobjects.appserver.WOResponse;
  * @author ak
  */
 public class ERXRssPage extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 	 
 	public ERXRssPage(WOContext context) {
 		super(context);
@@ -42,7 +48,7 @@ public class ERXRssPage extends ERXStatelessComponent {
 	
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		context._generateCompleteURLs();
+		context.generateCompleteURLs();
 		response.setHeader("text/xml", "content-type");
 		super.appendToResponse(response, context);
 	}

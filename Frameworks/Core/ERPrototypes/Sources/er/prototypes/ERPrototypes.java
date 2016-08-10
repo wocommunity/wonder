@@ -16,6 +16,7 @@ public class ERPrototypes extends ERXFrameworkPrincipal {
         setUpFrameworkPrincipalClass(ERPrototypes.class);
     }
     
+	@Override
 	public void finishInitialization() {
       log.debug("ERPrototypes loaded");
 	}

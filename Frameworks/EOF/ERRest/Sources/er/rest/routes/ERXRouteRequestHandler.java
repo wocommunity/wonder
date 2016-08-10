@@ -3,7 +3,9 @@ package er.rest.routes;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
@@ -25,11 +27,7 @@ import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestNameRegistry;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
-import er.rest.routes.jsr311.DELETE;
-import er.rest.routes.jsr311.GET;
 import er.rest.routes.jsr311.HttpMethod;
-import er.rest.routes.jsr311.POST;
-import er.rest.routes.jsr311.PUT;
 import er.rest.routes.jsr311.Path;
 import er.rest.routes.jsr311.Paths;
 
@@ -117,8 +115,8 @@ import er.rest.routes.jsr311.Paths;
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100/edit.json
  * </pre>
  * 
- * @property ERXRest.missingControllerName (default "ERXMissingRouteController")
- * @property ERXRest.parseUnknownExtensions
+ * @property ERXRest.missingControllerName (default "ERXMissingRouteController") Allow you to specify which controller to use when a route doesn't exist
+ * @property ERXRest.parseUnknownExtensions (default "true") If set to "false", will return a 404 status code if the format doesn't exist
  * @property ERXRest.pluralEntityNames
  * @property ERXRest.routeCase
  * @property ERXRest.lowercaseEntityNames
@@ -141,6 +139,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * A NameFormat that behaves like WO -- singular entities, singular routes, lowercase camel names (namesLikeThis).
 	 */
 	public static NameFormat WO_LOWER = new NameFormat(false, false, NameFormat.Case.LowerCamelCase);
+	public static NameFormat EMBER = new NameFormat(true, true, NameFormat.Case.LowerCamelCase);
 
 	/**
 	 * NameFormat specifies how routes and controller names should be capitalized by default.
@@ -175,9 +174,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			LowercaseUnderscore
 		}
 
-		private boolean _pluralControllerName;
-		private boolean _pluralRouteName;
-		private Case _routeCase;
+		private final boolean _pluralControllerName;
+		private final boolean _pluralRouteName;
+		private final Case _routeCase;
 
 		/**
 		 * Creates a new NameFormat.
@@ -260,6 +259,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		 */
 		public String formatEntityNamed(String entityName, boolean pluralizeIfNecessary) {
 			String singularEntityName = caseifyEntityNamed(entityName);
+			if ((entityName == null) || (entityName.length() == 0)) {
+				return singularEntityName;
+			}			
 			String controllerPath;
 			if (pluralizeIfNecessary && pluralRouteName()) {
 				controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
@@ -271,7 +273,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 	}
 
-	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXRouteRequestHandler.class);
 
 	public static final String Key = "ra";
 	public static final String TypeKey = "ERXRouteRequestHandler.type";
@@ -280,9 +282,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public static final String RouteKey = "ERXRouteRequestHandler.route";
 	public static final String KeysKey = "ERXRouteRequestHandler.keys";
 
-	private NameFormat _entityNameFormat;
-	private NSMutableArray<ERXRoute> _routes;
-	private boolean _parseUnknownExtensions; 
+	private final NameFormat _entityNameFormat;
+	private final NSMutableArray<ERXRoute> _routes;
+	private final boolean _parseUnknownExtensions; 
 
 	/**
 	 * Constructs a new ERXRouteRequestHandler with the default entity name format.
@@ -310,6 +312,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to insert
 	 */
 	public void insertRoute(ERXRoute route) {
+		verifyRoute(route);
 		_routes.insertObjectAtIndex(route, 0);
 	}
 
@@ -320,9 +323,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to add
 	 */
 	public void addRoute(ERXRoute route) {
-		if (log.isDebugEnabled()) {
-			log.debug("adding route " + route);
-		}
+		log.debug("adding route {}", route);
+		verifyRoute(route);
 		_routes.addObject(route);
 	}
 
@@ -393,10 +395,10 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route controller for the given entity
 	 * name, giving it the opportunity to add routes for this entity. Additionally, this method looks for all methods
-	 * annotated with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and
+	 * annotated with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. If no addRoutes method is found and
 	 * no
 	 * 
-	 * @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -408,9 +410,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route controller class, giving
 	 * it the opportunity to add routes for the given entity. Additionally, this method looks for all methods annotated
-	 * with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
+	 * with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
 	 * 
-	 * @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -422,8 +424,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
-	 * This method looks for all methods annotated with @Path or @Paths annotations and adds the corresponding routes. 
-	 * If no addRoutes method is found and no @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * This method looks for all methods annotated with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. 
+	 * If no addRoutes method is found and no {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * This is the variant to use if you have a controller that has no logical entity associated with it.
 	 * 
 	 * @param routeControllerClass
@@ -461,6 +463,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				}
 
 				ERXRoute.Method method = null;
+				// Search annotations for @PUT, @GET, etc.
 				for (Annotation annotation : routeMethod.getAnnotations()) {
 					HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
 					if (httpMethod != null) {
@@ -472,23 +475,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 						}
 					}
 				}
+
+				// Finally default declared REST actions to @GET
 				if (method == null) {
 					method = ERXRoute.Method.Get;
 				}
 
-				Annotation methodAnnotation = routeMethod.getAnnotation(GET.class);
-				if (methodAnnotation == null) {
-					methodAnnotation = routeMethod.getAnnotation(POST.class);
-					if (methodAnnotation == null) {
-						methodAnnotation = routeMethod.getAnnotation(PUT.class);
-						if (methodAnnotation == null) {
-							methodAnnotation = routeMethod.getAnnotation(DELETE.class);
-						}
-					}
-				}
-				if (methodAnnotation != null) {
-					method = methodAnnotation.annotationType().getAnnotation(HttpMethod.class).value();
-				}
 				if (pathAnnotation != null) {
 					addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
 					declaredRoutesFound = true;
@@ -503,7 +495,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (addDefaultRoutesIfNoDeclaredRoutesFound && !declaredRoutesFound) {
-			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no @Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '{}'. Registering default routes instead.", routeControllerClass.getSimpleName());
 			addDefaultRoutes(entityName, routeControllerClass);
 		}
 	}
@@ -718,6 +710,57 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		return matchingRoute;
+	}
+	
+	/**
+	 * @param method
+	 * @param urlPattern
+	 * @return the first route matching <code>method</code> and <code>pattern</code>.
+	 */
+	protected ERXRoute routeForMethodAndPattern(ERXRoute.Method method, String urlPattern) {
+		for (ERXRoute route : _routes) {
+			if (route.method().equals(method) && route.routePattern().pattern().equals(urlPattern)) {
+				return route;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Checks for an existing route that matches the {@link er.rest.routes.ERXRoute.Method} and {@link er.rest.routes.ERXRoute#routePattern()} of <code>route</code> and
+	 * yet has a different controller or action mapping.
+	 * @param route
+	 */
+	protected void verifyRoute(ERXRoute route) {
+		ERXRoute duplicateRoute = routeForMethodAndPattern(route.method(), route.routePattern().pattern());
+		if (duplicateRoute != null) {
+			boolean isDifferentController = ObjectUtils.notEqual(duplicateRoute.controller(), route.controller());
+			boolean isDifferentAction = ObjectUtils.notEqual(duplicateRoute.action(), route.action());
+			if (isDifferentController || isDifferentAction) {
+				// We have a problem whereby two routes with same url pattern and http method map to different direct actions
+				StringBuilder message = new StringBuilder();
+				message.append("The route <");
+				message.append(route);
+				message.append("> conflicts with existing route <");
+				message.append(duplicateRoute);
+				message.append(">.");
+				if (isDifferentController) {
+					message.append(" The controller class <");
+					message.append(route.controller());
+					message.append("> is different to <");
+					message.append(duplicateRoute.controller());
+					message.append(">.");
+				}
+				if (isDifferentAction) {
+					message.append(" The action <");
+					message.append(route.action());
+					message.append("> is different to <");
+					message.append(duplicateRoute.action());
+					message.append(">.");
+				}
+				throw new IllegalStateException(message.toString());
+			}
+		}
 	}
 
 	/**

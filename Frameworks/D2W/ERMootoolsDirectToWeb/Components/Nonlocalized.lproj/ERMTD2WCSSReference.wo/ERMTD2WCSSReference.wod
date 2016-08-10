@@ -1,0 +1,38 @@
+AdditionalReferences : WOComponentContent {
+	
+}
+
+BootstrapResponseStyleSheet : ERXStyleSheet {
+	filename = "css/bootstrap-responsive.css";
+	framework = "ERMootoolsDirectToWeb"
+}
+
+BootstrapStyleSheet : ERXStyleSheet {
+	filename = "css/bootstrap.css";
+	framework = "ERMootoolsDirectToWeb"
+}
+
+IFIEClose : WOString {
+	escapeHTML = false;
+	value = "<![endif]-->";
+}
+
+IFIEOpen : WOString {
+	escapeHTML = false;
+	value = "<!--[if lt IE 9]>";
+}
+
+IncludeStylesheetsConditional : WOConditional {
+	condition = ^includeRuleStylesheets;
+}
+
+StyleSheet : ERXStyleSheet {
+	filename = stylesheetFileName;
+	framework = resourceFrameworkName;
+	media = stylesheetMedia;
+}
+
+StyleSheetRepetition : WORepetition {
+	list = d2wContext.stylesheets;
+	item = stylesheetName;
+}

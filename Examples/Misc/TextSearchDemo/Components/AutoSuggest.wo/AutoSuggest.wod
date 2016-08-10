@@ -1,0 +1,8 @@
+PageWrapper : PageWrapper {
+	pageTitle = "Auto Suggest";
+}
+
+PrimeIndexLink : WOHyperlink {
+	action = indexMoviesAction;
+	class = "Button PrimeIndexButton";
+}

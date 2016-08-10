@@ -13,31 +13,34 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * <div class="en">
  * NSSet reimplementation to support JDK 1.5 templates. Use with
+ * </div>
  * 
- * <pre>
- * NSSet&lt;E&gt; setA = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listA);
- * NSSet&lt;E&gt; setB = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listB);
- * logger.debug(&quot;intersection contains &quot; + setA.setByIntersectingSet(setB));
- * </pre>
+ * <div class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。使用は
+ * </div>
  * 
- * @param <E>
- *            type of set contents
+ * <pre>{@code
+ * NSSet<E> setA = new NSSet<E>(NSArray<E> listA);
+ *NSSet<E> setB = new NSSet<E>(NSArray<E> listB);
+ *logger.debug("intersection contains " + setA.setByIntersectingSet(setB));
+ * }</pre>
+ * 
+ * @param <E> - type of set contents
  */
 public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<E> {
+  
+  static final long serialVersionUID = -8833684352747517048L;
 
-	@SuppressWarnings("unchecked")
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSSet");
 
 	protected static int _NSSetClassHashCode = _CLASS.hashCode();
 
-	@SuppressWarnings("unchecked")
 	public static final NSSet EmptySet = new NSSet();
 
 	private static final String SerializationValuesFieldKey = "objects";
 	private static final ObjectStreamField[] serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField(SerializationValuesFieldKey, ((Object) (_NSUtilities._NoObjectArray)).getClass()) });
-
-	static final long serialVersionUID = -8833684352747517048L;
 
 	public static Object decodeObject(NSCoder coder) {
 		return new NSSet<Object>(coder.decodeObjects());
@@ -113,6 +116,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	private NSSet(E[] objects, boolean checkForNull) {
+		if (objects == null) {
+			throw new IllegalArgumentException("Objects cannot be null.");
+		}
 		initFromObjects(objects, checkForNull);
 	}
 
@@ -216,7 +222,6 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return count() <= 0 ? null : (E)objectsNoCopy()[0];
 	}
 
-	@SuppressWarnings("unchecked")
 	public Class classForCoder() {
 		return _CLASS;
 	}
@@ -225,6 +230,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		throw new UnsupportedOperationException("clear is not a supported operation in com.webobjects.foundation.NSSet");
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
@@ -281,6 +287,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return (NSSet<T>) EmptySet;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
 			return true;
@@ -404,7 +411,6 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		keys = keys != null ? keys : _NSUtilities._NoObjectArray;
 		initFromObjects(keys, true);
 	}
-	@SuppressWarnings("unused")
 	private Object readResolve() throws ObjectStreamException {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptySet;
@@ -459,9 +465,10 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return objects;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(128);
-		buffer.append("(");
+		StringBuilder buffer = new StringBuilder(128);
+		buffer.append('(');
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			Object object = objects[i];
@@ -482,8 +489,8 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 			}
 		}
 
-		buffer.append(")");
-		return new String(buffer);
+		buffer.append(')');
+		return buffer.toString();
 	}
 
 	private void writeObject(ObjectOutputStream s) throws IOException {

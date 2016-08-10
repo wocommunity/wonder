@@ -1,8 +1,10 @@
 package er.extensions.eof;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -18,7 +20,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSRecursiveLock;
 
 import er.extensions.foundation.ERXProperties;
 
@@ -32,9 +33,16 @@ import er.extensions.foundation.ERXProperties;
  * @author ak moved stuff from ERXEOAccessUtilities to here
  */
 public class ERXAdaptorOperationWrapper implements Serializable {
-    public static final Logger log = Logger.getLogger(ERXAdaptorOperationWrapper.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public static final NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
+    private static final Logger log = LoggerFactory.getLogger(ERXAdaptorOperationWrapper.class);
+
+    public static final ReentrantLock adaptorOperationsLock = new ReentrantLock();
     
     public static final String AdaptorOperationsDidPerformNotification = "AdaptorOperationsDidPerform";
     
@@ -104,10 +112,10 @@ public class ERXAdaptorOperationWrapper implements Serializable {
             EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, op.operation().entity().model().name());
             context.lock();
             adaptorOperationsLock.lock();
-            EODatabaseChannel dchannel = context.availableChannel();
-            EOAdaptorChannel achannel = dchannel.adaptorChannel();
-            achannel.adaptorContext().beginTransaction();
             try {
+                EODatabaseChannel dchannel = context.availableChannel();
+                EOAdaptorChannel achannel = dchannel.adaptorChannel();
+                achannel.adaptorContext().beginTransaction();
                 boolean wasOpen = achannel.isOpen();
                 if (!wasOpen) {
                     achannel.openChannel();
@@ -117,7 +125,7 @@ public class ERXAdaptorOperationWrapper implements Serializable {
                     try {
                         achannel.performAdaptorOperation(op.operation());
                     } catch(EOGeneralAdaptorException ex) {
-                        log.error("Failed op " + i + ": " + ex + "\n" + op);
+                        log.error("Failed op {}: {}\n{}", i, ex, op);
                         throw ex;
                     }
                 }

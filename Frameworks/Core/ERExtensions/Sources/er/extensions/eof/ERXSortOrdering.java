@@ -1,12 +1,13 @@
 package er.extensions.eof;
 
+import java.util.Objects;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
-
-import er.extensions.ERXExtensions;
-
 
 /**
  * <p>
@@ -25,6 +26,13 @@ import er.extensions.ERXExtensions;
  * 
  */
 public class ERXSortOrdering extends EOSortOrdering {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constructs an ERXSortOrdering (see EOSortOrdering).
 	 * 
@@ -60,6 +68,21 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 		ERXSortOrderings sortOrderings = array();
 		sortOrderings.addObject(nextSortOrdering);
+		return sortOrderings;
+	}
+
+	/**
+	 * Returns ERXSortOrderings with this sort ordering followed by the provided
+	 * array of next sort orderings.
+	 * 
+	 * @param nextSortOrderings
+	 *            the next sort orderings to chain to this
+	 * @return an array of sort orderings
+	 * @author David Avendasora
+	 */
+	public ERXSortOrderings then(NSArray<EOSortOrdering> nextSortOrderings) {
+		ERXSortOrderings sortOrderings = array();
+		sortOrderings.addObjectsFromArray(nextSortOrderings);
 		return sortOrderings;
 	}
 
@@ -101,12 +124,18 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * @param obj the Object to compare to
 	 * @return <code>true</code> if obj is an EOSortOrder with the same key and selector as this object
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ERXSortOrdering) {
 			ERXSortOrdering other = (ERXSortOrdering)obj;
-			return ERXExtensions.safeEquals(key(), other.key()) && ERXExtensions.safeEquals(selector(), other.selector());
+			return Objects.equals(key(), other.key()) && Objects.equals(selector(), other.selector());
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(key()).append(selector()).toHashCode();
 	}
 
 	/**
@@ -136,12 +165,19 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 	
 	/**
-	 * ERXSortOrderings is an NSMutableArray<EOSortOrdering> that
+	 * ERXSortOrderings is an NSMutableArray&lt;EOSortOrdering&gt; that
 	 * provides methods for chaining.
 	 * 
 	 * @author mschrag
 	 */
 	public static class ERXSortOrderings extends NSMutableArray<EOSortOrdering> {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Constructs an empty ERXSortOrderings.
 		 */
@@ -185,6 +221,19 @@ public class ERXSortOrdering extends EOSortOrdering {
 		 */
 		public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 			addObject(nextSortOrdering);
+			return this;
+		}
+
+		/**
+		 * Adds the given sort orderings to the end of this list and returns
+		 * "this" so it can be chained again.
+		 * 
+		 * @param nextSortOrderings the sort ordering to add
+		 * @return this (with the sort orderings appended)
+		 * @author David Avendasora
+		 */
+		public ERXSortOrderings then(ERXSortOrderings nextSortOrderings) {
+			addObjectsFromArray(nextSortOrderings);
 			return this;
 		}
 

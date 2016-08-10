@@ -3,8 +3,6 @@
 package er.bugtracker;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -25,11 +23,10 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.taggable.ERTaggable;
 
 public class Bug extends _Bug implements Markable {
-    static final Logger log = Logger.getLogger(Bug.class);
-
     protected boolean _componentChanged;
     protected boolean _ownerChanged;
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setPriority(Priority.MEDIUM);
@@ -41,7 +38,7 @@ public class Bug extends _Bug implements Markable {
         setOwner(People.clazz.currentUser(editingContext()));
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-        Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
+        Comment comment = Comment.clazz.createAndInsertObject(ec);
         comment.setOriginator(originator());
         comment.setBug(this);
     }
@@ -55,7 +52,7 @@ public class Bug extends _Bug implements Markable {
 		ec.lock();
 		try {
 			People people = (People) ERCoreBusinessLogic.actor(ec);
-			Bug copy = (Bug) ERXEOControlUtilities.localInstanceOfObject(ec, this);
+			Bug copy = ERXEOControlUtilities.localInstanceOfObject(ec, this);
 			if(copy != null && !copy.isRead() && copy.owner().equals(people)) {
 				copy.setIsRead(true);
 				ec.saveChanges();
@@ -93,6 +90,7 @@ public class Bug extends _Bug implements Markable {
     }
 
     // FIXME:(ak) now *what* is this supposed to do???
+    @Override
     public void setComponent(Component value) {
         willChange();
         Component oldComponent = component();
@@ -106,6 +104,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
+    @Override
     public void setOwner(People value) {
         willChange();
         People oldOwner = owner();
@@ -119,6 +118,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
+	@Override
 	public void setState(State newState) {
         willChange();
         State oldState = state();
@@ -152,11 +152,13 @@ public class Bug extends _Bug implements Markable {
         return null;
     }
 
+    @Override
     public void validateForInsert() {
         super.validateForInsert();
         validateTargetReleaseForNewBugs();
     }
 
+    @Override
     public void validateForUpdate() {
         if (_componentChanged && component()!=null && !_ownerChanged) {
             setOwner(component().owner());
@@ -184,7 +186,7 @@ public class Bug extends _Bug implements Markable {
 	public void setNewText(String newValue) {
 		_newText = newValue;
 		if (newValue != null && newValue.length() > 0) {
-			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
+			Comment comment = Comment.clazz.createAndInsertObject(editingContext());
 			comment.setBug(this);
             comment.setTextDescription(newValue);
 			addToComments(comment);
@@ -196,6 +198,7 @@ public class Bug extends _Bug implements Markable {
 		return ERXArrayUtilities.sortedArraySortedWithKey(comments(), Comment.Key.DATE_SUBMITTED);
 	}
 
+    @Override
     public void didUpdate() {
         super.didUpdate();
         _newText=null;
@@ -234,7 +237,7 @@ public class Bug extends _Bug implements Markable {
         }
 
         protected EOQualifier qualifierForRead(boolean flag) {
-            return new EOKeyValueQualifier(Key.IS_READ, EOQualifier.QualifierOperatorEqual, new Boolean(flag));
+            return new EOKeyValueQualifier(Key.IS_READ, EOQualifier.QualifierOperatorEqual, Boolean.valueOf(flag));
         }
         
         protected EOQualifier qualifierForPerson(People owner) {
@@ -313,7 +316,7 @@ public class Bug extends _Bug implements Markable {
             for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
                 String s=(String)e.nextElement();
                 try {
-                    Integer i=new Integer(s);
+                    Integer i = Integer.valueOf(s);
                     quals.addObject(new EOKeyValueQualifier("id", EOQualifier.QualifierOperatorEqual, i));
 
                 } catch (NumberFormatException ex) {}

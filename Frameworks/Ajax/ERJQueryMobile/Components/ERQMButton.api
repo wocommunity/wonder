@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMButton" wocomponentcontent="false">    <binding name="string"/>
+    
+    
+    <binding defaults="Actions" name="action"/>
+    <binding name="linkResource"/>
+    
+    <binding defaults="Boolean" name="disabled"/>
+    <binding name="data-rel"/>
+    <binding name="class"/>
+    <binding name="icon"/>
+    <binding name="theme"/>
+    <binding name="iconpos"/>
+    <binding defaults="Boolean" name="inline"/>
+    <binding defaults="Boolean" name="externalLink"/>
+    <binding name="transition"/>
+    <binding defaults="Boolean" name="mini"/>
+    </wo>
+</wodefinitions>

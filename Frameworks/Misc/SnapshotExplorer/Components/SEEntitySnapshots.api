@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="SEEntitySnapshots" wocomponentcontent="false">    <binding name="entityStats"/>
         <validation message="'entityStats' is a required binding.">

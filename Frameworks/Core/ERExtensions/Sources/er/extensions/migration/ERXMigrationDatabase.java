@@ -1,6 +1,7 @@
 package er.extensions.migration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -14,8 +15,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.eof.ERXModelGroup;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
@@ -67,7 +66,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * Another more complex case is that you are introducing an entirely new table
  * that has a foreign key to some existing table:
  * </p>
- * <code><pre>
+ * <pre><code>
  * ERXMigrationDatabase database = ERXMigrationDatabase.database(channel);
  * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson");
  * table.newStringColumn("FirstName", 100, false);
@@ -83,7 +82,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * table.newIntegerColumn("CompanyID", false);
  * table.create();
  * table.addForeignKey(table.existingColumnNamed("CompanyID"), database.existingTableNamed("Company").existingColumnNamed("companyID"));
- * </pre></code>
+ * </code></pre>
  * 
  * <p>
  * In the above examples, database.existingTableNamed and
@@ -114,7 +113,7 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * @author mschrag
  */
 public class ERXMigrationDatabase {
-	public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
 
 	private EOModel _model;
 	private EOAdaptorChannel _adaptorChannel;
@@ -299,7 +298,7 @@ public class ERXMigrationDatabase {
 	}
 
 	/**
-	 * @see ERXJDBCUtilities#databaseProductName(EOAdaptorChannel)
+	 * @see er.extensions.jdbc.ERXJDBCUtilities#databaseProductName(EOAdaptorChannel)
 	 * @return database product name
 	 */
 	public String productName() {
@@ -375,7 +374,7 @@ public class ERXMigrationDatabase {
 			if (required) {
 				throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support the required '" + operationName + "' operation.");
 			}
-			ERXMigrationDatabase.log.error("Your EOSynchronizationFactory does not support the '" + operationName + "' operation, so this migration will be skipped.");
+			log.error("Your EOSynchronizationFactory does not support the '{}' operation, so this migration will be skipped.", operationName);
 		}
 	}
 
@@ -421,7 +420,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.downgrade
+		 * @see IERXMigration#downgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database
@@ -443,7 +442,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.upgrade
+		 * @see IERXMigration#upgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database

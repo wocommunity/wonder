@@ -11,7 +11,8 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Beefed up list page.<br />
+ * Beefed up list page.
+ * 
  * @d2wKey printerButtonComponentName
  * @d2wKey emptyListComponentName
  * @d2wKey headerComponentName
@@ -25,6 +26,12 @@ import er.directtoweb.pages.ERD2WListPage;
  * @d2wKey returnButtonLabel
  */
 public class ERD2WListPageTemplate extends ERD2WListPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public ERD2WListPageTemplate(WOContext context) {
 		super(context);

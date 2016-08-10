@@ -105,6 +105,7 @@ EditForm : WOForm {
 	name = id;
 	disabled = disableForm;
 	onsubmit = ^onsubmit;
+	class = ^formClass;
 }
 
 ButtonConditional : WOConditional {

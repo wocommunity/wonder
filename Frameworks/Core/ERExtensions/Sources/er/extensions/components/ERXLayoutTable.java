@@ -2,7 +2,8 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -13,13 +14,37 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Table that can handle cell with row and colspans. Very useful with D2W to make more advance layouts.<br />
+ * Table that can handle cell with row and colspans. Very useful with D2W to make more advance layouts.
  * 
+ * @binding col
+ * @binding index
+ * @binding list
+ * @binding maxColumns
+ * @binding row
+ * @binding item
+ * @binding border
+ * @binding cellpadding
+ * @binding cellspacing
+ * @binding rowBackgroundColor
+ * @binding cellColSpan
+ * @binding cellRowSpan
+ * @binding cellBackgroundColor
+ * @binding cellAlign
+ * @binding cellVAlign
+ * @binding cellWidth
+ * @binding tableBackgroundColor
+ * @binding tableWidth
+ * @binding otherTagString
  */
-
 public class ERXLayoutTable extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	static final Logger log = Logger.getLogger(ERXLayoutTable.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLayoutTable.class);
 	
 	NSArray _list;
 	NSArray _colCounts;
@@ -33,6 +58,7 @@ public class ERXLayoutTable extends WOComponent {
         _resetInternalCaches();
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -95,31 +121,31 @@ public class ERXLayoutTable extends WOComponent {
     				// fill up rows until enough are present
     				// this currently doesn't work when a col has eaten all
     				for(int i = colCounts.count(); i < rowSpan + row; i++) {
-    					colCounts.addObject(new Integer(maxColumns));
-    					//log.info("Added: " + item + " " + colCounts);
+    					colCounts.addObject(Integer.valueOf(maxColumns));
+    					//log.info("Added: {} {}", item, colCounts);
     				}
-    				//log.info("Start: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
+    				//log.info("Start: {}  {}/{} {}/{} {}", item, currentRow, rowSpan, currentCol, colSpan, colCounts);
     				for(int i = row; i < row + rowSpan; i++) {
     					int currentMaxColumns = ((Integer) colCounts.objectAtIndex(i)).intValue();
     					currentMaxColumns = currentMaxColumns - (colSpan - (i == row ? 1 : 0));
-    					colCounts.replaceObjectAtIndex(new Integer(currentMaxColumns), i);
-    					//log.info("Curr: " + item + "  " + i + "/" + rowSpan + " " + currentMaxColumns + "/" + colSpan + " " + colCounts);
+    					colCounts.replaceObjectAtIndex(Integer.valueOf(currentMaxColumns), i);
+    					//log.info("Curr: {}  {}/{} {}/{} {}", item, i, rowSpan, currentMaxColumns, colSpan, colCounts);
     				}
-    				//log.info("Intern: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
+    				//log.info("Intern: {}  {}/{} {}/{} {}", item, currentRow, rowSpan, currentCol, colSpan, colCounts);
     				int currentRowMaxColums = ((Integer) colCounts.objectAtIndex(row)).intValue();
     				total += rowSpan * colSpan;
     				col += colSpan;
     				if(col >= currentRowMaxColums) {
     					row++;
     					col = 0;
-    					//log.info("Bumping row: " + item + " " + currentRow + " " + colCounts);
+    					//log.info("Bumping row: {} {} {}", item, currentRow, colCounts);
     				}
     	   			index = index + 1;
     			}
     			if(total > maxColumns * colCounts.count()) {
-    				colCounts.addObject(new Integer(total - maxColumns * colCounts.count()));
+    				colCounts.addObject(Integer.valueOf(total - maxColumns * colCounts.count()));
     			}
-    			//log.info("Result: " + colCounts);
+    			//log.info("Result: {}", colCounts);
     			_colCounts = colCounts;
     		}
     	}
@@ -151,7 +177,7 @@ public class ERXLayoutTable extends WOComponent {
         NSArray aList = list();
         int index = currentItemIndex;
         Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
-        // log.debug("Index: " + currentItemIndex + ": " + item + " -> " + currentRow + "/" + currentCol);
+        // log.debug("Index: {}: {} -> {}/{}", currentItemIndex, item, currentRow, currentCol);
         setValueForBinding(item, "item");
         setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
         setValueForBinding(ERXConstant.integerForInt(currentCol), "col");
@@ -161,7 +187,7 @@ public class ERXLayoutTable extends WOComponent {
 
     public void setCurrentCol(int newValue){
     	currentCol=newValue;
-    	// log.debug("Index: " + newValue);
+    	// log.debug("Index: {}", newValue);
     	if(colCount() != newValue) {
     		pushItem();
     	} else {
@@ -178,11 +204,13 @@ public class ERXLayoutTable extends WOComponent {
         _colCounts = null;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
      }
 
+    @Override
     public void reset() {
         _resetInternalCaches();
         setValueForBinding(null, "item");

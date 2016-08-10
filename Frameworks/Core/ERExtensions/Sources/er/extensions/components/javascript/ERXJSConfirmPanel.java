@@ -11,9 +11,8 @@ import com.webobjects.appserver.WOContext;
 
 import er.extensions.foundation.ERXStringUtilities;
 
-// Stateless confirm panel
 /**
- * Stateless implementation of JSConfirmPanel.*<br />
+ * Stateless implementation of JSConfirmPanel.
  *
  * @binding hyperlinkMessage
  * @binding action
@@ -24,14 +23,19 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding style style of the link
  * @binding disabled whether or not this link is disabled
  */
-
 public class ERXJSConfirmPanel extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSConfirmPanel(WOContext aContext) {
         super(aContext);
     }
 
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
     public String confirmMessage() { return "return confirm('" +

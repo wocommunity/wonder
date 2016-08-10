@@ -11,23 +11,20 @@ import java.util.Iterator;
 import java.util.Properties;
 
 public class PageInstaller {
-
     static void addLinkToNavBar(String targetFilename, String htmlFilename, String linkName) {
-
         File file = new File(targetFilename);
-
         FileReader fRdr = null;
 
         try {
             fRdr = new FileReader(file);
-        } catch (java.io.FileNotFoundException fnfe) { System.err.println("ERROR: could not open file for reading: "+file); System.exit(1); }
+        } catch (java.io.FileNotFoundException fnfe) {
+            System.err.println("ERROR: could not open file for reading: " + file);
+            System.exit(1);
+        }
 
         LineNumberReader rdr = new LineNumberReader(fRdr);
-
         String line = "";
-
         ArrayList<String> output = new ArrayList<String>();
-
         boolean needsUpdate = false;
 
         while (line != null) {
@@ -39,11 +36,14 @@ public class PageInstaller {
                 output.add(line);
                 if (line.indexOf("CLASS=\"NavBarCell1\"") > 0 && line.indexOf("deprecated-list.html") > 0) {
                     needsUpdate = true;
-                    String str = "  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"";
-                    str += dotsForPath(targetFilename);
-                    str += htmlFilename;
-                    str += "\"<FONT CLASS=\"NavBarFont1\"><B>"+linkName+"</B></FONT></A>&nbsp;</TD>";
-                    output.add(str);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"");
+                    sb.append(dotsForPath(targetFilename));
+                    sb.append(htmlFilename);
+                    sb.append("\"<FONT CLASS=\"NavBarFont1\"><B>");
+                    sb.append(linkName);
+                    sb.append("</B></FONT></A>&nbsp;</TD>");
+                    output.add(sb.toString());
                 }
             }
         }
@@ -67,7 +67,7 @@ public class PageInstaller {
 
     static String dotsForPath(String path) {
         int count = 0;
-        final String base = "dist/wonder-5.0/Documentation/api";
+        final String base = "dist/wonder-6.0/Documentation/api";
 
         String str = path;
 
@@ -134,9 +134,9 @@ public class PageInstaller {
             System.out.println("property[\""+name+"\"] -> \""+p.getProperty(name)+"\"");
         }
         */
-       if (!"wonder-5.0".equals(System.getProperty("wonder.version"))) System.exit(0);
+       if (!"wonder-6.0".equals(System.getProperty("wonder.version"))) System.exit(0);
 
-       String root = System.getProperty("wonder.root")+"/dist/wonder-5.0/Documentation/api/";
+       String root = System.getProperty("wonder.root")+"/dist/wonder-6.0/Documentation/api/";
 
        (new File("components.html")).renameTo(new File(root+"components.html"));
        (new File("components.txt")).renameTo(new File(root+"components.txt"));

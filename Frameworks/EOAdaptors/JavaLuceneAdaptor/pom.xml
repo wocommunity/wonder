@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>eoadaptors</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.eoadaptors</groupId>
@@ -10,11 +10,15 @@
 	<name>JavaLuceneAdaptor</name>
 	<packaging>woframework</packaging>
 	<dependencies>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERFoundation</artifactId>
+		</dependency>
 		<!-- BEGIN: Required because of NSCollection's using generics -->
-	<dependency>
-		<groupId>wonder.core</groupId>
-		<artifactId>ERExtensions</artifactId>
-	</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
 		<!-- END: Required because of NSCollection's using generics -->
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -29,11 +33,28 @@
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>ognl</groupId>
 			<artifactId>ognl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-XDignore.symbol.file=true</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>

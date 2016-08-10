@@ -6,7 +6,8 @@
 //
 package er.extensions.components.conditionals;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -25,8 +26,14 @@ import er.extensions.eof.ERXConstant;
  * @binding ERXOncePerRequestDisplayCountDict
  */
 public class ERXOncePerRequestConditional extends ERXStatelessComponent {
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXOncePerRequestConditional.class.getName());
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(ERXOncePerRequestConditional.class);
     
     String keyName = null;
     int currentStage = -1;
@@ -62,11 +69,13 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	return keyName;
     }
 
+    @Override
     public void reset() {
 	super.reset();
 	keyName = null;
     }
 
+    @Override
     public void awake() {
 	super.awake();
     }
@@ -81,18 +90,21 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
         displayCountDict().setObjectForKey(ERXConstant.integerForInt(count), key);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
         currentStage = 0;
 	resetDict();
 	super.takeValuesFromRequest(aRequest,aContext);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
         currentStage = 1;
 	resetDict();
 	return super.invokeAction(aRequest,aContext);
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         currentStage = 2;
 	resetDict();
@@ -101,8 +113,7 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 
     public boolean displayContent() {
 	int showCount = displayCountForKey(keyName() + "--" + currentStage);
-        if(log.isDebugEnabled())
-            log.debug("displayContent - showCount: " + showCount + " stage:" + currentStage);
+    log.debug("displayContent - showCount: {} stage: {}", showCount, currentStage);
 	return showCount == 0;
     }
 }

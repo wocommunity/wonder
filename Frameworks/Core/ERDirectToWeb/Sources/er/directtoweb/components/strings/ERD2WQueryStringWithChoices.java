@@ -17,6 +17,13 @@ import er.extensions.localization.ERXLocalizer;
  * @d2wKey possibleChoices
  */
 public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** logging support */
     public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);
     public ERXKeyValuePair currentChoice;
@@ -54,6 +61,7 @@ public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
         return _choices;
     }
     
+    @Override
     public void reset(){
         super.reset();
         _choices = null;

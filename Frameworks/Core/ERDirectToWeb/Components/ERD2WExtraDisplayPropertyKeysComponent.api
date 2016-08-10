@@ -2,7 +2,7 @@
 <wodefinitions>
         <wo class="ERD2WExtraDisplayPropertyKeysComponent" wocomponentcontent="false">
             <binding name="extraPropertiesKey"/>
-            <validation message="&apos;extraPropertiesKey&apos; is a required binding">
+            <validation message="'extraPropertiesKey' is a required binding">
                 <unbound name="extraPropertiesKey"/>
             </validation>
         </wo>

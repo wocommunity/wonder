@@ -26,6 +26,13 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOToOneRelationship extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     // ** passed-in (required)
     protected String _sourceEntityName;
     protected String _relationshipKey;
@@ -48,6 +55,7 @@ public class WOToOneRelationship extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -167,6 +175,7 @@ public class WOToOneRelationship extends WOComponent {
         set_privateSelection(null);
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }

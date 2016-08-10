@@ -7,10 +7,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -27,11 +27,11 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCConnectionBroker;
 
 /**
- * @author david@cluster9.com<br/> <br/> Automatically generates Long primary
- *         keys for entities. Features a cache which reduces database roundtrips
- *         as well as optionally encoding Entity type in PK value.<br/> <br/>
- *         usage:<br/> <br/> override either the ERXGeneratesPrimaryKey
- *         interface like this:<br/> <code><pre>
+ * Automatically generates Long primary keys for entities. Features a cache which reduces
+ * database roundtrips as well as optionally encoding Entity type in PK value.
+ * <h3>Usage:</h3>
+ * override either the ERXGeneratesPrimaryKey interface like this:
+ * <pre><code>
  * private NSDictionary _primaryKeyDictionary = null;
  * 
  * public NSDictionary primaryKeyDictionary(boolean inTransaction) {
@@ -40,20 +40,20 @@ import er.extensions.jdbc.ERXJDBCConnectionBroker;
  * 		}
  * 		return _primaryKeyDictionary;
  * }
- * </pre>
- * </code><br/> or manually call<br/>
- *         <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code><br/>
- *         <br/> the necessary database table is generated on the fly.<br/>
- *         <br/> <b>Encoding Entity in PK values</b><br/> If the system
- *         property
- *         <code>ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue</code> is
- *         set to <code>true</code> then the last 6 bits from the 64 bit
- *         primary key is used to encode the Subentity in the pk value. This
- *         speeds up inheritance with multiple tables. In order to support this
- *         you must add an entry to the userInfo from the Subentities:<br/>
- *         <br/> <code>key=entityCode</code><br/>
- *         <code>value= %lt;%lt; an unique integer, no longer than 6 bit - 1</code><br/>
+ * </code></pre>
+ * or manually call<br>
+ * <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code>
+ * the necessary database table is generated on the fly.
+ * <h3>Encoding Entity in PK values</h3>
+ * If the system property <code>ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue</code> is
+ * set to <code>true</code> then the last 6 bits from the 64 bit primary key is used to
+ * encode the Subentity in the pk value. This speeds up inheritance with multiple tables. In
+ * order to support this you must add an entry to the userInfo from the Subentities:
+ * <p>
+ * <code>key=entityCode</code><br>
+ * <code>value= %lt;%lt; an unique integer, no longer than 6 bit - 1</code>
  * 
+ * @author david@cluster9.com
  */
 public class ERXLongPrimaryKeyFactory {
 
@@ -61,7 +61,7 @@ public class ERXLongPrimaryKeyFactory {
 	private static final int		HOST_CODE_LENGTH = 10;
 	private static final String    HOST_CODE_KEY = "er.extensions.ERXLongPrimaryKeyFactory.hostCode";
 
-	private static final Logger log          = Logger.getLogger(ERXLongPrimaryKeyFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLongPrimaryKeyFactory.class);
 	private static long            MAX_PK_VALUE = (long) Math.pow(2, 48);
 	private  Boolean         encodeEntityInPkValue;
 	private  Boolean         encodeHostInPkValue;
@@ -85,9 +85,9 @@ public class ERXLongPrimaryKeyFactory {
 			// now add the hostCode
 			realPk = realPk | hostCode();
 			if (log.isDebugEnabled()) {
-				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+				log.debug("new pk value for {}({}), db value = {}, new value = {}", ename, ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename), pk, realPk);
 			}
-			pk = new Long(realPk);
+			pk = Long.valueOf(realPk);
 		}
 		if (encodeEntityInPkValue()) {
 			long l = pk.longValue();
@@ -102,9 +102,9 @@ public class ERXLongPrimaryKeyFactory {
 			// now add the entity code
 			realPk = realPk | ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename);
 			if (log.isDebugEnabled()) {
-				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+				log.debug("new pk value for {}({}), db value = {}, new value = {}", ename, ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename), pk, realPk);
 			}
-			pk = new Long(realPk);
+			pk = Long.valueOf(realPk);
 		}
 		return pk;
 	}
@@ -144,7 +144,7 @@ public class ERXLongPrimaryKeyFactory {
 
 	private int hostCode() {
 		if (hostCode == null) {
-			hostCode = new Integer(ERXSystem.getProperty(HOST_CODE_KEY));
+			hostCode = Integer.valueOf(ERXSystem.getProperty(HOST_CODE_KEY));
 		}
 		return hostCode.intValue();
 	}
@@ -197,23 +197,23 @@ public class ERXLongPrimaryKeyFactory {
 		}
 
 		Long pk = getNextPkValueForEntity(entityName);
-		String pkName = (String) entity.primaryKeyAttributeNames().objectAtIndex(0);
+		String pkName = entity.primaryKeyAttributeNames().objectAtIndex(0);
 		return new NSDictionary(new Object[] { pk}, new Object[] { pkName});
 	}
 
 	/**
 	 * returns a new primary key for the specified entity.
 	 * 
-	 * @param ename,
+	 * @param entityName
 	 *            the entity name for which this method should return a new
 	 *            primary key
-	 * @param count,
+	 * @param count
 	 *            the number of times the method should try to get a value from
 	 *            the database if something went wrong (a deadlock in the db for
 	 *            example -> high traffic with multiple instances)
-	 * @param increaseBy,
+	 * @param increasePkBy
 	 *            if > 1 then the value in the database is increased by this
-	 *            factor. This is usefull to 'get' 10000 pk values at once for
+	 *            factor. This is useful to 'get' 10000 pk values at once for
 	 *            caching. Removes a lot of db roundtrips.
 	 * @return a new pk values for the specified entity.
 	 */
@@ -247,7 +247,7 @@ public class ERXLongPrimaryKeyFactory {
 					con.setAutoCommit(false);
 					con.setReadOnly(false);
 				} catch (SQLException e) {
-					log.error(e, e);
+					log.error("Database error.", e);
 				}
 
 				for(int tries = 0; tries < count; tries++) {
@@ -267,7 +267,7 @@ public class ERXLongPrimaryKeyFactory {
 							con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + entityName + "', " + (pk+increasePkBy) + ")");
 						}
 						con.commit();
-						return new Long(pk);
+						return Long.valueOf(pk);
 					} catch(SQLException ex) {
 						String s = ex.getMessage().toLowerCase();
 						boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
@@ -304,14 +304,12 @@ public class ERXLongPrimaryKeyFactory {
 	 * first
 	 * 
 	 * @param ename
-	 * @param pk
-	 * @return
 	 */
 	private long maxIdFromTable(String ename) {
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);
 		if (entity == null) throw new NullPointerException("could not find an entity named " + ename);
 		String tableName = entity.externalName();
-		String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+		String colName = entity.primaryKeyAttributes().lastObject().columnName();
 		String sql = "select max(" + colName + ") from " + tableName;
 
 		ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);
@@ -325,8 +323,7 @@ public class ERXLongPrimaryKeyFactory {
 			long v = 1l;
 			if (hasNext) {
 				v = resultSet.getLong(1);
-				if (log.isDebugEnabled())
-					log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
+				log.debug("received max id from table {}, setting value in PK_TABLE to {}", tableName, v);
 				if(encodeEntityInPkValue()) {
 					v = v >> CODE_LENGTH;
 				}
@@ -337,7 +334,7 @@ public class ERXLongPrimaryKeyFactory {
 			return v + 1;
 
 		} catch (SQLException e) {
-			log.error("could not call database with sql " + sql, e);
+			log.error("could not call database with sql {}", sql, e);
 			throw new IllegalStateException("could not get value from " + sql);
 		} finally {
 			broker.freeConnection(con);
@@ -348,7 +345,7 @@ public class ERXLongPrimaryKeyFactory {
 	 * Returns a new integer based PkValue for the specified entity. If the
 	 * cache is empty it is refilled again.
 	 * 
-	 * @param ename,
+	 * @param ename
 	 *            the entity name for which this method should return a new
 	 *            primary key
 	 * 
@@ -372,7 +369,7 @@ public class ERXLongPrimaryKeyFactory {
 	 * specified entity name. If there is no Stack a new Stack object will be
 	 * created.
 	 * 
-	 * @param ename,
+	 * @param ename
 	 *            the name of the entity for which this method should return the
 	 *            Stack
 	 * @return the Stack with primary key values for the specified entity.
@@ -390,17 +387,17 @@ public class ERXLongPrimaryKeyFactory {
 	 * creates x primary key values for the specified entity and updates the
 	 * database, where x is the number specified in increaseBy
 	 * 
-	 * @param s,
+	 * @param s
 	 *            the stack into which the pk values should be inserted
-	 * @param ename,
+	 * @param ename
 	 *            the entity name for which the pk values should be generated
 	 */
 	private void fillPkCache(Stack s, String ename) {
 		Long pkValueStart = getNextPkValueForEntityIncreaseBy(ename, 10, increaseBy());
 		long value = pkValueStart.longValue();
-		log.debug("filling pkCache for " + ename + ", starting at " + value);
+		log.debug("filling pkCache for {}, starting at {}", ename, value);
 		for (int i = increaseBy(); i > 0;  i--) {
-			s.push(new Long(i + value));
+			s.push(Long.valueOf(i + value));
 		}
 	}
 
@@ -413,7 +410,7 @@ public class ERXLongPrimaryKeyFactory {
 	 */
 	private int increaseBy() {
 		if (increaseBy == null) {
-			increaseBy = new Integer(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
+			increaseBy = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
 		}
 		return increaseBy.intValue();
 	}

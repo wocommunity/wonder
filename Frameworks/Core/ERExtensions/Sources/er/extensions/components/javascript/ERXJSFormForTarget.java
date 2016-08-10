@@ -16,12 +16,20 @@ import er.extensions.foundation.ERXValueUtilities;
  * Useful for creating a javascript window for a form submit.
  * @binding multipleSubmit true the form multiple submit
  * @binding targetDictionary dictionary (optionally) containing
- *  <li>width - width of the window
- *  <li>targetName - name of the target window
- *  <li>height - height of the target window
- *  <li>scrollbars - NO/false if you don't want scrollbars 
+ *  <ul>
+ *  <li>width - width of the window</li>
+ *  <li>targetName - name of the target window</li>
+ *  <li>height - height of the target window</li>
+ *  <li>scrollbars - NO/false if you don't want scrollbars</li>
+ *  </ul> 
  */
 public class ERXJSFormForTarget extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSFormForTarget(WOContext aContext) {
         super(aContext);
@@ -33,7 +41,7 @@ public class ERXJSFormForTarget extends WOComponent {
     public String targetString(){
         String result = "";
         if(targetDictionary != null){
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append( targetDictionary.valueForKey("targetName")!=null ?
                            targetDictionary.valueForKey("targetName") : "foobar");
             buffer.append(":width=");
@@ -42,7 +50,7 @@ public class ERXJSFormForTarget extends WOComponent {
             buffer.append(", height=");
             buffer.append( targetDictionary.valueForKey("height")!=null ?
                            targetDictionary.valueForKey("height") : "{myHeight}");
-            buffer.append(",");
+            buffer.append(',');
             buffer.append( ERXValueUtilities.booleanValueWithDefault(targetDictionary.valueForKey("scrollbars"), true) ? " " : "scrollbars");
             buffer.append(", {(isResizable)?'resizable':''}, status");
             //System.out.println("buffer = "+buffer.toString());

@@ -9,10 +9,10 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * Table implementation of a grouping repetition.<br />
+ * Table implementation of a grouping repetition.
  * 
- * @binding list
- * @binding item
+ * @binding list NSArray
+ * @binding item An object coming from the list
  * @binding sectionForItem
  * @binding subList
  * @binding subListSection
@@ -31,10 +31,16 @@ import com.webobjects.appserver.WOContext;
  * @binding cellVAlign
  * @binding cellWidth
  * @binding tableWidth
- * @binding goingVertically" defaults="Boolean
+ * @binding goingVertically defaults=Boolean
  */
 
 public class ERXGroupingTable extends ERXGroupingRepetition {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXGroupingTable(WOContext context) {
         super(context);

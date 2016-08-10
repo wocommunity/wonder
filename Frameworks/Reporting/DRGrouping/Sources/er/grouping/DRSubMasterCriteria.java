@@ -1,13 +1,20 @@
 package er.grouping;
 
-import java.text.*;
-import java.util.*;
+import java.text.Format;
+import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXValueUtilities;
 
 
@@ -18,10 +25,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * into a set of ranges, if required.
  */
  
-public class DRSubMasterCriteria extends Object  {
-
-    /** Logging support */
-    protected static final Logger log = Logger.getLogger(DRSubMasterCriteria.class);
+public class DRSubMasterCriteria {
+    private static final Logger log = LoggerFactory.getLogger(DRSubMasterCriteria.class);
 
     protected boolean _useMethod;
 
@@ -122,13 +127,13 @@ public class DRSubMasterCriteria extends Object  {
     public DRSubMasterCriteria(String akey, boolean auseMethod, boolean auseTimeFormat, String aformat, String apossibleValuesUseType, boolean agroupEdges, NSArray apossibleValues) {
         
         if(log.isDebugEnabled()) {
-            log.debug("akey: "+akey);
-            log.debug("auseMethod: "+auseMethod);
-            log.debug("auseTimeFormat: "+auseTimeFormat);
-            log.debug("aformat: "+aformat);
-            log.debug("apossibleValuesUseType: "+apossibleValuesUseType);
-            log.debug("agroupEdges: "+agroupEdges);
-            log.debug("apossibleValues: "+apossibleValues);
+            log.debug("akey: {}", akey);
+            log.debug("auseMethod: {}", auseMethod);
+            log.debug("auseTimeFormat: {}", auseTimeFormat);
+            log.debug("aformat: {}", aformat);
+            log.debug("apossibleValuesUseType: {}", apossibleValuesUseType);
+            log.debug("agroupEdges: {}", agroupEdges);
+            log.debug("apossibleValues: {}", apossibleValues);
         }
         _label = null;
         
@@ -191,7 +196,7 @@ public class DRSubMasterCriteria extends Object  {
     }
 
     /**
-     * Decides if the extration is by method or instance variable.
+     * Decides if the extraction is by method or instance variable.
      * If this returns true, then only methods will be used to extract
      * values from the raw objects, not their instance variables.
      */
@@ -206,7 +211,7 @@ public class DRSubMasterCriteria extends Object  {
      * Decides if the {@link #format()} given is used to convert dates
      * into strings before comparison or just compare {@link NSTimestamp}.
      * If you set this, you should also set a valid {@link NSTimestampFormatter}
-     * pattern in {@link format()}.
+     * pattern in {@link #format()}.
      */
     public boolean useTimeFormat() {
         return _useTimeFormat;
@@ -242,7 +247,7 @@ public class DRSubMasterCriteria extends Object  {
     }
 
     /**
-     * When {@link useTimeFormat()} is set, then date values
+     * When {@link #useTimeFormat()} is set, then date values
      * will be converted to a string before a comparison by using this format.
      * The string can be any valid {@link NSTimestampFormatter} string,
      * which means that you can also use {@link java.util.DateFormatter}
@@ -255,7 +260,7 @@ public class DRSubMasterCriteria extends Object  {
     public void setFormat(String v) {
         if (_useTimeFormat && v == null) {
             _format = "";
-            log.error("Can't have empty format when useTimeFormat=true: " + this);
+            log.error("Can't have empty format when useTimeFormat=true: {}", this);
         }
         if(v != null)
             _format = v;
@@ -284,7 +289,7 @@ public class DRSubMasterCriteria extends Object  {
         } else {
             if (!_possibleUseTypes.containsObject(v)) {
                 // invalid possibleValuesUseType
-                log.error("Invalid possibleValuesUseType: " + v + ". Allowed are only: " +_possibleUseTypes+ " " + this);
+                log.error("Invalid possibleValuesUseType: {}. Allowed are only: {} {}", v, _possibleUseTypes, this);
                 _possibleValuesUseType = null;
             } else {
                 _possibleValuesUseType = v;
@@ -301,7 +306,7 @@ public class DRSubMasterCriteria extends Object  {
     }
     public void setRawPossibleValues(NSArray arr) {
         if (_possibleValuesUseType != null && (arr == null || arr.count() == 0)) {
-            log.warn("Should use possible values but got none: " + this);
+            log.warn("Should use possible values but got none: {}", this);
             _rawPossibleValues = NSArray.EmptyArray;
         } else {
             _rawPossibleValues = new NSArray(arr);
@@ -440,11 +445,11 @@ public class DRSubMasterCriteria extends Object  {
             return nvts;
         } else if (val instanceof Number) {
             v = DRValueConverter.converter().doubleForValue(val) + delta;
-            return (new Double(v));
+            return (Double.valueOf(v));
         }
 
         v = DRValueConverter.converter().doubleForValue(val) + delta;
-        return (new Double(v)).toString();
+        return Double.toString(v);
     }
 
     /**
@@ -500,7 +505,7 @@ public class DRSubMasterCriteria extends Object  {
             try {
                 s = formatter.format(ts);
             } catch(Exception ex) {
-                log.warn("Error lookup " + ex + ", value=" + aVal + ": " + this);
+                log.warn("Error lookup {}, value={}: {}", ex, aVal, this);
                 s = aVal.toString();
             }
         } else {
@@ -515,10 +520,10 @@ public class DRSubMasterCriteria extends Object  {
         return _possibleUseTypes;
     }
 
-    /** Holds the description for the {@link key}. */
+    /** Holds the description for the {@link #key()}. */
     private String _keyDesc = null;
 
-    /** Returns the description for the {@link key}. */
+    /** Returns the description for the {@link #key()}. */
     public String keyDesc() {
         if(_keyDesc == null) {
             _keyDesc = super.toString();
@@ -526,6 +531,7 @@ public class DRSubMasterCriteria extends Object  {
         return _keyDesc;
     }
 
+    @Override
     public String toString() {
         return "<DRSubMasterCriteria key: \"" + key() + "\"; label: \"" + label() + "\"; >";
     }

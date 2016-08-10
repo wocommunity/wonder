@@ -1,6 +1,7 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -22,7 +23,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak
  */
 public class ERXTolerantWrapper extends WODynamicGroup {
-	private static final Logger log = Logger.getLogger(ERXTolerantWrapper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXTolerantWrapper.class);
 	private WOAssociation _tolerant;
 
 	public ERXTolerantWrapper(String name, NSDictionary associations, WOElement template) {
@@ -41,6 +42,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 		return tolerant;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {
@@ -50,7 +52,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 			catch (Throwable ex) {
 				response.appendContentString(ex.toString());
 				context._setCurrentComponent(component);
-				log.error(ex, ex);
+				log.error("Error during appendToResponse", ex);
 			}
 		}
 		else {
@@ -58,6 +60,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 		}
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {
@@ -66,13 +69,14 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 			}
 			catch (Throwable ex) {
 				context._setCurrentComponent(component);
-				log.error(ex, ex);
+				log.error("Error during invokeAction", ex);
 			}
 			return null;
 		}
 		return super.invokeAction(request, context);
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {
@@ -81,7 +85,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 			}
 			catch (Throwable ex) {
 				context._setCurrentComponent(component);
-				log.error(ex, ex);
+				log.error("Error during takeValuesFromRequest", ex);
 			}
 		}
 		else {

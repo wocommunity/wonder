@@ -5,11 +5,11 @@
 		<binding name="key"/>
 		<binding name="object"/>
 
-		<validation message="&apos;key&apos; is a required binding">
+		<validation message="'key' is a required binding">
 			<unbound name="key"/>
 		</validation>
 
-		<validation message="&apos;object&apos; is a required binding">
+		<validation message="'object' is a required binding">
 			<unbound name="object"/>
 		</validation>
 	</wo>

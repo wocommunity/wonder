@@ -6,12 +6,16 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.text.*; // for number formatting
-import java.util.*; // for Enumeration
+import java.text.DecimalFormat;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * PayPalSingleItemFormLink is a WOComponent that implements a form to submit a
@@ -44,18 +48,9 @@ public class PayPalSingleItemFormLink extends
      * 
      * @return boolean
      */
+    @Override
     public boolean isStateless() {
         return true;
-    }
-
-    /**
-     * Tells the component not to synchronize its binding values. This means we
-     * have to do it manually.
-     * 
-     * @return boolean
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
     }
 
     /**
@@ -76,7 +71,7 @@ public class PayPalSingleItemFormLink extends
 
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();
-            if (this.valueForKey(key) != null) {
+            if (valueForKey(key) != null) {
                 if (key.equals("payPalBusinessName")) {
                     boundValues.addObject(new NSDictionary(new Object[] { payPalBusinessName, "business"},
                             new Object[] {"value", "key"}));
@@ -153,6 +148,7 @@ public class PayPalSingleItemFormLink extends
      * 
      * @return NSArray
      */
+    @Override
     protected NSArray additionalBindingList() {
         NSMutableArray bindingsArray = new NSMutableArray();
         bindingsArray.addObjectsFromArray(new NSArray(new Object[] { "useImageButton"}));
@@ -184,6 +180,7 @@ public class PayPalSingleItemFormLink extends
     /**
      * Resets the values pulled from the WOComponent to null.
      */
+    @Override
     public void reset() {
         Enumeration enumeration = baseBindingList().objectEnumerator();
 
@@ -198,6 +195,7 @@ public class PayPalSingleItemFormLink extends
             String key = (String) enumeration.nextElement();
             takeValueForKey(null, key);
         }
+        super.reset();
     }
 
     /**
@@ -210,6 +208,7 @@ public class PayPalSingleItemFormLink extends
      * @param c
      *            WOContext
      */
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         pullBindings();
         super.appendToResponse(r, c);
@@ -225,6 +224,7 @@ public class PayPalSingleItemFormLink extends
      * @param c
      *            WOContext
      */
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         pullBindings();
         super.takeValuesFromRequest(r, c);
@@ -241,6 +241,7 @@ public class PayPalSingleItemFormLink extends
      *            WOContext
      * @return WOActionResults
      */
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         pullBindings();
         return super.invokeAction(r, c);

@@ -8,9 +8,9 @@
 	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/gluonj-1.5beta.jar"/>
-	<classpathentry kind="lib" path="Libraries/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERJars"/>
+	<classpathentry kind="lib" path="Libraries/javassist-3.19.0-GA.jar"/>
+	<classpathentry kind="lib" path="Libraries/gluonj-1.5beta-java6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

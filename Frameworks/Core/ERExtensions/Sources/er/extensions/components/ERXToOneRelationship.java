@@ -14,7 +14,7 @@ import er.extensions.woextensions.WOToOneRelationship;
 
 /**
  * Better layout options that the {@link WOToOneRelationship}, in addition you can set a 
- * qualifier on the dataSource if you passed any.<br />
+ * qualifier on the dataSource if you passed any.
  *
  * @binding dataSource
  * @binding destinationDisplayKey
@@ -36,7 +36,13 @@ import er.extensions.woextensions.WOToOneRelationship;
  */
 
 public class ERXToOneRelationship extends WOToOneRelationship {
-	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public final String radioButtonComponentName = ERXProperties.stringForKeyWithDefault("er.extensions.components.ERXToOneRelationship.radioButtonComponentName", "ERXRadioButtonMatrix");
 
     public ERXToOneRelationship(WOContext context) {

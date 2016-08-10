@@ -3,6 +3,7 @@ package com.webobjects.foundation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import er.erxtest.ERXTestCase;
@@ -266,5 +267,31 @@ public class NSSetTest extends ERXTestCase {
 		} catch (UnsupportedOperationException e) {
 		}
 	}
-
+	
+	public void testNSSetIterator() {
+		NSSet<String> set = new NSSet<String>("abc", "def");
+		NSMutableSet<String> check = set.mutableClone();
+		
+		Iterator<String> iterator = set.iterator();
+		assertTrue(iterator.hasNext());
+		assertTrue(check.remove(iterator.next()));
+		assertTrue(iterator.hasNext());
+		assertTrue(check.remove(iterator.next()));
+		assertFalse(iterator.hasNext());
+		assertTrue(check.isEmpty());
+		try {
+			iterator.next(); // no items left, should throw ArrayIndexOutOfBoundsException
+			fail();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// test passed
+		}
+		
+		iterator = set.iterator();
+		try {
+			iterator.remove(); // immutable, should throw UnsupportedOperationException
+			fail();
+		} catch (UnsupportedOperationException e) {
+			// test passed
+		}
+	}
 }

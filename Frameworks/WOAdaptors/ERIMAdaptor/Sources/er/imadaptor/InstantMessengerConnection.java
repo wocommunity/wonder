@@ -149,7 +149,7 @@ public class InstantMessengerConnection {
 		@Override
 		public void process(Message message) {
 			try {
-				IInstantMessenger instantMessenger = InstantMessengerConnection.this.instantMessenger();
+				IInstantMessenger instantMessenger = instantMessenger();
 				instantMessenger.sendMessage(message.buddyName(), message.contents(), true);
 			}
 			catch (MessageException e) {

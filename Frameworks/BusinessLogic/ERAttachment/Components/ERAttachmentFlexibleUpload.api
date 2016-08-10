@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="ERMAttachmentUploader" wocomponentcontent="false">    <binding name="attachment"/>
         <validation message="'attachment' is a required binding.">

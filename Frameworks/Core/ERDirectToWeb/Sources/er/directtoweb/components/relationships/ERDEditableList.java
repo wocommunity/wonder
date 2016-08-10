@@ -17,6 +17,13 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @d2wKey displayNameForDestinationEntity
  */
 public class ERDEditableList extends ERDList {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public EODetailDataSource detailDataSource;
 	private String closedLabelString;
 	private String container;
@@ -25,6 +32,7 @@ public class ERDEditableList extends ERDList {
         super(context);
     }
     
+    @Override
     public void reset() {
     	detailDataSource = null;
     	closedLabelString = null;

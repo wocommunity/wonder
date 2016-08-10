@@ -1,0 +1,14 @@
+<wo:JQPageWrapper title = "Split Button List">
+  <wo:ERQMListView data-split-icon = "gear" data-split-theme = "b" data-inset = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie" index = "$index">
+      <wo:ERQMListViewElement action = "$doShowOneMovieAction">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        <wo:img src = "$fileName" />
+        <h3><wo:str value = "$oneMovie.title" /></h3>
+        <p><wo:str value = "$oneMovie.studio.name" /></p>
+        <!-- This Link makes the SplitView : also because set split-icon the link isButton has to be false -->
+        <wo:ERQMButton linkResource = "page://PurchaseSheet" data-transition = "pop" isButton = "false">Purchase album</wo:ERQMButton>
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

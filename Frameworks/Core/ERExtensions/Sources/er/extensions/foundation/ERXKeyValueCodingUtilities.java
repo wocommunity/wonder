@@ -1,9 +1,3 @@
-/*
- * Created on 08.03.2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package er.extensions.foundation;
 
 import java.lang.reflect.Field;
@@ -14,6 +8,8 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -21,7 +17,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 
 /**
@@ -56,6 +51,7 @@ public class ERXKeyValueCodingUtilities {
 	 * 
 	 * @param clazz
 	 * @param key
+     * @return value object
 	 */
     public static Object classValueForKey(Class clazz, String key) {
         Object result = null;
@@ -79,9 +75,9 @@ public class ERXKeyValueCodingUtilities {
                     for (int i = 0; i < fields.length && !found; i++) {
                         Field current = fields[i];
                         if(current.getName().equals(key)) {
-                        	boolean isAccessible = current.isAccessible();
-                        	// AK: should have a check for existance of KeyValueCodingProtectedAccessor here
+                        	// AK: should have a check for existence of KeyValueCodingProtectedAccessor here
                         	// AK: disabled, only for testing
+                        	// boolean isAccessible = current.isAccessible();
                         	// current.setAccessible(true);
                         	result = current.get(clazz);
                         	// current.setAccessible(isAccessible);
@@ -114,6 +110,7 @@ public class ERXKeyValueCodingUtilities {
      * Returns final strings constants from an interface or class. Useful in particular when you want to create
      * selection lists from your interfaces automatically. 
      * @param c
+     * @return list of final string constants
      */
     public static NSArray<ERXKeyValuePair> staticStringsForClass(Class c) {
 		NSMutableArray<ERXKeyValuePair> result = new NSMutableArray();
@@ -137,7 +134,7 @@ public class ERXKeyValueCodingUtilities {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
-		return (NSArray<ERXKeyValuePair>) result;
+		return result;
 
 	}
 
@@ -189,13 +186,12 @@ public class ERXKeyValueCodingUtilities {
     	try {
     		if(field != null) {
         		return field.get(target);
-    		} else {
-    			Method method = accessibleMethodForKey(target, key);
-    			if(method != null) {
-    				return method.invoke(target, null);
-    			}
-    			throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
     		}
+			Method method = accessibleMethodForKey(target, key);
+			if(method != null) {
+				return method.invoke(target, (Object[]) null);
+			}
+			throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
     	}
     	catch (IllegalArgumentException e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -244,7 +240,7 @@ public class ERXKeyValueCodingUtilities {
     public static Field fieldForKey(Object target, String key) {
     	Field result = null;
     	Class c = target.getClass();
-    	while(result == null && c != null) {
+    	while (c != null) {
     		try {
     			result = c.getDeclaredField(key);
     			if(result != null) { 
@@ -264,7 +260,7 @@ public class ERXKeyValueCodingUtilities {
     public static Method methodForKey(Object target, String key) {
     	Method result = null;
     	Class c = target.getClass();
-    	while(result == null && c != null) {
+    	while (c != null) {
     		try {
     			result = c.getDeclaredMethod(key);
     			if(result != null) { 
@@ -306,12 +302,12 @@ public class ERXKeyValueCodingUtilities {
     		}
     		
     		if (keyValueCodingObject != null) {
-    			if (ERXExtensions.safeDifferent(value, keyValueCodingObject.valueForKey(key))) {
+    			if (ObjectUtils.notEqual(value, keyValueCodingObject.valueForKey(key))) {
     				keyValueCodingObject.takeValueForKey(value, key);
     			}
     		}
     		else {
-    			if (ERXExtensions.safeDifferent(value, NSKeyValueCoding.DefaultImplementation.valueForKey(object, key))) {
+    			if (ObjectUtils.notEqual(value, NSKeyValueCoding.DefaultImplementation.valueForKey(object, key))) {
     				NSKeyValueCoding.DefaultImplementation.takeValueForKey(object, value, key);
     			}
     		}

@@ -1,0 +1,35 @@
+AjaxOptions :  AjaxOptions {
+	options = createAjaxOptions;
+	onComplete = onComplete;
+}
+
+ContainerID : WOString {
+	value = id;
+}
+
+Content : WOComponentContent {
+	
+}
+
+ListContainer : WOGenericContainer {
+	elementName = listElementName;
+	id = id;
+	class = ^listClass;
+	style = ^listStyle;
+}
+
+ListItemContainer : WOGenericContainer {
+	elementName = listItemElementName;
+	id = listItemID;
+	class = ^listItemClass;
+	style = ^listItemStyle;
+}
+
+ListRepetition : WORepetition {
+	list = ^list;
+	item = ^item;
+}
+
+SortableVariableName : WOString {
+	value = var;
+}

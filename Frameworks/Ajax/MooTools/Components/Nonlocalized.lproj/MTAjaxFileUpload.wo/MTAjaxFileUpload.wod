@@ -1,0 +1,79 @@
+HiddenFrame : WOIFrame {
+	name = uploadFrameName;
+	src = srcUrl;
+	width = "0";
+	height = "0";
+	style = "border: none;";
+	border = "0";
+}
+
+UploadForm : WOForm {
+	class = ^formClass;
+	multipleSubmit = false;
+	enctype = "multipart/form-data";
+	target = uploadFrameName;
+	href = uploadUrl;
+	name = uploadFormID;
+}
+
+HiddenID : WOGenericElement {
+	elementName = "input";
+	type = "hidden";
+	name = "id";
+	value = id;
+}
+
+HiddenWOSID : WOGenericElement {
+	elementName = "input";
+	type = "hidden";
+	name = application.sessionIdKey;
+	value = session.sessionID;
+}
+
+UploadField : WOGenericElement {
+	elementName = "input";
+	type = "file";
+	name = "uploadedFile";
+	class = ^class;
+	id = ^id;
+	style = ^style;
+}
+
+UploadAction : MTAjaxUpdateLink {
+	updateContainerID = progressBarID;
+	action = startUpload;
+	button = true;
+	class = ^linkClass;
+	functionName = ^uploadFunctionName;
+	value = uploadLabel;
+	disabled = false;
+}
+
+UploadProgressBar : MTAjaxProgressBar { 
+	id = progressBarID;
+	progressID = id;
+	progress = uploadProgress;
+	started = uploadStarted;
+	succeededAction = uploadSucceeded;
+	startedFunction = ^startedFunction;
+	finishedFunction = ^finishedFunction;
+	succeededFunction = ^succeededFunction;
+	failedAction = uploadFailed;
+	failedFunction = ^failedFunction;
+	canceledAction = uploadCanceled;
+	canceledFunction = ^canceledFunction;
+	displayValue = bytesReadSize;
+	displayMaximum = streamLengthSize;
+	allowCancel = ^allowCancel;
+	visibleBeforeStart = progressBarBeforeStart;
+	visibleAfterDone = progressBarAfterDone;
+	cancelText = cancelText;
+	cancelingText = cancelingText;
+	startingText = startingText;
+	refreshTime = ^refreshTime;
+	progressOfText = ^progressOfText;
+	progressBarContainerClass = ^progressBarContainerClass;
+}
+
+Contents : WOComponentContent {
+}

@@ -6,12 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver.ajax;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -27,29 +29,62 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXProperties;
 
 /**
+ * <div class="en">
  * ERXAjaxSession is the part of ERXSession that handles Ajax requests.
  * If you want to use the Ajax framework without using other parts of Project
  * Wonder (i.e. ERXSession or ERXApplication), you should steal all of the code
  * in ERXAjaxSession, ERXAjaxApplication, and ERXAjaxContext.
+ * </div>
+ * 
+ * <div class="ja">
+ * ERXAjaxSession は ERXSession の Ajax 対応部分である。
+ * </div>
+ * 
+ * @property er.extensions.maxPageReplacementCacheSize=30
+ * @property er.extensions.appserver.ajax.ERXAjaxSession.storesPageInfo=false
+ * @property er.extensions.overridePrivateCache
  * 
  * @author mschrag
  */
 public class ERXAjaxSession extends WOSession {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   /**
+   * <div class="en">
    * Key that tells the session not to store the current page. Checks both the 
    * response userInfo and the response headers if this key is present. The value doesn't matter,
    * but you need to update the corresponding value in AjaxUtils.  This is to keep the dependencies
    * between the two frameworks independent.
+   * </div>
+   * 
+   * <div class="ja">
+   * カレント・ページをセッション内に保存しない、又は強制的に保存するキーです。
+   * レスポンスの userInfo もレスポンスの header の両方をチェックします。
+   * 値は関係ないのですが、キーが設定されていればだけでいいのです。
+   * </div>
    */
   public static final String DONT_STORE_PAGE = "erxsession.dont_store_page";
   public static final String FORCE_STORE_PAGE = "erxsession.force_store_page";
 
   /**
+   * <div class="en">
    * Key that is used to specify that a page should go in the replacement cache instead of
    * the backtrack cache.  This is used for Ajax components that actually generate component
    * actions in their output.  The value doesn't matter, but you need to update the 
    * corresponding value in AjaxUtils.  This is to keep the dependencies between the two
    * frameworks independent.
+   * </div>
+   * 
+   * <div class="ja">
+   * ページがバックトラック・キャシュではなく、独自の内部キャシュで処理します。なぜなら、 Ajax コンポーネントが
+   * 既にコンポーネント・アクションを出力している場合に有効です。
+   * 値は関係ないのですが、キーが設定されていればだけでいいのです。
+   * </div>
    */
   public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "page_cache_key";
 
@@ -58,20 +93,48 @@ public class ERXAjaxSession extends WOSession {
   private static final String PAGE_REPLACEMENT_CACHE_KEY = "page_replacement_cache";
 
   private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
+  
+  private static boolean storesPageInfo = ERXProperties.booleanForKeyWithDefault("er.extensions.appserver.ajax.ERXAjaxSession.storesPageInfo", false);
+  
+  private NSMutableDictionary<WOComponent, NSMutableDictionary<String, Object>> pageInfoDictionary;
 
-  private static boolean overridePrivateCache = ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
+  private static boolean overridePrivateCache = storesPageInfo || ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
   
-  private static final Logger logger = Logger.getLogger(ERXAjaxSession.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(ERXAjaxSession.class);
   
+  public boolean storesPageInfo() {
+	  return storesPageInfo;
+  }
   
-  /*
+  public NSMutableDictionary<WOComponent, NSMutableDictionary<String,Object>> pageInfoDictionary() {
+	  if(pageInfoDictionary == null) {
+		  pageInfoDictionary = new NSMutableDictionary<WOComponent, NSMutableDictionary<String,Object>>();
+	  }
+	  return pageInfoDictionary;
+  }
+  
+  /**
+   * <div class="en">
    * ERTransactionRecord is a reimplementation of WOTransactionRecord for
    * use with Ajax background request page caching.
+   * </div>
+   * 
+   * <div class="ja">
+   * TransactionRecord は WOTransactionRecord のかわりのクラスです。
+   * Ajax バックグラウンド・リクエスト・ページ・キャッシュ使用
+   * </div>
    * 
    * @author mschrag
    */
-  static class TransactionRecord {
-    private WOContext _context;
+  static class TransactionRecord implements Serializable {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
+    private String _contextID;
     private WOComponent _page;
     private String _key;
     private boolean _oldPage;
@@ -79,7 +142,7 @@ public class ERXAjaxSession extends WOSession {
 
     public TransactionRecord(WOComponent page, WOContext context, String key) {
       _page = page;
-      _context = context;
+      _contextID = context._requestContextID();
       _key = key;
       touch();
     }
@@ -88,20 +151,18 @@ public class ERXAjaxSession extends WOSession {
       _lastModified = System.currentTimeMillis();
     }
 
+    @Override
     public int hashCode() {
       return _key.hashCode();
     }
 
+    @Override
     public boolean equals(Object _obj) {
       return (_obj instanceof TransactionRecord && ((TransactionRecord) _obj)._key.equals(_key));
     }
 
     public WOComponent page() {
       return _page;
-    }
-
-    public WOContext context() {
-      return _context;
     }
 
     // MS: The preferrable behavior here is for Ajax records to expire
@@ -129,8 +190,9 @@ public class ERXAjaxSession extends WOSession {
       return _oldPage;
     }
 
+    @Override
     public String toString() {
-      return "[TransactionRecord: page = " + _page.name() + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
+      return "[TransactionRecord: page = " + _page.name() + "; context = " + _contextID + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
   }
   
@@ -143,6 +205,7 @@ public class ERXAjaxSession extends WOSession {
   }
   
   /**
+   * <div class="en">
    * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
    * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
    * <p>
@@ -160,7 +223,7 @@ public class ERXAjaxSession extends WOSession {
    * then you can click on links in Ajax updated areas.  Page Replacement cache implements this logic.  For each Ajax component on 
    * your page that is updating, it keeps a cache entry of its most recent backtrack state (note the difference between this and the
    * normal page cache.  The normal page cache contains one entry per user-backtrackable-request.  The replacement cache contains
-   * one entry per ajax component*, allowing up to replacement_page_cache_size many components per page). Each time the Ajax area 
+   * one entry per Ajax component*, allowing up to replacement_page_cache_size many components per page). Each time the Ajax area 
    * refreshes, the most recent state is replaced*.  When a restorePage request comes in, the replacement cache is checked first.  If 
    * the replacement cache can service the page, then it does so.  If the replacement cache doesn't contain the context, then it 
    * passes up to the standard page cache.  If you are not using Ajax, no replacement cache will exist in your session, and all the code 
@@ -175,11 +238,48 @@ public class ERXAjaxSession extends WOSession {
    * in the main cache.  It's only on a subsequent Ajax update that it uses page replacement cache.  So even though the cache
    * is keyed off of context ID, the explanation of the cache being components-per-page-sized works out because each component
    * is requesting in its own thread and generating their own non-overlapping context ids.
+   * </div>
+   * 
+   * <div class="ja">
+   * Ajax リクエストがページ・キャシュに保存されないようにオーバライドします。
+   * レスポンス・ユーザ・インフォメーション・ディクショナリーとレスポンス・ヘッダーを DONT_STORE_PAGE キーがあるかどうかをチェックします。
+   * 値は何でもいいのです。
+   * 
+   * <p>
+   * 独自ページ・キャシュは Ajax updates をコンポーネント・アクションでサポートする為に作成されました。Ajax のコンポーネント・アクションの
+   * 一番な問題は一般ページ・キャシュが使用されるので、バックトラック・キャシュ（30、設定によって違うかも）が一杯になります。
+   * Ajax の為にページ・キャシュが一杯になるとユーザが表示中のページをクリックし、コンポーネント・アクションを実行するとそのページがページ・キャシュにない為
+   * エラーが発生します。なぜなら、コンテクストが既にないからです。
+   * バックトラック・キャシュをレクエストの為にオフすると Ajax 更新エリアでのコンポーネント・アクションが使えなくなるのです。なぜなら、Ajax 更新でリンク生成される
+   * と生成されているリンクは保存されない。いつでも、バックトラック・エラーが発生します。</p>
+   * 
+   * <p> 
+   * 独自ページ・キャシュ。
+   * Ajax の振る舞いを見ると一番いい方法はハイブリッド・キャシュになります。
+   * ある Ajax コンポーネントの最後のバックトラックのみを保持します。その前の 29 の Ajax コンポーネント・アクションは必要ありません。
+   * ユーザがブラウザの戻りボタンをクリックすると戻ることはもっとも不可能です。
+   * ただし、最新のバックトラックがあれば、Ajax 更新エリアのリンクもクリックが可能になります。
+   * この独自ページ・キャシュは上記のロジックを使用しています。
+   * ページが更新する各 Ajax コンポーネントの最後の最新なバックトラック状態を保持します。（一般ページ・キャシュと振る舞いが違います）
+   * 一般ページ・キャシュは各ユーザ・バックトラック・リクエストを保持します。独自ページ・キャシュは各 ajax コンポーネントを保持します。
+   * （ページの replacement_page_cache_size 分を許可します）
+   * Ajax エリアはリフレッシュされる度、最後の状態が置き換わることです。
+   * restorePage ページ・レクエストが来ると独自ページ・キャシュを先に参照します。独自ページ・キャシュがそのページをリストアができれば、それで完了。
+   * 独自ページ・キャシュがリストアするページを見つからない場合には一般ページ・キャシュに処理を委託します。
+   * Ajax を使用しない場合、独自ページ・キャシュはセッション内に存在しないことになります。関連コードはスキップされます。</p>
+   * 
+   * <p>
+   * いろいろテストした結果で、最後の状態のみではなく、最後の二つの状態を保存するようになりました。なぜなら、まれに独自ページ・キャシュは
+   * コンテクスト2をコンテクスト3にアップデートし、ブラウザのHTMLはまだコンテクスト3でアップデートされていない場合。ユーザがページを
+   * 変わる前にコンテクスト2のリンクをクリックすることになります。ただしそのリンクもちょっど独自ページ・キャシュより削除した為に見つかりません。
+   * 二つの状態を保存することでトランスアクション内の問題を防ぐことが可能になります。</p>
+   * </div>
    */
+  @Override
   public void savePage(WOComponent page) {
 	  WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
-      if (logger.isDebugEnabled()) logger.debug("Considering pageReplacementCache for " + context.request().uri() + " with contextID " + context.contextID());
+      if (log.isDebugEnabled()) log.debug("Considering pageReplacementCache for {} with contextID {}", context.request().uri(), context.contextID());
       WORequest request = context.request();
       WOResponse response = context.response();
       String pageCacheKey = null;
@@ -192,7 +292,7 @@ public class ERXAjaxSession extends WOSession {
 
       // A null pageCacheKey should mean an Ajax request that is not returning a content update or an expliclty not cached non-Ajax request
       if (pageCacheKey != null) {
-        if (logger.isDebugEnabled()) logger.debug("Will use pageCacheKey " + pageCacheKey);
+        log.debug("Will use pageCacheKey {}", pageCacheKey);
         String originalContextID = context.request().headerForKey(ERXAjaxSession.ORIGINAL_CONTEXT_ID_KEY);
         pageCacheKey = originalContextID + "_" + pageCacheKey;
         LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
@@ -209,44 +309,59 @@ public class ERXAjaxSession extends WOSession {
           Iterator entryIterator = pageReplacementCache.entrySet().iterator();
           Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
           entryIterator.remove();
-          if (logger.isDebugEnabled()) logger.debug(pageCacheKey + "pageReplacementCache too large, removing oldest entry = " + ((TransactionRecord)oldestEntry.getValue()).key());
+          if (log.isDebugEnabled()) log.debug("{} pageReplacementCache too large, removing oldest entry = {}", pageCacheKey, ((TransactionRecord)oldestEntry.getValue()).key());
         }
 
         TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
         pageReplacementCache.put(context.contextID(), pageRecord);
-        if (logger.isDebugEnabled()) logger.debug(pageCacheKey + " new context = " + context.contextID());
-        if (logger.isDebugEnabled()) logger.debug(pageCacheKey + " = " + pageReplacementCache.keySet());
+        log.debug("{} new context = {}", pageCacheKey, context.contextID());
+        log.debug("{} = {}", pageCacheKey, pageReplacementCache.keySet());
 
         ERXAjaxApplication.cleanUpHeaders(response);
       }
       else {
-          // A null pageCacheKey should mean an Ajax request that is not returning a content update or an expliclty not cached non-Ajax request
-    	  if (logger.isDebugEnabled()) logger.debug("Not caching as no pageCacheKey found");
+          // A null pageCacheKey should mean an Ajax request that is not returning a content update or an explicitly not cached non-Ajax request
+    	  log.debug("Not caching as no pageCacheKey found");
       }
     }
     else {
-    	if (logger.isDebugEnabled()) logger.debug("Calling super.savePage for contextID " + context.contextID());
+    	log.debug("Calling super.savePage for contextID {}", context.contextID());
     	super.savePage(page);
     }
   }
 
   /**
+   * <div class="en">
    * Iterates through the page replacement cache (if there is one) and removes expired records.
+   * </div>
+   * 
+   * <div class="ja">
+   * 独自の内部ページ・キャシュを Iterates し、有効期限切れのレコードを削除します。
+   * </div>
    */
   protected void cleanPageReplacementCacheIfNecessary() {
     cleanPageReplacementCacheIfNecessary(null);
   }
 
   /**
+   * <div class="en">
    * Iterates through the page replacement cache (if there is one) and removes expired records.
+   * </div>
    * 
-   * @param _cacheKeyToAge optional cache key to age via setOldPage
-   * @return whether or not a cache entry was removed
+   * <div class="ja">
+   * 独自の内部ページ・キャシュを Iterates し、有効期限切れのレコードを削除します。
+   * </div>
+   * 
+   * @param _cacheKeyToAge <div class="en">optional cache key to age via setOldPage</div>
+   *                       <div class="ja">オプション・キャシュ・キー (setOldPage)</div>
+   * 
+   * @return <div class="en">whether or not a cache entry was removed</div>
+   *         <div class="ja">キャシュ・エントリが削除されているかどうか</div>
    */
-  protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
+protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
     boolean removedCacheEntry = false;
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
-    if (logger.isDebugEnabled()) logger.debug("keys in pageReplacementCache: " + pageReplacementCache.keySet());
+    if (log.isDebugEnabled()) log.debug("keys in pageReplacementCache: {}", pageReplacementCache.keySet());
     if (pageReplacementCache != null) {
       Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
       while (transactionRecordsEnum.hasNext()) {
@@ -254,7 +369,7 @@ public class ERXAjaxSession extends WOSession {
         TransactionRecord tempPageRecord = (TransactionRecord) pageRecordEntry.getValue();
         // If the page has been GC'd, toss the transaction record ...
         if (tempPageRecord.isExpired()) {
-          if (logger.isDebugEnabled()) logger.debug("deleting expired page record " + tempPageRecord);
+          log.debug("deleting expired page record {}", tempPageRecord);
           transactionRecordsEnum.remove();
           removedCacheEntry = true;
         }
@@ -263,13 +378,13 @@ public class ERXAjaxSession extends WOSession {
           if (_cacheKeyToAge.equals(transactionRecordKey)) {
             // If this is the "old page", then delete the entry ...
             if (tempPageRecord.isOldPage()) {
-              if (logger.isDebugEnabled()) logger.debug(_cacheKeyToAge + " removing old page " + tempPageRecord);
+              log.debug("{} removing old page {}", _cacheKeyToAge, tempPageRecord);
               transactionRecordsEnum.remove();
               removedCacheEntry = true;
             }
             // Otherwise, flag this entry as the old page ...
             else {
-              if (logger.isDebugEnabled()) logger.debug(_cacheKeyToAge + " marking as old page");
+              log.debug("{} marking as old page", _cacheKeyToAge);
               tempPageRecord.setOldPage(true);
             }
           }
@@ -281,7 +396,7 @@ public class ERXAjaxSession extends WOSession {
       // to exist.
       if (_cacheKeyToAge == null && pageReplacementCache.isEmpty()) {
         removeObjectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
-        if (logger.isDebugEnabled()) logger.debug("Removing empty page cache");
+        log.debug("Removing empty page cache");
       }
     }
     return removedCacheEntry;
@@ -289,17 +404,27 @@ public class ERXAjaxSession extends WOSession {
   
 
   	/**
-	 * A dict of contextID/pages
+	 * <div class="en">A dict of contextID/pages</div>
+	 * <div class="ja">contextID/pages のディクショナリー</div>
 	 */
 	protected NSMutableDictionary _permanentPageCache;
 	
 	/**
-	 * The currently active contextIDs for the permanent pages.
+	 * <div class="en">The currently active contextIDs for the permanent pages.</div>
+	 * <div class="ja">永続ページのカレント・コンテクスト ID</div>
 	 */
 	protected NSMutableArray _permanentContextIDArray;
 
 	/**
+	 * <div class="en">
 	 * Returns the permanent page cache. Initializes it if needed.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * 永続ページ・キャシュを戻します。（なければ、初期化される）
+	 * </div>
+	 * 
+	 * @return NSMutableDictionary
 	 */
 	protected NSMutableDictionary _permanentPageCache() {
 		if (_permanentPageCache == null) {
@@ -310,8 +435,19 @@ public class ERXAjaxSession extends WOSession {
 	}
 
 	/**
+	 * <div class="en">
 	 * Returns the page for the given contextID, null if none is present.
-	 * @param contextID
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * 指定コンテクスト ID を使って、ページをキャシュより戻します。
+	 * なければ、null が戻ります。
+	 * </div>
+	 * 
+	 * @param contextID <div class="en"></div>
+	 *                  <div class="ja">コンテクスト ID</div>
+	 * 
+	 * @return WOComponent
 	 */
 	protected WOComponent _permanentPageWithContextID(String contextID) {
 		WOComponent wocomponent = null;
@@ -321,15 +457,23 @@ public class ERXAjaxSession extends WOSession {
 	}
 
 	/**
+	 * <div class="en">
 	 * Semi-private method that saves the current page. Overridden to put the page in the
 	 * permanent page cache if it's already in there.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * カレント・ページを保存します。
+	 * 永続ページ・キャシュに登録する為にオーバライドされています。
+	 * </div>
 	 */
+    @Override
 	public void _saveCurrentPage() {
 		if(overridePrivateCache) {
 			WOContext _currentContext = context();
 			if (_currentContext != null) {
 				String contextID = context().contextID();
-				if (logger.isDebugEnabled()) logger.debug("Saving page for contextID: " + contextID);
+				log.debug("Saving page for contextID: {}", contextID);
 				WOComponent currentPage = _currentContext._pageComponent();
 				if (currentPage != null && currentPage._isPage()) {
 					WOComponent permanentSenderPage = _permanentPageWithContextID(_currentContext._requestContextID());
@@ -357,15 +501,21 @@ public class ERXAjaxSession extends WOSession {
 	}
 
 	/**
-	 * Reimplementation of the rather wierd super imp which references an interface probably no
+	 * <div class="en">
+	 * Reimplementation of the rather weird super imp which references an interface probably no
 	 * one has ever heard of...
-	 * @param wocomponent
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * スーパーの再実装！スーパーはだれも聞いたことがないインタフェースを搭載しているため
+	 * </div>
+	 * 
+	 * @param wocomponent - WOComponent
+	 * 
+	 * @return boolean
 	 */
 	protected boolean _shouldPutInPermanentCache(WOComponent wocomponent) {
 		boolean flag = true;
-		if(false) {
-			return true;
-		}
 		if ((com.webobjects.appserver._private._PermanentCacheSingleton.class).isInstance(wocomponent)) {
 			flag = false;
 		}
@@ -383,19 +533,30 @@ public class ERXAjaxSession extends WOSession {
 	
 	
 	/**
+	 * <div class="en">
 	 * Saves a page in the permanent cache. Overridden to not save in the super implementation's iVars but in our own.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * 永続ページ・キャシュにページを保存します。
+	 * スーパーの実装で保存されない用にオーバライドされています。独自で保存を行います。
+	 * </div>
 	 */
 	// FIXME: ak: as we save the perm pages under a lot of context IDs, we should have a way to actually limit the size...
 	// not sure how, though
+    @Override
 	public void savePageInPermanentCache(WOComponent wocomponent) {
 		if(overridePrivateCache) {
 			WOContext wocontext = context();
 			String contextID = wocontext.contextID();
-			if (logger.isDebugEnabled()) logger.debug("Saving page for contextID: " + contextID);
+			log.debug("Saving page for contextID: {}", contextID);
 			NSMutableDictionary permanentPageCache = _permanentPageCache();
 			for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
 				String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
 				WOComponent page = (WOComponent) permanentPageCache.removeObjectForKey(s1);
+				if(storesPageInfo()) {
+					pageInfoDictionary().removeObjectForKey(page);
+				}
 			}
 
 			permanentPageCache.setObjectForKey(wocomponent, contextID);
@@ -407,22 +568,30 @@ public class ERXAjaxSession extends WOSession {
 	}
 	
 	/**
+	 * <div class="en">
 	 * Extension of restorePageForContextID that implements the other side of
 	 * Page Replacement Cache.
+	 * </div>
+	 * 
+	 * <div class="ja">
+	 * restorePageForContextID の拡張。
+	 * 独自内部ページ・キャシュのサポート
+	 * </div>
 	 */
+    @Override
   public WOComponent restorePageForContextID(String contextID) {
-	if (logger.isDebugEnabled()) logger.debug("Restoring page for contextID: " + contextID);
+	log.debug("Restoring page for contextID: {}", contextID);
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
 
     WOComponent page = null;
     if (pageReplacementCache != null) {
       TransactionRecord pageRecord = (TransactionRecord) pageReplacementCache.get(contextID);
       if (pageRecord != null) {
-          if (logger.isDebugEnabled()) logger.debug("Restoring page for contextID: " + contextID + " pageRecord = " + pageRecord);
+          log.debug("Restoring page for contextID: {} pageRecord = {}", contextID, pageRecord);
           page = pageRecord.page();
       }
       else {
-        if (logger.isDebugEnabled()) logger.debug("No page in pageReplacementCache for contextID: " + contextID);
+        log.debug("No page in pageReplacementCache for contextID: {}", contextID);
         // If we got the page out of the replacement cache above, then we're obviously still
         // using Ajax, and it's likely our cache will be cleaned out in an Ajax update.  If the
         // requested page was not in the cache, though, then we might be done with Ajax, 
@@ -442,6 +611,10 @@ public class ERXAjaxSession extends WOSession {
 
     if (page != null) {
       WOContext context = page.context();
+      if(context == null) {
+          page._awakeInContext(context());
+          context = page.context();
+      }
       WORequest request = context.request();
       // MS: I suspect we don't have to do this all the time, but I don't know if we have 
       // enough information at this point to know whether to do it or not, unfortunately.

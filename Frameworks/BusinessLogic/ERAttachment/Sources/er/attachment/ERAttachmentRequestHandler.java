@@ -4,18 +4,18 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
@@ -23,7 +23,6 @@ import com.webobjects.foundation.NSLog;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.components.ERXDynamicURL;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -38,7 +37,6 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERAttachmentRequestHandler extends WORequestHandler {
   public static final String REQUEST_HANDLER_KEY = "attachments";
-  public static final Logger log = Logger.getLogger(ERAttachmentRequestHandler.class);
 
   /**
    * The delegate definition for this request handler.
@@ -77,33 +75,35 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
       WOContext context = application.createContextForRequest(request);
       WOResponse response = application.createResponseInContext(context);
 
-      String wosid = (String) request.formValueForKey("wosid");
-      if (wosid == null) {
-        wosid = request.cookieValueForKey("wosid");
+      String sessionIdKey = application.sessionIdKey();
+      String sessionId = (String) request.formValueForKey(sessionIdKey);
+      if (sessionId == null) {
+        sessionId = request.cookieValueForKey(sessionIdKey);
       }
-      context._setRequestSessionID(wosid);
-      WOSession session = null;
+      context._setRequestSessionID(sessionId);
       if (context._requestSessionID() != null) {
-        session = WOApplication.application().restoreSessionWithID(wosid, context);
+        application.restoreSessionWithID(sessionId, context);
       }
+
       try {
-        ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
-        String requestHandlerPath = url.requestHandlerPath();
-        Matcher idMatcher = Pattern.compile("^id/(\\d+)/").matcher(requestHandlerPath);
-        String idStr;
-        String webPath;
-        if (idMatcher.find()) {
-          idStr = idMatcher.group(1);
-          webPath = idMatcher.replaceFirst("/");
-        }
-        else {
+    	final WODynamicURL url = request._uriDecomposed();
+        final String requestPath = url.requestHandlerPath();
+        final Matcher idMatcher = Pattern.compile("^id/(\\d+)/").matcher(requestPath);
+
+        final Integer requestedAttachmentID;
+        String requestedWebPath;
+
+        final boolean requestedPathContainsAnAttachmentID = idMatcher.find();
+		if (requestedPathContainsAnAttachmentID) {
+          requestedAttachmentID = Integer.valueOf(idMatcher.group(1));
+          requestedWebPath = idMatcher.replaceFirst("/");
+        } else {
           // MS: This is kind of goofy because we lookup by path, your web path needs to 
           // have a leading slash on it.
-          webPath = "/" + requestHandlerPath;
-          idStr = null;
+          requestedWebPath = "/" + requestPath;
+          requestedAttachmentID = null;
         }
 
-        webPath = ERXStringUtilities.urlDecode(webPath);
 
         try {
           InputStream attachmentInputStream;
@@ -117,18 +117,8 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           editingContext.lock();
 
           try {
-            ERAttachment attachment;
-            if (idStr != null) {
-              EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(ERAttachment.ENTITY_NAME, new Object[] { Integer.parseInt(idStr) });
-              attachment = (ERAttachment) ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gid);
-              String actualWebPath = attachment.webPath();
-              if (!actualWebPath.equals(webPath)) {
-                throw new SecurityException("You are not allowed to view the requested attachment."); 
-              }
-            }
-            else {
-              attachment = ERAttachment.fetchRequiredAttachmentWithWebPath(editingContext, webPath);
-            }
+            ERAttachment attachment = fetchAttachmentFor(editingContext, requestedAttachmentID, requestedWebPath);
+            
             if (_delegate != null && !_delegate.attachmentVisible(attachment, request, context)) {
               throw new SecurityException("You are not allowed to view the requested attachment.");
             }
@@ -141,19 +131,19 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
             }
             InputStream rawAttachmentInputStream = attachmentProcessor.attachmentInputStream(attachment);
             attachmentInputStream = new BufferedInputStream(rawAttachmentInputStream, bufferSize);
-          }
-          finally {
+          } finally {
             editingContext.unlock();
           }
+          
           response.setHeader(mimeType, "Content-Type");
           response.setHeader(String.valueOf(length), "Content-Length");
 
           if (proxyAsAttachment) {
-            response.setHeader("attachment; filename=\"" + fileName+"\"", "Content-Disposition");
+            response.setHeader("attachment; filename=\"" + fileName + "\"", "Content-Disposition");
           }
 
           response.setStatus(200);
-          response.setContentStream(attachmentInputStream, bufferSize, (int) length);
+          response.setContentStream(attachmentInputStream, bufferSize, length);
         }
         catch (SecurityException e) {
           NSLog.out.appendln(e);
@@ -188,4 +178,95 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
       application.sleep();
     }
   }
+
+
+	/**
+	 * 
+	 * 
+	 * @param editingContext
+	 *        the {@link EOEditingContext} that the result will be inserted into
+	 * @param attachmentPrimaryKey
+	 *        the primaryKey value of an existing ERAttachment in the database
+	 * @param requestedWebPath
+	 *        a URL-encoded portion of the requested ERAttachment path including the file name of the attachment
+	 * @return an attachment that matches either both the {@code attachmentPrimaryKey} and the {@code requestedWebPath},
+	 *         or just the {@code reqestedWebPath}. If it is null then we throw a SecurityException. 
+	 * 
+	 * @author davendasora
+	 * @since Apr 25, 2014
+	 */
+	public static ERAttachment fetchAttachmentFor(final EOEditingContext editingContext, final Integer attachmentPrimaryKey, final String requestedWebPath) {
+		ERAttachment attachment;
+		if (attachmentPrimaryKey != null) {
+			final EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(ERAttachment.ENTITY_NAME, new Object[] {(attachmentPrimaryKey)});
+			attachment = (ERAttachment) ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gid);
+
+			/*
+			 * Ensure the attachment request is a legitimate one by comparing the attachment's webPath to the
+			 * requestedWebPath.
+			 */
+			final boolean requestedWebPathIsInvalid = !ERAttachmentRequestHandler.requestedWebPathIsForAttachment(requestedWebPath, attachment);
+			if (requestedWebPathIsInvalid) {
+				throw new SecurityException("You are not allowed to view the requested attachment.");
+			}
+		} else {
+			/*
+			 * Aaron Rosenzweig April 25, 2014 
+			 * WARNING: This is partially broken on an edge case and no easy fix is available. Any true fix would break
+			 * current WOnder users of ERAttachment. Short version: We cannot URLDecode the column in the database efficiently. 
+			 * See details below:
+			 * 
+			 * If the webPath value that is stored in the database (actualWebPath) contains "%20" (or any other %nn
+			 * code) the following fetch will not find it because the requestedWebPath needs to be decoded, which will
+			 * remove any occurrences of "%20" from it, causing it to no longer match the actualWebPath value.
+			 */
+			String decodedRequestedWebPath;
+			try {
+				decodedRequestedWebPath = new URI(requestedWebPath).getPath();
+				attachment = ERAttachment.fetchRequiredAttachmentWithWebPath(editingContext, decodedRequestedWebPath);
+			} catch (URISyntaxException exception) {
+				attachment = null;
+				exception.printStackTrace();
+			}
+			
+			if (attachment == null) {
+				throw new SecurityException("You are not allowed to view the requested attachment.");
+			}
+		}
+		return attachment;
+	}
+
+
+	/**
+	 * Takes into account potential URL encoding differences between the {@code requestedWebPath} and the
+	 * {@code attachment}'s {@link ERAttachment#webPath() webPath()} attribute. e.g., "/the/web/path/My Attachment.jpg"
+	 * will match "/the/web/path/My%20Attachment.jpg"
+	 * 
+	 * @param requestedWebPath
+	 *        a String to compare to the {@code attachment} parameter's
+	 * @param attachment
+	 *        an ERAttachment
+	 * @return {@code true} if the {@code requestedWebPath} matches {@code attachment.webPath()}. {@code false} if not.
+	 * 
+	 * @author davendasora
+	 * @since Apr 25, 2014
+	 */
+	public static boolean requestedWebPathIsForAttachment(final String requestedWebPath, final ERAttachment attachment) {
+		final String actualWebPath = attachment.webPath();
+		/*
+		 * We are using the form-data decoder (URLDecoder.decode(String)) instead of the more appropriate URI#getPath()
+		 * because we only need to ensure that both webPath values decode identically. We can't use URI.getPath() here
+		 * because the webPath value stored in the database (actualWebPath) may contain illegal values (spaces, etc.)
+		 */
+		final String decodedActualWebPath = ERXStringUtilities.urlDecode(actualWebPath);
+		final String decodedRequestedWebPath = ERXStringUtilities.urlDecode(requestedWebPath);
+
+		/*
+		 * Aaron Rosenzweig - April 24, 2014 - Because the attachment may have been originally uploaded with "%20" (or
+		 * another %nn value) already in the file name, we need to compare both the stored decoded (actualWebPath) 
+		 * against the decoded requested value (requestedWebPath) otherwise we could incorrectly throw a SecurityException.
+		 */
+		final boolean requestedWebPathMatchesTheAttachmentWebPath = decodedRequestedWebPath.equals(decodedActualWebPath);
+		return requestedWebPathMatchesTheAttachmentWebPath;
+	}
 }

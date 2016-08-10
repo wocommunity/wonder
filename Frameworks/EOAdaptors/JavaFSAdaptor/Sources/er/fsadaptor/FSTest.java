@@ -1,7 +1,3 @@
-
-/* FSTest - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import java.io.File;

@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.Ajax=load
+er.extensions.Ajax.hasLocalization=false
+
 # Set ALL of the following properties to use a compressed version of the various scripts
 #er.extensions.ERXResponseRewriter.resource.Ajax.prototype.js=Ajax.wondaculous-min.js
 #er.extensions.ERXResponseRewriter.resource.Ajax.scriptaculous.js=Ajax.wondaculous-min.js

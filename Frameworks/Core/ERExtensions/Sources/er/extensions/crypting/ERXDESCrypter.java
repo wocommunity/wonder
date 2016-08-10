@@ -13,7 +13,9 @@ import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -26,7 +28,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @author mschrag
  */
 public class ERXDESCrypter implements ERXCrypterInterface {
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXCrypto.class);
 
 	private Key _secretDESKey;
 	private String _secretKeyPathFramework;
@@ -160,7 +162,7 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 		try {
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			byte[] stringBytes = clearText.getBytes("UTF-8");
+			byte[] stringBytes = clearText.getBytes(CharEncoding.UTF_8);
 			stringBytes = ERXCompressionUtilities.deflateByteArray(stringBytes);
 			byte[] raw = cipher.doFinal(stringBytes);
 			String encBase64String = ERXCrypto.base64Encode(raw);

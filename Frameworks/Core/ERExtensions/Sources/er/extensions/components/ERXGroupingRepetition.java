@@ -8,7 +8,8 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -58,13 +59,18 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 
 public class ERXGroupingRepetition extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXGroupingRepetition(WOContext aContext) {
         super(aContext);
     }
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXGroupingRepetition.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXGroupingRepetition.class);
     
     private NSMutableArray _sections;
     private Object _sectionItem;
@@ -89,7 +95,7 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
                 
                 for (Enumeration e=list.objectEnumerator(); e.hasMoreElements();) {
                     Object item=e.nextElement();
-                    if(log.isDebugEnabled()) log.debug("item = "+item);
+                    log.debug("item = {}", item);
                     
                     // push value up, so parent can tell us the group
                     setValueForBinding(item,"item");
@@ -143,7 +149,6 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
     /**
      * @param splitArrays
      * @param section
-     * @return
      */
     private Object keyForSection(Object section) {
         Object sectionKey = NULL;
@@ -175,6 +180,7 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
         setValueForBinding(_itemsPerSection.objectForKey(keyForSection(_sectionItem)), "subList");
     }
     
+    @Override
     public void reset() {
         _sections=null;
         _splitArrays=null;

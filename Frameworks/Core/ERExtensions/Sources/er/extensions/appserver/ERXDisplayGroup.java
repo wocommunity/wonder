@@ -1,6 +1,11 @@
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -12,9 +17,14 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSArrayUtilities;
 
-import er.extensions.ERXExtensions;
+import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXS;
 
@@ -23,17 +33,59 @@ import er.extensions.eof.ERXS;
  * <ul>
  * <li>provide access to the filtered objects</li>
  * <li>allows you to add qualifiers to the final query qualifier (as opposed to just min/equals/max with the keys)</li>
- * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.
+ * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.</li>
  * </ul>
+ * <h2>Selections and usage with Datasource</h2>
+ * If you are using the display group with a datasource and changing the selection by {@link #setSelectedObjects(NSArray)}
+ * only matching objects in the displayed objects will be selected and the events <i>displayGroupShouldChangeSelectionToIndexes</i>,
+ * <i>displayGroupDidChangeSelectedObjects</i> and <i>displayGroupDidChangeSelection</i> will be triggered.
+ * <h2>Selections and usage without Datasource</h2>
+ * If you are using plain arrays to fill your display group and set a selection by {@link #setSelectedObjects(NSArray)} you won't
+ * get related events as with a datasource. Also the selection is not matched against the displayed objects but set directly. 
+ * 
  * @author ak
+ * @param <T> data type of the displaygroup's objects
  */
 public class ERXDisplayGroup<T> extends WODisplayGroup {
+	/**
+	 * {@code _displayedObjects} field in parent object
+	 */
+	private transient Field displayedObjectsField;
+	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	/** Logging support */
-	private static final Logger log = Logger.getLogger(ERXDisplayGroup.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDisplayGroup.class);
 
 	public ERXDisplayGroup() {
 		super();
+	}
+
+	/**
+	 * Fetches the {@code _displayedObjects} field from the parent
+	 * {@link WODisplayGroup}. This is used in the overriden
+	 * {@link #setSelectedObjects(NSArray)} method.
+	 * 
+	 * @return {@code _displayedObjects} field from parent object
+	 */
+	private Field displayedObjectsField() {
+		if (displayedObjectsField == null) {
+			try {
+				displayedObjectsField = WODisplayGroup.class.getDeclaredField("_displayedObjects");
+				displayedObjectsField.setAccessible(true);
+			}
+			catch (SecurityException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (NoSuchFieldException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+		return displayedObjectsField;
 	}
 	
 	/**
@@ -85,9 +137,23 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 			_extraQualifiers.removeObjectForKey(key);
 		}
 	}
+	
+	/**
+	 * Will return the qualifier set by "setQualifierForKey()" if it exists. Null returns otherwise.
+	 * @param key
+	 * @return
+	 */
+	public EOQualifier qualifierForKey(String key) {
+		EOQualifier qualifier = null;
+		if (StringUtils.isNotBlank(key)) {
+			qualifier = _extraQualifiers.objectForKey(key);
+		}
+		return qualifier;
+	}
 
 	/**
 	 * Overridden to support extra qualifiers.
+	 * @return the qualifier constructed
 	 */
 	@Override
 	public EOQualifier qualifierFromQueryValues() {
@@ -103,11 +169,12 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to localize the fetch specification if needed.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object fetch() {
 		if(log.isDebugEnabled()) {
-			log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
+			log.debug("Fetching: {}", this, new RuntimeException("Dummy for Stacktrace"));
 		}
 		Object result;
 		// ak: we need to transform localized keys (foo.name->foo.name_de)
@@ -133,8 +200,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Returns all objects, filtered by the qualifier().
+	 * @return filtered objects
 	 */
-	@SuppressWarnings("unchecked")
 	public NSArray<T> filteredObjects() {
 		// FIXME AK: need to cache here
 		NSArray<T> result;
@@ -149,72 +216,142 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Returns allObjects(), first filtered by the qualifier(), then sorted by the sortOrderings().
+	 * @return sorted filtered objects
 	 */
 	public NSArray<T> sortedObjects() {
 		return ERXS.sorted(filteredObjects(), sortOrderings());
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> selectedObjects() {
 		if(log.isDebugEnabled()) {
-			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
+			log.debug("selectedObjects@{}:{}", hashCode(), super.selectedObjects().count());
 		}
 		return super.selectedObjects();
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public void setSelectedObjects(NSArray nsarray) {
+	public void setSelectedObjects(NSArray objects) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"));
+			log.debug("setSelectedObjects@{}:{}", hashCode(), (objects != null ? objects.count() : "0"));
 		}
-		super.setSelectedObjects(nsarray);
+		if (this instanceof ERXBatchingDisplayGroup || dataSource() == null) {
+			// keep previous behavior
+			// CHECKME a batching display group has its own _displayedObjects variable so setSelectionIndexes won't work
+			super.setSelectedObjects(objects);
+		} else {
+			// jw: don't call super as it does not call setSelectionIndexes as advertised in its
+			// javadocs and thus doesn't invoke events on the delegate
+			// we need to access the private field _displayedObjects directly as we would get
+			// wrong indexes when calling displayedObjects()
+			NSMutableArray displayedObjects;
+			try {
+				displayedObjects = (NSMutableArray) displayedObjectsField().get(this);
+			}
+			catch (IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			NSArray<Integer> newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(displayedObjects, objects);
+			setSelectionIndexes(newSelection);
+		}
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectionIndexes@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"),
+			log.debug("setSelectionIndexes@{}:{}", hashCode(), (nsarray != null ? nsarray.count() : "0"),
 					new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Extends the current selection by the given object.
+	 * @param object object to add to the selection
+	 * @return <code>true</code> if the object was added or <code>false</code> otherwise
+	 */
+	public boolean addToSelection(T object) {
+		if (object == null) {
+			return false;
+		}
+		return addToSelection(new NSArray<T>(object));
+	}
+	
+	/**
+	 * Extends the current selection by the given objects.
+	 * @param objects objects to add to the selection
+	 * @return <code>true</code> if at least one object was added or <code>false</code> otherwise
+	 */
+	public boolean addToSelection(NSArray<T> objects) {
+		if (objects == null || objects.isEmpty()) {
+			return false;
+		}
+		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		int selectionCountBefore = selection.count();
+		selection.addObjectsFromArray(objects);
+		setSelectedObjects(selection.allObjects());
+		return selection.count() != selectionCountBefore;
+	}
+	
+	/**
+	 * Removes the given object from the current selection.
+	 * @param object object to remove from the selection
+	 * @return <code>true</code> if the object was removed or <code>false</code> otherwise
+	 */
+	public boolean removeFromSelection(T object) {
+		if (object == null) {
+			return false;
+		}
+		return removeFromSelection(new NSArray<T>(object));
+	}
+	
+	/**
+	 * Removes the given objects from the current selection.
+	 * @param objects objects to remove from the selection
+	 * @return <code>true</code> if at least one object was removed or <code>false</code> otherwise
+	 */
+	public boolean removeFromSelection(NSArray<T> objects) {
+		if (objects == null || objects.isEmpty()) {
+			return false;
+		}
+		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		int selectionCountBefore = selection.count();
+		NSSet<T> objectsToRemove = new NSSet<T>(objects);
+		selection.subtractSet(objectsToRemove);
+		setSelectedObjects(selection.allObjects());
+		return selection.count() != selectionCountBefore;
+	}
+
+	/**
+	 * Overridden to preserve the current selection.
+	 * @param count the proposed number of objects the WODisplayGroup should display at a time
 	 */
 	@Override
-	public void setNumberOfObjectsPerBatch(int i) {
+	public void setNumberOfObjectsPerBatch(int count) {
 		NSArray<T> oldSelection = selectedObjects();
-		super.setNumberOfObjectsPerBatch(i);
+		super.setNumberOfObjectsPerBatch(count);
 		setSelectedObjects(oldSelection);
 	}
 
 	/**
 	 * Overridden to clear out the sort ordering if it is no longer applicable.
+	 * @param ds the proposed EODataSource
 	 */
 	@Override
-	public void setDataSource(EODataSource eodatasource) {
+	public void setDataSource(EODataSource ds) {
 		EODataSource old = dataSource();
-		super.setDataSource(eodatasource);
-		if(old != null && eodatasource != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), eodatasource.classDescriptionForObjects())) {
+		super.setDataSource(ds);
+		if(old != null && ds != null && ObjectUtils.notEqual(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
 			setSortOrderings(NSArray.EmptyArray);
 		}
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Overridden to preserve the current selection.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object displayNextBatch() {
@@ -225,7 +362,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Overridden to preserve the current selection.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object displayPreviousBatch() {
@@ -237,7 +375,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	
 	/**
 	 * Selects the visible objects.
-	 *
+	 * @return <code>null</code> to force the page to reload
 	 */
 	public Object selectFilteredObjects() {
 		setSelectedObjects(filteredObjects());
@@ -246,15 +384,13 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to log a message when more than one sort order exists. Useful to track down errors.
+	 * @param sortOrderings the proposed EOSortOrdering objects
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public void setSortOrderings(NSArray nsarray) {
-		super.setSortOrderings(nsarray);
-		if(nsarray != null && nsarray.count() > 1) {
-			if(log.isDebugEnabled()) {
-				log.debug("More than one sort order: " + nsarray);
-			}
+	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
+		super.setSortOrderings(sortOrderings);
+		if (sortOrderings != null && sortOrderings.count() > 1) {
+			log.debug("More than one sort order: {}", sortOrderings);
 		}
 	}
 
@@ -264,55 +400,35 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	
 	/* Generified methods */
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> allObjects() {
 		return super.allObjects();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<String> allQualifierOperators() {
 		return super.allQualifierOperators();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> displayedObjects() {
 		return super.displayedObjects();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public T selectedObject() {
 		return (T) super.selectedObject();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<EOSortOrdering> sortOrderings() {
 		return super.sortOrderings();
 	}
 	
 	/**
 	 * Overridden to return correct result when no objects are displayed
+	 * @return the index of the first object displayed by the current batch
 	 */
-	
 	@Override
 	public int indexOfFirstDisplayedObject() {
 		if (currentBatchIndex() == 1 && displayedObjects().count() == 0)
@@ -325,6 +441,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 * is not a multiple of <code>numberOfObjectsPerBatch</code> and we are
 	 * on the last batch index. The superclass incorrectly uses allObjects
 	 * instead of displayedObjects to determine the index value.
+	 * @return the index of the last object displayed by the current batch
 	 */
 	@Override
 	public int indexOfLastDisplayedObject() {

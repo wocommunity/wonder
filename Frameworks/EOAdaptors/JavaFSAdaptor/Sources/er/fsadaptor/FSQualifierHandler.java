@@ -1,7 +1,3 @@
-
-/* FSQualifierHandler - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import java.io.File;
@@ -29,6 +25,7 @@ public abstract class FSQualifierHandler {
             super(path);
         }
 
+        @Override
         public String getParent() {
             return getRealParent().substring(rootDirectory.length());
         }
@@ -57,19 +54,20 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOKeyValueQualifier.class;
         }
 
-        private void addFileWithQualifierToSet(EOKeyValueQualifier aQualifier, NSMutableSet aSet) {
+        private void addFileWithQualifierToSet(EOKeyValueQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
                     String aKey = aQualifier.key();
                     for (int index = 0; index < PathKeysCount; index++) {
-                        if (aKey.equals(PathKeys[index]) == true) {
+                        if (aKey.equals(PathKeys[index])) {
                             String aPath = aQualifier.value().toString();
                             File aFile = fileWithPath(aPath);
-                            if (aFile.exists() == true)
+                            if (aFile.exists())
                                 aSet.addObject(aFile);
                             if (debug)
                                 System.out.println("EOKeyValueQualifier.addFileWithQualifierToSet: " + aFile);
@@ -83,7 +81,7 @@ public abstract class FSQualifierHandler {
             throw new IllegalArgumentException("FSQualifierHandler.KeyValue.addFileWithQualifierToSet: null qualifier.");
         }
 
-        private void addParentFilesWithQualifierToSet(EOKeyValueQualifier aQualifier, NSMutableSet aSet) {
+        private void addParentFilesWithQualifierToSet(EOKeyValueQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
                     String aKey = aQualifier.key();
@@ -93,7 +91,7 @@ public abstract class FSQualifierHandler {
                         if (aFile.exists() && aFile.isDirectory()) {
                             File[] someFiles = aFile.listFiles();
                             if (someFiles != null && someFiles.length > 0) {
-                                NSArray files = new NSArray(someFiles);
+                                NSArray<File> files = new NSArray<File>(someFiles);
                                 aSet.addObjectsFromArray(files);
                                 if (debug)
                                     System.out.println("EOKeyValueQualifier.addParentFilesWithQualifierToSet: " + files);
@@ -107,7 +105,8 @@ public abstract class FSQualifierHandler {
             throw new IllegalArgumentException("FSQualifierHandler.KeyValue.addParentFilesWithQualifierToSet: null qualifier.");
         }
 
-        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet aSet) {
+        @Override
+        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
                     addFileWithQualifierToSet((EOKeyValueQualifier) aQualifier, aSet);
@@ -125,11 +124,13 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EONotQualifier.class;
         }
 
-        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet aSet) {
+        @Override
+        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
                     FSQualifierHandler.addFilesWithQualifierToSet(((EONotQualifier) aQualifier).qualifier(), aSet);
@@ -146,18 +147,20 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOOrQualifier.class;
         }
 
-        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet aSet) {
+        @Override
+        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
-                    NSArray someQualifiers = ((EOOrQualifier) aQualifier).qualifiers();
+                    NSArray<EOQualifier> someQualifiers = ((EOOrQualifier) aQualifier).qualifiers();
                     if (someQualifiers != null) {
                         int count = someQualifiers.count();
                         for (int index = 0; index < count; index++) {
-                            EOQualifier anotherQualifier = ((EOQualifier) someQualifiers.objectAtIndex(index));
+                            EOQualifier anotherQualifier = someQualifiers.objectAtIndex(index);
                             FSQualifierHandler.addFilesWithQualifierToSet(anotherQualifier, aSet);
                         }
                     }
@@ -174,18 +177,20 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOAndQualifier.class;
         }
 
-        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet aSet) {
+        @Override
+        protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
-                    NSArray someQualifiers = ((EOAndQualifier) aQualifier).qualifiers();
+                    NSArray<EOQualifier> someQualifiers = ((EOAndQualifier) aQualifier).qualifiers();
                     if (someQualifiers != null) {
                         int count = someQualifiers.count();
                         for (int index = 0; index < count; index++) {
-                            EOQualifier anotherQualifier = ((EOQualifier) someQualifiers.objectAtIndex(index));
+                            EOQualifier anotherQualifier = someQualifiers.objectAtIndex(index);
                             FSQualifierHandler.addFilesWithQualifierToSet(anotherQualifier, aSet);
                         }
                     }
@@ -205,15 +210,15 @@ public abstract class FSQualifierHandler {
         return _handlers;
     }
 
-    static NSArray filesWithQualifier(EOQualifier aQualifier, String root) {
+    static NSArray<File> filesWithQualifier(EOQualifier aQualifier, String root) {
         if (aQualifier != null) {
             rootDirectory = root;
             if (debug)
                 System.out.println("FSQualifierHandler.rootDirectory: " + rootDirectory);
-            NSMutableSet aSet = new NSMutableSet();
+            NSMutableSet<File> aSet = new NSMutableSet<File>();
             addFilesWithQualifierToSet(aQualifier, aSet);
             if (aSet.count() > 0) {
-                NSArray anArray = EOQualifier.filteredArrayWithQualifier(aSet.allObjects(), aQualifier);
+                NSArray<File> anArray = EOQualifier.filteredArrayWithQualifier(aSet.allObjects(), aQualifier);
                 if (anArray != null && anArray.count() > 0) {
                     if (debug)
                         System.out.println("FSQualifierHandler.filesWithQualifier: " + anArray);
@@ -225,21 +230,21 @@ public abstract class FSQualifierHandler {
         if (root != null) {
             File aFile = fileWithPath("");
             if (aFile.exists() && aFile.isDirectory()) {
-                return new NSArray(aFile.listFiles());
+                return new NSArray<File>(aFile.listFiles());
             }
             return null;
         }
         throw new IllegalArgumentException("FSQualifierHandler.filesWithQualifier: null qualifier.");
     }
 
-    private static void addFilesWithQualifierToSet(EOQualifier aQualifier, NSMutableSet aSet) {
+    private static void addFilesWithQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
         if (aQualifier != null) {
             if (aSet != null) {
                 FSQualifierHandler[] someHandlers = handlers();
                 int count = someHandlers.length;
                 for (int index = 0; index < count; index++) {
                     FSQualifierHandler anHandler = someHandlers[index];
-                    if (anHandler.canHandleQualifier(aQualifier) == true) {
+                    if (anHandler.canHandleQualifier(aQualifier)) {
                         anHandler.addFilesMatchingQualifierToSet(aQualifier, aSet);
                         break;
                     }
@@ -263,7 +268,7 @@ public abstract class FSQualifierHandler {
 
     protected abstract Class type();
 
-    protected abstract void addFilesMatchingQualifierToSet(EOQualifier eoqualifier, NSMutableSet nsmutableset);
+    protected abstract void addFilesMatchingQualifierToSet(EOQualifier eoqualifier, NSMutableSet<File> nsmutableset);
 
     static {
         String[] someHandlerNames = HandlerNames;

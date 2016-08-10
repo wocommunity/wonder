@@ -48,7 +48,7 @@ public class ERXDictionaryUtilities {
 
     /**
      * Creates an NSDictionary from a resource associated with a given bundle
-     * that is in property list format.<br/>
+     * that is in property list format.
      * @param name name of the file or resource.
      * @param bundle NSBundle to which the resource belongs.
      * @return NSDictionary de-serialized from the property list.
@@ -159,6 +159,16 @@ public class ERXDictionaryUtilities {
         return result.immutableClone();
     }
 
+    /**
+     * Creates a dictionary from an object and a list of key paths
+     * @param object object to pull the values from
+     * @param keys list of keys
+     * @return Returns a {@code NSDictionary} containing all of the object-key pairs.
+     */
+    public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, String... keys) {
+        return ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, new NSArray<>(keys));
+    }
+
     // if you're keys are not all strings, this method will throw.
 	public static NSArray<String> stringKeysSortedAscending(final NSDictionary<String, ?> d) {
         NSArray<String> result = null;
@@ -255,6 +265,7 @@ public class ERXDictionaryUtilities {
              dictionary = aDictionary;
          }
 
+        @Override
         public int compare(Object key1, Object key2) throws ComparisonException {
             Object value1 = dictionary.objectForKey(key1);
             Object value2 = dictionary.objectForKey(key2);
@@ -318,13 +329,13 @@ public class ERXDictionaryUtilities {
 		if (separator == null) {
 			separator = "&";
 		}
-		StringBuffer sb = new StringBuffer(100);
+		StringBuilder sb = new StringBuilder(100);
 		if (dict != null) {
 			for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 				Object key = e.nextElement();
 				try {
 					sb.append(URLEncoder.encode(key.toString(), encoding));
-					sb.append("=");
+					sb.append('=');
 					sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 					if (e.hasMoreElements()) {
 						sb.append(separator);

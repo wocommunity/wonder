@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.EOSQLExpression;
  * This class models an SQL binding based on a model keypath/value pair.
  * <p>
  * The keypath refers to the base entity of the SQL expression. As an example, if the
- * base entity is Person, than a binding for person's first name would have a keypath
+ * base entity is Person, then a binding for person's first name would have a keypath
  * of "firstName". The name of the person's department would be "department.name". The
  * keypath is used to inspect the model and obtain the correct {@link EOAttribute} used
  * to handle SQL generation (value type, conversion, etc).

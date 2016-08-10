@@ -1,10 +1,20 @@
 package com.webobjects.jdbcadaptor;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * WO runtime plugin with support for Postgresql.
@@ -30,6 +40,7 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**
    * Name of the driver.
    */
+  @Override
   public String defaultDriverName() {
       return "com.ibm.db2.jcc.DB2Driver";
   }
@@ -37,6 +48,7 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**
    * Name of the database.
    */
+  @Override
   public String databaseProductName() {
     return "DB2";
   }
@@ -47,6 +59,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * it loads models.</P>
    * @return the name of the plugin.
    */
+  @Override
   public String name() {
     return "DB2";
   }
@@ -75,6 +88,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * framework and this can be used as a hard-coded equivalent.
    * </P> 
    */
+  @Override
   public NSDictionary jdbcInfo() {
     // you can swap this code out to write the property list out in order
     // to get a fresh copy of the JDBCInfo.plist.
@@ -106,6 +120,8 @@ public class DB2PlugIn extends JDBCPlugIn {
       }
       catch (IOException e) {
         throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+      } finally {
+    	  try { jdbcInfoStream.close(); } catch (IOException e) {}
       }
     }
     else {
@@ -118,6 +134,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * Returns a "pure java" synchronization factory.
    * Useful for testing purposes.
    */
+  @Override
   public EOSynchronizationFactory createSynchronizationFactory() {
     try {
       return new DB2SynchronizationFactory(adaptor());
@@ -130,7 +147,8 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**                                                                                                                                                         
    * Expression class to create. We have custom code, so we need our own class.                                                                               
    */
-  public Class defaultExpressionClass() {
+  @Override
+  public Class<? extends JDBCExpression> defaultExpressionClass() {
     return DB2Expression.class;
   }
 
@@ -143,12 +161,13 @@ public class DB2PlugIn extends JDBCPlugIn {
    * @param channel open JDBCChannel
    * @return NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
    */
+  @Override
   public NSArray newPrimaryKeys(int count, EOEntity entity, JDBCChannel channel) {
     if (isPrimaryKeyGenerationNotSupported(entity)) {
       return null;
     }
     
-    EOAttribute attribute = (EOAttribute) entity.primaryKeyAttributes().lastObject();
+    EOAttribute attribute = entity.primaryKeyAttributes().lastObject();
     String attrName = attribute.name();
     boolean isIntType = "i".equals(attribute.valueType());
 
@@ -160,10 +179,10 @@ public class DB2PlugIn extends JDBCPlugIn {
     for (int tries = 0; !succeeded && tries < 2; tries++) {
       while (results.count() < count) {
         try {
-          StringBuffer sql = new StringBuffer();
-          sql.append("SELECT ");
-          sql.append("next value for " + sequenceName + " AS KEY");
-          sql.append(" from sysibm.sysdummy1");
+          StringBuilder sql = new StringBuilder();
+          sql.append("SELECT next value for ");
+          sql.append(sequenceName);
+          sql.append(" AS KEY from sysibm.sysdummy1");
           expression.setStatement(sql.toString());
           channel.evaluateExpression(expression);
           try {
@@ -174,10 +193,10 @@ public class DB2PlugIn extends JDBCPlugIn {
                 Number pkObj = (Number)pksEnum.nextElement();
                 Number pk;
                 if (isIntType) {
-                  pk = new Integer(pkObj.intValue());
+                  pk = Integer.valueOf(pkObj.intValue());
                 }
                 else {
-                  pk = new Long(pkObj.longValue());
+                  pk = Long.valueOf(pkObj.longValue());
                 }
                 results.addObject(new NSDictionary(pk, attrName));
               }            
@@ -233,7 +252,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * @return  yes/no
    */
   protected boolean isPrimaryKeyGenerationNotSupported(EOEntity entity) {
-    return entity.primaryKeyAttributes().count() > 1 || ((EOAttribute) entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorNumberType;
+    return entity.primaryKeyAttributes().count() > 1 || entity.primaryKeyAttributes().lastObject().adaptorValueType() != EOAttribute.AdaptorNumberType;
   }
 
 }

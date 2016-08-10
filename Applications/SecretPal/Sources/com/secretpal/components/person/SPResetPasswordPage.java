@@ -1,5 +1,7 @@
 package com.secretpal.components.person;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.secretpal.components.application.Main;
 import com.secretpal.components.application.SPPage;
 import com.secretpal.model.SPPerson;
@@ -7,7 +9,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -42,7 +43,7 @@ public class SPResetPasswordPage extends SPPage {
 		// MS: This password checking is some repetitive bullshit ... It needs to be somewhere more centralized, but
 		// they're all just SLLIIGGHTTLY different. They also can't quite be in EO validation because we actually
 		// ALLOW a null password, but just not when entered by a user.
-		if (!ERXExtensions.safeEquals(_password, _confirmPassword)) {
+		if (ObjectUtils.notEqual(_password, _confirmPassword)) {
 			_password = null;
 			_confirmPassword = null;
 			session().errors().addNotice("Your password confirmation didn't match.");

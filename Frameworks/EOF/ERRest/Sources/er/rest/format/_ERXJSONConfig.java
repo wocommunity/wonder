@@ -7,8 +7,13 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.processors.JsonValueProcessorMatcher;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.crypting.ERXCryptoString;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestUtils;
 
@@ -25,13 +30,13 @@ public class _ERXJSONConfig {
 		}
 	}
 
-	public static class NSTimestampProcessor implements JsonValueProcessor {
+	public static class GeneralObjectToStringProcessor implements JsonValueProcessor {
 		private ERXRestContext _context;
-		
-		public NSTimestampProcessor(ERXRestContext context) {
+
+		public GeneralObjectToStringProcessor(ERXRestContext context) {
 			_context = context;
 		}
-		
+
 		public Object processArrayValue(Object obj, JsonConfig jsonconfig) {
 			return ERXRestUtils.coerceValueToString(obj, _context);
 		}
@@ -43,10 +48,14 @@ public class _ERXJSONConfig {
 
 	public static JsonConfig createDefaultConfig(ERXRestContext context) {
 		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(NSTimestamp.class, new NSTimestampProcessor(context));
-		config.registerJsonValueProcessor(Date.class, new NSTimestampProcessor(context));
+		config.registerJsonValueProcessor(NSTimestamp.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(LocalDate.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(LocalDateTime.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(Date.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(NSData.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(ERXCryptoString.class, new GeneralObjectToStringProcessor(context));
 		config.setJsonValueProcessorMatcher(new ERXRestValueProcessorMatcher());
 		return config;
 	}
-	
+
 }

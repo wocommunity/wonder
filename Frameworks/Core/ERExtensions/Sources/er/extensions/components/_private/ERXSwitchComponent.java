@@ -44,6 +44,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		elementIDByName = new NSMutableDictionary<String, String>();
 	}
 
+	@Override
 	public String toString() {
 		return "<" + getClass().getName() + " componentName: " + componentName 
 		+ " componentAttributes: " + componentAttributes 
@@ -93,6 +94,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		return localWOElement;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest paramWORequest, WOContext paramWOContext) {
 		String name = componentNameInContext(paramWOContext.component());
 		String id = _elementNameInContext(name, paramWOContext);
@@ -106,6 +108,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		paramWOContext.deleteLastElementIDComponent();
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest paramWORequest, WOContext paramWOContext) {
 		String name = componentNameInContext(paramWOContext.component());
 		String id = _elementNameInContext(name, paramWOContext);
@@ -121,6 +124,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		return localWOActionResults;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse paramWOResponse, WOContext paramWOContext) {
 		String name = componentNameInContext(paramWOContext.component());
 		String id = _elementNameInContext(name, paramWOContext);

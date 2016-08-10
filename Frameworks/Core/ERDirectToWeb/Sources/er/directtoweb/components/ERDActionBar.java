@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.delegates.ERDBranchDelegate;
 import er.directtoweb.delegates.ERDBranchDelegateInterface;
 import er.directtoweb.delegates.ERDBranchInterface;
+import er.extensions.security.ERXAccessPermission;
 
 /**
  * Displays a set of buttons and calls the enclosing page's branch delegate with it.
@@ -19,10 +20,14 @@ import er.directtoweb.delegates.ERDBranchInterface;
  * @binding d2wContext the context for this component 
  *
  * @author ak on Sun Jan 26 2003
- * @project ERExtras
  */
-
 public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDActionBar.class);
@@ -36,7 +41,9 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
@@ -64,6 +71,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     public WOComponent performAction() {
         return nextPageFromParent();
     }
+
+    @Override
     public void reset() {
         super.reset();
         branch = null;
@@ -125,15 +134,44 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /**
-        * Determines if this message page should display branch choices.
+     * Determines if this message page should display branch choices.
+     * 
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
         return branchDelegate() != null && branchChoices().count() > 0;
     }
 
+    @Override
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
-        log.info("" + theException + theValue + theKeyPath);
+        if(log.isInfoEnabled())
+          log.info("" + theException + theValue + theKeyPath);
+    }
+    
+    /**
+     * <span class="en">
+     * Before Display the Button it will check the Permission. If no Permission are set it
+     * will return true, and Display the Button. (Default)
+     * 
+     * Sample:
+     * <code>public WOComponent copyOnlineToWork(WOComponent sender)</code>
+     * 
+     * Access Permission Key : <code>Delegate.copyOnlineToWork</code>
+     * </span>
+     * 
+     * <span class="ja">
+     * ボタンを表示する前にアクセス権限をチェックします。アクセス権限がなければ、そのままで true として実行します。
+     * 
+     * 例：
+     * <code>public WOComponent copyOnlineToWork(WOComponent sender)</code>
+     * 
+     * アクセス権限キー： <code>Delegate.copyOnlineToWork</code>
+     * </span>
+     * 
+     * @author ishimoto
+     */
+    public boolean isDelegateAllowed() {
+      return ERXAccessPermission.instance().canWithDefault("Delegate." + branchName(), true);
     }
 }

@@ -6,7 +6,8 @@
 //
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -28,9 +29,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXMessageEncoding.Enabled
  */
 public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXDirectActionRequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXDirectActionRequestHandler.class);
 
     /** caches if automatic message encoding is enabled, defaults to true */
     protected static Boolean automaticMessageEncodingEnabled;
@@ -66,6 +65,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
     	return request.requestHandlerPath() != null && request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
     }
     
+    @Override
     public WOResponse handleRequest(WORequest request) {
         WOResponse response = null;
         
@@ -76,6 +76,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         if (ERXWOResponseCache.sharedInstance().isEnabled()) {
             try {
                 // Caching scheme for 5.2 applications. Will uncomment once we are building 5.2 only ERExtensions
+            	// CHECKME
                 Object[] actionClassAndName = getRequestActionClassAndNameForPath(getRequestHandlerPathForRequest(request));
                 //Object[] actionClassAndName = null;
                 if (actionClassAndName != null && actionClassAndName.length == 3) {
@@ -90,7 +91,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                     }
                 }
             } catch (Exception e) {
-                log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: " + request, e);
+                log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: {}", request, e);
             } 
         }
 		if (response == null) {
@@ -110,7 +111,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 						if (app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
         					response = generateRequestRefusal(request);
         					// AK: should be a permanent redirect, as the session is gone for good. 
-        					// However, the adaptor checks explictely on 302 so we return that...
+        					// However, the adaptor checks explicitly on 302 so we return that...
         					// It shouldn't matter which instance we go to now.
         					response.setStatus(302);
         				}
@@ -133,7 +134,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             try {
                 ERXWOResponseCache.sharedInstance().cacheResponseForRequest(actionClass, actionName, request, response);
             } catch (Exception e) {
-                log.error("Caught exception when caching response. Request: " + request, e);
+                log.error("Caught exception when caching response. Request: {}", request, e);
             }
         }
         if (automaticMessageEncodingEnabled()) {

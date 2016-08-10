@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxProgressBar" wocomponentcontent="true">    <binding name="progressBarContainerClass"/>
+    <binding name="allowCancel"/>
+        <binding name="canceledAction"/>
+    <binding name="canceledFunction"/>
+        <binding name="cancelingText"/>
+        <binding name="cancelText"/>
+        <binding name="failedAction"/>
+        <binding name="failedFunction"/>
+        <binding name="id"/>
+        <binding name="progress"/>
+        <binding name="progressID"/>
+        <binding name="progressOfText"/>
+        <binding name="refreshTime"/>
+        <binding name="started"/>
+        <binding name="startedFunction"/>
+        <binding name="startingText"/>
+        <binding name="succeededAction"/>
+        <binding name="succeededFunction"/>
+        <binding name="visibleAfterDone"/>
+        <binding name="visibleAfterFunction"/>
+        <binding name="visibleBeforeStart"/>
+    </wo>
+</wodefinitions>

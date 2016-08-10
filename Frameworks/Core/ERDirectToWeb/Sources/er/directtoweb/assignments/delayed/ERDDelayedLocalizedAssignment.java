@@ -5,13 +5,18 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
-import er.directtoweb.assignments.ERDLocalizedAssignment;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Same as {@link ERDLocalizedAssignment}, except that firing is delayed.
+ * Same as {@link er.directtoweb.assignments.ERDLocalizedAssignment}, except that firing is delayed.
  */
 public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implements ERDLocalizableAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     static final Logger log = Logger.getLogger(ERDDelayedLocalizedAssignment.class);
@@ -42,6 +47,7 @@ public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implemen
      */
     public ERDDelayedLocalizedAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {

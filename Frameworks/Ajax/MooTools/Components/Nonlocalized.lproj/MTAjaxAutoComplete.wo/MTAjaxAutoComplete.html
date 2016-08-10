@@ -1,0 +1,28 @@
+<webobject name = "Disabled">
+	<webobject name = "TextField" />
+</webobject>
+<webobject name = "NotDisabled"> 
+	<webobject name = "ShowItem">
+		<webobject name = "TextField" />
+		<webobject name="HasIndicator">
+			<webobject name="Indicator"/>
+		</webobject>
+		<webobject name = "ZIndexContainer">
+			<webobject name = "AutoCompleteContainer"/>
+		</webobject>   
+		<wo:genericContainer elementName = "script">
+			window.addEvent('domready', function() {
+				var div = $('<webobject name = "ZIndexContainerName"/>');
+				<webobject name="hasContainerId">
+					document.getElementById('<webobject name="containerId"/>').appendChild(div);
+				</webobject>
+				<webobject name="else">
+					document.getElementsByTagName('body')[0].appendChild(div);
+				</webobject>      
+			});    
+		</wo:genericContainer>
+	</webobject>
+	<webobject name = "ShowList">
+		<webobject name = "Content" />
+	</webobject>
+</webobject>

@@ -1,0 +1,12 @@
+DateField : WOTextField {
+  value = value;
+  dateformat = dateformat;
+  class = dateFormatString;
+  onclick = datePickerOpenScript;
+  id = elementID;
+  tabindex = ^tabindex;
+}
+
+DatePickerCreateScript : WOString {
+  value = datePickerCreateScript;
+}

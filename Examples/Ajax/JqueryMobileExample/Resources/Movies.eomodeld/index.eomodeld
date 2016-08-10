@@ -1,0 +1,34 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {}; 
+    entities = (
+        {className = EOGenericRecord; name = Director; }, 
+        {className = "webobjectsexamples.businesslogic.eo.Movie"; name = Movie; }, 
+        {
+            className = "webobjectsexamples.businesslogic.eo.MovieRole"; 
+            name = MovieRole; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.eo.PlotSummary"; 
+            name = PlotSummary; 
+        }, 
+        {className = "webobjectsexamples.businesslogic.eo.Review"; name = Review; }, 
+        {className = "webobjectsexamples.businesslogic.eo.Studio"; name = Studio; }, 
+        {className = "webobjectsexamples.businesslogic.eo.Talent"; name = Talent; }, 
+        {
+            className = "webobjectsexamples.businesslogic.eo.TalentPhoto"; 
+            name = TalentPhoto; 
+        }, 
+        {className = "webobjectsexamples.businesslogic.eo.Voting"; name = Voting; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = NewDatabaseConfig; 
+            databaseConfigs = {
+                NewDatabaseConfig = {adaptorName = JDBC; prototypeEntityName = EOJDBCFrontBasePrototypes; }; 
+            }; 
+            entityNamingConvention = {case = Upper; separator = Underscore; }; 
+        }; 
+    }; 
+}

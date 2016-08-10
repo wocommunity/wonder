@@ -49,6 +49,13 @@ import er.extensions.qualifiers.ERXKeyValueQualifier;
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private static final int DefaultPadToSize =
             ERXProperties.intForKeyWithDefault("er.extensions.ERXInQualifier.DefaultPadToSize", 8);
 
@@ -68,7 +75,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
     }
 
     /**
-    * Constructs an in qualifer for a given
+     * Constructs an in qualifier for a given
      * attribute name and an array of values.
      * @param key attribute name
      * @param values array of values
@@ -95,7 +102,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
             final NSMutableArray paddedValues = new NSMutableArray(values);
             int padCount = paddedSize - count;
             // We pad with the last element repeated padCount times.  Do not pad with null
-            // as that might extend the set inadvertantly.
+            // as that might extend the set inadvertently.
             Object padElement = values.lastObject();
             while (padCount > 0) {
                 paddedValues.addObject(padElement);
@@ -108,10 +115,11 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
 
 
     /**
-    * String representation of the in
+     * String representation of the in
      * qualifier.
      * @return string description of the qualifier
      */
+    @Override
     public String toString() {
         return " <" + getClass().getName() + " key: " + key() + " > IN '" + value() + "'";
     }
@@ -122,6 +130,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
 
     /** Tests if the given object's key is in the supplied values */ 
     // FIXME: this doesn't work right with EOs when the key() is keypath across a relationship
+    @Override
     public boolean evaluateWithObject(Object object) {
         Object value = null;
         String key = key();
@@ -145,7 +154,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
                     // so we try to compare 'n' values with 'm' objects.
                     // we use set intersection
                     NSSet vs = new NSSet((NSArray) value);
-                    NSSet vss = new NSSet((NSArray) values());
+                    NSSet vss = new NSSet(values());
                     return vs.intersectsSet(vss);
                 }
             }
@@ -155,13 +164,14 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
         return value != null && values().containsObject(value);
     }
     
-    /*
+    /**
      * EOF seems to be wanting to clone qualifiers when
      * they are inside an and-or qualifier without this
      * method, ERXInQualifier is cloned into
-     * an EOKeyValueQualifier and the generated SQL is incorrect..
+     * an EOKeyValueQualifier and the generated SQL is incorrect...
      * @return cloned primary key list qualifier.
      */
+    @Override
     public Object clone() {
         return new ERXInQualifier(key(), values());
     }
@@ -186,6 +196,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
          * @param e current eo sql expression
          * @return SQL for the current qualifier.
          */
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXInQualifier inqualifier = (ERXInQualifier)eoqualifier;
             String result;
@@ -199,6 +210,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
         }
 
         // ENHANCEME: This should support restrictive qualifiers on the root entity
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOKeyValueQualifier eokeyvaluequalifier = (EOKeyValueQualifier)eoqualifier;
             String key = eokeyvaluequalifier.key();
@@ -273,6 +285,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
             return new EOAndQualifier(qualifiers);
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             // the key migration is the same as for EOKeyValueQualifier
             ERXInQualifier inQualifier=(ERXInQualifier)eoqualifier;
@@ -309,5 +322,4 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
 				(String)unarchiver.decodeObjectForKey("key"),
 				(NSArray)unarchiver.decodeObjectForKey("values"));
 	}
-	
 }

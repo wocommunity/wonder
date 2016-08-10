@@ -229,6 +229,14 @@ void *sha_setLocalDataForKey(ShmemArray *array, unsigned int elementNumber, cons
  */
 void sha_clearLocalData(ShmemArray *array, unsigned int elementNumber);
 
+/*
+  perform automated tests
+  returns 0 on success
+  returns 1 on failure
+  prints to stdout
+*/
+int shmem_do_tests();
+
 #endif /* SHMEM_H */
 
  

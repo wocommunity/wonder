@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.eof.ERXConstant;
 
 /**
- * Allows turning the border on and off of a table. Useful for Netscape which doesn't handle nested tables very well.<br />
+ * Allows turning the border on and off of a table. Useful for Netscape which doesn't handle nested tables very well.
  * 
  * @binding color
  * @binding width
@@ -21,6 +21,12 @@ import er.extensions.eof.ERXConstant;
  */
 
 public class ERXTableWithBorder extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXTableWithBorder(WOContext aContext) {
         super(aContext);

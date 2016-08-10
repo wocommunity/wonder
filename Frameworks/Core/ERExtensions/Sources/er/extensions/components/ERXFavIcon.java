@@ -31,10 +31,10 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 
 	public ERXFavIcon(String aName, NSDictionary associations, WOElement template) {
 		super("link", associations, template);
-		_href = (WOAssociation) _associations.removeObjectForKey("href");
-		_type = (WOAssociation) _associations.removeObjectForKey("type");
-		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
-		_filename = (WOAssociation) _associations.removeObjectForKey("filename");
+		_href = _associations.removeObjectForKey("href");
+		_type = _associations.removeObjectForKey("type");
+		_framework = _associations.removeObjectForKey("framework");
+		_filename = _associations.removeObjectForKey("filename");
 		if(_filename == null && _href == null) {
 			throw new WODynamicElementCreationException("Either 'href' or 'filename' must be bound: " + this);
 		}
@@ -43,6 +43,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 		}
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		String href;
@@ -72,6 +73,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 		super.appendAttributesToResponse(response, context);
 	}
 	
+	@Override
 	protected boolean hasContent() { return false; }
 	
 }

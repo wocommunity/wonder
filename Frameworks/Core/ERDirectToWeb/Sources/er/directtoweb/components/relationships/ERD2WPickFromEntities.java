@@ -13,11 +13,15 @@ import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomQueryComponent;
 
 /**
- * Custom query component that let's the user select from a set of shared eos.<br />
- * 
+ * Custom query component that let's the user select from a set of shared eos.
  */
-
 public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WPickFromEntities(WOContext context) {
         super(context);
@@ -27,7 +31,9 @@ public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
     public Object item; 
 
     // can't be stateless!
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray list() { return (NSArray)valueForBinding("list"); }

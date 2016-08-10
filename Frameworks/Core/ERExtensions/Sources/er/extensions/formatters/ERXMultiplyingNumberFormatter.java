@@ -13,6 +13,12 @@ import com.webobjects.foundation.NSNumberFormatter;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     private float factor;
     /**
@@ -33,6 +39,7 @@ public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
     /* (non-Javadoc)
      * @see com.webobjects.foundation.NSNumberFormatter#pattern()
      */
+    @Override
     public String pattern() {
         String pattern = super.pattern();
         return pattern;
@@ -40,6 +47,7 @@ public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
     /* (non-Javadoc)
      * @see com.webobjects.foundation.NSNumberFormatter#setPattern(java.lang.String)
      */
+    @Override
     public void setPattern(String pattern) {
         
         try {
@@ -66,6 +74,7 @@ public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
     /* (non-Javadoc)
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      */
+    @Override
     public StringBuffer format(Object arg0, StringBuffer arg1,
             FieldPosition arg2) {
         if (!(arg0 instanceof Number)) {
@@ -82,8 +91,8 @@ public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
             return super.format(b, arg1, arg2);
         } else {
             double d = n.doubleValue();
-            d *= (double)factor;
-            return super.format(new Double(d), arg1, arg2);
+            d *= factor;
+            return super.format(Double.valueOf(d), arg1, arg2);
         }
     }
 }

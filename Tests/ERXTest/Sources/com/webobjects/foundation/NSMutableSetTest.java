@@ -2,6 +2,8 @@ package com.webobjects.foundation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import er.erxtest.ERXTestCase;
@@ -216,5 +218,49 @@ public class NSMutableSetTest extends ERXTestCase {
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
-
+	
+	public void testNSMutableSetIterator() {
+		NSMutableSet<String> set = new NSMutableSet<String>("abc", "def");
+		int size = set.size();
+		NSMutableSet<String> check = set.mutableClone();
+		
+		Iterator<String> iterator = set.iterator();
+		assertTrue(iterator.hasNext());
+		assertTrue(check.remove(iterator.next()));
+		assertTrue(iterator.hasNext());
+		assertTrue(check.remove(iterator.next()));
+		assertFalse(iterator.hasNext());
+		assertTrue(check.isEmpty());
+		try {
+			iterator.next(); // no items left, should throw NoSuchElementException
+			fail();
+		} catch (NoSuchElementException e) {
+			// test passed
+		}
+		
+		iterator = set.iterator();
+		check = set.mutableClone();
+		try {
+			iterator.remove(); // not called next() before, should throw IllegalStateException
+			fail();
+		} catch (IllegalStateException e) {
+			// test passed
+		}
+		
+		for (int i = 0; i < size; i++) {
+			String currentItem = iterator.next();
+			iterator.remove();
+			assertFalse(set.contains(currentItem));
+			check.remove(currentItem);
+		}
+		assertTrue(set.isEmpty());
+		assertTrue(check.isEmpty());
+		
+		try {
+			iterator.remove(); // already called remove before, should throw IllegalStateException
+			fail();
+		} catch (IllegalStateException e) {
+			// test passed
+		}
+	}
 }

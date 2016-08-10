@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -24,11 +25,11 @@ import com.webobjects.foundation.NSRange;
  * @author Lenny Marks (lenny@aps.org)
  */
 public class ERXBatchFetchUtilities {
-	private static Logger log = Logger.getLogger(ERXBatchFetchUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXBatchFetchUtilities.class);
 
 	/**
 	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypaths the array of keypaths to fault
@@ -54,7 +55,7 @@ public class ERXBatchFetchUtilities {
 
 	/**
 	 * Shortcut for batch fetching a single source object
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObject source object to fault keypaths on.
      * @param keypaths the array of keypaths to fault
@@ -67,7 +68,7 @@ public class ERXBatchFetchUtilities {
 	/**
 	 * Shortcut for batch fetching a single keypath. 
 	 * Defaults skipFaultedSourceObjects to true
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -78,7 +79,7 @@ public class ERXBatchFetchUtilities {
 
 	/**
 	 * Shortcut for batch fetching a single keypath. 
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -89,9 +90,9 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
 	 * Defaults skipFaultedSourceObjects to true
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -101,8 +102,8 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -214,6 +215,7 @@ public class ERXBatchFetchUtilities {
          * @see EOFUtils#batchFetch
          * 
          * @param sourceObjects
+         * @param skipFaultedSourceObjects 
          */
         public void traverseForObjects(NSArray sourceObjects, boolean skipFaultedSourceObjects) {
             if (sourceObjects == null || sourceObjects.count() < 1) return;
@@ -352,9 +354,7 @@ public class ERXBatchFetchUtilities {
             EOEnterpriseObject eo = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
             EOEditingContext ec = eo.editingContext();
 
-            if (log.isDebugEnabled()) {
-            	log.debug("Batch fetching '" + path + "' relationship on " + sourceObjects);
-            }
+            log.debug("Batch fetching '{}' relationship on {}", path, sourceObjects);
 
             EODatabaseContext dbContext = ERXEOAccessUtilities.databaseContextForObject(eo);
             dbContext.lock();

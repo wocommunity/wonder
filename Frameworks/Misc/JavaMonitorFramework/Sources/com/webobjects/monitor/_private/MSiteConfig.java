@@ -21,11 +21,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOHTTPConnection;
@@ -49,12 +48,12 @@ import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.appserver.ERXRequest;
 import er.extensions.foundation.ERXFileUtilities;
 
 
 public class MSiteConfig extends MObject {
-    
-    private static final Logger log = Logger.getLogger(MSiteConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(MSiteConfig.class);
     
     /*
     // Site
@@ -308,7 +307,13 @@ public class MSiteConfig extends MObject {
     /********** Password Methods **********/
     private static Random _randomGenerator = new Random();
 
-    static public long myrand() { return Math.abs(_randomGenerator.nextLong()); }
+    static public long myrand() {
+        long nextLong = _randomGenerator.nextLong();
+        while (nextLong == Long.MIN_VALUE) {
+            nextLong = _randomGenerator.nextLong();
+        }
+        return Math.abs(nextLong);
+    }
 
     public String encryptStringWithKey(String to_be_encrypted, String aKey) {
         String encrypted_value = "";
@@ -371,11 +376,7 @@ public class MSiteConfig extends MObject {
     }
 
     public boolean isPasswordRequired() {
-        if (password() != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return password() != null;
     }
 
     // setPassword(value) is in the 'values' accessors
@@ -405,19 +406,16 @@ public class MSiteConfig extends MObject {
     public boolean compareStringWithPassword(String aString) {
         String _encryptedPassword = password();
         
-        if ( ((aString == null) && (_encryptedPassword != null)) || ((aString != null) && (_encryptedPassword == null)) ) {
-            // if one is null, and the other isn't, no match
-            return false;
-        } else if ( (aString == null) && (_encryptedPassword == null) ) {
+        if (aString == null && _encryptedPassword == null) {
             // if both are null, match
             return true;
-        } else if ( ((aString.length() == 0) && (_encryptedPassword == null)) || ((_encryptedPassword.length() == 0) && (aString == null)) ){
-            // if one is blank, and the other is null, match
-            return true;
+        } else if (aString == null || _encryptedPassword == null) {
+            // if one is null, and the other isn't, no match
+            return false;
         } else {	// do all the calculations
             // extract random portion of the encrypted password
             String fudgetoo_part = _encryptedPassword.substring(0, 4);
-            // encyrpt the new string using the random bit from the old string
+            // encrypt the new string using the random bit from the old string
             String encrypted_string = encryptStringWithKey(aString, fudgetoo_part);
             // compare keys and return
             return encrypted_string.equals(_encryptedPassword);
@@ -447,14 +445,13 @@ public class MSiteConfig extends MObject {
     		_passwordDictionary = new NSMutableDictionary<String, NSMutableArray<String>>();
     		_passwordDictionary.setObjectForKey(new NSMutableArray<String>(""), "password");
     	}
-        String aPassword = this.password();
+        String aPassword = password();
         if (_oldPasswordSet) {
             if (_oldPassword != null) {
                 _passwordDictionary.takeValueForKey(new NSMutableArray<String>(_oldPassword), "password");
                 return _passwordDictionary;
-            } else {
-                return NSDictionary.emptyDictionary();
             }
+            return NSDictionary.emptyDictionary();
         }
         if (aPassword != null) {
             _passwordDictionary.takeValueForKey(aPassword, "password");
@@ -474,7 +471,7 @@ public class MSiteConfig extends MObject {
         NSDictionary monitorRequest = new NSDictionary<String, String>("SITE", "queryWotaskd");
         NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
 
-        WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, (Map<String, ? extends List<String>>) NSDictionary.EmptyDictionary, content, null);
+        WORequest aRequest = new ERXRequest(MObject._POST, MObject.directActionString, MObject._HTTP1, NSDictionary.EmptyDictionary, content, null);
         WOResponse aResponse = null;
 
         try {
@@ -485,7 +482,7 @@ public class MSiteConfig extends MObject {
                 aResponse = anHTTPConnection.readResponse();
             }
         } catch(Exception localException) {
-            log.error("Failed to connect to Host: " + configHostName + " and Port: " + aPort);
+            log.error("Failed to connect to Host: {} and Port: {}", configHostName, aPort);
             throw new MonitorException("Failed to connect to Host: " + configHostName + " and Port: " + aPort);
         }
 
@@ -494,7 +491,7 @@ public class MSiteConfig extends MObject {
             try {
                 xmlDict = (NSDictionary) new _JavaMonitorDecoder().decodeRootObject(aResponse.content());
             } catch (WOXMLException wxe) {
-                log.error("Got non-parsable data from Host: " + configHostName + " + and Port: " + aPort + ". Data received was: " + aResponse.contentString() + ". It is possible that the Wotaskd on the remote host is of the wrong version");
+                log.error("Got non-parsable data from Host: {} + and Port: {}. Data received was: {}. It is possible that the Wotaskd on the remote host is of the wrong version", configHostName, aPort, aResponse.contentString());
                 throw new MonitorException("Got non-parsable data from Host: " + configHostName + " + and Port: " + aPort + ". Data received was: " +aResponse.contentString() + ". It is possible that the Wotaskd on the remote host is of the wrong version");
             }
         }
@@ -510,9 +507,8 @@ public class MSiteConfig extends MObject {
         NSDictionary queryWotaskdResponse = (NSDictionary) xmlDict.valueForKey("queryWotaskdResponse");
         if (queryWotaskdResponse != null) {
             return new MSiteConfig((NSDictionary) queryWotaskdResponse.valueForKey("SiteConfig"));
-        } else {
-            return new MSiteConfig(null);
         }
+        return new MSiteConfig(null);
     }
 
 
@@ -524,14 +520,14 @@ public class MSiteConfig extends MObject {
         if (xmlDict == null) {
             values = new NSMutableDictionary();
             setViewRefreshEnabled(Boolean.TRUE);
-            setViewRefreshRate(new Integer(60));
+            setViewRefreshRate(Integer.valueOf(60));
         } else {
             NSDictionary siteDict = (NSDictionary) xmlDict.valueForKey("site");
             if (siteDict == null) {
                 // rdar://3935864 - Seed: "Null Pointer Exception" for WO Application Instances
                 // It seems this should not be necessary, but there is no other place for default values to get fed in. -rrk
                 //
-                values = new NSMutableDictionary(new NSArray( new Object[] { Boolean.TRUE, new Integer(60) }),
+                values = new NSMutableDictionary(new NSArray( new Object[] { Boolean.TRUE, Integer.valueOf(60) }),
                                                  new NSArray ( new Object[] { "viewRefreshEnabled", "viewRefreshRate" }));
             } else {
                 values = new NSMutableDictionary(siteDict);
@@ -552,7 +548,7 @@ public class MSiteConfig extends MObject {
         String WOAssumeAppIsDeadMultiplier = System.getProperties().getProperty("WOAssumeApplicationIsDeadMultiplier");
         if (WOAssumeAppIsDeadMultiplier != null) {
             try {
-                Integer tempInt = new Integer(WOAssumeAppIsDeadMultiplier);
+                Integer tempInt = Integer.valueOf(WOAssumeAppIsDeadMultiplier);
                 _appIsDeadMultiplier = tempInt.intValue() * 1000;
             } catch (NumberFormatException e) {
                 // go with the default
@@ -600,11 +596,7 @@ public class MSiteConfig extends MObject {
 
         String _fS = File.separator;
 
-        if (_configDirectoryPath != null) {
-            return _configDirectoryPath;
-        }
-        else {
-
+        if (_configDirectoryPath == null) {
             _configDirectoryPath = System.getProperty("WODeploymentConfigurationDirectory");
             if (_configDirectoryPath != null) {
                 NSLog.debug.appendln("WODeploymentConfigurationDirectory set to non-default: "+_configDirectoryPath);
@@ -640,21 +632,20 @@ public class MSiteConfig extends MObject {
 
             if (!configDir.exists()) {
                 if (!configDir.mkdirs()) {
-                    log.fatal("Configuration Directory " + _configDirectoryPath + " does not exist, and cannot be created.");
+                    log.error("Configuration Directory {} does not exist, and cannot be created.", _configDirectoryPath);
                     System.exit(1);
                 }
             } else {
                 if (!configDir.isDirectory()) {
-                    log.fatal("Configuration Directory " + _configDirectoryPath + " is not actually a directory.");
+                    log.error("Configuration Directory {} is not actually a directory.", _configDirectoryPath);
                     System.exit(1);
                 }
                 if (!configDir.canRead()) {
-                    log.fatal("Don't have permission to read from Configuration Directory " + _configDirectoryPath + " as this user, please change the permissions or restart "
-                            + WOApplication.application().name() + " as another user.");
+                    log.error("Don't have permission to read from Configuration Directory {} as this user, please change the permissions or restart {} as another user.", _configDirectoryPath, WOApplication.application().name());
                     System.exit(1);
                 }
                 if ((WOApplication.application().name().equals("wotaskd")) && (!configDir.canWrite())) {
-                    log.fatal("Don't have permission to write to Configuration Directory " + _configDirectoryPath + " as this user; please change the permissions.");
+                    log.error("Don't have permission to write to Configuration Directory {} as this user; please change the permissions.", _configDirectoryPath);
                     System.exit(1);
                 }
             }
@@ -717,18 +708,18 @@ public class MSiteConfig extends MObject {
                         NSLog.debug.appendln("the SiteConfig is \n" + aConfig.generateSiteConfigXML());
                 } catch (Throwable ex) {
                     if (isWotaskd) {
-                        log.error("Failed to parse " + pathForSiteConfig() + ". Backing up original SiteConfig and continuing as if empty.");
+                        log.error("Failed to parse {}. Backing up original SiteConfig and continuing as if empty.", pathForSiteConfig());
                         backupSiteConfig();
                     } else {
-                        log.error("Failed to parse " + pathForSiteConfig() + ". Continuing as if empty.");
+                        log.error("Failed to parse {}. Continuing as if empty.", pathForSiteConfig());
                     }
                 }
             } else {
-                log.fatal("Cannot read from SiteConfig file " + pathForSiteConfig() + ". Possible Permissions Problem.");
+                log.error("Cannot read from SiteConfig file {}. Possible Permissions Problem.", pathForSiteConfig());
                 System.exit(1);
             }
         } else {
-            log.error("SiteConfig file " + pathForSiteConfig() + " doesn't exist. Continuing as if empty.");
+            log.error("SiteConfig file {} doesn't exist. Continuing as if empty.", pathForSiteConfig());
         }
         if (aConfig == null) aConfig = new MSiteConfig(null);
         return aConfig;
@@ -743,7 +734,7 @@ public class MSiteConfig extends MObject {
                 sc.renameTo(renamedFile);
             }
         } catch (NSForwardException ne) {
-            log.error("Cannot backup file " + pathForSiteConfig() + ". Possible Permissions Problem.");
+            log.error("Cannot backup file {}. Possible Permissions Problem.", pathForSiteConfig());
         }
     }
 
@@ -754,7 +745,7 @@ public class MSiteConfig extends MObject {
     public void saveSiteConfig(File sc, String value, boolean compress) {
         try {
             if ( sc.exists() && !sc.canWrite() ) {
-                log.error("Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.");
+                log.error("Don't have permission to write to file {} as this user, please change the permissions.", sc.getAbsolutePath());
                 String pre = WOApplication.application().name() + " - " + localHostName;
                 globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + sc.getAbsolutePath() + " as this user, please change the permissions.", "archiveSiteConfig");
                 return;
@@ -775,7 +766,7 @@ public class MSiteConfig extends MObject {
             String pre = WOApplication.application().name() + " - " + localHostName;
             globalErrorDictionary.takeValueForKey(pre + message, "archiveSiteConfig");
         } catch (NSForwardException ne) {
-            log.error("Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.");
+            log.error("Cannot write to file {}. Possible Permissions Problem.", sc.getAbsolutePath());
             String pre = WOApplication.application().name() + " - " + localHostName;
             globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + sc.getAbsolutePath() + ". Possible Permissions Problem.", "archiveSiteConfig");
         }
@@ -785,7 +776,7 @@ public class MSiteConfig extends MObject {
         try {
             File ac = fileForAdaptorConfig();
             if ( ac.exists() && !ac.canWrite() ) {
-                log.error("Don't have permission to write to file " + fileForAdaptorConfig() + " as this user, please change the permissions.");
+                log.error("Don't have permission to write to file {} as this user, please change the permissions.", fileForAdaptorConfig());
                 String pre = WOApplication.application().name() + " - " + localHostName;
                 globalErrorDictionary.takeValueForKey(pre + " Don't have permission to write to file " + fileForAdaptorConfig() + "as this user, please change the permissions.", "archiveSiteConfig");
                 return;
@@ -793,7 +784,7 @@ public class MSiteConfig extends MObject {
             _NSStringUtilities.writeToFile(fileForAdaptorConfig(), generateAdaptorConfigXML(false, false));
             globalErrorDictionary.takeValueForKey(null, "archiveAdaptorConfig");
         } catch (NSForwardException ne) {
-            log.error("Cannot write to file " + pathForAdaptorConfig() + ". Possible Permissions Problem.");
+            log.error("Cannot write to file {}. Possible Permissions Problem.", pathForAdaptorConfig());
             String pre = WOApplication.application().name() + " - " + localHostName;
             globalErrorDictionary.takeValueForKey(pre + " Cannot write to file " + pathForAdaptorConfig() + ". Possible Permissions Problem.", "archiveAdaptorConfig");
         }
@@ -801,6 +792,11 @@ public class MSiteConfig extends MObject {
     /**********/
     
 
+    /**
+     * This method should be removed, because it is only used by the deprecated MigrationPage in JavaMonitor.
+     * @return 
+     */
+    @Deprecated
 	public String generateHttpWebObjectsConfig(){
 		StringBuilder result = new StringBuilder();
 		result.append("ProxyRequests On\nProxyMaxForwards 10000\nProxyVia Full\n");
@@ -896,14 +892,26 @@ public class MSiteConfig extends MObject {
 //                            sb.append(recvBufSize.toString());
 //                        }
                         
-						final String route = anApp.name() + "_" + host + "_" + port + "_" + id;
-						result.append("\tBalancerMember http://" + host + ":" + port + "/cgi-bin/WebObjects/" + anApp.name() + ".woa route=" + route + "\n");
+                        final String route = anApp.name() + "_" + host + "_" + port + "_" + id;
+                        result.append("\tBalancerMember http://");
+                        result.append(host);
+                        result.append(':');
+                        result.append(port);
+                        result.append("/cgi-bin/WebObjects/");
+                        result.append(anApp.name());
+                        result.append(".woa route=");
+                        result.append(route);
+                        result.append('\n');
                     } // end if (!(onlyIncludeRunningInstances && !anInst.isRunning()));
 //                }
 
                 result.append("</Proxy>\n");
-				result.append("ProxyPass /cgi-bin/WebObjects/" + anApp.name() + ".woa balancer://" + anApp.name() + ".woa stickysession=woclusteragentid nofailover=On\n");
-				result.append("\n");
+				result.append("ProxyPass /cgi-bin/WebObjects/");
+				result.append(anApp.name());
+				result.append(".woa balancer://");
+				result.append(anApp.name());
+				result.append(".woa stickysession=woclusteragentid nofailover=On\n");
+				result.append('\n');
 //            } // end if (!(onlyIncludeRunningInstances && anApp.isRunning()))
         } // end Application Enumeration
 
@@ -917,14 +925,14 @@ public class MSiteConfig extends MObject {
 //                }
 //            }
 //        }
-		result.append("\n");
+		result.append('\n');
 		return result.toString();	
 	}
 	
     /********** Archiving Support **********/
     // KH - speed this up by uniquing the strings
     public String generateAdaptorConfigXML(boolean onlyIncludeRunningInstances, boolean shouldIncludeUnregisteredInstances) {
-        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
+        StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
 
         for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
             MApplication anApp = (MApplication) e.nextElement();
@@ -1097,6 +1105,7 @@ public class MSiteConfig extends MObject {
         return SiteConfig;
     }
     
+    @Override
     public String toString() {
         return
         values.toString() + "\n" +
@@ -1201,15 +1210,15 @@ public class MSiteConfig extends MObject {
     public MInstance instanceWithHostnameAndPort(String hostAndPort) {
         NSArray hostPortArray = NSArray.componentsSeparatedByString(hostAndPort, "\n");
         return instanceWithHostnameAndPort( (String) hostPortArray.objectAtIndex(0),
-                                                new Integer((String) hostPortArray.objectAtIndex(2)) );
+                                                Integer.valueOf((String) hostPortArray.objectAtIndex(2)) );
     }
 
     public MInstance instanceWithHostnameAndPort(String hostName, String port) {
         try {
-            Integer anIntPort = new Integer(port);
+            Integer anIntPort = Integer.valueOf(port);
             return instanceWithHostnameAndPort(hostName, anIntPort);
         } catch (Exception e) {
-            log.error("Exception getting instance: " + hostName + " + " + port, e);
+            log.error("Exception getting instance: {}:{}", hostName, port, e);
         }
         return null;
     }
@@ -1218,30 +1227,41 @@ public class MSiteConfig extends MObject {
         MHost aHost = hostWithName(hostName);
         if (aHost == null) {
             return null;
-        } else {
-            return aHost.instanceWithPort(port);
         }
+        return aHost.instanceWithPort(port);
     }
     
     public MInstance instanceWithHostAndPort(String name, InetAddress host, String port) {
         try {
-            Integer anIntPort = new Integer(port);
+            Integer anIntPort = Integer.valueOf(port);
             MHost aHost = hostWithAddress(host);
             if (aHost == null) {
                 return null;
-            } else {
-                MInstance anInstance = aHost.instanceWithPort(anIntPort);
-                if (anInstance != null) {
-                    if (anInstance.applicationName().equals(name)) {
-                        return anInstance;
-                    }                       
-                }
+            }
+            MInstance anInstance = aHost.instanceWithPort(anIntPort);
+            if (anInstance != null) {
+                if (anInstance.applicationName().equals(name)) {
+                    return anInstance;
+                }                       
             }
         } catch (Exception e) {
-            log.error("Exception getting instance: " + host + " + " + port, e);
+            log.error("Exception getting instance: {}:{}", host, port, e);
         }
         return null;
     }
 
+    public NSArray instancesWithHostName(String host) {
+        try {
+            MHost aHost = hostWithName(host);
+            if (aHost == null) {
+                return null;
+            }
+            return aHost.instanceArray();
+        } catch (Exception e) {
+            log.error("Exception getting instances for host: {}", host, e);
+        }
+        return null;
+    }
+    
     public int _appIsDeadMultiplier;
 }

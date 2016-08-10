@@ -7,17 +7,20 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.SelectPageInterface;
 
-
 /**
  * Select button to display in lists.
  *
  * @binding d2wContext the d2wContext
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
  */
-
 public class ERDSelectButton extends ERDActionButton {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDSelectButton.class);

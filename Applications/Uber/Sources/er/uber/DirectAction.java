@@ -15,14 +15,14 @@ public class DirectAction extends ERXDirectAction {
 
   @Override
   public WOActionResults defaultAction() {
-    return pageWithName(Main.class.getName());
+    return pageWithName(Main.class);
   }
 
   public WOActionResults rewriteBrokenAction() {
-    return pageWithName(RewriteBroken.class.getName());
+    return pageWithName(RewriteBroken.class);
   }
 
   public WOActionResults rewriteWorkedAction() {
-    return pageWithName(RewriteWorked.class.getName());
+    return pageWithName(RewriteWorked.class);
   }
 }

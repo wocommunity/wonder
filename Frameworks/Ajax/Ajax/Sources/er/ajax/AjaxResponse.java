@@ -2,19 +2,21 @@ package er.ajax;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
@@ -23,6 +25,7 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * @author mschrag
  */
 public class AjaxResponse extends ERXResponse {
+	private static final Logger log = LoggerFactory.getLogger(Ajax.class);
 	public static final String AJAX_UPDATE_PASS = "_ajaxUpdatePass";
 	private static NSMutableArray _responseAppenders; 
 	
@@ -32,7 +35,7 @@ public class AjaxResponse extends ERXResponse {
 	 * tag along. For instance, if you have an area at the top of your pages that
 	 * show errors or notifications, you may want all of your ajax responses to have
 	 * a chance to trigger an update of this area, so you could register an 
-	 * AjaxResponseAppender that renders a javascript block that calls 
+	 * {@link er.ajax.AjaxResponseAppender} that renders a javascript block that calls
 	 * MyNotificationsUpdate() only if there are notifications to be shown. Without
 	 * response appenders, you would have to include a check in all of your 
 	 * components to do this. 
@@ -55,25 +58,18 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
+	@Override
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
 			_context._setSenderID("");
 			try {
-				CharSequence content;
-				//AK: don't ask...
-				// MS: 5.3 vs 5.4 field type of _content
-				if (((Object)_content) instanceof StringBuffer) {
-					content = (StringBuffer)(Object)_content;
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
-				} else {
-					content = (StringBuilder)(Object) _content;
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuilder(),  "_content");
-				}
-				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
+				CharSequence originalContent = _content;
+				_content = new StringBuilder();
+				NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
-				_content.append(content);
+				_content.append(originalContent);
 				if (_responseAppenders != null) {
 					Enumeration responseAppendersEnum = _responseAppenders.objectEnumerator();
 					while (responseAppendersEnum.hasMoreElements()) {
@@ -81,17 +77,9 @@ public class AjaxResponse extends ERXResponse {
 						responseAppender.appendToResponse(this, _context);
 					}
 				}
-				int length;
-				if (((Object)_content) instanceof StringBuffer) {
-					StringBuffer buffer = (StringBuffer)(Object)_content;
-					length = buffer.length();
-				} else {
-					StringBuilder builder = (StringBuilder)(Object) _content;
-					length = builder.length();
-				}
-				if (length == 0) {
-				  setStatus(HTTP_STATUS_INTERNAL_ERROR);
-					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
+				if (_contentLength() == 0) {
+					setStatus(HTTP_STATUS_INTERNAL_ERROR);
+					log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
 				}
 			}
 			finally {
@@ -102,8 +90,7 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
-		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
-		return userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
+		return ERXWOContext.contextDictionary().valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
 	}
 	
 	/**
@@ -151,7 +138,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptHeaderIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptHeaderIfNecessary
+	 * @see er.ajax.AjaxUtils#appendScriptHeaderIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptHeaderIfNecessary() {
 		AjaxUtils.appendScriptHeaderIfNecessary(_request, this);
@@ -159,22 +146,39 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptFooterIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptFooterIfNecessary
+	 * @see er.ajax.AjaxUtils#appendScriptFooterIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptFooterIfNecessary() {
 		AjaxUtils.appendScriptFooterIfNecessary(_request, this);
 	}
 	
 	/**
-	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
-	 * @see AjaxUtils#updateDomElement
+	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
+	 * @param numberFormat
+	 *            optional number format to format the value with
+	 * @param dateFormat
+	 *            optional date format to format the value with
+	 * @param valueWhenEmpty
+	 *            string to use when value is null
+	 * 
+	 * @see er.ajax.AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
 		AjaxUtils.updateDomElement(this, id, value, numberFormat, dateFormat, valueWhenEmpty);
 	}
 
 	/**
-	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string. 
+	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
 	 */
 	public void updateDomElement(String id, Object value) {
 		updateDomElement(id, value, null, null, null);

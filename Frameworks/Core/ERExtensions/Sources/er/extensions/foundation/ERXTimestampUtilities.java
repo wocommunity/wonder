@@ -1,23 +1,22 @@
-//
-// NSTimestampUtilities.java
-// Project vwdBussinessLogicJava
-//
-// Created by ak on Wed Jun 06 2001
-//
 package er.extensions.foundation;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
  */
-public class ERXTimestampUtilities extends Object {
+public class ERXTimestampUtilities {
+    /** caches date formatter the first time it is used */
+    private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
 
     /**
      * Calculates a timestamp given a string. Currently supports
@@ -37,9 +36,9 @@ public class ERXTimestampUtilities extends Object {
         } else if (defaultValue.equals("tomorrow")) {
             value = ERXTimestampUtilities.tomorrow();
         } else if (defaultValue.equals("distantPast")) {
-            value = ERXTimestampUtilities.distantPast();
+            value = NSTimestamp.DistantPast;
         } else if (defaultValue.equals("distantFuture")) {
-            value = ERXTimestampUtilities.distantFuture();
+            value = NSTimestamp.DistantFuture;
         }
         return value;
     }
@@ -99,7 +98,7 @@ public class ERXTimestampUtilities extends Object {
         public int dayOfMonth() {
             return _calendar.get(Calendar.DATE);
         }
-        
+
         /**
          * Returns the day of the year as returned by
          * a GregorianCalendar.
@@ -113,7 +112,7 @@ public class ERXTimestampUtilities extends Object {
          * Returns the hour of the day as returned by
          * a GregorianCalendar.
          * @return hour of the day as an int.
-         */        
+         */
         public int hourOfDay() {
             return _calendar.get(Calendar.HOUR_OF_DAY);
         }
@@ -183,7 +182,7 @@ public class ERXTimestampUtilities extends Object {
      * wise this method subtracts the current hours, minutes and
      * seconds from the current time.
      * @return timestamp for today.
-     */    
+     */
     public static NSTimestamp today() {
         ERXTimestamp now = getInstance();
         return now.ts.timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
@@ -194,49 +193,21 @@ public class ERXTimestampUtilities extends Object {
      * wise this method subtracts the current hours, minutes and
      * seconds from the current time and then adds one day.
      * @return timestamp for tomorrow.
-     */    
+     */
     public static NSTimestamp tomorrow() {
         ERXTimestamp now = getInstance();
         return now.ts.timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
-    
+
     /**
      * Timestamp representing yesterday (12:00 AM). Implementation
      * wise this method subtracts the current hours, minutes and
      * seconds from the current time and then subtracts one day.
      * @return timestamp for yesterday.
-     */    
+     */
     public static NSTimestamp yesterday() {
         ERXTimestamp now = getInstance();
         return now.ts.timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
-    }
-
-    /**
-     * Cover method for returning DistantPast
-     * off of NSTimestamp.
-     * @deprecated use <code>NSTimestamp.DistantPast</code> instead
-     * @return a date in the distant past
-     */
-    public static NSTimestamp distantPast() {
-       return NSTimestamp.DistantPast;
-    }
-
-    /**
-     * Cover method for returning DistantFuture
-     * off of NSTimestamp.
-     * @deprecated use <code>NSTimestamp.DistantFuture</code> instead
-     * @return a date in the distant future
-     */    
-    public static NSTimestamp distantFuture() {
-        return NSTimestamp.DistantFuture;
-    }
-
-    /**
-     * @deprecated use <code>timestampByAddingTime</code> instead
-     */
-    public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp t1) {
-        ERXTimestamp time = getInstance(t1);
-        return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
     }
 
     /**
@@ -252,37 +223,13 @@ public class ERXTimestampUtilities extends Object {
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
     }
 
-    /**
-     * Compares two timestamps.
-     * @deprecated use <code>java.sql.Timestamp.before<code> instead.
-     * @param ts1 first timestamp
-     * @param ts2 second timestamp
-     * @return true if the the second timestamp is earlier than the
-     *		first timestamp.
-     */
-    public static boolean isEarlierThan(NSTimestamp ts1, NSTimestamp ts2) {
-        return ts1.compare(ts2) == NSComparator.OrderedAscending;
-    }
-
-    /**
-     * Compares two timestamps.
-     * @deprecated use <code>java.sql.Timestamp.after<code> instead.
-     * @param ts1 first timestamp
-     * @param ts2 second timestamp
-     * @return true if the the second timestamp is later than the
-     *		first timestamp.
-     */
-    public static boolean isLaterThan(NSTimestamp ts1, NSTimestamp ts2) {
-        return ts1.compare(ts2) == NSComparator.OrderedDescending;
-    }    
-    
     /************** Start Of UnixTimeAdditions ***************/
-    
+
     /** holds a static reference to the epoch */
     static NSTimestamp _epoch = new NSTimestamp(1970, 1, 1, 0, 0, 0, null);
 
     /**
-     * Utility method used to retrun the epoch,
+     * Utility method used to return the epoch,
      * Jan 1st, 1970
      * @return the epoch as an NSTimestamp
      */
@@ -311,9 +258,9 @@ public class ERXTimestampUtilities extends Object {
     public static Integer unixTimestamp(NSTimestamp ts) {
         long seconds = 0;
         seconds = ts.getTime() - epoch().getTime();
-        return (new Integer((int)((seconds-60*60)/1000L)));
+        return Integer.valueOf((int)((seconds-60*60)/1000L));
     }
-    
+
     /**
      * Returns the SimpleDateFormat pattern given an NSTimestampFormatter pattern. Note that these are not
      * 100% compatible -- SimpleDateFormat properly implements DST and TimeZones whereas NSTimestampFormatter
@@ -323,7 +270,7 @@ public class ERXTimestampUtilities extends Object {
      * @return a SimpleDateFormat pattern
      */
     public static String simpleDateFormatForNSTimestampFormat(String timestampFormatterPattern) {
-    	StringBuffer dateFormat = new StringBuffer(timestampFormatterPattern.length());
+    	StringBuilder dateFormat = new StringBuilder(timestampFormatterPattern.length());
     	int length = timestampFormatterPattern.length();
     	for (int i = 0; i < length; i ++) {
     		char ch = timestampFormatterPattern.charAt(i);
@@ -352,7 +299,7 @@ public class ERXTimestampUtilities extends Object {
     				dateFormat.append("dd");
     				break;
     			case 'e':
-    				dateFormat.append("d");
+    				dateFormat.append('d');
     				break;
     			case 'F':
     				dateFormat.append("SSS");
@@ -394,13 +341,13 @@ public class ERXTimestampUtilities extends Object {
     				dateFormat.append("yyyy");
     				break;
     			case 'z':
-    				dateFormat.append("Z");
+    				dateFormat.append('Z');
     				break;
     			case 'Z':
-    				dateFormat.append("z");
+    				dateFormat.append('z');
     				break;
     			default:
-    				dateFormat.append("%"); // (this is what NSTimstampFormatter did)
+    				dateFormat.append('%'); // (this is what NSTimstampFormatter did)
     			}
     		}
     		else {
@@ -408,5 +355,132 @@ public class ERXTimestampUtilities extends Object {
     		}
     	}
     	return dateFormat.toString();
+    }
+
+    public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
+        GregorianCalendar calendar = (GregorianCalendar) Calendar.getInstance();
+        calendar.setTime(t);
+        return calendar;
+    }
+
+    public static long offsetForDateInCommonEra(NSTimestamp t, int mode) {
+        GregorianCalendar calendar = calendarForTimestamp(t);
+        switch(mode) {
+            case Calendar.YEAR:
+                return calendar.get(Calendar.YEAR);
+            case Calendar.MONTH:
+                return calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH);
+            case Calendar.WEEK_OF_YEAR:
+                return calendar.get(Calendar.YEAR) * 52 + calendar.get(Calendar.WEEK_OF_YEAR);
+            case Calendar.DAY_OF_MONTH:
+            case Calendar.DAY_OF_YEAR:
+                return calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR);
+            case Calendar.HOUR_OF_DAY:
+            case Calendar.HOUR:
+                return (calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR)) * 24 + calendar.get(Calendar.HOUR_OF_DAY);
+            default:
+                return 0;
+        }
+    }
+
+    public static long differenceByDay(NSTimestamp t1, NSTimestamp t2) {
+        return compareDatesInCommonEra(t1, t2, Calendar.DAY_OF_YEAR);
+    }
+
+    public static long differenceByWeek(NSTimestamp t1, NSTimestamp t2) {
+        return compareDatesInCommonEra(t1, t2, Calendar.WEEK_OF_YEAR);
+    }
+
+    public static long differenceByMonth(NSTimestamp t1, NSTimestamp t2) {
+        return compareDatesInCommonEra(t1, t2, Calendar.MONTH);
+    }
+
+    public static long differenceByYear(NSTimestamp t1, NSTimestamp t2) {
+        return compareDatesInCommonEra(t1, t2, Calendar.YEAR);
+    }
+
+    public static NSTimestamp firstDateInSameWeek(NSTimestamp value) {
+        return new NSTimestamp(yearOfCommonEra(value), monthOfYear(value), -dayOfWeek(value) + 1, 0, 0, 0, NSTimeZone.defaultTimeZone());
+    }
+
+    public static NSTimestamp firstDateInSameMonth(NSTimestamp value) {
+        return new NSTimestamp(yearOfCommonEra(value), monthOfYear(value), -dayOfMonth(value) + 1, 0, 0, 0, NSTimeZone.defaultTimeZone());
+    }
+
+    public static NSTimestamp firstDateInNextMonth(NSTimestamp value) {
+        return firstDateInSameMonth(value).timestampByAddingGregorianUnits(0, 1, 0, 0, 0, 0);
+    }
+
+    public static long compareDatesInCommonEra(NSTimestamp t1, NSTimestamp t2, int mode) {
+        return offsetForDateInCommonEra(t2, mode) - offsetForDateInCommonEra(t1, mode);
+    }
+
+    public static int dayOfCommonEra(NSTimestamp t) {
+        return yearOfCommonEra(t) * 365 + dayOfYear(t);
+    }
+
+    public static int monthOfCommonEra(NSTimestamp t) {
+        return yearOfCommonEra(t) * 12 + monthOfYear(t);
+    }
+
+    public static int weekOfCommonEra(NSTimestamp t) {
+        return yearOfCommonEra(t) * 12 + weekOfYear(t);
+    }
+
+    public static boolean isWeekDay(NSTimestamp t) {
+        int day = dayOfWeek(t);
+        return !((day == Calendar.SATURDAY) || (day == Calendar.SUNDAY));
+    }
+
+    public static int dayOfWeek(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_WEEK);
+    }
+
+    public static int dayOfMonth(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int weekOfYear(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static int weekOfMonth(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.WEEK_OF_MONTH);
+    }
+
+    public static int dayOfYear(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.DAY_OF_YEAR);
+    }
+
+    public static int hourOfDay(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.HOUR_OF_DAY);
+    }
+
+    public static int minuteOfHour(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.MINUTE);
+    }
+
+    public static int secondOfMinute(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.SECOND);
+    }
+
+    public static int monthOfYear(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.MONTH);
+    }
+
+    public static int yearOfCommonEra(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.YEAR);
+    }
+
+    /**
+     * Utility method to return a standard timestamp
+     * formatter for the default string representation
+     * of java dates.
+     * @return timestamp formatter for java dates.
+     */
+    public static NSTimestampFormatter gregorianDateFormatterForJavaDate() {
+        if (_gregorianDateFormatterForJavaDate == null)
+            _gregorianDateFormatterForJavaDate = new NSTimestampFormatter("%a %b %d %H:%M:%S %Z %Y");
+        return _gregorianDateFormatterForJavaDate;
     }
 }

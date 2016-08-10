@@ -82,7 +82,8 @@ public class ERWOAdaptorUtilities {
 				cookie.getPath(),
 				cookie.getDomain(),
 				cookie.getMaxAge(),
-				cookie.isSecure());
+				cookie.isSecure(),
+				cookie.isHttpOnly());
 		return wocookie;
 	}
 	
@@ -101,6 +102,8 @@ public class ERWOAdaptorUtilities {
 		String serverName = context.request()._serverName();
 		String serverPort = context.request()._serverPort();
 		String sessionID = context.session().sessionID();
+		//TODO secure websocket support
+		//FIXME this only works for a single application
 		return "ws://" + serverName + ":" + serverPort + "?" + WOApplication.application().sessionIdKey() + "=" + sessionID;
 	}
 	

@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.erxtest.Application;
 import er.extensions.ERXExtensions;
-import er.extensions.eof.ERXEC;
 
 public class ERXThrashTest {
   static List<ThrashTest> useScheme(String scheme) throws Throwable {

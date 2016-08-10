@@ -14,13 +14,20 @@ import er.extensions.components.ERXStatelessComponent;
  * This component will display is content (as in WOComponentContent) if
  * it detects cookies are disabled. This can be useful for displaying
  * messages to the user that they should have cookies enabled in order
- * to use different features of the application.<br/>
+ * to use different features of the application.
+ * <p>
  * The content is used as a JavaScript string literal, so it must all be on single line.
  * Any line breaks will result in invalid JavaScript.
- * <br/>
+ * 
  * @binding negate 
  */
 public class ERXJSCookiesConditional extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Public constructor

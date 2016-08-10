@@ -1,0 +1,45 @@
+{
+    attributes = (
+        {
+            columnName = BUDGET; 
+            externalType = decimal; 
+            name = budget; 
+            precision = 15; 
+            prototypeName = amount; 
+        }, 
+        {
+            columnName = NAME; 
+            externalType = char; 
+            name = name; 
+            prototypeName = varchar50; 
+            width = 40; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "STUDIO_ID"; 
+            externalType = integer; 
+            name = studioID; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (budget, name, studioID); 
+    className = "webobjectsexamples.businesslogic.eo.Studio"; 
+    classProperties = (budget, name, movies); 
+    externalName = STUDIO; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (budget, name, movies); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.client.Studio"; 
+        "_nameInObjectStore" = STUDIO; 
+    }; 
+    name = Studio; 
+    primaryKeyAttributes = (studioID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = studioID; sourceAttribute = studioID; }); 
+            name = movies; 
+        }
+    ); 
+}

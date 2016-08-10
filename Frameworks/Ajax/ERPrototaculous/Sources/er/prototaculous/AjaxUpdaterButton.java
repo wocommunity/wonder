@@ -1,37 +1,27 @@
 package er.prototaculous;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.appserver.ERXWOContext;
-
-
 /**
- * An Ajax.Updater as a button (that also submits the form and form values)
- * 
+ * An Ajax.Updater as a button (that also submits the form and form values).
+ * <p>
  * In order to use this, the form elements(i.e WOTextField, etc) need to have their name attribute bound to concrete values.
  * The Prototype Ajax.Updater form is parametized using these names. WOElements won't correctly take form values otherwise.
- * Also Prototype/WO integration requires the use of <button> rather than <input> WOSubmitButtons. 
- * So set:		
- * 			 er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
- *  
+ * Also Prototype/WO integration requires the use of &lt;button&gt; rather than &lt;input&gt; WOSubmitButtons.
+ * <p>
+ * So set:
+ * <blockquote>er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true</blockquote>
+ * 
  * @see AjaxUpdater
- *   
  * @author mendis
- *
  */
 public class AjaxUpdaterButton extends AjaxUpdater {
     public AjaxUpdaterButton(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override
@@ -52,7 +42,7 @@ public class AjaxUpdaterButton extends AjaxUpdater {
     @Override
     protected String url() {
     	if (hasBinding(Bindings.action)) {
-    		return "'" + ERXWOContext.ajaxActionUrl(context()) + "'";
+    		return "'" + context().componentActionURL(application().ajaxRequestHandlerKey()) + "'";
     	} else return super.url();
     }
     

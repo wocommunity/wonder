@@ -1,0 +1,37 @@
+HasAction : WOConditional {
+	condition = hasActionBinding;
+}
+
+HasDirectAction : WOConditional {
+	condition = hasActionBinding;
+	negate = true;
+}
+
+ACTION : WOSubmitButton {
+	action = ^action;
+	value = ^value;
+	data-role="button";
+	class = cssClass;
+	data-icon = ^icon;
+	data-theme = ^theme;
+	data-inline = ^inline;
+	data-iconpos = ^iconpos;
+	otherTagString = miniVersion;
+	data-ajax = "false";
+	id = javaScriptElementID;
+}
+
+
+DIRECTACTION : WOSubmitButton {
+	actionClass = ^actionClass;
+	directActionName = ^directActionName;
+	value = ^value;
+	data-role="button";
+	class = cssClass;
+	data-icon = ^icon;
+	data-theme = ^theme;
+	data-inline = ^inline;
+	data-iconpos = ^iconpos;
+	otherTagString = miniVersion;
+	id = javaScriptElementID;
+}

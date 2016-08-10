@@ -1,0 +1,11 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = Neo4J; 
+    connectionDictionary = {URL = "file:///tmp/neo4jadaptor-test"; }; 
+    entities = (
+        {className = "er.neo4jadaptor.test.eo.FirstEntity"; name = FirstEntity; }, 
+        {className = "er.neo4jadaptor.test.eo.Join"; name = Join; }, 
+        {className = "er.neo4jadaptor.test.eo.SecondEntity"; name = SecondEntity; }, 
+        {className = "er.neo4jadaptor.test.eo.ThirdEntity"; name = ThirdEntity; }
+    ); 
+}

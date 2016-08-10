@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXSwitchEmbeddedPage.java" wocomponentcontent="true">
+
+	<binding name="initialComponentName"/>
+        <validation message="'initialComponentName' is a required binding.">
+            <unbound name="initialComponentName"/>
+        </validation>
+    </wo>
+</wodefinitions>

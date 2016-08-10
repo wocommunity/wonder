@@ -14,15 +14,14 @@ import er.rest.ERXRestUtils;
 
 /**
  *
- * @property ERXRest.suppressTypeAttributesForSimpleTypes
+ * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
+ * @property <code>ERXRest.includeNullValues</code> Boolean property to enable null values in return. Defaults
+ *           to true.
  */
-public class ERXXmlRestWriter implements IERXRestWriter {
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
-		response.setHeader("text/xml", "Content-Type");
-	}
-
+public class ERXXmlRestWriter extends ERXRestWriter {
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		appendHeadersToResponse(node, response, context);
+		response.setContentEncoding(contentEncoding());
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		appendNodeToResponse(node, response, 0, delegate, context);
 	}
@@ -50,16 +49,18 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		String name = node.name();
 		Object value = node.value();
 		String formattedValue = coerceValueToString(value, context);
+
 		if (formattedValue == null) {
-			indent(response, indent);
-			response.appendContentString("<");
-			response.appendContentString(name);
-			appendAttributesToResponse(node, response, context);
-			appendTypeToResponse(value, response);
-			response.appendContentString("/>");
-			response.appendContentString("\n");
-		}
-		else {
+			if(ERXProperties.booleanForKeyWithDefault("ERXRest.includeNullValues", true)) {
+				indent(response, indent);
+				response.appendContentString("<");
+				response.appendContentString(name);
+				appendAttributesToResponse(node, response, context);
+				appendTypeToResponse(value, response);
+				response.appendContentString("/>");
+				response.appendContentString("\n");
+			}
+		} else {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
@@ -188,4 +189,8 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
+	@Override
+	public String contentType() {
+		return "text/xml";
+	}
 }

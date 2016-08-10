@@ -1,0 +1,74 @@
+<wo:Main pageTitle = "$pageTitle">
+	
+	<style>
+		.plain {
+			background-color: #FFF;
+			border: 1px solid black;
+		}
+		
+		.darkened {
+			background-color: #000;
+			border: 3px dashed #F00;
+		}
+		
+		form legend, .updateContainers h3 {
+			margin-top: 20px;
+		}
+		
+		form legend:first, .updateContainers h3:first {
+			margin-top: 0px;
+		}
+		
+	</style>
+	<div class = "row">
+		<div class = "span9">
+			<h3>Ajax Submit Button</h3>
+			<hr/>
+			<p>
+				This page tests submitting a form via an AjaxSubmitButton.  
+			</p>
+			<hr/>
+		</div>
+	</div>
+	<div class = "row">
+		<div class = "span6">
+			<wo:form class = "well" multipleSubmit = "true">
+				<h4>The Highlight Form</h4>
+				<label>Wife's Name</label>
+				<wo:textfield value = "$wifeName"></wo:textfield>
+				<webobject name = "HighlighSubmitButton"></webobject>
+				<h4>The Slide In/Out Form</h4>
+				<label>Kid's Name</label>
+				<wo:textfield value = "$kidName"></wo:textfield>
+				<webobject name = "SlideInOutButton"></webobject>
+				<h4>The Morph Form</h4>
+				<label>Dog's Name</label>
+				<wo:textfield value = "$dogName"></wo:textfield>
+				<webobject name = "MorphButton"></webobject>
+				<h4>The Spinner Form</h4>
+				<label>Cat's Name</label>
+				<wo:textfield value = "$catName"></wo:textfield>
+				<webobject name = "SpinnerButton"></webobject>
+			</wo:form>
+
+		</div>
+		<div class = "span3 updateContainers">
+			<h3>Wife's Name</h3>
+			<webobject name = "HighlightAjaxUpdateContainer">
+				<wo:str value = "$wifeName"></wo:str>
+			</webobject>
+			<h3>Kid's Name</h3>
+			<webobject name = "SlideInOutUpdateContainer">
+				<wo:str value = "$kidName"></wo:str>
+			</webobject>
+			<h3>Dog's Name</h3>
+			<webobject name = "MorphUpdateContainer">
+				<wo:str value = "$dogName"></wo:str>
+			</webobject>
+			<h3>Cat's Name</h3>
+			<webobject name = "SpinnerUpdateContainer">
+				<wo:str value = "$catName"></wo:str>
+			</webobject>
+		</div>
+	</div>
+</wo:Main>

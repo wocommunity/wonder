@@ -3,7 +3,6 @@ package er.erxtest;
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;
-
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -13,11 +12,19 @@ public class ERXTestRunNoisyListener extends RunListener {
 	int failed = 0;
 	long start = 0L;
 
+	@Override
 	public void testRunStarted(Description description) { start = System.currentTimeMillis(); }
-	public void testStarted(Description description) { System.out.print("test: "+description); attempted++; }
-	public void testFailure(Failure failure) { System.out.print("\n"+failure+"\n"); failed++; }
-	public void testFinished(Description description) { System.out.println(""); }
+	@Override
+	public void testStarted(Description description) { attempted++; }
+	@Override
+	public void testFailure(Failure failure) {
+		System.out.print("\n"+failure+" FAILED\n");
+		failed++;
+	}
+	@Override
+	public void testFinished(Description description) { System.out.println(description.toString()); }
 
+	@Override
 	public void testRunFinished(Result result) {
 		long end = System.currentTimeMillis();
 

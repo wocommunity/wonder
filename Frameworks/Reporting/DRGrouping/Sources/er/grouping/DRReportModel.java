@@ -1,24 +1,34 @@
 package er.grouping;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.StringReader;
+import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-import org.xml.sax.*;
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
-import sun.misc.*;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSStringUtilities;
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
-public class DRReportModel extends Object  {
-    private static Logger log = Logger.getLogger(DRReportModel.class);
+public class DRReportModel {
+    private static final Logger log = LoggerFactory.getLogger(DRReportModel.class);
 
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
     public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";
@@ -80,7 +90,7 @@ public class DRReportModel extends Object  {
             
         }
 
-        this.setOrderings(arr);
+        setOrderings(arr);
         //OWDebug.println(1, "orderings:"+arr);
     }
 
@@ -124,7 +134,7 @@ public class DRReportModel extends Object  {
     static public NSArray possibleValues(NSDictionary smcdict) {
         //NSArray rawpossVals = (NSArray)smcdict.objectForKey("possibleValues");
         Object rawpossVals = smcdict.objectForKey("possibleValues");
-        String non = (String)smcdict.objectForKey("nonNumberOrDate");
+        //String non = (String)smcdict.objectForKey("nonNumberOrDate");
 
         if (rawpossVals == null) {
             return null;
@@ -134,13 +144,8 @@ public class DRReportModel extends Object  {
         
         if (rawpossVals instanceof String) {
             WOXMLDecoder decoder = WOXMLDecoder.decoder();
-            BASE64Decoder base64 = new BASE64Decoder();
-            String xmlString = "";
-            try {
-                xmlString = new String(base64.decodeBuffer((String)rawpossVals));
-            } catch(IOException ex) {
-            }
-            log.info("xmlString: " + xmlString);
+            String xmlString = new String(Base64.decodeBase64((String) rawpossVals));
+            log.info("xmlString: {}", xmlString);
             StringReader stringReader = new StringReader(xmlString);
             InputSource is = new InputSource(stringReader);
             // invoke setEncoding (on the input source) if the XML contains multibyte characters
@@ -254,8 +259,7 @@ public class DRReportModel extends Object  {
                 if (smc.nonNumberOrDate()) {
                     smcDict.setObjectForKey("true", "nonNumberOrDate");
                     String passValsXMLString = WOXMLCoder.coder().encodeRootObjectForKey(smc.rawPossibleValues(), "XML");
-                    BASE64Encoder base64 = new BASE64Encoder();
-                    String base64XML = base64.encodeBuffer(passValsXMLString.getBytes());
+                    String base64XML = Base64.encodeBase64String(passValsXMLString.getBytes());
                     smcDict.setObjectForKey(base64XML, "possibleValues");
                 }else{
                     smcDict.setObjectForKey(smc.rawPossibleValues(), "possibleValues");
@@ -347,7 +351,7 @@ public class DRReportModel extends Object  {
 
     public void buildGrandTotal() {
         DRRecordGroup rg = DRRecordGroup.withCriteriaGroupParent(null, null, null);
-        this.registerRecordGroupWithCoordinates(rg, new NSDictionary());
+        registerRecordGroupWithCoordinates(rg, new NSDictionary());
         rg.recordList().addObjectsFromArray(_records);
         //OWDebug.println(1, "buildGrandTotal: rg:"+ rg);
     }
@@ -359,7 +363,7 @@ public class DRReportModel extends Object  {
         _attributeList = aAttribList;
         _criteriaList = aCritArray;
         _registeredRecordGroups = new NSMutableDictionary();
-        _records = this.recordsForRawRecords(_rawRecords);
+        _records = recordsForRawRecords(_rawRecords);
         _vList = new NSMutableArray();
         _hList = new NSMutableArray();
         _zList = new NSMutableArray();
@@ -367,19 +371,19 @@ public class DRReportModel extends Object  {
         _flatAttributeListTotal = new NSMutableArray();
         _flatAttributeDepthDict = new NSMutableDictionary();
         _flatAttributeListTotalDict = new NSMutableDictionary();
-        dict = this.groupsWithCriteriaArray(aCritArray);
+        dict = groupsWithCriteriaArray(aCritArray);
         _groups = (NSArray)dict.objectForKey("groups");
         _groupDict = (NSDictionary)dict.objectForKey("lookup");
         _vList.addObjectsFromArray(_groups);
-        this.groupAllRecordGroups();
+        groupAllRecordGroups();
         log.debug("ABOUT TO GET flatListForAttributeList");
-        this.flatListForAttributeList();
+        flatListForAttributeList();
         log.debug("ABOUT TO GET flatListForAttributeListTotals");
-        this.flatListForAttributeListTotals();
-        log.debug("flatAttributeList: "+ _flatAttributeList);
-        log.debug("flatAttributeListTotal: "+_flatAttributeListTotal);
-        this.buildGrandTotal();
-        this.buildOrderings();
+        flatListForAttributeListTotals();
+        log.debug("flatAttributeList: {}", _flatAttributeList);
+        log.debug("flatAttributeListTotal: {}", _flatAttributeListTotal);
+        buildGrandTotal();
+        buildOrderings();
         
         NSSelector synchModelSelector = new NSSelector("synchModel", ERXConstant.NotificationClassArray);
         
@@ -390,12 +394,12 @@ public class DRReportModel extends Object  {
 
     public void synchModel() {
         log.info("synchModel()");
-        this.computeRecordValuesForRecords(this.records());
-        this.makeRecordGroupsStaleTotal();
-        this.flatListForAttributeList();
-        this.flatListForAttributeListTotals();
-        this.buildGrandTotal();
-        this.buildOrderings();
+        computeRecordValuesForRecords(records());
+        makeRecordGroupsStaleTotal();
+        flatListForAttributeList();
+        flatListForAttributeListTotals();
+        buildGrandTotal();
+        buildOrderings();
     }
 
     public void synchModel(NSNotification notification) {
@@ -451,7 +455,7 @@ public class DRReportModel extends Object  {
 
         }
 
-        Number dpthKey = new Integer(_attributeListDepth);
+        Number dpthKey = Integer.valueOf(_attributeListDepth);
         //OWDebug.println(1, "dpthKey:"+dpthKey);
         NSMutableArray lst = (NSMutableArray)_flatAttributeDepthDict.objectForKey(dpthKey);
 
@@ -476,7 +480,7 @@ public class DRReportModel extends Object  {
             while (anEnum.hasMoreElements()) {
                 DRAttribute att = (DRAttribute)anEnum.nextElement();
                 //OWDebug.println(1, "att:"+att);
-                this.flatListForAttribute(att);
+                flatListForAttribute(att);
             }
         }
 
@@ -490,7 +494,7 @@ public class DRReportModel extends Object  {
         int cnt = depthKeys.count();
 
         for (i = 0; i < cnt; i++) {
-            Number ky = new Integer(i);
+            Number ky = Integer.valueOf(i);
             //OWDebug.println(1, "ky:"+ ky);
             NSArray attsForDepth = (NSArray)_flatAttributeDepthDict.objectForKey(ky);
             Enumeration anEnum = attsForDepth.objectEnumerator();
@@ -531,7 +535,7 @@ public class DRReportModel extends Object  {
 
         }
 
-        this.getFlatAttributeDepthDictTotals();
+        getFlatAttributeDepthDictTotals();
         //OWDebug.println(1, "_flatAttributeListTotalDict:"+ _flatAttributeListTotalDict);
     }
 
@@ -627,27 +631,27 @@ public class DRReportModel extends Object  {
 
     public NSArray dimensionForName(String dim) {
         if (dim == null) {
-            return this.vList();
+            return vList();
         }
 
         if (dim.equals("H")) {
-            return this.hList();
+            return hList();
         }
 
         if (dim.equals("Z")) {
-            return this.zList();
+            return zList();
         }
 
         if (dim.equals("V")) {
-            return this.vList();
+            return vList();
         }
 
-        return this.vList();
+        return vList();
     }
 
     public void moveUpDimension(DRGroup vGroup, boolean up, String dim) {
         int cnt;
-        NSMutableArray dims = (NSMutableArray)this.dimensionForName(dim);
+        NSMutableArray dims = (NSMutableArray)dimensionForName(dim);
         int cur = dims.indexOfObject(vGroup);
         dims.removeObject(vGroup);
         cnt = dims.count();
@@ -779,6 +783,7 @@ public class DRReportModel extends Object  {
         //[self flatListForAttributeList];
     }
 
+    @Override
     public String toString() {
         return _groups.toString();
     }
@@ -801,7 +806,7 @@ public class DRReportModel extends Object  {
     }
 
     public void registerRecordGroupWithCoordinates(DRRecordGroup recGrp, NSDictionary coordDict) {
-        String coordKey = this.coordinateKey(coordDict);
+        String coordKey = coordinateKey(coordDict);
         _registeredRecordGroups.setObjectForKey(recGrp, coordKey);
     }
 
@@ -813,7 +818,7 @@ public class DRReportModel extends Object  {
     }
 
     public DRRecordGroup recordGroupForCoordinates(NSDictionary coordDict) {
-        String coordKey = this.coordinateKey(coordDict);
+        String coordKey = coordinateKey(coordDict);
         DRRecordGroup recordGroup = (DRRecordGroup)_registeredRecordGroups.objectForKey(coordKey);
         return recordGroup;
     }

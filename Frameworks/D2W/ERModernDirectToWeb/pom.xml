@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>d2w</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
@@ -27,6 +27,10 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+    		<artifactId>ERCoolComponents</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>

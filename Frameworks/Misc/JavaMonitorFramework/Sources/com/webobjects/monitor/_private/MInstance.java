@@ -1,9 +1,9 @@
 /*
-� Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (�Apple�) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple�s copyrights in this original Apple software (the �Apple Software�), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -29,10 +29,15 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.extensions.eof.ERXKey;
+
 public class MInstance extends MObject {
     static NSTimestampFormatter dateFormatter = new NSTimestampFormatter("%m/%d/%Y %H:%M:%S %Z");
 
     static NSTimestampFormatter shutdownFormatter = new NSTimestampFormatter("%a @ %H:00");
+
+    public static final ERXKey<MHost> HOST = new ERXKey<MHost>("host");
+    public static final ERXKey<String> HOST_NAME = new ERXKey<String>("hostName");
 
     /*
      * String hostName; Integer id; Integer port; String applicationName;
@@ -372,11 +377,11 @@ public class MInstance extends MObject {
 
         setSchedulingEnabled(Boolean.FALSE);
         setSchedulingType("DAILY");
-        setSchedulingHourlyStartTime(new Integer(3));
-        setSchedulingDailyStartTime(new Integer(3));
-        setSchedulingWeeklyStartTime(new Integer(3));
-        setSchedulingStartDay(new Integer(1)); // Sunday
-        setSchedulingInterval(new Integer(12));
+        setSchedulingHourlyStartTime(Integer.valueOf(3));
+        setSchedulingDailyStartTime(Integer.valueOf(3));
+        setSchedulingWeeklyStartTime(Integer.valueOf(3));
+        setSchedulingStartDay(Integer.valueOf(1)); // Sunday
+        setSchedulingInterval(Integer.valueOf(12));
         setGracefulScheduling(Boolean.TRUE);
     }
 
@@ -467,6 +472,7 @@ public class MInstance extends MObject {
         return values;
     }
 
+    @Override
     public String toString() {
         if (false) {
             return (values.toString() + " " + "lastRegistration = " + _lastRegistration + " " + "state = " + state
@@ -637,9 +643,8 @@ public class MInstance extends MObject {
         Integer lb = lifebeatInterval();
         if (lb == null) {
             return 30 * _siteConfig._appIsDeadMultiplier;
-        } else {
-            return lb.intValue() * _siteConfig._appIsDeadMultiplier;
         }
+        return lb.intValue() * _siteConfig._appIsDeadMultiplier;
     }
 
     public boolean isRunning_W() {
@@ -652,24 +657,21 @@ public class MInstance extends MObject {
             if (currentTime < finishStartingByTime) {
                 if (currentTime > cutOffTime) {
                     return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
                 }
+                state = MObject.ALIVE;
+                return true;
                 // I'm finished trying to start
-            } else {
-                // I've received a lifebeat in time
-                if (currentTime > cutOffTime) {
-                    addDeath();
-                    sendDeathNotificationEmail();
-                    setShouldDie(false);
-                    state = MObject.DEAD;
-                    return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
-                }
             }
+            // I've received a lifebeat in time
+            if (currentTime > cutOffTime) {
+                addDeath();
+                sendDeathNotificationEmail();
+                setShouldDie(false);
+                state = MObject.DEAD;
+                return false;
+            }
+            state = MObject.ALIVE;
+            return true;
         } else if (state == MObject.ALIVE) {
             if (currentTime > cutOffTime) {
                 addDeath();
@@ -677,9 +679,8 @@ public class MInstance extends MObject {
                 setShouldDie(false);
                 state = MObject.DEAD;
                 return false;
-            } else {
-                return true;
             }
+            return true;
         } else if (state == MObject.CRASHING) {
             addDeath();
             sendDeathNotificationEmail();
@@ -689,11 +690,10 @@ public class MInstance extends MObject {
             if (currentTime > cutOffTime) {
                 state = MObject.DEAD;
                 return false;
-            } else {
-                // KH - I've returned to life - what should I do?
-                state = MObject.ALIVE;
-                return true;
             }
+            // KH - I've returned to life - what should I do?
+            state = MObject.ALIVE;
+            return true;
         }
     }
 
@@ -756,6 +756,26 @@ public class MInstance extends MObject {
     }
 
     public void sendDeathNotificationEmail() {
+    	NSTimestamp currentTime = new NSTimestamp();
+        String currentDate = currentTime.toString();
+
+        long cutOffTime = _lastRegistration.getTime() + lifebeatCheckInterval();
+        String assumedToBeDead = "";
+        if (currentTime.getTime() > cutOffTime) {
+        	long secondsDifference = (currentTime.getTime() - _lastRegistration.getTime()) / 1000;
+        	assumedToBeDead = "The app did not respond for " + secondsDifference + " seconds " +
+        			"which is greater than the allowed threshold of " + lifebeatCheckInterval() + " seconds " +
+        			"(Lifebeat Interval * WOAssumeApplicationIsDeadMultiplier) so it is assumed to be dead.\n";
+        }
+    	String message = "Application '" + displayName() + "' on " + _host.name() + ":" + port() +
+	        " stopped running at " + (currentDate) + ".\n" + 
+	        "The app's current state was: " + stateArray[state] + ".\n" +
+	        assumedToBeDead + 
+	        "The last successful communication occurred at: " + _lastRegistration.toString() + ". " + 
+	        "This may be the result of a crash or an intentional shutdown from outside of wotaskd";
+        
+    	NSLog.err.appendln(message);
+        
         boolean shouldEmail = false;
         Boolean aBool = _application.notificationEmailEnabled();
         if (aBool != null) {
@@ -765,15 +785,12 @@ public class MInstance extends MObject {
         if (shouldEmail) {
             try {
                 WOMailDelivery mailer = WOMailDelivery.sharedInstance();
-                String currentDate = (new NSTimestamp()).toString();
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
-                String subject = new String("App stopped running: " + displayName());
-                String bodyText = new String("The application " + displayName() + " listening on port " + port()
-                        + " on host " + _host.name() + " stopped running at " + (currentDate)
-                        + ".  This may be the result of a crash or an intentional shutdown from outside of wotaskd");
+                String subject = "App stopped running: " + displayName();
+                String bodyText = message;
                 if (fromAddress != null) {
-                    fromAddress = new String("root@" + _host.name());
+                    fromAddress = "root@" + _host.name();
                 }
                 if (_application.notificationEmailAddr() != null) {
                     toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");
@@ -820,9 +837,8 @@ public class MInstance extends MObject {
     private String toNullOrString(Object o) {
         if (o != null) {
             return o.toString();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public NSArray commandLineArgumentsAsArray() {
@@ -852,7 +868,7 @@ public class MInstance extends MObject {
         anArray.addObject("-WOLifebeatEnabled");
         anArray.addObject("YES");
         anArray.addObject("-WOLifebeatDestinationPort");
-        anArray.addObject(new String(WOApplication.application().lifebeatDestinationPort() + ""));
+        anArray.addObject(String.valueOf(WOApplication.application().lifebeatDestinationPort()));
 
         // application stuff
         String adaptorString = toNullOrString(_application.adaptor());
@@ -922,12 +938,14 @@ public class MInstance extends MObject {
     /** ******* */
 
     /** ******** Overridden Methods for Scheduling ********* */
+    @Override
     public void setValues(NSMutableDictionary newValues) {
         super.setValues(newValues);
         if (isScheduled())
             calculateNextScheduledShutdown();
     }
 
+    @Override
     public void updateValues(NSDictionary aDict) {
         super.updateValues(aDict);
         if (isScheduled())
@@ -1080,11 +1098,7 @@ public class MInstance extends MObject {
     /** ******* */
 
     public void setRefusingNewSessions(boolean isRefusingNewSessions) {
-        if (isRefusingNewSessions) {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
-        } else {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + false);
-        }
+        // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
         this.isRefusingNewSessions = isRefusingNewSessions;
     }
 
@@ -1100,7 +1114,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Integer(aValue)).intValue();
+                    return Integer.parseInt(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing
@@ -1116,7 +1130,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Float(aValue)).floatValue();
+                    return Float.parseFloat(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing

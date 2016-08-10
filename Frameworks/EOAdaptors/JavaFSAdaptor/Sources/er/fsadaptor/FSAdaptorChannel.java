@@ -1,13 +1,10 @@
-
-/* FSAdaptorChannel - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -36,42 +33,46 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
 
     private boolean _isOpen = false;
 
-    private NSArray _attributes = null;
+    private NSArray<EOAttribute> _attributes = null;
 
-    private final NSMutableArray _files = new NSMutableArray();
+    private final NSMutableArray<File> _files = new NSMutableArray<File>();
 
     public FSAdaptorChannel(EOAdaptorContext aContext) {
         super(aContext);
     }
 
-    private NSMutableArray files() {
+    private NSMutableArray<File> files() {
         return _files;
     }
 
-    public NSArray attributesToFetch() {
+    @Override
+    public NSArray<EOAttribute> attributesToFetch() {
         return _attributes;
     }
 
+    @Override
     public void cancelFetch() {
         files().removeAllObjects();
     }
 
+    @Override
     public void closeChannel() {
         _isOpen = false;
     }
 
+    @Override
     public int deleteRowsDescribedByQualifier(EOQualifier aQualifier, EOEntity anEntity) {
         if (aQualifier != null) {
             if (anEntity != null) {
-                NSArray someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
+                NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
                 if (someFiles != null) {
                     someFiles = filteredArrayWithEntity(someFiles, anEntity);
                     if (someFiles != null) {
                         int count = someFiles.count();
                         int counter = 0;
                         for (int index = 0; index < count; index++) {
-                            File aFile = (File) someFiles.objectAtIndex(index);
-                            if (aFile.delete() == true)
+                            File aFile = someFiles.objectAtIndex(index);
+                            if (aFile.delete())
                                 counter++;
                         }
                         return counter;
@@ -84,20 +85,24 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.deleteRowsDescribedByQualifier: null qualifier.");
     }
 
-    public NSArray describeResults() {
+    @Override
+    public NSArray<EOAttribute> describeResults() {
         return _attributes;
     }
 
+    @Override
     public void evaluateExpression(EOSQLExpression anExpression) {
         throw new UnsupportedOperationException("FSAdaptorChannel.evaluateExpression");
     }
 
+    @Override
     public void executeStoredProcedure(EOStoredProcedure aStoredProcedure, NSDictionary someValues) {
         throw new UnsupportedOperationException("FSAdaptorChannel.executeStoredProcedure");
     }
 
-    public NSMutableDictionary fetchRow() {
-        File aFile = (File) files().lastObject();
+    @Override
+    public NSMutableDictionary<String, Object> fetchRow() {
+        File aFile = files().lastObject();
         if (aFile != null) {
             files().removeLastObject();
             return dictionaryForFileWithAttributes(aFile, attributesToFetch());
@@ -105,14 +110,15 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return null;
     }
 
-    public void insertRow(NSDictionary aRow, EOEntity anEntity) {
+    @Override
+    public void insertRow(NSDictionary<String, Object> aRow, EOEntity anEntity) {
         if (aRow != null) {
             if (anEntity != null) {
                 String aPath = (String) aRow.objectForKey("absolutePath");
                 if (aPath != null) {
                     File aFile = new File(aPath);
                     try {
-                        if (anEntity.externalName().equals("FSDirectory") == true)
+                        if (anEntity.externalName().equals("FSDirectory"))
                             aFile.mkdirs();
                         else
                             aFile.createNewFile();
@@ -128,20 +134,24 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.insertRow: null row.");
     }
 
+    @Override
     public boolean isFetchInProgress() {
         if (files().count() > 0)
             return true;
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return _isOpen;
     }
 
+    @Override
     public void openChannel() {
         _isOpen = true;
     }
 
+    @Override
     public NSDictionary returnValuesForLastStoredProcedureInvocation() {
         throw new UnsupportedOperationException("FSAdaptorChannel.returnValuesForLastStoredProcedureInvocation");
     }
@@ -153,7 +163,8 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return root;
     }
 
-    public void selectAttributes(NSArray someAttributes, EOFetchSpecification aFetchSpecification, boolean shouldLock, EOEntity anEntity) {
+    @Override
+    public void selectAttributes(NSArray<EOAttribute> someAttributes, EOFetchSpecification aFetchSpecification, boolean shouldLock, EOEntity anEntity) {
         if (anEntity == null)
             throw new IllegalArgumentException("FSAdaptorChannel.selectAttributes: null entity.");
         if (someAttributes == null)
@@ -170,36 +181,38 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         if (debug)
             System.out.println("*****selectAttributes: " + entityName + "--" + aFetchSpecification.entityName() + "--" + aFetchSpecification);
         // if(true) throw new RuntimeException();
-        NSArray someFiles = (FSQualifierHandler.filesWithQualifier(qualifier, rootDirectory(anEntity)));
+        NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(qualifier, rootDirectory(anEntity));
 
         if (someFiles != null) {
-            NSArray someSortOrderings = aFetchSpecification.sortOrderings();
+            NSArray<EOSortOrdering> someSortOrderings = aFetchSpecification.sortOrderings();
             if (someSortOrderings != null)
-                someFiles = (EOSortOrdering.sortedArrayUsingKeyOrderArray(someFiles, someSortOrderings));
+                someFiles = EOSortOrdering.sortedArrayUsingKeyOrderArray(someFiles, someSortOrderings);
             someFiles = filteredArrayWithEntity(someFiles, anEntity);
             if (someFiles != null)
                 files().addObjectsFromArray(someFiles);
         }
     }
 
-    public void setAttributesToFetch(NSArray someAttributes) {
+    @Override
+    public void setAttributesToFetch(NSArray<EOAttribute> someAttributes) {
         if (someAttributes != null)
             _attributes = someAttributes;
         else
             throw new IllegalArgumentException("FSAdaptorChannel.setAttributesToFetch: null attributes.");
     }
 
+    @Override
     public int updateValuesInRowsDescribedByQualifier(NSDictionary aRow, EOQualifier aQualifier, EOEntity anEntity) {
         if (aRow != null) {
             if (aQualifier != null) {
                 if (anEntity != null) {
-                    NSArray someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
+                    NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
                     if (someFiles != null) {
                         someFiles = filteredArrayWithEntity(someFiles, anEntity);
                         if (someFiles != null) {
                             int count = someFiles.count();
                             for (int index = 0; index < count; index++) {
-                                File aFile = (File) someFiles.objectAtIndex(index);
+                                File aFile = someFiles.objectAtIndex(index);
                                 NSArray someKeys = aRow.allKeys();
                                 int keyCount = someKeys.count();
 
@@ -225,7 +238,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.updateValuesInRowsDescribedByQualifier: null row.");
     }
 
-    private String defaultModelPath() {
+    private URL defaultModelUrl() {
         Class aClass = this.getClass();
         String aClassName = aClass.getName();
         String aResourceName = "/" + aClassName.replace('.', '/') + ".class";
@@ -241,22 +254,28 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
             if (anIndex != -1)
                 aPath = aPath.substring(0, anIndex);
             File aFile = new File(aPath);
-            File aModelFile = new File(new File(aFile.getParent()).getParent() + "/FS", "FS.eomodeld");
-            if (debug)
+            File aModelFile = new File(aFile.getParentFile().getParent() + "/FS", DefaultModelName);
+            if (debug) {
                 System.out.println(aFile);
-            if (debug)
                 System.out.println(aModelFile);
-            return aModelFile.getAbsolutePath();
+            }
+            try {
+                return aModelFile.toURI().toURL();
+            } catch (MalformedURLException e) {
+                System.out.println(e);
+            }
         }
         return null;
     }
 
+    @Override
     public NSArray describeTableNames() {
         return new NSArray(TableNames);
     }
 
-    public EOModel describeModelWithTableNames(NSArray anArray) {
-        return new EOModel(defaultModelPath());
+    @Override
+    public EOModel describeModelWithTableNames(NSArray tableNames) {
+        return new EOModel(defaultModelUrl());
     }
 
     private NSArray filteredArrayWithEntity(NSArray anArray, EOEntity anEntity) {
@@ -267,7 +286,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                     System.out.println("filteredArrayWithEntity: " + anEntity.name() + "/" + anEntityName + " --- " + anArray);
                 if (!anEntityName.equals("FSItem")) {
                     Boolean isDirectory = Boolean.FALSE;
-                    if (anEntityName.equals("FSDirectory") == true)
+                    if (anEntityName.equals("FSDirectory"))
                         isDirectory = Boolean.TRUE;
                     anArray = (EOQualifier.filteredArrayWithQualifier(anArray, new EOKeyValueQualifier("isDirectory", (EOQualifier.QualifierOperatorEqual), isDirectory)));
                 }
@@ -280,32 +299,36 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.filteredArrayWithEntity: null array.");
     }
 
-    private NSMutableDictionary dictionaryForFileWithAttributes(File aFile, NSArray someAttributes) {
+    private NSMutableDictionary<String, Object> dictionaryForFileWithAttributes(File aFile, NSArray<EOAttribute> someAttributes) {
         if (aFile != null) {
             if (someAttributes != null) {
-                NSMutableDictionary aDictionary = new NSMutableDictionary();
-                int count = someAttributes.count();
-                for (int index = 0; index < count; index++) {
-                    EOAttribute anAttribute = (EOAttribute) someAttributes.objectAtIndex(index);
+                NSMutableDictionary<String, Object> aDictionary = new NSMutableDictionary<String, Object>();
+                for (EOAttribute anAttribute : someAttributes) {
                     String columnName = anAttribute.columnName();
                     Object aValue = null;
                     if ("content".equals(columnName)) {
+                        InputStream in = null;
                         try {
                             String path = aFile.getAbsolutePath();
-                            InputStream in = new FileInputStream(path);
-
-                            if (null == in)
-                                throw new RuntimeException("The file '" + path + "' can not be opened.");
+                            in = new FileInputStream(path);
                             int length = in.available();
                             if (length == 0) {
                                 aValue = "";
+                            } else {
+                                byte buffer[] = new byte[length];
+                                in.read(buffer);
+                                aValue = new String(buffer);
                             }
-                            byte buffer[] = new byte[length];
-                            in.read(buffer);
-                            in.close();
-                            aValue = new String(buffer);
                         } catch (IOException ex) {
                             System.err.println("dictionaryForFileWithAttributes : (" + aFile.getName() + ") " + ex);
+                        } finally {
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException e) {
+                                    // ignore
+                                }
+                            }
                         }
                     } else if ("realFile".equals(columnName)) {
                         aValue = aFile;

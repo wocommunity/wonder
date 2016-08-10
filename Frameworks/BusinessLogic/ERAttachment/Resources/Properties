@@ -1,11 +1,34 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERAttachment=load
+er.extensions.ERAttachment.hasLocalization=true
+
+#### Attachment Setup Sample
+##er.attachment.productAttachment.storageType=file
+##er.attachment.productAttachment.proxyAsAttachment=false
+##er.attachment.productAttachment.width=100
+##er.attachment.productAttachment.height=100
+##er.attachment.productAttachment.file.proxy=true
+##er.attachment.productAttachment.file.filesystemPath=/Volumes/Data/Users/xxx/Desktop/products/attachments/${hash}/${pk}${ext}
+##er.attachment.productAttachment.file.webPath=/products/attachments/${hash}/${pk}${ext}
+
+
+#### Base Folder for File Storage Type : see ERFileAttachment
+#er.attachment.file.filebasePath=
+
+#### Migration
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=audio/mpeg,audio/mp4,audio/x-wav,image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime,application/guitar-pro3,application/guitar-pro4,application/guitar-pro5
+#### Supported MIME Typelist
+er.attachment.mimeTypes=video/x-ms-wmv,video/x-ms-wmp,video/x-ms-wma,video/x-ms-wm,video/msvideo,video/mpeg,video/mp4,video/x-ms-asx,video/x-ms-asf,video/3gpp2,video/3gpp,text/rtf,text/directory,image/vnd.microsoft.icon,image/svg+xml,font/truetype,font/opentype,audio/basic,audio/aiff,application/x-sit,application/x-Shockwave-Flash,application/vnd.rn-realmedia,application/vnd.rn-realaudio,application/binhex,text/javascript,application/java-archive,application/jnlp,application/macbinary,audio/mpeg,audio/mp4,audio/x-wav,image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime,application/guitar-pro3,application/guitar-pro4,application/guitar-pro5
 
+#### Viewer
 er.attachment.mimeType.video/quicktime.viewer=er.attachment.components.viewers.ERAttachmentQuickTimeViewer
 er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
 er.attachment.mimeType.default.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.application/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
 er.attachment.mimeType.unavailable.viewer=er.attachment.components.viewers.ERAttachmentUnavailableViewer
+
+#### MIME Types
 
 er.attachment.mimeType.audio/mpeg.name=MP3
 er.attachment.mimeType.audio/mpeg.uti=public.mp3
@@ -17,7 +40,7 @@ er.attachment.mimeType.audio/mp4.extensions=m4a
 
 er.attachment.mimeType.audio/x-wav.name=WAV
 er.attachment.mimeType.audio/x-wav.uti=com.microsoft.waveform-audio
-er.attachment.mimeType.audio/x-wav.extensions=wav
+er.attachment.mimeType.audio/x-wav.extensions=wav,wave
 
 er.attachment.mimeType.image/bmp.name=BMP
 er.attachment.mimeType.image/bmp.uti=public.bmp
@@ -37,7 +60,7 @@ er.attachment.mimeType.image/jp2.extensions=jp2
 
 er.attachment.mimeType.image/jpeg.name=JPEG
 er.attachment.mimeType.image/jpeg.uti=public.jpeg
-er.attachment.mimeType.image/jpeg.extensions=jpg,jpeg
+er.attachment.mimeType.image/jpeg.extensions=jpg,jpeg,jfif,jfi
 
 er.attachment.mimeType.application/pdf.name=PDF
 er.attachment.mimeType.application/pdf.uti=public.pdf
@@ -94,7 +117,7 @@ er.attachment.mimeType.application/zip.extensions=zip
 
 er.attachment.mimeType.application/x-gzip.name=GZIP
 er.attachment.mimeType.application/x-gzip.uti=org.gnu.gnu-zip-archive
-er.attachment.mimeType.application/x-gzip.extensions=gz
+er.attachment.mimeType.application/x-gzip.extensions=gz,gzip,tgz
 
 er.attachment.mimeType.application/x-tar.name=tar
 er.attachment.mimeType.application/x-tar.uti=public.tar-archive
@@ -116,3 +139,115 @@ er.attachment.mimeType.application/guitar-pro4.extensions=gp4
 
 er.attachment.mimeType.application/guitar-pro5.name=Guitar Pro5
 er.attachment.mimeType.application/guitar-pro5.extensions=gp5
+
+er.attachment.mimeType.application/binhex.name=BinHex archive
+er.attachment.mimeType.application/binhex.uti=com.apple.binhex-archive
+er.attachment.mimeType.application/binhex.extensions=hqx
+
+er.attachment.mimeType.text/javascript.name=JavaScript
+er.attachment.mimeType.text/javascript.uti=com.netscape.javascript-​source
+er.attachment.mimeType.text/javascript.extensions=js,jscript	
+
+er.attachment.mimeType.application/java-archive.name=Java Archive
+er.attachment.mimeType.application/java-archive.uti=com.sun.java-archive
+er.attachment.mimeType.application/java-archive.extensions=jar
+
+er.attachment.mimeType.application/jnlp.name=Java Web Start
+er.attachment.mimeType.application/jnlp.uti=com.sun.java-web-start
+er.attachment.mimeType.application/jnlp.extensions=jnlp
+
+er.attachment.mimeType.application/macbinary.name=MacBinary archive
+er.attachment.mimeType.application/macbinary.uti=com.apple.macbinary-​archive
+er.attachment.mimeType.application/macbinary.extensions=bin
+
+er.attachment.mimeType.application/vnd.rn-realaudio.name=RealMedia audio
+er.attachment.mimeType.application/vnd.rn-realaudio.uti=com.real.realaudio
+er.attachment.mimeType.application/vnd.rn-realaudio.extensions=ra,ram
+
+er.attachment.mimeType.application/vnd.rn-realmedia.name=RealMedia
+er.attachment.mimeType.application/vnd.rn-realmedia.uti=com.real.realmedia
+er.attachment.mimeType.application/vnd.rn-realmedia.extensions=rm
+
+er.attachment.mimeType.application/x-Shockwave-Flash.name=Shockwave Flash
+er.attachment.mimeType.application/x-Shockwave-Flash.extensions=swf,flv
+
+er.attachment.mimeType.application/x-sit.name=Stuffit archive
+er.attachment.mimeType.application/x-sit.uti=com.allume.stuffit-archive
+er.attachment.mimeType.application/x-sit.extensions=sit,sitx
+
+er.attachment.mimeType.audio/aiff.name=AIFF Audio
+er.attachment.mimeType.audio/aiff.uti=public.aiff-audio
+er.attachment.mimeType.audio/aiff.extensions=aiff,aif,aifc,
+
+er.attachment.mimeType.audio/basic.name=μLaw Audio
+er.attachment.mimeType.audio/basic.uti=public.ulaw-audio
+er.attachment.mimeType.audio/basic.extensions=au,ulw,snd
+
+er.attachment.mimeType.font/opentype.name=OpenType Font
+er.attachment.mimeType.font/opentype.extensions=otf
+
+er.attachment.mimeType.font/truetype.name=TrueType Font
+er.attachment.mimeType.font/truetype.extensions=ttf
+
+er.attachment.mimeType.image/svg+xml.name=Scalable Vector Graphics
+er.attachment.mimeType.image/svg+xml.extensions=svg
+
+er.attachment.mimeType.image/vnd.microsoft.icon.name=Windows icon
+er.attachment.mimeType.image/vnd.microsoft.icon.uti=com.microsoft.ico 
+er.attachment.mimeType.image/vnd.microsoft.icon.extensions=ico
+
+er.attachment.mimeType.text/directory.name=vCard (electronic business card)
+er.attachment.mimeType.text/directory.uti=public.vcard
+er.attachment.mimeType.text/directory.extensions=vcf,vcard
+
+er.attachment.mimeType.text/rtf.name=Rich Text
+er.attachment.mimeType.text/rtf.uti=public.rtf
+er.attachment.mimeType.text/rtf.extensions=rtf
+
+er.attachment.mimeType.video/3gpp.name=3GPP movie
+er.attachment.mimeType.video/3gpp.uti=public.3gpp
+er.attachment.mimeType.video/3gpp.extensions=3gp,3gpp
+
+er.attachment.mimeType.video/3gpp2.name=3GPP2 movie
+er.attachment.mimeType.video/3gpp2.uti=public.3gpp2
+er.attachment.mimeType.video/3gpp2.extensions=3g2,3gp2
+
+er.attachment.mimeType.video/x-ms-asf.name=Microsoft Advanced Systems Format
+er.attachment.mimeType.video/x-ms-asf.uti=com.microsoft.advanced-​systems-format
+er.attachment.mimeType.video/x-ms-asf.extensions=asf
+
+er.attachment.mimeType.video/x-ms-asx.name=Microsoft Advanced Stream Redirector
+er.attachment.mimeType.video/x-ms-asx.uti=com.microsoft.advanced-​stream-redirector
+er.attachment.mimeType.video/x-ms-asx.extensions=asx
+
+er.attachment.mimeType.video/mp4.name=MPEG-4
+er.attachment.mimeType.video/mp4.uti=public.mpeg-4
+er.attachment.mimeType.video/mp4.extensions=mp4,m4v
+
+er.attachment.mimeType.video/mpeg.name=MPEG video
+er.attachment.mimeType.video/mpeg.uti=public.mpeg
+er.attachment.mimeType.video/mpeg.extensions=mpg,mpeg,m15,m75,mp2,mpa,mpv,mpv2,mpe
+
+er.attachment.mimeType.video/msvideo.name=AVI movie
+er.attachment.mimeType.video/msvideo.uti=public.avi
+er.attachment.mimeType.video/msvideo.extensions=avi,vfw,divx,xvid
+
+er.attachment.mimeType.video/x-ms-wm.name=Windows Media
+er.attachment.mimeType.video/x-ms-wm.uti=com.microsoft.windows-​media-wm
+er.attachment.mimeType.video/x-ms-wm.extensions=wm
+
+er.attachment.mimeType.video/x-ms-wma.name=Windows Media
+er.attachment.mimeType.video/x-ms-wma.uti=com.microsoft.windows-​media-wma
+er.attachment.mimeType.video/x-ms-wma.extensions=wma
+
+er.attachment.mimeType.video/x-ms-wmp.name=Windows Media
+er.attachment.mimeType.video/x-ms-wmp.uti=com.microsoft.windows-​media-wmp
+er.attachment.mimeType.video/x-ms-wmp.extensions=wmp
+
+er.attachment.mimeType.video/x-ms-wmv.name=Windows Media
+er.attachment.mimeType.video/x-ms-wmv.uti=com.microsoft.windows-​media-wmv
+er.attachment.mimeType.video/x-ms-wmv.extensions=wmv
+
+er.attachment.cf.connectionTimeOut=5000
+er.attachment.cf.authUrl=https://auth.api.rackspacecloud.com/v1.0
+er.attachment.cf.authTokenName=X-Auth-Token

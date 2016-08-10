@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERXWOTelField.java" wocomponentcontent="false">
+    <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+    <binding name="id"/>
+    <binding name="class"/>
+    <binding name="style"/>
+    <binding defaults="Boolean" name="required"/>
+    <binding defaults="Boolean" name="readonly"/>
+    <binding defaults="Boolean" name="disabled"/>
+    <binding defaults="Boolean" name="blankIsNull"/>
+    <binding name="name"/>
+    <binding name="otherTagString"/>
+    <binding name="size"/>
+    <binding name="maxlength"/>
+    <binding name="pattern"/>
+    <binding name="placeholder"/>
+    <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+    </wo>
+</wodefinitions>

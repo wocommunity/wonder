@@ -14,16 +14,27 @@ import com.webobjects.appserver.WODisplayGroup;
 import er.extensions.validation.ERXExceptionHolder;
 
 /**
- * Superclass for most custom query components. <br />
- *  
+ * <span class="en">
+ * Superclass for most custom query components.
+ * </span>
+ * 
+ * <span class="ja">
+ * 沢山のカスタム・コンポーネントのベース・クラスである
+ * 
+ * @d2wKey displayGroup - ディスプレイグループ
+ * </span>
  */
-
 public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXExceptionHolder {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** interface for all the keys used in this pages code */
     public static interface Keys {
-
-        public static final String displayGroup = "displayGroup";
+      public static final String displayGroup = "displayGroup";
     }
 
     /** logging support */
@@ -60,6 +71,7 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
         }
     }
 
+    @Override
     public void reset() {
         super.reset();
         _displayGroup = null;

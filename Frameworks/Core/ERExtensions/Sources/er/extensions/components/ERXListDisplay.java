@@ -15,7 +15,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Useful for displaying a list of objects. Ex. a list of person eos could be displayed as "Fred, Mark and Max".<br />
+ * Useful for displaying a list of objects. Ex. a list of person eos could be displayed as "Fred, Mark and Max".
  * If you give the "item" binding, then the content is used to render. Otherwise the "attribute" binding will get used.
  * @binding list
  * @binding attribute
@@ -28,8 +28,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author NetStruxr
  * @author kieran - I noticed nullArrayDisplay binding was not implemented. Implemented more useful emptyArrayDisplay with fallback to nullArrayDisplay binding for backwards compatibility.
  */
-
 public class ERXListDisplay extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXListDisplay(WOContext aContext) {
         super(aContext);
@@ -39,8 +44,8 @@ public class ERXListDisplay extends WOComponent {
     protected NSArray list;
     protected String finalSeparator;
     protected String separator;
-    
-    public boolean synchronizesVariablesWithBindings() { return false; }
+
+    @Override
     public boolean isStateless() { return true; }
 
     public boolean escapeHTML() {
@@ -102,7 +107,8 @@ public class ERXListDisplay extends WOComponent {
         }
         return separator;
     }
-    
+
+    @Override
     public void reset() {
         super.reset();
         list = null;

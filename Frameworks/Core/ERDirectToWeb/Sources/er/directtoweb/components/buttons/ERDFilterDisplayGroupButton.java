@@ -23,19 +23,27 @@ import er.directtoweb.components.ERDCustomQueryComponent;
 import er.extensions.appserver.ERXDisplayGroup;
 
 /**
- * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />
+ * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.
  * 
  * @binding d2wContext
  * @binding displayGroup
  */
 
 public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }
 
     public static final Logger log = Logger.getLogger(ERDFilterDisplayGroupButton.class);
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public static class _FilterDelegate implements NextPageDelegate {

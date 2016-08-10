@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.directtoweb.pages.ERD2WMessagePage;
 
 /**
- * More robust confirm messaging.  Still a work in progress.<br />
+ * More robust confirm messaging.  Still a work in progress.
  * 
  * @d2wKey pageWrapperName
  * @d2wKey confirmMessageManditory
@@ -29,6 +29,12 @@ import er.directtoweb.pages.ERD2WMessagePage;
  * @d2wKey shouldProvideConfirmMessage
  */
 public class ERD2WConfirmPageTemplate extends ERD2WMessagePage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WConfirmPageTemplate(WOContext context) { super(context); }
 }

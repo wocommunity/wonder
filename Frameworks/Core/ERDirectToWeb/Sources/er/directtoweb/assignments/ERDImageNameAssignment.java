@@ -13,11 +13,16 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Default way of generating image references for tabs and sections.<br />
- * 
+ * Default way of generating image references for tabs and sections.
  */
 
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger("er.directtoweb.rules.ERDImageNameAssignment");
@@ -52,7 +57,7 @@ public class ERDImageNameAssignment extends ERDAssignment implements ERDLocaliza
     public ERDImageNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "baseImageDirectory", "sectionKey",
      * and "tabKey". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

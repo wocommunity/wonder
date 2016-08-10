@@ -55,7 +55,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
     }
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
-      NSData data = new NSData(uploadedFile.toURL());
+      NSData data = new NSData(uploadedFile.toURI().toURL());
       if (smallData) {
         attachment.setSmallData(data);
       }

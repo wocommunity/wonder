@@ -1,7 +1,7 @@
 package er.extensions.appserver;
 
 /**
- * An extension of @link {@link IERXPerformWOAction} that allows a result object to be
+ * An extension of {@link IERXPerformWOAction} that allows a result object to be
  * provided such that the {@link IERXPerformWOAction#performAction()} can use that result in its
  * logic.
  *

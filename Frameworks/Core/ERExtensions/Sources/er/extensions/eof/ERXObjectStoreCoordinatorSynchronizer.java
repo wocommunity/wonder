@@ -228,10 +228,13 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private boolean _running;
 		
 		private abstract class SnapshotProcessor {
+			public SnapshotProcessor() {}
 			public abstract void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots, SynchronizerSettings settings);
 		}
 
 		private abstract class RelationshipSnapshotProcessor extends SnapshotProcessor {
+			public RelationshipSnapshotProcessor() {}
+
 			public void processRelationships(EODatabase database, NSArray gids, NSDictionary snapshots, Object context, SynchronizerSettings settings) {
 				Enumeration gidsEnum = gids.objectEnumerator();
 				while (gidsEnum.hasMoreElements()) {
@@ -263,6 +266,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class DeleteSnapshotProcessor extends SnapshotProcessor {
+			public DeleteSnapshotProcessor() {}
+
 			@Override
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots, SynchronizerSettings settings) {
 				if (settings.broadcastDeletes()) {
@@ -276,6 +281,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class UpdateSnapshotProcessor extends SnapshotProcessor {
+			public UpdateSnapshotProcessor() {}
+
 			@Override
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots, SynchronizerSettings settings) {
 				if (settings.broadcastUpdates()) {
@@ -295,6 +302,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class InsertSnapshotProcessor extends RelationshipSnapshotProcessor {
+			public InsertSnapshotProcessor() {}
+
 			@Override
 			public void processGID(EODatabase database, EOGlobalID sourceGID, Object context, SynchronizerSettings settings) {
 			}
@@ -332,6 +341,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class InvalidateSnapshotProcessor extends SnapshotProcessor {
+			public InvalidateSnapshotProcessor() {}
+
 			@Override
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots, SynchronizerSettings settings) {
 				if (log.isDebugEnabled()) {
@@ -341,10 +352,13 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private abstract class CacheChangeProcessor {
+			public CacheChangeProcessor() {}
 			public abstract void processCacheChange(EODatabaseContext dbc, EODatabase database, ERXDatabase.CacheChange cacheChange);
 		}
 
 		private class DeleteCacheChangeProcessor extends CacheChangeProcessor {
+			public DeleteCacheChangeProcessor() {}
+
 			@Override
 			public void processCacheChange(EODatabaseContext dbc, EODatabase database, CacheChange cacheChange) {
 				ERXDatabase.SnapshotDeleted deleteChange = (ERXDatabase.SnapshotDeleted) cacheChange;
@@ -363,6 +377,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class UpdateCacheChangeProcessor extends CacheChangeProcessor {
+			public UpdateCacheChangeProcessor() {}
+
 			@Override
 			public void processCacheChange(EODatabaseContext dbc, EODatabase database, CacheChange cacheChange) {
 				ERXDatabase.SnapshotUpdated updateChange = (ERXDatabase.SnapshotUpdated) cacheChange;
@@ -391,6 +407,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class InsertCacheChangeProcessor extends CacheChangeProcessor {
+			public InsertCacheChangeProcessor() {}
+
 			@Override
 			public void processCacheChange(EODatabaseContext dbc, EODatabase database, CacheChange cacheChange) {
 				ERXDatabase.SnapshotInserted insertChange = (ERXDatabase.SnapshotInserted) cacheChange;
@@ -410,6 +428,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		private class ToManyUpdateCacheChangeProcessor extends CacheChangeProcessor {
+			public ToManyUpdateCacheChangeProcessor() {}
+
 			@Override
 			public void processCacheChange(EODatabaseContext dbc, EODatabase database, CacheChange cacheChange) {
 				ERXDatabase.ToManySnapshotUpdated toManyUpdateChange = (ERXDatabase.ToManySnapshotUpdated) cacheChange;
@@ -467,7 +487,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private CacheChangeProcessor _toManyUpdateCacheChangeProcessor = new ToManyUpdateCacheChangeProcessor();
 
 		protected ProcessChangesQueue() {
-			Thread.currentThread().setName("ProcessChangesQueue");
 		}
 
 		public void addChange(Change changes) {
@@ -615,7 +634,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				_queueThread.interrupt();
 			}
 			else {
-				throw new IllegalStateException("Attempted to stop the " + getClass().getSimpleName() + " when it wasn't already running");
+				log.warn("Attempted to stop the " + getClass().getSimpleName() + " when it wasn't already running");
 			}
 		}
 	}

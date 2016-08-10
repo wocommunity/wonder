@@ -10,7 +10,6 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * <p>
  * A simple popup menu for language selection. The menu itself is can be
  * localized in two different ways. It allows all language names to be presented
  * in the current localized language, or each language name can be presented in
@@ -35,7 +34,6 @@ import er.extensions.localization.ERXLocalizer;
  * stick it in a form and bind the language binding to something that stores a
  * language value. For example, your WOD file might contain:
  * <code>LanguageMenu: ERXLanguageMenu { language = session.language; }</code>
- * </p>
  * 
  * @author Ramsey Gurley
  * @binding class (optional) the html class attribute string
@@ -61,6 +59,13 @@ import er.extensions.localization.ERXLocalizer;
  * 
  */
 public class ERXLanguageMenu extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static NSDictionary<String, String> displayStringForLanguages;
 	private static final String localizeDisplayStringsKey = "localizeDisplayStrings";
 	
@@ -70,6 +75,7 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 		super(context);
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		_languageOption = null;
@@ -91,7 +97,7 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 	 *            the languageOption to set
 	 */
 	public void setLanguageOption(String languageOption) {
-		this._languageOption = languageOption;
+		_languageOption = languageOption;
 	}
 
 	/**

@@ -1,0 +1,2 @@
+webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=true
+er.extensions.ERXModelGroup.User.customerID.ignoreTypeMismatch=true

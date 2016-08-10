@@ -1,5 +1,5 @@
 package er.reporting;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for Wonder Component WRVerticalRowsLayout.
@@ -19,6 +19,7 @@ public class WRVerticalRowsLayout extends WRReport {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
 }

@@ -10,8 +10,6 @@ import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment;
-
 /**
  * Piece of crap. This assignment works around the 
  * fact that KeyValueAssignment isn't public (and should be).
@@ -21,9 +19,15 @@ import er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment;
  * assignment will be cached the first time this assignment is
  * fired. To have a key value assignment that does not cache 
  * the value returned the first time have a look at
- * {@link ERDDelayedKeyValueAssignment}.
+ * {@link er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment}.
  */
 public class ERDKeyValueAssignment extends Assignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -65,6 +69,7 @@ public class ERDKeyValueAssignment extends Assignment {
      * @return result of resolving the key path off of the 
      * 		context. 
      */
+    @Override
     public Object fire(D2WContext d2wcontext) {
         return d2wcontext.valueForKeyPath((String)value());
     }

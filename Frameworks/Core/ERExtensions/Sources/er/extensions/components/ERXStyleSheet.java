@@ -1,6 +1,6 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -11,9 +11,9 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXExpiringCache;
@@ -21,13 +21,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Copied from ERExtensions to enable the "title"-attribute for stylesheets.
- * 
- * 
- * 
- * 
- * 
- * 
  * Adds a style sheet to a page. You can either supply a complete URL, a file
  * and framework name or put something in the component content. The content of
  * the component is cached under a "key" binding and then delivered via a direct
@@ -40,18 +33,22 @@ import er.extensions.foundation.ERXStringUtilities;
  *          content. Default is the sessionID. That means, you should *really*
  *          explicitly set a key, when you use more than one ERXStyleSheet using
  *          the component content method within one session
- * @binding inline when true, the generated link tag will be appended inline,
- *          when false it'll be placed in the head of the page, when unset it
+ * @binding inline when <code>true</code>, the generated link tag will be appended inline,
+ *          when <code>false</code> it'll be placed in the head of the page, when unset it
  *          will be placed inline for ajax requests and in the head for regular
  *          requests
- * @property er.extensions.ERXStyleSheet.xhtml (defaults true) if false, link
- *           tags are not closed, which is compatible with older HTML
+ * @binding media media name this style sheet is for
+ * @property er.extensions.ERXStyleSheet.xhtml (defaults <code>true</code>) if <code>false</code>,
+ *           link tags are not closed, which is compatible with older HTML
  */
-// FIXME: cache should be able to cache on calues of bindings, not a single key
+// FIXME: cache should be able to cache on values of bindings, not a single key
 public class ERXStyleSheet extends ERXStatelessComponent {
-
-	/** logging support */
-	public static final Logger log = Logger.getLogger( ERXStyleSheet.class );
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Public constructor
@@ -63,8 +60,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		super( aContext );
 	}
 
-	@SuppressWarnings( "unchecked" )
-	private static ERXExpiringCache<String, WOResponse> cache( WOSession session ) {
+	protected static ERXExpiringCache<String, WOResponse> cache( WOSession session ) {
 		ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>)session.objectForKey( "ERXStylesheet.cache" );
 		if( cache == null ) {
 			cache = new ERXExpiringCache<String, WOResponse>( 60 );
@@ -84,7 +80,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			WOResponse response = ERXStyleSheet.cache( session() ).objectForKey( name );
 			String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
 			String queryMd5 = response.headerForKey( "checksum" );
-			if( ERXExtensions.safeEquals( md5, queryMd5 ) ) {
+			if (Objects.equals(md5, queryMd5)) {
 				//TODO check for last-whatever time and return not modified if not changed
 			}
 			return response;
@@ -92,17 +88,17 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * returns the complete url to the style sheet.
+	 * Returns the complete url to the style sheet.
 	 * 
 	 * @return style sheet url
 	 */
 	public String styleSheetUrl() {
-		String url = (String)valueForBinding( "styleSheetUrl" );
-		url = (url == null ? (String)valueForBinding( "href" ) : url);
+		String url = stringValueForBinding("styleSheetUrl");
+		url = (url == null ? stringValueForBinding("href") : url);
 		if( url == null ) {
 			String name = styleSheetName();
 			if( name != null ) {
-				url = application().resourceManager().urlForResourceNamed( styleSheetName(), styleSheetFrameworkName(), languages(), context().request() );
+				url = application().resourceManager().urlForResourceNamed( name, styleSheetFrameworkName(), languages(), context().request() );
 				if( ERXResourceManager._shouldGenerateCompleteResourceURL( context() ) ) {
 					url = ERXResourceManager._completeURLForResource( url, null, context() );
 				}
@@ -118,8 +114,8 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * @return style sheet framework name
 	 */
 	public String styleSheetFrameworkName() {
-		String result = (String)valueForBinding( "styleSheetFrameworkName" );
-		result = (result == null ? (String)valueForBinding( "framework" ) : result);
+		String result = stringValueForBinding("styleSheetFrameworkName");
+		result = (result == null ? stringValueForBinding("framework") : result);
 		return result;
 	}
 
@@ -129,8 +125,8 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * @return style sheet name
 	 */
 	public String styleSheetName() {
-		String result = (String)valueForBinding( "styleSheetName" );
-		result = (result == null ? (String)valueForBinding( "filename" ) : result);
+		String result = stringValueForBinding("styleSheetName");
+		result = (result == null ? stringValueForBinding("filename") : result);
 		return result;
 	}
 
@@ -138,32 +134,19 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * Returns key under which the stylesheet should be placed in the cache. If
 	 * no key is given, the session id is used.
 	 * 
-	 * @return style sheet framework name
+	 * @return cache key
 	 */
 	public String styleSheetKey() {
-		String result = (String)valueForBinding( "key" );
+		String result = stringValueForBinding("key");
 		if( result == null ) {
-			result = context().session().sessionID();
+			result = session().sessionID();
 		}
 		return result;
 	}
 
 	/**
-	 * Specifies the relationship between the current document and the linked document.
-	 */
-	public String rel() {
-		return stringValueForBinding( "rel" );
-	}
-
-	/**
-	 * Specifies extra information about an element.
-	 */
-	public String title() {
-		return stringValueForBinding( "title" );
-	}
-
-	/**
 	 * Specifies on what device the linked document will be displayed.
+	 * @return media string
 	 */
 	public String mediaType() {
 		return stringValueForBinding( "media" );
@@ -171,8 +154,8 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 	/**
 	 * Returns the languages for the request.
+	 * @return requested languages
 	 */
-	@SuppressWarnings( "unchecked" )
 	private NSArray<String> languages() {
 		if( hasSession() ) {
 			return session().languages();
@@ -185,7 +168,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * Appends the &ltlink&gt; tag, either by using the style sheet name and
+	 * Appends the &lt;link&gt; tag, either by using the style sheet name and
 	 * framework or by using the component content and then generating a link to
 	 * it.
 	 */
@@ -196,75 +179,64 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		boolean isResourceStyleSheet = styleSheetName != null;
 		if( isResourceStyleSheet && ERXResponseRewriter.isResourceAddedToHead( wocontext, styleSheetFrameworkName, styleSheetName ) ) {
 			// Skip, because this has already been added ... 
+			return;
 		}
-		else {
-			// default to inline for ajax requests
-			boolean inline = booleanValueForBinding( "inline", ERXAjaxApplication.isAjaxRequest( wocontext.request() ) );
-			WOResponse response = inline ? originalResponse : new WOResponse();
+		// default to inline for ajax requests
+		boolean inline = booleanValueForBinding( "inline", ERXAjaxApplication.isAjaxRequest( wocontext.request() ) );
+		WOResponse response = inline ? originalResponse : new ERXResponse();
 
-			String href = styleSheetUrl();
-			if( href == null ) {
-				String key = styleSheetKey();
-				ERXExpiringCache<String, WOResponse> cache = cache( session() );
-				String md5;
-				WOResponse cachedResponse = cache.objectForKey( key );
-				if( cache.isStale( key ) || ERXApplication.isDevelopmentModeSafe() ) {
-					cachedResponse = new WOResponse();
-					super.appendToResponse( cachedResponse, wocontext );
-					// appendToResponse above will change the response of
-					// "wocontext" to "newresponse". When this happens during an
-					// Ajax request, it will lead to backtracking errors on
-					// subsequent requests, so restore the original response "r"
-					wocontext._setResponse( originalResponse );
-					cachedResponse.setHeader( "text/css", "content-type" );
-					cache.setObjectForKey( cachedResponse, key );
-					md5 = ERXStringUtilities.md5Hex( cachedResponse.contentString(), null );
-					cachedResponse.setHeader( md5, "checksum" );
-				}
-				md5 = cachedResponse.headerForKey( "checksum" );
-				NSDictionary query = new NSDictionary<String, String>( md5, "checksum" );
-				href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query );
+		String href = styleSheetUrl();
+		if( href == null ) {
+			String key = styleSheetKey();
+			ERXExpiringCache<String, WOResponse> cache = cache( session() );
+			String md5;
+			WOResponse cachedResponse = cache.objectForKey( key );
+			if( cache.isStale( key ) || ERXApplication.isDevelopmentModeSafe() ) {
+				cachedResponse = new ERXResponse();
+				super.appendToResponse( cachedResponse, wocontext );
+				// appendToResponse above will change the response of
+				// "wocontext" to "newresponse". When this happens during an
+				// Ajax request, it will lead to backtracking errors on
+				// subsequent requests, so restore the original response "r"
+				wocontext._setResponse( originalResponse );
+				cachedResponse.setHeader( "text/css", "content-type" );
+				cache.setObjectForKey( cachedResponse, key );
+				md5 = ERXStringUtilities.md5Hex( cachedResponse.contentString(), null );
+				cachedResponse.setHeader( md5, "checksum" );
 			}
+			md5 = cachedResponse.headerForKey( "checksum" );
+			NSDictionary<String, Object> query = new NSDictionary<String, Object>( md5, "checksum" );
+			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query, wocontext.request().isSecure(), 0, false );
+		}
 
-			response._appendContentAsciiString( "<link " );
+		response._appendContentAsciiString( "<link" );
 
-			String rel = rel();
+		if (styleSheetName != null && styleSheetName.toLowerCase().endsWith(".less")) {
+			response._appendTagAttributeAndValue( "rel", "stylesheet/less", false );
+		} else {
+			response._appendTagAttributeAndValue( "rel", "stylesheet", false );
+		}
+		response._appendTagAttributeAndValue( "type", "text/css", false );
+		response._appendTagAttributeAndValue( "href", href, false );
+		response._appendTagAttributeAndValue( "media", mediaType(), false );
 
-			if( rel == null )
-				rel = "stylesheet";
-
-			response._appendTagAttributeAndValue( "rel", rel, false );
-			response._appendTagAttributeAndValue( "type", "text/css", false );
-			response._appendTagAttributeAndValue( "href", href, false );
-
-			String media = mediaType();
-			if( media != null ) {
-				response._appendTagAttributeAndValue( "media", media, false );
+		if( ERXStyleSheet.shouldCloseLinkTags() ) {
+			response._appendContentAsciiString( "/>" );
+		} else {
+			response._appendContentAsciiString( ">" );
+		}
+		response.appendContentString("\n");
+		boolean inserted = true;
+		if( !inline ) {
+			String stylesheetLink = response.contentString();
+			inserted = ERXResponseRewriter.insertInResponseBeforeHead( originalResponse, wocontext, stylesheetLink, ERXResponseRewriter.TagMissingBehavior.Inline );
+		}
+		if( inserted ) {
+			if( isResourceStyleSheet ) {
+				ERXResponseRewriter.resourceAddedToHead( wocontext, styleSheetFrameworkName, styleSheetName );
 			}
-
-			String title = title();
-			if( title != null ) {
-				response._appendTagAttributeAndValue( "title", title, false );
-			}
-
-			if( ERXStyleSheet.shouldCloseLinkTags() ) {
-				response._appendContentAsciiString( "/>" );
-			} else {
-				response._appendContentAsciiString( ">" );
-			}
-			response.appendContentString("\n");
-			boolean inserted = true;
-			if( !inline ) {
-				String stylesheetLink = response.contentString();
-				inserted = ERXResponseRewriter.insertInResponseBeforeHead( originalResponse, wocontext, stylesheetLink, ERXResponseRewriter.TagMissingBehavior.Inline );
-			}
-			if( inserted ) {
-				if( isResourceStyleSheet ) {
-					ERXResponseRewriter.resourceAddedToHead( wocontext, styleSheetFrameworkName, styleSheetName );
-				}
-				else if( href != null ) {
-					ERXResponseRewriter.resourceAddedToHead( wocontext, null, href );
-				}
+			else if( href != null ) {
+				ERXResponseRewriter.resourceAddedToHead( wocontext, null, href );
 			}
 		}
 	}

@@ -1,0 +1,7 @@
+<wo:if condition = "$wantsDataFilter">
+  <wo:if condition = "$context.isInForm"><webobject name = "FilterField" /></wo:if>
+  <wo:else>
+    <wo:WOForm class = "ui-filterable"> <webobject name = "FilterField" /> </wo:WOForm>
+  </wo:else>
+</wo:if>
+<wo:genericContainer data-role = "listview" elementName = "$elementName" otherTagString = "$otherTagString"> <wo:content /> </wo:genericContainer>

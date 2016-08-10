@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang = "en">
+  <head>
+    <meta charset = "utf-8" />
+    <title>ERPDFGeneration Examples</title>
+    <wo:ERXStyleSheet filename = "base.css" />
+    <!-- since no media is specified for the base.css stylesheet, the only
+	thing you need in the print.css stylesheet are elements that you want 
+	to override for the print (or in this example pdf) output -->
+    <wo:ERXStyleSheet filename = "print.css" media = "print" />
+  </head>
+  <body>
+
+    <h1>ERPDFGeneration Examples </h1>
+    <p>This application is intended to exercise the facilities
+      in ERPDFGeneration framework of Project Wonder. Enormous profit
+      from the use of this framework is left as an exercise for the user.
+    </p>
+    <p>The ERPDFGeneration framework is pretty small and narrowly focused
+      so the following links are variations on the basic task of generating
+      pdf output from material within your application. For reporting output
+      using pdf (and other formats) you can also look at Jasper Reports (and 
+      the corresponding Wonder framework, ERJasperReports (Frameworks/Reporting/ERJasperReports).
+      An example of that framework is found in Examples/Reporting/ERJasperReportsExample.
+    </p>
+    <h3>Examples</h3>
+    <dl>
+      <dt>
+        <h4><wo:WOHyperlink pageName = "SimplePDFGeneration1">Simple PDF Generation</wo:WOHyperlink></h4>
+      </dt>
+      <dd>
+        <p>This page wrapped in an ERPDFWrapper component rather than the page wrapper used for 
+          html view and navigation. The difference between that page and this page is only
+          the use of ERPDFWrapper instead of PageWrapper (from the example application). 
+          I did put in a filename binding for the ERPDFWrapper, but it is not necessary.
+          Finer control over the layout of the generated pdf is achieved through the use of 
+          css for print viewing. Take a look at the
+          <code>print.css</code>
+          stylesheet for 
+          examples of the sorts of things you can style using the
+          <a href = "http://code.google.com/p/flying-saucer/" target = "_new">FlyingSaucer renderer.</a>
+          There are a number of additional CSS attributes available that are specific to Flying Saucer 
+          but I haven't exercised those here. For more details and examples of  Flying Saucer CSS, see
+          the Flying Saucer website or
+          <a href = "http://today.java.net/pub/a/today/2007/06/26/generating-pdfs-with-flying-saucer-and-itext.html" target = "_new">
+            this  example at Java.net</a>
+        </p>
+      </dd>
+      <dt><h4>
+        <wo:WOHyperlink pageName = "SimpleHTML2FOP2PDF">Simple XHTML 2 FOP (2 PDF) example</wo:WOHyperlink></h4>
+      </dt>
+      <dd>
+        <p>As with the Simple PDF Generation example above, this uses the contents of this page 
+          to feed an FOP transformation to PDF. This process uses the
+          <a href = "http://xmlgraphics.apache.org/fop/" target = "_new">Apache FOP project.</a>
+          The xsl transform sheet was written at IBM DeveloperWorks. See the comments in the sheet for further details. 
+        </p>
+        <p>This transform sheet is ridiculously complicated (compared to the first example that had some very simple styles applied
+          via CSS for the PDF output). The point of using this method is not to seek the most complicated path to pdf output, but to 
+          exercise some of the fine control that is available using xsl. The cover page and automatically generated table of contents with internal
+          links is one example of doing somewhat more transformation than just rendering to pdf. I am not expert enough in the Flying Saucer renderer
+          to know if this is possible there, but my understanding is that Flying Saucer uses CSS for styling and the the ability to use xpaths 
+          in FOP give it some additional structural flexibility... plus have enough FOP lying around that it's worthwhile to have this option available in ERPDFGeneration.
+        </p>
+      </dd>
+      <dt>
+        <h4><wo:WOHyperlink pageName = "SimpleXML2FOP2PDF1">Simple FOP example using XML</wo:WOHyperlink></h4>
+      </dt>
+      <dd>
+        <p>The html example above is useful, but I imagine it will more often be more expedient to use the
+          ERPDFWrapper to render html using CSS to handle small display differences.
+          It is probably more likely that you'll be using FOP to transform XML source material.
+          (If you can use Jasper Reports for reporting on XML data sources, it may be helpful to 
+          consider that option because while writing xsl for fo is not difficult, but it's also not as nice
+          as using the report writer in Jasper. The reason I added the FOP processor is because I 
+          have xml reports that are built in multiple stages and much of the fo transforms pre-date
+          the Jasper Reports option ... so get off my back and quit dissing FOP!)</p>
+        <p>This example takes a basic xml file and renders it using the ERFOPWrapper process.</p>
+      </dd>
+      <dt>
+       <h4> <wo:WOHyperlink action="$combinePdfStreams">Combined PDFs</wo:WOHyperlink></h4>
+      </dt>
+      <dd>
+        <p>ERPDFWrapper has an array of strings intended to be used to add additional pdfs to the generated one. This uses the MergePDF from ERPDFUtilities
+        to apply this to generic input streams instead of FileInputStreams. I want to just combine dynamically generated streams and then work on 
+        sniffing what sort of object is in the _additionalPDFs array so that you can get the right input stream (NSData.stream(), or FileInputStream from 
+        string (location of a file) or resourceFromStream (if the pdf is in a jar or in the classpath) or a stream from a url. 
+          </p>
+      </dd>
+    </dl>
+  </body>
+</html>

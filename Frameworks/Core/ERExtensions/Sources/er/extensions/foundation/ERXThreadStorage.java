@@ -3,7 +3,8 @@
  *
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
+ * included with this distribution in the LICENSE.NPL file.
+ */
 package er.extensions.foundation;
 
 import java.util.HashMap;
@@ -11,7 +12,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
@@ -24,20 +26,19 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.concurrency.ERXCloneableThreadLocal;
 import er.extensions.eof.ERXEOControlUtilities;
 /**
- * <code>ERXThreadStorage</code> provides a way to store objects for
- * a particular thread. This can be especially handy for storing objects
- * like the current actor or the current form name within the scope of
- * a thread handling a particular request. <br />
- * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
- * defines if the thread storage can be either inherited by client threads (default)
- * or get used only by the current thread. 
+ * Provides a way to store objects for a particular thread. This can be especially handy for storing objects
+ * like the current actor or the current form name within the scope of a thread handling a particular request.
+ * <p>
+ * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> defines if the
+ * thread storage can be either inherited by client threads (default) or get used only by the current thread.
  * The usage of some types of objects inherited from the parent thread can cause problems.
+ * </p><p>
  * The system property <code>er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues</code>
- * defines, if potential problems should be logged. This defaults to true when running in development mode
- * and to false when running a deployed app.
+ * defines, if potential problems should be logged. This defaults to <code>true</code> when running in development mode
+ * and to <code>false</code> when running a deployed application.
  */
 public class ERXThreadStorage {
-	private static final Logger log = Logger.getLogger(ERXThreadStorage.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXThreadStorage.class);
 	public static final String KEYS_ADDED_IN_CURRENT_THREAD_KEY = "ERXThreadStorage.keysAddedInCurrentThread";
     public static final String WAS_CLONED_MARKER = "ERXThreadStorage.wasCloned";
 
@@ -109,7 +110,7 @@ public class ERXThreadStorage {
      * @param key key
      */
     public static void takeValueForKey(Object object, String key) {
-    	// log.debug(key+" <- "+object);
+    	// log.debug("{} <- {}", key, object);
     	Map map = storageMap(true);
     	map.put(key, object);
     	markKeyAddedInCurrentThread(key);
@@ -165,15 +166,14 @@ public class ERXThreadStorage {
 		if (result != null && logUsageOfProblematicInheritedValues() && !wasKeyAddedInCurrentThread(key)) {
 			for(Class<?> type: problematicTypes()) {
 				if(type.isAssignableFrom(result.getClass())) {
-					String msg = "The object for key '" + key + "' was inherited from the parent thread. " +
-							"The usage of inherited objects that are a subclass of '"+type.getSimpleName()+"' can cause problems.";
-					log.warn(msg, new Exception("DEBUG"));
+					log.warn("The object for key '{}' was inherited from the parent thread. " +
+							"The usage of inherited objects that are a subclass of '{}' can cause problems.",
+							key, type.getSimpleName(), new Exception("DEBUG"));
 				}
 			}
 			if(problematicKeys().contains(key)) {
-				String msg = "The object for key '" + key + "' was inherited from the parent thread. " +
-						"The usage of inherited objects for this key can cause problems.";
-				log.warn(msg, new Exception("DEBUG"));
+				log.warn("The object for key '{}' was inherited from the parent thread. " +
+						"The usage of inherited objects for this key can cause problems.", key, new Exception("DEBUG"));
 			}
 		}
 		return result;

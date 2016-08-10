@@ -1,0 +1,41 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            precision = 9; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = SUMMARY; 
+            externalType = varchar; 
+            name = summary; 
+            prototypeName = varcharLarge; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID); 
+    className = "webobjectsexamples.businesslogic.eo.PlotSummary"; 
+    classProperties = (summary, movie); 
+    externalName = "PLOT_SUMMARY"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (summary, movie); 
+        "_nameInObjectStore" = "PLOT_SUMMARY"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = PlotSummary; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

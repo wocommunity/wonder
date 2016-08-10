@@ -39,7 +39,7 @@ public class ERXWOResponseCacheKeyPolicy implements ERXWOResponseCache.Policy {
             this.headerKeys = headerKeys != null ? headerKeys : NSArray.EmptyArray;
             this.cookieKeys = cookieKeys != null ? cookieKeys : NSArray.EmptyArray;
 
-            this.count = this.formKeys.count() + this.headerKeys.count() + this.cookieKeys.count();
+            count = this.formKeys.count() + this.headerKeys.count() + this.cookieKeys.count();
         }
         
     }

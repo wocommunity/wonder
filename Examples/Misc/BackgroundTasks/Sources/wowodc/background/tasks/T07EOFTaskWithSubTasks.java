@@ -9,20 +9,19 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXAbstractTask;
 import er.extensions.concurrency.ERXExecutorService;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.ERXTask;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * A demo task that runs two other tasks in sequence and uses the result of the first as the argument for the second.
  * 
  * @author kieran
- *
  */
-public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<EOGlobalID>, ERXStatusInterface,
-		ERXTaskPercentComplete, IERXStoppable {
+public class T07EOFTaskWithSubTasks extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus,
+		IERXPercentComplete, IERXStoppable {
 	private T04SimpleEOFTask _task1 = null;
 	private T06EOFFactorialUpdateTask _task2 = null;
 
@@ -30,8 +29,8 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 
 	private EOGlobalID _taskInfoGID = null;
 
-	public EOGlobalID call() throws Exception {
-		
+	@Override
+	public EOGlobalID _call() throws Exception {
 		long startTime = System.currentTimeMillis();
 
 		if (!_isStopped) {
@@ -90,7 +89,6 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 		if (_task2 != null) {
 			_task2.stop();
 		}
-
 	}
 
 	public Double percentComplete() {
@@ -121,5 +119,4 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 		// Default
 		return _status;
 	}
-
 }

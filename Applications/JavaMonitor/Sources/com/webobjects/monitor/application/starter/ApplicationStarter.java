@@ -53,11 +53,11 @@ public abstract class ApplicationStarter extends Thread implements ErrorCollecto
         }
     }
 
-    public void addObjectsFromArrayIfAbsentToErrorMessageArray(NSArray<String> aErrors) {
+    public synchronized void addObjectsFromArrayIfAbsentToErrorMessageArray(NSArray<String> aErrors) {
         _errors.addObjectsFromArray(aErrors);
     }
 
-    public NSArray<String> errors() {
+    public synchronized NSArray<String> errors() {
         return _errors.allObjects();
     }
 

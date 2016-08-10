@@ -1,0 +1,50 @@
+HasKeyList: WOConditional {
+	condition = keyList.@count;
+}
+
+KeyList: WORepetition {
+	list = keyList;
+	item = currentKey;
+}
+
+ValueItem: WOGenericContainer {
+	elementName = "li";
+	class = itemClassName;
+}
+
+Key: WOString {
+	value = currentDisplayName;
+}
+
+HasValueList: WOConditional {
+	condition = valueList.@count;
+}
+
+ValueList: WORepetition {
+	list = valueList;
+	item = currentValue;
+}
+
+IsSelectedValue: WOConditional {
+	condition = isCurrentValueSelected;
+}
+
+HasSelectedValues: WOConditional {
+	condition = hasSelectedValues;
+}
+
+ClearSelectionLink: WOHyperlink {
+	action = clearSelectedValues;
+}
+
+Value: WOString {
+	value = currentValue;
+}
+
+ValueCount: WOString {
+	value = currentValueCount;
+}
+
+ValueLink: WOHyperlink {
+	action = selectCurrentValue;
+}

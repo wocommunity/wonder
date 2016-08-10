@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
@@ -59,8 +57,6 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		public Connection getConnection();
 	}
 
-	public static final Logger log = Logger.getLogger(ERXJDBCAdaptor.class);
-
 	public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
 
 	public static final String CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.className";
@@ -78,6 +74,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	/**
 	 * Returns whether the connection broker is active.
 	 * 
+	 * @return <code>true</code> if connection broker is active
 	 */
 	public static boolean useConnectionBroker() {
 		if (useConnectionBroker == null) {
@@ -101,7 +98,6 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	 * Channel subclass to support notification posting.
 	 * 
 	 * @author ak
-	 * 
 	 */
 	public static class Channel extends JDBCChannel {
 
@@ -160,15 +156,16 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				System.exit(1);
 			}
 		}
-		
-		public void setAttributesToFetch(NSArray attributes) {
+
+		@Override
+		public void setAttributesToFetch(NSArray<EOAttribute> attributes) {
 			_attributes = attributes;
 			int j;
 			if (_attributes == null || (j = _attributes.count()) == 0)
 				return;
 			ERXJDBCColumn columns[] = new ERXJDBCColumn[j];
 			for (int i = 0; i < j; i++)
-				columns[i] = newERXJDBCColumn((EOAttribute) _attributes.objectAtIndex(i), this, i + 1, _resultSet);
+				columns[i] = newERXJDBCColumn(_attributes.objectAtIndex(i), this, i + 1, _resultSet);
 
 			_selectedColumns = new NSArray(columns);
 		}
@@ -192,10 +189,11 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			}
 			return old;
 		}
-		
+
 		/**
 		 * Overridden to switch the connection to read-only while selecting.
 		 */
+		@Override
 		public void selectAttributes(NSArray array, EOFetchSpecification fetchspecification, boolean lock, EOEntity entity) {
 			boolean mode = setReadOnly(!lock);
 			super.selectAttributes(array, fetchspecification, lock, entity);
@@ -205,6 +203,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		/**
 		 * Overridden to post a notification when the operations were performed.
 		 */
+		@Override
 		public void performAdaptorOperations(NSArray ops) {
 			super.performAdaptorOperations(ops);
 			ERXAdaptorOperationWrapper.adaptorOperationsDidPerform(ops);
@@ -225,6 +224,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		 * <code>ERXPrimaryKeyBatchSize</code> to your model or entity user
 		 * info.
 		 */
+		@Override
 		public NSArray primaryKeysForNewRowsWithEntity(int cnt, EOEntity entity) {
 			if (defaultBatchSize > 0) {
 				synchronized (pkCache) {
@@ -354,6 +354,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		 * Re-implemented to fix: http://www.mail-archive.com/dspace-tech@lists.sourceforge.net/msg06063.html.
 		 * We could also use the delegate, but where would be the fun in that?
 		 */
+		@Override
 		public void rollbackTransaction() {
 			if (!hasOpenTransaction()) {
 				return;
@@ -388,6 +389,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			}
 		}
 
+		@Override
 		public boolean connect() throws JDBCAdaptorException {
 			boolean connected = false;
 			if (useConnectionBroker()) {
@@ -404,6 +406,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			return new Channel(this);
 		}
 
+		@Override
 		protected JDBCChannel _cachedAdaptorChannel() {
 			if (_cachedChannel == null) {
 				_cachedChannel = createJDBCChannel();
@@ -411,6 +414,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			return _cachedChannel;
 		}
 
+		@Override
 		public EOAdaptorChannel createAdaptorChannel() {
 			if (_cachedChannel != null) {
 				JDBCChannel jdbcchannel = _cachedChannel;
@@ -420,31 +424,36 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			return createJDBCChannel();
 		}
 
+		@Override
 		public void disconnect() throws JDBCAdaptorException {
 			freeConnection();
 			super.disconnect();
 		}
 
+		@Override
 		public void beginTransaction() {
 			checkoutConnection();
 			super.beginTransaction();
 		}
 
+		@Override
 		public void transactionDidCommit() {
 			super.transactionDidCommit();
 			freeConnection();
 		}
 
+		@Override
 		public void transactionDidRollback() {
 			super.transactionDidRollback();
 			freeConnection();
 		}
 	}
 
-	public ERXJDBCAdaptor(String s) {
-		super(s);
+	public ERXJDBCAdaptor(String name) {
+		super(name);
 	}
 
+	@Override
 	protected JDBCContext _cachedAdaptorContext() {
 		if (_cachedContext == null) {
 			_cachedContext = createJDBCContext();
@@ -452,6 +461,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		return _cachedContext;
 	}
 
+	@Override
 	protected NSDictionary jdbcInfo() {
 		boolean closeCachedContext = (_cachedContext == null && _jdbcInfo == null);
 		NSDictionary jdbcInfo = super.jdbcInfo();
@@ -462,6 +472,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		return jdbcInfo;
 	}
 
+	@Override
 	protected NSDictionary typeInfo() {
 		boolean closeCachedContext = (_cachedContext == null && _jdbcInfo == null);
 		NSDictionary typeInfo = super.typeInfo();
@@ -477,6 +488,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		return context;
 	}
 
+	@Override
 	public EOAdaptorContext createAdaptorContext() {
 		EOAdaptorContext context;
 		if (_cachedContext != null) {

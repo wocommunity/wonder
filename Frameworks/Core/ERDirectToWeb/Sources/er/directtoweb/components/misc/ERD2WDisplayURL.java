@@ -15,6 +15,12 @@ import com.webobjects.directtoweb.D2WDisplayString;
  * @d2wKey urlTarget
  */
 public class ERD2WDisplayURL extends D2WDisplayString {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayURL(WOContext context) { super(context); }
 
@@ -32,7 +38,7 @@ public class ERD2WDisplayURL extends D2WDisplayString {
     
     /**
      * Gets the string from the 
-     * D2W key <propertyKey>
+     * D2W key &lt;propertyKey&gt;
      * @return the display string of the hyperlink
      */
     public String string() {
@@ -45,6 +51,7 @@ public class ERD2WDisplayURL extends D2WDisplayString {
      * using the D2W key <code>urlTarget</code>.
      * @return the target of the hyperlink
      */
+    @Override
     public String target() {
         String target = (String)d2wContext().valueForKey("urlTarget");
         return target != null ? target : "_blank";

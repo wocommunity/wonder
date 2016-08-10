@@ -26,9 +26,9 @@ public class ERMD2WInspectLink extends D2WDisplayString {
     }
 
 	public WOActionResults inspectAction() {
-		InspectPageInterface ipi = (InspectPageInterface)D2W.factory().inspectPageForEntityNamed(object().entityName(), session());
+		InspectPageInterface ipi = D2W.factory().inspectPageForEntityNamed(object().entityName(), session());
 		ipi.setObject(object());
-		ipi.setNextPage(this.context().page());
+		ipi.setNextPage(context().page());
 		return (WOActionResults)ipi;
 	}
 

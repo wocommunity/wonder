@@ -26,12 +26,16 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Description forthcoming.<br />
- * 
+ * Description forthcoming.
  */
 //DELETEME This looks like a pick page?
-
 public class ERDEditList extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditList(WOContext context) { super(context); }
 
@@ -49,7 +53,7 @@ public class ERDEditList extends ERDCustomEditComponent {
     public EOEnterpriseObject item;
     
     private NSArray _list;
-    /** @TypeInfo com.webobjects.eocontrol.EOEnterpriseObject */    
+
     public NSArray list() {
         if (_list==null) {
             EOEditingContext objectContext = object().editingContext();

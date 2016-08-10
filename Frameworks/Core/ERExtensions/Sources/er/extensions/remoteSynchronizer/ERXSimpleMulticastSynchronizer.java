@@ -11,7 +11,10 @@ import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -48,6 +51,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
+	private static final Logger log = LoggerFactory.getLogger(ERXRemoteSynchronizer.class);
 	public static final int IDENTIFIER_LENGTH = 6;
 	private static final int JOIN = 1;
 	private static final int LEAVE = 2;
@@ -61,12 +65,12 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 	private boolean _listening;
 	private int _maxSendPacketSize;
 	private int _maxReceivePacketSize;
-	private NSArray _whitelist;
-	private NSMutableDictionary _incomingCacheChanges;
+	private NSArray<String> _whitelist;
+	private NSMutableDictionary<String, RemoteChange> _incomingCacheChanges;
 
 	public ERXSimpleMulticastSynchronizer(IChangeListener listener) throws IOException {
 		super(listener);
-		_incomingCacheChanges = new NSMutableDictionary();
+		_incomingCacheChanges = new NSMutableDictionary<String, RemoteChange>();
 		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
 		if (localBindAddressStr == null) {
 			_localBindAddress = WOApplication.application().hostAddress();
@@ -107,9 +111,10 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		_multicastSocket.bind(new InetSocketAddress(_multicastPort));
 	}
 
+	@Override
 	public void join() throws IOException {
-		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
+		if (log.isInfoEnabled()) {
+			log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
 		_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
 		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
@@ -120,12 +125,14 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.JOIN);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 	}
 
+	@Override
 	public void leave() throws IOException {
-		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
+		if (log.isInfoEnabled()) {
+			log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
 		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(baos);
@@ -135,11 +142,13 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.LEAVE);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 		_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 		_listening = false;
 	}
-	
+
+	@Override
 	protected boolean handleMessageType(int messageType, RemoteChange remoteChange, DataInputStream dis) {
 		boolean handled = false;
 		if (messageType == ERXSimpleMulticastSynchronizer.JOIN) {
@@ -151,6 +160,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		return handled;
 	}
 
+	@Override
 	public void listen() throws IOException {
 		Thread listenThread = new Thread(new Runnable() {
 			public void run() {
@@ -176,7 +186,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 							short transactionSize = dis.readShort();
 							String identifierHex = ERXStringUtilities.byteArrayToHexString(identifier);
 							String transactionIdentifierStr = identifierHex + "-" + transactionID;
-							RemoteChange remoteChange = (RemoteChange) _incomingCacheChanges.objectForKey(transactionIdentifierStr);
+							RemoteChange remoteChange = _incomingCacheChanges.objectForKey(transactionIdentifierStr);
 							if (remoteChange == null) {
 								remoteChange = new RemoteChange(identifierHex, transactionID, transactionSize);
 								_incomingCacheChanges.setObjectForKey(remoteChange, transactionIdentifierStr);
@@ -197,7 +207,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 						}
 					}
 					catch (Throwable t) {
-						ERXRemoteSynchronizer.log.error("Failed to read multicast notification.", t);
+						log.error("Failed to read multicast notification.", t);
 					}
 				}
 			}
@@ -207,11 +217,12 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		listenThread.start();
 	}
 
-	protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws IOException {
+	@Override
+	protected void _writeCacheChanges(int transactionID, NSArray<ERXDatabase.CacheChange> cacheChanges) throws IOException {
 		short transactionSize = (short) cacheChanges.count();
 		short transactionNum = 0;
-		for (Enumeration cacheChangesEnum = cacheChanges.objectEnumerator(); cacheChangesEnum.hasMoreElements(); transactionNum++) {
-			ERXDatabase.CacheChange cacheChange = (ERXDatabase.CacheChange) cacheChangesEnum.nextElement();
+		for (Iterator<ERXDatabase.CacheChange> iter = cacheChanges.iterator(); iter.hasNext(); transactionNum++) {
+			ERXDatabase.CacheChange cacheChange = iter.next();
 			writeCacheChange(cacheChange, transactionID, transactionNum, transactionSize);
 		}
 	}
@@ -227,9 +238,10 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(transactionSize);
 		_writeCacheChange(dos, cacheChange);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
-		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
+		if (log.isDebugEnabled()) {
+			log.debug("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), cacheChange);
 		}
 	}
 

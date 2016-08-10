@@ -10,11 +10,16 @@ import com.webobjects.appserver.WOContext;
 
 // Will open a new window. 
 /**
- * Submit button to open a new window with an action.<br />
- * 
+ * Submit button to open a new window with an action.
  */
 
 public class ERXJSOpenWindowSubmitButton extends ERXJSOpenWindowHyperlink {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSOpenWindowSubmitButton(WOContext context) {
         super(context);
@@ -32,6 +37,7 @@ public class ERXJSOpenWindowSubmitButton extends ERXJSOpenWindowHyperlink {
     }
 
     // this 
+    @Override
     public String contextComponentActionURL() {
         return _contextComponentActionURL;
     }

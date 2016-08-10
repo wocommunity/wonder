@@ -26,6 +26,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey maxBrowserSize
  */
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final Logger log = Logger.getLogger(ERD2WEditSortedToManyFault.class);
 
@@ -79,6 +85,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
         return result;
     }
 
+    @Override
     public String browserStringForItem(){
         String result = super.browserStringForItem();
         if(showIndex()){

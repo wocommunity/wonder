@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry kind="src" path="Tests"/>
+	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
+	<classpathentry kind="con" path="WOFramework/ERJars"/>
+	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="WOFramework/ERModernLook"/>
+	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
+	<classpathentry kind="con" path="WOFramework/ERModernDefaultSkin"/>
+	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
+	<classpathentry kind="con" path="WOFramework/ERMoviesLogic"/>
+	<classpathentry kind="con" path="WOFramework/ERModernDirectToWeb"/>
+	<classpathentry kind="con" path="WOFramework/ERDirectToWeb"/>
+	<classpathentry kind="con" path="WOFramework/JavaFoundation"/>
+	<classpathentry kind="con" path="WOFramework/JavaXML"/>
+	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
+	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOAccess"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOControl"/>
+	<classpathentry kind="con" path="WOFramework/JavaJDBCAdaptor"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
+	<classpathentry kind="con" path="WOFramework/Ajax"/>
+	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
+	<classpathentry kind="con" path="WOFramework/WOLips"/>
+	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
+	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
+	<classpathentry kind="lib" path="Libraries/selenium-java-2.45.0.jar"/>
+	<classpathentry kind="con" path="WOFramework/ERCoreBusinessLogic"/>
+	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
+	<classpathentry kind="lib" path="Libraries/selenide-2.23.jar"/>
+	<classpathentry kind="lib" path="Libraries/guava-18.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

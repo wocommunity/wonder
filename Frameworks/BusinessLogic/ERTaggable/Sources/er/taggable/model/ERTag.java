@@ -1,7 +1,5 @@
 package er.taggable.model;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 
@@ -14,6 +12,13 @@ import er.taggable.ERTaggableEntity;
  * @author mschrag
  */
 public class ERTag extends _ERTag {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   /**
    * Inclusion provides an enum for ANY or ALL.
    * 
@@ -22,9 +27,6 @@ public class ERTag extends _ERTag {
   public static enum Inclusion {
     ANY, ALL
   }
-
-  @SuppressWarnings("unused")
-  private static Logger log = Logger.getLogger(ERTag.class);
 
   @Override
   public void willDelete() throws ValidationException {

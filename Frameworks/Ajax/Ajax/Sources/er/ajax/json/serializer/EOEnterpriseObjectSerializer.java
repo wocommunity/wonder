@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.jabsorb.JSONSerializer;
@@ -30,7 +31,6 @@ import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXRandomGUID;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -47,6 +47,13 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author <a href="mailto:jfveillette@os.ca">Jean-François Veillette</a>
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected static final NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static final NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static final NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();
@@ -95,15 +102,14 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	public Object unmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
 		try {
-			JSONObject jso = (JSONObject) o;
-			JSONObject eoDict = jso;
-			if(jso.has("eo")) {
-				jso.getJSONObject("eo");
-			}
-			if (eoDict == null) {
+			if (o == null) {
 				throw new UnmarshallException("eo missing");
 			}
-			String gidString = jso.getString("gid");
+			JSONObject eoDict = (JSONObject) o;
+			if(eoDict.has("eo")) {
+				eoDict.getJSONObject("eo");
+			}
+			String gidString = eoDict.getString("gid");
 			if (gidString == null) {
 				throw new UnmarshallException("gid missing");
 			}
@@ -215,11 +221,13 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * to be an exposed primary or foreign key and not copied. Such attributes are set to null. See
 	 * exposedKeyAttributeNames for details on how this is determined. It can be used when creating custom
 	 * implementations of the duplicate() method in EOCopyable.
-	 * 
+	 * @param state
+	 *            object that holds the sate of the serialization
 	 * @param source
 	 *            the EOEnterpriseObject to copy attribute values from
 	 * @param destination
 	 *            the EOEnterpriseObject to copy attribute values to
+	 * @throws MarshallException if conversion failed
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
 		boolean useEO = false;
@@ -292,7 +300,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return whether or not a new entity can be inserted.
-	 * @param entityName
+	 * @param entityName name of an entity
+	 * 
+	 * @return <code>true</code> if entity is insertable
 	 */
 	protected boolean _canInsert(String entityName) {
 		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
@@ -300,7 +310,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate attribute names.
-	 * @param eo
+	 * @param eo enterprise object
+	 * 
+	 * @return array of attribute names
 	 */
 	protected NSArray<String> _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
@@ -308,7 +320,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate attribute names.
-	 * @param eo
+	 * @param eo enterprise object
+	 * 
+	 * @return array of attribute names
 	 */
 	protected NSArray<String> _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
@@ -316,7 +330,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate relationship names.
-	 * @param eo
+	 * @param eo enterprise object
+	 * 
+	 * @return array of relationship names
 	 */
 	protected NSArray<String> _includedRelationshipNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.includedRelationshipNames(eo);
@@ -459,7 +475,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			if (id != null) {
 				return id;
 			}
-			id = ERXRandomGUID.newGid();
+			id = UUID.randomUUID().toString();
 			contexts.put(ec, id);
 			return id;
 		}

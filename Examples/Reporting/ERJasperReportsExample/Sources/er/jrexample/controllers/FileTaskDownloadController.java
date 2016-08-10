@@ -3,7 +3,6 @@ package er.jrexample.controllers;
 import java.io.File;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -23,10 +22,6 @@ import er.jrexample.components.DownloadIsCompletePage;
  *
  */
 public class FileTaskDownloadController extends ERXNextPageForResultWOAction {
-	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(FileTaskDownloadController.class);
-	
 	private String _returnLinkText;
 	private final WOComponent _senderPage;
 	

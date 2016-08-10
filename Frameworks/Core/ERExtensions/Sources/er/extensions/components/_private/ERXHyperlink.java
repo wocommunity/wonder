@@ -1,12 +1,4 @@
-/*
- * Created on Jan 27, 2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package er.extensions.components._private;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -17,7 +9,6 @@ import com.webobjects.appserver._private.WOHyperlink;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
 import er.extensions.foundation.ERXProperties;
 
@@ -41,9 +32,6 @@ import er.extensions.foundation.ERXProperties;
  * @author ak WONoContentElement fix, senderID fix, double-quote fix
  */
 public class ERXHyperlink extends WOHyperlink {
-    
-    public static Logger log = Logger.getLogger(ERXHyperlink.class);
-    
     /**
      * Defines if the hyperlink adds a default <code>rel="nofollow"</code> if an action is bound.
      */
@@ -59,9 +47,10 @@ public class ERXHyperlink extends WOHyperlink {
     }
 
     /**
-     * Overriden to perform the logging, propagating the action to subelements and returning the
+     * Overridden to perform the logging, propagating the action to subelements and returning the
      * current page if an empty page is returned from super.
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         WOActionResults result = super.invokeAction(request, context);
         if(result != null && (result instanceof WONoContentElement)) {
@@ -75,30 +64,16 @@ public class ERXHyperlink extends WOHyperlink {
             }
         }
         if (result != null && ERXSession.anySession() != null) {
-        	ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+        	ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
         }
         return result;
     }
  
     @Override
-    public void appendAttributesToResponse(final WOResponse woresponse, WOContext wocontext) {
-    	if(!ERXApplication.isWO54() && _href != null && _href.valueInComponent(wocontext.component()) != null) {
-    		// AK: for whatever reason, WO double-quotes the '&' when you use the HREF binding, 
-    		// so you end up with x=1&amp;amp;y=2 instead of x=1&amp;y=2
-    		// setting escape to false fixes this (one could argue the escape is needed in the first place)
-    		// This is a pretty inefficient method, but at least it's correct
-    		WOResponse response = new WOResponse() {
-    			public void appendContentHTMLAttributeValue(String s) {
-    				super.appendContentString(s);
-    			}
-    		};
-			super.appendAttributesToResponse(response, wocontext);
-			woresponse.appendContentString(response.contentString());
-     	} else {
-        	super.appendAttributesToResponse(woresponse, wocontext);
-     	}
-    	if(defaultNoFollow && _action != null) {
-    		woresponse.appendContentString(" rel=\"nofollow\"");
+    public void appendAttributesToResponse(final WOResponse response, WOContext context) {
+    	super.appendAttributesToResponse(response, context);
+    	if (defaultNoFollow && _action != null) {
+    		response.appendContentString(" rel=\"nofollow\"");
     	}
     }
 }

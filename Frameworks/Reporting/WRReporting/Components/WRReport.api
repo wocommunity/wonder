@@ -19,7 +19,7 @@
 		<binding name="showTopCriteriaLabel" defaults="Boolean"/>
 		<binding name="colors"/>
 
-		<validation message="&apos;model&apos; is a required binding">
+		<validation message="'model' is a required binding">
 			<unbound name="model"/>
 		</validation>
 	</wo>

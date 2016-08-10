@@ -6,9 +6,15 @@
 //
 package er.extensions.eof;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 /**
  * The ERXModuloQualifier is useful for creating qualifiers that
@@ -22,7 +28,13 @@ import com.webobjects.eoaccess.*;
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable {
- 
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** register SQL generation support for the qualifier */
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ModuloQualifierSQLGenerationSupport(), ERXModuloQualifier.class);
@@ -47,6 +59,7 @@ public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable
      * qualifier.
      * @return string description of the qualifier
      */
+    @Override
     public String toString() {
         return " <" + getClass().getName() + " key: " + key() + " > == "+index()+" mod "+modulo();
     }
@@ -54,6 +67,7 @@ public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable
 
     /** Tests if the given object's key is in the supplied values */ 
     // FIXME: this doesn't work right with EOs when the key() is keypath across a relationship
+    @Override
     public boolean evaluateWithObject(Object object) {
         Object value = null;
         if(object instanceof EOEnterpriseObject) {
@@ -79,6 +93,7 @@ public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable
      * an EOKeyValueQualifier and the generated SQL is incorrect..
      * @return cloned primary key list qualifier.
      */
+    @Override
     public Object clone() {
         return new ERXModuloQualifier(key(), modulo(), index());
     }
@@ -102,9 +117,10 @@ public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable
          * @param e current eo sql expression
          * @return SQL for the current qualifier.
          */
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXModuloQualifier modQualifier = (ERXModuloQualifier)eoqualifier;
-            StringBuffer sb=new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("mod(");
             sb.append(e.sqlStringForAttributeNamed(modQualifier.key()));
             sb.append(", ");
@@ -115,10 +131,12 @@ public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable
         }
 
         // ENHANCEME: This should support restrictive qualifiers on the root entity
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             return (EOQualifier)eoqualifier.clone();
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             // the key migration is the same as for EOKeyValueQualifier
             ERXModuloQualifier modQualifier=(ERXModuloQualifier)eoqualifier;

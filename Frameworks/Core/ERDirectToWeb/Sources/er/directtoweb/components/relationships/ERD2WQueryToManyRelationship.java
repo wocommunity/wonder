@@ -37,6 +37,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey propertyKey
  */
 public class ERD2WQueryToManyRelationship extends D2WQueryToManyRelationship {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERD2WQueryToManyRelationship.class);
@@ -65,6 +71,7 @@ public class ERD2WQueryToManyRelationship extends D2WQueryToManyRelationship {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("matchesAllValues"));
     }
 
+    @Override
     public void setValue(Object newValue) {
         if(hasMultipleSelection()) {
             if (newValue instanceof NSArray) {

@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * Can be used as a repetition in list pages.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey componentName
  * @d2wKey object
  * @d2wKey extraListComponentName
@@ -25,6 +25,12 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @d2wKey propertyIsSortable 
  */
 public class ERDListPageRepetition extends ERDAttributeRepetition {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDListPageRepetition.class);
@@ -52,6 +58,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         return actions == null ? NO_ACTIONS : actions;
     }
     
+    @Override
     public NSArray sectionsContents() {
     	NSArray result = super.sectionsContents();
     	if(result.count() == 1) {
@@ -61,7 +68,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
             return NSArray.EmptyArray;
         }
         ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
-    	return (NSArray) new NSArray(pair);
+    	return new NSArray(pair);
     }
     
     public NSArray itemSectionsContents() {

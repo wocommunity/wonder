@@ -6,7 +6,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WOForm;
 
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 
@@ -46,7 +45,7 @@ public class AjaxUpdaterForm extends AjaxUpdater {
 	public boolean _omitTags;
     
     public String href() {    // action
-		return ERXWOContext.ajaxActionUrl(context());
+		return context().componentActionURL(application().ajaxRequestHandlerKey());
     }
     
     public String classString() {
@@ -97,12 +96,12 @@ public class AjaxUpdaterForm extends AjaxUpdater {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
         String forceFormSubmittedElementID = (String) request.formValueForKey("_forceFormSubmitted");
         boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID());
-        boolean _wasFormSubmitted = context._wasFormSubmitted();
+        boolean _wasFormSubmitted = context.wasFormSubmitted();
         
         if (showForm()) {
-        	if (forceFormSubmitted) context._setFormSubmitted(true);
+        	if (forceFormSubmitted) context.setFormSubmitted(true);
         	super.takeValuesFromRequest(request, context);
-        	if (forceFormSubmitted) context._setFormSubmitted(_wasFormSubmitted);
+        	if (forceFormSubmitted) context.setFormSubmitted(_wasFormSubmitted);
         } else super.takeValuesFromRequest(request, context);
 	}
 }

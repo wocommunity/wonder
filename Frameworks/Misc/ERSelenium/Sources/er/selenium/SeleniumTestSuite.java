@@ -23,12 +23,14 @@
 
 package er.selenium;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 
-import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * Starts testing of a suite of tests (a directory)
@@ -38,23 +40,23 @@ public class SeleniumTestSuite extends WODirectAction {
 	public SeleniumTestSuite(WORequest request) {
 		super(request);
 	}
-	
-	// @Override
+
+	@Override
 	public WOActionResults defaultAction() {
 	    return pageWithName(SeleniumTestSuitePage.class.getName());
 	}
-		
-	// @Override
+
+	@Override
 	public WOActionResults performActionNamed(String anActionName) {
 	    if(!ERSelenium.testsEnabled()) {
-	        return new WOResponse();
+	        return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
 	    }
 	    if (anActionName.equals("default")) {
 	        return defaultAction();
 	    }
 
 	    SeleniumTestSuitePage page = (SeleniumTestSuitePage)pageWithName(SeleniumTestSuitePage.class.getName());
-	    page.setTestPath(ERXStringUtilities.replaceStringByStringInString(ERSelenium.SUITE_SEPERATOR, "/", anActionName));
+	    page.setTestPath(StringUtils.replace(anActionName, ERSelenium.SUITE_SEPERATOR, "/"));
 	    return page;
 	}
 }

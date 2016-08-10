@@ -42,6 +42,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
         return _enableIdentifierQuoting.booleanValue();
     }
 
+    @Override
     protected String formatTableName(String name) {
         if (!enableIdentifierQuoting()) {
             return name;
@@ -49,13 +50,15 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
         return "\"" + name + "\"";
     }
 
+    @Override
     protected String formatColumnName(String name) {
         if (!enableIdentifierQuoting()) {
             return name;
         }
         return "\"" + name + "\"";
     }
-    
+
+    @Override
     public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
         if (group == null)
             return NSArray.EmptyArray;
@@ -112,6 +115,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
+    @Override
     public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
         NSMutableSet sequenceNames = new NSMutableSet();
         NSMutableArray results = new NSMutableArray();
@@ -135,6 +139,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
+    @Override
     public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
         NSMutableArray results = new NSMutableArray();
         int count = entityGroup.count();
@@ -160,6 +165,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
      *            the relationship, as represented by EOF
      * @return the array of SQL statements
      */
+    @Override
     public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
         NSArray superResults;
         NSMutableArray results;
@@ -180,7 +186,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
             // timc 2006-11-06 check for enableIdentifierQuoting
             String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
             NSArray columnNames = ((NSArray) relationship.sourceAttributes().valueForKey("columnName"));
-            StringBuffer sbColumnNames = new StringBuffer();
+            StringBuilder sbColumnNames = new StringBuilder();
             for (int j = 0; j < columnNames.count(); j++) {
                 sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String) columnNames.objectAtIndex(j)));
             }
@@ -209,6 +215,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
+    @Override
     public NSArray primaryKeyConstraintStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -231,7 +238,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
             String constraintName = result.sqlStringForSchemaObjectName(externalNameForEntityWithoutSchema(entity) + "_pk");
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-            StringBuffer statement = new StringBuffer("ALTER TABLE ");
+            StringBuilder statement = new StringBuilder("ALTER TABLE ");
             statement.append(tableName);
             statement.append(" ADD CONSTRAINT ");
             statement.append(constraintName);
@@ -245,7 +252,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
                 if (j < priKeyAttributeCount - 1) {
                     statement.append(", ");
                 } else {
-                    statement.append(")");
+                    statement.append(')');
                 }
             }
             result.setStatement(statement.toString());
@@ -283,6 +290,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
      *            an array of <code>EOEntity</code> objects
      * @return the array of SQL statements
      */
+    @Override
     public NSArray primaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -338,6 +346,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
     /**
      * Quote table name if necessary
      */
+    @Override
     public NSArray createTableStatementsForEntityGroup(NSArray entityGroup) {
 		NSMutableSet columnNames = new NSMutableSet();
 		StringBuffer aStatement = new StringBuffer(128);
@@ -355,7 +364,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
 					}
 				}
 			}
-			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(this.formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
 		}
 		return new NSArray();
 	}
@@ -375,7 +384,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while (begin < length) {
@@ -409,7 +418,8 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
       }
       return attribute.externalType();
     }
-    
+
+    @Override
     public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
       NSArray statements;
       if (allowsNull) {
@@ -441,7 +451,8 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
       NSArray statements = new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + "set data type " + columnTypeString + usingClause));
       return statements;
     }
-    
+
+    @Override
     public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
       return new NSArray(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
     }
@@ -474,6 +485,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
     }
 */
 
+    @Override
     public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options)
     {
 /* 741*/        StringBuffer result = new StringBuffer();
@@ -484,9 +496,10 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
 /* 748*/        for(int count = statements.count(); i < count; i++)
 /* 749*/            appendExpressionToScript((EOSQLExpression)statements.objectAtIndex(i), result);
 
-/* 751*/        return new String(result);
+/* 751*/        return result.toString();
     }
 
+    @Override
     public NSArray schemaCreationStatementsForEntities(NSArray allEntities, NSDictionary options)
     {
 /* 879*/        NSMutableArray result = new NSMutableArray();

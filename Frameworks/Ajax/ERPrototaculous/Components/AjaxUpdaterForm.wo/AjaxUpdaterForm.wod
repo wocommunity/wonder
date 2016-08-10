@@ -17,7 +17,7 @@ Contents: WOComponentContent {
 
 WOSID: WOHiddenField {
 	value = session.sessionID;
-	name = "wosid";
+	name = application.sessionIdKey;
 }
 
 FID: WOGenericElement {

@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.applications</groupId>
@@ -15,8 +15,36 @@
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERFoundation</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.misc</groupId>
 			<artifactId>JavaMonitorFramework</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.eof</groupId>
+			<artifactId>ERRest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaWebObjects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-pam</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

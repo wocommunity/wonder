@@ -1,0 +1,23 @@
+<webobject name = "PageWrapper">
+<h1>Spell Check</h1>
+<webobject name = "PrimeIndexLink">Prime Index</webobject>
+<div id="SearchWrapper">
+	<wo:form>
+		<h4>Check Spelling</h4>
+		<wo:textfield class="textfield" value="$searchString"/> <wo:submit value="Check" action="$searchAction"></wo:submit>
+	</wo:form>
+	<wo:if condition="$suggestions.count">
+	<wo:if condition = "$isIncorrect">
+		<p>OHNOSE! That word appears incorrect, did you mean:</p>
+		<ul>
+		<wo:loop list="$suggestions" item="$suggestionItem">
+			<li><wo:str value="$suggestionItem"/></li>
+		</wo:loop>
+		</ul>
+	</wo:if>
+	<wo:if condition = "$isIncorrect" negate = "$true">
+		<p>YAY! That word is correct, you are smart!</p>
+	</wo:if>
+	</wo:if>
+</div>
+</webobject>

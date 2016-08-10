@@ -18,9 +18,8 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXExceptionHolder;
 
-
 /**
- * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.<br />
+ * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.
  * 
  * @binding choiceDisplayKey
  * @binding choicePageName
@@ -31,14 +30,20 @@ import er.extensions.validation.ERXExceptionHolder;
  * @binding numberOfColumns
  * @binding object
  */
-
 public class ERDEditListButton extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditListButton(WOContext context) {super(context);}
     
     public EOEnterpriseObject item;
     protected NextPageDelegate _nextPageDelegate;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     
@@ -63,7 +68,6 @@ public class ERDEditListButton extends ERDCustomEditComponent {
         return _editButtonName;
     }
     
-    /** @TypeInfo Object */
     private String _choices;
     public String choices(){
         if (_choices==null)

@@ -1,7 +1,5 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -22,9 +20,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak
  */
 public class ERXUniquingWrapper extends WODynamicGroup {
-	
-	private static final Logger log = Logger.getLogger(ERXTolerantWrapper.class);
-	
 	private WOAssociation _id;
 
 	public ERXUniquingWrapper(String name, NSDictionary associations, WOElement template) {
@@ -40,12 +35,14 @@ public class ERXUniquingWrapper extends WODynamicGroup {
 		return value != null ? value.toString() : "" + hashCode();
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		super.appendToResponse(response, context);
 		context.deleteLastElementIDComponent();
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		WOActionResults result = super.invokeAction(request, context);
@@ -53,6 +50,7 @@ public class ERXUniquingWrapper extends WODynamicGroup {
 		return result;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		super.takeValuesFromRequest(request, context);

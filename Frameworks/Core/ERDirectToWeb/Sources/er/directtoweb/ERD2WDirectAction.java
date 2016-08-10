@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
@@ -43,15 +42,15 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.directtoweb.pages.ERD2WEditableListPage;
 import er.directtoweb.pages.ERD2WQueryPage;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -59,8 +58,8 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Automatically creates page configurations from URLs.<br />
- * Examples:
+ * Automatically creates page configurations from URLs.
+ * <h3>Examples:</h3>
  * <ul>
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryAll</code><br >
  * will create an query page all entities.
@@ -79,14 +78,14 @@ import er.extensions.foundation.ERXValueUtilities;
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/CreateArticle</code><br >
  * will create an edit page for a newly created article.
  *
- *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__key=&lt;userid&gt;&__keypath=User.articles</code><br >
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__key=&lt;userid&gt;&amp;__keypath=User.articles</code><br >
  * will list the articles of the given user.
  *
- *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=recentArticles&authorName=*foo*</code><br >
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=recentArticles&amp;authorName=*foo*</code><br >
  * will list the articles by calling the fetch spec "recentArticles". When the
  * fetch spec has an "authorName" binding, it is set to "*foo*".
  *
- *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=&author.name=*foo*&__fs_fetchLimit=0</code><br >
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=&amp;author.name=*foo*&amp;__fs_fetchLimit=0</code><br >
  * will list the articles by creating a fetch spec with the supplied attributes. 
  * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ErrorSomeStuff?__message=Some+Test</code><br >
@@ -227,11 +226,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     	return fs;
     }
 
-    /** @deprecated use primaryKeyFromRequest(EOEditingContext ec, String entityName) */
-    public Number primaryKeyFromRequest() {
-        return context().request().numericFormValueForKey(primaryKeyKey, new NSNumberFormatter("#"));
-    }
-
     public NSDictionary primaryKeyFromRequest(EOEditingContext ec, String entityName) {
         String pkString = context().request().stringFormValueForKey(primaryKeyKey);
         return ERXEOControlUtilities.primaryKeyDictionaryForString(ec, entityName, pkString);
@@ -239,14 +233,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     public WOComponent previousPageFromRequest() {
         String cid = context().request().stringFormValueForKey(contextIDKey);
-        if(cid == null) return context().page();
-        WOComponent comp = session().restorePageForContextID(cid);
-        // (ak) we need to put the component to sleep again
-    	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
-        if(comp != null && !ERXApplication.isWO54()) {
-            comp._sleepInContext(comp.context());
-        }
-        return comp;
+        if (cid == null) return context().page();
+        return session().restorePageForContextID(cid);
     }
 
     public String keyPathFromRequest() {
@@ -364,11 +352,11 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             context = ERD2WContext.newContext(session());
             context.setDynamicPage(anActionName);
         }
-        EOEntity entity = (EOEntity)context.entity();
+        EOEntity entity = context.entity();
 
         if(entity != null) {
             String entityName = entity.name();
-            String taskName = (String)context.task();
+            String taskName = context.task();
 
             if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
                 prepareEditPage(context, (EditPageInterface)newPage, entityName);
@@ -386,7 +374,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         } else if(newPage instanceof ErrorPageInterface) {
             prepareErrorPage(context, (ErrorPageInterface)newPage);
         }
-        return (WOActionResults)newPage;
+        return newPage;
     }
 
     /**
@@ -443,10 +431,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * Returns a response with a 401 (access denied) message. Override this for something more user friendly.
      */
     public WOActionResults forbiddenAction() {
-        WOResponse response = new WOResponse();
-        response.setStatus(401);
-        response.setContent("Access denied");
-        return response;
+    	return new ERXResponse("Access denied", ERXHttpStatusCodes.UNAUTHORIZED);
     }
     
     /**
@@ -455,6 +440,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * implementation catches NoSuchMethodException more or less silently, so be
      * sure to turn on logging.
      */
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         WOActionResults newPage = null;
         try {

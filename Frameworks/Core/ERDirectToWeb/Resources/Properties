@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERDirectToWeb=load
+er.extensions.ERDirectToWeb.hasLocalization=true
+
 
 # ERDirectToWeb Framework Properties
 
@@ -15,4 +19,3 @@
 er.directtoweb.ERD2WModel.additionalModelNames = (d2wClient.d2wModel)
 # patch rules to allow for better formatting and correct evaluation
 er.directoweb.ERXD2WModel.patchRules=true
-

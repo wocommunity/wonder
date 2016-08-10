@@ -8,10 +8,10 @@ package er.extensions.validation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -22,7 +22,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSValidation;
+import com.webobjects.foundation.NSValidation.ValidationException;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEntityClassDescription;
@@ -40,9 +40,7 @@ import er.extensions.localization.ERXLocalizer;
  * exceptions and generating validation messages.
  */
 public class ERXValidationFactory {
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXValidationFactory.class);
+    private final static Logger log = LoggerFactory.getLogger(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
@@ -52,7 +50,7 @@ public class ERXValidationFactory {
     private static Object _defaultValidationDelegate = null;
     
     /** holds the default mappings that map model thrown validation strings to exception types */
-    private static NSDictionary _mappings;
+    private static NSDictionary<String, String> _mappings;
 
     /** holds the value 'ValidationTemplate.' */
     public static final String VALIDATION_TEMPLATE_PREFIX = "ValidationTemplate.";
@@ -124,7 +122,7 @@ public class ERXValidationFactory {
     /**
      * Exception delegates can be used to provide hooks to customize
      * how messages are generated for validation exceptions and how
-     * tempates are looked up. A validation exception can have a 
+     * templates are looked up. A validation exception can have a 
      * delegate set or a default delegate can be set on the factory
      * itself.
      */
@@ -139,7 +137,7 @@ public class ERXValidationFactory {
      * created.
      */
     static {
-        Object keys[] = {				// MESSAGE LIST:
+        String keys[] = {				// MESSAGE LIST:
             "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
             "Invalid Number", 				// "Invalid Number"
             "must have a ", 				// "The owner property of Bug must have a People assigned "
@@ -149,7 +147,7 @@ public class ERXValidationFactory {
             "exceeds maximum length of",
             "Error encountered converting value of class"
         };
-        Object objects[] = {
+        String objects[] = {
             ERXValidationException.NullPropertyException,
             ERXValidationException.InvalidNumberException,
             ERXValidationException.MandatoryToOneRelationshipException,
@@ -159,14 +157,14 @@ public class ERXValidationFactory {
             ERXValidationException.ExceedsMaximumLengthException,
             ERXValidationException.ValueConversionException
         };
-        _mappings = new NSDictionary( objects, keys );
+        _mappings = new NSDictionary<String, String>(objects, keys);
     }
 
     /** holds the validation exception class */
     private Class _validationExceptionClass;
 
     /** holds the template cache for a given set of keys */
-    private Hashtable _cache=new Hashtable(1000);
+    private Hashtable<ERXMultiKey, String> _cache = new Hashtable<ERXMultiKey, String>(1000);
 
     /** holds the default template delimiter, "@@" */
     private String _delimiter = "@@";
@@ -226,12 +224,12 @@ public class ERXValidationFactory {
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
         try {
-            log.debug("Creating exception for type: " + type + " validationExceptionClass: " + validationExceptionClass().getName());
+            log.debug("Creating exception for type: {} validationExceptionClass: {}", type, validationExceptionClass());
             erve = (ERXValidationException)regularValidationExceptionConstructor().newInstance(new Object[] {type, eo, property, value});
         } catch (InvocationTargetException ite) {
-            log.error("Caught InvocationTargetException creating regular validation exception: " + ite.getTargetException());            
+            log.error("Caught InvocationTargetException creating regular validation exception: {}", ite.getTargetException());
         } catch (Exception e) {
-            log.error("Caught exception creating regular validation exception: " + e);
+            log.error("Caught exception creating regular validation exception.", e);
         }
         return erve;
     }
@@ -243,7 +241,7 @@ public class ERXValidationFactory {
      * only convert to the base type given the information it has at that point.
      * @param erv previous validation exception
      * @param value value that failed validating
-     * @return yes if the exception should be recreated
+     * @return <code>true</code> if the exception should be recreated
      */
     public boolean shouldRecreateException(ERXValidationException erv, Object value) {
         return false;
@@ -288,7 +286,7 @@ public class ERXValidationFactory {
      * @param eov validation exception to be converted
      * @return converted validation exception
      */
-    public ERXValidationException convertException(NSValidation.ValidationException eov) { 
+    public ERXValidationException convertException(ValidationException eov) { 
         return convertException(eov, null); 
     }
 
@@ -303,28 +301,26 @@ public class ERXValidationFactory {
      * @param value that failed validation
      * @return converted validation exception
      */
-    public ERXValidationException convertException(NSValidation.ValidationException eov, Object value) {
+    public ERXValidationException convertException(ValidationException eov, Object value) {
         ERXValidationException erve = null;
-        if (log.isDebugEnabled())
-            log.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
+        log.debug("Converting exception: {} value: {}", eov, (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
             Object o = eov.object();
             EOEnterpriseObject eo = ((o instanceof EOEnterpriseObject) ? (EOEnterpriseObject) o: null);
             //NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : NSDictionary.EmptyDictionary;
-            for (Enumeration e = _mappings.allKeys().objectEnumerator(); e.hasMoreElements();) {
-                //EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
-                String key = (String)e.nextElement();
-                String type = (String)_mappings.objectForKey(key);
+            for (String key : _mappings.allKeys()) {
+                //EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(ValidationException.ValidatedObjectUserInfoKey);
+                String type = _mappings.objectForKey(key);
                 if (message.lastIndexOf(key) >= 0) {
                     String property = eov.key();
                     if(property == null && message.indexOf("Removal") == 0) {
                         //FIXME: (ak) pattern matching?
-                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3));
+                        property = NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3);
                     }
                     if(property == null && message.indexOf("Error encountered converting") == 0) {
                         //FIXME: (ak) pattern matching?
-                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(1));
+                        property = NSArray.componentsSeparatedByString(message, "'").objectAtIndex(1);
                     }
                     erve = createException(eo, property, value, type);
                     break;
@@ -334,13 +330,13 @@ public class ERXValidationFactory {
             ERXValidationException original = (ERXValidationException)eov;
             if(shouldRecreateException(original, value)) {
                 erve = createException(original.eoObject(), original.key(), original.value(), original.type());
-                log.debug("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
+                log.debug("Converting exception: {} value: {}", original, (original.value() != null ? original.value() : "<NULL>"));
             } else {
                 erve = original;
             }
         }
         if (erve == null) {
-            log.error("Unable to convert validation exception: " + eov, eov);
+            log.error("Unable to convert validation exception.", eov);
         } else {
             NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
             if (erveAdditionalExceptions.count() > 0)
@@ -357,20 +353,19 @@ public class ERXValidationFactory {
      * @param ex validation exception
      * @return NSArray of converted exceptions
      */
-    protected NSArray convertAdditionalExceptions(NSValidation.ValidationException ex) {
-        NSArray additionalExceptions = ex.additionalExceptions();
-        if (additionalExceptions == null || additionalExceptions.count() == 0) {
+    protected NSArray<ERXValidationException> convertAdditionalExceptions(ValidationException ex) {
+        NSArray<ValidationException> additionalExceptions = ex.additionalExceptions();
+        if (additionalExceptions == null || additionalExceptions.isEmpty()) {
             return NSArray.EmptyArray;
-        } else {
-            NSMutableArray erveAdditionalExceptions = new NSMutableArray();
-            for (Enumeration e = additionalExceptions.objectEnumerator(); e.hasMoreElements();) {
-                ERXValidationException erven = convertException((NSValidation.ValidationException)e.nextElement());
-                if (erven != null)
-                    erveAdditionalExceptions.addObject(erven);
+        }
+        NSMutableArray<ERXValidationException> erveAdditionalExceptions = new NSMutableArray<ERXValidationException>();
+        for (ValidationException e : additionalExceptions) {
+            ERXValidationException erve = convertException(e);
+            if (erve != null)
+                erveAdditionalExceptions.addObject(erve);
             }
             return erveAdditionalExceptions;
         }
-    }
     
     /**
      * Entry point for generating an exception message
@@ -438,11 +433,10 @@ public class ERXValidationFactory {
                 targetLanguage = ERXLocalizer.currentLocalizer() != null ? ERXLocalizer.currentLocalizer().language() : ERXLocalizer.defaultLanguage();
             }
             
-            if (log.isDebugEnabled ())
-                log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
+            log.debug("templateForException with entityName: {}; property: {}; type: {}; targetLanguage: {}", entityName, property, type, targetLanguage);
             ERXMultiKey k = new ERXMultiKey (new Object[] {entityName, property,
                 type,targetLanguage});
-            template = (String)_cache.get(k);
+            template = _cache.get(k);
             // Not in the cache.  Simple resolving.
             if (template == null) {
                 template = templateForEntityPropertyType(entityName, property, type, targetLanguage);
@@ -459,8 +453,8 @@ public class ERXValidationFactory {
      *		is reset.
      */
     public void resetTemplateCache(NSNotification n) {
-        _cache = new Hashtable(1000);
-        if (log.isDebugEnabled()) log.debug("Resetting template cache");
+        _cache = new Hashtable<ERXMultiKey, String>(1000);
+        log.debug("Resetting template cache");
     }
 
     /**
@@ -485,19 +479,18 @@ public class ERXValidationFactory {
     
     /**
      * Returns the template delimiter, the
-     * default delimiter is "@".
+     * default delimiter is "@@".
      * @return template delimiter
      */
     public String templateDelimiter() { return _delimiter; }
     
     /**
-     * sets the template delimiter to be used
+     * Sets the template delimiter to be used
      * when parsing templates for creating validation
      * exception messages.
-     * @param delimiter to be set.
+     * @param delimiter to be set
      */
-    // FIXME: Should be setTemplateDelimiter, what was I thinking
-    public void setDelimiter(String delimiter) { _delimiter = delimiter; }
+    public void setTemplateDelimiter(String delimiter) { _delimiter = delimiter; }
 
     /**
      * Method used to configure the validation factory
@@ -526,15 +519,13 @@ public class ERXValidationFactory {
      * @param property key name
      * @param type validation exception type
      * @param targetLanguage target language name
-     * @return a templaet for the given set of parameters
+     * @return a template for the given set of parameters
      */
     protected String templateForEntityPropertyType(String entityName,
                                                    String property,
                                                    String type,
                                                    String targetLanguage) {
-        if (log.isDebugEnabled())
-            log.debug("Looking up template for entity named \"" + entityName + "\" property \"" + property
-                      + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"");
+        log.debug("Looking up template for entity named '{}' property '{}' type '{}' target language '{}'.", entityName, property, type, targetLanguage);
         // 1st try the whole string.
         String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);
         // 2nd try everything minus the type.
@@ -559,7 +550,9 @@ public class ERXValidationFactory {
     /**
      * Get the template for a given key in a given language.
      * Uses {@link ERXLocalizer} to handle the actual lookup.
-     * @return template for key or null if none is found
+     * @param key the key to lookup
+     * @param language use localizer for this language
+     * @return template for key or <code>null</code> if none is found
      */
     public String templateForKeyPath(String key, String language) {
         return (String)ERXLocalizer.localizerForLanguage(language).valueForKey(VALIDATION_TEMPLATE_PREFIX + key);

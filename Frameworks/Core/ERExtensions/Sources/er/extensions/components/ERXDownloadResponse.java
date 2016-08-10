@@ -5,8 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -20,13 +21,30 @@ import er.extensions.foundation.ERXFileContext;
  * component, use appropriate setters for the type of content to be downloaded
  * and return the component from a component action
  * 
+ * @binding contentDisposition A string to set the content-disposition header. Defaults to 
+ * <code>"attachment;filename=\"" + downloadFilename() + "\""</code>
+ * @binding contentType A string to represents the MIME type (text/plain, application/pdf, 
+ * etc.) of the file 
+ * @binding downloadFilename A string that represents the name of the file. Defaults to 
+ * "downloadedfile"
+ * @binding fileContext An ERXFileContext object that contains a reference to the file, 
+ * the file name and the MIME type. If you set this binding, you don't need to set the 
+ * contentType, fileToDownload and downloadFilename bindings.
+ * @binding fileToDownload A java.io.File object that will be returned in the response
+ *
  * @author kieran 1/27/2006
  * 
  * 
  */
 public class ERXDownloadResponse extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(ERXDownloadResponse.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDownloadResponse.class);
 
 	private String _downloadFilename;
 	private long _streamingContentSize = 0L;
@@ -136,8 +154,7 @@ public class ERXDownloadResponse extends WOComponent {
 		aResponse.setHeader(contentType(), "content-type");
 		aResponse.setHeader(contentDisposition(), "content-disposition");
 
-		if (log.isDebugEnabled())
-			log.debug("DownloadResponse = " + this);
+		log.debug("DownloadResponse = {}", this);
 	}
 
 	private String _contentDisposition;

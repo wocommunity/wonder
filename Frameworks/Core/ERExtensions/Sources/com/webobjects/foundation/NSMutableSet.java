@@ -1,26 +1,34 @@
 package com.webobjects.foundation;
 
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
+ * <div class="en">
  * NSSet reimplementation to support JDK 1.5 templates. Use with
+ * </div>
  * 
- * <pre>
- * NSMutableSet&lt;E&gt; set = new NSMutableSet&lt;E&gt;();
+ * <div class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。使用は
+ * </div>
+ * 
+ * <pre>{@code
+ * NSMutableSet<E> set = new NSMutableSet<E>();
  * set.put(new E())
  * 
  * for (E t : set)
  *     logger.debug(t);
- * </pre>
+ * }</pre>
  * 
- * @param <E>
- *            type of set contents
+ * @param <E> - type of set contents
  */
-
-//TODO iterator.remove() throws unimplemented
-
 public class NSMutableSet<E> extends NSSet<E> {
+  
+  static final long serialVersionUID = -6054074706096120227L;
+
 	public NSMutableSet() {
 	}
 
@@ -83,6 +91,7 @@ public class NSMutableSet<E> extends NSSet<E> {
                     throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
                 if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
                 	_setCount(count() + 1);
+                	_objectsCache = null;
                 }
             }
 		}
@@ -196,9 +205,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return (NSMutableSet<E>) clone();
 	}
 
-	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
-	static final long serialVersionUID = -6054074706096120227L;
 
 	@Override
 	public boolean add(E o) {
@@ -264,5 +271,47 @@ public class NSMutableSet<E> extends NSSet<E> {
 	public void clear() {
 		removeAllObjects();
 	}
+	
+	@Override
+	public Iterator<E> iterator() {
+        return new Itr();
+    }
 
+	private class Itr implements Iterator<E> {
+        int cursor = 0;
+        static final int NotFound = -1;
+        int lastRet = NotFound;
+
+        protected Itr() { }
+        
+        public boolean hasNext() {
+            return cursor != size();
+        }
+
+        public E next() {
+            try {
+                Object next = objectsNoCopy()[cursor];
+                lastRet = cursor++;
+                return (E)next;
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException();
+            }
+        }
+
+        public void remove() {
+            if (lastRet == NotFound) {
+                throw new IllegalStateException();
+            }
+
+            try {
+                removeObject(objectsNoCopy()[lastRet]);
+                if (lastRet < cursor) {
+                    cursor--;
+                }
+                lastRet = NotFound;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
 }

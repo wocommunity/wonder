@@ -5,31 +5,13 @@ import wowodc.background.utilities.Utilities;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.components.ERXComponent;
+import er.extensions.components.ERXStatelessComponent;
 
-public class PageWrapper extends ERXComponent {
+public class PageWrapper extends ERXStatelessComponent {
     public PageWrapper(WOContext context) {
         super(context);
     }
-    
-    @Override
-	public boolean synchronizesVariablesWithBindings() {
-		// makes this component non-synchronizing
-		return false;
-	}
 
-	@Override
-	public boolean isStateless() {
-		// makes this component stateless
-		return true;
-	}
-
-	@Override
-	public void reset() {
-		// resets ivars at the end or RR phases
-		super.reset();
-	}
-	
 	public boolean hasErrors() {
 		return Utilities.hasErrors();
 	}
@@ -51,6 +33,4 @@ public class PageWrapper extends ERXComponent {
 		}
 		return b.toString();
 	}
-
-
 }

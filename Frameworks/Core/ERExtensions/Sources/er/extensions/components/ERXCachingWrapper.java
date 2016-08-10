@@ -1,10 +1,10 @@
 package er.extensions.components;
+
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -21,7 +21,8 @@ import er.extensions.foundation.ERXAssert;
 
 /**
  * Wrapper that caches its content based on a set of bindings. Use this component to wrap
- * parts of your HTML whose generation is costly. <br />
+ * parts of your HTML whose generation is costly.
+ * <p>
  * Valid keys would be for example:
  * <ul>
  *   <li><code>parent.isEnabled</code>, where isEnabled would be some method on the parent.
@@ -39,20 +40,28 @@ import er.extensions.foundation.ERXAssert;
  * @binding entryName the name to cache on
  *
  * @author ak on 20.01.05
- * @project ERExtensions
  */
-
 //ENHANCEME cache should get reaped every so often and remove stale entries. 
-
 public class ERXCachingWrapper extends ERXStatelessComponent {
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXCachingWrapper.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** The cached entries */
     protected static Map cache = Collections.synchronizedMap(new HashMap() {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
+    	@Override
     	public Object get(Object key) {
-    		Entry result = (Entry) super.get(key);
+    		CacheEntry result = (CacheEntry) super.get(key);
     		if(result != null) {
     			if(!result.isActive()) {
     				remove(key);
@@ -64,35 +73,42 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     });
     
     /** Simply cache entry class. It caches a string for a duration and can replace the session ID on retrieval. */
-    protected class Entry {
+    protected static class CacheEntry implements Serializable{
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
     	private long insertTime;
     	private long duration;
     	private String content;
     	private String sessionID;
     	
-    	public Entry(String aContent, long aDuration, String aSessionID) {
-    		this.insertTime = System.currentTimeMillis();
-    		this.content = aContent;
-    		this.duration = aDuration;
-    		this.sessionID = aSessionID;
+    	public CacheEntry(String aContent, long aDuration, String aSessionID) {
+    		insertTime = System.currentTimeMillis();
+    		content = aContent;
+    		duration = aDuration;
+    		sessionID = aSessionID;
     	}
 
 		public boolean isActive() {
-			return System.currentTimeMillis() - (this.insertTime + this.duration) < 0;
+			return System.currentTimeMillis() - (insertTime + duration) < 0;
 		}
 		
 		public String content(WOContext arg1) {
-			if(this.sessionID != null) {
-				return content.replaceAll(this.sessionID, arg1.session().sessionID());
+			if(sessionID != null) {
+				return content.replaceAll(sessionID, arg1.session().sessionID());
 			}
-			return this.content;
+			return content;
 		}
     }
 
     protected NSArray keys;
     protected String entryName;
     protected Long cacheDuration;
-    protected Entry entry;
+    protected CacheEntry entry;
     protected NSDictionary values;
     
     /**
@@ -103,13 +119,14 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
         super(context);
     }
     
+    @Override
     public void awake() {
     	super.awake();
     	keys = null;
     	entryName = null;
     	cacheDuration = null;
     	values = null;
-     	entry = (Entry) cache.get(values());
+     	entry = (CacheEntry) cache.get(values());
     }
     
     protected NSArray keys() {
@@ -172,9 +189,9 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
         if(cacheDuration == null) {
             Number value = (Number)valueForBinding("duration");
             if(value == null) {
-                cacheDuration = new Long(60L*1000L);
+                cacheDuration = Long.valueOf(60L*1000L);
             } else {
-                cacheDuration = new Long(value.longValue());
+                cacheDuration = Long.valueOf(value.longValue());
             }
         }
         return cacheDuration.longValue();
@@ -196,12 +213,14 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	return values;
     }
     
+    @Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if(entry == null) {
 			super.takeValuesFromRequest(request, context);
 		}
 	}
 	
+    @Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		if(entry == null) {
 			return super.invokeAction(request, context);
@@ -209,6 +228,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 		return null;
 	}
 	
+    @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if(entry == null) {
 			WOResponse newResponse = application().createResponseInContext(context);
@@ -216,7 +236,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 			newResponse.setUserInfo(response.userInfo());
 			super.appendToResponse(newResponse, context);
 			String content = newResponse.contentString();
-			entry = new Entry(content, cacheDuration(), (context.hasSession() ? context.session().sessionID() : null));
+			entry = new CacheEntry(content, cacheDuration(), (context.hasSession() ? context.session().sessionID() : null));
 			cache.put(values(), entry);
 		}
 		String content = entry.content(context);

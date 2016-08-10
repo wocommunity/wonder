@@ -10,7 +10,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditToManyRelationship;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -41,10 +40,17 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey shouldShowSelectAllButtons
  */
 public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WEditToManyRelationship(WOContext context) { super(context); }
     
     // Validation Support
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -55,7 +61,7 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(), (String)d2wContext().valueForKey("propertyKey"));
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(), (String)d2wContext().valueForKey("propertyKey"));
             if(relationship != null)
                 return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }

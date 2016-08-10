@@ -6,12 +6,6 @@ No : WOHyperlink {
 Yes2 : AjaxHyperlink {
 	action = deleteIt;
 	evalScripts = true;
-	
-}
-
-UpdateArea : AjaxUpdateContainer {
-	id = "ConfirmationMessage";
-	onComplete = "function() { Modalbox.resizeToContent(); }";
 }
 
 ConfirmationMessage: WOString {

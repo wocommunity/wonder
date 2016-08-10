@@ -2,6 +2,9 @@ package er.chronic.handlers;
 
 import java.util.Calendar;
 import java.util.List;
+
+import org.apache.commons.lang3.time.DateUtils;
+
 import er.chronic.Chronic;
 import er.chronic.Options;
 import er.chronic.repeaters.Repeater;
@@ -18,7 +21,6 @@ import er.chronic.tags.Scalar;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 import er.chronic.utils.Token;
-import org.apache.commons.lang.time.DateUtils;
 
 public class SRPHandler implements IHandler {
 

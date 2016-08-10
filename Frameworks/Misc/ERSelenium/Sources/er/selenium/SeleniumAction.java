@@ -25,7 +25,8 @@ package er.selenium;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOCookie;
@@ -35,14 +36,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * Default handler class, gets replaced by the startup process.
  *
  */
 public class SeleniumAction extends ERXDirectAction {
-
-	private static final Logger log = Logger.getLogger(SeleniumAction.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumAction.class);
 
 	public SeleniumAction(WORequest request) {
 		super(request);
@@ -69,7 +70,7 @@ public class SeleniumAction extends ERXDirectAction {
 
     
     protected WOResponse dictionaryResponse(NSDictionary<?,?> dict) {
-        WOResponse response = new WOResponse();
+        ERXResponse response = new ERXResponse();
         response.appendContentString("<html><body>");
         for (Enumeration<?> e = dict.keyEnumerator(); e.hasMoreElements();) {
             Object key = e.nextElement();
@@ -81,14 +82,7 @@ public class SeleniumAction extends ERXDirectAction {
     }
     
     protected WOResponse stringResponse(String s) {
-        WOResponse response = new WOResponse();
-        response.appendContentString(s);
-        return response;  	
-    }
-  
-    // @Deprecated
-    protected WOResponse simpleResponse(String s) {
-    	return stringResponse(s);
+        return new ERXResponse(s);
     }
     
     protected WOResponse success() {
@@ -103,10 +97,9 @@ public class SeleniumAction extends ERXDirectAction {
         return stringResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE + " " + s);
     }
 
-	
-	// @Override
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
-    	log.debug("Selenium Action: " + anActionName);
+    	log.debug("Selenium Action: {}", anActionName);
         WOActionResults result = null;
         if(ERSelenium.testsEnabled()) {
         	result = super.performActionNamed(anActionName);
@@ -119,7 +112,7 @@ public class SeleniumAction extends ERXDirectAction {
             result = response;
             session()._appendCookieToResponse(response);
         }
-        log.debug("Out Session: " + session().sessionID() + response.cookies());
+        log.debug("Out Session: {}{}", session().sessionID(), response.cookies());
         return result;
     }
 }

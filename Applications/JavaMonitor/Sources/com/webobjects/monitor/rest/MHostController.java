@@ -12,6 +12,7 @@ public class MHostController extends JavaMonitorController {
 		super(request);
 	}
 	
+	@Override
 	public WOActionResults createAction() throws Throwable {
 		checkPassword();
 		MHost host = create(ERXKeyFilter.filterWithAttributes());
@@ -22,11 +23,13 @@ public class MHostController extends JavaMonitorController {
 		return response(host, ERXKeyFilter.filterWithAttributes());
 	}
 
+	@Override
 	public WOActionResults indexAction() throws Throwable {
 		checkPassword();
 		return response(siteConfig().hostArray(), ERXKeyFilter.filterWithAttributes());
 	}
 
+	@Override
 	public WOActionResults showAction() throws Throwable {
 		checkPassword();
 		MHost host = siteConfig().hostWithName((String) routeObjectForKey("mHost"));		

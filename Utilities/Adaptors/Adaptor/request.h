@@ -51,7 +51,7 @@ typedef struct _HTTPRequest {
 	char *request_str;			/* the http request (includes CRLF) */
 	void *headers;				/* (strtbl *) but you don't need to know */
 	void *api_handle;			/* api specific pointer */
-	unsigned content_length;
+	unsigned long content_length;
 	void *content;
         unsigned content_buffer_size;
         req_getMoreContentCallback getMoreContent;
@@ -59,7 +59,9 @@ typedef struct _HTTPRequest {
         int shouldProcessUrl;
 #ifdef IIS
         /* for IIS we have to keep track of how much we have read */
-        int total_len_read;
+        // 2009/04/27: IIS is using DWORD in the API layer and a DWORD
+        //             is an "unsigned long" value:
+        unsigned long total_len_read;
 #endif
 } HTTPRequest;
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
 	<wo class="ERAttachmentUpload" wocomponentcontent="false">
 		<binding name="editingContext"/>	
@@ -37,5 +37,6 @@
 		</validation>
 	<binding name="class"/>
         <binding name="style"/>
+    <binding name="name"/>
     </wo>
 </wodefinitions>

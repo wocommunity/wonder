@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -22,8 +23,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 {
-
-    private static Logger logger = Logger.getLogger(ERXEntityFKConstraintOrder.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXEntityFKConstraintOrder.class);
 
 
     /**
@@ -50,33 +50,34 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
      *
      * @return a dictionary keyed on dependencyKeyFor(EOEntity)
      */
+    @Override
     protected NSDictionary dependenciesByEntity() {
-        logger.debug("Building dependency list");
+        log.debug("Building dependency list");
 
         NSMutableDictionary dependencyList = new NSMutableDictionary(allEntities().count());
         for (Enumeration entityEnum = allEntities().objectEnumerator(); entityEnum.hasMoreElements();) {
             EOEntity entity = (EOEntity) entityEnum.nextElement();
-            logger.trace("Finding dependencies of " + entity.name());
+            log.trace("Finding dependencies of {}", entity.name());
 
             for (Enumeration relationshipEnum = entity.relationships().objectEnumerator(); relationshipEnum.hasMoreElements();) {
                 EORelationship relationship = (EORelationship) relationshipEnum.nextElement();
 
                 if (hasForeignKeyConstraint(relationship)) {
                     EOEntity destinationEntity = relationship.destinationEntity();
-                    logger.trace("Recording dependency on " + destinationEntity.name());
+                    log.trace("Recording dependency on {}", destinationEntity.name());
                     entitiesDependentOn(dependencyList, destinationEntity).addObject(entity.name());
                 }
                 else {
-                    logger.trace("Ignoring, is not FK relationship or vertical inheritance parent");
+                    log.trace("Ignoring, is not FK relationship or vertical inheritance parent");
                 }
             }
         }
-        logger.debug("Finished building dependency list");
+        log.debug("Finished building dependency list");
 
-        if (logger.isTraceEnabled()) {
+        if (log.isTraceEnabled()) {
             for (int i = 0; i < allEntities().count(); i++) {
-                EOEntity entity = (EOEntity) allEntities().objectAtIndex(i);
-                logger.trace("Entity " + entity.name() + " is referenced by " + entitiesDependentOn(dependencyList, entity));
+                EOEntity entity = allEntities().objectAtIndex(i);
+                log.trace("Entity {} is referenced by {}", entity.name(), entitiesDependentOn(dependencyList, entity));
             }
         }
 
@@ -89,20 +90,20 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
      * @return <code>true</code> if relationship models a relation that will have a foreign key constraint in the database
      */
     protected boolean hasForeignKeyConstraint(EORelationship relationship) {
-        logger.trace("Examining relationshp " + relationship.name());
+        log.trace("Examining relationshp {}", relationship.name());
 
         // Reflexive relationships (circular dependencies) can't be accommodated by entity ordering, 
         // these require ordering within the operations for an entity. Check the externalName() rather than
         // entity name so that it will handle relationships to a super or subclass in a Single-Table inheritance structure
 		if (relationship.entity().externalName() != null &&
 			relationship.entity().externalName().equals(relationship.destinationEntity().externalName())) {
-            logger.trace("Ignoring: reflexive relationship");
+            log.trace("Ignoring: reflexive relationship");
             return false;
         }
 
         if ( ! ERXArrayUtilities.arraysAreIdenticalSets(relationship.destinationAttributes(),
                                                         relationship.destinationEntity().primaryKeyAttributes()) ) {
-            logger.trace("No FK constraint: found non-PK attributes in destination");
+            log.trace("No FK constraint: found non-PK attributes in destination");
             return false;
         }
         // Primary key to primary key relationships are excluded.
@@ -110,16 +111,16 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
                                                           relationship.entity().primaryKeyAttributes()) ) {
             // PK - PK relationships for vertical inheritance (child to parent) also need to be considered in ordering
             if (relationship.destinationEntity().equals(relationship.entity().parentEntity())) {
-                logger.trace("Is vertical inheritance PK to PKconstraint");
+                log.trace("Is vertical inheritance PK to PKconstraint");
                 return true;
             }
 
             // Bug?  Do these need to be included?
-            logger.trace("No FK constraint: Is PK to PK");
+            log.trace("No FK constraint: Is PK to PK");
             return false;
         }
 
-        logger.trace("Is FK constraint");
+        log.trace("Is FK constraint");
         return true;
     }
 
@@ -131,6 +132,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
      *
      * @return key for <code>entity</code> into dependency dictionary returned by <code>dependenciesByEntity()</code>
      */
+    @Override
     protected String dependencyKeyFor(EOEntity entity) {
         if (entity.externalName() == null) {
             return "Abstract Dummy Entity";

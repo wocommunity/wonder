@@ -39,6 +39,13 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding containerElementName the container element for this component, which is "a"
  */
 public class AjaxSelectionList extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String _id;
 	private String _value;
 	private NSArray _list;
@@ -47,6 +54,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -68,6 +76,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		return valueForBinding("item");
 	}
 
+	@Override
 	public void sleep() {
 		super.sleep();
 		_list = null;
@@ -144,9 +153,10 @@ public class AjaxSelectionList extends AjaxComponent {
 		return selectedIndex;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			if (_value == null) {
 				setSelection(null);
 			}
@@ -165,12 +175,14 @@ public class AjaxSelectionList extends AjaxComponent {
 		}
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "prototype.js");
 		addScriptResourceInHead(res, "AjaxSelectionList.js");
 		addStylesheetResourceInHead(res, "AjaxSelectionList.css");
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

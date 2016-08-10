@@ -14,8 +14,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
-import er.extensions.foundation.ERXProperties;
-
 /**
  * <p>
  * A simple class that provides a resource-efficient WebObjects-friendly {@link ExecutorService} for a

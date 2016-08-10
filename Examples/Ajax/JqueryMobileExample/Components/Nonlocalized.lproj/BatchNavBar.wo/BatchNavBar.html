@@ -1,0 +1,12 @@
+<wo:JQPageWrapper title = "Batch Nav Bar">
+  <wo:ERQMListView>
+    <wo:foreach list = "$talentDisplayGroup.displayedObjects" item = "$oneTalent">
+      <wo:ERQMListViewElement action = "$doShowOneTalentAction">
+        <wo:str value = "$oneTalent.firstName" />
+        <wo:str value = "$oneTalent.lastName" />
+      </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+  <br />
+  <wo:ERQMDisplayGroupNavigationBar displayGroup = "$talentDisplayGroup" />
+</wo:JQPageWrapper>

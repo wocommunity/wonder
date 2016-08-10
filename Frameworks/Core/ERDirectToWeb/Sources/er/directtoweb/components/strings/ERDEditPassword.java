@@ -30,10 +30,14 @@ import er.extensions.validation.ERXValidationFactory;
  * @d2wKey length the length of the text field
  *
  * @author ak on Sun Aug 17 2003
- * @project ERDirectToWeb
  */
-
 public class ERDEditPassword extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDEditPassword.class);
@@ -48,6 +52,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         super(context);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     protected Boolean _passwordConfirmationValidates;
@@ -66,6 +71,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         _password = value;
     }
 
+    @Override
     public void setObject(EOEnterpriseObject newObject) {
         if (newObject!=object()) {
             setPassword(null);
@@ -92,6 +98,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         ERXWOContext.contextDictionary().setObjectForKey(userInfo, "ERDEditPassword");
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r,c);
         if(passwordConfirmationValidates()) {
@@ -99,9 +106,10 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         }
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	if(passwordConfirmationValidates()) {
         		updateContextValues();
         	} else {

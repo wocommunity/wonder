@@ -3,6 +3,8 @@ package er.wolips;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.apache.commons.lang3.CharEncoding;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
@@ -39,22 +41,22 @@ public class WOLipsUtilities {
       if (password == null) {
         throw new NullPointerException("You must set 'wolips.password' in your Properties file.");
       }
-      StringBuffer urlBuffer = new StringBuffer();
+      StringBuilder urlBuffer = new StringBuilder();
       urlBuffer.append("http://");
       urlBuffer.append(host);
-      urlBuffer.append(":");
+      urlBuffer.append(':');
       urlBuffer.append(port);
-      urlBuffer.append("/");
+      urlBuffer.append('/');
       urlBuffer.append(action);
       urlBuffer.append("?pw=");
-      urlBuffer.append(URLEncoder.encode(password, "UTF-8"));
+      urlBuffer.append(URLEncoder.encode(password, CharEncoding.UTF_8));
       if (params != null && !params.isEmpty()) {
         for (Object key : params.allKeys()) {
           urlBuffer.append("&amp;");
-          urlBuffer.append(URLEncoder.encode(key.toString(), "UTF-8"));
-          urlBuffer.append("=");
+          urlBuffer.append(URLEncoder.encode(key.toString(), CharEncoding.UTF_8));
+          urlBuffer.append('=');
           Object value = params.objectForKey(key);
-          urlBuffer.append(URLEncoder.encode(value.toString(), "UTF-8"));
+          urlBuffer.append(URLEncoder.encode(value.toString(), CharEncoding.UTF_8));
         }
       }
       return urlBuffer.toString();

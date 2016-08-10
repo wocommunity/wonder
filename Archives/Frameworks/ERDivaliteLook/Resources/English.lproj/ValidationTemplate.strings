@@ -1,0 +1,14 @@
+{
+	"IllegalCharacterInNumberException" = "Please check the value @@escapedValue@@ you supplied for the field @@displayNameForProperty@@.";
+	"InvalidDateFormatException" = "Please check @@displayNameForProperty@@ as @@escapedValue@@ is not a valid date";
+	"InvalidNumberException" = "The value is an invalid number.";
+	"MandatoryToManyRelationshipException" = "A @@displayNameForEntity@@ must have a least one @@displayNameForDestinationEntity@@.";
+	"MandatoryToOneRelationshipException" = "A @@displayNameForEntity@@ must have a @@displayNameForProperty@@.";
+	"NotANumberException" = "Sorry, I could not read this number @@escapedValue@@ ";
+	"NullPropertyException" = "Please provide a @@displayNameForProperty@@.";
+	"ObjectCannotBeDeletedException" = "Cannot delete this @@displayNameForEntity@@ because either this @@displayNameForEntity@@ or any object related to this @@displayNameForEntity@@ cannot be deleted.";
+	"ObjectRemovalException" = "Cannot delete this @@displayNameForEntity@@. You should first delete the item in its @@displayNameForProperty@@.";
+	"ObjectsRemovalException" = "Cannot delete this @@displayNameForEntity@@. You should first delete the items in its @@displayNameForProperty@@.";
+	"PasswordsDontMatchException" = "The passwords you entered don't match";
+	"PasswordsFillBothFieldsException" = "Please fill in both password fields";
+}

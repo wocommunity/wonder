@@ -1,0 +1,23 @@
+DraggableExample1 : MTAjaxDraggable {
+	class = "alert alert-success";
+	droppables = ".droppable";
+	draggableObject = o1;
+	droppedDraggableID = droppedDraggableID;
+	droppedObject = droppedObject;
+	droppedArea = droppedArea;
+	action = droppedDraggable1;
+	ghost = true;
+	updateContainerID = "statusMessage";
+	elementName = "div";
+	onDrop = "function(draggable, droppable) { droppable.removeClass('alert-error'); droppable.addClass('alert-info'); $('statusMessage').highlight(); } ";
+	onEnter = "function(draggable, droppable) { droppable.removeClass('alert-info'); droppable.addClass('alert-error'); } ";
+	onLeave = "function(draggable, droppable) { droppable.removeClass('alert-error'); droppable.addClass('alert-info'); } ";
+}
+
+FirstItem : WOString {
+	value = o1;
+}
+
+StatusMessage : MTAjaxUpdateContainer {
+	id = "statusMessage";
+}

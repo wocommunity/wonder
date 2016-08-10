@@ -67,11 +67,9 @@ public class FileUtilities {
       BufferedInputStream bis = new BufferedInputStream(in);
       try {
         byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
-        int totalRead = 0;
         int read = -1;
         while ((read = bis.read(buf, 0, buf.length)) != -1) {
           out.write(buf, 0, read);
-          totalRead += read;
           progressMonitor.worked((int)read);
           if (progressMonitor.isCanceled()) {
             throw new IOException("Operation canceled");

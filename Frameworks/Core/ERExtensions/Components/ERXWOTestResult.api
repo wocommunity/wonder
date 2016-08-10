@@ -8,23 +8,23 @@
 		<binding name="test"/>
 		<binding name="showExceptions"/>
 
-		<validation message="&apos;testResult&apos; is a required binding">
+		<validation message="'testResult' is a required binding">
 			<unbound name="testResult"/>
 		</validation>
 
-		<validation message="&apos;errorMessage&apos; is a required binding">
+		<validation message="'errorMessage' is a required binding">
 			<unbound name="errorMessage"/>
 		</validation>
 
-		<validation message="&apos;runTime&apos; is a required binding">
+		<validation message="'runTime' is a required binding">
 			<unbound name="runTime"/>
 		</validation>
 
-		<validation message="&apos;test&apos; is a required binding">
+		<validation message="'test' is a required binding">
 			<unbound name="test"/>
 		</validation>
 
-		<validation message="&apos;showExceptions&apos; is a required binding">
+		<validation message="'showExceptions' is a required binding">
 			<unbound name="showExceptions"/>
 		</validation>
 	</wo>

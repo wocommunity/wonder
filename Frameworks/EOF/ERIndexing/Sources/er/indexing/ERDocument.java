@@ -17,7 +17,7 @@ public class ERDocument implements NSKeyValueCoding {
 	public ERDocument(Document doc, float score) {
 		super();
 		_doc = doc;
-		_score = new Float(score);
+		_score = Float.valueOf(score);
 	}
 	
 	// ACCESSORS

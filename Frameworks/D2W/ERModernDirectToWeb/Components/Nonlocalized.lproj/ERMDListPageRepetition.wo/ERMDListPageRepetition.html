@@ -2,7 +2,7 @@
 	<webobject name=ListTableHeaderRow>
 		<th>&nbsp;</th>
 		<webobject name=SectionRepetition><webobject name=ColumnLabelRepetition>
-				<th nowrap><webobject name = "TableHeaderSwitchComponent"/></th>
+				<webobject name = "IsNotOmitted"><th nowrap><webobject name = "TableHeaderSwitchComponent"/></th></webobject>
 			</webobject></webobject>
 		<th>&nbsp;</th>
 	</webobject>
@@ -31,7 +31,7 @@
 		</td>
 		<webobject name = "AttributeRow">
 			<webobject name=SectionRepetition><webobject name=AttributeRepetition>
-					<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
+					<webobject name = "IsNotOmitted"><webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject></webobject>
 				</webobject></webobject>
 		</webobject>
 		<webobject name = "ExtraRow">

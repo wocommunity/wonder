@@ -1,9 +1,12 @@
 package er.prototaculous.widgets;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.appserver.ERXWOContext;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 
 /**
@@ -33,6 +36,7 @@ public class ModalBoxLink extends ModalBox {
     }
     
     // accessors
+    @Override
     protected NSArray<String> _options() {
     	NSMutableArray<String> params = new NSMutableArray<String>(super._options());
     	
@@ -46,7 +50,7 @@ public class ModalBoxLink extends ModalBox {
     	if (hasBinding(Bindings.href))
     		return (String) valueForBinding(Bindings.href);
     	else if (hasBinding(Bindings.action) || hasBinding(Bindings.pageName))
-    		return (String) ERXWOContext.ajaxActionUrl(context());
+    		return context().componentActionURL(application().ajaxRequestHandlerKey());
     	else if (hasBinding(Bindings.directActionName)) {
     		String directActionName = (String) valueForBinding(Bindings.directActionName);
     		NSDictionary<String, Object> queryDictionary = (NSDictionary<String, Object>) valueForBinding(Bindings.queryDictionary);

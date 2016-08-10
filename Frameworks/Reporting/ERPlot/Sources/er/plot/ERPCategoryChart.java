@@ -9,6 +9,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -44,6 +46,14 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  */
 
 public class ERPCategoryChart extends ERPChart {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LoggerFactory.getLogger(ERPCategoryChart.class);
 
     public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[]{
             "BarChart", "StackedBarChart", "BarChart3D", "StackedBarChart3D", "AreaChart", 
@@ -118,7 +128,7 @@ public class ERPCategoryChart extends ERPChart {
                     (showUrls() ? Boolean.TRUE : Boolean.FALSE )
             });
         } catch(Throwable t) {
-            log.error(t.getMessage(), t);
+            log.error("Could not create chart.", t);
             throw  NSForwardException._runtimeExceptionForThrowable(t);
         }
         return chart;

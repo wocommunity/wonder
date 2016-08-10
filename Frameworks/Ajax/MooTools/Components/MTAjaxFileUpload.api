@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="MTAjaxFileUpload" wocomponentcontent="false">    <binding name="linkClass"/>
+    <binding name="formClass"/>
+    <binding name="allowCancel"/>
+        <binding name="canceledAction"/>
+        <binding name="canceledFunction"/>
+        <binding name="cancelingText"/>
+        <binding name="cancelText"/>
+        <binding name="class"/>
+        <binding name="data"/>
+        <binding name="failedAction"/>
+        <binding name="failedFunction"/>
+        <binding name="id"/>
+        <binding name="inputStream"/>
+        <binding name="keepTempfile"/>
+        <binding name="mimeType"/>
+        <binding name="onFileSelected"/>
+        <binding name="outputStream"/>
+        <binding name="progressBarAfterDone"/>
+        <binding name="progressBarBeforeStart"/>
+        <binding name="progressOfText"/>
+        <binding name="refreshTime"/>
+        <binding name="startedFunction"/>
+        <binding name="startingText"/>
+        <binding name="streamToFilePath"/>
+        <binding name="style"/>
+        <binding name="succeededAction"/>
+        <binding name="succeededFunction"/>
+        <binding name="uploadFunctionName"/>
+        <binding name="uploadLabel"/>
+        <binding name="uploadProgress"/>
+    <binding name="filePath"/>
+    <binding name="finalFilePath"/>
+    <binding name="finishedAction"/>
+    <binding name="finishedFunction"/>
+    </wo>
+</wodefinitions>

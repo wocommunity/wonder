@@ -11,7 +11,7 @@ public class ERFakeMetadataParser implements IERMetadataParser {
     ERParsedMetadataDirectory metadata = new ERParsedMetadataDirectory(IERMetadataDirectory.EXIF);
     for (int i = 0; i < 30; i++) {
       int length = 100;
-      StringBuffer sb = new StringBuffer(length);
+      StringBuilder sb = new StringBuilder(length);
       for (int j = 0; j < length; j++) {
         sb.append('a');
       }

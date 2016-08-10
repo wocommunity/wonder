@@ -16,7 +16,7 @@ import er.extensions.foundation.ERXProperties;
  * NOTE: that dateformats must have compatible client side scripts
  * So optionally you may produce your own variants of the client-side date format javascripts and set the properties to use them
  * 
- * See {@link http://code.google.com/p/calendardateselect/}
+ * @see "http://code.google.com/p/calendardateselect/"
  *
  * @author mendis
  * 
@@ -74,12 +74,8 @@ public class CalendarDateSelect extends WOComponent {
     public CalendarDateSelect(WOContext context) {
         super(context);
     }
-    
+
     @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-    
     public boolean isStateless() {
     	return true;
     }

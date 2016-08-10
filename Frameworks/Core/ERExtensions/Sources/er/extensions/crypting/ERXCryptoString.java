@@ -5,7 +5,7 @@ public class ERXCryptoString implements Comparable<ERXCryptoString> {
 	private final String value;
 	
 	public ERXCryptoString(String clearText) {
-		this.value = clearText==null?"":clearText;
+		value = clearText == null ? "" : clearText;
 	}
 	
 	public static ERXCryptoString createInstanceFromCryptoString(String encryptedString) {
@@ -23,11 +23,13 @@ public class ERXCryptoString implements Comparable<ERXCryptoString> {
 	public int compareTo(ERXCryptoString cryptoString) {
 		return value.compareTo(cryptoString.toString());
 	}
-	
+
+	@Override
 	public boolean equals(Object object) {
 		return (object instanceof ERXCryptoString)?value.equals(object.toString()):false;
 	}
-	
+
+	@Override
 	public int hashCode() {
 		return value.hashCode();
 	}
@@ -35,9 +37,9 @@ public class ERXCryptoString implements Comparable<ERXCryptoString> {
 	public String toCryptoString() {
 		return encryptText(value);
 	}
-	
+
+	@Override
 	public String toString() {
 		return value;
 	}
-	
 }

@@ -24,6 +24,13 @@ import com.webobjects.foundation.NSSelector;
  * @author mschrag
  */
 public class ERXFullTextQualifier extends EOQualifier implements Cloneable, EOQualifierEvaluation {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String FullTextContainsSelectorName = "fulltextContains";
 	public static final NSSelector FullTextContainsSelector = new NSSelector(ERXFullTextQualifier.FullTextContainsSelectorName, new Class[] { String.class });
 
@@ -167,9 +174,10 @@ public class ERXFullTextQualifier extends EOQualifier implements Cloneable, EOQu
 		while (keyPathTokenizer.hasMoreElements()) {
 			String key = keyPathTokenizer.nextToken();
 			if (keyPathTokenizer.hasMoreElements()) {
-				classDescription = classDescription.classDescriptionForDestinationKey(key);
+				EOClassDescription sourceClassDescription = classDescription;
+				classDescription = sourceClassDescription.classDescriptionForDestinationKey(key);
 				if (classDescription == null) {
-					throw new IllegalStateException("Invalid key '" + key + "' for entity '" + classDescription.entityName() + "'.");
+					throw new IllegalStateException("Invalid key '" + key + "' for entity '" + sourceClassDescription.entityName() + "'.");
 				}
 			}
 			else {

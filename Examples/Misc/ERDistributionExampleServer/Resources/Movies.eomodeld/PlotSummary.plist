@@ -1,0 +1,39 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            name = movieID; 
+            precision = 9; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = SUMMARY; 
+            name = summary; 
+            prototypeName = longText; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID); 
+    className = "er.distribution.example.server.eo.PlotSummary"; 
+    classProperties = (summary, movie); 
+    externalName = "PLOT_SUMMARY"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (summary, movie); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.PlotSummary"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = PlotSummary; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

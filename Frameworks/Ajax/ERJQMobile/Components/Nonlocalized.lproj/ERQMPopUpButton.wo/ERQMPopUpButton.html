@@ -1,0 +1,19 @@
+<wo:if condition = "$inset">
+  <div class = "ui-field-contain">
+    <wo:if condition = "$hasLabel">
+      <wo:genericContainer elementName = "label" for = "$javaScriptElementID"> <wo:str value = "$label" /> </wo:genericContainer>
+    </wo:if>
+    <wo:if condition = "$hasSelection"><webobject name = "BtnSelection" /></wo:if>
+    <wo:else><webobject name = "BtnSelectedValue" /></wo:else>
+  </div>
+</wo:if>
+<wo:else>
+  <wo:if condition = "$hasLabel">
+    <wo:genericContainer elementName = "label" for = "$javaScriptElementID"> <wo:str value = "$label" /> </wo:genericContainer>
+  </wo:if>
+  <wo:if condition = "$hasSelection"><webobject name = "BtnSelection" /></wo:if>
+  <wo:else><webobject name = "BtnSelectedValue" /></wo:else>
+</wo:else>
+<wo:if condition = "$filterable">
+  <script>$.mobile.document.initSelectFilter('<wo:WOString value = "$javaScriptElementID" />');</script>
+</wo:if>

@@ -1,5 +1,1 @@
-{
-    "WebObjects Release" = "WebObjects 5.0"; 
-    encoding = MacRoman; 
-    variables = {}; 
-}
+{"WebObjects Release" = "WebObjects 5.0"; encoding = "UTF-8"; variables = {}; }

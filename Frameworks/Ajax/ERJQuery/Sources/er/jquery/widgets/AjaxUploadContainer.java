@@ -1,8 +1,6 @@
 package er.jquery.widgets;
 
-import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 
 /**
  * @see AjaxUpload
@@ -10,7 +8,7 @@ import com.webobjects.appserver.WORequest;
  * @author mendis
  *
  *	This version is for uploads not in forms. And can be any element.
- * @see er.prototaculous.AjaxUploadContainer 	jQuery compatible version
+ * @see er.prototaculous.widgets.AjaxUploadContainer 	jQuery compatible version
  *
  */
 public class AjaxUploadContainer extends AjaxUpload {

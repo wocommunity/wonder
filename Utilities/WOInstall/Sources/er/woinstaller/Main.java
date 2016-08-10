@@ -11,14 +11,13 @@ public class Main {
     }
 
     showLicense();
-  
-    WebObjectsInstaller.newInstaller(args[1]).installToFolder(new File(args[0]), new ConsoleProgressMonitor());
+    WebObjectsInstaller.newInstaller(args[0]).installToFolder(new File(args[1]), new ConsoleProgressMonitor());
     
     System.out.println("Installation Complete");
   }
 
   private static void showUsage() {
-    System.out.println("usage: java -jar WOInstaller.jar [5.3.3|5.4.3|5.5] [destinationFolder]");
+    System.out.println("usage: java -jar WOInstaller.jar [5.3.3|5.4.3] [destinationFolder]");
     
     System.out.println("\nExample:");
     System.out.println("WO 5.4.3 on Windows");
@@ -41,12 +40,10 @@ public class Main {
         "unmodified, in binary form only, on any platform but solely as incorporated\n" +
         "into such application programs and only for use by end-users under terms that\n" +
         "are at least as restrictive of those set forth in this License (including,\n" +
-        "without limitation, Sections 2, 6 and 7 of this License [1]).\n\n" +
+        "without limitation, Sections 2, 6 and 7 of this License).\n\n" +
         "For avoidance of doubt, you may not distribute the WebObjects Software on a\n" +
         "stand-alone basis, and you may not develop application programs using the\n" +
         "WebObjects Software (or any portion thereof) on any non-Apple branded\n" +
-        "computer.\n\n" +
-        "To view the full license agreement see the following document:\n" +
-        "[1] http://images.apple.com/legal/sla/docs/xcode.pdf\n");
+        "computer.\n\n");
   }
 }

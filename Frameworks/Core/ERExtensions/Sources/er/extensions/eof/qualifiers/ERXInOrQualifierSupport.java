@@ -1,8 +1,8 @@
 package er.extensions.eof.qualifiers;
 
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration._OrQualifierSupport;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;

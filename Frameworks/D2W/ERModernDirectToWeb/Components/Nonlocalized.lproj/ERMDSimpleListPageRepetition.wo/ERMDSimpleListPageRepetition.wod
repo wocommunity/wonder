@@ -12,6 +12,11 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 ColumnLabelRepetition: WORepetition {
 	_unroll = true;
 	item = propertyKey;
@@ -22,6 +27,13 @@ ObjectsRepetition: WORepetition {
 	item = d2wContext.object;
 	list = ^displayGroup.displayedObjects;
 	index = rowIndex;
+	checkHashCodes = true;
+	eoSupport = true;	
+}
+
+IsRenderTableHeader : ERXEqualConditional {
+	value1 = rowIndex;
+	value2 = 0;
 }
 
 LeftAction: WOSwitchComponent { 

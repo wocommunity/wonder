@@ -55,8 +55,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding class (optional) the class attribute of the file input
  * @binding style (optional) the style attribute of the file input
  * 
- * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
- * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
+ * @property er.attachment.[configurationName].tempFolder the temp folder to use for WOFileUploads for a specific configuration. Default is er.attachment.tempFolder value.
+ * @property er.attachment.tempFolder the temp folder to use for WOFileUploads. If not set, temporary dir will be set from File.createTempFile().
  * @property er.attachment.[configurationName].storageType
  * @property er.attachment.storageType
  * @property er.attachment.[configurationName].width
@@ -66,6 +66,13 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  */
 public class ERAttachmentUpload extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private String _filePath;
   private String _finalFilePath;
 
@@ -101,7 +108,7 @@ public class ERAttachmentUpload extends WOComponent {
   @Override
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     WOActionResults results = super.invokeAction(request, context);
-    if (context._wasFormSubmitted() && !ajax()) {
+    if (context.wasFormSubmitted() && !ajax()) {
       try {
         _uploadSucceeded();
         valueForBinding("succeededAction");

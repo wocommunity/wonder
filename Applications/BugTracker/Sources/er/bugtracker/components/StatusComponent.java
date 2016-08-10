@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker.components;
+
 import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
@@ -18,11 +19,12 @@ public class StatusComponent extends ERDCustomEditComponent {
         super(aContext);
     }
 
-
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -47,7 +49,8 @@ public class StatusComponent extends ERDCustomEditComponent {
 
     public String[] bugIcons=new String[] { 
             "spider.gif", "molette.gif", "check.gif", "document.gif", "closed.gif" };
-    
+
+    @Override
     public String name() {
         return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(bug().state().textDescription());
     }

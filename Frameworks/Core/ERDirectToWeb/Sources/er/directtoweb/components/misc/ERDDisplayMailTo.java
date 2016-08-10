@@ -7,11 +7,9 @@
 package er.directtoweb.components.misc;
 
 import com.webobjects.appserver.WOContext;
-
-import er.directtoweb.components.ERDCustomEditComponent;
-
 import com.webobjects.foundation.NSArray;
 
+import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -22,24 +20,32 @@ import er.extensions.foundation.ERXArrayUtilities;
 //	showBrackets - Boolean, specifies if the <> should be displayed around the mailto link.
 /////////////////////////////////////////////////////////////////////////////////
 /**
- * A display mailto component with a number of bindings.<br />
+ * A display mailto component with a number of bindings.
  * 
  * @binding email
  * @binding object
  * @binding key
  * @binding showBrackets
  */
-
 public class ERDDisplayMailTo extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
      public ERDDisplayMailTo(WOContext context) { super(context); }
     
     protected String _displayString, _email;
     protected Boolean _showBrackets;
-    
+
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public void reset() {
          super.reset();
         _displayString = null;

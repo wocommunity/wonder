@@ -7,14 +7,11 @@
 
 package er.wopaypal;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXProperties;
-
-import java.util.*;
 
 /** WOPayPal is the principal class in the framework.  It gets initialized first, and contains the setup for initializing the framework's functionality
  */

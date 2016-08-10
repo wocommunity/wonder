@@ -1,5 +1,7 @@
 package er.extensions.components.javascript;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -8,7 +10,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.validation.ERXValidationException;
 
@@ -18,13 +19,16 @@ import er.extensions.validation.ERXValidationException;
  * @binding sample sample binding explanation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
-
 public class ERXJSValidationErrors extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXJSValidationErrors.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXJSValidationErrors.class);
 
     public String _errors;
     public String _callback;
@@ -38,6 +42,8 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
     }
 
     public String callback() { return "parent." + _callback; }
+    
+    @Override
     public void awake() {
         String key = context().request().stringFormValueForKey("_vkey");
         String value = context().request().stringFormValueForKey("_vvalue");
@@ -52,14 +58,14 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         
         Object newValue = value;
 
-        log.debug("validateKeyAndValueInEntityAction: key="+key+", value="+value+", entity="+entity + ", contextID "+contextID+ ", callback=" + _callback);
+        log.debug("validateKeyAndValueInEntityAction: key={}, value={}, entity={}, contextID {}, callback={}", key, value, entity, contextID, _callback);
 
         EOEnterpriseObject eo = null;
         WOComponent page = null;
         try {
             if(contextID != null)
                 page = session().restorePageForContextID(contextID);
-            log.debug("Page: " + (page != null ? "Yes" : "No"));
+            log.debug("Page: {}", (page != null ? "Yes" : "No"));
             if(page != null && true) {
                 eo = (EOEnterpriseObject)page.valueForKey("object");
                 eo.editingContext().lock();
@@ -79,7 +85,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
             }
         } catch (ERXValidationException ex) {
             try {
-                log.info(ex);
+                log.info("Something did not validate.", ex);
                 NSKeyValueCoding d2wContext = (NSKeyValueCoding)page.valueForKey("d2wContext");
                 d2wContext.takeValueForKey(key, "propertyKey");
                 ex.setContext(d2wContext);
@@ -91,17 +97,12 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         } catch (NSValidation.ValidationException ex1) {
             _errors = ex1.getMessage();
         } finally {        
-            if(eo != null && eo.editingContext() != null)
+            if (eo != null && eo.editingContext() != null) {
                 eo.editingContext().unlock();
-            if(page != null) {
-                // we cheat here because calling sleep() is not enough...
-            	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
-            	if (!ERXApplication.isWO54()) {
-            		page._sleepInContext(page.context());
-            	}
             }
         }
     }
     
+    @Override
     public void reset() { _errors = null; _callback = null;}
 }

@@ -1,7 +1,8 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class DB2ForISeriesSynchronizationFactory extends

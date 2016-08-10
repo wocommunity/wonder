@@ -7,6 +7,8 @@ import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
 import org.apache.lucene.store.LockFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -15,9 +17,14 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class ERIDirectory extends _ERIDirectory {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIDirectory.class);
+	private static final Logger log = LoggerFactory.getLogger(ERIDirectory.class);
 
 	public static final ERIDirectoryClazz clazz = new ERIDirectoryClazz();
 
@@ -211,7 +218,7 @@ public class ERIDirectory extends _ERIDirectory {
 
 		@Override
 		public IndexOutput createOutput(String s) throws IOException {
-			log.debug("createOutput: " + s);
+			log.debug("createOutput: {}", s);
 			ERIFile file = fileForName(s);
 			if (file == null) {
 				file = createFile(s);
@@ -224,14 +231,14 @@ public class ERIDirectory extends _ERIDirectory {
 			file = ERIFile.clazz.createAndInsertObject(editingContext());
 			file.setName(s);
 			file.setDirectory(ERIDirectory.this);
-			ERIDirectory.this.addToFiles(file);
+			addToFiles(file);
 			editingContext().saveChanges();
 			return file;
 		}
 
 		@Override
 		public void deleteFile(String s) throws IOException {
-			log.debug("deleteFile: " + s);
+			log.debug("deleteFile: {}", s);
 			ERIFile file = fileForName(s);
 			if (file != null) {
 				file.delete();
@@ -308,6 +315,7 @@ public class ERIDirectory extends _ERIDirectory {
 	public interface Key extends _ERIDirectory.Key {
 	}
 
+	@Override
 	public void init(EOEditingContext ec) {
 		super.init(ec);
 	}

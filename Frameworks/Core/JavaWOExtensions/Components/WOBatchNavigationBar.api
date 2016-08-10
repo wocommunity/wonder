@@ -11,7 +11,7 @@
 		<binding name="border"/>
 		<binding name="bgcolor"/>
 
-		<validation message="&apos;displayGroup&apos; is a required binding">
+		<validation message="'displayGroup' is a required binding">
 			<unbound name="displayGroup"/>
 		</validation>
 	</wo>

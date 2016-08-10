@@ -14,15 +14,15 @@
 		<binding name="size"/>
 		<binding name="maxColumns"/>
 
-		<validation message="&apos;sourceObject&apos; is a required binding">
+		<validation message="'sourceObject' is a required binding">
 			<unbound name="sourceObject"/>
 		</validation>
 
-		<validation message="&apos;relationshipKey&apos; is a required binding">
+		<validation message="'relationshipKey' is a required binding">
 			<unbound name="relationshipKey"/>
 		</validation>
 
-		<validation message="&apos;isToMany&apos; is a required binding">
+		<validation message="'isToMany' is a required binding">
 			<unbound name="isToMany"/>
 		</validation>
 

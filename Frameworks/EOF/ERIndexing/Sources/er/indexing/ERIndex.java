@@ -6,7 +6,6 @@ import java.net.URL;
 import java.text.Format;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -239,6 +238,12 @@ public class ERIndex {
     }
 
     protected static class Command extends Parameter {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
 
         protected Command(String name) {
             super(name);
@@ -315,7 +320,7 @@ public class ERIndex {
         }
 
         TransactionHandler handler() {
-            return ERIndex.this._handler;
+            return _handler;
         }
     }
    
@@ -407,7 +412,7 @@ public class ERIndex {
 
     private Directory _indexDirectory;
 
-    private NSDictionary<String, IndexAttribute> _attributes = (NSDictionary<String, IndexAttribute>) NSDictionary.EmptyDictionary;
+    private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.EmptyDictionary;
 
     private final String _name;
 
@@ -444,7 +449,7 @@ public class ERIndex {
     }
     
     protected Analyzer analyzer() {
-        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer());
+        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer(Version.LUCENE_24));
         for (IndexAttribute attribute : attributes()) {
             wrapper.addAnalyzer(attribute.name(), attribute.analyzer());
         }
@@ -709,20 +714,6 @@ public class ERIndex {
         }
     }
     
-    @Deprecated
-    public Hits findHits(Query query) {
-    	Hits hits = null;
-    	long start = System.currentTimeMillis();
-        try {
-            Searcher searcher = indexSearcher();
-            hits = searcher.search(query);
-            log.debug("Returning " + hits.length() + " after " + (System.currentTimeMillis() - start) + " ms");
-            return hits;
-        } catch (IOException e) {
-        	throw NSForwardException._runtimeExceptionForThrowable(e);
-        }
-    }
-    
     public NSArray<String> findTermStringsForPrefix(String field, String prefix) {
     	NSMutableArray<String> terms = new NSMutableArray<String>();
     	try {
@@ -738,42 +729,6 @@ public class ERIndex {
     		e.printStackTrace();
     	}
     	return terms;
-    }
-    
-    @Deprecated
-    public NSArray<Term> findTerms(Query q) {
-    	NSMutableArray<Term> terms = new NSMutableArray<Term>();
-    	try {
-    		IndexReader reader = indexReader(); 
-    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
-    		q.rewrite(reader).extractTerms(suggestedTerms); 
-    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
-    		{ 
-    			Term term = iter.next();
-    			terms.addObject(term); 
-    		} 
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    	return terms.immutableClone();
-    }
-    
-    @Deprecated
-    public NSArray<String> findTermStrings(Query q) {
-    	NSMutableArray<String> terms = new NSMutableArray<String>();
-    	try {
-    		IndexReader reader = indexReader(); 
-    		HashSet<Term> suggestedTerms = new HashSet<Term>(); 
-    		q.rewrite(reader).extractTerms(suggestedTerms); 
-    		for (Iterator<Term> iter = suggestedTerms.iterator(); iter.hasNext();) 
-    		{ 
-    			Term term = iter.next();
-    			terms.addObject(term.text());
-    		} 
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    	return terms.immutableClone();
     }
 
     public IndexDocument findDocument(EOKeyGlobalID globalID) {
@@ -801,7 +756,7 @@ public class ERIndex {
     public ERDocument documentForId(int docId, float score) {
     	ERDocument doc = null;
     	try {
-    		Document _doc = this.indexSearcher().doc(docId);
+    		Document _doc = indexSearcher().doc(docId);
     		doc = new ERDocument(_doc, score);
     	} catch (IOException e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);

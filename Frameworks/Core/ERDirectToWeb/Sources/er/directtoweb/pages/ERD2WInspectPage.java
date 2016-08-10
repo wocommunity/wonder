@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -24,6 +22,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
+import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.interfaces.ERDEditPageInterface;
 import er.directtoweb.interfaces.ERDFollowPageInterface;
@@ -36,7 +35,8 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Superclass for all inspecting/editing ERD2W templates.<br />
+ * Superclass for all inspecting/editing ERD2W templates.
+ * 
  * @d2wKey inspectConfirmConfigurationName
  * @d2wKey object
  * @d2wKey editConfigurationName
@@ -56,6 +56,12 @@ import er.extensions.localization.ERXLocalizer;
  * @d2wKey firstResponder
  */
 public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface, ERXComponentActionRedirector.Restorable  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Public constructor
@@ -69,13 +75,14 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
 	protected static final String firstResponderContainerName = "FirstResponderContainer";
 
+	@Override
     public String urlForCurrentState() {
-    	NSDictionary dict = null;
+    	NSDictionary<String, Object> dict = null;
     	String actionName = d2wContext().dynamicPage();
     	if(object() != null) {
     		String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
     		if(primaryKeyString != null) {
-    			dict = new NSDictionary(primaryKeyString, "__key");
+    			dict = new NSDictionary<String, Object>(primaryKeyString, "__key");
     		}
     	}
     	return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
@@ -83,12 +90,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
     
     protected boolean _objectWasSaved;
+
     public boolean objectWasSaved() { return _objectWasSaved; }
 
     private WOComponent _previousPage;
+
     public WOComponent previousPage() { return _previousPage;}
+
     public void setPreviousPage(WOComponent existingPageName) { _previousPage = existingPageName; }
 
+	@Override
     public WOComponent nextPage() { return nextPage(true); }
 
     public WOComponent nextPage(boolean doConfirm) {
@@ -102,7 +113,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             }
             if (ipi instanceof ERDFollowPageInterface)
                 ((ERDFollowPageInterface)ipi).setPreviousPage(context().page());
-            return (WOComponent)ipi;
+            return ipi;
         }
         WOComponent result = nextPageFromDelegate();
     	if(result == null) {
@@ -126,6 +137,15 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
 	    	editPage.setObject(object);
             editPage.setNextPage(nextPage());
+	    	if (currentTab() != null && editPage instanceof ERD2WPage) {
+	    	    // try to keep the current tab selection
+	    	    ERD2WPage tabPage = (ERD2WPage) editPage;
+	    	    for (ERD2WContainer aTab : tabPage.tabSectionsContents()) {
+	    	        if (aTab.equals(currentTab())) {
+	    	            tabPage.setCurrentTab(aTab);
+	    	        }
+	    	    }
+	    	}
             returnPage = (WOComponent)editPage;
         }
         return returnPage != null ? returnPage : previousPage();
@@ -143,6 +163,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public WOComponent cancelAction() {
         if ((object() != null) && (object().editingContext()!=null) && shouldRevertChanges()) {
             object().editingContext().revert();
+            clearValidationFailed();
         }
         return nextPage(false);
     }
@@ -151,9 +172,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldShowActionButtons() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }
     public boolean shouldShowCancelButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowCancelButton")); }
     public boolean shouldShowSubmitButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSubmitButton")); }
+
+	@Override
     public boolean showCancel() { return super.showCancel() && shouldShowCancelButton(); }
     public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
+	@Override
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
         super.setObject(eoenterpriseobject);
     }
@@ -165,12 +189,11 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     //		 on the eo.  In this case you sould write a the following rule:
     //		pageConfiguration = 'Foo' && tabKey = 'Bar' => validationKeys = "(validateXY)"
     public void performAdditionalValidations() {
-        NSArray validationKeys = (NSArray)d2wContext().valueForKey("validationKeys");
+        NSArray<String> validationKeys = (NSArray<String>)d2wContext().valueForKey("validationKeys");
         if (validationKeys != null && validationKeys.count() > 0) {
             if (log.isDebugEnabled())
                 log.debug("Validating Keys: " + validationKeys + " on eo: " + object());
-            for (Enumeration e = validationKeys.objectEnumerator(); e.hasMoreElements();) {
-                String validationKey = (String)e.nextElement();
+            for (String validationKey : validationKeys) {
                 try {
                     object().valueForKeyPath(validationKey);
                 } catch (NSValidation.ValidationException ev) {
@@ -180,6 +203,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         }
     }
 
+	@Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
         if (isEditing() && errorMessages.count() == 0) {
@@ -195,7 +219,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldRevertChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRevertChanges")); }
     public boolean shouldSaveChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
     public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
+
+	@Override
     public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
+
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
     public boolean shouldRevertUponSaveFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRevertUponSaveFailure"), false); }
 
@@ -231,6 +258,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     				EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
     				setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
     				validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
+    				} else if(ERXEOAccessUtilities.isUniqueFailure(ex)) { 
+    				  EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
+    				  setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("DatabaseUniqException", d2wContext()));
+    				  validationFailedWithException(ex, eo, "DatabaseUniqException");
     			} else {
     				throw ex;
     			}
@@ -290,7 +321,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
      * used in conjunction with the <code>firstResponderKey</code> to mark the cell where the propertyKey is that named 
      * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@link #tabScriptString tabScriptString}
      * can identify it.
-     * @return a String to be included in the <code>td<td> tag for the propertyKey component cell.
+     * @return a String to be included in the <code>td</code> tag for the propertyKey component cell.
      */
     public String otherTagStringsForPropertyKeyComponentCell() {
         String firstResponderKey = (String)d2wContext().valueForKey(Keys.firstResponderKey);
@@ -347,7 +378,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
          */
         if (d2wContext().valueForKey(Keys.firstResponderKey) == null) { return null; }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("function activateFirstResponder() {\n");
 
         // Get the container element.
@@ -375,7 +406,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         sb.append("\t\t\t}\n");
         sb.append("\t\t}\n");
         sb.append("\t}\n");
-        sb.append("}");
+        sb.append('}');
 
         // Now call the function.
         sb.append("activateFirstResponder();");

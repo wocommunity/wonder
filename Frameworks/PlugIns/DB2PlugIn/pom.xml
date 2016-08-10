@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>plugins</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.plugins</groupId>
 	<artifactId>DB2PlugIn</artifactId>
@@ -23,16 +23,8 @@
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>db2jcc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>db2jcc_license_cu</artifactId>
-		</dependency>
-		<dependency>
-  			<groupId>as400dq</groupId>
-  			<artifactId>jt400</artifactId>
+			<groupId>com.webobjects</groupId>
+			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

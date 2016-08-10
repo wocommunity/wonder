@@ -1,0 +1,7 @@
+<wo:JQPageWrapper title = "Linked List View">
+  <wo:ERQMListView isNumberedList = "true">
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie">
+      <wo:ERQMListViewElement action = "$doShowOneMovieAction"> <wo:str value = "$oneMovie.title" /> </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

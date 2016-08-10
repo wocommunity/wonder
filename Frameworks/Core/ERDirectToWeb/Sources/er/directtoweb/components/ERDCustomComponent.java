@@ -16,17 +16,41 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.ERDirectToWeb;
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.eof.ERXConstant;
 import er.extensions.validation.ERXExceptionHolder;
 
 /**
- * Base class of many custom components.<br />
+ * <div class="en">
+ * Base class of many custom components.
+ * <p>
  * Has a lot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@link ERXNonSynchronizingComponent}.
  * Subclasses should be able to run stand alone without a D2W context. This is achieved by pulling values first from the bindings, then from the d2wContext and finally from an "extraBindings" binding.
+ * </div>
+ * 
+ * <div class="ja">
+ * たくさんのカスタム・コンポーネントのベース・クラスである
+ * 
+ * ルール・システムへのバインディングや {@link ERXNonSynchronizingComponent} の値バインディング取得機能等の必要な処理をたくさん含みます。
+ * 
+ * サブクラスは D2W コンテキスト無しでスタンドアロンで実行可能です。最初はコンポーネント・バインディングを優先で取得を試し、
+ * だめなら、 d2wContext と後は "extraBindings" バインディングより。
+ * 
+ * @d2wKey localContext - d2wContext (deprecated)
+ * @d2wKey d2wContext - d2wContext
+ * @d2wKey key - プロパティ・キー
+ * @d2wKey extraBindings - オプション・バインディング
+ * @d2wKey propertyKey - プロパティ・キー
+ * </div>
  */
-
 public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent implements ERXExceptionHolder {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static interface Keys {
         public static final String key = "key";
@@ -80,7 +104,16 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return d2wContextFromBindings();
     }
 
-    /** Returns the active d2wContext. If the value was not set via KVC, tries to get the value from the bindings if the component is non-syncing */
+    /** 
+     * <span class="en">
+     * Returns the active d2wContext. If the value was not set via KVC, tries to get the value from the bindings if the component is non-syncing 
+     * </span>
+     * 
+     * <span class="ja">
+     * アクティブな d2wContext を戻します。
+     * KVC で設定されていなければ、非シンクロナイズ・コンポーネントのバインディングより取得を試し見る
+     * </span>
+     */
     protected D2WContext d2wContextFromBindings() {
         if (d2wContext == null && !synchronizesVariablesWithBindings()) {
             d2wContext = (D2WContext)super.valueForBinding(Keys.localContext);
@@ -105,12 +138,19 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     public boolean taskIsInspect() { return "inspect".equals(task()); }
     public boolean taskIsList() { return "list".equals(task()); }
 
-    /** Validation Support. Passes errors to the parent. */
+    /** 
+     * <span class="en">Validation Support. Passes errors to the parent. </span>
+     * <span class="ja">Validation Support. エラーを親コンポーネントに渡す</span>
+     */
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
 
-    /** Implementation of the {@link ERXExceptionHolder} interface. Clears exceptions in the parent if possible.*/
+    /** 
+     * <span class="en">Implementation of the {@link ERXExceptionHolder} interface. Clears exceptions in the parent if possible.</span>
+     * <span class="ja">{@link ERXExceptionHolder} インタフェース実装。可能であれば、親のエラーをクリアします。</span>
+     */
     public void clearValidationFailed() {
         // Since this component can be used stand alone, we might not necessarily
         // have an exception holder as our parent --> testing
@@ -118,17 +158,22 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
             ((ERXExceptionHolder)parent()).clearValidationFailed();
     }
 
-    /** @deprecated use booleanValueForBinding() instead */
-    public boolean booleanForBinding(String binding) {
-        return booleanValueForBinding(binding);
-    }
-
     // CHECKME ak who needs this?
     public Integer integerBooleanForBinding(String binding) {
         return booleanValueForBinding(binding) ? ERDCustomComponent.TRUE : ERDCustomComponent.FALSE;
     }
 
-    /** Checks if the binding can be pulled. If the component is synching, throws an Exception. Otherwise checks the superclass and if the value for the binding is not null.*/
+    /** 
+     * <span class="en">
+     * Checks if the binding can be pulled. If the component is synching, throws an Exception. Otherwise checks the superclass and if the value for the binding is not null.
+     * </span>
+     * 
+     * <span class="ja">
+     * バインディングが取得可能かどうかをチェックします。シンクロナイズ・コンポーネントの場合にはエラーを発行します。
+     * そうでなければ、スーパークラスをバインディングが非 null であるようにチェックします
+     * </span>
+     */
+    @Override
     public boolean hasBinding(String binding) {
         // FIXME:  Turn this check off in production
         if (synchronizesVariablesWithBindings()) {
@@ -140,7 +185,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Utility to dump some debug info about this component and its parent */
     protected void logDebugInfo() {
         if (log.isDebugEnabled()) {
-            log.debug("***** ERDCustomComponent: this: " + this.getClass().getName());
+            log.debug("***** ERDCustomComponent: this: " + getClass().getName());
             log.debug("***** ERDCustomComponent: parent(): + (" + ((parent() == null) ? "null" : parent().getClass().getName()) + ")");
             log.debug("                      " + parent());
             log.debug("***** ERDCustomComponent: parent() instanceof ERDCustomComponent == " + (parent() instanceof ERDCustomComponent));
@@ -150,7 +195,10 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         }
     }
 
-    /** Utility to pull the value from the components parent, if the parent is a D2W wrapper component. */
+    /** 
+     * <span class="en">Utility to pull the value from the components parent, if the parent is a D2W wrapper component.</span>
+     * <span class="ja">親コンポーネントが D2W ラパー・コンポーネントの場合のバインディング取得ユーティリティ</span>
+     */
     protected Object parentValueForBinding(String binding) {
         WOComponent parent = parent();
         if (parent instanceof ERDCustomComponent ||
@@ -164,12 +212,18 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return null;
     }
 
-    /** Utility to pull the value from the components actual bindings. */
+    /** 
+     * <span class="en">Utility to pull the value from the components actual bindings. </span>
+     * <span class="ja">コンポーネントのバインディングから取得するユーティリティ</span>
+     */
     protected Object originalValueForBinding(String binding) {
         return super.valueForBinding(binding);
     }
 
-    /** Utility to pull the value from the {@link D2WContext}. */
+    /** 
+     * <span class="en">Utility to pull the value from the {@link D2WContext}. </span>
+     * <span class="ja">{@link D2WContext} から値を取得するユーティリティ</span>
+     */
     protected Object d2wContextValueForBinding(String binding) {
         return d2wContextFromBindings().valueForKey(binding);
     }
@@ -182,9 +236,17 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /**
+     * <span class="en">
      * Fetches an object from the bindings.
      * Tries the actual supplied bindings, the supplied d2wContext, the parent and finally the extra bindings dictionary.
+     * </span>
+     * 
+     * <span class="ja">
+     * バインディングを使って、オブジェクトをフェッチする
+     * バインディングを次の順で取得を試す：コンポーネント、d2wContext、親コンポーネント、オプション・バインディング・ディクショナリー
+     * </span>
      */
+    @Override
     public Object valueForBinding(String binding) {
         Object value=null;
         logDebugInfo();
@@ -214,6 +276,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Used by stateful but non-synching subclasses */
+    @Override
     public void resetCachedBindingsInStatefulComponent() {
         super.resetCachedBindingsInStatefulComponent();
         extraBindings = null;
@@ -223,6 +286,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Used by stateless subclasses. */
+    @Override
     public void reset() {
         super.reset();
         extraBindings = null;
@@ -246,7 +310,12 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
 
     /** The active property key. */
     public String key() {
-        if(!synchronizesVariablesWithBindings()) {
+      //FIXME : バグフィックス：複数のカスタム・コンポーネントを複数のタブに設定すると正しく設定されず。
+      //if(synchronizesVariablesWithBindings()) {
+      //  key = null;
+      //}
+
+      if(!synchronizesVariablesWithBindings()) {
             if (key==null) {
                 key=(String)super.valueForBinding(Keys.key);
             }
@@ -258,28 +327,46 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Overridden from superclass to turn on component synching, which is the default. */
-    public boolean synchronizesVariablesWithBindings() { return true; }
+    @Override
+    public boolean synchronizesVariablesWithBindings() { return true; } // CHECKME why then does this class subclass ERXNonSynchronizingComponent?
 
     /** Is D2W debugging enabled. */
     public boolean d2wDebuggingEnabled() {
         return ERDirectToWeb.d2wDebuggingEnabled(session());
     }
 
-    /** Should the component name be shown. */
+    /** 
+     * <span class="en">Should the component name be shown. </span>
+     * <span class="ja">コンポーネント名を表示する？</span>
+     */
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
     }
 
-    /** Should the property keys be shown. */
+    /** 
+     * <span class="en">Should the property keys be shown.</span>
+     * <span class="ja">プロパティ・キーを表示する？</span>
+     */
     public boolean d2wPropertyKeyDebuggingEnabled() {
         return ERDirectToWeb.d2wPropertyKeyDebuggingEnabled(session());
     }
 
     /**
+     * <span class="en">
      * Finds the containing D2WPage, if possible.  There are certain situations when having a 
      * reference to the containing D2W page is useful, e.g., when needing to use the userInfo 
      * dictionary of {@link ERD2WPage} to pass information between subcomponents.
+     * 
      * @return the containing D2WPage
+     * </span>
+     * 
+     * <span class="ja">
+     * 可能であれば、D2WPage の親コンポーネントを戻します。
+     * 場合によって、親 D2W ページへのアクセスは必要です。
+     * ユーザ情報ディクショナリーへのアクセス等でサブコンポーネントの情報交換が可能です。
+     * 
+     * @return 親 D2WPage
+     * </span>
      */
     public D2WPage d2wPage() {
         // Can't just use context().page(), because the d2wPage isn't necessarily the top-level
@@ -293,6 +380,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return (D2WPage)component;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if(!ERDirectToWeb.shouldRaiseException(false)) {
             // in the case where we are non-synchronizing but not stateless, make sure we pull again

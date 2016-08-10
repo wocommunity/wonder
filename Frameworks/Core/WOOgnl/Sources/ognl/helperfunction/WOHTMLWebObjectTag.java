@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSUtilities;
 
 public class WOHTMLWebObjectTag {
@@ -76,7 +75,7 @@ public class WOHTMLWebObjectTag {
 		Enumeration enumeration = _children.objectEnumerator();
 		if (enumeration != null) {
 			nsmutablearray = new NSMutableArray(_children.count());
-			StringBuffer stringbuffer = new StringBuffer(128);
+			StringBuilder stringbuffer = new StringBuilder(128);
 			while (enumeration.hasMoreElements()) {
 				Object obj1 = enumeration.nextElement();
 				if (obj1 instanceof String) {
@@ -84,7 +83,7 @@ public class WOHTMLWebObjectTag {
 				}
 				else {
 					if (stringbuffer.length() > 0) {
-						WOHTMLBareString wohtmlbarestring1 = new WOHTMLBareString(_NSStringUtilities.stringFromBuffer(stringbuffer));
+						WOHTMLBareString wohtmlbarestring1 = new WOHTMLBareString(stringbuffer.toString());
 						nsmutablearray.addObject(wohtmlbarestring1);
 						stringbuffer.setLength(0);
 					}
@@ -92,13 +91,13 @@ public class WOHTMLWebObjectTag {
 				}
 			}
 			if (stringbuffer.length() > 0) {
-				WOHTMLBareString wohtmlbarestring = new WOHTMLBareString(_NSStringUtilities.stringFromBuffer(stringbuffer));
+				WOHTMLBareString wohtmlbarestring = new WOHTMLBareString(stringbuffer.toString());
 				stringbuffer.setLength(0);
 				nsmutablearray.addObject(wohtmlbarestring);
 			}
 		}
 		WOElement obj = null;
-		if (nsmutablearray.count() == 1) {
+		if (nsmutablearray != null && nsmutablearray.count() == 1) {
 			Object obj2 = nsmutablearray.objectAtIndex(0);
 			if (obj2 instanceof WOComponentReference) {
 				obj = new WODynamicGroup(_name, null, (WOElement) obj2);
@@ -135,7 +134,7 @@ public class WOHTMLWebObjectTag {
 			wocomponentreference = wocomponentdefinition.componentReferenceWithAssociations(nsdictionary, woelement);
 		}
 		else {
-			throw new ClassNotFoundException("Cannot find class or component named " + s + " in runtime or in a loadable bundle");
+			throw new ClassNotFoundException("Cannot find class or component named \'" + s + "\" in runtime or in a loadable bundle");
 		}
 		return wocomponentreference;
 	}

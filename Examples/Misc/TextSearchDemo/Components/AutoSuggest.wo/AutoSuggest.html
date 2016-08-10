@@ -1,0 +1,21 @@
+<webobject name = "PageWrapper">
+<h1>Auto Suggest</h1>
+<webobject name = "PrimeIndexLink">Prime Index</webobject>
+<div id="SearchWrapper">
+	<wo:form>
+		<h4>Search</h4>
+		<wo:AjaxAutoComplete class="textfield" list="$currentValues" value="$searchString"/> <wo:submit value="Search" action="$searchAction"></wo:submit>
+	</wo:form>
+	<table>
+		<tr><th>Index</th><th>Title</th><th>Rank</th></tr>
+		<wo:if condition = "$foundScoreDocsCount">
+		<wo:loop count = "$foundScoreDocsCount" index = "$foundSetIndex">
+			<tr><td><wo:str value="$foundSetIndex" /></td><td><wo:link action="$showDetailsAction"><wo:str value="$currentDocument.title//VALID" /></wo:link></td><td><wo:str value="$currentDocument.score" /></td></tr>
+		</wo:loop>
+		</wo:if>
+		<wo:if condition = "$foundScoreDocsCount" negate="$true">
+			<tr><td>-</td><td><em>No Results Found</em></td><td>-</td></tr>
+		</wo:if>
+	</table>
+</div>
+</webobject>

@@ -1,6 +1,14 @@
 # Properties file for wotaskd
 # Overrides the JavaWebObjects.framework Properties
 
+# Changes to this file will be overwritten when you update wotaskd. 
+# Consider storing customizations in: /etc/WebObjects/wotaskd/Properties   (or in the launchd file)
+
+#WOHost=localhost
+
+# Uncomment this to get some basic logging (like lifebeats from instances), probably to the file: /Library/WebObjects/Logs/wotaskd.log
+#_DeploymentDebugging=true
+
 WOAutoOpenInBrowser=false
 WODebuggingEnabled=false
 WODirectConnectEnabled=true
@@ -13,12 +21,56 @@ WOMonitorEnabled=false
 WOLifebeatDestinationPort=1085
 WOLifebeatEnabled=false
 
-# wotaskd specific defaults
+# Sets the IP address that the wotaskd process listens to for multicast requests from the HTTP adaptor.
 WOMulticastAddress=239.128.14.2
+
+# Determines whether the wotaskd process responds to multicast queries from the HTTP adaptor.
 WORespondsToMulticastQuery=false 
+
+# Determines whether the wotaskd process generates an HTTP adaptor configuration file.
 WOSavesAdaptorConfiguration=false
+
+# Used to determine the number of seconds that the wotaskd process waits without receiving any status messages 
+# from an instance before considering it dead. It species a multiplier against WOLifebeatInterval. 
+# If WOLifebeatInterval is 30, a wotaskd process waits 120 seconds from the last status message before 
+# determining that an instance is dead.
 WOAssumeApplicationIsDeadMultiplier=4
+
+# Controls whether wotaskd should start instances using a system-specific launcher;
+# this allows for starting applications in the background, as well as circumventing 
+# Windows-specific issues with launch output.
 WOShouldUseSpawn=true
+
+
+
+# If an app instance has been told to 1) "stop" or 2) "refuse new sessions" and it does not stop, 
+# then it can be forcefully terminated after some time period if WOTaskd.forceQuitTaskEnabled is true
+#WOTaskd.forceQuitTaskEnabled=false
+
+
+# If an app instance has been told to "refuse new sessions" and it does not stop, 
+# then it can be forcefully terminated after this number of retries.
+#WOTaskd.refuseNumRetries=3
+
+
+# If WOTaskd.forceQuitTaskEnabled is true, setup a task to check the instance. 
+# If it still doesn't die, then force a QUIT command when the timer elapses.
+# If the app was told to "stop" and does not stop, then it will be forcefully stopped after the killTimeout elapses.
+# If the app was told to "refuse new sessions" and does not stop, then it will be forcefully stopped after
+#    (killTimeout + (refuseNumRetries-1 * killTimeout)) elapses.
+# The value is specified in milliseconds. The minimum is 60000 (60 seconds).
+#WOTaskd.killTimeout=120000
+
+
+# The number of milliseconds before a timeout occurs for requests sent from WOTaskD to WOApplication instances. 
+#WOTaskd.receiveTimeout=5000
+
+
+# The TCP port on which the built-in SSH/SCP server will run on
+er.wotaskd.sshd.port=6022
+
+# Enable or disable the built-in SSH/SCP server
+er.wotaskd.sshd.enabled=false
 
 log4j.rootCategory=INFO, A1
 

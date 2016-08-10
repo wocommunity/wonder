@@ -10,14 +10,14 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
@@ -28,7 +28,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXRetainer;
-import er.extensions.foundation.ERXUtilities;
 
 // Note: This is a direct port of Kelly Hawks' ObjC SharedEOLoader.  Only enhanced it to use the log4j system.
 //
@@ -42,7 +41,7 @@ import er.extensions.foundation.ERXUtilities;
 // contain shared objects. What seems to be happening is EOF's shared EO loader goes like this:
 // 1) request comes in for object from model #1
 // 2) shared EOs are loaded for model #1 (none).
-// 3) object from step #1 touches are relationship to an entity in model #2.
+// 3) object from step #1 touches a relationship to an entity in model #2.
 // 4) shared EOs are loaded for model #2.
 // For some reason, this is too late. All the shared EOs for all models need to
 // be loaded at once.
@@ -56,13 +55,11 @@ import er.extensions.foundation.ERXUtilities;
 
 // CHECKME: I believe this bug has been fixed, should be removed if this is the case.
 /**
- * Java port of Kelly Hawk's shared EO loader. Works around a bug with shared eos and multiple models.<br />
- * 
+ * Java port of Kelly Hawk's shared EO loader. Works around a bug with shared eos and multiple models.
  */
 
 public class ERXSharedEOLoader {
-    /////////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public static final Logger log = Logger.getLogger("er.extensions.fixes.ERSharedEOLoader");
+    private static final Logger log = LoggerFactory.getLogger("er.extensions.fixes.ERSharedEOLoader");
 
     /** holds the key to enable patched shared eo loading */
     public static final String PatchSharedEOLoadingPropertyKey = "er.extensions.ERXSharedEOLoader.PatchSharedEOLoading";
@@ -114,6 +111,7 @@ public class ERXSharedEOLoader {
                                                          null);
     }
 
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
@@ -139,7 +137,7 @@ public class ERXSharedEOLoader {
                         EOFetchSpecification fs = entity.fetchSpecificationNamed("FetchAll"); 
                         dsec.bindObjectsWithFetchSpecification(fs, "FetchAll"); 
                     } catch (Exception e1) {
-                        log.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
+                        log.error("Exception occurred for entity named: {} in Model: {}", entity.name(), aModel.name(), e1);
                         throw new RuntimeException(e.toString());
                     }
                 } else {
@@ -147,7 +145,7 @@ public class ERXSharedEOLoader {
                         String fsn = (String)ee.nextElement();
                         EOFetchSpecification fs = entity.fetchSpecificationNamed(fsn);
                         if (fs != null) {
-                            log.debug("Loading "+entity.name()+" - "+fsn);
+                            log.debug("Loading {} - {}", entity.name(), fsn);
                             dsec.bindObjectsWithFetchSpecification(fs, fsn);
                         }
                     }                    
@@ -162,7 +160,7 @@ public class ERXSharedEOLoader {
     public void modelWasAddedNotification(NSNotification aNotification) {
         // sometimes a model gets added twice; make sure we store it once.
         if (!_modelList.containsObject(aNotification.object())) {
-            log.debug("Adding model: " + ((EOModel)aNotification.object()).name());
+            log.debug("Adding model: {}", ((EOModel)aNotification.object()).name());
             _modelList.addObject(aNotification.object());
         }
     }
@@ -204,13 +202,12 @@ public class ERXSharedEOLoader {
                 if (_transCount != 0) {
                     // only print this if we loaded something; otherwise
                     // the request for the reg. obj. count with start sharing.
-                    log.debug("Shared EO loading complete: " + _transCount + " transactions/ " +
-                              EOSharedEditingContext.defaultSharedEditingContext().registeredObjects().count() + " objects.");
+                    log.debug("Shared EO loading complete: {} transactions/ {} objects.", _transCount, EOSharedEditingContext.defaultSharedEditingContext().registeredObjects().count());
                 } else {
                     log.debug("Shared EO loading complete: no objects loaded.");
                 }
             } catch (Exception e) {
-                log.error("Exception occurred with model: " + currentModel.name() + "\n" + e + ERXUtilities.stackTrace());
+                log.error("Exception occurred with model: {}", currentModel, e);
                 // no matter what happens, un-register for notifications.
                 NSNotificationCenter.defaultCenter().removeObserver(this, EOAdaptorContext.AdaptorContextBeginTransactionNotification, null);
                 if (_didChangeDebugSetting) {
@@ -230,8 +227,7 @@ public class ERXSharedEOLoader {
         if (_currentAdaptor.isDebugEnabled() && !ERXExtensions.sharedEOAdaptorCategory.isDebugEnabled()) {
             _didChangeDebugSetting = true;
             _currentAdaptor.setDebugEnabled(false);
-            if (log.isDebugEnabled())
-                log.debug("Disabling adaptor debugging while loading shared EOs...");
+            log.debug("Disabling adaptor debugging while loading shared EOs...");
         } */
         _transCount++;
     }

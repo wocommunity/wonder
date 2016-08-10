@@ -23,6 +23,7 @@ public class DirectAction extends ERXDirectAction {
 		super(request);
 	}
 
+	@Override
 	public Session session() {
 		return (Session) super.session();
 	}

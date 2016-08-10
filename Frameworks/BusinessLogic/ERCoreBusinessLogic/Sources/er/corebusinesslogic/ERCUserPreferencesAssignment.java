@@ -11,6 +11,12 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 public class ERCUserPreferencesAssignment extends Assignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERCUserPreferencesAssignment(eokeyvalueunarchiver);
@@ -19,5 +25,6 @@ public class ERCUserPreferencesAssignment extends Assignment {
     public ERCUserPreferencesAssignment (EOKeyValueUnarchiver u) { super(u); }
     public ERCUserPreferencesAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fire(D2WContext c) { return ERCoreUserPreferences.userPreferences(); }
 }

@@ -1,3 +1,7 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERSelenium=load
+er.extensions.ERSelenium.hasLocalization=false
+
 ## Enables Selenium tests Direct Action in production mode.
 ## Always enabled in development mode.
 # SeleniumTestsEnabled = true
@@ -5,4 +9,3 @@
 ## Which class is the "SeleniumAction" class. If its a direct action, the methods get
 ## called by DA conventions as fooAction() otherwise by foo(response, context)
 # SeleniumActionsClass = er.whatever.SomeClass
-

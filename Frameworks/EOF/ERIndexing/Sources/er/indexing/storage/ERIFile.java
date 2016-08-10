@@ -2,9 +2,10 @@ package er.indexing.storage;
 
 import java.io.IOException;
 
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSData;
@@ -13,9 +14,14 @@ import com.webobjects.foundation.NSMutableRange;
 import com.webobjects.foundation.NSTimestamp;
 
 public class ERIFile extends _ERIFile {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERIFile.class);
+    private static final Logger log = LoggerFactory.getLogger(ERIFile.class);
 
     public static final ERIFileClazz clazz = new ERIFileClazz();
     
@@ -167,19 +173,20 @@ public class ERIFile extends _ERIFile {
     @Override
     public void didInsert() {
         super.didInsert();
-        log.debug("Did create: " + name());
+        log.debug("Did create: {}", name());
     }
     @Override
     public void didUpdate() {
         super.didUpdate();
-        log.debug("Did update: " + name() + "->" + length());
+        log.debug("Did update: {}->{}", name(), length());
     }
     @Override
     public void didDelete(EOEditingContext ec) {
         super.didUpdate();
-        log.debug("Did delete: " + name() + "->" + length());
+        log.debug("Did delete: {}->{}", name(), length());
     }
     
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         ERIFileContent content = ERIFileContent.clazz.createAndInsertObject(ec);

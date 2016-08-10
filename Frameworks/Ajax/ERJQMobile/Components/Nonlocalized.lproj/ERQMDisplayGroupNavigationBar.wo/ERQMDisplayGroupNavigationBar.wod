@@ -1,0 +1,32 @@
+FirstBatch : ERQMButton {
+	action = displayFirstBatch;
+	string = "Zurück";
+	data-icon = "angle-double-left";
+	data-iconpos = "notext";
+	data-role = "button";
+	data-mini = true;
+	data-inline = true;
+	class = "ui-nosvg";
+}
+
+PrevBatch : ERQMButton {
+	action = displayGroup.displayPreviousBatch;
+	string = "Zurück";
+	data-icon = "angle-left";
+	data-iconpos = "notext";
+	data-role = "button";
+	data-mini = true;
+	data-inline = true;
+	class = "ui-nosvg";
+}
+
+NextBatch : ERQMButton {
+	action = displayGroup.displayNextBatch;
+	string = "Weiter";
+	data-icon = "angle-right";
+	data-iconpos = "notext";
+	data-mini = true;
+	data-role = "button";
+	data-inline = true;
+	class = "ui-nosvg";
+}

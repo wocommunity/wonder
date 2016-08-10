@@ -6,10 +6,8 @@ import er.directtoweb.components.repetitions.ERDListPageRepetition;
 
 /**
  * Table based list repetition. I've not looked at this very closely. I currently use
- * {@link ERMSimpleListPageRepetition} this is included for backwards compatibility.
+ * {@link er.modern.directtoweb.components.repetitions.ERMDSimpleListPageRepetition} this is included for backwards compatibility.
  *
- * @project ERModernDirectToWeb
- * 
  * @binding displayGroup
  * @binding d2wContext
  * 

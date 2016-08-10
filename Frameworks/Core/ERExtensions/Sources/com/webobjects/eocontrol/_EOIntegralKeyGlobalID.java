@@ -34,26 +34,31 @@ public class _EOIntegralKeyGlobalID extends EOKeyGlobalID {
 		this(entityName, (Number) values[0]);
 	}
 
+	@Override
 	public Object clone() {
 		_EOIntegralKeyGlobalID result = new _EOIntegralKeyGlobalID(_literalEntityName(), keyValue);
 		_prepClone(result);
 		return result;
 	}
 
+	@Override
 	public Object[] keyValues() {
 		return (new Object[] { keyValue });
 	}
 
+	@Override
 	public Object[] _keyValuesNoCopy() {
 		return keyValues();
 	}
 
+	@Override
 	public int keyCount() {
 		return 1;
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer(_NSUtilities.shortClassName(this));
+		StringBuilder result = new StringBuilder(_NSUtilities.shortClassName(this));
 		result.append('[');
 		result.append(entityName());
 		result.append(" (");
@@ -64,6 +69,7 @@ public class _EOIntegralKeyGlobalID extends EOKeyGlobalID {
 		return result.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;

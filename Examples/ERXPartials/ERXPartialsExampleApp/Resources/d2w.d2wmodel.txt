@@ -1,0 +1,9 @@
+(
+    40 : *true* => isEntityEditable = true [com.webobjects.directtoweb.BooleanAssignment],
+    40 : *true* => isEntityDeletable = true [com.webobjects.directtoweb.BooleanAssignment],
+    50 : *true* => look = ERModernLook [com.webobjects.directtoweb.Assignment],
+    100 : pageConfiguration = 'ListPerson' => displayPropertyKeys = (firstName,lastName,username,password,"employeeType.name",salary,"department.name"
+) [com.webobjects.directtoweb.Assignment],
+    155 : (pageConfiguration = 'ListPerson' and propertyKey = 'department.name') => displayNameForProperty = Department [com.webobjects.directtoweb.Assignment],
+    155 : (pageConfiguration = 'ListPerson' and propertyKey = 'employeeType.name') => displayNameForProperty = Employee Type [com.webobjects.directtoweb.Assignment]
+)

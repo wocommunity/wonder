@@ -1,0 +1,23 @@
+{
+    attributes = (
+        {columnName = info; name = info; prototypeName = varchar50; width = 64; }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (info, pk); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    classProperties = (info, results); 
+    externalName = environments; 
+    fetchSpecificationDictionary = {}; 
+    name = Environment; 
+    primaryKeyAttributes = (pk); 
+    relationships = (
+        {
+            destination = EnvJoin; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = envPk; sourceAttribute = pk; }); 
+            name = envJoins; 
+        }, 
+        {definition = "envJoins.result"; name = results; }
+    ); 
+}

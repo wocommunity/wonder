@@ -1,5 +1,6 @@
 package er.rest.routes.jsr311;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,6 +15,7 @@ import er.rest.routes.ERXRoute;
  * 
  * @author mschrag
  */
+@Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @HttpMethod(value=ERXRoute.Method.Put)

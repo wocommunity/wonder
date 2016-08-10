@@ -7,7 +7,13 @@ import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 
 /**
+ * <span class="en">
  * Performs the initial database table creation.
+ * </span>
+ * 
+ * <span class="ja">
+ * データベース・テーブル作成の実行
+ * </span>
  * 
  * @property er.extensions.ERXModelGroup.ERAttachment.size.columnName
  *

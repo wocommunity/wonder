@@ -1,0 +1,48 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = departmentID; 
+            name = departmentID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = employeeNumber; 
+            name = employeeNumber; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = employeeTypeID; 
+            name = employeeTypeID; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = Y; columnName = salary; name = salary; prototypeName = amount; }
+    ); 
+    attributesUsedForLocking = (departmentID, employeeNumber, employeeTypeID, id, salary); 
+    className = "er.example.erxpartials.model.Partial_EmployeePerson"; 
+    classProperties = (department, employeeNumber, employeeType, salary); 
+    externalName = Person; 
+    fetchSpecificationDictionary = {}; 
+    name = "Partial_EmployeePerson"; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Department; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = departmentID; }); 
+            name = department; 
+        }, 
+        {
+            destination = EmployeeType; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = employeeTypeID; }); 
+            name = employeeType; 
+        }
+    ); 
+    userInfo = {"_EntityModeler" = {partialEntity = Person; }; }; 
+}

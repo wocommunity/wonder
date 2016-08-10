@@ -1,0 +1,46 @@
+BusyClass : WOString {
+	value = ^busyClass;
+}
+
+CustomStyleConditional : WOConditional {
+  condition = customStyle;
+}
+
+DefaultStyleConditional : WOConditional {
+  condition = customStyle;
+  negate = true;
+}
+
+CustomBusyDiv : WOGenericContainer {
+  elementName = "div";
+  id = divID;
+  class = ^class;
+  style = style;
+}
+
+BusyDiv : WOGenericContainer {
+	elementName = "div";
+	id = divID;
+	style = "display: none; position: fixed; top: 50%; left: 50%; z-index: 9999";
+}
+
+DivID : WOString {
+	value = divID;
+}
+
+WatchContainerID : WOString {
+  value = ^watchContainerID;
+}
+
+OnCreate : WOString {
+  value = onCreate;
+}
+
+OnComplete : WOString {
+  value = onComplete;
+}
+
+SpinOpts : WOString {
+  value = spinOpts;
+  escapeHTML = false;
+}

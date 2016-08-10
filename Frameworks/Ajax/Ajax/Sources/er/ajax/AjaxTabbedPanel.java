@@ -7,10 +7,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicGroup;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -53,7 +51,7 @@ import com.webobjects.foundation.NSMutableArray;
  * <td>ajaxTabbedPanelPane-unselected</td>
  * <td>The LI representing the unselected panel(s).</td>
  * </tr>
- * </table
+ * </table>
  *
  * @binding id required, String the id of the UL that wraps the tabs
  * @binding busyDiv optional, String the id of a div that should be shown when a
@@ -107,7 +105,8 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 
             	// The tabs need to have an id attribute so we assign one if needed
                 if (childTab.id() == null) {
-                    childTab.setId(new WOConstantValueAssociation(id.valueInComponent(null) + "_pane_" + tabs.count()));
+                	childTab.setParentId(id);
+                	childTab.setTabNumber(new WOConstantValueAssociation("_pane_" + tabs.count()));
                 }
 
                 tabs.addObject(childTab);
@@ -122,6 +121,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     /**
      * Creates the tabs and pane control.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
         String idString = (String) id.valueInComponent(component);
@@ -146,12 +146,12 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         String paneControlID = idString + "_panecontrol";
 
         for (int i = 0; i < tabs.count(); i++) {
-            String index = new Integer(i).toString();
+            String index = Integer.toString(i);
             String tabID = idString + "_tab_" + index;
             AjaxTabbedPanelTab tab = (AjaxTabbedPanelTab)tabs.objectAtIndex(i);
             if (tab.isVisble(component)) {
 	            boolean isSelectedTab = tab.isSelected(context.component());
-	            String panelTabID = (String) tab.id().valueInComponent(component);
+	            String panelTabID = tab.tabIdInComponent(component);
 	            String panelID = panelTabID + "_panel";
 	            response.appendContentString("  <li class=\"ajaxTabbedPanelTab-");
 	            response.appendContentString(isSelectedTab ? "selected" : "unselected");
@@ -224,6 +224,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     }
 
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 		// Wonder is not needed by this component, but it is often used when Ajax components are used
@@ -234,6 +235,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	}
 
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

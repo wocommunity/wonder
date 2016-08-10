@@ -1,0 +1,18 @@
+<wo:ERQMHtmlTemplate data-title = "NavBar">
+  <wo:ERQMHeaderBarSimple string = "Nav Bar" isFixed = "true" data-theme = "a" hasBackButton = "true" rightButton-icon = "home" rightButton-theme = "a" rightButton-title = "Home" rightButton-linkResource = "da://default" />
+  <wo:ERQMNavBar>
+    <wo:ERQMNavBarElement linkResource = "da://default" string = "Main" />
+    <wo:ERQMNavBarElement linkResource = "page://Grid" string = "Grid" />
+    <wo:ERQMNavBarElement linkResource = "page://NavBar" string = "NavBar" selected = "true" />
+  </wo:ERQMNavBar>
+  <wo:ERQMContent>
+    <h1>NAVBAR</h1>
+  </wo:ERQMContent>
+  <wo:ERQMFooterBar isNavBar = "true">
+    <wo:ERQMNavBar>
+      <wo:ERQMNavBarElement linkResource = "da://default" string = "Main" data-icon = "home" />
+      <wo:ERQMNavBarElement linkResource = "page://Grid" string = "Grid" data-icon = "grid" />
+      <wo:ERQMNavBarElement linkResource = "page://NavBar" string = "NavBar" data-icon = "star" />
+    </wo:ERQMNavBar>
+  </wo:ERQMFooterBar>
+</wo:ERQMHtmlTemplate>

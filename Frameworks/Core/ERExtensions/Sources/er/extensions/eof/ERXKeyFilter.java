@@ -10,30 +10,34 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
 /**
- * <p>
  * ERXKeyFilter provides a way to specify hierarchical rules for 
  * including and excluding ERXKeys. This is useful if you need
  * to perform operations on a set of EO's and optional relationships
  * and attributes within those EO's. As an example, ERXRest uses
  * ERXKeyFilter to programmatically specify which attributes and
  * relationships will be rendered for a particular root EO.
- * </p>
- * 
  * <p>
  * ERXKeyFilter is a hierarchical mapping between ERXKeys (single key, 
  * not keypaths), whether an include or exclude
  * rule should be applied for that key, and if it's an include, the 
  * next set of filter rules to apply to the destination object.
- * </p>
- * 
- * <pre>
+ * <pre><code>
  * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
  * ERXKeyFilter remindersFilter = companyFilter.include(Company.REMINDERS);
  * remindersFilter.include(Reminder.SUMMARY);
  * ERXKeyFilter reminderAuthorFilter = remindersFilter.include(Reminder.AUTHOR);
  * reminderAuthorFilter.includeAll();
  * reminderAuthorFilter.exclude(Author.HUGE_RELATIONSHIP);
- * </pre>
+ * </code></pre>
+ * For keys representing to-many relationships you can set a distinct flag
+ * if you want to filter that relationship to return only distinct objects.
+ * For this you can either pass in a key with the unique operator of
+ * ERXArrayUtilities or explicitly set the flag:
+ * <pre><code>
+ * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
+ * companyFilter.include(ERXKey.unique(Company.EMPLOYEES));
+ * companyFilter.include(Company.CLIENTS).setDistinct(true);
+ * </code></pre>
  * 
  * more method comments to come ...
  * 
@@ -61,6 +65,7 @@ public class ERXKeyFilter {
 	private boolean _deduplicationEnabled;
 	private boolean _anonymousUpdateEnabled;
 	private boolean _unknownKeyIgnored;
+	private boolean _distinct;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -120,6 +125,16 @@ public class ERXKeyFilter {
 	}
 	
 	/**
+	 * Adds a key mapping to this filter.
+	 * 
+	 * @param fromKey the key to map from
+	 * @param toKey the key to map to
+	*/
+	public void addMap(String fromKey, String toKey) {
+		addMap(new ERXKey(toKey), new ERXKey(fromKey));
+	}
+	
+	/**
 	 * Returns the key that is mapped to from the given input key.
 	 * 
 	 * @param <T> the type of the key (which doesn't change)
@@ -133,6 +148,20 @@ public class ERXKeyFilter {
 		}
 		return toKey;
 	}
+	
+	/**
+	 * Returns the key that is mapped to from the given input key.
+	 * 
+	 * @param fromKey the key to map from
+	 * @return the key that maps to the given key
+	 */
+	public String keyMap(String fromKey) {
+		ERXKey toKey = keyMap(new ERXKey(fromKey));
+		if (toKey == null) {
+			return fromKey;
+		}
+		return toKey.key();
+	}	
 	
 	/**
 	 * Shortcut to return a new ERXKeyFilter(None)
@@ -162,6 +191,19 @@ public class ERXKeyFilter {
 		}
 		return keyFilter;
 	}
+	
+	/**
+	 * Shortcut to return a new ERXKeyFilter()
+	 * @param keys the keys to include
+	 * @return a new ERXKeyFilter(None) with the included keys
+	 */
+	public static ERXKeyFilter filterWithKeys(String... keys) {
+		ERXKeyFilter keyFilter =  new ERXKeyFilter(ERXKeyFilter.Base.None);
+		for (String key : keys) {
+			keyFilter.include(new ERXKey(key));
+		}
+		return keyFilter;
+	}	
 	
 	/**
 	 * Shortcut to return a new ERXKeyFilter(AttributesAndToOneRelationships)
@@ -323,6 +365,19 @@ public class ERXKeyFilter {
 	}
 
 	/**
+	 * Returns the filter for the given key, or creates a "nextBase" filter
+	 * if there isn't one.  This should usually only be called when you 
+	 * know exactly what you're doing, as this doesn't fully interpret 
+	 * include/exclude rules.
+	 * 
+	 * @param key the key to lookup
+	 * @return the key filter
+	 */
+	public ERXKeyFilter _filterForKey(String key) {
+		return _filterForKey(new ERXKey(key));
+	}	
+
+	/**
 	 * Returns the included keys and the next filters they map to.
 	 * 
 	 * @return the included keys and the next filters they map to
@@ -391,6 +446,16 @@ public class ERXKeyFilter {
 	public boolean includes(ERXKey key) {
 		return _includes.containsKey(key);
 	}
+	
+	/**
+	 * Returns whether or not the given key is included in this filter.
+	 * 
+	 * @param key the key to lookup
+	 * @return whether or not the given key is included in this filter
+	 */
+	public boolean includes(String key) {
+		return _includes.containsKey(new ERXKey(key));
+	}	
 
 	/**
 	 * Includes the given key in this filter.
@@ -401,6 +466,16 @@ public class ERXKeyFilter {
 	public ERXKeyFilter include(ERXKey key) {
 		return include(key, null);
 	}
+	
+	/**
+	 * Includes the given key in this filter.
+	 * 
+	 * @param key the key to include
+	 * @return the next filter
+	 */
+	public ERXKeyFilter include(String key) {
+		return include(new ERXKey(key));
+	}	
 
 	/**
 	 * Includes the given key in this filter.
@@ -413,6 +488,13 @@ public class ERXKeyFilter {
 		ERXKeyFilter filter;
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
+		boolean useUnique = false;
+		if (dotIndex != -1 && keyPath.startsWith("@unique.")) {
+			keyPath = keyPath.substring(dotIndex + 1);
+			dotIndex = keyPath.indexOf('.');
+			useUnique = true;
+			key = new ERXKey(keyPath);
+		}
 		if (dotIndex == -1) {
 			if (existingFilter != null) {
 				_includes.put(key, existingFilter);
@@ -427,9 +509,11 @@ public class ERXKeyFilter {
 					_excludes.removeObject(key);
 				}
 			}
+			filter.setDistinct(useUnique);
 		}
 		else {
 			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)), null);
+			subFilter.setDistinct(useUnique);
 			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)), existingFilter);
 		}
 		return filter;
@@ -446,6 +530,16 @@ public class ERXKeyFilter {
 	}
 
 	/**
+	 * Returns whether or not the given key is excluded.
+	 * 
+	 * @param key the key to lookup
+	 * @return whether or not the given key is excluded
+	 */
+	public boolean excludes(String key) {
+		return excludes(new ERXKey(key));
+	}
+
+	/**
 	 * Returns whether or not the given relationship is locked (i.e. value's attributes can be updated but not the relationship cannot be changed). 
 	 * 
 	 * @param key the key to lookup
@@ -454,6 +548,16 @@ public class ERXKeyFilter {
 	public boolean lockedRelationship(ERXKey key) {
 		return _lockedRelationships.contains(key);
 	}
+	
+	/**
+	 * Returns whether or not the given relationship is locked (i.e. value's attributes can be updated but not the relationship cannot be changed). 
+	 * 
+	 * @param key the key to lookup
+	 * @return whether or not the given relationship is locked
+	 */
+	public boolean lockedRelationship(String key) {
+		return lockedRelationship(new ERXKey(key));
+	}	
 
 	/**
 	 * Locks the given relationship on this filter.
@@ -474,6 +578,25 @@ public class ERXKeyFilter {
 			}
 		}
 	}
+	
+	/**
+	 * Locks the given relationship on this filter.
+	 * 
+	 * @param keys the relationships to lock
+	 */
+	public void lockRelationship(String... keys) {
+		for (String keyPath : keys) {
+			int dotIndex = keyPath.indexOf('.');
+			if (dotIndex == -1) {
+				_lockedRelationships.addObject(new ERXKey(keyPath));
+				//_includes.removeObjectForKey(key);
+			}
+			else {
+				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
+				subFilter.lockRelationship(new ERXKey(keyPath.substring(dotIndex + 1)));
+			}
+		}
+	}	
 
 	/**
 	 * Excludes the given keys from this filter.
@@ -494,6 +617,26 @@ public class ERXKeyFilter {
 			}
 		}
 	}
+	
+	/**
+	 * Excludes the given keys from this filter.
+	 * 
+	 * @param keys the keys to exclude
+	 */
+	public void exclude(String... keys) {
+		for (String keyPath : keys) {
+			int dotIndex = keyPath.indexOf('.');
+			if (dotIndex == -1) {
+				ERXKey key = new ERXKey(keyPath);
+				_excludes.addObject(key);
+				_includes.remove(key);
+			}
+			else {
+				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
+				subFilter.exclude(new ERXKey(keyPath.substring(dotIndex + 1)));
+			}
+		}
+	}	
 
 	/**
 	 * Restricts this filter to only allow the given keys.
@@ -508,6 +651,20 @@ public class ERXKeyFilter {
 			include(key);
 		}
 	}
+	
+	/**
+	 * Restricts this filter to only allow the given keys.
+	 * 
+	 * @param keys the keys to restrict to
+	 */
+	public void only(String... keys) {
+		_base = ERXKeyFilter.Base.None;
+		_includes.clear();
+		_excludes.clear();
+		for (String key : keys) {
+			include(key);
+		}
+	}	
 
 	/**
 	 * Restricts this filter to only allow the given key.
@@ -521,6 +678,19 @@ public class ERXKeyFilter {
 		_excludes.clear();
 		return include(key);
 	}
+	
+	/**
+	 * Restricts this filter to only allow the given key.
+	 *   
+	 * @param key the only key to allow
+	 * @return the next filter
+	 */
+	public ERXKeyFilter only(String key) {
+		_base = ERXKeyFilter.Base.None;
+		_includes.clear();
+		_excludes.clear();
+		return include(key);
+	}	
 
     /**
      * Sets the sort orderings that will be applied by this key filter. The actual meaning of this
@@ -560,6 +730,27 @@ public class ERXKeyFilter {
 	public boolean isUnknownKeyIgnored() {
 		return _unknownKeyIgnored;
 	}
+    
+    /**
+	 * Sets whether or not a to-many relationship should return only distinct objects.
+	 * 
+	 * @param distinct if <code>true</code> and the key represents a to-many only distinct objects
+	 * 		  will be returned
+	 * @return this filter
+	 */
+	public ERXKeyFilter setDistinct(boolean distinct) {
+		_distinct = distinct;
+		return this;
+	}
+	
+	/**
+	 * Returns whether or not a to-many relationship should return only distinct objects.
+	 * 
+	 * @return whether or not a to-many relationship should return only distinct objects.
+	 */
+	public boolean isDistinct() {
+		return _distinct;
+	}
 
 	/**
 	 * Returns whether or not the given key (of the given type, if known) is included in this filter.
@@ -595,10 +786,24 @@ public class ERXKeyFilter {
 		return matches;
 	}
 	
+	/**
+	 * Returns whether or not the given key (of the given type, if known) is included in this filter.
+	 * 
+	 * @param key the key to lookup 
+	 * @param type the type of the key (if known)
+	 * @return whether or not this filter matches the key
+	 */
+	public boolean matches(String key, ERXKey.Type type) {
+		return matches(new ERXKey(key), type);
+	}	
+	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("[ERXKeyFilter: base=" + _base);
+		if (_distinct) {
+			sb.append("; distinct");
+		}
 		if (!_includes.isEmpty()) {
 			sb.append("; includes=" + _includes + "");
 		}
@@ -608,7 +813,7 @@ public class ERXKeyFilter {
 		if (!_lockedRelationships.isEmpty()) {
 			sb.append("; excludesRelationships=" + _lockedRelationships);
 		}
-		sb.append("]");
+		sb.append(']');
 		return sb.toString();
 	}
 	

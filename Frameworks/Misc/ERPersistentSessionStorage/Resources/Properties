@@ -1,0 +1,24 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERPersistentSessionStorage=load
+er.extensions.ERPersistentSessionStorage.hasLocalization=false
+
+#The number of seconds for which a session may be idle before it times out.
+#The default is 3600 seconds (one hour). A value of 0 means sessions never
+#time out.
+#WOSessionTimeOut=0
+
+#The WOSessionStore removes session automatically at a specific interval.
+#The problem is it does not check to see if the session is distributed.
+#In order to prevent one instance from removing a session which another 
+#instance might be using, we turn it off by making the interval the max
+#integer value possible. This should be sufficient to prevent premature
+#session deletion unless you plan on having an app uptimes > 24 days.
+_WOSessionReclaimingInterval=2147483
+
+#ERXResponseRewriter uses weak references to pages in order to store
+#the information about the resources sent to a page. That does not work
+#for persistent sessions, because the weak references are garbage collected
+#after the session is serialized. This property should make no difference
+#when using in-memory sessions, but is necessary for persistent sessions,
+#especially if you plan on using Ajax.
+er.extensions.appserver.ajax.ERXAjaxSession.storesPageInfo=true

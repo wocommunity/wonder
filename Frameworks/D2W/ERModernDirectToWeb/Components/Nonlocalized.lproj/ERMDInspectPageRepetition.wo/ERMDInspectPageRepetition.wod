@@ -2,6 +2,7 @@ AttributeRepetitionDiv : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForAttributeRepetitionWrapper;
 }
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = propertyKey;
@@ -9,15 +10,23 @@ AttributeRepetition: WORepetition {
 	index = index;
 }
 
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
+
 AttributeValue: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	localContext = d2wContext;
 	object = object;
 }
 
-LineDiv : WOGenericContainer {
-	elementName = "div";
+LineDiv : WOSwitchComponent {
+	WOComponentName = lineDivComponentName;
+	id = lineDivId;
 	class = lineDivClass;
+	elementName = "div";
 }
 
 EmptyLabelSpan : WOGenericContainer {
@@ -29,6 +38,7 @@ LabelWrapper : WOGenericContainer {
 	elementName = "span";
 	class = d2wContext.classForLabelSpan;
 }
+
 AttributeWrapper : WOGenericContainer {
 	elementName = "span";
 	class = d2wContext.classForAttributeValue;
@@ -54,6 +64,20 @@ PropertyName: WOSwitchComponent {
 
 SafeWrapper : D2WEmptyWrapper {
 	
+}
+
+shouldObserve : WOConditional {
+	condition = shouldObserve;
+}
+
+shouldNotObserve : WOConditional {
+	condition = shouldObserve;
+	negate = true;
+}
+
+AjaxObserveField: AjaxObserveField {
+	action = postChangeNotification;
+	updateContainerID = d2wContext.ajaxNotificationCenterID;
 }
 
 Section: WOSwitchComponent {

@@ -28,13 +28,19 @@ import er.extensions.foundation.ERXStringUtilities;
  *
  * Component originally named: HWOSubmitLink
  * 
- * @author Greg Bartnick <gbartnick@hosts.com>
+ * @author Greg Bartnick &lt;gbartnick@hosts.com&gt;
  * @version 1.0; April 04, 2005
  * 
  * Modified:
  * @author davidleber
  */
 public class CCSubmitLink extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String _fieldName;
 	private boolean _isInForm;
@@ -45,22 +51,19 @@ public class CCSubmitLink extends ERXNonSynchronizingComponent {
         super(context);
     }
     
-	@SuppressWarnings("deprecation")
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		String formValue = (String) request.formValueForKey(fieldName());
 		if (fieldName().equals(formValue)) {
 			// Tell context that an action was performed. If this is
 			// not done, the form's default action will be called also.
 			// *note* Uses undocumented method of WOContext.
-			//
-			// deprecated call required to maintain WO5.3 compatibility.
-			// change to context.setActionInvoked(true) once move to
-			// WO5.4+ is complete -davidleber
-			context._setActionInvoked(true);
+			context.setActionInvoked(true);
 		}
 		return super.invokeAction(request, context);
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		// Check if the link is in a form so we know if we need to
 		// use the link and a hidden field to submit the form.

@@ -8,7 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -31,8 +32,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class ERIndexing extends ERXFrameworkPrincipal {
-	
-	private final Logger log = Logger.getLogger(ERIndexing.class);
+	private static final Logger log = LoggerFactory.getLogger(ERIndexing.class);
 
 	// Master dictionary of indices
 	NSMutableDictionary indices = ERXMutableDictionary.synchronizedDictionary();
@@ -86,7 +86,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 	                
 	                // Create the lucene index with name and dictionary definition
 	                addIndex(name, dict);
-	                log.info("Added index: " + name);
+	                log.info("Added index: {}", name);
 	            }
 			}
 		}
@@ -94,7 +94,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 
 	public void fileDidChange(NSNotification n) throws MalformedURLException {
 		File file = (File) n.object();
-		loadModel(file.toURL());
+		loadModel(file.toURI().toURL());
 	}
 
 	private void loadModel(URL url) {
@@ -126,7 +126,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 		// If index store not defined, default to index named the dsame as the indexModel file in the indexRoot directory
 		if(!dict.containsKey("store")) {
 			try {
-				dict.setObjectForKey(new File(indexRoot(), key).toURL().toString(), "store");
+				dict.setObjectForKey(new File(indexRoot(), key).toURI().toURL().toString(), "store");
 			} catch (MalformedURLException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMDialogLink" wocomponentcontent="false">    <binding defaults="Actions" name="action"/>
+    <binding name="string"/>
+    <binding name="inline"/>
+    <binding name="transition"/>
+    <binding name="linkResource"/>
+    <binding name="icon"/>
+    <binding name="theme"/>
+    <binding defaults="Boolean" name="isButton"/>
+    <binding name="iconpos"/>
+        <binding defaults="Boolean" name="mini"/>
+    </wo>
+</wodefinitions>

@@ -97,7 +97,7 @@ if you wish</p>
 <p>Here is an example of business logic that creates a report task ready for execution in a background thread:</p>
 <code class = "block">
 	/**
-	 * @return a {@link Callable} task that creates and returns a StudioRevenueReport PDF file
+	 * @return a {@link java.util.concurrent.Callable} task that creates and returns a StudioRevenueReport PDF file
 	 */
 	public static Callable&lt;File&gt; createStudioRevenueReportTask() {
 		// SortOrderings

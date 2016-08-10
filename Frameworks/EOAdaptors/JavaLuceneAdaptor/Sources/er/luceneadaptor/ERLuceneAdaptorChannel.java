@@ -6,7 +6,6 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
@@ -23,7 +22,6 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.MultiPhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
@@ -82,8 +80,6 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
 public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 
 	private static final String EXTERNAL_NAME_KEY = "_e";
-	
-	static Logger log = Logger.getLogger(ERLuceneAdaptorChannel.class);
 
 	private static class LuceneQualifierTraversal extends ERXQualifierTraversal {
 
@@ -374,13 +370,20 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			}
 		}
 
-		public Field valueToField(Document doc,Object value) {
+		public Field valueToField(Document doc, Object value) {
 			String stringValue = asLuceneValue(value);
 			Field field = doc.getField(columnName());
-			if(field == null) {
-				field = new Field(columnName(), stringValue, store(), index(), termVector());
+			if (value != null) {
+				if (field == null) {
+					field = new Field(columnName(), stringValue, store(), index(), termVector());
+				}
+				field.setValue(stringValue);
+			} else {
+				field = null;
 			}
-			field.setValue(stringValue);
+			if (field != null) {
+				field.setValue(stringValue);
+			}
 			return field;
 		}
 
@@ -426,11 +429,6 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			_searcher = new IndexSearcher(adaptorContext().adaptor().indexReader());
 		}
 		return _searcher;
-	}
-
-	@Deprecated
-	public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
-		return adaptorContext()._newPrimaryKey(null, entity);
 	}
 
 	@Override

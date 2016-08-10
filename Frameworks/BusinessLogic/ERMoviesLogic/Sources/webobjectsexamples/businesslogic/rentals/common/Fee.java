@@ -1,7 +1,7 @@
 /*
- * Fee.java [JavaBusinessLogic Project] © Copyright 2005 Apple Computer, Inc. All rights reserved. IMPORTANT: This Apple software is supplied to you by Apple Computer, Inc. (“Apple”) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution
+ * Fee.java [JavaBusinessLogic Project] ¬© Copyright 2005 Apple Computer, Inc. All rights reserved. IMPORTANT: This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution
  * of this Apple software constitutes acceptance of these terms. If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software. In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal,
- * non-exclusive license, under Apple’s copyrights in this original Apple software (the “Apple Software”), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety
+ * non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety
  * and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software. Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software
  * without specific prior written permission from Apple. Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which
  * the Apple Software may be incorporated. The Apple Software is provided by Apple on an "AS IS" basis. APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE
@@ -14,24 +14,16 @@ package webobjectsexamples.businesslogic.rentals.common;
 import java.math.BigDecimal;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
-public class Fee extends EOGenericRecord {
-	private static final long	serialVersionUID	= -6593943328561415279L;
+public class Fee extends _Fee {
+	
+    private static final long serialVersionUID = 1L;
 
-	public static final String	AmountKey			= "amount";
-
-	public static final String	DatePaidKey			= "datePaid";
-
-	public static final String	FeeTypeKey			= "feeType";
-
-	public static final String	RentalKey			= "rental";
-
-	private static final String	_CostKeyPath		= "rental.unit.video.rentalTerms.cost";
-
-	public static final int		LateFeeAmountPerDay	= 3;
+    private static final String _CostKeyPath        = "rental.unit.video.rentalTerms.cost";
+    
+    public static final int		LateFeeAmountPerDay	= 3;
 
 	public Fee() {
 		super();
@@ -48,8 +40,8 @@ public class Fee extends EOGenericRecord {
 	}
 
 	@Override
-	public void awakeFromInsertion(EOEditingContext editingContext) {
-		super.awakeFromInsertion(editingContext);
+	public void init(EOEditingContext editingContext) {
+		super.init(editingContext);
 		if (amount() == null) {
 			setAmount((BigDecimal) (valueForKeyPath(_CostKeyPath)));
 		}
@@ -66,36 +58,8 @@ public class Fee extends EOGenericRecord {
 		super.validateForDelete();
 	}
 
-	public BigDecimal amount() {
-		return (BigDecimal) (storedValueForKey(AmountKey));
-	}
-
-	public void setAmount(BigDecimal value) {
-		takeStoredValueForKey(value, AmountKey);
-	}
-
-	public NSTimestamp datePaid() {
-		return (NSTimestamp) (storedValueForKey(DatePaidKey));
-	}
-
-	public void setDatePaid(NSTimestamp value) {
-		takeStoredValueForKey(value, DatePaidKey);
-	}
-
-	public FeeType feeType() {
-		return (FeeType) (storedValueForKey(FeeTypeKey));
-	}
-
-	public void setFeeType(FeeType value) {
-		takeStoredValueForKey(value, FeeTypeKey);
-	}
-
-	public Rental rental() {
-		return (Rental) (storedValueForKey(RentalKey));
-	}
-
 	public void setRental(Rental value) {
-		takeStoredValueForKey(value, RentalKey);
+	    super.setRental(value);
 		if (amount() == null) {
 			setAmount((BigDecimal) (valueForKeyPath(_CostKeyPath)));
 		}

@@ -154,3 +154,98 @@ FEEDBACK
 - - - - -
 
 Don't hesitate to send {postcards, feedback, love letters} to Camille Troillard <tuscland@mac.com>
+
+
+============ JAPANESE PART ============
+
+設定定義
+- - - - - - 
+
+##　すべてのメールを er.javamail.adminEmail ユーザに送信します。(デバッグ中に便利)
+@property er.javamail.centralize = true
+
+##　必須項目："centralize" メールの送り先メール・アドレス
+@property er.javamail.adminEmail = user@domain.com
+
+## メール・デバッグ情報を表示するかどうか。プロトコル・レベル情報を含む
+## SMTP 設定時に問題がある場合、これを true するといいのです。
+@property er.javamail.debugEnabled = false
+
+## SMTP 送信ホスト
+## セットされててない場合には WOHost へ送信が行われる
+@property er.javamail.smtpHost = smtp.domain.com
+
+## SMTP 送信ポート
+## セットされていない場合には 25 が使用されます。
+@property # er.javamail.smtpPort = 25
+
+## SMTP 送信に認証が必要かどうかをセットします。
+## true の場合には下記のユーザとパスワード情報もセットする必要があります。
+@property er.javamail.smtpAuth = true
+
+## SMTP サーバへの認証ログインのユーザ名
+@property er.javamail.smtpUser = smtpusername
+
+## SMTP サーバへの認証ログインのパスワード
+@property er.javamail.smtpPassword = smtppassword
+
+## 送信キューが保持できるメッセージ・サイズ
+## セットされていない場合には 50 が使用されます。
+@property er.javamail.senderQueue.size = 50
+
+## すべての送信メッセージに追加する X-Mailer header
+## デフォルトは無し
+@property # er.javamail.mailer.XMailerHeader = 
+
+## メッセージ・コンテントに使用するデフォルト・エンコーディング
+@property er.javamail.defaultEncoding = UTF-8
+
+## 送信キューが一杯時に待つミリ秒。デフォルトは 6000
+@property er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
+
+## 検証に使用する ERJavaMailメール・パタン。 null の場合には内部のパタンが使用される
+@property # er.javamail.emailPattern = ^.*?@.*$
+
+## ホワイト＆ブラック・リスト・メールアドレス・パタン
+## 例えば、テスト中で@mycompany.com にしかメールを送信したい場合
+## コンマ区切りされているメールアドレス・パタンのホワイト・リスト
+## セットされている場合にはホワイト・リストに含まれるメールしか送信されません。
+## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
+## この場合には次の様に追加します：
+@property # er.javamail.WhiteListEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
+
+## 送信したくないアドレスがある場合にはブラック・リストを使用できます。
+## コンマ区切りされているメールアドレス・パタンのブラック・リスト
+## セットされているアドレスへはメール送信されません。
+## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
+## ブラック・リスト・パタンは最後に処理されるので、ホワイト・リストよりも優先です。
+@property # er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+
+## SMTP 又は SMTPS を使用するかどうか
+## 基本的にはここで指定する必要がありません。 
+@property # er.javamail.smtpProtocol
+@property # mail.smtps.socketFactory.fallback
+
+コード・サンプル
+- - - - - - 
+
+// ERMailDelivery クラスのインスタンス化
+ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
+
+// ERMailDeliveryHTML はレンダリングのために WOComponent を使用します
+mail.setComponent(mailPage);
+
+// メッセージの新インスタンスを作成します。
+// メッセージのアトリビュートをセットする前に newMail() を忘れず
+try {
+	mail.newMail();
+	mail.setFromAddress(emailFrom);
+	mail.setReplyToAddress(emailReplyTo);
+	mail.setSubject(emailSubject);
+	mail.setToAddresses(new NSArray (toEmailAddresses));
+	// Send the mail.  There is an optional sendMail(boolean) that optionally blocks during the send.
+	mail.sendMail();
+} catch (Exception e) {
+	// handle the exception ...
+}
+ 

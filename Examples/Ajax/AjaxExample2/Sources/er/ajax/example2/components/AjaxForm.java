@@ -1,7 +1,7 @@
 package er.ajax.example2.components;
 
-import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
 
 import er.ajax.AjaxHighlight;
 

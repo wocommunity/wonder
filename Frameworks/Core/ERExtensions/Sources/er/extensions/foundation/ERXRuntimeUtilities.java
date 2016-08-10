@@ -5,14 +5,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -37,10 +36,7 @@ import er.extensions.appserver.ERXWOContext;
  * @author david
  */
 public class ERXRuntimeUtilities {
-
-    /** logging support */
-    public static final Logger log = Logger
-            .getLogger(ERXRuntimeUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXRuntimeUtilities.class);
     
     /**
      * Hack to create a bundle after the app is loaded. Useful for the insistence of EOF on JavaXXXAdaptor bundles. 
@@ -207,7 +203,6 @@ public class ERXRuntimeUtilities {
      */
 
     public static Throwable originalThrowable(Throwable t) {
-    	Throwable throwable = null;
     	if (t instanceof InvocationTargetException) {
     		return originalThrowable(((InvocationTargetException)t).getTargetException());
     	} 
@@ -366,7 +361,6 @@ public class ERXRuntimeUtilities {
      */
     public final static Result execute(String[] command, String[] envp,
             File dir, long timeout) throws IOException, TimeoutException {
-        File outputFile = null;
         int exitValue = -1;
         Runtime rt = Runtime.getRuntime();
         Process p = null;
@@ -375,7 +369,7 @@ public class ERXRuntimeUtilities {
         Result result;
 		try {
             if (log.isDebugEnabled()) {
-                log.debug("Will execute command " +  new NSArray<String>(command).componentsJoinedByString(" "));
+                log.debug("Will execute command {}", new NSArray<String>(command).componentsJoinedByString(" "));
             }
             if (dir == null && envp == null) {
                 p = rt.exec(command);
@@ -440,20 +434,15 @@ public class ERXRuntimeUtilities {
         	// Checking exceptions after getting results to ensure that stream readers
         	// had already read their buffers by the time of check.
         	if (isr != null && isr.getException() != null) {
-                log.error("input stream reader got exception,\n      "+
-                        "command = "+ERXStringUtilities.toString(command, " ")+
-                        "result = "+isr.getResultAsString(), isr.getException());
+                log.error("input stream reader got exception,\n\tcommand = {}\n\tresult = {}",
+                        ERXStringUtilities.toString(command, " "), isr.getResultAsString(), isr.getException());
             }
             if (esr != null && esr.getException() != null) {
-                log.error("error stream reader got exception,\n      "+
-                        "command = "+ERXStringUtilities.toString(command, " ")+
-                        "result = "+esr.getResultAsString(), esr.getException());
+                log.error("error stream reader got exception,\n\tcommand = {}\n\tresult = {}",
+                        ERXStringUtilities.toString(command, " "), esr.getResultAsString(), esr.getException());
             }
 
             freeProcessResources(p);
-
-            if (outputFile != null)
-                outputFile.delete();
         }
         return result;
 
@@ -574,6 +563,12 @@ public class ERXRuntimeUtilities {
     }
 
     public static class TimeoutException extends Exception {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
 
         public TimeoutException(String string) {
             super(string);
@@ -634,7 +629,7 @@ public class ERXRuntimeUtilities {
 		}
 		synchronized (flags) {
 			if (!flags.containsKey(thread)) {
-				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
+				log.debug("Adding thread interrupt request: {}", message, new RuntimeException());
 				flags.setObjectForKey(message, thread);
 			}
 		}

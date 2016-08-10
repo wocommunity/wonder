@@ -1,0 +1,7 @@
+<wo:JQPageWrapper title = "Icons List">
+  <wo:ERQMListView>
+    <wo:foreach list = "$onlyFiveMovies" item = "$oneMovie" index = "$index">
+      <wo:ERQMListViewElement action = "$doShowOneMovieAction" imageResource = "$fileName" imageClass = "ui-li-icon"> <wo:str value = "$oneMovie.title" /> </wo:ERQMListViewElement>
+    </wo:foreach>
+  </wo:ERQMListView>
+</wo:JQPageWrapper>

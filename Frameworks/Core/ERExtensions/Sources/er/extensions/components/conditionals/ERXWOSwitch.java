@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with
  * their case bound to a value.
- <code><pre>
+ <pre><code>
  ==========================
  Example.wo/Example.html (modern syntax)
  ==========================
@@ -94,7 +94,7 @@ ChosenCaseString: WOString {
  ==========================
 
 public Object chosenCase() {
-    Object objects = new Object[] {"Fourth", "Third", "First", new Integer(2), "dummy"};
+    Object objects = new Object[] {"Fourth", "Third", "First", Integer.valueOf(2), "dummy"};
     return objects[(new Random()).nextInt(objects.length)];
 }
 
@@ -105,13 +105,13 @@ public Object chosenCase() {
  */
 public class ERXWOSwitch extends WODynamicElement {
 
-    private NSDictionary _childCases;
+    private NSDictionary<Object, WOElement> _childCases;
     private WOAssociation _case;
 
-    public ERXWOSwitch(String name, NSDictionary associations, WOElement template) {
+    public ERXWOSwitch(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
         super(name, associations, template);
-        NSMutableDictionary dict = new NSMutableDictionary();
-        _case = (WOAssociation) associations.objectForKey("case");
+        NSMutableDictionary<Object, WOElement> dict = new NSMutableDictionary<Object, WOElement>();
+        _case = associations.objectForKey("case");
         for(Enumeration e = ((WODynamicGroup)template).childrenElements().objectEnumerator(); e.hasMoreElements(); ) {
             WOElement child = (WOElement)e.nextElement();
             if(child instanceof ERXWOCase) {
@@ -128,10 +128,10 @@ public class ERXWOSwitch extends WODynamicElement {
         Object value = _case.valueInComponent(context.component());
         value = (value == null ? "default" : value);
 
-        WOElement result = (WOElement) _childCases.objectForKey(value);
+        WOElement result = _childCases.objectForKey(value);
 
         if(result == null) {
-            result = (WOElement) _childCases.objectForKey("default");
+            result = _childCases.objectForKey("default");
         }
         if(result == null) {
             result = new WOHTMLBareString("");
@@ -139,14 +139,17 @@ public class ERXWOSwitch extends WODynamicElement {
         return result;
     }
 
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         childCaseInContext(wocontext).appendToResponse(woresponse, wocontext);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         return childCaseInContext(wocontext).invokeAction(worequest, wocontext);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
         childCaseInContext(wocontext).takeValuesFromRequest(worequest, wocontext);
     }

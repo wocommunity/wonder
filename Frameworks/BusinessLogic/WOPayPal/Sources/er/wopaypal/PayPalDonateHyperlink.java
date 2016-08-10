@@ -6,10 +6,7 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOContext;
 
 /** PayPalDonateHyperlink is identical in functionality to PayPalSingleItemHyperlink, except that the amount parameter is optional for donations.  I decided to make a separate WOComponent to make it easier to keep the WOComponent bindings straight.
  */

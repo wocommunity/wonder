@@ -1,30 +1,23 @@
 package wowodc.background.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.components.ERXStatelessComponent;
 import er.extensions.concurrency.ERXFutureTask;
 import er.extensions.concurrency.ERXTaskInfo;
-import er.extensions.concurrency.ERXTaskPercentComplete;
 import er.extensions.concurrency.ERXTaskThread;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * This stateless component is regenerated on each refresh with fresh statistics.
  *
  * @author kieran
- *
  */
-public class TaskThreadMonitor extends WOComponent {
-	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(TaskThreadMonitor.class);
-	
+public class TaskThreadMonitor extends ERXStatelessComponent {
     public TaskThreadMonitor(WOContext context) {
         super(context);
     }
@@ -55,20 +48,20 @@ public class TaskThreadMonitor extends WOComponent {
 
 	public Double taskPercentageComplete() {
 		Double result = null;
-		if (loopTaskItem().task() != null && loopTaskItem().task() instanceof ERXTaskPercentComplete) {
-			result = ((ERXTaskPercentComplete)loopTaskItem().task()).percentComplete();
+		if (loopTaskItem().task() != null && loopTaskItem().task() instanceof IERXPercentComplete) {
+			result = ((IERXPercentComplete) loopTaskItem().task()).percentComplete();
 			if (result != null) {
 				result = result * 100.0;
 			} //~ if (result != null)
-		} //~ if (loopTaskItem() != null && loopTaskItem() instanceof ERXTaskPercentComplete)
+		} //~ if (loopTaskItem() != null && loopTaskItem() instanceof IERXPercentComplete)
 		return result;
 	}
 
 	public String taskStatus() {
 		String result = null;
-		if (loopTaskItem().task() instanceof ERXStatusInterface) {
-			result = ((ERXStatusInterface)loopTaskItem().task()).status();
-		} //~ if (loopTaskItem() instanceof ERXStatusInterface)
+		if (loopTaskItem().task() instanceof IERXStatus) {
+			result = ((IERXStatus) loopTaskItem().task()).status();
+		} //~ if (loopTaskItem() instanceof IERXStatus)
 		return result;
 	}
 
@@ -76,18 +69,6 @@ public class TaskThreadMonitor extends WOComponent {
 		return loopTaskItem().task().toString();
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		// makes this component non-synchronizing
-		return false;
-	}
-
-	@Override
-	public boolean isStateless() {
-		// makes this component stateless
-		return true;
-	}
-	
 	@Override
 	public void reset() {
 		super.reset();
@@ -133,6 +114,4 @@ public class TaskThreadMonitor extends WOComponent {
 
 		return iERXStop;
 	}
-
-
 }

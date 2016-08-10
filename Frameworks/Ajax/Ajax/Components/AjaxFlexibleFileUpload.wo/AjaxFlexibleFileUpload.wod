@@ -1,6 +1,7 @@
 AjaxProxy : AjaxProxy {
   name = ajaxProxyName;
   proxyName = "wopage";
+  proxy = proxy;
 }
 
 SelectFileButtonWrapper : WOGenericContainer {
@@ -9,7 +10,7 @@ SelectFileButtonWrapper : WOGenericContainer {
 }
 
 SelectFileButton : WOHyperlink {
-  href = "javascript:void();";
+  href = "javascript:void(0);";
   id = selectFileButtonId;
   class = selectFileButtonClass;
 }
@@ -40,7 +41,7 @@ NotAutoSubmit : WOConditional {
 }
 
 ManualUploadSubmitButton : WOHyperlink {
-  href = "javascript:void();";
+  href = "javascript:void(0);";
   onclick = manualSubmitUploadFunction;
   id = submitUploadButtonId;
   class = uploadButtonClass;
@@ -51,7 +52,7 @@ ManualUploadLabel : WOString {
 }
 
 ClearUploadButton : WOHyperlink {
-  href = "javascript:void();";
+  href = "javascript:void(0);";
   onclick = clearUploadFunction;
   class = clearButtonClass;
   id = clearUploadButtonId;
@@ -76,10 +77,11 @@ ProgressBarAmount : WOGenericContainer {
 }
 
 CancelButton : WOHyperlink {
-  href = "javascript:void();";
+  href = "javascript:void(0);";
   onclick = cancelUploadFunction;
   id = cancelButtonId;
   class = cancelButtonClass;
+  style = "display:none";
 }
 
 CancelLabel : WOString {
@@ -87,6 +89,7 @@ CancelLabel : WOString {
 }
 
 UploadScriptWrapper : ERXJavaScript {
+  hideInComment = false;
 }
 
 AjaxUploadScript : WOString {

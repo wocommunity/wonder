@@ -13,8 +13,8 @@ SourceRepetition: WORepetition {
 
 Source: WOGenericElement {
 	elementName = "source";
-	src = source.webPath;
-	type = source.mimeType;
+	src = source.webPath;//VALID
+	type = source.mimeType;//VALID
 }
 
 JWFlashPlayer: WOResourceURL {

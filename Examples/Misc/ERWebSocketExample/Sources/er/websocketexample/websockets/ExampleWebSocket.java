@@ -27,6 +27,7 @@ public class ExampleWebSocket extends DefaultWOWebSocket {
 	/**
 	 * Posts a notification that a chat message is received
 	 */
+	@Override
 	public void receive(String message) {
 		NSDictionary<String, String> userInfo = new NSDictionary<String, String>(
 				new String[] { message, username }, new String[] { "message", "username" });

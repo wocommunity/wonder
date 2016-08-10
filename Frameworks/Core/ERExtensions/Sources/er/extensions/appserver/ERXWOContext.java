@@ -1,12 +1,5 @@
-//
-// ERXWOContext.java
-// Project armehaut
-//
-// Created by ak on Mon Apr 01 2002
-//
 package er.extensions.appserver;
 
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -15,17 +8,14 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.appserver.ERXResponseRewriter.TagMissingBehavior;
 import er.extensions.appserver.ajax.ERXAjaxContext;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
@@ -43,6 +33,8 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	private static Observer observer;
 	private boolean _generateCompleteURLs;
 	private boolean _generateCompleteResourceURLs;
+	
+	private static final boolean IS_DEV = ERXApplication.isDevelopmentModeSafe();
 
 	public static final String CONTEXT_KEY = "wocontext";
 	public static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
@@ -55,7 +47,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Returns the existing session if any is given in the form values or url.
+	 * Returns the existing session if any is given in the form values or URL.
+	 * 
+	 * @return session for this request or <code>null</code>
 	 */
 	public WOSession existingSession() {
 		String sessionID = _requestSessionID();
@@ -75,9 +69,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return existingSession() != null;
 	}
 
-	/**
-	 * Public constructor
-	 */
 	public static NSMutableDictionary contextDictionary() {
 		if (observer == null) {
 			synchronized (ERXWOContext.class) {
@@ -114,14 +105,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Implemented so the the thread checks if it should get interrupted.
+	 * Implemented so that the thread checks if it should get interrupted.
 	 * 
-	 * @param wocomponent
+	 * @param component the current component
 	 */
 	@Override
-	public void _setCurrentComponent(WOComponent wocomponent) {
+	public void _setCurrentComponent(WOComponent component) {
 		ERXRuntimeUtilities.checkThreadInterrupt();
-		super._setCurrentComponent(wocomponent);
+		super._setCurrentComponent(component);
 	}
 	
 	@Override
@@ -148,20 +139,21 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	public boolean _generatingCompleteResourceURLs() {
 		return _generateCompleteResourceURLs;
 	}
-
+	
 	@Override
-	public void _generateCompleteURLs() {
-		super._generateCompleteURLs();
+	public void generateCompleteURLs() {
+		super.generateCompleteURLs();
 		_generateCompleteURLs = true; 
 	}
 
 	@Override
-	public void _generateRelativeURLs() {
-		super._generateRelativeURLs();
+	public void generateRelativeURLs() {
+		super.generateRelativeURLs();
 		_generateCompleteURLs = false;
 	}
-
-	public boolean _generatingCompleteURLs() {
+	
+	@Override
+	public boolean doesGenerateCompleteURLs() {
 		return _generateCompleteURLs;
 	}
 
@@ -178,7 +170,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		// Note: If you configured the adaptor's WebObjectsAlias to something other than the default, 
 		// make sure to also set your WOAdaptorURL property to match.  Otherwise, asking the new context 
 		// the path to a direct action or component action URL will give an incorrect result.
-		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + ".woa";
+		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + app.applicationExtension();
 		try {
 			URL url = new URL(requestUrl);
 			requestUrl = url.getPath(); // Get just the part of the URL that is relative to the server root.
@@ -198,6 +190,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		ERXThreadStorage.takeValueForKey(userInfo, ERXWOContext.CONTEXT_DICTIONARY_KEY);
 	}
 
+	@Override
 	public NSDictionary userInfo() {
 		return mutableUserInfo();
 	}
@@ -226,33 +219,37 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	@Override
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
 		_preprocessURL();
-		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
-		if (!ERXApplication.isWO54()) {
-			url = _postprocessURL(url);
-		}
+		return super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
+	}
+	
+	@Override
+	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean isSecure, int somePort) {
+		_preprocessURL();
+		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, isSecure, somePort);
+		url = _postprocessURL(url);
 		return url;
 	}
 
 	/**
 	 * Returns a complete URL for the specified action. Works like
 	 * {@link WOContext#directActionURLForActionNamed} but has one extra
-	 * parameter to specify whether or not to include the current Session ID
-	 * (wosid) in the URL. Convenient if you embed the link for the direct
-	 * action into an email message and don't want to keep the Session ID in it.
+	 * parameter to specify whether or not to include the current session ID
+	 * in the URL. Convenient if you embed the link for the direct
+	 * action into an email message and don't want to keep the session ID in it.
 	 * <p>
 	 * <code>actionName</code> can be either an action -- "ActionName" -- or
 	 * an action on a class -- "ActionClass/ActionName". You can also specify
 	 * <code>queryDict</code> to be an NSDictionary which contains form values
 	 * as key/value pairs. <code>includeSessionID</code> indicates if you want
-	 * to include the Session ID (wosid) in the URL.
+	 * to include the session ID in the URL.
 	 * 
 	 * @param actionName
 	 *            String action name
 	 * @param queryDict
 	 *            NSDictionary containing query key/value pairs
 	 * @param includeSessionID
-	 *            true: to include the Session ID (if has one), <br>
-	 *            false: not to include the Session ID
+	 *            <code>true</code>: to include the session ID (if has one), <br>
+	 *            <code>false</code>: not to include the session ID
 	 * @return a String containing the URL for the specified action
 	 * @see WODirectAction
 	 */
@@ -265,23 +262,24 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Removes Session ID (wosid) query key/value pair from the given URL
+	 * Removes session ID query key/value pair from the given URL
 	 * string.
 	 * 
 	 * @param url
 	 *            String URL
-	 * @return a String with the Session ID removed
+	 * @return a String with the session ID removed
 	 */
 	public static String stripSessionIDFromURL(String url) {
 		if (url == null)
 			return null;
+		String sessionIdKey = WOApplication.application().sessionIdKey();
 		int len = 1;
-		int startpos = url.indexOf("?wosid");
+		int startpos = url.indexOf("?" + sessionIdKey);
 		if (startpos < 0) {
-			startpos = url.indexOf("&wosid");
+			startpos = url.indexOf("&" + sessionIdKey);
 		}
 		if (startpos < 0) {
-			startpos = url.indexOf("&amp;wosid");
+			startpos = url.indexOf("&amp;" + sessionIdKey);
 			len = 5;
 		}
 
@@ -339,70 +337,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		return result;
 	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static String _htmlCloseHeadTag() {
-		return ERXResponseRewriter._htmlCloseHeadTag(); 
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void insertInResponseBeforeTag(WOContext context, WOResponse response, String content, String tag, TagMissingBehavior tagMissingBehavior) {
-		ERXResponseRewriter.insertInResponseBeforeTag(response, context, content, tag, tagMissingBehavior);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script) {
-		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script, String scriptName) {
-		ERXResponseRewriter.addScriptCodeInHead(response, context, script, scriptName);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag);
-	}
-	
-	/**
-	 * 
-	 * @deprecated replaced by ERXResponseRewriter
-	 */
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, tagMissingBehavior);
-	}
 
 	private static final String SAFE_IDENTIFIER_NAME_KEY = "ERXWOContext.safeIdentifierName";
 	/**
@@ -437,51 +371,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		return safeIdentifierName;
 	}
-	
-	/**
-	 * Returns a javascript-safe version of the given element ID.
-	 * 
-	 * @see ERXStringUtilities#safeIdentifierName(String, String, char)
-	 * @param elementID
-	 *            the element ID
-	 * @return a javascript-safe version (i.e. "_1_2_3_10")
-	 * @deprecated for ERXStringUtilities.safeIdentifierName(String)
-	 */
-	public static String toSafeElementID(String elementID) {
-		return ERXStringUtilities.safeIdentifierName(elementID);
-	}
-
-	/**
-	 * Call this anywhere you would have called _directActionURL in 5.3 if you
-	 * want to be 5.4 compatible.
-	 * 
-	 * @param context
-	 *            the WOContext to operate on
-	 * @param actionName
-	 *            the name of the direct action to lookup
-	 * @param queryParams
-	 *            the query parameters to use
-	 * @param secure
-	 *            whether or not the URL should be HTTPS
-	 * @return the URL to the given direct action
-	 */
-	public static String _directActionURL(WOContext context, String actionName, NSDictionary queryParams, boolean secure) {
-		try {
-			String directActionURL;
-			if (ERXApplication.isWO54()) {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class, int.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), new Integer(0), Boolean.FALSE });
-			}
-			else {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure) });
-			}
-			return directActionURL;
-		}
-		catch (Exception e) {
-			throw new NSForwardException(e);
-		}
-	}
 
 	/**
 	 * Generates direct action URLs with support for various overrides.
@@ -491,9 +380,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String directActionName, Boolean secure, boolean includeSessionID) {
@@ -508,13 +397,13 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param key
-	 *            the query parameter key to add (or null to skip)
+	 *            the query parameter key to add (or <code>null</code> to skip)
 	 * @param value
-	 *            the query parameter value to add (or null to skip)
+	 *            the query parameter value to add (or <code>null</code> to skip)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String directActionName, String key, String value, Boolean secure, boolean includeSessionID) {
@@ -529,14 +418,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param queryParameters
-	 *            the query parameters to append (or null)
+	 *            the query parameters to append (or <code>null</code>)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
-	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, Object> queryParameters, Boolean secure, boolean includeSessionID) {
 		return ERXWOContext.directActionUrl(context, null, null, null, directActionName, queryParameters, secure, includeSessionID);
 	}
 
@@ -546,25 +435,25 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param context
 	 *            the context to generate the URL within
 	 * @param host
-	 *            the host name for the URL (or null for default)
+	 *            the host name for the URL (or <code>null</code> for default)
 	 * @param port
-	 *            the port number of the URL (or null for default)
+	 *            the port number of the URL (or <code>null</code> for default)
 	 * @param path
-	 *            the custom path prefix (or null for none)
+	 *            the custom path prefix (or <code>null</code> for none)
 	 * @param directActionName
 	 *            the direct action name
 	 * @param key
-	 *            the query parameter key to add (or null to skip)
+	 *            the query parameter key to add (or <code>null</code> to skip)
 	 * @param value
-	 *            the query parameter value to add (or null to skip)
+	 *            the query parameter value to add (or <code>null</code> to skip)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, String key, Object value, Boolean secure, boolean includeSessionID) {
-		NSDictionary<String, ? extends Object> queryParameters = null;
+		NSDictionary<String, Object> queryParameters = null;
 		if (key != null && value != null) {
 			queryParameters = new NSDictionary<String, Object>(value, key);
 		}
@@ -577,22 +466,22 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param context
 	 *            the context to generate the URL within
 	 * @param host
-	 *            the host name for the URL (or null for default)
+	 *            the host name for the URL (or <code>null</code> for default)
 	 * @param port
-	 *            the port number of the URL (or null for default)
+	 *            the port number of the URL (or <code>null</code> for default)
 	 * @param path
-	 *            the custom path prefix (or null for none)
+	 *            the custom path prefix (or <code>null</code> for none)
 	 * @param directActionName
 	 *            the direct action name
 	 * @param queryParameters
-	 *            the query parameters to append (or null)
+	 *            the query parameters to append (or <code>null</code>)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
-	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, Object> queryParameters, Boolean secure, boolean includeSessionID) {
 		boolean completeUrls;
 
 		boolean currentlySecure = ERXRequest.isRequestSecure(context.request());
@@ -601,15 +490,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		if (host == null && currentlySecure == secureBool && port == null) {
 			completeUrls = true;
 		}
-		else if (context instanceof ERXWOContext) {
-			completeUrls = ((ERXWOContext) context)._generatingCompleteURLs();
-		}
 		else {
-			completeUrls = false;
+			completeUrls = context.doesGenerateCompleteURLs();
 		}
 
 		if (!completeUrls) {
-			context._generateCompleteURLs();
+			context.generateCompleteURLs();
 		}
 
 		String url;
@@ -617,9 +503,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			ERXMutableURL mu = new ERXMutableURL();
 			boolean customPath = (path != null && path.length() > 0);
 			if (!customPath) {
-				mu.setURL(ERXWOContext._directActionURL(context, directActionName, queryParameters, secureBool));
+				mu.setURL(context._directActionURL(directActionName, queryParameters, secureBool, 0, false));
 				if (!includeSessionID) {
-					mu.removeQueryParameter("wosid");
+					mu.removeQueryParameter(WOApplication.application().sessionIdKey());
 				}
 			}
 			else {
@@ -633,7 +519,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 				mu.setPath(path + directActionName);
 				mu.setQueryParameters(queryParameters);
 				if (includeSessionID && context.session().storesIDsInURLs()) {
-					mu.setQueryParameter("wosid", context.session().sessionID());
+					mu.setQueryParameter(WOApplication.application().sessionIdKey(), context.session().sessionID());
 				}
 			}
 
@@ -660,7 +546,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		finally {
 			if (!completeUrls) {
-				context._generateRelativeURLs();
+				context.generateRelativeURLs();
 			}
 		}
 		return url;
@@ -670,14 +556,16 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return ERXStringUtilities.safeIdentifierName(elementID());
 	}
 
-	/**
-	 * Workaround for missing componentActionUrl(String) in 5.3.
-	 * @param context
-	 * @return ajax action url
-	 */
-	public static String ajaxActionUrl(WOContext context) {
-		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");
-		return url;
+	@Override
+	protected String relativeURLWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString) {
+		String result = super.relativeURLWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString);
+		if(IS_DEV && !WOApplication.application().isDirectConnectEnabled()) {
+			String extension = "." + WOApplication.application().applicationExtension();
+			String replace = extension + "/-" + WOApplication.application().port();
+			if(!result.contains(replace) && result.contains(extension)) {
+				result = result.replace(extension, replace);
+			}
+		}
+		return result;
 	}
-	
 }

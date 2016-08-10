@@ -1,6 +1,8 @@
 # Properties file for JavaMonitor
 # Overrides the JavaWebObjects.framework Properties
 
+#WOHost=localhost
+
 WOAutoOpenInBrowser=true
 
 WODebuggingEnabled=false
@@ -32,3 +34,6 @@ ERXRest.MHost.type.alias = osType
 
 # Hide the Migrations tab.
 er.javamonitor.showMigrationsTab=false
+
+# Show the Mod_Proxy tab.
+er.javamonitor.showModProxyTab=true

@@ -1,0 +1,33 @@
+ColorObserveField : MTAjaxObserveField { 
+	observeFieldID = "PrimaryColorID";
+	updateContainerID = "SecondaryColorDiv";
+	fullSubmit = false;
+	useSpinner = true;	
+	spinnerOptions = "{ containerPosition: { position: 'leftCenter'  }}";
+}
+
+DependentListForm : WOForm {
+	action = doStuff;
+	multipleSubmit = true;
+}
+
+PrimaryColorField : WOPopUpButton {
+	id = "PrimaryColorID";
+	list = primaryColors;
+	item = primaryColor;
+	selection = selectedPrimaryColor;
+	noSelectionString = "No Color Selected";
+}
+
+SecondaryColorField : WOPopUpButton {
+	id = "SecondaryColors";
+	list = secondaryColors;
+	item = secondaryColor;
+	selection = selectedSecondaryColor;
+	noSelectionString = "No secondary Color Selected";
+}
+
+SecondaryColorUpdateComponent : MTAjaxUpdateContainer {
+	id = "SecondaryColorDiv";
+}
+

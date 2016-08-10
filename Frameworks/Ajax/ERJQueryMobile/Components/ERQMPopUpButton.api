@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMPopUpButton" wocomponentcontent="false">    <binding name="string"/>
+    <binding name="list"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+    <binding name="selection"/>
+        <validation message="'selection' is a required binding.">
+            <unbound name="selection"/>
+        </validation>
+    <binding defaults="Boolean" name="isPopUpWindow"/>
+    <binding defaults="Boolean" name="mini"/>
+    <binding defaults="Boolean" name="inset"/>
+    <binding name="item"/>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+    <binding name="displayString"/>
+    <binding defaults="Boolean" name="disabled"/>
+    <binding name="noSelectionString"/>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>

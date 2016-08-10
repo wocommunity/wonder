@@ -6,35 +6,34 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-// Nice little unread marker.  Subclass in specific look frameworks to provide custom
-//	unread marker images.
 /**
- * Nice for denoting that something has not been viewed. Extended in look frameworks.<br />
+ * Nice for denoting that something has not been viewed. Extended in look frameworks.
  * 
  * @binding item
  * @binding list
- * @binding condition" defaults="Boolean
- * @binding negate" defaults="Boolean
+ * @binding condition A boolean
+ * @binding negate A boolean
  */
-
 public class ERXUnreadMarker extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXUnreadMarker(WOContext aContext) {
         super(aContext);
     }
 
-    /////////////////////////////////  log4j category  /////////////////////////////////
-    public static Logger log = Logger.getLogger(ERXUnreadMarker.class);
-    
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public void reset() { super.reset(); initialized=false; }
     
     private boolean initialized=false;

@@ -4,7 +4,7 @@
     <parent>
         <groupId>wonder.frameworks</groupId>
         <artifactId>core</artifactId>
-        <version>5.4-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>wonder.core</groupId>
@@ -30,8 +30,8 @@
             <artifactId>ognl</artifactId>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 

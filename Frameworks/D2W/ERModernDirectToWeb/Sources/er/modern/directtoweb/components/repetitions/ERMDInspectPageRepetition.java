@@ -1,15 +1,19 @@
 package er.modern.directtoweb.components.repetitions;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver._private.WOGenericContainer;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSNotificationCenter;
 
+import er.ajax.AjaxUpdateContainer;
 import er.directtoweb.components.repetitions.ERDInspectPageRepetition;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.modern.directtoweb.components.ERMDAjaxNotificationCenter;
 
 /**
  * Modern tableless inspect/edit page repetition
  * 
- * @project ERModernDirectToWeb
  * @d2wKey componentName
  * @d2wKey propertyNameComponentName
  * @d2wKey sectionComponentName
@@ -23,11 +27,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * @d2wKey classForAttributeRepetitionWrapper
  * 
  * @author davidleber
- *
  */
 public class ERMDInspectPageRepetition extends ERDInspectPageRepetition {
 	
-	public int index;
+    private static final long serialVersionUID = 1L;
+
+    public int index;
 	
     public ERMDInspectPageRepetition(WOContext context) {
         super(context);
@@ -69,10 +74,10 @@ public class ERMDInspectPageRepetition extends ERDInspectPageRepetition {
 	// ERRORS //
 	
     public boolean hasNoErrors() {
-        if(false) {
-            String keyPath = "errorMessages." + displayNameForProperty();
-            return d2wContext().valueForKeyPath(keyPath) == null;
-        }
+      //    if(false) {
+      //        String keyPath = "errorMessages." + displayNameForProperty();
+      //        return d2wContext().valueForKeyPath(keyPath) == null;
+      //    }
         return !validationExceptionOccurredForPropertyKey();
     }
     
@@ -90,10 +95,56 @@ public class ERMDInspectPageRepetition extends ERDInspectPageRepetition {
         }
     }
     
-    @SuppressWarnings("unchecked")
-	public NSArray<String> keyPathsWithValidationExceptions() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public NSArray<String> keyPathsWithValidationExceptions() {
         NSArray exceptions = (NSArray)d2wContext().valueForKey("keyPathsWithValidationExceptions");
         return exceptions != null ? exceptions : NSArray.EmptyArray;
     }
+    
+    // AJAX notification center support
 	
+	public boolean isDependent() {
+	    return ERXValueUtilities.booleanValueWithDefault(
+	            d2wContext().valueForKey("isDependent"), false);
+	}
+	
+	public boolean shouldObserve() {
+	    return ERXValueUtilities.booleanValueWithDefault(
+	            d2wContext().valueForKey("shouldObserve"), false);
+	}
+
+	public String lineDivId() {
+	    String lineDivId = null;
+	    // only needed if this is a dependent property
+	    if (isDependent()) {
+	        String pageConfiguration = (String) d2wContext().valueForKey(
+	                "pageConfiguration");
+	        lineDivId = pageConfiguration
+	                + ERXStringUtilities.capitalize(propertyKey()).replaceAll("\\.", "_")
+	                + "LineUC";
+	    }
+	    return lineDivId;
+	}
+
+    /**
+     * If the current property key is depending on an observed property key, we
+     * surround it with an update container.
+     * 
+     * @return the component name to use as the line div
+     */
+    public String lineDivComponentName() {
+        String lineDivComponentName = WOGenericContainer.class.getSimpleName();
+        if (isDependent()) {
+            lineDivComponentName = AjaxUpdateContainer.class.getSimpleName();
+        }
+        return lineDivComponentName;
+    }
+
+    /**
+     * Posts a change notification when an observed property key has changed.
+     */
+    public void postChangeNotification() {
+        NSNotificationCenter.defaultCenter().postNotification(
+                ERMDAjaxNotificationCenter.PropertyChangedNotification, d2wContext());
+    }
 }

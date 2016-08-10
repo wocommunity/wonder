@@ -1,0 +1,45 @@
+{
+    attributes = (
+        {columnName = duration; name = duration; prototypeName = longNumber; }, 
+        {columnName = email; name = email; prototypeName = varchar100; width = 127; }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }, 
+        {
+            columnName = "time_zone"; 
+            name = timeZone; 
+            prototypeName = varchar50; 
+            width = 32; 
+        }, 
+        {columnName = whence; name = whence; prototypeName = varchar50; width = 19; }
+    ); 
+    attributesUsedForLocking = (duration, email, pk, timeZone, whence); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    classProperties = (digests, duration, email, environments, failures, timeZone, whence); 
+    externalName = results; 
+    fetchSpecificationDictionary = {}; 
+    name = Result; 
+    primaryKeyAttributes = (pk); 
+    relationships = (
+        {
+            destination = VersionDigest; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = digests; 
+        }, 
+        {definition = "envJoins.environment"; name = environments; }, 
+        {
+            destination = EnvJoin; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = envJoins; 
+        }, 
+        {
+            destination = Failure; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = failures; 
+        }
+    ); 
+}

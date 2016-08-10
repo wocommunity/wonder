@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMCheckbox" wocomponentcontent="true">
+	    <binding name="id"/>
+	    <binding name="value"/>
+	    <binding name="string"/>
+	    <binding name="checked"/>
+            
+    	<validation message="'checked' is a required binding.">
+            <unbound name="checked"/>
+        </validation>
+    <binding defaults="Boolean" name="inset"/>
+    <binding name="theme"/>
+    <binding defaults="Boolean" name="mini"/>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,57 @@
+HighlighSubmitButton : MTAjaxSubmitButton {
+	action = updateNames;
+	afterEffect = "highlight";
+	class = "btn btn-primary";
+	updateContainerID = "WifeNameUpdateContainer";
+	value = "Update Wife's Name";	
+}
+
+HighlightAjaxUpdateContainer : MTAjaxUpdateContainer {
+	id = "WifeNameUpdateContainer";	
+}
+
+MorphButton : MTAjaxSubmitButton {
+	action = updateNames;
+	class = "btn btn-primary";
+	beforeEffect = "morph";
+	beforeEffectStart = "darkened";
+	effect = "morph";
+	effectDuration = "long";
+	effectStart = "plain";
+	updateContainerID = "DogNameUpdateContainer";
+	value = "Update Dog's Name";	
+}
+
+MorphUpdateContainer : MTAjaxUpdateContainer {
+	id = "DogNameUpdateContainer";
+}
+
+SlideInOutButton : MTAjaxSubmitButton {
+	action = updateNames;
+	class = "btn btn-primary";
+	beforeEffect = "slide";
+	beforeEffectDuration = "long";
+	beforeEffectProperty = "out";
+	beforeEffectTransition = "Fx.Transitions.Bounce.easeOut";
+	effect = "slide";
+	effectDuration = "long";
+	effectProperty = "in";
+	updateContainerID = "KidNameUpdateContainer";
+	value = "Update Kid's Name";	
+}
+
+SlideInOutUpdateContainer : MTAjaxUpdateContainer {
+	id = "KidNameUpdateContainer";
+}
+
+SpinnerButton : MTAjaxSubmitButton {
+	action = updateNamesSlowly;
+	class = "btn btn-primary";
+	useSpinner = true;
+	updateContainerID = "SpinnerContainer";
+	value = "Update Cat's Name";
+}
+
+SpinnerUpdateContainer : MTAjaxUpdateContainer {
+	id = "SpinnerContainer";
+}

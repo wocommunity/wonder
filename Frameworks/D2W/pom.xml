@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>d2w</artifactId>
@@ -15,5 +15,6 @@
 		<module>ERModernDefaultSkin</module>
 		<module>ERModernDirectToWeb</module>
 		<module>ERModernLook</module>
+		<module>ERMootoolsDirectToWeb</module>
 	</modules>
 </project>

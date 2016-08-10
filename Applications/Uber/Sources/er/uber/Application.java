@@ -3,8 +3,6 @@ package er.uber;
 import ognl.webobjects.WOOgnl;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.localization.ERXLocalizerAssociation;
-import er.rest.entityDelegates.ERXRestRequestHandler;
-import er.rest.entityDelegates.ERXUnsafeRestAuthenticationDelegate;
 import er.taggable.ERTaggableEntity;
 import er.uber.model.Employee;
 
@@ -19,8 +17,6 @@ public class Application extends ERXApplication {
     setAllowsConcurrentRequestHandling(true);
 
     ERTaggableEntity.registerTaggable(Employee.ENTITY_NAME);
-
-    ERXRestRequestHandler.register(new ERXUnsafeRestAuthenticationDelegate(), true, false);
   }
 
   @Override

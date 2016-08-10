@@ -10,7 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -57,8 +58,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     //	Class constant(s)
     //	---------------------------------------------------------------------------    
     
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCoreBusinessLogic.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCoreBusinessLogic.class);
     
     /** property key that holds the email domain of the generated from email */
     public static final String ProblemEmailDomainPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain";
@@ -92,7 +92,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      */
     public static ERCoreBusinessLogic sharedInstance() {
         if (sharedInstance == null) {
-            sharedInstance = (ERCoreBusinessLogic)ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
         }
         return sharedInstance;
     }
@@ -102,8 +102,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * @param actor current user for this thread
      */
     public static void setActor(EOEnterpriseObject actor) {
-        if (log.isDebugEnabled())
-            log.debug("Setting actor to : "+actor);
+        log.debug("Setting actor to: {}", actor);
         if (actor != null) {
             ERXThreadStorage.takeValueForKey(actor, "actor");
         } else {
@@ -123,7 +122,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             EOEditingContext actorEc = actor.editingContext();
             actorEc.lock();
             try {
-            	EOEnterpriseObject localActor = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, actor);
+            	EOEnterpriseObject localActor = ERXEOControlUtilities.localInstanceOfObject(ec, actor);
             	try {
             		if(actor instanceof ERCoreUserInterface) {
             			NSArray prefs = ((ERCoreUserInterface)actor).preferences();
@@ -131,7 +130,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             			((ERCoreUserInterface)localActor).setPreferences(prefs);
             		}
                 } catch(RuntimeException ex) {
-                	log.error("Error while setting getting actor's preferences: " + ex, ex);
+                	log.error("Error while setting getting actor's preferences: ", actor, ex);
             	}
         		actor = localActor;
             } finally {
@@ -202,6 +201,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * Called when it is time to finish the
      * initialization of the framework.
      */
+    @Override
     public void finishInitialization() {
         ERCAuditTrailHandler.initialize();
         ERCStampedEnterpriseObject.initialize();
@@ -227,7 +227,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public void addPreferenceRelationshipToActorEntity(String entityName) {
         EOEntity entity  = EOModelGroup.defaultGroup().entityNamed(entityName);
         if(entity != null && entity.primaryKeyAttributeNames().count() == 1) {
-            addPreferenceRelationshipToActorEntity(entityName, (String) entity.primaryKeyAttributeNames().lastObject());
+            addPreferenceRelationshipToActorEntity(entityName, entity.primaryKeyAttributeNames().lastObject());
         } else {
             throw new IllegalArgumentException("Entity is not suitable: " + entityName);
         }
@@ -328,7 +328,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 	                valueIndent.append("\n         ");
 	            	ERXStringUtilities.indent(valueIndent, indent);
 	                for (int i = 0; i < key.length(); i ++) {
-	                	valueIndent.append(" ");
+	                	valueIndent.append(' ');
 	                }
 	                value = valueStr.replaceAll("\n", valueIndent.toString());
 	            }
@@ -351,7 +351,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         if (exception instanceof NSForwardException) {
             exception = ((NSForwardException)exception).originalException();
         }
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         try {
             s.append(" **** Caught: "+exception + "\n");
             s.append(extraInfoString(extraInfo, 3));
@@ -377,13 +377,13 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             if (!WOApplication.application().isCachingEnabled() ||
                 !ERCMailDelivery.usesMail() ||
                 !shouldMailReportedExceptions()) {
-                log.error(s.toString());
+                log.error("{}", s);
             } else {
                 // Usually the Mail appender is set to Threshold ERROR
-                log.warn(s.toString());
+                log.warn("{}", s);
                 if (emailsForProblemRecipients().count() == 0 || problemEmailDomain() == null) {
-                    log.error("Unable to log problem due to misconfiguration: recipients: "
-                              + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
+                    log.error("Unable to log problem due to misconfiguration: recipients: {}"
+                              + " email domain: {}", emailsForProblemRecipients(), problemEmailDomain());
                 } else {
                     ERCMailableExceptionPage standardExceptionPage = (ERCMailableExceptionPage)ERXApplication.instantiatePage("ERCMailableExceptionPage");
                     standardExceptionPage.setException(exception);
@@ -425,7 +425,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                 s.append("** Second exception ");
                 s.append(ERXUtilities.stackTrace(u));
                 NSLog.err.appendln(s.toString());
-                log.error(s.toString());
+                log.error("{}", s);
             } catch (Throwable u2) {} // WE DON'T WANT ANYTHING TO GO WRONG IN HERE as it would cause the app to instantly exit
         }
     }

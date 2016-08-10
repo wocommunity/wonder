@@ -19,7 +19,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Used for displaying the propertyName in a template.<br />
+ * Used for displaying the propertyName in a template.
  * 
  * @binding localContext
  * @d2wKey displayRequiredMarkerCell
@@ -32,6 +32,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey keyPathsWithValidationExceptions
  */
 public class ERD2WPropertyName extends ERD2WStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public static final Logger log = Logger.getLogger(ERD2WPropertyName.class);
 
     protected String _displayNameForProperty;
@@ -42,6 +49,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
         super(context); 
     }
 
+    @Override
     public String displayNameForProperty() {
         if(_displayNameForProperty == null) {
             _displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
@@ -49,6 +57,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
         return _displayNameForProperty;
     }
     
+    @Override
     public void reset() {
         super.reset();
         _displayNameForProperty = null;
@@ -56,10 +65,6 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
     }
     
     public boolean hasNoErrors() {
-        if(false) {
-            String keyPath = "errorMessages." + displayNameForProperty();
-            return d2wContext().valueForKeyPath(keyPath) == null;
-        }
         return !validationExceptionOccurredForPropertyKey();
     }
 
@@ -111,10 +116,10 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
     }
 
     public boolean displayRequiredMarker() {
-    	boolean displayRequiredMarker = ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
-    	return displayRequiredMarker;
+    	return ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
     	// no form values in here!
     }

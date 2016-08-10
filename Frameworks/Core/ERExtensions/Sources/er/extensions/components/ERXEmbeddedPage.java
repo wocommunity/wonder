@@ -40,6 +40,7 @@ public class ERXEmbeddedPage extends WODynamicGroup {
 		super(s, nsdictionary, nsmutablearray);
 	}
 
+	@Override
 	public WOActionResults invokeChildrenAction(WORequest worequest, WOContext wocontext) {
 		WOActionResults woactionresults = super.invokeChildrenAction(worequest, wocontext);
 

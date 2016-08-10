@@ -62,7 +62,7 @@ public class NSTimestampHelper {
   public String withDayName(NSTimestamp date, boolean includeTime, boolean includeYear) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     
     buffer.append(DateUtils.DAYS_OF_WEEK[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
     buffer.append(", ");
@@ -86,7 +86,7 @@ public class NSTimestampHelper {
       buffer.append(":");
       
       int minute = calendar.get(Calendar.MINUTE);
-      buffer.append(String.format("%02d", minute));
+      buffer.append(String.format("%02d", Integer.valueOf(minute)));
       buffer.append("");
       
       if(calendar.get(Calendar.AM_PM) == Calendar.PM) {
@@ -110,7 +110,7 @@ public class NSTimestampHelper {
   	if(date == null) { return null; }
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     
     buffer.append(DateUtils.MONTHS[calendar.get(Calendar.MONTH)]);
     buffer.append(" ");
@@ -129,7 +129,7 @@ public class NSTimestampHelper {
 	    buffer.append(":");
 	    
 	    int minute = calendar.get(Calendar.MINUTE);
-	    buffer.append(String.format("%02d", minute));
+	    buffer.append(String.format("%02d", Integer.valueOf(minute)));
 	    buffer.append("");
 	    
 	    if(calendar.get(Calendar.AM_PM) == Calendar.PM) {

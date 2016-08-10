@@ -7,7 +7,7 @@
 		<binding name="keyPath"/>
 		<binding name="valueWhenEmpty"/>
 		<binding name="templateString"/>
-		<binding name="escapeHTML" defaults="Boolean"/>
+		<binding defaults="Boolean" name="escapeHTML"/>
 
 		<validation message="&quot;You must bind at least one of object, value or keyPath&quot;">
 			<and>
@@ -16,5 +16,7 @@
 				<unbound name="keyPath"/>
 			</and>
 		</validation>
-	</wo>
+	<binding name="otherObject"/>
+        <binding defaults="Boolean" name="omitWhenEmpty"/>
+    </wo>
 </wodefinitions>

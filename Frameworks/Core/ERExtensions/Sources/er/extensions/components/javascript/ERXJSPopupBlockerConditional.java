@@ -8,13 +8,20 @@ import er.extensions.components.ERXStatelessComponent;
  * This component will display is content (as in WOComponentContent) if
  * it detects that popup windows are blocked.  This can be useful for displaying
  * messages to the user that they should allow popup windows or to allow alternate
- * access to functionality normally delivered in popup windows.<br/>
+ * access to functionality normally delivered in popup windows.
+ * <p>
  * The content is used as a JavaScript string literal, so it must all be on single line.
  * Any line breaks will result in invalid JavaScript.
- * <br/>
+ * 
  * @binding negate 
  */
 public class ERXJSPopupBlockerConditional extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Public constructor

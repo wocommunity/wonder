@@ -2,11 +2,12 @@ package er.extensions.foundation;
 
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 
@@ -24,7 +25,7 @@ import er.extensions.appserver.ERXWOContext;
  *            the type of the lazy value
  */
 public class ERXLazyValue<T> {
-	public static Logger log = Logger.getLogger(ERXLazyValue.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLazyValue.class);
 
 	private ERXLazyValue.Source<T> _dataSource;
 	private ERXLazyValue.Invalidator _invalidator;
@@ -84,7 +85,7 @@ public class ERXLazyValue<T> {
 	}
 
 	/**
-	 * Forecfully invalidates the lazy value, regardless of the state of the
+	 * Forcefully invalidates the lazy value, regardless of the state of the
 	 * invalidator.
 	 */
 	public synchronized void invalidate() {
@@ -100,9 +101,7 @@ public class ERXLazyValue<T> {
 	 */
 	public synchronized T value() {
 		if (!_valueCached || _invalidator.shouldInvalidate()) {
-			if (ERXLazyValue.log.isDebugEnabled()) {
-				ERXLazyValue.log.debug("Fetching from " + _dataSource + " with invalidator " + _invalidator + " ...");
-			}
+			log.debug("Fetching from {} with invalidator {} ...", _dataSource, _invalidator);
 			_value = _dataSource.value();
 			_invalidator.fetchedValue(_value);
 			_valueCached = true;
@@ -357,7 +356,7 @@ public class ERXLazyValue<T> {
 
 		public boolean shouldInvalidate() {
 			Object currentCacheKey = cacheKey();
-			return !ERXExtensions.safeEquals(_lastCacheKey, currentCacheKey);
+			return ObjectUtils.notEqual(_lastCacheKey, currentCacheKey);
 		}
 	}
 
@@ -411,6 +410,7 @@ public class ERXLazyValue<T> {
 			return ERXThreadStorage.valueForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXThreadStorage.takeValueForKey(value, _key);
 		}
@@ -436,6 +436,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}
@@ -462,6 +463,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}

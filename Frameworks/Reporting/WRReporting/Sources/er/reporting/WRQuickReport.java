@@ -1,17 +1,24 @@
 package er.reporting;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXAssert;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
-import er.grouping.*;
+import er.grouping.DRReportModel;
 
 /**
  * Provides a quick way to set up a {@link WRReport}. Instead of binding all those keys,
@@ -28,8 +35,7 @@ import er.grouping.*;
  */
 
 public class WRQuickReport extends WOComponent  {
-
-    private Logger log = Logger.getLogger(WRQuickReport.class);
+    private static final Logger log = LoggerFactory.getLogger(WRQuickReport.class);
     protected DRReportModel _model;
     protected NSDictionary _modelDictionary;
     protected NSDictionary _reportDictionary;
@@ -76,11 +82,13 @@ public class WRQuickReport extends WOComponent  {
         return _componentName;
     }
 
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
     }
 
+    @Override
     public void awake() {
         super.awake();
         _objects = null;
@@ -95,6 +103,7 @@ public class WRQuickReport extends WOComponent  {
             _objects = null;
         }
     }
+    @Override
     public void reset() {
         super.reset();
         _model = null;
@@ -107,6 +116,7 @@ public class WRQuickReport extends WOComponent  {
         _componentName = null;
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -115,11 +125,11 @@ public class WRQuickReport extends WOComponent  {
         if (super.hasBinding("plistString")) {
             return (String)super.valueForBinding("plistString");
         } else {
-            if (this.hasBinding("pathString")) {
+            if (hasBinding("pathString")) {
                 String p = (String)super.valueForBinding("pathString");
-                log.debug( "p:"+p);
+                log.debug("p: {}", p);
                 String plist = ERXStringUtilities.stringWithContentsOfFile(p);
-                log.debug( "plist:"+plist);
+                log.debug("plist: {}", plist);
                 return plist;
             }
         }
@@ -131,7 +141,7 @@ public class WRQuickReport extends WOComponent  {
             if (super.hasBinding("modelDictionary")) {
                 _modelDictionary = (NSDictionary)super.valueForBinding("modelDictionary");
             } else {
-                String plistString = this.plistString();
+                String plistString = plistString();
 
                 if (plistString != null) {
                     _modelDictionary = (NSDictionary)NSPropertyListSerialization.propertyListFromString(plistString);
@@ -142,10 +152,8 @@ public class WRQuickReport extends WOComponent  {
                         _modelDictionary = NSDictionary.EmptyDictionary;
                     }
                 }
-                if(log.isDebugEnabled()) {
-                    log.debug("plistString:" + plistString);
-                    log.debug( "modelDict:" + _modelDictionary);
-                }
+                log.debug("plistString: {}", plistString);
+                log.debug( "modelDict: {}", _modelDictionary);
             }
         }
         return _modelDictionary;
@@ -210,13 +218,13 @@ public class WRQuickReport extends WOComponent  {
             }
             if(super.hasBinding("model")) {
                 if(super.canSetValueForBinding("model")) {
-                    log.info("setValueForBinding model: DRReportModel@" + _model.hashCode());
+                    log.info("setValueForBinding model: DRReportModel@{}", _model.hashCode());
                     super.setValueForBinding(_model, "model");
                 }
             }
             if(log.isDebugEnabled()) {
-                log.debug( "model(): DRReportModel@" + _model.hashCode());
-                log.debug( "model().records(): "+_model.records().count());
+                log.debug( "model(): DRReportModel@{}", _model.hashCode());
+                log.debug( "model().records(): {}", _model.records().count());
             }
         }
         return _model;
@@ -237,14 +245,14 @@ public class WRQuickReport extends WOComponent  {
         return _objects;
     }
 
+    @Override
     public boolean hasBinding(String name) {
         boolean result = super.hasBinding(name) || settingsDictionary().objectForKey(name) != null;
-        if(log.isDebugEnabled()) {
-            log.debug("hasBinding: "+ name + " : " + result);
-        }
+        log.debug("hasBinding: {} : {}", name, result);
         return result;
     }
 
+    @Override
     public Object valueForBinding(String name) {
         Object result;
         if(super.hasBinding(name)) {
@@ -252,9 +260,7 @@ public class WRQuickReport extends WOComponent  {
         } else {
             result = settingsDictionary().objectForKey(name);
         }
-        if(log.isDebugEnabled()) {
-            log.debug("valueForBinding: "+ name + " : " + result);
-        }
+        log.debug("valueForBinding: {} : {}", name, result);
         return result;
     }
 
@@ -262,6 +268,7 @@ public class WRQuickReport extends WOComponent  {
         return ERXValueUtilities.booleanValue(valueForBinding("dontSyncModel"));
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r, c);
         //reset();

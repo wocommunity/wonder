@@ -97,6 +97,31 @@ var datePickerController = (function datePickerController() {
                 };                              
         })();
         
+		// AR (stolen from CH in calendar.js): new method start
+		/* Fire the onChange event of the text input that we are setting so that it plays nice with
+		   AjaxObserveField etc. that use this notification.  */
+		function fireOnChangeEvent (input_element) {
+			var evt;
+			var el = input_element;
+			if (document.createEvent) {
+				evt = document.createEvent("HTMLEvents");
+				if (evt.initEvent) {
+					evt.initEvent("change", false, false);
+				}
+				else {
+					evt = false;
+				}
+				el.dispatchEvent(evt);
+			}
+			else {
+				if(document.createEventObject) {
+					var evt=document.createEventObject();
+					el.fireEvent("onChange", evt);
+				}
+			}
+		};
+		// AR (stolen from CH in calendar.js): new method done
+
         function parseUILanguage() {                                 
                 var languageTag = document.getElementsByTagName('html')[0].getAttribute('lang') || document.getElementsByTagName('html')[0].getAttribute('xml:lang');
                 
@@ -2084,7 +2109,16 @@ var datePickerController = (function datePickerController() {
                         
                         fmtDate = printFormattedDate(this.dateSet, elemFmt, returnLocaleDate);                   
                         if(elem.tagName.toLowerCase() == "input") {
-                                elem.value = fmtDate; 
+                        		var valueDiffers = false;
+                                if (elem.value != fmtDate) {
+                                	valueDiffers = true;
+                                }
+                                
+                                elem.value = fmtDate;
+                                 
+                                if (valueDiffers) {
+                                	fireOnChangeEvent(elem);
+                                }
                         } else {  
                                 this.setSelectIndex(elem, fmtDate);                              
                         };

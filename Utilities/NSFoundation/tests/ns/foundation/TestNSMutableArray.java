@@ -301,13 +301,6 @@ public class TestNSMutableArray extends BaseTestCase {
 		assertEquals("abc", array.get(0));
 	}
 
-	@SuppressWarnings("deprecation")
-  public void testReplaceObjectAtIndexEInt() {
-		NSMutableArray<String> array = new NSMutableArray<String>(new String[] { "abc", "def", "ghi" });
-		array.replaceObjectAtIndex(0, "123");
-		assertEquals("123", array.get(0));
-	}
-
 	public void testReplaceObjectAtIndexIntE() {
 		NSMutableArray<String> array = new NSMutableArray<String>(new String[] { "abc", "def", "ghi" });
 		array.replaceObjectAtIndex("123", 0);

@@ -1,0 +1,57 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = id; 
+            externalType = INTEGER; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = number; 
+            name = number; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = thirdId; 
+            name = thirdId; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (id, number, thirdId); 
+    className = "er.neo4jadaptor.test.eo.SecondEntity"; 
+    classProperties = (firstEntities, joins, "joins_firstEntity", number, thirdEntity); 
+    externalName = SecondEntity; 
+    fetchSpecificationDictionary = {}; 
+    name = SecondEntity; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = FirstEntity; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = secondEntityId; sourceAttribute = id; }); 
+            name = firstEntities; 
+        }, 
+        {
+            destination = Join; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = secondId; sourceAttribute = id; }); 
+            name = joins; 
+        }, 
+        {definition = "joins.firstEntity"; name = "joins_firstEntity"; }, 
+        {
+            destination = ThirdEntity; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = thirdId; }); 
+            name = thirdEntity; 
+        }
+    ); 
+}

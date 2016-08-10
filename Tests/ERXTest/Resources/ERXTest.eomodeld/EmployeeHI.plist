@@ -1,0 +1,123 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = address1; 
+            name = address1; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = address2; 
+            name = address2; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = bestSalesTotal; 
+            name = bestSalesTotal; 
+            prototypeName = amount; 
+        }, 
+        {allowsNull = Y; columnName = city; name = city; prototypeName = varchar255; }, 
+        {
+            allowsNull = N; 
+            columnName = companyID; 
+            name = companyID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = firstName; 
+            name = firstName; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = lastName; 
+            name = lastName; 
+            prototypeName = varchar255; 
+        }, 
+        {columnName = manager; name = manager; prototypeName = boolean; }, 
+        {
+            allowsNull = Y; 
+            columnName = state; 
+            name = state; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = zipcode; 
+            name = zipcode; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        address1, 
+        address2, 
+        bestSalesTotal, 
+        city, 
+        companyID, 
+        firstName, 
+        id, 
+        lastName, 
+        manager, 
+        state, 
+        zipcode
+    ); 
+    className = EOGenericRecord; 
+    classProperties = (
+        address1, 
+        address2, 
+        bestSalesTotal, 
+        city, 
+        company, 
+        employeeVIs, 
+        firstName, 
+        lastName, 
+        manager, 
+        paychecks, 
+        roles, 
+        state, 
+        zipcode
+    ); 
+    externalName = EmployeeHI; 
+    name = EmployeeHI; 
+    parent = Person; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Company; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
+            name = company; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = EmployeeRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = employeeId; sourceAttribute = id; }); 
+            name = employeeRoles; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            destination = EmployeeVI; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = id; }); 
+            name = employeeVIs; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Paycheck; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = employeeID; sourceAttribute = id; }); 
+            name = paychecks; 
+        }, 
+        {definition = "employeeRoles.role"; name = roles; }
+    ); 
+}

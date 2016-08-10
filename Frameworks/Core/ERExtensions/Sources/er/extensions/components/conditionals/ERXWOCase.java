@@ -21,9 +21,9 @@ public class ERXWOCase extends WODynamicElement {
     protected Object _value;
     protected WOElement _children;
     
-    public ERXWOCase(String name, NSDictionary associations, WOElement woelement) {
+    public ERXWOCase(String name, NSDictionary<String, WOAssociation> associations, WOElement woelement) {
         super(name, associations, woelement);
-        WOAssociation assoc = (WOAssociation) associations.objectForKey("case");
+        WOAssociation assoc = associations.objectForKey("case");
         if(!assoc.isValueConstant()) {
             throw new IllegalStateException("You must bind 'case' to a constant value");
         }
@@ -35,14 +35,17 @@ public class ERXWOCase extends WODynamicElement {
         return _value;
     }
     
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         _children.appendToResponse(woresponse, wocontext);
     }
     
+    @Override
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         return _children.invokeAction(worequest, wocontext);
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
         _children.takeValuesFromRequest(worequest, wocontext);
     }

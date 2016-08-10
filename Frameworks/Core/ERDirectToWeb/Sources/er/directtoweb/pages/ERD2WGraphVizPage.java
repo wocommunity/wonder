@@ -25,7 +25,18 @@ import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
  * 
  */
 public class ERD2WGraphVizPage extends ERD2WPage {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    /** interface for all the keys used in this pages code */
+    public interface Keys extends ERD2WPage.Keys {
+	    public static String format = "format";
+	}
+	   
     private int _nodeID = 0;
 
     public ERD2WGraphVizPage(WOContext context) {
@@ -77,6 +88,13 @@ public class ERD2WGraphVizPage extends ERD2WPage {
         return result;
     }
     
+    /* 
+     * Disable click to open
+     */
+    public boolean clickToOpenEnabled(WOResponse response, WOContext context) {
+        return false;
+    }
+    
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         // we do NOT want to expose our model to just everyone...
@@ -84,7 +102,10 @@ public class ERD2WGraphVizPage extends ERD2WPage {
             super.appendToResponse(response, context);
         }
         response.setHeader("text/plain", "content-type");
-        String format = context.request().stringFormValueForKey("format");
+        String format = (String) d2wContext().valueForKey(Keys.format);
+        if (format == null) {
+            format = context.request().stringFormValueForKey("format");
+        }
         if (format != null) {
             String dot = response.contentString();
             File f = null;

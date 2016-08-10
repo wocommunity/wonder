@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
@@ -24,18 +22,21 @@ import er.extensions.eof.ERXEOAccessUtilities;
  * a qualifier that can be used to filter a result set
  * for a given set of primary keys. Note that this uses
  * the IN expression and as such may not work with some
- * databases. <br/>
- * <br/>
+ * databases.
+ * <p>
  * Given a list of EOs, this generates a query looking like
  *
- *   ...  t0.ID in (< the list of primary Keys for EOs in the list>) ..
+ *   ...  t0.ID in (&lt; the list of primary Keys for EOs in the list &gt;) ..
  *
  * this is useful for pre-fetching type uses.
  */
 public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
-    
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final String IsContainedInArraySelectorName = "isContainedInArray";
     
@@ -52,10 +53,12 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      */
     public static class Support extends EOQualifierSQLGeneration._KeyValueQualifierSupport {
 
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             return super.sqlStringForSQLExpression(eoqualifier, e);
         }
 
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
@@ -78,6 +81,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
             return result;
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             return super.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }
@@ -129,6 +133,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * Implementation of the Cloneable interface.
      * @return cloned primary key list qualifier.
      */
+    @Override
     public Object clone() {
         return new ERXPrimaryKeyListQualifier(key(), (NSArray)value(), true);
     }
@@ -148,7 +153,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
         EOEntity entity = ((EOEntityClassDescription)eo.classDescription()).entity();
         if (entity.primaryKeyAttributeNames().count() != 1)
             throw new IllegalStateException("Attempting to construct a qualifier for an entity with a compound primary key: " + entity);
-        return (String)entity.primaryKeyAttributeNames().lastObject();
+        return entity.primaryKeyAttributeNames().lastObject();
     }
 
     /**

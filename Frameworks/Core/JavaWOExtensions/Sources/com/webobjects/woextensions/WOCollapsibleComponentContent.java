@@ -12,6 +12,13 @@ import com.webobjects.appserver.WOContext;
 
 public class WOCollapsibleComponentContent extends WOComponent
 {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected boolean _isVisible;
     protected boolean _isVisibleSet;
     protected String _openedImageFileName;
@@ -37,6 +44,7 @@ public class WOCollapsibleComponentContent extends WOComponent
         }
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -60,9 +68,9 @@ public class WOCollapsibleComponentContent extends WOComponent
         _isVisible = isVisible() ? false : true;
         if (canSetValueForBinding("visibility")) {
             if (_isVisible) {
-                setValueForBinding(new Integer(1), "visibility");
+                setValueForBinding(Integer.valueOf(1), "visibility");
             } else {
-                setValueForBinding(new Integer(0), "visibility");
+                setValueForBinding(Integer.valueOf(0), "visibility");
             }
         }
         
@@ -161,6 +169,4 @@ public class WOCollapsibleComponentContent extends WOComponent
     public String anchor() {
         return "" + _anchor;
     }
-
-
 }

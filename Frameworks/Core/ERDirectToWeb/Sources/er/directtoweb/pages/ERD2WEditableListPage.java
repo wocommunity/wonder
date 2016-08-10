@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -64,6 +65,12 @@ import er.extensions.validation.ERXValidation;
  * @d2wKey showMassChange
  */
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder, ERDObjectSaverInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final Logger log = Logger.getLogger(ERD2WEditableListPage.class);
 
@@ -73,6 +80,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return 2*displayPropertyKeys().count()+2;
     }
 
+    @Override
     public int numberOfObjectsPerBatch() {
         // if we are not showing the nav bar, do not batch the display group (since user will have no way to navigate batches)
         if (!ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBanner"), true)) {
@@ -125,22 +133,27 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public String dummy;
 
+    @Override
     public boolean showCancel() {
         return _nextPage!=null;
     }
 
+    @Override
     public boolean isEntityInspectable() {
         return isEntityReadOnly() && ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityInspectable"));
     }
 
+    @Override
     public void setObject(EOEnterpriseObject eo) {
         super.setObject(eo);
     }
 
+    @Override
     public WOComponent backAction() {
         return super.backAction();
     }
 
+    @Override
     public WOComponent nextPage() {
         return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
     }
@@ -158,8 +171,8 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         try {
             if (!isListEmpty() && validateObjects && shouldValidateBeforeSave()) {
                 if (log.isDebugEnabled()) log.debug("tryToSaveChanges calling validateForSave");
-                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, null);
-                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, null);
+                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, (Object[])null);
+                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, (Object[])null);
             }
             if (!isListEmpty() && shouldSaveChanges() && editingContext().hasChanges())
                 editingContext().saveChanges();
@@ -212,6 +225,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return backAction();
     }
 
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         if (value != null) {
             ERXValidation.validationFailedWithException(e, value, keyPath, errorDictionaryForObject(value), propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(), shouldSetFailedValidationValue());
@@ -219,6 +233,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         super.validationFailedWithException(e, value, keyPath);
     }
 
+    @Override
     public void clearValidationFailed(){
         super.clearValidationFailed();
         setErrorMessage(null);
@@ -232,6 +247,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return null;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // Need to make sure that we have a clean slate, every time
         clearValidationFailed();
@@ -264,7 +280,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     private D2WContext _d2wContextForMassChangeEO;
     public D2WContext d2wContextForMassChangeEO() {
         if (_d2wContextForMassChangeEO == null) {
-            _d2wContextForMassChangeEO = new D2WContext(d2wContext());
+            _d2wContextForMassChangeEO = ERD2WContext.newContext(d2wContext());
             _d2wContextForMassChangeEO.takeValueForKey(Boolean.TRUE, MassChangeEntityDisplayKey);
         }
         return _d2wContextForMassChangeEO;
@@ -286,6 +302,13 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     // custom generic record class that manages unbound keys in a dictionary.
     public class ERDMassChangeGenericRecord extends EOGenericRecord {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         // dictionary of non property key values
         private NSMutableDictionary _unboundKeyDictionary;
         public ERDMassChangeGenericRecord(EOClassDescription classDescription) {
@@ -293,10 +316,12 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
             _unboundKeyDictionary = new NSMutableDictionary();
         }
 
+        @Override
         public Object handleQueryWithUnboundKey(String key) {
             return _unboundKeyDictionary.objectForKey(key);
         }
 
+        @Override
         public void handleTakeValueForUnboundKey(Object value, String key) {
             _unboundKeyDictionary.takeValueForKey(value, key);
         }

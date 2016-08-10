@@ -20,6 +20,12 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class ERDSortedManyToManyAssignment extends ERDAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "object.entityName", "propertyKey" });
@@ -55,7 +61,7 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
     public ERDSortedManyToManyAssignment(EOKeyValueUnarchiver unarchiver) { super(unarchiver); }
 
     /**
-        * Implementation of the {@link ERDComputingAssignmentInterface}. This
+        * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "propertyKey" and
      * "keyWhenRelationship". This array of keys is used when constructing the
      * significant keys for the passed in keyPath.

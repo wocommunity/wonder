@@ -1,0 +1,23 @@
+PageWrapper : PageWrapper {
+	pageTitle = "WOWODC : WOOT!";
+}
+
+SimpleSearchLink : WOHyperlink {
+	directActionName = "page";
+	?p = "SimpleSearch";
+}
+
+DidYouMeanLink : WOHyperlink {
+	directActionName = "page";
+	?p = "DidYouMean";
+}
+
+SpellCheckLink : WOHyperlink {
+	directActionName = "page";
+	?p = "SpellCheck";
+}
+
+AutoSuggestLink : WOHyperlink {
+	directActionName = "page";
+	?p = "AutoSuggest";
+}

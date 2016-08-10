@@ -8,7 +8,8 @@ package er.directtoweb.assignments.delayed;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -35,9 +36,14 @@ import er.directtoweb.assignments.ERDComputingAssignmentInterface;
  */
 
 public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedConditionalAssignment");
+    private final static Logger log = LoggerFactory.getLogger("er.directtoweb.rules.DelayedConditionalAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -67,7 +73,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
 
     public NSArray _dependentKeys;
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon all of the qualifier keys from the formed
      * qualifier of the value of this assignment. This array of keys is 
      * used when constructing the significant keys for the passed in keyPath.
@@ -78,19 +84,19 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         if (_dependentKeys==null) {
             NSDictionary conditionAssignment;
             try {
-               conditionAssignment = (NSDictionary)this.value();
+               conditionAssignment = (NSDictionary)value();
             } catch (ClassCastException e) {
-                log.error("expected a NSDictionary object but received "+this.value(), e);
+                log.error("expected a NSDictionary object but received {}", value(), e);
                 throw e;
             }
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
-            if (log.isDebugEnabled()) log.debug("parsing "+qualFormat);
+            log.debug("parsing {}", qualFormat);
             EOQualifier qualifier =
                 EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
             if (log.isDebugEnabled())
-                log.debug("Qualifier keys: " + qualifier.allQualifierKeys());
+                log.debug("Qualifier keys: {}", qualifier.allQualifierKeys());
             _dependentKeys=qualifier.allQualifierKeys().allObjects();
         }
         return _dependentKeys;
@@ -100,9 +106,10 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
      * This method is called whenever the propertyKey is requested,
      * but the value in the cache is actually a rule.
      */
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSDictionary conditionAssignment = (NSDictionary)this.value();
+        NSDictionary conditionAssignment = (NSDictionary)value();
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSArray args = (NSArray)conditionAssignment.objectForKey("args");
@@ -122,25 +129,23 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
             }
         }
         if (log.isDebugEnabled()) {
-            log.debug("Entity \"" + c.entity().name() + "\"");
-            log.debug("Object " + c.valueForKey("object"));
-            log.debug("qualifierFormat " + qualFormat);
-            log.debug("ardgs " + args);
+            log.debug("Entity '{}'", c.entity().name());
+            log.debug("Object {}", c.valueForKey("object"));
+            log.debug("qualifierFormat {}", qualFormat);
+            log.debug("args {}", args);
         }
         EOQualifier qualifier = EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
         if (log.isDebugEnabled()) {
-            log.debug("Qualifier keys: " + qualifier.allQualifierKeys());
-            log.debug("Qualifier : " + qualifier);
-            log.debug("DelayedConditonalQualifier: " + qualifier);
+            log.debug("Qualifier keys: {}", qualifier.allQualifierKeys());
+            log.debug("Qualifier: {}", qualifier);
+            log.debug("DelayedConditonalQualifier: {}", qualifier);
         }
         if (qualifier.evaluateWithObject(c)) {
             result = conditionAssignment.objectForKey("trueValue");
-            if (log.isDebugEnabled())
-                log.debug("trueValue = " + result);
+            log.debug("trueValue = {}", result);
         } else {
             result = conditionAssignment.objectForKey("falseValue");
-            if (log.isDebugEnabled())
-                log.debug("falseValue = " + result);
+            log.debug("falseValue = {}", result);
         }
         return result;
     }

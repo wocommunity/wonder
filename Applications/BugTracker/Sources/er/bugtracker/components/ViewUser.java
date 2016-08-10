@@ -20,10 +20,12 @@ public class ViewUser extends ERDCustomEditComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -36,6 +38,7 @@ public class ViewUser extends ERDCustomEditComponent {
         return _user;
     }
 
+    @Override
     public void reset() {
         super.reset();
         _user = null;

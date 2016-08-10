@@ -9,18 +9,10 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXEnterpriseObject;
-import er.extensions.eof.ERXFetchSpecification;
-import er.extensions.eof.ERXKey;
-import er.extensions.eof.ERXQ;
-import er.extensions.eof.ERXS;
-
 /**
  * A class than is composited into an EO to provide common toMany functionality
  * for the case where the toMany cannot be modeled in EOF due to the unusually
- * large size possibilities of the toMany relationship. 
+ * large size possibilities of the toMany relationship.
  * <p>
  * This class is for simple to many relationships, has not been tested on 
  * flattened toMany relationships having a join table, aka "many-to-many" relationships.
@@ -34,14 +26,13 @@ import er.extensions.eof.ERXS;
  * relationship to CTMessage but due to the huge size of the toMany impacting performance, the toMany side of the
  * relationship had to be deleted from the EOModel:
  * 
- * <code>
-<pre>
- 	private ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage> _messagesRelationship;
+ * <pre><code>
+ 	private ERXUnmodeledToManyRelationship&lt;CTMediaTemplate, CTMessage&gt; _messagesRelationship;
 
 	// Lazily initialize the helper class
-	public ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage> messagesRelationship() {
+	public ERXUnmodeledToManyRelationship&lt;CTMediaTemplate, CTMessage&gt; messagesRelationship() {
 		if (_messagesRelationship == null) {
-			_messagesRelationship = new ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage>(this,
+			_messagesRelationship = new ERXUnmodeledToManyRelationship&lt;CTMediaTemplate, CTMessage&gt;(this,
 							CTMessage.ENTITY_NAME, CTMessage.XKEY_MEDIA_TEMPLATE);
 		}
 		return _messagesRelationship;
@@ -55,23 +46,23 @@ import er.extensions.eof.ERXS;
 		return messagesRelationship().qualifierForObjects();
 	}
 
-	public NSArray<CTMessage> messages() {
+	public NSArray&lt;CTMessage&gt; messages() {
 		return messagesRelationship().objects();
 	}
 
-	public ERXFetchSpecification<CTMessage> fetchSpecificationForMessages() {
+	public ERXFetchSpecification&lt;CTMessage&gt; fetchSpecificationForMessages() {
 		return messagesRelationship().fetchSpecificationForObjects();
 	}
 
-	public NSArray<CTMessage> messages(EOQualifier qualifier) {
+	public NSArray&lt;CTMessage&gt; messages(EOQualifier qualifier) {
 		return messagesRelationship().objects(qualifier);
 	}
 
-	public NSArray<CTMessage> messages(EOQualifier qualifier, boolean fetch) {
+	public NSArray&lt;CTMessage&gt; messages(EOQualifier qualifier, boolean fetch) {
 		return messagesRelationship().objects(qualifier, null, fetch);
 	}
 
-	public NSArray<CTMessage> messages(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+	public NSArray&lt;CTMessage&gt; messages(EOQualifier qualifier, NSArray&lt;EOSortOrdering&gt; sortOrderings, boolean fetch) {
 		return messagesRelationship().objects(qualifier, sortOrderings, fetch);
 	}
 
@@ -90,8 +81,7 @@ import er.extensions.eof.ERXS;
 	public void deleteAllMessagesRelationships() {
 		messagesRelationship().deleteAllObjectsRelationships();
 	}
-	</code>
-</pre>
+	</code></pre>
  * @author kieran
  * 
  */
@@ -252,6 +242,13 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	public void removeFromObjectsRelationship(NSArray<D> objects) {
 		for (D object : objects) {
 			object.removeObjectFromBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
+		}
+	}
+	
+	public void removeAllFromObjectsRelationship() {
+		NSArray<D> objects = objects().immutableClone();
+		for (D object : objects) {
+			removeFromObjectsRelationship(object);
 		}
 	}
 

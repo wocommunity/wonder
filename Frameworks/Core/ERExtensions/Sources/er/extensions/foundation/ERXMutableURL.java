@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang3.CharEncoding;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -233,6 +235,15 @@ public class ERXMutableURL {
 	 * @return the port of this URL (can be null)
 	 */
 	public Integer port() {
+		if (_port == null) {
+			if (protocol() != null) {
+				if ("https".equals(protocol())) {
+					_port = 443;
+				} else {
+					_port = 80;
+				}
+			}
+		}
 		return _port;
 	}
 
@@ -256,7 +267,7 @@ public class ERXMutableURL {
 	}
 
 	/**
-	 * Replaces the query parameters of this URL with the given k=v&k2=v2 format
+	 * Replaces the query parameters of this URL with the given k=v&amp;k2=v2 format
 	 * string.
 	 * 
 	 * @param queryParameters
@@ -270,7 +281,7 @@ public class ERXMutableURL {
 	}
 	
 	/**
-	 * Appends the query parameters of this URL with the given k=v&k2=v2 format
+	 * Appends the query parameters of this URL with the given k=v&amp;k2=v2 format
 	 * string.
 	 * 
 	 * @param queryParameters
@@ -298,9 +309,9 @@ public class ERXMutableURL {
 					if (key == null || key.length() == 0) {
 						throw new MalformedURLException("The query string parameter '" + queryStringToken + " has an empty key in '" + queryParameters + "'.");
 					}
-					key = URLDecoder.decode(key, "UTF-8");
+					key = URLDecoder.decode(key, CharEncoding.UTF_8);
 					if (value != null) {
-						value = URLDecoder.decode(value, "UTF-8");
+						value = URLDecoder.decode(value, CharEncoding.UTF_8);
 					}
 					addQueryParameter(key, value);
 				}
@@ -478,7 +489,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the query parmeters for the given key
+	 * @return the query parameters for the given key
 	 */
 	public synchronized List<String> queryParameters(String key) {
 		return _queryParameters.get(key);
@@ -489,7 +500,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the first query parmeter for the given key
+	 * @return the first query parameter for the given key
 	 */
 	public synchronized String queryParameter(String key) {
 		String queryParameter = null;
@@ -545,7 +556,7 @@ public class ERXMutableURL {
 		}
 		if (_path != null) {
 			if (!_path.startsWith("/")) {
-				sb.append("/");
+				sb.append('/');
 			}
 			sb.append(_path);
 		}
@@ -563,7 +574,7 @@ public class ERXMutableURL {
 	}
 
 	/**
-	 * Returns the query parameters of this URL as a String (in x=y&a=b syntax).
+	 * Returns the query parameters of this URL as a String (in x=y&amp;a=b syntax).
 	 * 
 	 * @return the query parameters of this URL as a String
 	 */
@@ -581,16 +592,16 @@ public class ERXMutableURL {
 				String key = queryParameter.getKey();
 				Iterator<String> valuesIter = queryParameter.getValue().iterator();
 				if (!valuesIter.hasNext()) {
-					sb.append(URLEncoder.encode(key, "UTF-8"));
+					sb.append(URLEncoder.encode(key, CharEncoding.UTF_8));
 				}
 				while (valuesIter.hasNext()) {
 					String value = valuesIter.next();
-					sb.append(URLEncoder.encode(key, "UTF-8"));
+					sb.append(URLEncoder.encode(key, CharEncoding.UTF_8));
 					if (value != null) {
 						if (key.length() > 0) {
 							sb.append('=');
 						}
-						sb.append(URLEncoder.encode(value, "UTF-8"));
+						sb.append(URLEncoder.encode(value, CharEncoding.UTF_8));
 					}
 					if (valuesIter.hasNext()) {
 						sb.append('&');

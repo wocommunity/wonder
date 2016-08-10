@@ -2,24 +2,13 @@ package er.extensions.eof;
 
 import java.util.Iterator;
 
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyComparisonQualifier;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOQualifierEvaluation;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
-
-import er.extensions.qualifiers.ERXQualifierTraversal;
 
 /**
  * Extended fetch specification (work in progress). 
@@ -28,9 +17,15 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  * </ul>
  * @author ak
  *
- * @param &lt;T&gt;
+ * @param <T>
  */
 public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFetchSpecification {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * List of supported aggregate operators.
@@ -185,6 +180,7 @@ public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFe
 	 * Type-safe method to fetch the rows for this fetch spec.
 	 * @param ec
 	 */
+	@Override
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
 		NSArray oldKeyPaths = rawRowKeyPaths();
 		try {

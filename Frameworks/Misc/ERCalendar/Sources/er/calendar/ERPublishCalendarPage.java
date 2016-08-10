@@ -1,8 +1,19 @@
 package er.calendar;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * ERPublishCalendarPage is a WebObjects component for dynamically
@@ -27,17 +38,22 @@ import java.util.*;
  * {@link ERSimpleEvent ERSimpleEvent}, or any other class implementing
  * {@link ERCalendarEvent the ERCalendarEvent interface}.
  *
- * @author 	Johan Carlberg <johan@oops.se>
+ * @author 	Johan Carlberg &lt;johan@oops.se&gt;
  * @version 	1.0, 2002-09-30
  */
-
 public class ERPublishCalendarPage extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected String calendarName;
     protected String calendarTimeZone;
     protected final int maxLineLength = 75;
     public static String newline = System.getProperty("line.separator");
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
     public ERCalendarEvent event;
     protected NSTimestamp eventTimestamp;
@@ -74,14 +90,15 @@ public class ERPublishCalendarPage extends WOComponent {
      * @param aResponse  the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
      * @param aContext   context of a transaction
      */
+    @Override
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();
-	aResponse.setContentEncoding ("UTF-8");
+	aResponse.setContentEncoding("UTF-8");
 	super.appendToResponse (aResponse, aContext);
 	aResponse.setHeader ("text/calendar","content-type");
 	try {
-	    aResponse.setContent (new NSData (foldLongLinesInString (new String (aResponse.content().bytes(), "UTF-8")).getBytes ("UTF-8")));
+	    aResponse.setContent(new NSData(foldLongLinesInString(new String(aResponse.content().bytes(), "UTF-8")).getBytes("UTF-8")));
 	} catch (java.io.UnsupportedEncodingException exception) {
 	    // If encoding is not supported, content of response is left unmodified
 	    // (although exceptions will be thrown elsewhere if UTF-8 is unsupported).
@@ -132,7 +149,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	events.removeObjectsInArray (eventsArray);
     }
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     public NSMutableArray events() {
 	return events;
     }
@@ -198,7 +214,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  status of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#status
+     * @see     ERCalendarEvent#status()
      */
     public String escapedEventStatus()
     {
@@ -208,7 +224,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  summary of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#summary
+     * @see     ERCalendarEvent#summary()
      */
     public String escapedEventSummary()
     {
@@ -241,7 +257,7 @@ public class ERPublishCalendarPage extends WOComponent {
      *		"WEEKLY", "DAILY", "HOURLY", "MINUTELY", "SECONDLY" depending
      *		on the value returned by {@link ERCalendarEvent#repeatFrequency
      *		repeatFrequency}.
-     * @see	ERCalendarEvent#repeatFrequency
+     * @see	ERCalendarEvent#repeatFrequency()
      */
     public String eventRepeatFrequency()
     {
@@ -274,7 +290,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	GregorianCalendar calendarDate = new GregorianCalendar();
 
 	calendarDate.setTime (event.startTime());
-	return new Integer (calendarDate.get (Calendar.MONTH) + 1);
+	return Integer.valueOf(calendarDate.get(Calendar.MONTH) + 1);
     }
 
     /**
@@ -286,7 +302,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	String byDay = "";
 
 	if (event.repeatDayOfWeekInMonth() != 0) {
-	    byDay = new Integer (event.repeatDayOfWeekInMonth()).toString();
+	    byDay = Integer.valueOf(event.repeatDayOfWeekInMonth()).toString();
 	}
 	switch (event.repeatDayOfWeek()) {
 	    case Calendar.SUNDAY:

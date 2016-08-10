@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -27,7 +28,7 @@ import er.extensions.woextensions.WOSortOrder;
 //		if you want the app to 'remember' what the last sort was for a user.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Better sort order changer. Useful for providing custom sort order images and remembering the sort orderings.<br />
+ * Better sort order changer. Useful for providing custom sort order images and remembering the sort orderings.
  * 
  * @binding d2wContext
  * @binding displayGroup
@@ -45,13 +46,18 @@ import er.extensions.woextensions.WOSortOrder;
  */
 
 public class ERXSortOrder extends WOSortOrder {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXSortOrder(WOContext context) {
         super(context);
     }
     
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXSortOrder.class);
+    private final static Logger log = LoggerFactory.getLogger(ERXSortOrder.class);
 
     //////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
     public final static String SortOrderingChanged = "SortOrderingChanged";
@@ -62,7 +68,9 @@ public class ERXSortOrder extends WOSortOrder {
     public final static int SortedAscending = 1;
     public final static int SortedDescending = 2;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public void reset() {
         super.reset();
         _currentState = Reset;
@@ -138,6 +146,7 @@ public class ERXSortOrder extends WOSortOrder {
         return src;
     }
     
+    @Override
     public String frameworkName() {
         return hasCustomImageNameForCurrentState() ? 
                 (hasBinding("frameworkName") ?
@@ -163,19 +172,20 @@ public class ERXSortOrder extends WOSortOrder {
     }
 
     // FIXME: Should post a notification even if d2wContext isn't bound.
+    @Override
     public WOComponent toggleClicked() {
         super.toggleClicked();
-        if (log.isDebugEnabled()) log.debug("toggleClicked "+valueForBinding("d2wContext"));
-        if (valueForBinding("d2wContext") != null) {
+        Object context = valueForBinding("d2wContext");
+        log.debug("toggleClicked {}", context);
+        if (context != null) {
             NSNotificationCenter.defaultCenter().postNotification(SortOrderingChanged,
                                                                   displayGroup().sortOrderings(),
-                                                                  new NSDictionary(valueForBinding("d2wContext"), "d2wContext"));
+                                                                  new NSDictionary(context, "d2wContext"));
         }
         return null;
     }
     
-    
-
+    @Override
     public String helpString() {
        return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERXSortOrder.sortBy", this);
     }
@@ -186,9 +196,8 @@ public class ERXSortOrder extends WOSortOrder {
         if (nsarray != null && nsarray.count() > 0) {
             EOSortOrdering eosortordering = (EOSortOrdering)nsarray.objectAtIndex(0);
             return eosortordering;
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected NSSelector _primaryKeySortOrderingSelector() {

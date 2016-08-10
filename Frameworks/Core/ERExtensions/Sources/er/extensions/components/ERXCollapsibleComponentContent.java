@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.woextensions.WOCollapsibleComponentContent;
 
 /**
- * Better collapsible component content.<br />
+ * Better collapsible component content.
  * 
  * @binding closedImageFileName" defaults="Resources
  * @binding closedLabel
@@ -25,6 +25,12 @@ import er.extensions.woextensions.WOCollapsibleComponentContent;
  */
 
 public class ERXCollapsibleComponentContent extends WOCollapsibleComponentContent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXCollapsibleComponentContent(WOContext context) {
         super(context);
@@ -33,6 +39,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
     protected String _closedImageFileName, _openedImageFileName, _framework;
     protected boolean _isFrameworkSet = false;
     
+    @Override
     public String openedImageFileName()  {
         if (_openedImageFileName==null) {
             if (hasBinding("openedImageFileName")) {
@@ -44,6 +51,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
         return _openedImageFileName;
     }
 
+    @Override
     public String closedImageFileName()  {
         if (_closedImageFileName==null) {
             if (hasBinding("closedImageFileName")) {
@@ -55,6 +63,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
         return _closedImageFileName;
     }
 
+    @Override
     public String framework() {
         if (!_isFrameworkSet) {
             _isFrameworkSet = true;

@@ -6,7 +6,12 @@
 <!-- Called from "build.xml", normally shouldn't be used as   --> 
 <!-- a standalone buildfile.                                  -->
 <!-- ======================================================== -->
-<project name="wonder-doc" default="api" basedir="../..">
+<project name="wonder-doc" default="api" basedir="../.." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+    <path id="maven-ant-tasks.classpath" path="${basedir}/Build/lib/maven-ant-tasks-2.1.3.jar" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+    <artifact:pom id="wonder-version" file="pom.xml" />
+    <property name="project.version" value="${wonder-version.version}" />
 
     <property name="wonder.root" value="${basedir}" />
     <property file="${wonder.root}/build.properties" />
@@ -20,12 +25,16 @@
     <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
     <property name="build.classes" value="${build.root}/classes/${project.name}" />
 
+    <tstamp>
+        <format property="current.year" pattern="yyyy"/>
+    </tstamp>
+
     <!-- ==================================================== -->
     <!--              Derived Properties.                     -->
     <!-- These properties are derived from other properties.  -->
     <!-- Normally, these should not be redefined.             -->
     <!-- ==================================================== -->
-    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+    <property name="dist" value="${dist.base}/${project.name}"/>
     
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
@@ -144,6 +153,7 @@
         <copy todir="${dist}/" flatten="true">
             <fileset dir="${wonder.root}">
                 <include name="*.txt"/>
+                <exclude name="BUILD.txt"/>
                 <include name="**/LICENSE*"/>
             </fileset>
         </copy>
@@ -156,7 +166,8 @@
                    use="true"
                    verbose="false"
                    maxmemory="512m"
-                   windowtitle="Project Wonder Reference Documentation">
+                   windowtitle="Project Wonder Reference Documentation"
+                   stylesheetfile="${wonder.root}/Build/build/mystylesheet.css">
 
             <classpath refid="classpath"/>
             <sourcepath>
@@ -165,15 +176,19 @@
                          <exclude name="**/*Example*/**" /> 
                          <exclude name="**/Applications/**" /> 
                          <exclude name="**/Tests/**" />
+                         <exclude name="**/Archives/**" />
+                    </dirset>
+                    <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
+                         <include name="**/Sources/" />
                     </dirset>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
-            <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2011  Project Wonder.]]></bottom>
+            <header>Project Wonder ${project.version}</header>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; ${current.year} Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
-            <link href="http://java.sun.com/j2se/1.4/docs/api/"/>
-            <link href="http://developer.apple.com/documentation/WebObjects/Reference/WO53_Reference/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
-            <link href="http://jakarta.apache.org/log4j/docs/api/"/>
+            <link href="https://docs.oracle.com/javase/8/docs/api/"/>
+            <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
+            <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
             <link href="http://joda-time.sourceforge.net/api-release/" />
             <tag name="author" description="Author:" scope="all" />
@@ -191,7 +206,6 @@
                 <dirset dir="${build.root}/Build/lib" />
             </classpath>
         </java>
-        <echo>components javadoc installation finished</echo>
     </target>
 
     <target name="componentsOnly" depends="build">
@@ -209,6 +223,10 @@
                          <include name="Frameworks/**/Sources/" />
                          <exclude name="**/*Example*/**" />
                          <exclude name="**/Applications/**" />
+                         <exclude name="**/Archives/**" />
+                    </dirset>
+                    <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
+                         <include name="**/Sources/" />
                     </dirset>
             </sourcepath>
             <doclet name="ComponentDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />
@@ -232,6 +250,10 @@
                          <include name="Frameworks/**/Sources/" />
                          <exclude name="**/*Example*/**" />
                          <exclude name="**/Applications/**" />
+                         <exclude name="**/Archives/**" />
+                    </dirset>
+                    <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
+                         <include name="**/Sources/" />
                     </dirset>
             </sourcepath>
             <doclet name="D2WKeyDoclet" path="${build.root}/Build/lib:${build.root}/Build/lib/jdom-b7.jar" />

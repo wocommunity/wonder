@@ -14,7 +14,7 @@ import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.<br />
+ * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.
  * 
  * @binding tabs a list of objects representing the tabs
  * @binding tabNameKey a string containing a key to apply to tabs to get the title of the tab
@@ -36,6 +36,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding nonSelectedTabImageContainerClass the style used for the td that surrounds the left and right side images of an unselected tab
  */
 public class ERXTabPanel extends WOTabPanel  {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXTabPanel(WOContext c) {
         super(c);
@@ -52,9 +58,10 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public Object selectedTabIdentifier() {
     	int id = selectedTabName().hashCode();
-    	return new Integer(id < 0 ? -id : id);
+    	return Integer.valueOf(id < 0 ? -id : id);
     }
     
+    @Override
     public void switchSubmitTab() {
         Object result = null;
 
@@ -203,6 +210,7 @@ public class ERXTabPanel extends WOTabPanel  {
     }
     
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         _useLinkForTabSwitch=null;
         super.appendToResponse(aResponse, aContext);

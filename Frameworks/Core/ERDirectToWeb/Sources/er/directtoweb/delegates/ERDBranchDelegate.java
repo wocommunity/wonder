@@ -19,7 +19,6 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -30,7 +29,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.ERDirectToWeb;
-import er.directtoweb.components.ERDCustomComponent;
 import er.directtoweb.interfaces.ERDMessagePageInterface;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -45,6 +43,12 @@ import er.extensions.localization.ERXLocalizer;
  * {@link ERDBranchInterface ERDBranchInterface}.
  */
 public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Runtime flags for the delegate, so you can have one delegate for all tasks.
@@ -85,7 +89,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * Implementation of the {@link NextPageDelegate NextPageDelegate}
      * interface. This method provides the dynamic dispatch based on
      * the selected branch provided by the sender. Will call the 
-     * method <branchName>(WOComponent) on itself returning the 
+     * method &lt;branchName&gt;(WOComponent) on itself returning the 
      * result. 
      * @param sender template invoking the branch delegate
      * @return result of dynamic method lookup and execution on itself.

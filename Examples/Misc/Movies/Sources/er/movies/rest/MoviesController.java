@@ -70,9 +70,9 @@ public class MoviesController extends ERXDefaultRouteController {
 
 		return filter;
 	}
-	
+
+	@Override
 	protected ERXRestFormat defaultFormat() {
-		return ERXRestFormat.JSON;
+		return ERXRestFormat.json();
 	}
-	
 }

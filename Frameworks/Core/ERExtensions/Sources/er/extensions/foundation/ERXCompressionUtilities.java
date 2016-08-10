@@ -15,14 +15,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSData;
 
 
 public class ERXCompressionUtilities {
-
-	public static final Logger log = Logger.getLogger(ERXCompressionUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXCompressionUtilities.class);
 
 	/**
 	 * Returns an NSData containing the gzipped version of the given input stream.
@@ -117,8 +118,8 @@ public class ERXCompressionUtilities {
 
 	public static String gunzipString(String source) {
 		try {
-			byte[] b = gunzipByteArray(source.getBytes("UTF-8"));
-			return new String(b, "UTF-8");
+			byte[] b = gunzipByteArray(source.getBytes(CharEncoding.UTF_8));
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -129,7 +130,7 @@ public class ERXCompressionUtilities {
 		try {
 			byte[] b = gunzipByteArray(input);
 
-			return new String(b, "UTF-8");
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -138,7 +139,7 @@ public class ERXCompressionUtilities {
 
 	public static byte[] gzipStringAsByteArray(String source) {
 		try {
-			return gzipByteArray(source.getBytes("UTF-8"));
+			return gzipByteArray(source.getBytes(CharEncoding.UTF_8));
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -165,7 +166,7 @@ public class ERXCompressionUtilities {
 			return compressedData;
 		}
 		catch (IOException e) {
-			log.error("Caught exception zipping byte array: " + e, e);
+			log.error("Caught exception zipping byte array: {}", e, e);
 			return null;
 		}
 	}
@@ -198,8 +199,7 @@ public class ERXCompressionUtilities {
 				String filename = directory.getAbsolutePath() + File.separator + oriName;
 
 				if (entry.isDirectory()) {
-					if (log.isDebugEnabled())
-						log.debug("creating directory " + oriName);
+					log.debug("creating directory {}", oriName);
 
 					File f = new File(filename);
 					f.mkdirs();
@@ -217,16 +217,14 @@ public class ERXCompressionUtilities {
 						fis.flush();
 						fis.close();
 
-						if (log.isDebugEnabled())
-							log.debug("unzipped entry " + filename);
+						log.debug("unzipped entry {}", filename);
 					}
 				}
 				long end1 = System.currentTimeMillis();
 
 			}
 			long end = System.currentTimeMillis();
-			if (log.isDebugEnabled())
-				log.debug("whole decompression took " + (end - start));
+			log.debug("whole decompression took {}ms", end - start);
 			return directory;
 		}
 		catch (IOException e) {
@@ -267,7 +265,7 @@ public class ERXCompressionUtilities {
 
 	public static String deflateString(String source) {
 		try {
-			return new String(deflateByteArray(source.getBytes("UTF-8")), "UTF-8");
+			return new String(deflateByteArray(source.getBytes(CharEncoding.UTF_8)), CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -276,8 +274,8 @@ public class ERXCompressionUtilities {
 
 	public static String inflateString(String source) {
 		try {
-			byte[] b = inflateByteArray(source.getBytes("UTF-8"));
-			return new String(b, "UTF-8");
+			byte[] b = inflateByteArray(source.getBytes(CharEncoding.UTF_8));
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;

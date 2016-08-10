@@ -10,12 +10,12 @@ import com.webobjects.foundation.NSNotification;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.indexing.ERAutoIndex.AutoTransactionHandler;
 
 public class ERAttributeIndex extends ERIndex {
 
     protected class AttributeTransactionHandler extends TransactionHandler {
         
+        @Override
         public void _handleChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
             if (ec.parentObjectStore() == ec.rootObjectStore()) {
@@ -23,10 +23,10 @@ public class ERAttributeIndex extends ERIndex {
                 String notificationName = n.name();
                 if (notificationName.equals(ERXEC.EditingContextWillSaveChangesNotification)) {
                     ec.processRecentChanges();
-                    NSArray inserted = (NSArray) ec.insertedObjects();
-                    NSArray updated = (NSArray) ec.updatedObjects();
+                    NSArray inserted = ec.insertedObjects();
+                    NSArray updated = ec.updatedObjects();
                     updated = ERXArrayUtilities.arrayMinusArray(updated, inserted);
-                    NSArray deleted = (NSArray) ec.deletedObjects();
+                    NSArray deleted = ec.deletedObjects();
 
                     Transaction transaction = new Transaction(ec);
 
@@ -58,7 +58,7 @@ public class ERAttributeIndex extends ERIndex {
 
     private static String toUrl(File store) {
         try {
-            return store.toURL().toString();
+            return store.toURI().toURL().toString();
         } catch (MalformedURLException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }

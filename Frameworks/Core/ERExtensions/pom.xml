@@ -3,7 +3,7 @@
     <parent>
         <groupId>wonder.frameworks</groupId>
         <artifactId>core</artifactId>
-        <version>5.4-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>wonder.core</groupId>
@@ -46,10 +46,6 @@
             <artifactId>JavaWOExtensions</artifactId>
         </dependency>
         <dependency>
-            <groupId>wonder.core</groupId>
-            <artifactId>JavaWOExtensions</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.webobjects</groupId>
             <artifactId>JavaFoundation</artifactId>
         </dependency>
@@ -78,6 +74,11 @@
             <artifactId>JavaWOJSPServlet</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.webobjects</groupId>
+            <artifactId>JavaWebServicesSupport</artifactId>
+            <version>${webobjects.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
         </dependency>
@@ -94,9 +95,21 @@
             <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

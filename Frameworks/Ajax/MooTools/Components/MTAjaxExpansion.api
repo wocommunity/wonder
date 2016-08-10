@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="MTAjaxExpansion" wocomponentcontent="true">    <binding name="accesskey"/>
+        <binding name="action"/>
+        <binding name="class"/>
+        <binding name="closedLabel"/>
+        <binding name="elementName"/>
+        <binding name="expanded"/>
+        <binding name="id"/>
+        <binding name="initiallyExpanded"/>
+        <binding name="linkClass"/>
+        <binding name="linkID"/>
+        <binding name="onComplete"/>
+        <binding name="onExpansionComplete"/>
+        <binding name="onFailure"/>
+        <binding name="onLoading"/>
+        <binding name="onSuccess"/>
+        <binding name="openedLabel"/>
+        <binding name="string"/>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,171 @@
+ButtonConditional : WOConditional {
+	condition = button;
+}
+
+CancelAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = cancelFunctionCall;
+	class = ^cancelClass;
+}
+
+CancelFunction : MTAjaxUpdateLink {
+	action = cancel;
+	evalScripts = true;
+	functionName = cancelFunctionName;
+	onClick = ^onCancelClick;
+	onClickBefore = ^onCancelClickBefore;
+	onFailure = ^onCancelFailure;
+	onLoading = ^onCancelling;
+	onSuccess = ^onCancelSuccess;
+	updateContainerID = cancelUpdateContainerID;
+}
+
+CancelLabel : WOString {
+	value = ^cancelLabel;
+	valueWhenEmpty = "cancel";
+}
+
+EditAction : WOGenericContainer {
+	class = ^editClass;
+	elementName = "div";
+	onClick = editFunctionCall;
+}
+
+EditComponent : ERXWOComponentContent {
+	templateName = "edit";
+}
+
+EditForm : WOForm {
+	class = ^formClass;
+	disabled = disableForm;
+	multipleSubmit = true;
+	name = id;
+	onSubmit = ^onSubmit;
+}
+
+EditFunction : MTAjaxUpdateLink {
+	action = startEditing;
+	disabled = ^disabled;
+	evalScripts = true;
+	functionName = editFunctionName;
+	onClick = ^onEditClick;
+	onClickBefore = ^onEditClickBefore;
+	onFailure = ^onEditFailure;
+	onRequest = ^onEditing;
+	onSuccess = ^onEditSuccess;
+	updateContainerID = id;
+}
+
+ID : WOString {
+	value = id;
+}
+
+IsChangingToEditConditional : WOConditional {
+	condition = changingToEdit;
+}
+
+IsChangingToViewConditional : WOConditional {
+	condition = changingToView;
+}
+
+IsEditingConditional : WOConditional {
+	condition = editing;
+}
+
+IsNotEditingConditional : WOConditional {
+	condition = editing;
+	negate = true;
+}
+
+LinkConditional : WOConditional {
+	condition = button;
+	negate = true;
+}
+
+LinkOnSaveConditional : WOConditional {
+	condition = linkOnSave;
+}
+
+ManualViewControlConditional : WOConditional {
+	condition = manualViewControl;
+}
+
+NotManualEditControlConditional : WOConditional {
+	condition = manualEditControl;
+	negate = true;
+}
+
+NotManualViewControlConditional : WOConditional {
+	condition = manualControl;
+	negate = true;
+}
+
+SaveButtonAction : WOGenericContainer {
+	class = ^saveClass;
+	elementName = "input";
+	onClick = saveFunctionCall;
+	type = "button";
+	value = saveLabel;
+}
+
+SaveLabel : WOString {
+	value = saveLabel;
+}
+
+SaveLinkAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = saveFunctionCall;
+	class = ^saveClass;
+}
+
+SaveLinkFunction : MTAjaxUpdateLink {
+	accesskey = save;
+	evalScripts = true;
+	formName = formName;
+	functionName = saveFunctionName;
+	onClick = ^onSaveClick;
+	onClickBefore = ^onSaveClickBefore;
+	onFailure = ^onSaveFailure;
+	onRequest = ^onSaving;
+	onSuccess = ^onSaveSuccess;
+	updateContainerID = saveUpdateContainerID;
+}
+
+SaveSubmitFunction : MTAjaxSubmitButton {
+	action = save;
+	button = false;
+	evalScripts = true;
+	formName = formName;
+	formSerializer = ^formSerializer;
+	functionName = saveFunctionName;
+	onClick = ^onSaveClick;
+	onClickBefore = ^onSaveClickBefore;
+	onFailure = ^onSaveFailure;
+	onRequest = ^onSaving;
+	onSuccess = ^onSaveSuccess;
+	updateContainerID = saveUpdateContainerID;
+}
+
+ScriptContainer : WOGenericContainer {
+	elementName = "script";
+}
+
+SubmitOnSaveConditional : WOConditional {
+	condition = submitOnSave;
+}
+
+UpdateContainer : MTAjaxUpdateContainer {
+	id = id;
+	class = ^class;
+	elementName = elementName;
+	evalScripts = true;
+	onRequest = ^onRequest;
+	onComplete = ^onComplete;
+	style = ^style;
+}
+
+ViewComponent : ERXWOComponentContent {
+	templateName = "view";
+}

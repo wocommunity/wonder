@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Modernized query page.<br />
+ * Modernized query page.
  * 
  * @d2wKey headerComponentName
  * @d2wKey showListInSamePage
@@ -28,7 +28,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author davidleber
  */
 public class ERMODQueryPage extends ERD2WQueryPageTemplate {
-    
+  /**
+   * Do I need to update serialVersionUID?
+   * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+   * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+   */
+  private static final long serialVersionUID = 1L;
+  
 	public interface Keys extends ERD2WQueryPageTemplate.Keys {
 		public static final String parentPageConfiguration = "parentPageConfiguration";
 		public static final String useAjaxControlsWhenEmbedded = "useAjaxControlsWhenEmbedded";
@@ -61,7 +67,7 @@ public class ERMODQueryPage extends ERD2WQueryPageTemplate {
 		WOComponent page = super.returnAction();
 		boolean useAjaxWhenEmbedded = ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.useAjaxControlsWhenEmbedded));
 		if (useAjaxWhenEmbedded) {
-			if (this.parent() != null) {
+			if (parent() != null) {
 				D2WPage parent = (D2WPage)ERD2WUtilities.enclosingPageOfClass(this, D2WPage.class);
 				if (parent != null) 
 					parent.takeValueForKeyPath(null, "d2wContext.inlineTask");

@@ -1,0 +1,35 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = "env_pk"; name = envPk; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = "result_pk"; 
+            name = resultPk; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (envPk, resultPk); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    externalName = "env_joins"; 
+    fetchSpecificationDictionary = {}; 
+    name = EnvJoin; 
+    primaryKeyAttributes = (envPk, resultPk); 
+    relationships = (
+        {
+            destination = Environment; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = envPk; }); 
+            name = environment; 
+        }, 
+        {
+            destination = Result; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = resultPk; }); 
+            name = result; 
+        }
+    ); 
+}

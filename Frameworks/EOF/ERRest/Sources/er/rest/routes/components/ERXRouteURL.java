@@ -1,8 +1,8 @@
 package er.rest.routes.components;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -38,11 +38,6 @@ public class ERXRouteURL extends ERXComponent {
 		return true;
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	public Object record() {
 		return valueForBinding("record");
 	}
@@ -65,12 +60,13 @@ public class ERXRouteURL extends ERXComponent {
 		boolean includeSessionID = context().hasSession() && context().session().storesIDsInURLs();
 
 		NSMutableDictionary<String, Object> queryParameters = new NSMutableDictionary<String, Object>();
-		for (String bindingKey : (NSArray<String>) bindingKeys()) {
+		for (String bindingKey : bindingKeys()) {
 			if (bindingKey.startsWith("?")) {
 				Object value = valueForBinding(bindingKey);
 				String key = bindingKey.substring(1);
 				if (value != null) {
-					if ("wosid".equals(key) && (Boolean.FALSE.equals(value) || "false".equals(value))) {
+					String sessionIdKey = WOApplication.application().sessionIdKey();
+					if (sessionIdKey.equals(key) && (Boolean.FALSE.equals(value) || "false".equals(value))) {
 						includeSessionID = false;
 					}
 					else {
@@ -90,7 +86,7 @@ public class ERXRouteURL extends ERXComponent {
 
 		boolean absolute = booleanValueForBinding("absolute");
 		if (absolute) {
-			context()._generateCompleteURLs();
+			context().generateCompleteURLs();
 		}
 		String format = stringValueForBinding("format", "html");
 		Object record = record();
@@ -120,7 +116,7 @@ public class ERXRouteURL extends ERXComponent {
 			}
 		}
 		if (absolute) {
-			context()._generateRelativeURLs();
+			context().generateRelativeURLs();
 		}
 		return linkUrl;
 	}

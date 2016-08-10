@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.URL;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver._private.WODefaultAdaptor;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -32,12 +31,7 @@ public class ERXSecureDefaultAdaptor extends ERXDefaultAdaptor {
 		// port number was selected!
 		if (parameters != null && Integer.valueOf(0).equals(parameters.objectForKey(WOProperties._PortKey))) {
 			try {
-				Field listenSocketField;
-				if (ERXApplication.isWO54()) {
-					listenSocketField = Class.forName("com.webobjects.appserver._private.WOClassicAdaptor").getDeclaredField("_listenSocket");
-				} else { 
-					listenSocketField = WODefaultAdaptor.class.getDeclaredField("_listenSocket");
-				}
+				Field listenSocketField = Class.forName("com.webobjects.appserver._private.WOClassicAdaptor").getDeclaredField("_listenSocket");
 				listenSocketField.setAccessible(true);
 				ServerSocket socket = (ServerSocket) listenSocketField.get(this);
 				int localPort = socket.getLocalPort();

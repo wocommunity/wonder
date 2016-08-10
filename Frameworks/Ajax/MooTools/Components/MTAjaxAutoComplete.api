@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="MTAjaxAutoComplete" wocomponentcontent="true">    <binding name="accesskey"/>
+        <binding name="activateOnFocus"/>
+        <binding name="afterUpdateElement"/>
+        <binding name="autoSelect"/>
+        <binding name="choices"/>
+        <binding name="class"/>
+        <binding name="containerId"/>
+        <binding name="default"/>
+        <binding name="displayString"/>
+        <binding name="frequency"/>
+        <binding name="fullSearch"/>
+        <binding name="id"/>
+        <binding name="ignoreCase"/>
+        <binding name="indicator"/>
+        <binding name="isLocal"/>
+        <binding name="isLocalSharedList"/>
+        <binding name="item"/>
+        <binding name="list"/>
+        <binding name="localSharedVarName"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+        <binding name="minChars"/>
+        <binding name="onblur"/>
+        <binding name="onchange"/>
+        <binding name="onfocus"/>
+        <binding name="onShow"/>
+        <binding name="partialChars"/>
+        <binding name="partialSearch"/>
+        <binding name="select"/>
+        <binding name="selection"/>
+        <binding name="style"/>
+        <binding name="tabindex"/>
+        <binding name="tokens"/>
+        <binding name="updateElement"/>
+        <binding name="value"/>
+    </wo>
+</wodefinitions>

@@ -26,15 +26,18 @@ package er.selenium;
 import java.io.File;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.CharEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 
@@ -42,7 +45,7 @@ import er.extensions.foundation.ERXProperties;
  * Direct action that returns the test results. This class is not used by users.
  */
 public class SeleniumTestResults extends WODirectAction {
-	private static final Logger log = Logger.getLogger(SeleniumAction.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumAction.class);
 	
 	public static final String DEFAULT_REPORT_PATH = "./";
 	
@@ -58,7 +61,7 @@ public class SeleniumTestResults extends WODirectAction {
     	try {
     		keys = keys.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
     	} catch (NSComparator.ComparisonException e) {
-    		log.debug("can't sort results' dictionary keys");
+    		log.debug("Can't sort results' dictionary keys.", e);
     	}
     	Iterator iter = keys.iterator();
     	while (iter.hasNext()) {
@@ -82,24 +85,24 @@ public class SeleniumTestResults extends WODirectAction {
     	if (filename != null) {
     		filename = ERXProperties.stringForKeyWithDefault("SeleniumReportPath", DEFAULT_REPORT_PATH) + "/" + filename;
     		try {
-    			ERXFileUtilities.stringToFile(report(), new File(filename), "UTF-8");
+    			ERXFileUtilities.stringToFile(report(), new File(filename), CharEncoding.UTF_8);
     		} catch (Exception e) {
-    			log.debug(e.getMessage());
+    			log.debug("Could not save report into file {}", filename, e);
     		}
     	}
     	
-    	WOResponse response = new WOResponse();
-    	response.appendContentString(report());
-    	return response;
+    	return new ERXResponse(report());
     }
     
+    @Override
     public WOActionResults defaultAction() {
         return processReport(null);
     }
 
+    @Override
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.FORBIDDEN);
         }
         if (actionName.equals("default"))
             return defaultAction();

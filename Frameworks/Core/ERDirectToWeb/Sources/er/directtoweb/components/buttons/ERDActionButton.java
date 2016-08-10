@@ -9,7 +9,6 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.directtoweb.SelectPageInterface;
 import com.webobjects.eocontrol.EODataSource;
@@ -22,10 +21,14 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  * Abstract superclass for all actions inside of Wonder D2W.
  * 
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
  */
-
 public  class ERDActionButton extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDActionButton.class);
@@ -46,9 +49,11 @@ public  class ERDActionButton extends ERDCustomComponent {
     }
 
     /** Action buttons must be stateless. */
+    @Override
     public final boolean isStateless() { return true; }
 
     /** Action buttons do not synchronize their variables. */
+    @Override
     public final boolean synchronizesVariablesWithBindings() { return false; }
 
     /** The current object. */
@@ -61,6 +66,7 @@ public  class ERDActionButton extends ERDCustomComponent {
     public EODataSource dataSource() {return (EODataSource)valueForBinding(Keys.dataSource); }
 
     /** The current task.*/
+    @Override
     public String task() { return (String)valueForBinding(Keys.task);  }
 
     /** Utility to return the next page in the enclosing page. */

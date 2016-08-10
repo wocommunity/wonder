@@ -39,7 +39,7 @@ WebObjects application.  ERAttachment framework was inspired by the Rails attach
 mechanism of adding attachments to your application that abstract the actual storage requirements for those 
 attachments.  The framework provide a single unified set of components and models that can allow the storage of
 attachments on your local filesystem, served through your webserver; on your local filesystem served through 
-a custom request handler; in your database, served through a custom request handler; and on Amazon's S3 service,
+a custom request handler; in your database, served through a custom request handler; on RackSpace's CloudFiles service; and on Amazon's S3 service,
 served directly from S3.  The intent of the framework is to make it very simple to control how the attachments
 are stored and served by simple adjusting some configuration properties.
 </p>
@@ -111,7 +111,7 @@ There are some properties that apply to all attachment types.
 	
 	<dt>er.attachment.storageType / er.attachment.[configurationName].storageType</dt>
 	<dd>(optional) When using the ERAttachmentUpload component, this sets the default storage type to use for the attachment.  Examples
-	are "s3", "db", or "file".  The default is "db".</dd>
+	are "cf", "s3", "db", or "file".  The default is "db".</dd>
 	
 	<dt>er.attachment.width / er.attachment.[configurationName].width and er.attachment.height / er.attachment.[configurationName].height</dt>
 	<dd>(optional) When using the ERAttachmentUpload component, this sets the width and/or height of the attachment. Currently this will resize the original attachment (i.e. the original is lost). Later versions will support generating thumbnails in addition to the original image.</dd>
@@ -243,6 +243,9 @@ Note: Deleting an attachment that is in the unavailable state may result in the 
 	
 	<dt>er.attachment.s3.bucket / er.attachment.[configurationName].s3.bucket</dt>
 	<dd>(required) The name of the bucket to store and retrieve attachments into.  The bucket must already exist in your S3 account.</dd> 
+	
+	<dt>er.attachment.s3.host / er.attachment.[configurationName].s3.host</dt>
+	<dd>(optional) Defaults to s3.amazonaws.com. Use this property if your bucket is not in the default region. For example put s3-eu-west-1.amazonaws.com for EU(Ireland).</dd> 
 
 	<dt>er.attachment.s3.key / er.attachment.[configurationName].s3.key</dt>
 	<dd>(optional) The name of the file to store in the S3 bucket.  This is evaluated as a path template.  The default value is "${pk}${ext}".</dd>
@@ -256,6 +259,32 @@ Note: Deleting an attachment that is in the unavailable state may result in the 
 	<dt>er.attachment.s3.proxy / er.attachment.[configurationName].s3.proxy</dt>
 	<dd>(optional) If proxy is true, then the attachment's contents will be served through the request handler proxy.  The default
 	is true.</dd>
+</dl>
+
+<h2>CloudFiles Attachments</h2>
+<p>
+RasckSpace's CloudFiles service is an alternative to Amazon's S3. Like the S3 implementation, uploading may take a while, so the actual upload to CloudFiles
+is performed in a background queue.  As a result, your attachment may be in an "unavailable" state (attachment.available = false)
+until the upload is complete.  The attachment components handle this state with specific views and by disabling attachment links.
+Note: Deleting an attachment that is in the unavailable state may result in the file not being removed from CloudFiles right now.
+</p>
+
+<dl>
+	<dt>er.attachment.cf.apiAccessKey / er.attachment.[configurationName].cf.apiAccessKey</dt>
+	<dd>(required) Your CloudFiles API access key ID.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
+	
+	<dt>er.attachment.cf.username / er.attachment.[configurationName].cf.username</dt>
+	<dd>(required) Your CloudFiles username.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
+	
+	<dt>er.attachment.cf.container / er.attachment.[configurationName].cf.container</dt>
+	<dd>(required) The name of the container to store and retrieve attachments into.  The container must already exist in your CloudFiles account.</dd> 
+
+	<dt>er.attachment.cf.connectionTimeOut / er.attachment.[configurationName].cf.connectionTimeOut</dt>
+	<dd>(optional) The timeout, in ms, before it stops trying to reach CloudFiles servers. Default is 5000</dd>
+
+	<dt>er.attachment.cf.authUrl / er.attachment.[configurationName].cf.authUrl</dt>
+	<dd>(optional) URL to the REST API. Default is https://auth.api.rackspacecloud.com/v1.0</dd>
+	
 </dl>
 
 <h2>Mime Types</h2>

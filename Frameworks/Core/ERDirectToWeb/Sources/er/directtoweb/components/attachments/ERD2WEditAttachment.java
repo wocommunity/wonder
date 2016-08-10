@@ -8,7 +8,7 @@ import com.webobjects.directtoweb.D2WComponent;
  * The configurationName is computed: 'Entity.propertyKey'
  * 
  * The properties for this configuration name must be set:
- * @see {http://webobjects.mdimension.com/hudson/job/Wonder53/javadoc/er/attachment/package-summary.html}
+ * @see <a href="http://jenkins.wocommunity.org/job/Wonder/javadoc/er/attachment/package-summary.html">http://jenkins.wocommunity.org/job/Wonder/javadoc/er/attachment/package-summary.html</a>
  * 
  * Prerequisite: you must set a D2W rule for key 'enctype' with value "multipart/form-data" in the edit page template
  * 
@@ -19,6 +19,12 @@ import com.webobjects.directtoweb.D2WComponent;
  * @d2wKey size
  */
 public class ERD2WEditAttachment extends D2WComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public ERD2WEditAttachment(WOContext aContext) {
 		super(aContext);

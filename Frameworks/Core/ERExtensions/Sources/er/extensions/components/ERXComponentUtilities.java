@@ -1,6 +1,9 @@
 package er.extensions.components;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -45,7 +48,7 @@ public class ERXComponentUtilities {
 	 *            the set of associations
 	 * @param component
 	 *            the component to evaluate their values within
-	 * @return a dictionary of key=value query parameters
+	 * @return a dictionary of key-value query parameters
 	 */
 	public static NSMutableDictionary queryParametersInComponent(NSDictionary associations, WOComponent component) {
 		NSMutableDictionary queryParameterAssociations = ERXComponentUtilities.queryParameterAssociations(associations);
@@ -62,7 +65,7 @@ public class ERXComponentUtilities {
 	 *            the component to evaluate their values within
 	 * @param removeQueryParametersAssociations
 	 *            should the entries be removed from the passed-in dictionary?
-	 * @return dictionary of key-value query parameters
+	 * @return a dictionary of key-value query parameters
 	 */
 	public static NSMutableDictionary queryParametersInComponent(NSMutableDictionary associations, WOComponent component, boolean removeQueryParametersAssociations) {
 		NSMutableDictionary queryParameterAssociations = ERXComponentUtilities.queryParameterAssociations(associations, removeQueryParametersAssociations);
@@ -89,14 +92,15 @@ public class ERXComponentUtilities {
 	 * 
 	 * @param associations
 	 *            the associations to enumerate
+	 * @return dictionary with query parameter associations
 	 */
-	public static NSMutableDictionary queryParameterAssociations(NSDictionary associations) {
+	public static NSMutableDictionary<String, WOAssociation> queryParameterAssociations(NSDictionary<String, WOAssociation> associations) {
 		return ERXComponentUtilities._queryParameterAssociations(associations, false);
 	}
 
 	/**
 	 * Returns the set of ?key=value associations from an associations
-	 * dictionary. If removeQueryParameterAssociations is true, the
+	 * dictionary. If removeQueryParameterAssociations is <code>true</code>, the
 	 * corresponding entries will be removed from the associations dictionary
 	 * that was passed in.
 	 * 
@@ -104,17 +108,18 @@ public class ERXComponentUtilities {
 	 *            the associations to enumerate
 	 * @param removeQueryParameterAssociations
 	 *            should the entries be removed from the passed-in dictionary?
+	 * @return dictionary with query parameter associations
 	 */
-	public static NSMutableDictionary queryParameterAssociations(NSMutableDictionary associations, boolean removeQueryParameterAssociations) {
+	public static NSMutableDictionary<String, WOAssociation> queryParameterAssociations(NSMutableDictionary<String, WOAssociation> associations, boolean removeQueryParameterAssociations) {
 		return ERXComponentUtilities._queryParameterAssociations(associations, removeQueryParameterAssociations);
 	}
 
-	public static NSMutableDictionary _queryParameterAssociations(NSDictionary associations, boolean removeQueryParameterAssociations) {
-		NSMutableDictionary mutableAssociations = null;
+	public static NSMutableDictionary<String, WOAssociation> _queryParameterAssociations(NSDictionary<String, WOAssociation> associations, boolean removeQueryParameterAssociations) {
+		NSMutableDictionary<String, WOAssociation> mutableAssociations = null;
 		if (removeQueryParameterAssociations) {
 			mutableAssociations = (NSMutableDictionary) associations;
 		}
-		NSMutableDictionary queryParameterAssociations = new NSMutableDictionary();
+		NSMutableDictionary<String, WOAssociation> queryParameterAssociations = new NSMutableDictionary<String, WOAssociation>();
 		Enumeration keyEnum = associations.keyEnumerator();
 		while (keyEnum.hasMoreElements()) {
 			String key = (String) keyEnum.nextElement();
@@ -189,15 +194,46 @@ public class ERXComponentUtilities {
 	 */
 	public static URL templateUrl(String componentName, String extension, NSArray languages) {
 		String htmlPathName = componentName + ".wo/" + componentName + "." + extension;
-		WOResourceManager resourcemanager = WOApplication.application().resourceManager();
-		URL templateUrl = resourcemanager.pathURLForResourceNamed(htmlPathName, null, languages);
+		WOResourceManager resourceManager = WOApplication.application().resourceManager();
+		URL templateUrl = pathUrlForResourceNamed(resourceManager, htmlPathName, languages);
+		if (templateUrl == null) {
+			// jw: hack for bundle-less builds as there is some sort of classpath problem that will
+			// pick up the wrong class for WOProjectBundle, _WOProject, … that register only component's
+			// .wo directories but not the containing files (.html, .wod, .woo). Thus we are assuming
+			// that if we can find the .wo directory we can manually point to the correct subfile
+			templateUrl = pathUrlForResourceNamed(resourceManager, componentName + ".wo", languages);
+			if (templateUrl != null) {
+				File templateDir = null;
+				try {
+					templateDir = new File(templateUrl.toURI());
+				} catch(URISyntaxException e) {
+					templateDir = new File(templateUrl.getPath());
+				}
+				if (templateDir.isDirectory()) {
+					File templateFile = new File(templateDir, componentName + "." + extension);
+					if (templateFile.exists()) {
+						try {
+							templateUrl = templateFile.toURI().toURL();
+						}
+						catch (MalformedURLException e) {
+							// ignore
+						}
+					}
+				}
+			}
+		}
+		return templateUrl;
+	}
+
+	private static URL pathUrlForResourceNamed(WOResourceManager resourceManager, String resourceName, NSArray languages) {
+		URL templateUrl = resourceManager.pathURLForResourceNamed(resourceName, null, languages);
 		if (templateUrl == null) {
 			NSArray frameworkBundles = NSBundle.frameworkBundles();
 			if (frameworkBundles != null) {
 				Enumeration frameworksEnum = frameworkBundles.objectEnumerator();
 				while (templateUrl == null && frameworksEnum.hasMoreElements()) {
 					NSBundle frameworkBundle = (NSBundle) frameworksEnum.nextElement();
-					templateUrl = resourcemanager.pathURLForResourceNamed(htmlPathName, frameworkBundle.name(), languages);
+					templateUrl = resourceManager.pathURLForResourceNamed(resourceName, frameworkBundle.name(), languages);
 				}
 			}
 		}
@@ -215,6 +251,7 @@ public class ERXComponentUtilities {
 	 *            the list of languages to use for finding components
 	 * @return the string contents of the html template (or null if there isn't
 	 *         one)
+	 * @throws IOException
 	 */
 	public static String htmlTemplate(String componentName, NSArray languages) throws IOException {
 		return ERXComponentUtilities.template(componentName, "html", languages);
@@ -233,6 +270,7 @@ public class ERXComponentUtilities {
 	 * @param languages
 	 *            the list of languages to use for finding components
 	 * @return the string contents of the template (or null if there isn't one)
+	 * @throws IOException
 	 */
 	public static String template(String componentName, String extension, NSArray languages) throws IOException {
 		String template;
@@ -273,7 +311,8 @@ public class ERXComponentUtilities {
 			/** require [valid_componentName] componentName != null;  **/
 			String htmlString = ERXComponentUtilities.template(componentName, "html", languages);
 			String wodString = ERXComponentUtilities.template(componentName, "wod", languages);
-			return WOComponent.templateWithHTMLString(htmlString, wodString, languages);
+			return WOComponent.templateWithHTMLString("", "", htmlString, wodString, languages,
+					WOApplication.application().associationFactoryRegistry(), WOApplication.application().namespaceProvider());
 			/** ensure [valid_Result] Result != null;  **/
 		}
 		catch (IOException e) {
@@ -284,8 +323,9 @@ public class ERXComponentUtilities {
 	/**
 	 * Returns an array of the current component names.
 	 * 
+	 * @return array of current component names
 	 */
-	public static NSArray componentTree() {
+	public static NSArray<String> componentTree() {
 		WOContext context = ERXWOContext.currentContext();
 		NSMutableArray<String> result = new NSMutableArray<String>();
 		if (context != null) {
@@ -329,6 +369,30 @@ public class ERXComponentUtilities {
 			ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
 		}
 	}
+	
+	/**
+	 * Appends a dictionary of associations as HTML attributes.
+	 * 
+	 * @param associations
+	 *            the associations dictionary
+	 * @param excludeKeys
+	 *            the associations to ignore
+	 * @param response
+	 *            the response to write to
+	 * @param component
+	 *            the component to evaluate the associations within
+	 */
+	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, NSArray<String> excludeKeys, WOResponse response, WOComponent component) {
+		if (excludeKeys == null) {
+			excludeKeys = NSArray.EmptyArray;
+		}
+		for (String key : associations.allKeys()) {
+			if (!excludeKeys.contains(key)) {
+				WOAssociation association = associations.objectForKey(key);
+				ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
+			}
+		}
+	}
 
 	/**
 	 * Appends an association as an HTML attribute.
@@ -368,7 +432,7 @@ public class ERXComponentUtilities {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
-		return (T) ERXApplication.erxApplication().pageWithName(componentClass, context);
+		return ERXApplication.erxApplication().pageWithName(componentClass, context);
 	}
 
 	/**
@@ -383,7 +447,217 @@ public class ERXComponentUtilities {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends WOComponent> T pageWithName(Class<T> componentClass) {
-		return (T) ERXApplication.erxApplication().pageWithName(componentClass);
+		return ERXApplication.erxApplication().pageWithName(componentClass);
 	}
 
+	/**
+	 * Checks if there is an association for a binding with the given name.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return <code>true</code> if the association exists
+	 */
+	public static boolean hasBinding(String name, NSDictionary<String, WOAssociation> associations) {
+		return associations.objectForKey(name) != null;
+	}
+	
+	/**
+	 * Returns the association for a binding with the given name. If there is
+	 * no such association <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return association for given binding or <code>null</code>
+	 */
+	public static WOAssociation bindingNamed(String name, NSDictionary<String, WOAssociation> associations) {
+		return associations.objectForKey(name);
+	}
+	
+	/**
+	 * Checks if the association for a binding with the given name can assign
+	 * values at runtime.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return <code>true</code> if binding is settable
+	 */
+	public static boolean bindingIsSettable(String name, NSDictionary<String, WOAssociation> associations) {
+		boolean isSettable = false;
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			isSettable = association.isValueSettable();
+		}
+		return isSettable;
+	}
+	
+	/**
+	 * Will try to set the given binding in the component to the passed value.
+	 * 
+	 * @param value new value for the binding
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to set the value in
+	 */
+	public static void setValueForBinding(Object value, String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			association.setValue(value, component);
+		}
+	}
+	
+	/**
+	 * Retrieves the current value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved value or default value
+	 */
+	public static Object valueForBinding(String name, Object defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		Object value = valueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Retrieves the current value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved value or <code>null</code>
+	 */
+	public static Object valueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return association.valueInComponent(component);
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieves the current string value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved string value or default value
+	 */
+	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		String value = stringValueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Retrieves the current string value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved string value or <code>null</code>
+	 */
+	public static String stringValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return (String) association.valueInComponent(component);
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieves the current boolean value of the given binding from the component. If there
+	 * is no such binding the default value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved boolean value or default value
+	 */
+	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return association.booleanValueInComponent(component);
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Retrieves the current boolean value of the given binding from the component. If there
+	 * is no such binding <code>false</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved boolean value or <code>false</code>
+	 */
+	public static boolean booleanValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		return booleanValueForBinding(name, false, associations, component);
+	}
+	
+	/**
+	 * Retrieves the current int value of the given binding from the component. If there
+	 * is no such binding the default value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved int value or default value
+	 */
+	public static int integerValueForBinding(String name, int defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			Object value = association.valueInComponent(component);
+			return ERXValueUtilities.intValueWithDefault(value, defaultValue);
+		}
+		return defaultValue;
+	}
+	
+	
+	/**
+	 * Retrieves the current array value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved array value or default value
+	 */
+	public static <T> NSArray<T> arrayValueForBinding(String name, NSArray<T> defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			Object value = association.valueInComponent(component);
+			return ERXValueUtilities.arrayValueWithDefault(value, defaultValue);
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Retrieves the current array value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved array value or <code>null</code>
+	 */
+	public static NSArray arrayValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		return arrayValueForBinding(name, null, associations, component);
+	}
 }

@@ -10,21 +10,14 @@ import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestResult;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * extensions to hold multiple errors and failures.<br />
- * 
+ * extensions to hold multiple errors and failures.
  */
 
 public class ERXTestResult extends TestResult {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXTestResult.class);
-
     protected NSMutableArray _errors;
     protected NSMutableArray _failures;
 
@@ -34,11 +27,13 @@ public class ERXTestResult extends TestResult {
         _failures = new NSMutableArray();
     }
 
+    @Override
     public synchronized void addError(Test test, Throwable t) {
         super.addError(test, t);
         _errors.addObject(fErrors.get(fErrors.size() -1));
     }
     
+    @Override
     public synchronized void addFailure(Test test, AssertionFailedError t) {
         super.addFailure(test, t);
         _failures.addObject(fFailures.get(fFailures.size() - 1));

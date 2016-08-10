@@ -1,60 +1,61 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent = "true" class = "AjaxInPlace">
-		<binding name = "id"/>
-		<binding name = "class"/>
-		<binding name = "style"/>
-		<binding name = "button"/>
-		<binding name = "saveLabel"/>
-		<binding name = "cancelLabel"/>
-		<binding name = "editClass"/>
-		<binding name = "editAction"/>
-		<binding name = "formSerializer"/>
-		<binding name = "saveAction"/>
-		<binding name = "saveUpdateContainerID"/>
-		<binding name = "cancelAction"/>
-		<binding name = "cancelUpdateContainerID"/>
-		<binding name = "saveClass"/>
-		<binding name = "onSaveClick"/>
-		<binding name = "onSaveSuccess"/>
-		<binding name = "onSaveFailure"/>
-		<binding name = "onSaving"/>
-		<binding name = "cancelClass"/>
-		<binding name = "onCancelClick"/>
-		<binding name = "onCancelSuccess"/>
-		<binding name = "onCancelFailure"/>
-		<binding name = "onCancelling"/>
-		<binding name = "onEditClick"/>
-		<binding name = "onEditSuccess"/>
-		<binding name = "onEditFailure"/>
-		<binding name = "onEditing"/>
-		<binding name = "onRefreshComplete"/>
-		<binding name = "disabled"/>
-		<binding name = "editing"/>
-		<binding name = "manualControl"/>
-		<binding name = "manualViewControl"/>
-		<binding name = "manualEditControl"/>
-		<binding name = "submitOnSave"/>
-		<binding name = "canSave"/>
-		<binding name = "canEdit"/>
-		<binding name = "editOnly"/>
+	<wo class="AjaxInPlace" wocomponentcontent="true">
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="style"/>
+		<binding name="button"/>
+		<binding name="saveLabel"/>
+		<binding name="cancelLabel"/>
+		<binding name="editClass"/>
+		<binding name="editAction"/>
+		<binding name="formSerializer"/>
+		<binding name="saveAction"/>
+		<binding name="saveUpdateContainerID"/>
+		<binding name="cancelAction"/>
+		<binding name="cancelUpdateContainerID"/>
+		<binding name="saveClass"/>
+		<binding name="onSaveClick"/>
+		<binding name="onSaveSuccess"/>
+		<binding name="onSaveFailure"/>
+		<binding name="onSaving"/>
+		<binding name="cancelClass"/>
+		<binding name="onCancelClick"/>
+		<binding name="onCancelSuccess"/>
+		<binding name="onCancelFailure"/>
+		<binding name="onCancelling"/>
+		<binding name="onEditClick"/>
+		<binding name="onEditSuccess"/>
+		<binding name="onEditFailure"/>
+		<binding name="onEditing"/>
+		<binding name="onRefreshComplete"/>
+		<binding name="disabled"/>
+		<binding name="editing"/>
+		<binding name="manualControl"/>
+		<binding name="manualViewControl"/>
+		<binding name="manualEditControl"/>
+		<binding name="submitOnSave"/>
+		<binding name="canSave"/>
+		<binding name="canEdit"/>
+		<binding name="editOnly"/>
 		
-		<binding name = "editInsertion"/>
-		<binding name = "editInsertionDuration"/>
-		<binding name = "editBeforeInsertionDuration"/>
-		<binding name = "editAfterInsertionDuration"/>
+		<binding name="editInsertion"/>
+		<binding name="editInsertionDuration"/>
+		<binding name="editBeforeInsertionDuration"/>
+		<binding name="editAfterInsertionDuration"/>
 		
-		<binding name = "saveInsertion"/>
-		<binding name = "saveInsertionDuration"/>
-		<binding name = "saveBeforeInsertionDuration"/>
-		<binding name = "saveAfterInsertionDuration"/>
+		<binding name="saveInsertion"/>
+		<binding name="saveInsertionDuration"/>
+		<binding name="saveBeforeInsertionDuration"/>
+		<binding name="saveAfterInsertionDuration"/>
 		
-		<binding name = "cancelInsertion"/>
-		<binding name = "cancelInsertionDuration"/>
-		<binding name = "cancelBeforeInsertionDuration"/>
-		<binding name = "cancelAfterInsertionDuration"/>
-		<binding name = "elementName"/>
+		<binding name="cancelInsertion"/>
+		<binding name="cancelInsertionDuration"/>
+		<binding name="cancelBeforeInsertionDuration"/>
+		<binding name="cancelAfterInsertionDuration"/>
+		<binding name="elementName"/>
 
-		<binding name = "onsubmit"/>
-	</wo>
+		<binding name="onsubmit"/>
+	<binding name="formClass"/>
+    </wo>
 </wodefinitions>

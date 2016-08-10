@@ -1,0 +1,27 @@
+Content : WOComponentContent {
+	
+}
+
+PageTitle : WOString {
+	value = ^pageTitle;
+	valueWhenEmpty = "Untitled";
+}
+
+PageCSS : ERXStyleSheet {
+	filename = "default.css";
+	framework = "app";
+}
+
+AutoCompleteCSS : ERXStyleSheet {
+	filename = "autocomplete.css";
+	framework = "app";
+}
+
+BackButton : WOHyperlink {
+	action = returnAction;
+	class = "Button"
+}
+
+ShowBackButton : WOConditional {
+	condition = showBackButton;
+}

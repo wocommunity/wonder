@@ -1,0 +1,3 @@
+{
+	"AttachmentExceedsMaximumLengthException" = "アタッチメント <b>@@recommendedFileName@@</b> は最大サイズ <b>@@maxSize@@ bytes</b> を超えています。";
+}

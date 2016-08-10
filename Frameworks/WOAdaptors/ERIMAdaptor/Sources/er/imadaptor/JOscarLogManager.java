@@ -3,7 +3,7 @@ package er.imadaptor;
 import net.kano.joscar.logging.LogManager;
 import net.kano.joscar.logging.Logger;
 
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 public class JOscarLogManager implements LogManager {
 
@@ -50,7 +50,7 @@ public class JOscarLogManager implements LogManager {
 		}
 
 		public boolean logWarningEnabled() {
-			return _logger.isEnabledFor(Priority.WARN);
+			return _logger.isEnabledFor(Level.WARN);
 		}
 
 	}

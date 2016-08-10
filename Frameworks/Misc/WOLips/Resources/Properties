@@ -1,0 +1,12 @@
+##  Properies Info
+er.extensions.load.Properties.framework.WOLips=load
+er.extensions.WOLips.hasLocalization=false
+
+er.component.clickToOpen=false
+
+wolips.prototype.framework=Ajax
+wolips.prototype.fileName=prototype.js
+
+wolips.host=localhost
+wolips.port=9485
+#wolips.password=

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERQMAjaxUpdateContainer.java" wocomponentcontent="false">
+
+        <binding name="otherTagSring"/>
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="elementName"/>
+    </wo>
+</wodefinitions>

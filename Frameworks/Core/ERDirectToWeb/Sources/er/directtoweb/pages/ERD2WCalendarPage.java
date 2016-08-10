@@ -16,16 +16,24 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.components.ERXDateGrouper;
 
 /**
- * Superclass of all calendar list pages.<br />
+ * Superclass of all calendar list pages.
+ * <p>
  * Note that they are not compatible with the NetStruxr version.
  * Using a {@link ERXDateGrouper} as the display group, most of the logic is gone from this page.
  */
-
 public class ERD2WCalendarPage extends ERD2WListPage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ERD2WCalendarPage(WOContext c) {
         super(c);
     }
 
+    @Override
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
             ERXDateGrouper grouper = new ERXDateGrouper();
@@ -45,6 +53,7 @@ public class ERD2WCalendarPage extends ERD2WListPage {
         return (ERXDateGrouper)displayGroup();
     }
 
+    @Override
     public int numberOfObjectsPerBatch() {
         return 0;	// we want all the objects in one batch
     }

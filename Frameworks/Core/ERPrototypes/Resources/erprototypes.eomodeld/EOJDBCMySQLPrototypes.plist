@@ -57,12 +57,14 @@
             externalType = DATE; 
             name = date; 
             valueClassName = NSCalendarDate; 
+            valueType = D; 
         }, 
         {
             columnName = ""; 
             externalType = DATETIME; 
             name = dateTime; 
             valueClassName = NSCalendarDate; 
+            valueType = T; 
         }, 
         {
             columnName = ""; 
@@ -351,6 +353,13 @@
             name = varcharLarge; 
             valueClassName = NSString; 
             valueType = c; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = BINARY; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (
@@ -454,5 +463,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCMySQLPrototypes; 
-    primaryKeyAttributes = (id); 
+    primaryKeyAttributes = (id, uuid); 
 }

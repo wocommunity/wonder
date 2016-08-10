@@ -10,14 +10,25 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableSet;
 
 /**
+ * <div class="en">
  * Used as a generic way to retain a reference to an object so that it will not
  * be collected by the garbage collector. This class is most often used to
- * retain objects used to observe {link
+ * retain objects used to observe {link @NSNotification}s.
+ * <p>
+ * Note that the current implementation does not
+ * implement reference counting so calling retain multiple
+ * times on the same object does not have any effect after
+ * the first call.
+ * </div>
  * 
- * @NSNotification}s.<br/> <br/> Note that the current implementation does not
- *                    implement reference counting so calling retain multiple
- *                    times on the same object does not have any effect after
- *                    the first call.
+ * <div class="ja">
+ * オブジェクトへのリファレンスを保持し、garbage collectorより回収されないようにする。
+ * <p>
+ * このクラスを使う時は、{link @NSNotification}のオブジェクトを保持と観察する場合によく使用します。
+ * <p>
+ * メモ：カレントの実装ではリファレンス・カウントしていません。
+ * 一つのオブジェクトを複数回コールしても最初のコールと替わりません。
+ * </div>
  */
 // ENHANCEME: Should implement reference counting.
 public class ERXRetainer {
@@ -27,10 +38,16 @@ public class ERXRetainer {
 	private static NSMutableSet _retainerSet = new NSMutableSet();
 
 	/**
+	 * <div class="en">
 	 * Retains a reference to the object.
+	 * </div>
 	 * 
-	 * @param object
-	 *            object to be retained.
+	 * <div class="ja">
+	 * オブジェクトへのリファレンスを保持する為に追加します
+	 * </div>
+	 * 
+	 * @param object <div class="en">object to be retained.</div>
+	 *               <div class="ja">保持するオブジェクト</div>
 	 */
 	public static void retain(Object object) {
 		synchronized (_retainerSet) {
@@ -54,10 +71,16 @@ public class ERXRetainer {
 	}
 
 	/**
+	 * <div class="en">
 	 * Releases the reference to the object.
+	 * </div>
 	 * 
-	 * @param object
-	 *            object to be released.
+	 * <div class="ja">
+	 * オブジェクトへのリファレンスの取り除きます
+	 * </div>
+	 * 
+	 * @param object <div class="en">object to be released.</div>
+	 *               <div class="ja">取り除くオブジェクト</div>
 	 */
 	public static void release(Object object) {
 		synchronized (_retainerSet) {
@@ -66,11 +89,18 @@ public class ERXRetainer {
 	}
 
 	/**
+	 * <div class="en">
 	 * Tests if the given object is being retained by the ERXRetainer class.
+	 * </div>
 	 * 
-	 * @param object
-	 *            object to be tested.
-	 * @return returns if the given object is currently retained.
+	 * <div class="ja">
+	 * このクラスで保持されているかどうかをテストします
+	 * </div>
+	 * 
+	 * @param object <div class="en">object to be tested.</div>
+	 *               <div class="ja">テストするオブジェクト</div>
+	 * @return <div class="en">returns if the given object is currently retained.</div>
+	 *         <div class="ja">オブジェクトが保持されていれば true を戻します</div>
 	 */
 	public static boolean isObjectRetained(Object object) {
 		synchronized (_retainerSet) {

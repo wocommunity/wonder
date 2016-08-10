@@ -13,7 +13,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSDictionary;
@@ -26,7 +27,8 @@ import com.webobjects.foundation.NSNotificationCenter;
  * NSNotificationCenter that can post simple notifications to other
  * applications. Currently just posts the name, no object and the userInfo as a
  * dictionary of strings. You must specifically register observers and post notifications here, not at
- * <code>NSNotificationCenter.defaultCenter()</code>. <br/>
+ * <code>NSNotificationCenter.defaultCenter()</code>.
+ * <p>
  * If you don't link ERJGroupsSynchronizer, it will create a simple implementation, which posts via 
  * multicast - and is thus not really reliable and can't handle larger useInfo dict 
  * (of which keys and values must be strings). Also, you need to explicitely send the 
@@ -39,16 +41,13 @@ import com.webobjects.foundation.NSNotificationCenter;
  * 
  * @author ak
  */
-
 // TODO subclass of NSNotification that custom-serialize itself to a sparser
 // format
 public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
-	
-	private static final Logger log = Logger.getLogger(ERXRemoteNotificationCenter.class);
-
 	private static ERXRemoteNotificationCenter _sharedInstance;
 
 	private static class SimpleCenter extends ERXRemoteNotificationCenter {
+		private static final Logger log = LoggerFactory.getLogger(ERXRemoteNotificationCenter.class);
 		public static final int IDENTIFIER_LENGTH = 6;
 		private static final int JOIN = 1;
 		private static final int LEAVE = 2;
@@ -107,7 +106,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 		public void join() throws IOException {
 			if (log.isInfoEnabled()) {
-				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
+				log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
 			_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
 			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
@@ -115,24 +114,27 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			dos.write(_identifier);
 			dos.writeByte(JOIN);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			listen();
 		}
 
 		public void leave() throws IOException {
 			if (log.isInfoEnabled()) {
-				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
+				log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
 			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
 			dos.write(_identifier);
 			dos.writeByte(LEAVE);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
 		}
 
+		@Override
 		protected void postRemoteNotification(NSNotification notification) {
 			try {
 				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
@@ -144,7 +146,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 				writeNotification(notification, dos);
 				_multicastSocket.send(baos.createDatagramPacket());
 				if (log.isDebugEnabled()) {
-					log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + notification);
+					log.info("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), notification);
 				}
 				dos.close();
 				if (_postLocal) {
@@ -185,31 +187,25 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 					byte code = dis.readByte();
 					if (code == JOIN) {
-						if (log.isDebugEnabled()) {
-							log.info("Received JOIN from " + remote);
-						}
+						log.info("Received JOIN from {}", remote);
 					}
 					else if (code == LEAVE) {
-						if (log.isDebugEnabled()) {
-							log.info("Received LEAVE from " + remote);
-						}
+						log.info("Received LEAVE from {}", remote);
 					}
 					else if (code == POST) {
 						String self = ERXStringUtilities.byteArrayToHexString(_identifier);
 
+						log.info("Received POST from {}", remote);
 						if (log.isDebugEnabled()) {
-							log.info("Received POST from " + remote);
-						}
-						if (log.isDebugEnabled()) {
-							log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
+							log.debug("Received POST from {}", ERXStringUtilities.byteArrayToHexString(identifier));
 						}
 						if(!self.equals(remote)) {
 							NSNotification notification = readNotification(dis);
 							if (log.isDebugEnabled()) {
-								log.debug("Received notification: " + notification);
+								log.debug("Received notification: {}", notification);
 							}
 							else if (log.isInfoEnabled()) {
-								log.info("Received " + notification.name() + " notification from " + remote);
+								log.info("Received {} notification from {}", notification.name(), remote);
 							}
 							postLocalNotification(notification);
 						}
@@ -306,7 +302,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Set the default center
-	 * @param center
+	 * @param center the notification center to use as default
 	 */
 	public static void setDefaultCenter(ERXRemoteNotificationCenter center) {
 		_sharedInstance = center;
@@ -314,7 +310,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the local app only.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	public void postLocalNotification(NSNotification notification) {
 		super.postNotification(notification);
@@ -322,13 +318,14 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the remote listeners.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	protected abstract void postRemoteNotification(NSNotification notification);
 
 	/**
 	 * Overridden to call {@link #postRemoteNotification(NSNotification)}.
 	 */
+	@Override
 	public void postNotification(NSNotification notification) {
 		postRemoteNotification(notification);
 	}

@@ -1,6 +1,7 @@
 package er.extensions.appserver;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -24,20 +25,20 @@ import er.extensions.foundation.ERXThreadStorage;
  * <br>
  *  The mode of operation is as follows; given a component action in a typical page:
  * <br>
- * <code><pre>
+ * <pre><code>
  *  public WOComponent myAction() {
  *      WOComponent nextPage = pageWithName("Main");
- *      nextPage.takeValueForKey(new Integer(100), "someValue");
+ *      nextPage.takeValueForKey(Integer.valueOf(100), "someValue");
  *      return nextPage;
  *  }
  * 
- *  </pre></code>
+ *  </code></pre>
  *  then Main could be implemented something like this:
- * <code><pre>
+ * <pre><code>
  *  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
  *      static Logger log = Logger.getLogger(Main.class);
  * 
- *      public Integer someValue = new Integer(10);
+ *      public Integer someValue = Integer.valueOf(10);
  * 
  *      public Main(WOContext aContext) {
  *          super(aContext);
@@ -45,7 +46,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *      
  *      // this page has a "Increment Some Value" link to itself which just doubles the current value
  *      public WOComponent addAction() {
- *          someValue = new Integer(someValue.intValue()*2);
+ *          someValue = Integer.valueOf(someValue.intValue()*2);
  *          log.info(someValue);
  *          return this;
  *      }
@@ -67,7 +68,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *          }
  *      }
  *  }
- *  </pre></code>
+ *  </code></pre>
  *  But this is just one possibility. It only locates all the code in one place. <br>
  * 
  * The actual workings are:
@@ -80,16 +81,16 @@ import er.extensions.foundation.ERXThreadStorage;
  * session-based cache and return a redirect instead. The current page is asked for the URL for the redirect when it implements 
  * the Restorable interface.<br>
  * So the users browser receives redirection to a "reasonable" URL like "/article/1234/edit?wosid=..." or 
- * "../wa/EditArticle?__key=1234&wosid=...". This URL is intercepted and looked up in the cache. If found, the stored 
+ * "../wa/EditArticle?__key=1234&amp;wosid=...". This URL is intercepted and looked up in the cache. If found, the stored 
  * response is returned, else the request is handled normally.
- * <br>
+ * <p>
  *  The major thing about this class is that you can detach URLs from actions. For example, it is very hard to create a 
  *  direct action that creates a page that uses a Tab panel or a collapsible component because you need to store a 
  *  tremendous amount of state in the URL. With this class, you say: "OK, I won't be able to totally restore everything, 
  *  but I'll show the first page with everything collapsed."<br>
  * 
  *  For all of this to work, your application should override the request-response loop like:
- * <code><pre>
+ * <pre><code>
  *  public WOActionResults invokeAction(WORequest request, WOContext context) {
  *      WOActionResults results = super.invokeAction(request, context);
  *      ERXComponentActionRedirector.createRedirector(results);
@@ -118,16 +119,14 @@ import er.extensions.foundation.ERXThreadStorage;
  *      }
  *      return response;
  *  }
- * </pre></code>
+ * </code></pre>
  * If you are using ERXApplication, you should set the 
  * <code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property instead.
  *  
  * @author ak
  *  */
 public class ERXComponentActionRedirector {
-
-    /** logging support */
-    protected static final Logger log = Logger.getLogger(ERXComponentActionRedirector.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXComponentActionRedirector.class);
 
     /** implemented by the pages that want to be restorable */
     public static interface Restorable {
@@ -163,9 +162,7 @@ public class ERXComponentActionRedirector {
             }
             sessionRef.setObjectForKey(redirector, redirector.url());
         }
-        if(log.isDebugEnabled()) {
-            log.debug("Stored URL: " + redirector.url());
-        }
+        log.debug("Stored URL: {}", redirector.url());
     }
 
     /**
@@ -177,13 +174,9 @@ public class ERXComponentActionRedirector {
             redirector = (ERXComponentActionRedirector)responses.valueForKeyPath(request.sessionID() + "." + request.uri());
         }
         if(redirector != null) {
-            if(log.isDebugEnabled()) {
-                log.debug("Retrieved URL: " + redirector.url());
-            }
+            log.debug("Retrieved URL: {}", redirector.url());
         } else {
-            if(log.isDebugEnabled()) {
-                log.debug("No Redirector for request: " + request.uri());
-            }
+            log.debug("No Redirector for request: {}", request.uri());
         }
         return redirector;
     }
@@ -200,7 +193,7 @@ public class ERXComponentActionRedirector {
                     ERXComponentActionRedirector r = new ERXComponentActionRedirector((Restorable)component);
                     ERXComponentActionRedirector.storeRedirector(r);
                 } else {
-                    log.debug("Not restorable: " + context.request().uri() + ", " + component);
+                    log.debug("Not restorable: {}, {}", context.request().uri(), component);
                 }
             }
         }
@@ -213,7 +206,7 @@ public class ERXComponentActionRedirector {
         return (ERXComponentActionRedirector)ERXThreadStorage.valueForKey("redirector");
     }
 
-    /** contructs the redirector from the Restorable. 
+    /** constructs the redirector from the Restorable. 
      * @param r - Restorable component used to construct a redirector */
     public ERXComponentActionRedirector(Restorable r) {
         WOComponent component = (WOComponent)r;
@@ -222,8 +215,9 @@ public class ERXComponentActionRedirector {
         url = r.urlForCurrentState();
         if(context.session().storesIDsInURLs()) {
 	        String argsChar = url.indexOf("?") >= 0? "&" : "?";
-	        if(url.indexOf("wosid=") < 0) {
-	            url = url + argsChar + "wosid=" +sessionID;
+	        String sessionIdKey = WOApplication.application().sessionIdKey();
+	        if(url.indexOf(sessionIdKey + "=") < 0) {
+	            url = url + argsChar + sessionIdKey + "=" +sessionID;
 	            argsChar = "&";
 	        }
 	        if(url.indexOf("wocid=") < 0) {

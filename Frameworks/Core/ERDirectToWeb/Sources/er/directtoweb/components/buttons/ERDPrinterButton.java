@@ -17,7 +17,7 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
- * Handles the switching of the current task to print, which uses the print templates.<br />
+ * Handles the switching of the current task to print, which uses the print templates.
  * 
  * @binding d2wContext
  * @binding dataSource
@@ -28,6 +28,12 @@ import er.directtoweb.pages.ERD2WListPage;
  * @d2wKey forcedSubTask
  */
 public class ERDPrinterButton extends ERDActionButton {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDPrinterButton(WOContext context) { super(context); }
     
