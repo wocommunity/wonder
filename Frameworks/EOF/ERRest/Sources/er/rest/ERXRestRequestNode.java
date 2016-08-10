@@ -776,7 +776,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (entityName == null) {
 			entityName = type();
 			if (entityName == null && value() == null) {
-				entityName = "NSDictionary";
+				if (isArray()) {
+					entityName = "NSMutableArray";
+				} else {
+					entityName = "NSDictionary";
+				}
 			}
 		}
 		return entityName;
@@ -1191,7 +1195,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					}
 				}
 
-				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
+				if (keyName == null && isArray()) {
+					Object value = ERXRestUtils.coerceValueToTypeNamed(childNode.value(), valueType.getCanonicalName(), context, true);
+					((List<Object>)obj).add(value);
+				}
+				else if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
 					EOClassDescription destinationClassDescription;
 					// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
 					// we fallback and lookup the class entity ...
