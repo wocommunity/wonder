@@ -1,14 +1,15 @@
 package er.rest.format;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Set;
 
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.processors.JsonValueProcessorMatcher;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSTimestamp;
@@ -49,9 +50,13 @@ public class _ERXJSONConfig {
 	public static JsonConfig createDefaultConfig(ERXRestContext context) {
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(NSTimestamp.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(org.joda.time.LocalDate.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(org.joda.time.LocalDateTime.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(Date.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(LocalDate.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(LocalDateTime.class, new GeneralObjectToStringProcessor(context));
-		config.registerJsonValueProcessor(Date.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(LocalTime.class, new GeneralObjectToStringProcessor(context));
+		config.registerJsonValueProcessor(OffsetDateTime.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(NSData.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(ERXCryptoString.class, new GeneralObjectToStringProcessor(context));
 		config.setJsonValueProcessorMatcher(new ERXRestValueProcessorMatcher());
