@@ -58,11 +58,14 @@ import er.extensions.localization.ERXLocalizer;
  * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
+ * @binding manualInput false if you want to prevent manual input from the user and force him/her to use the date picker, defaults to true
  * 
+ * @binding startDay specify the first day of week to use 0(Sunday)-6(Saturday). The default use the current localizer.
  * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
  * @binding monthNames list of month names for localization, English is the default
  * @binding imagesDir directory to take images from, takes them from Ajax.framework by default
  * @binding locale FL: locale can be set if ERXLocalizer returns the wrong one. IE the English localizer returns a US Locale. If you want the UK one then set this binding.
+ * @binding showYearControls: display the prev and next year controls. Default to true.
  * 
  * @binding calendarCSS name of CSS resource with classed for calendar, defaults to "calendar.css"
  * @binding calendarCSSFramework name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
@@ -75,7 +78,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author ported by Chuck Hill
  */
 public class AjaxDatePicker extends AjaxComponent {
-	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
     private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
 
@@ -107,6 +116,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * @return <code>true</code>
      */
+    @Override
     public boolean isStateless() {
     	return true;
     }
@@ -114,6 +124,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Sets up format / formatter values.
      */
+    @Override
     public void awake() {
 		super.awake();
 
@@ -147,6 +158,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Clear cached values.
      */
+    @Override
     public void reset() {
     	options = null;
     	formatter = null;
@@ -160,7 +172,7 @@ public class AjaxDatePicker extends AjaxComponent {
     
     public Integer startDay() {
     	// Get first day of week from current localizer Locale.
-    	return new Integer(new GregorianCalendar(locale()).getFirstDayOfWeek() - 1);
+    	return Integer.valueOf(new GregorianCalendar(locale()).getFirstDayOfWeek() - 1);
     }
     
     private NSArray<String> localizeStringArray(NSArray<String> strings) {
@@ -182,10 +194,23 @@ public class AjaxDatePicker extends AjaxComponent {
     		return (NSArray<String>)valueForBinding("monthNames");
     	return localizeStringArray(_monthNames);
     }
+    
+    public String otherTagString() {
+    	String otherTagString = (String)valueForStringBinding("otherTagString", "");
+    	if (booleanValueForBinding("manualInput", true) == false) {
+    		otherTagString = otherTagString + " readonly";
+    	}
+    	return otherTagString;
+    }
 
     /**
      * Sets up AjaxOptions prior to rendering.
+     * 
+     * @param res the HTTP response that an application returns to a
+     *        Web server to complete a cycle of the request-response loop
+     * @param ctx context of a transaction
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
 		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
@@ -197,7 +222,8 @@ public class AjaxDatePicker extends AjaxComponent {
 		
 		// FL Added to support start day, defaults to 0 (Sunday - choice made in calendar.js).
 		ajaxOptionsArray.addObject(new AjaxOption("start_day", "startDay", startDay(), AjaxOption.NUMBER));
-
+		ajaxOptionsArray.addObject(new AjaxOption("showYearControls", "showYearControls", showYearControls(), AjaxOption.BOOLEAN));
+		
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
 
@@ -207,10 +233,17 @@ public class AjaxDatePicker extends AjaxComponent {
     	super.appendToResponse(res, ctx);
     }
     
-    /**
+    private Boolean showYearControls() {
+		return Boolean.valueOf(booleanValueForBinding("showYearControls", true));
+	}
+
+	/**
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         return showCalendarScript();
     }
     
@@ -218,7 +251,10 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
-        	StringBuffer script = new StringBuffer(200);
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
+        	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());
             return script.toString();
@@ -304,6 +340,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Includes calendar.css and calendar.js.
      */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "prototype.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
@@ -315,13 +352,18 @@ public class AjaxDatePicker extends AjaxComponent {
 	/**
 	 * No action so nothing for us to handle.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
     	
     /**
      * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
+     * @param t the exception thrown during validation
+     * @param value the given value to be validated
+     * @param keyPath the key path associated with this value, identifies the property of an object
      */
+	@Override
     public void validationFailedWithException(Throwable t, Object value, String keyPath) {
     	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
     		ValidationException e = (ValidationException) t;

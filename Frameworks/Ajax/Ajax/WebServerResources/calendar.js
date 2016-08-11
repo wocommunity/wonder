@@ -115,35 +115,25 @@ function input_keypress(evt) {
   return true;
 }
 
-// Gets the [x,y] position on the page of the element.
-function get_xy(el) {
-  var result = [document.viewport.getScrollOffsets().left - $(el).cumulativeScrollOffset().left, document.viewport.getScrollOffsets().top - $(el).cumulativeScrollOffset().top]; 
-  while (el) {
-    result[0] += el.offsetLeft;
-	result[1] += el.offsetTop;
-
-    // CH: If you use position:relative on a span around an input, Safari copies the offset values
-    //     to the contained input resulting in the calendar popup being offset to the right and bottom 
-    //     To work around this, detect this situation and skip the containing span.
-	if (Prototype.Browser.WebKit && el.tagName == "INPUT" && 
-	    el.offsetParent && el.offsetParent.tagName == "SPAN" && 
-	    el.offsetParent.getStyle('position').toLowerCase() == 'relative') {
-      el = el.offsetParent;
-    }
-
-    el = el.offsetParent;
-  }
-  return result;
-}
-
 // Return X coord of element.
 function left(el) {
-  return get_xy(el)[0];
+  return el.cumulativeOffset().left;
 }
 
 // Return Y coord of element.
 function top(el) {
-  return get_xy(el)[1];
+  return el.cumulativeOffset().top;
+}
+
+// Check if element is inside a Modal dialog or other fixed div.
+function isInsideModal(el) {
+  while (el) {
+	if (el.getStyle('position').toLowerCase() == 'fixed') {
+      return true;
+    }
+    el = el.offsetParent;
+  }
+  return false;
 }
   
 // Pad number or string to the left with pad character to a width of width characters.
@@ -310,6 +300,9 @@ function calendar_prev_year() {
 
 function calendar_show() {
   calendar.element.style.display = '';
+  if (typeof Modalbox !== 'undefined' && Modalbox.MBoverlay) {
+  	Modalbox.MBoverlay.observe("click", calendar_hide);
+  }
 }
 
 function calendar_hide() {
@@ -319,6 +312,9 @@ function calendar_hide() {
   if ($('ieShim'))
   {
     $('ieShim').style.display = 'none';  
+  }
+  if (typeof Modalbox !== 'undefined' && Modalbox.MBoverlay) {
+  	Modalbox.MBoverlay.stopObserving("click", calendar_hide);
   }
 }
 
@@ -338,8 +334,18 @@ function calendar_update() {
   get_element('calendar_header').innerHTML = calendar.month_names[m].substr(0,3).toUpperCase()+ ' ' + y;
   get_element('calendar_prev_month').onclick = calendar_prev_month;
   get_element('calendar_next_month').onclick = calendar_next_month;
-  get_element('calendar_prev_year').onclick = calendar_prev_year;
-  get_element('calendar_next_year').onclick = calendar_next_year;
+  if (calendar.showYearControls) {
+  	get_element('calendar_prev_year').childNodes[0].style.visibility = 'visible';
+  	get_element('calendar_prev_year').onclick = calendar_prev_year;
+  	get_element('calendar_next_year').childNodes[0].style.visibility = 'visible';
+  	get_element('calendar_next_year').onclick = calendar_next_year;
+  }
+  else {
+  	get_element('calendar_prev_year').childNodes[0].style.visibility = 'hidden';
+  	get_element('calendar_prev_year').onclick = undefined;
+  	get_element('calendar_next_year').childNodes[0].style.visibility = 'hidden';
+  	get_element('calendar_next_year').onclick = undefined;
+  }
 
 // Iterate through the 42 calendar date boxes.
   var hide_last_row = false;
@@ -408,7 +414,11 @@ function calendar_open(input_element, options) {
   
   // FL Added to support diffrent start days. Defaults to 0 (Sunday).
   if (options.start_day) {
-  	calendar.start_day = options.start_day
+  	calendar.start_day = options.start_day;
+  }
+
+  if (options.showYearControls == false) {
+  	calendar.showYearControls = false;
   }
   // CH: Done add init of new options
   
@@ -456,8 +466,19 @@ function calendar_open(input_element, options) {
   }
   
   // Position calendar by input element.
-  calendar.element.style.left = left(input_element) + 'px';
-  calendar.element.style.top = (top(input_element) + input_element.offsetHeight) + 'px';
+  if ( isInsideModal(input_element) ) {
+  	left = input_element.viewportOffset().left;
+  	top = input_element.viewportOffset().top;
+  	calendar.element.style.position = "fixed";    
+  }
+  else {
+  	left = input_element.cumulativeOffset().left;
+  	top = input_element.cumulativeOffset().top;
+  	calendar.element.style.position = "absolute";
+  }
+  
+  calendar.element.style.left = left + 'px';
+  calendar.element.style.top = (top + input_element.offsetHeight) + 'px';  
   calendar_show();
   // Parse input date.
   var date = string_to_date(input_element.value);
@@ -523,8 +544,6 @@ function build_calendar(input_element) {
 	  	
    		$(document.body).insert({'top': calendarControl});
 		calendar.element = get_element('calendar_control');
-		
-		
 	}
 }
 
@@ -539,6 +558,7 @@ calendar = {                        // Calendar properties.
   onDateSelect: undefined,          // CH: add function called when user selects a date
   fireEvent: true,					// CH: add should event listener for text field be fired upon date select?
   start_day: 0,						// FL: Start day, defaults to 0 Sunday.
+  showYearControls: true,			// SP: Display the year prev and next arrows.
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.
   format: undefined,                // The date display format, set by calendar_show().
