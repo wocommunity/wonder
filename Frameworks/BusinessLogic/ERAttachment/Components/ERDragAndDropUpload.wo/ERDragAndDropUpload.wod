@@ -27,6 +27,10 @@ DropTargetID: WOString {
 	value = dropTargetID;
 }
 
+FileSelectorID: WOString {
+	value = fileSelectorID;
+}
+
 Enabled: WOConditional {
 	condition = ^disabled;
 	negate = true;
