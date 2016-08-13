@@ -1,5 +1,6 @@
-var dragAndDropUpload = function(targetID, actionURL, enterFunction, exitFunction, overFunction, completeFunction, completeAllFunction, errorFunction) {
+var dragAndDropUpload = function(targetID, fileSelectorID, actionURL, enterFunction, exitFunction, overFunction, completeFunction, completeAllFunction, errorFunction) {
 	var dropTarget = document.getElementById(targetID),
+		fileSelectTarget = document.getElementById(fileSelectorID),
 		upload = function(file) {
 			var xhr = new XMLHttpRequest(),
 				formData = new FormData(),
@@ -50,17 +51,8 @@ var dragAndDropUpload = function(targetID, actionURL, enterFunction, exitFunctio
 			formData.append(targetID,file);
 			xhr.send(formData);
 		},
-		noopHandler = function(event) {
-			event.stopPropagation();
-			event.preventDefault();
-			return false;
-		},
-		drop = function(event) {
-			event.stopPropagation();
-			event.preventDefault();
-			
-			var files = event.dataTransfer.files,
-				count = files.length,
+		processFiles = function(files) {
+			var count = files.length,
 				i;
 
 			for(i = 0; i < count; i++) {
@@ -72,7 +64,7 @@ var dragAndDropUpload = function(targetID, actionURL, enterFunction, exitFunctio
 					upload(files[i]);
 				}
 			}
-			
+
 			// execute a function indicating all uploads are finished
 			if(completeAllFunction) {
 				completeAllFunction(event);
@@ -80,13 +72,36 @@ var dragAndDropUpload = function(targetID, actionURL, enterFunction, exitFunctio
 			
 			return false;
 		},
+		noopHandler = function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			return false;
+		},
+		dropHandler = function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			
+			processFiles(event.dataTransfer.files);
+			return false;
+		},
+		fileSelectionHandler = function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			
+			processFiles(event.target.files);
+			return false;
+		}, 
 		body = document.getElementsByTagName('body')[0];
+
 	
 	dropTarget.addEventListener("dragenter", enterFunction?enterFunction:noopHandler, false);
 	dropTarget.addEventListener("dragexit", exitFunction?exitFunction:noopHandler, false);
 	dropTarget.addEventListener("dragover", overFunction?overFunction:noopHandler, false);
-	dropTarget.addEventListener("drop", drop, false);
-	
+	dropTarget.addEventListener("drop", dropHandler, false);
+	if (fileSelectTarget) {
+		fileSelectTarget.addEventListener("change", fileSelectionHandler, false);
+		fileSelectTarget.addEventListener("drop", dropHandler, false);
+	}
 	/*
 	 * If the user misses the drop target, the browser will attempt to load
 	 * the dropped file. That is undesirable, so use the noopHandler function

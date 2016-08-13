@@ -28,5 +28,7 @@
         <binding name="completeAllFunction"/>
         <binding name="errorFunction"/>
     <binding name="accept"/>
+    <binding defaults="Boolean" name="includeFileSelector"/>
+        <binding name="fileSelectorID"/>
     </wo>
 </wodefinitions>
