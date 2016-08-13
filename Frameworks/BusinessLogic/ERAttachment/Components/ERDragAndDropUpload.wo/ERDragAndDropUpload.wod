@@ -55,3 +55,14 @@ OverFunction: WOString {
 	value = ^overFunction;
 	valueWhenEmpty = "false";
 }
+
+IncludeFileSelector : WOConditional {
+  condition = ^includeFileSelector;
+}
+
+Input1 : WOGenericContainer {
+  elementName = "input";
+  type = "file";
+  id = fileSelectorID;
+  multiple = "multiple";
+}
