@@ -279,12 +279,15 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
             
             String destEntityForeignKey;
+            NSArray<EOAttribute> destinationAttributes;
             if (relationship != null) {
                 EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
                 destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(parentChildJoin.destinationAttribute().columnName());
+                destinationAttributes = relationship.destinationAttributes();
             } else {
                 EOAttribute pk = srcEntity.primaryKeyAttributes().lastObject();
                 destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(pk.columnName());
+                destinationAttributes = destEntity.primaryKeyAttributes();
             }
             
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
@@ -295,7 +298,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 
             EOSQLExpression subExpression = factory.expressionForEntity(destEntity);
             subExpression.setUseAliases(true);
-            subExpression.prepareSelectExpressionWithAttributes(relationship.destinationAttributes(), false, fetchSpecification);
+            subExpression.prepareSelectExpressionWithAttributes(destinationAttributes, false, fetchSpecification);
 
             for (Enumeration bindEnumeration = subExpression.bindVariableDictionaries().objectEnumerator(); bindEnumeration.hasMoreElements();) {
                 expression.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
