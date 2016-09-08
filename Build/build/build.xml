@@ -240,7 +240,7 @@
 
     <target name="ERJavaMail.all">
         <antcall target="global.framework.${build.action}">
-            <param name="project.dir" value="Frameworks/Mail/ERJavaMail" />
+            <param name="project.dir" value="Frameworks/Core/ERJavaMail" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
