@@ -514,6 +514,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 #
 # er.extensions.ERXSession.useSecureSessionCookies=false
 
+# If you want to set the SameSite policy for session and instance cookies
+# you can set this property to one of the following values:
+# LAX, NORMAL, STRICT
+#
+# er.extensions.ERXSession.cookies.SameSite=STRICT
+
 #########################################################################
 # ERXJDBCConnectionBroker 
 #########################################################################
