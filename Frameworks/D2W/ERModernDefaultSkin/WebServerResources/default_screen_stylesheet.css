@@ -422,6 +422,101 @@ ul.L2WithChildren li.Nav2Selected {
 }
 
 
+/* COLUMN SELECTOR DROP-DOWN MENU */
+/* inspired by http://koen.kivits.com/articles/pure-css-menu/ */
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.icon-menu3 {
+	width: 1.375em;
+}
+
+.ColumnSelector {
+	position: relative;
+}
+
+.LftActionCell .ColumnSelector {
+	float: left;
+}
+
+.RtActionCell .ColumnSelector {
+	float: right;
+}
+
+.ColumnSelector:hover .ColumnSelectorMenu {
+    visibility: visible;
+}
+
+.ColumnSelectorMenu {
+	position: absolute;
+    z-index: 1;
+    visibility: hidden;
+    transition: visibility .5s;
+	background-color: #414b5e;
+	margin-top: 1.5em;
+	padding: .8em;
+}
+
+.LftActionCell .ColumnSelectorMenu {
+	left: -10px;
+}
+
+.RtActionCell .ColumnSelectorMenu {
+    right: -6px;
+}
+
+/* menu pointer */
+.ColumnSelectorMenu:before {
+	content: "";
+	width: 0;
+	height: 0;
+	border-bottom: 10px solid #414b5e;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	position: absolute;
+	top: -10px;
+}
+
+.LftActionCell .ColumnSelectorMenu:before {
+	left: 5px;
+}
+
+.RtActionCell .ColumnSelectorMenu:before {
+	right: 8px;
+}
+
+.ColumnSelectorMenu li {
+	list-style-type: disc;
+	margin-left: 1.2em;
+	white-space: nowrap;
+	line-height: 1.3em;
+}
+
+.ColumnSelectorMenu a {
+	color: inherit;
+	cursor: pointer;
+}
+
+.ColumnSelectorMenu li.omit {
+	list-style-type: circle;
+}
+
+.ColumnSelectorMenu li.omit a {
+	color: #999da6;
+}
+
+.ColumnSelectorMenu li.omit a:hover {
+	color: inherit;
+}
+
+.ColumnSelectorMenu a:hover {
+	text-decoration: underline;
+}
 
 
 /* ACTION LIST */
