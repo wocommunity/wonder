@@ -792,7 +792,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 		}
         if (useHttpOnlySessionCookies()) {
             _convertSessionCookiesToHttpOnly(response);
-        }		
+        }
+        _setCookieSameSite(response);
 	}
   
   @Override
