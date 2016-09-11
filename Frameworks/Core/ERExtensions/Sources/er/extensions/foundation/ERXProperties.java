@@ -1110,7 +1110,46 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     	return array;
     }
-    
+
+    /**
+     * Returns an enum value for a given enum class and system property. If the property is not
+     * set or matches no enum constant, <code>null</code> will be returned. The search for the
+     * enum value is case insensitive, i.e. a property value "foo" will match the enum constant
+     * <code>FOO</code>.
+     * 
+     * @param enumClass the enum class
+     * @param key the property key
+     * @return the enum value
+     */
+    public static <T extends Enum> T enumValueForKey(Class<T> enumClass, String key) {
+    	return enumValueForKeyWithDefault(enumClass, key, null);
+    }
+
+    /**
+     * Returns an enum value for a given enum class and system property. If the property is not
+     * set or matches no enum constant, the specified default value will be returned. The
+     * search for the enum value is case insensitive, i.e. a property value "foo" will match
+     * the enum constant <code>FOO</code>.
+     * 
+     * @param enumClass the enum class
+     * @param key the property key
+     * @param defaultValue the default value
+     * @return the enum value
+     */
+    public static <T extends Enum> T enumValueForKeyWithDefault(Class<T> enumClass, String key, T defaultValue) {
+    	T result = defaultValue;
+    	String stringValue = stringForKey(key);
+    	if (stringValue != null) {
+    		for (T enumValue : enumClass.getEnumConstants()) {
+    			if (enumValue.name().equalsIgnoreCase(stringValue)) {
+    				result = enumValue;
+    				break;
+    			}
+    		}
+    	}
+    	return result;
+    }
+
     /**
      * <div class="en">
      * Sets an array in the System properties for

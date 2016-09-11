@@ -21,6 +21,7 @@ import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver.WOCookie.SameSite;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -71,6 +72,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** cookie name that if set it means that the user has cookies enabled */
   // FIXME: This should be configurable
   public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
+
+  /** the SameSite to set for session and instance cookies */
+  private static SameSite _sameSite = ERXProperties.enumValueForKey(SameSite.class, "er.extensions.ERXSession.cookies.SameSite");
 
   /** holds a reference to the current localizer used for this session */
   transient private ERXLocalizer _localizer;
@@ -741,17 +745,30 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useHttpOnlySessionCookies", false);
   }
 
-  protected void _convertSessionCookiesToSecure(WOResponse response) {
-	    if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+  protected void _setCookieSameSite(WOResponse response) {
+		if (storesIDsInCookies() && _sameSite != null) {
 			for (WOCookie cookie : response.cookies()) {
 				String sessionIdKey = application().sessionIdKey();
 				String instanceIdKey = application().instanceIdKey();
 				String cookieName = cookie.name();
 				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
-					 cookie.setIsSecure(true);
+					 cookie.setSameSite(_sameSite);
 				}
 			}
 		}
+  }
+
+  protected void _convertSessionCookiesToSecure(WOResponse response) {
+	  if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+		  for (WOCookie cookie : response.cookies()) {
+			  String sessionIdKey = application().sessionIdKey();
+			  String instanceIdKey = application().instanceIdKey();
+			  String cookieName = cookie.name();
+			  if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
+				  cookie.setIsSecure(true);
+			  }
+		  }
+	  }
   }
   
   protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
@@ -775,7 +792,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 		}
         if (useHttpOnlySessionCookies()) {
             _convertSessionCookiesToHttpOnly(response);
-        }		
+        }
+        _setCookieSameSite(response);
 	}
   
   @Override
