@@ -106,6 +106,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
@@ -902,25 +903,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return false;
 		}
 		
-		String adapterUrl;
-		if (application().host() != null) {
-			adapterUrl = application().cgiAdaptorURL();
-		} else {
-			adapterUrl = application().cgiAdaptorURL().replace("://null/", "://localhost/");
-		}
-		
-		String appUrl;
-		if (application().isDirectConnectEnabled()) {
-			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
-			appUrl += "/" + application().name() + application().applicationExtension();
-		} else {
-			appUrl = adapterUrl + "/" + application().name() + application().applicationExtension() + "/-" + application().port();
-		}
-		
-		URL url;
 		try {
-			appUrl = appUrl + "/" + application().directActionRequestHandlerKey() + "/stop";
-			url = new URL(appUrl);
+			ERXMutableURL adapterUrl = new ERXMutableURL(application().cgiAdaptorURL());
+			if (application().host() == null) {
+				adapterUrl.setHost("localhost");
+			}
+			adapterUrl.appendPath(application().name() + application().applicationExtension());
+			
+			if (application().isDirectConnectEnabled()) {
+				adapterUrl.setPort((Integer) application().port());
+			} else {
+				adapterUrl.appendPath("-" + application().port());
+			}
+		
+			adapterUrl.appendPath(application().directActionRequestHandlerKey() + "/stop");
+			URL url = adapterUrl.toURL();
 
 			log.debug("Stopping previously running instance of " + application().name());
 			
