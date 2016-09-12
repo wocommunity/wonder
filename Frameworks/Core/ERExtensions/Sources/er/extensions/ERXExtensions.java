@@ -879,7 +879,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Frees all of the resources associated with a given
      * process and then destroys the process.
      * @param p process to destroy
+     * @deprecated use {@link ERXRuntimeUtilities#freeProcessResources(Process)} instead
      */
+    @Deprecated
     public static void freeProcessResources(Process p) {
         if (p!=null) {
             try {
