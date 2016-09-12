@@ -2520,6 +2520,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * @author mschrag
 	 */
 	public static class _Properties extends Properties {
+		private static final Logger log = LoggerFactory.getLogger(ERXProperties.class);
 		/**
 		 * Do I need to update serialVersionUID?
 		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
