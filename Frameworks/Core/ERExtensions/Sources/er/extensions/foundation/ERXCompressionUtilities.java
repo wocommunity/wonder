@@ -33,20 +33,10 @@ public class ERXCompressionUtilities {
 	 * @return gzipped NSData
 	 */
 	public static NSData gzipInputStreamAsNSData(InputStream input, int length) {
-		try {
-			ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length);
+		try (ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length)) {
 			if (input != null) {
-				GZIPOutputStream out = new GZIPOutputStream(bos);
-				try {
+				try (GZIPOutputStream out = new GZIPOutputStream(bos)) {
 					ERXFileUtilities.writeInputStreamToOutputStream(input, true, out, false);
-				}
-				finally {
-					try {
-						out.finish();
-					}
-					finally {
-						out.close();
-					}
 				}
 			}
 			return bos.toNSData();
@@ -66,15 +56,11 @@ public class ERXCompressionUtilities {
 	}
 	
 	public static NSData gzipByteArrayAsNSData(byte[] input, int offset, int length) {
-		try {
-			ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length);
+		try (ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length)) {
 			if (input != null) {
-				GZIPOutputStream out = new GZIPOutputStream(bos);
-	
-				out.write(input, offset, length);
-	
-				out.finish();
-				out.close();
+				try (GZIPOutputStream out = new GZIPOutputStream(bos)) {
+					out.write(input, offset, length);
+				}
 			}
 			return bos.toNSData();
 		}
@@ -85,14 +71,8 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] gzipByteArray(byte[] input) {
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
-			GZIPOutputStream out = new GZIPOutputStream(bos);
-
+		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); GZIPOutputStream out = new GZIPOutputStream(bos)) {
 			out.write(input, 0, input.length);
-
-			out.finish();
-			out.close();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
@@ -104,10 +84,7 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] gunzipByteArray(byte[] input) {
-		try {
-			ByteArrayInputStream bos = new ByteArrayInputStream(input);
-			GZIPInputStream in = new GZIPInputStream(bos);
-
+		try (ByteArrayInputStream bos = new ByteArrayInputStream(input); GZIPInputStream in = new GZIPInputStream(bos)) {
 			byte[] uncompressedData = ERXFileUtilities.bytesFromInputStream(in);
 			return uncompressedData;
 		}
@@ -151,16 +128,10 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] zipByteArray(byte[] input, String zipEntryName) {
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
-			ZipOutputStream out = new ZipOutputStream(bos);
-
+		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); ZipOutputStream out = new ZipOutputStream(bos)) {
 			out.putNextEntry(new ZipEntry(zipEntryName));
 			out.write(input, 0, input.length);
 			out.closeEntry();
-			
-			out.finish();
-			out.close();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
@@ -190,42 +161,40 @@ public class ERXCompressionUtilities {
 			}
 
 			long start = System.currentTimeMillis();
-			ByteArrayInputStream bos = new ByteArrayInputStream(input);
-			ZipInputStream in = new ZipInputStream(bos);
-			ZipEntry entry = null;
-			while ((entry = in.getNextEntry()) != null) {
-
-				String oriName = entry.getName();
-				String filename = directory.getAbsolutePath() + File.separator + oriName;
-
-				if (entry.isDirectory()) {
-					log.debug("creating directory {}", oriName);
-
-					File f = new File(filename);
-					f.mkdirs();
-					f.mkdir();
-
-				}
-				else {
-					int uncompressedSize = (int) entry.getSize();
-
-					if (uncompressedSize > -1) {
-						byte[] b = new byte[uncompressedSize];
-						in.read(b);
-						FileOutputStream fis = new FileOutputStream(filename);
-						fis.write(b);
-						fis.flush();
-						fis.close();
-
-						log.debug("unzipped entry {}", filename);
+			try (ByteArrayInputStream bos = new ByteArrayInputStream(input);
+				ZipInputStream in = new ZipInputStream(bos)) {
+				ZipEntry entry = null;
+				while ((entry = in.getNextEntry()) != null) {
+	
+					String oriName = entry.getName();
+					String filename = directory.getAbsolutePath() + File.separator + oriName;
+	
+					if (entry.isDirectory()) {
+						log.debug("creating directory {}", oriName);
+	
+						File f = new File(filename);
+						f.mkdirs();
+						f.mkdir();
+	
+					}
+					else {
+						int uncompressedSize = (int) entry.getSize();
+	
+						if (uncompressedSize > -1) {
+							byte[] b = new byte[uncompressedSize];
+							in.read(b);
+							try (FileOutputStream fis = new FileOutputStream(filename)) {
+								fis.write(b);
+							}
+	
+							log.debug("unzipped entry {}", filename);
+						}
 					}
 				}
-				long end1 = System.currentTimeMillis();
-
+				long end = System.currentTimeMillis();
+				log.debug("whole decompression took {}ms", end - start);
+				return directory;
 			}
-			long end = System.currentTimeMillis();
-			log.debug("whole decompression took {}ms", end - start);
-			return directory;
 		}
 		catch (IOException e) {
 			return null;
@@ -233,14 +202,8 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] deflateByteArray(byte[] input) {
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
-			DeflaterOutputStream out = new DeflaterOutputStream(bos);
-
+		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); DeflaterOutputStream out = new DeflaterOutputStream(bos)) {
 			out.write(input, 0, input.length);
-
-			out.finish();
-			out.close();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
@@ -251,10 +214,7 @@ public class ERXCompressionUtilities {
 	}
 
 	public static byte[] inflateByteArray(byte[] input) {
-		try {
-			ByteArrayInputStream bos = new ByteArrayInputStream(input);
-			InflaterInputStream in = new InflaterInputStream(bos);
-
+		try (ByteArrayInputStream bos = new ByteArrayInputStream(input); InflaterInputStream in = new InflaterInputStream(bos)) {
 			byte[] uncompressedData = ERXFileUtilities.bytesFromInputStream(in);
 			return uncompressedData;
 		}

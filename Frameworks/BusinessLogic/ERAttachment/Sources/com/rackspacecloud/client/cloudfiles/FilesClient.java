@@ -2900,18 +2900,16 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     static void writeInputStreamToFile (InputStream is, File f) throws IOException
     {
-    	BufferedOutputStream bf = new BufferedOutputStream (new FileOutputStream (f));
-    	byte[] buffer = new byte [1024];
-    	int read = 0;
+    	try (BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(f))) {
+    		byte[] buffer = new byte [1024];
+    		int read = 0;
 
-    	while ((read = is.read(buffer)) > 0)
-    	{
-    		bf.write(buffer, 0, read);
+    		while ((read = is.read(buffer)) > 0) {
+    			bf.write(buffer, 0, read);
+    		}
+    	} finally {
+    		is.close();
     	}
-
-    	is.close();
-    	bf.flush();
-    	bf.close();
     }
     
     /**
@@ -2925,13 +2923,13 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     static String inputStreamToString(InputStream stream, String encoding) throws IOException {
     	char buffer[] = new char[4096];
     	StringBuilder sb = new StringBuilder();
-    	InputStreamReader isr = new InputStreamReader(stream, "utf-8"); // For now, assume utf-8 to work around server bug
+    	try (InputStreamReader isr = new InputStreamReader(stream, "utf-8")) { // For now, assume utf-8 to work around server bug
     	
-    	int nRead = 0;
-    	while((nRead = isr.read(buffer)) >= 0) {
-    		sb.append(buffer, 0, nRead);
+    		int nRead = 0;
+    		while((nRead = isr.read(buffer)) >= 0) {
+    			sb.append(buffer, 0, nRead);
+    		}
     	}
-    	isr.close();
     	
     	return sb.toString();
     }

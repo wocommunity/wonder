@@ -2595,14 +2595,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public synchronized void load(File propsFile) throws IOException {
 			_files.push(propsFile.getParentFile());
-			try {
-	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile));
-	            try {
-	            	load(is);
-	            }
-	            finally {
-	            	is.close();
-	            }
+			try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile))) {
+	            load(is);
 			}
 			finally {
 				_files.pop();

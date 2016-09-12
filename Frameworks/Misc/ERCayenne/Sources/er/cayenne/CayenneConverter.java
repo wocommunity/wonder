@@ -157,10 +157,9 @@ public class CayenneConverter {
 			
 			File sourcesFolder = new File(projectFolder.getAbsolutePath(), "Sources");
 			File newModelFile = new File(sourcesFolder.getAbsolutePath(), model.name() + ".map.xml");
-			PrintWriter writer = new PrintWriter(newModelFile, "UTF8");
-			dataMap.encodeAsXML(writer);
-			writer.flush();
-			writer.close();
+			try (PrintWriter writer = new PrintWriter(newModelFile, "UTF8")) {
+				dataMap.encodeAsXML(writer);
+			}
 			
 			System.err.println("\nWrote cayenne map (model) file to: " +  newModelFile.getCanonicalPath() + "\n");
 			

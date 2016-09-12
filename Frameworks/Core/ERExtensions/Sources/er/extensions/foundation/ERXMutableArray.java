@@ -69,11 +69,8 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	}
 
 	public static NSData toBlob(NSArray<?> d) {
-		try {
-			ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(bout);
+		try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); ObjectOutputStream oos = new ObjectOutputStream(bout)) {
 			oos.writeObject(d);
-			oos.close();
 			NSData sp = new NSData(bout.toByteArray());
 			return sp;
 		} catch (IOException e) {
@@ -88,11 +85,8 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 	
 	@SuppressWarnings("unchecked")
 	public static NSArray fromBlob(NSData d) {
-		try {
-			ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
-			ObjectInputStream ois = new ERXMappingObjectStream(bis);
+		try (ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes()); ObjectInputStream ois = new ERXMappingObjectStream(bis)) {
 			NSArray<?> dd = (NSArray<?>) ois.readObject();
-			ois.close();
 			return dd;
 		} catch (IOException e) {
 			// shouldn't ever happen, as we only read from memory

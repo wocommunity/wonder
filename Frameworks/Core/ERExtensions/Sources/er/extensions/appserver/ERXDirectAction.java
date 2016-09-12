@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
@@ -351,17 +352,19 @@ public class ERXDirectAction extends WODirectAction {
       if (canPerformActionWithPasswordKey("er.extensions.ERXOpenEditingContextLockTracesPassword")) {
         ERXStringHolder result = pageWithName(ERXStringHolder.class);
         result.setEscapeHTML(false);
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        pw.println("<pre>");
-        pw.println(ERXEC.outstandingLockDescription());
-        pw.println("</pre>");
-        pw.println("<hr>");
-        pw.println("<pre>");
-        pw.println(ERXObjectStoreCoordinator.outstandingLockDescription());
-        pw.println("</pre>");
-        pw.close();
-        result.setValue(sw.toString());
+        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+            pw.println("<pre>");
+            pw.println(ERXEC.outstandingLockDescription());
+            pw.println("</pre>");
+            pw.println("<hr>");
+            pw.println("<pre>");
+            pw.println(ERXObjectStoreCoordinator.outstandingLockDescription());
+            pw.println("</pre>");
+            result.setValue(sw.toString());
+        }
+        catch (IOException e) {
+            // ignore
+        }
         return result;
       }
       return forbiddenResponse();

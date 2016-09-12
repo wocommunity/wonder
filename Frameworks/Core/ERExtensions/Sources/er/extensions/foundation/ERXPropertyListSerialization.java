@@ -112,16 +112,10 @@ import com.webobjects.foundation._NSUtilities;
  *
  * <pre><code>
  * File tempFile = File.createTempFile(&quot;myPlist&quot;, &quot;plist&quot;);
- * FileOutputStream out = null;
- * try {
- * 	out = new FileOutputStream(tempFile);
- * 	ERXPropertyListSerialization.propertyListWriteToStream(plist, out, ERXPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
+ * try (FileOutputStream out = new FileOutputStream(tempFile)) {
+ *   ERXPropertyListSerialization.propertyListWriteToStream(plist, out, ERXPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
  * } catch (Exception e) {
- * 	e.printStackTrace();
- * } finally {
- * 	if (out != null) {
- * 		out.close();
- * 	}
+ *   e.printStackTrace();
  * }
  * </code></pre>
  *
@@ -3962,12 +3956,8 @@ public class ERXPropertyListSerialization {
 		public Object propertyListWithURL(URL url) {
 			try {
 				 URLConnection conn = url.openConnection();
-				 InputStream is = conn.getInputStream();
-				 try {
+				 try (InputStream is = conn.getInputStream()) {
 					 return _propertyListWithStream(is);
-				 }
-				 finally {
-					 is.close();
 				 }
 			} catch (RuntimeException e) {
 				throw new RuntimeException("Failed to decode binary plist at " + url, e);
@@ -4036,12 +4026,8 @@ public class ERXPropertyListSerialization {
 
 			try {
 				 URLConnection conn = url.openConnection();
-				 InputStream is = conn.getInputStream();
-				 try {
+				 try (InputStream is = conn.getInputStream()) {
 					 return propertyListDocumentWithStream(is);
-				 }
-				 finally {
-					 is.close();
 				 }
 			} catch (RuntimeException e) {
 				throw new RuntimeException("Failed to decode binary plist at " + url, e);
@@ -5647,12 +5633,8 @@ public class ERXPropertyListSerialization {
 	public static Object propertyListWithURL(URL url, PListFormat type, String encoding) {
 		try {
 			 URLConnection conn = url.openConnection();
-			 InputStream is = conn.getInputStream();
-			 try {
+			 try (InputStream is = conn.getInputStream()) {
 				 return propertyListWithStream(is, type, encoding);
-			 }
-			 finally {
-				 is.close();
 			 }
 		} catch (RuntimeException e) {
 			throw new RuntimeException("Failed to decode plist at " + url, e);

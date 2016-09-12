@@ -1447,13 +1447,8 @@ public class ERXSQLHelper {
 	 *             if there is a problem reading the stream
 	 */
 	public NSArray<String> splitSQLStatementsFromFile(File f) throws IOException {
-		FileInputStream fis = new FileInputStream(f);
-		try {
-			BufferedInputStream bis = new BufferedInputStream(fis);
+		try (FileInputStream fis = new FileInputStream(f); BufferedInputStream bis = new BufferedInputStream(fis)){
 			return splitSQLStatementsFromInputStream(bis);
-		}
-		finally {
-			fis.close();
 		}
 	}
 

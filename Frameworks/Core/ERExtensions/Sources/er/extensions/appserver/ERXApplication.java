@@ -435,9 +435,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				return bundle.properties();
 			}
 
-			InputStream inputStream = null;
-			try {
-				inputStream = bundle.inputStreamForResourcePath(name);
+			try (InputStream inputStream = bundle.inputStreamForResourcePath(name)) {
 				if(inputStream == null) {
 					return null;
 				}
@@ -452,10 +450,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			catch (IOException exception) {
 				return null;
-			} finally {
-				if (inputStream != null) {
-					try { inputStream.close(); } catch (IOException e) {}
-				}
 			}
 		}
 
