@@ -984,13 +984,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<>();
 
 		private void processJar(String jar) {
-
-			try {
-				File jarFile = new File(jar);
-				if (!jarFile.exists() || jarFile.isDirectory()) {
-					return;
-				}
-				JarFile f = new JarFile(jar);
+			File jarFile = new File(jar);
+			if (!jarFile.exists() || jarFile.isDirectory()) {
+				return;
+			}
+			try (JarFile f = new JarFile(jar)) {
 				for (Enumeration<JarEntry> enumerator = f.entries(); enumerator.hasMoreElements();) {
 					JarEntry entry = enumerator.nextElement();
 					String name = entry.getName();
