@@ -2,7 +2,14 @@
   <webobject name = "Wrapper">
     <webobject name = "form">
       <webobject name = "showSearchField">
-        <webobject name = "observeField"> <webobject name = "SearchField" /> </webobject>
+        <webobject name = "hasMultipleFields">
+          <webobject name = "fieldList">
+            <webobject name = "observeField"> <webobject name = "SearchField" /> </webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "hasSingleField">
+          <webobject name = "observeField"> <webobject name = "SearchField" /> </webobject>
+        </webobject>
       </webobject>
       <webobject name = "showRestrictedChoices">
         <webobject name = "observeChoice"> <webobject name = "RestrictedChoices" /> </webobject>

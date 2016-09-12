@@ -1456,10 +1456,12 @@ div.RtActionCell li {
 .ListFilter {
 	position: relative;
 	top: 22px;
-	width: 40%;
+	width: 55%;
 	padding: 0 50px;
 	margin: auto;
 	z-index: 100;
+    /* until flexbox can be used, we have to make do with a pseudo-table here */
+	display: table;
 }
 
 /* adapt position when used to filter relationships */
@@ -1468,32 +1470,18 @@ div.RtActionCell li {
 	padding: 4px 50px;
 }
 
-.ListFilter .ListFilterSearch  {
+.ListFilter form {
+	display: table-row;
+}
+
+.ListFilter .ListFilterSearch, .ListFilter .ListFilterChoices {
 	font-size: 16px;
-	display: inline-block;
-	width: 100%;
+	display: table-cell;
+	padding-right: 4%;
 }
 
 .ListFilter .ListFilterSearch input {
 	width: 100%;
-}
-
-/* apply lighter border and smaller font-size when used to filter relationships */
-.AttrVal .ListFilter .ListFilterSearch input {
-	border: 1px solid #aaa;
-	font-size: 11px;
-}
-
-.ListFilter .ListFilterChoices {
-	font-size: 16px;
-	margin-left: 20px;
-	display: inline-block;
-	width: 100%;
-}
-
-.ListFilter.ComboListFilter .ListFilterSearch, .ListFilter.ComboListFilter .ListFilterChoices {
-	/* input and select side-by-side, so reduce width */
-	width: 40%;
 }
 
 /* ATTACHMENT */
