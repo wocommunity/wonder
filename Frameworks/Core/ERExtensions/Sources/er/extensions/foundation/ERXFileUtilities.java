@@ -453,7 +453,7 @@ public class ERXFileUtilities {
         if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
         if (dstPath == null) throw new IllegalArgumentException("null source path not allowed");
 
-        NSMutableArray<String> args = new NSMutableArray<String>(7);
+        NSMutableArray<String> args = new NSMutableArray<>(7);
         args.addObject("/usr/bin/scp");
         args.addObject("-B");
         args.addObject("-q");
@@ -898,7 +898,7 @@ public class ERXFileUtilities {
                                      if (destination == null || source == null)
                                          throw new IllegalArgumentException("null source or destination not allowed");
 
-                                 	ArrayList<String> array = new ArrayList<String>();
+                                 	ArrayList<String> array = new ArrayList<>();
                                 	array.add("ln");
 
                                 	if (allowUnlink)
@@ -1465,7 +1465,7 @@ public class ERXFileUtilities {
             }
         });
         if (recursive) {
-        	NSMutableArray<File> a = new NSMutableArray<File>(files);
+        	NSMutableArray<File> a = new NSMutableArray<>(files);
             for (int i = files.length; i-- > 0;) {
                 File currentDir = files [i];
                 File[] currentDirs = listDirectories(currentDir, true);
@@ -1490,7 +1490,7 @@ public class ERXFileUtilities {
     public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
         File[] files = baseDir.listFiles(filter);
         if (files != null && recursive) {
-        	NSMutableArray<File> a = new NSMutableArray<File>();
+        	NSMutableArray<File> a = new NSMutableArray<>();
             for (int i = files.length; i-- > 0;) {
                 File currentFile = files[i];
             	a.addObject(currentFile);

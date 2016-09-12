@@ -101,7 +101,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     private static final Logger log = LoggerFactory.getLogger(ERXProperties.class);
     private static final Logger configLog = LoggerFactory.getLogger(ERXConfigurationManager.class);
 
-    private static final Map AppSpecificPropertyNames = new HashMap(128);
+    private static final Map<String, String> AppSpecificPropertyNames = new HashMap<>(128);
 
     /** WebObjects version number as string */
     private static String _webObjectsVersion;
@@ -114,7 +114,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     * 
     * <div class="ja">タイプ変換されている値を内部でキャシュし、何回も同じ変換をする必要なくなります</div>
     */
-    private static Map _cache = Collections.synchronizedMap(new HashMap());
+    private static Map<String, Object> _cache = Collections.synchronizedMap(new HashMap<>());
 
     
     /**
@@ -362,7 +362,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return <div class="en">array de-serialized from the string in the system properties</div>
      *         <div class="ja">システム・プロパティー内の連結した String を NSArray に変換した配列</div>
      */
-	public static NSArray arrayForKey(String s) {
+	public static NSArray<String> arrayForKey(String s) {
         return arrayForKeyWithDefault(s, null);
     }
 
@@ -393,7 +393,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             if (AppSpecificPropertyNames.size() > 128) {
                 AppSpecificPropertyNames.clear();
             }
-            String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
+            String appSpecificPropertyName = AppSpecificPropertyNames.get(propertyName);
             if (appSpecificPropertyName == null) {
                 final WOApplication application = WOApplication.application();
                 if (application != null) {
@@ -431,9 +431,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return <div class="en">array de-serialized from the string in the system properties or default value</div>
      *         <div class="ja">システム・プロパティー内の連結した String を NSArray に変換した配列</div>
      */
-	public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
+	public static NSArray<String> arrayForKeyWithDefault(final String s, final NSArray<String> defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-		NSArray value;
+		NSArray<String> value;
 		Object cachedValue = _cache.get(propertyName);
 		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
@@ -441,7 +441,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = (NSArray) cachedValue;
 		} else {
 			value = ERXValueUtilities.arrayValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			_cache.put(s, value == null ? UndefinedMarker : value);
 			if (value == null) {
 				value = defaultValue;
 			}
@@ -504,7 +504,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Boolean) cachedValue).booleanValue();
 		} else {
 			Boolean objValue = ERXValueUtilities.BooleanValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(propertyName, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(propertyName, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -566,7 +566,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = (NSDictionary) cachedValue;
 		} else {
 			value = ERXValueUtilities.dictionaryValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			_cache.put(s, value == null ? UndefinedMarker : value);
 			if (value == null) {
 				value = defaultValue;
 			}
@@ -744,7 +744,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             propertyValue = bigDecimal.toString();
             System.setProperty(propertyName, propertyValue);
         }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : bigDecimal);
+        _cache.put(propertyName, propertyValue == null ? UndefinedMarker : bigDecimal);
         return bigDecimal;
     }
 
@@ -776,7 +776,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Integer) cachedValue).intValue();
 		} else {
 			Integer objValue = ERXValueUtilities.IntegerValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -817,7 +817,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Long) cachedValue).longValue();
 		} else {
 			Long objValue = ERXValueUtilities.LongValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -859,7 +859,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Float) cachedValue).floatValue();
 		} else {
 			Float objValue = ERXValueUtilities.FloatValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -901,7 +901,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Double) cachedValue).doubleValue();
 		} else {
 			Double objValue = ERXValueUtilities.DoubleValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -1685,7 +1685,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </div>
      */
     public static NSArray<Property> allProperties() {
-    	NSMutableArray props = new NSMutableArray();
+    	NSMutableArray<Property> props = new NSMutableArray<>();
     	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
     		String object = "" + ERXSystem.getProperty(key);
@@ -1716,8 +1716,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
 	public static String pathForPropertiesUnderProjectPath(String projectPath) {
         String path = null; 
-        final NSArray supportedPropertiesPaths = new NSArray(new Object[] 
-                                        {"/Properties", "/Resources/Properties"});
+        final NSArray<String> supportedPropertiesPaths = new NSArray<>("/Properties", "/Resources/Properties");
         Enumeration e = supportedPropertiesPaths.objectEnumerator();
         while (e.hasMoreElements()) {
             File file = new File(projectPath + (String) e.nextElement());

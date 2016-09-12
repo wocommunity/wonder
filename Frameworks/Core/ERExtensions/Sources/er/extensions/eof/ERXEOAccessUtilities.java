@@ -1839,7 +1839,7 @@ public class ERXEOAccessUtilities {
 
 		if (relationship.isToMany()) {
 	 		if (skipFaultedRelationships) {
- 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+ 				NSMutableArray<EOEnterpriseObject> objectsWithUnfaultedRelationships = new NSMutableArray<>();
  				String relationshipName = relationship.name();
  				Enumeration objectsEnum = objects.objectEnumerator();
  				while (objectsEnum.hasMoreElements()) {
@@ -1858,7 +1858,7 @@ public class ERXEOAccessUtilities {
 		else {
 			NSMutableSet<EOGlobalID> gids = new NSMutableSet<EOGlobalID>();
 	 		
-			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+			NSMutableArray<EOEnterpriseObject> objectsWithUnfaultedRelationships = new NSMutableArray<>();
 			EOEntity destinationEntity = relationship.destinationEntity();
 			String relationshipName = relationship.name();
 			Enumeration objectsEnum = objects.objectEnumerator();
