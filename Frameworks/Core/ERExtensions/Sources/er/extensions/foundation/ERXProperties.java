@@ -103,12 +103,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     private static final Map<String, String> AppSpecificPropertyNames = new HashMap<>(128);
 
-    /** WebObjects version number as string */
-    private static String _webObjectsVersion;
-    
-    /** WebObjects version number as double */ 
-    private static double _webObjectsVersionDouble;
-
     /** 
     * <div class="en">Internal cache of type converted values to avoid reconverting attributes that are asked for frequently</div> 
     * 
@@ -139,16 +133,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * the native Java System.getProperty call.
      */
     public static final boolean _useLoadtimeAppSpecifics;
-
-    /**
-     * Set in flattenPropertyNames().
-     *
-     * The flattenPropertyNames() method is called from ERXSystem.updateProperties(), 
-     *     which is called from ERXConfigurationManager.loadConfiguration(),
-     *         which is called from ERXExtensions.finishInitialization(),
-     *             which is registered to be called at ApplicationDidFinishLaunching-time by ERXApplication.
-     */
-    private String _appNameSuffix;
 
     static {
        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault(System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true);
