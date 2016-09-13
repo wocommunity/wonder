@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -305,12 +305,10 @@ public class MSiteConfig extends MObject {
 
 
     /********** Password Methods **********/
-    private static Random _randomGenerator = new Random();
-
-    static public long myrand() {
-        long nextLong = _randomGenerator.nextLong();
+    public static long myrand() {
+        long nextLong = ThreadLocalRandom.current().nextLong();
         while (nextLong == Long.MIN_VALUE) {
-            nextLong = _randomGenerator.nextLong();
+            nextLong = ThreadLocalRandom.current().nextLong();
         }
         return Math.abs(nextLong);
     }
