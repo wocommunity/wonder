@@ -117,16 +117,14 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 			log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
 		_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
-		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(baos);
-		dos.write(_identifier);
-		dos.writeInt(0);
-		dos.writeShort(0);
-		dos.writeShort(0);
-		dos.writeByte(ERXSimpleMulticastSynchronizer.JOIN);
-		dos.flush();
-		dos.close();
-		_multicastSocket.send(baos.createDatagramPacket());
+		try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+			dos.write(_identifier);
+			dos.writeInt(0);
+			dos.writeShort(0);
+			dos.writeShort(0);
+			dos.writeByte(ERXSimpleMulticastSynchronizer.JOIN);
+			_multicastSocket.send(baos.createDatagramPacket());
+		}
 	}
 
 	@Override
@@ -134,16 +132,14 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		if (log.isInfoEnabled()) {
 			log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 		}
-		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(baos);
-		dos.write(_identifier);
-		dos.writeInt(0);
-		dos.writeShort(0);
-		dos.writeShort(0);
-		dos.writeByte(ERXSimpleMulticastSynchronizer.LEAVE);
-		dos.flush();
-		dos.close();
-		_multicastSocket.send(baos.createDatagramPacket());
+		try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+			dos.write(_identifier);
+			dos.writeInt(0);
+			dos.writeShort(0);
+			dos.writeShort(0);
+			dos.writeByte(ERXSimpleMulticastSynchronizer.LEAVE);
+			_multicastSocket.send(baos.createDatagramPacket());
+		}
 		_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 		_listening = false;
 	}
@@ -230,16 +226,14 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 	public void writeCacheChange(CacheChange cacheChange, int transactionID, short transactionNum, short transactionSize) throws IOException {
 		// System.out.println("MulticastSynchronizer.writeCacheChange: Writing " + transactionID + ", " +
 		// transactionNum + " of " + transactionSize);
-		MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(baos);
-		dos.write(_identifier);
-		dos.writeInt(transactionID);
-		dos.writeShort(transactionNum);
-		dos.writeShort(transactionSize);
-		_writeCacheChange(dos, cacheChange);
-		dos.flush();
-		dos.close();
-		_multicastSocket.send(baos.createDatagramPacket());
+		try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+			dos.write(_identifier);
+			dos.writeInt(transactionID);
+			dos.writeShort(transactionNum);
+			dos.writeShort(transactionSize);
+			_writeCacheChange(dos, cacheChange);
+			_multicastSocket.send(baos.createDatagramPacket());
+		}
 		if (log.isDebugEnabled()) {
 			log.debug("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), cacheChange);
 		}

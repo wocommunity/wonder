@@ -664,7 +664,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 		additionalQualifier = ERXEOControlUtilities.localInstancesInQualifier(ec, additionalQualifier);
     	ERXExpiringCache<Object, EORecord<T>> cache = cache();
     	NSArray allKeys = cache.allKeys();
-    	NSMutableArray allObjects = new NSMutableArray(allKeys.count());
+    	NSMutableArray<T> allObjects = new NSMutableArray<>(allKeys.count());
 
     	for (Object entryKey : allKeys) {
     		T object = objectForKey(ec, entryKey, false);

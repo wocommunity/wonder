@@ -81,10 +81,10 @@ public class ERXExternalContent extends ERXStatelessComponent {
     		if(encoding == null) {
     			encoding = CharEncoding.UTF_8;
     		}
-    		InputStream stream = connection.getInputStream();
-    		byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
-    		stream.close();
-    		result = new String(bytes, encoding);
+    		try (InputStream stream = connection.getInputStream()) {
+    			byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
+    			result = new String(bytes, encoding);
+    		}
     	} catch (IOException ex) {
     		throw NSForwardException._runtimeExceptionForThrowable(ex);
     	}

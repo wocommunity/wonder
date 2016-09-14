@@ -361,17 +361,11 @@ public class ERXStringUtilities {
         }
         path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
         if(path != null) {
-        	InputStream stream = null;
-            try {
-                stream = bundle.inputStreamForResourcePath(path);
+            try (InputStream stream = bundle.inputStreamForResourcePath(path)) {
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
                 return new String(bytes);
             } catch (IOException e) {
                 log.warn("IOException when stringFromResource({}.{} in bundle {}", name, extension, bundle.name());
-            } finally {
-            	if (stream != null) {
-            		try { stream.close(); } catch (IOException e) {}
-            	}
             }
         }
         return null;
@@ -1281,12 +1275,8 @@ public class ERXStringUtilities {
      * @throws IOException if the connection fails
      */
     public static String stringFromURL(URL url) throws IOException {
-    	InputStream is = url.openStream();
-    	try {
+    	try (InputStream is = url.openStream()) {
     		return ERXStringUtilities.stringFromInputStream(is);
-    	}
-    	finally {
-    		is.close();
     	}
     }
 
@@ -1300,12 +1290,8 @@ public class ERXStringUtilities {
      * @throws IOException if the connection fails
      */
     public static String stringFromURL(URL url, String encoding) throws IOException {
-    	InputStream is = url.openStream();
-    	try {
+    	try (InputStream is = url.openStream()) {
     		return ERXStringUtilities.stringFromInputStream(is, encoding);
-    	}
-    	finally {
-    		is.close();
     	}
     }
 

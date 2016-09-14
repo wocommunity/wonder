@@ -1,5 +1,6 @@
 package er.extensions.eof;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -172,33 +173,36 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	}
 
 	public static String outstandingLockDescription() {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		boolean hadLocks = false;
-		pw.print(activeDatabaseContexts.size() + " active ObjectStoreCoordinators : "+ activeDatabaseContexts + ")");
-		for (ERXObjectStoreCoordinator ec : activeDatabaseContexts.keySet()) {
-			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
-			if (traces != null && traces.count() > 0) {
-				hadLocks = true;
-				pw.println("\n------------------------");
-				pw.println("ObjectStoreCoordinator: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
-				for (Thread thread : traces.keySet()) {
-					pw.println("Outstanding at @" + thread);
-					for(Exception ex: traces.objectForKey(thread)) {
-						if(ex == defaultTrace) {
-							pw.println("Stack tracing is disabled");
-						} else {
-							ex.printStackTrace(pw);
+		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+			boolean hadLocks = false;
+			pw.print(activeDatabaseContexts.size() + " active ObjectStoreCoordinators : "+ activeDatabaseContexts + ")");
+			for (ERXObjectStoreCoordinator ec : activeDatabaseContexts.keySet()) {
+				NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
+				if (traces != null && traces.count() > 0) {
+					hadLocks = true;
+					pw.println("\n------------------------");
+					pw.println("ObjectStoreCoordinator: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
+					for (Thread thread : traces.keySet()) {
+						pw.println("Outstanding at @" + thread);
+						for(Exception ex: traces.objectForKey(thread)) {
+							if(ex == defaultTrace) {
+								pw.println("Stack tracing is disabled");
+							} else {
+								ex.printStackTrace(pw);
+							}
 						}
 					}
 				}
 			}
+			if(!hadLocks) {
+				pw.print("No open ObjectStoreCoordinator (of " + activeDatabaseContexts.size() + ")");
+			}
+			return sw.toString();
 		}
-		if(!hadLocks) {
-			pw.print("No open ObjectStoreCoordinator (of " + activeDatabaseContexts.size() + ")");
+		catch (IOException e) {
+			// ignore
 		}
-        pw.close();
-		return sw.toString();
+		return null;
 	}
 
 	public static class DumpLocksSignalHandler implements SignalHandler {

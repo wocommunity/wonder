@@ -82,12 +82,8 @@ public class ERXKeyStoreBlowfishCrypter extends ERXAbstractBlowfishCrypter {
 			keystorePassword = keystorePasswordStr.toCharArray();
 		}
 
-		FileInputStream keystoreInputStream = new FileInputStream(keystoreFile);
-		try {
+		try (FileInputStream keystoreInputStream = new FileInputStream(keystoreFile)) {
 			keyStore.load(keystoreInputStream, keystorePassword);
-		}
-		finally {
-			keystoreInputStream.close();
 		}
 
 		String alias = ERXProperties.stringForKeyWithDefault("er.extensions.ERXKeyStoreBlowfishCrypter.keyAlias", ERXKeyStoreBlowfishCrypter.DEFAULT_KEY_ALIAS);
@@ -136,12 +132,8 @@ public class ERXKeyStoreBlowfishCrypter extends ERXAbstractBlowfishCrypter {
 
 		File keystoreFile = new File(keystorePath);
 		if (keystoreFile.exists()) {
-			FileInputStream keystoreInputStream = new FileInputStream(keystoreFile);
-			try {
+			try (FileInputStream keystoreInputStream = new FileInputStream(keystoreFile)) {
 				keyStore.load(keystoreInputStream, keystorePassword);
-			}
-			finally {
-				keystoreInputStream.close();
 			}
 		}
 		else {
@@ -151,12 +143,8 @@ public class ERXKeyStoreBlowfishCrypter extends ERXAbstractBlowfishCrypter {
 		SecretKeySpec key = new SecretKeySpec(blowfishKey.getBytes(), "Blowfish");
 		keyStore.setKeyEntry(keyAlias, key, keyPassword, null);
 
-		FileOutputStream keystoreOutputStream = new FileOutputStream(keystoreFile);
-		try {
+		try (FileOutputStream keystoreOutputStream = new FileOutputStream(keystoreFile)) {
 			keyStore.store(keystoreOutputStream, keystorePassword);
-		}
-		finally {
-			keystoreOutputStream.close();
 		}
 
 		System.out.println("ERXKeyStoreBlowfishCrypter.main: Generated the keystore '" + keystorePath + "'.");

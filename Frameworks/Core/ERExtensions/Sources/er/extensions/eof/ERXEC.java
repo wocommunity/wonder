@@ -1982,41 +1982,44 @@ public class ERXEC extends EOEditingContext {
 	 */
 
 	public static String outstandingLockDescription() {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		boolean hadLocks = false;
-		pw.print("Currently " +activeEditingContexts.size() + " active ECs : "+ activeEditingContexts + ")");
-		for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
-			synchronized (ec) {
-			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
-			if (traces != null && traces.count() > 0) {
-				hadLocks = true;
-				pw.println("\n------------------------");
-				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
-				if(ec.creationTrace != null) {
-					ec.creationTrace.printStackTrace(pw);
-				}
-				if(!ERXEC.traceOpenLocks()) {
-					pw.println("Stack tracing is disabled");
-				} else {
-					for (Thread thread : traces.keySet()) {
-						pw.println("Outstanding at @" + thread);
-						for(Exception ex: traces.objectForKey(thread)) {
-							ex.printStackTrace(pw);
+		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+			boolean hadLocks = false;
+			pw.print("Currently " + activeEditingContexts.size() + " active ECs : "+ activeEditingContexts + ")");
+			for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
+				synchronized (ec) {
+					NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
+					if (traces != null && traces.count() > 0) {
+						hadLocks = true;
+						pw.println("\n------------------------");
+						pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
+						if(ec.creationTrace != null) {
+							ec.creationTrace.printStackTrace(pw);
 						}
+						if(!ERXEC.traceOpenLocks()) {
+							pw.println("Stack tracing is disabled");
+						} else {
+							for (Thread thread : traces.keySet()) {
+								pw.println("Outstanding at @" + thread);
+								for(Exception ex: traces.objectForKey(thread)) {
+									ex.printStackTrace(pw);
+								}
+							}
+						}
+					} else {
+						// pw.println("\n------------------------");
+						// pw.println("Editing Context: " + ec + " unlocked");
 					}
 				}
-			} else {
-				// pw.println("\n------------------------");
-				// pw.println("Editing Context: " + ec + " unlocked");
 			}
+			if(!hadLocks) {
+				pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
+			}
+			return sw.toString();
 		}
+		catch (IOException e) {
+			// ignore
 		}
-		if(!hadLocks) {
-			pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
-		}
-        pw.close();
-		return sw.toString();
+		return null;
 	}
 	
 	/**

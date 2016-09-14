@@ -197,11 +197,8 @@ public class ERCloudFilesAttachmentProcessor extends
 			IOException {
 		try {
 			FilesClient conn = attachment.cloudFilesConnection();
-			FileInputStream attachmentFileInputStream = new FileInputStream(
-					uploadedFile);
-			BufferedInputStream attachmentInputStream = new BufferedInputStream(
-					attachmentFileInputStream);
-			try {
+			try (FileInputStream attachmentFileInputStream = new FileInputStream(uploadedFile);
+				BufferedInputStream attachmentInputStream = new BufferedInputStream(attachmentFileInputStream)) {
 				try {
           conn.storeObjectAs(bucket, uploadedFile, mimeType, key);
           URL pathToFile = new URL(conn.getStorageURL() + "/" + bucket + "/" + key);
@@ -219,8 +216,6 @@ public class ERCloudFilesAttachmentProcessor extends
               + key + "' to CloudFiles: Error "
               + e.getMessage());
         }
-			} finally {
-				attachmentInputStream.close();
 			}
 		} finally {
 			if (attachment._isPendingDelete()) {

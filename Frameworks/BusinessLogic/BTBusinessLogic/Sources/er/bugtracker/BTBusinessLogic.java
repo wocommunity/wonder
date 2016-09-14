@@ -6,7 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -55,23 +58,15 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
                 // delete former entries, so we set this once here.
                 String url = ""+ model.connectionDictionary().objectForKey("URL");
                 if(!url.contains(";create=true")) {
-                    java.sql.Connection conn = null;
                     try {
                         Class foundDriver = Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-                        conn = java.sql.DriverManager.getConnection(url +";create=true");
-                        java.sql.Statement s = conn.createStatement();
+                        try (Connection conn = DriverManager.getConnection(url +";create=true")) {
+                            Statement s = conn.createStatement();
+                        }
                     } catch (SQLException e) {
                         //ignore
                     } catch (ClassNotFoundException e) {
                         throw NSForwardException._runtimeExceptionForThrowable(e);
-                    } finally {
-                        if(conn !=null) {
-                            try {
-                                conn.close();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        }
                     }
                 }
             }

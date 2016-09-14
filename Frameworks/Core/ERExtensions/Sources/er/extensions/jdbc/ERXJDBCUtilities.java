@@ -306,23 +306,20 @@ public class ERXJDBCUtilities {
 
 					if (o instanceof Blob) {
 						Blob b = (Blob) o;
-						InputStream bis = b.getBinaryStream();
 						// stream this to a file, we need the length...
 						File tempFile = null;
-						try {
+						try (InputStream bis = b.getBinaryStream()) {
 							tempFile = File.createTempFile("TempJDBC", ".blob");
 							ERXFileUtilities.writeInputStreamToFile(bis, tempFile);
 						}
-						catch (IOException e5) {
-							log.error("could not create tempFile for row {} and column {}, setting column value to null!", rows.getRow(), columnName);
+						catch (IOException e) {
+							log.error("could not create tempFile for row {} and column {}, setting column value to null!", rows.getRow(), columnName, e);
 							upps.setNull(i + 1, type);
 							if (tempFile != null)
 								if (!tempFile.delete())
 									tempFile.delete();
 
 							continue;
-						} finally {
-							try { bis.close(); } catch (IOException e) {}
 						}
 						FileInputStream fis = null;
 						try {
@@ -546,8 +543,7 @@ public class ERXJDBCUtilities {
 		}
 		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
 		try {
-			Statement stmt = conn.createStatement();
-			try {
+			try (Statement stmt = conn.createStatement()) {
 				rowsUpdated = stmt.executeUpdate(sql);
 				if(autoCommit) {
 					conn.commit();
@@ -558,9 +554,6 @@ public class ERXJDBCUtilities {
 					conn.rollback();
 				}
 				throw new RuntimeException("Failed to execute the statement '" + sql + "'.", ex);
-			}
-			finally {
-				stmt.close();
 			}
 		}
 		finally {
@@ -651,8 +644,7 @@ public class ERXJDBCUtilities {
 		}
 		Connection conn = ((JDBCContext) adaptorContext).connection();
 		try {
-			Statement stmt = conn.createStatement();
-			try {
+			try (Statement stmt = conn.createStatement()) {
 				Enumeration<String> sqlStatementsEnum = sqlStatements.objectEnumerator();
 				while (sqlStatementsEnum.hasMoreElements()) {
 					String sql = sqlStatementsEnum.nextElement();
@@ -672,9 +664,6 @@ public class ERXJDBCUtilities {
 						log.info("Skipping {}", sql);
 					}
 				}
-			}
-			finally {
-				stmt.close();
 			}
 		}
 		finally {
@@ -706,18 +695,13 @@ public class ERXJDBCUtilities {
 	@SuppressWarnings("unchecked")
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
 		log.info("Executing SQL script '{}' from {} ...", resourceName, frameworkName);
-		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
-		if (sqlScript == null) {
-			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
+		try (InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray)) {
+			if (sqlScript == null) {
+				throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
+			}
+			NSArray<String> sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
+			return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 		}
-		NSArray<String> sqlStatements;
-		try {
-			sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
-		}
-		finally {
-			sqlScript.close();
-		}
-		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 	}
 
 	/**
@@ -866,18 +850,8 @@ public class ERXJDBCUtilities {
 	public static void executeQuery(EOAdaptorChannel adaptorChannel, final String query, final IResultSetDelegate delegate) throws Exception {
 		ERXJDBCUtilities.processConnection(adaptorChannel, new IConnectionDelegate() {
 			public void processConnection(EOAdaptorChannel innerAdaptorChannel, Connection conn) throws Exception {
-				Statement stmt = conn.createStatement();
-				try {
-					ResultSet rs = stmt.executeQuery(query);
-					try {
-						delegate.processResultSet(innerAdaptorChannel, rs);
-					}
-					finally {
-						rs.close();
-					}
-				}
-				finally {
-					stmt.close();
+				try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+					delegate.processResultSet(innerAdaptorChannel, rs);
 				}
 			}
 		});

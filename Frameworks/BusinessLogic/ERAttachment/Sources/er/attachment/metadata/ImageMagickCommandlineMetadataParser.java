@@ -68,14 +68,9 @@ public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
 
     byte[] metadataBytes;
     if (metadataFile.exists() && metadataFile.length() > 0) {
-      FileInputStream fis = new FileInputStream(metadataFile);
-      try {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try (FileInputStream fis = new FileInputStream(metadataFile); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
         StreamUtils.copy(fis, baos, ImageMagickCommandlineMetadataParser.BUFFER_SIZE);
         metadataBytes = baos.toByteArray();
-      }
-      finally {
-        fis.close();
       }
       metadataFile.delete();
     }

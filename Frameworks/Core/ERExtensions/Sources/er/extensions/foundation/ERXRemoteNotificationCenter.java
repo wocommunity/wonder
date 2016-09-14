@@ -109,13 +109,11 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 				log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
 			_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
-			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(baos);
-			dos.write(_identifier);
-			dos.writeByte(JOIN);
-			dos.flush();
-			dos.close();
-			_multicastSocket.send(baos.createDatagramPacket());
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+				dos.write(_identifier);
+				dos.writeByte(JOIN);
+				_multicastSocket.send(baos.createDatagramPacket());
+			}
 			listen();
 		}
 
@@ -123,22 +121,18 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			if (log.isInfoEnabled()) {
 				log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
-			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(baos);
-			dos.write(_identifier);
-			dos.writeByte(LEAVE);
-			dos.flush();
-			dos.close();
-			_multicastSocket.send(baos.createDatagramPacket());
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+				dos.write(_identifier);
+				dos.writeByte(LEAVE);
+				_multicastSocket.send(baos.createDatagramPacket());
+			}
 			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
 		}
 
 		@Override
 		protected void postRemoteNotification(NSNotification notification) {
-			try {
-				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-				DataOutputStream dos = new DataOutputStream(baos);
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
 				dos.write(_identifier);
 
 				dos.writeByte(POST);
@@ -148,7 +142,6 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 				if (log.isDebugEnabled()) {
 					log.info("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), notification);
 				}
-				dos.close();
 				if (_postLocal) {
 					postLocalNotification(notification);
 				}

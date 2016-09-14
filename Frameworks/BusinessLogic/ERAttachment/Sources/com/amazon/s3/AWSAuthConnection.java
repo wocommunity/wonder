@@ -240,11 +240,11 @@ public class AWSAuthConnection {
 		byte[] buf = new byte[1024];
 		int bytesRead = 0;
 
-		OutputStream out = request.getOutputStream();
-		while ((bytesRead = object.stream.read(buf)) > 0) {
-			out.write(buf, 0, bytesRead);
+		try (OutputStream out = request.getOutputStream()) {
+			while ((bytesRead = object.stream.read(buf)) > 0) {
+				out.write(buf, 0, bytesRead);
+			}
 		}
-		out.close();
 
 		return new Response(request);
 	}

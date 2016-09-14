@@ -38,15 +38,11 @@ public class FilesUtil
     private static synchronized void loadPropertiesFromClasspath() throws IOException
     {
         props = new Properties();
-        InputStream io = FilesUtil.class.getClassLoader().getResourceAsStream(file);
-        if (io == null)
-        {
-            throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
-        }
-        try {
-        	loadProperties(io);
-        } finally {
-        	io.close();
+        try (InputStream io = FilesUtil.class.getClassLoader().getResourceAsStream(file)) {
+            if (io == null) {
+                throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
+            }
+            loadProperties(io);
         }
     }
 

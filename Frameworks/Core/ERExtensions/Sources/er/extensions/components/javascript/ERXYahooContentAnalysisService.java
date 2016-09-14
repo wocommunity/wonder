@@ -77,9 +77,9 @@ public class ERXYahooContentAnalysisService {
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
 
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream()), true);
-			pw.print(postData);
-			pw.close();
+			try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream()), true)) {
+				pw.print(postData);
+			}
 
 			Document resultsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(conn.getInputStream());
 			resultsDoc.normalize();
