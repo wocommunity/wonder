@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -209,7 +210,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private static Observer observer = new Observer();
 
   /** <div class="ja">モニタ中のファイル・リスト</div> */
-	private static NSMutableArray<URL> monitoredFiles = new NSMutableArray<URL>();
+	private static List<URL> monitoredFiles = new NSMutableArray<>();
 	
 	private static final char _localizerMethodIndicatorCharacter = '@';
 
@@ -697,8 +698,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	protected NSMutableDictionary<String, Object> cache;
 	private NSMutableDictionary<String, Object> createdKeys;
 	private String NOT_FOUND = "**NOT_FOUND**";
-	protected Hashtable<String, Format> _dateFormatters = new Hashtable<String, Format>();
-	protected Hashtable<String, Format> _numberFormatters = new Hashtable<String, Format>();
+	protected Map<String, Format> _dateFormatters = new Hashtable<>();
+	protected Map<String, Format> _numberFormatters = new Hashtable<>();
 	protected String language;
 	protected Locale locale;
 	
@@ -790,9 +791,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 						addEntriesToCache(dict);
 						if (!WOApplication.application().isCachingEnabled()) {
 							synchronized (monitoredFiles) {
-								if (!monitoredFiles.containsObject(path)) {
+								if (!monitoredFiles.contains(path)) {
 									ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path.getFile());
-									monitoredFiles.addObject(path);
+									monitoredFiles.add(path);
 								}
 							}
 						}

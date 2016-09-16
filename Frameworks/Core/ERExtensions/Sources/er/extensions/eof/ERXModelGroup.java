@@ -131,7 +131,7 @@ import er.extensions.jdbc.ERXSQLHelper;
 public class ERXModelGroup extends EOModelGroup {
 	private static final Logger log = LoggerFactory.getLogger(ERXModelGroup.class);
 	
-	private Hashtable cache;
+	private Map<EOEntity, Integer> cache;
 
 	/**
 	 * Key for languages, can be either in properties or in the model object's user info.
@@ -157,7 +157,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Default public constructor
 	 */
 	public ERXModelGroup() {
-		cache = new Hashtable();
+		cache = new Hashtable<>();
 	}
 
 	/**
@@ -603,7 +603,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @return either the userInfo.entityCode or 0 if no entry could be found
 	 */
 	public int entityCode(EOEntity entity) {
-		Integer cachedValue = (Integer) cache.get(entity);
+		Integer cachedValue = cache.get(entity);
 		if (cachedValue == null) {
 			NSDictionary d = entity.userInfo();
 			if (d == null)

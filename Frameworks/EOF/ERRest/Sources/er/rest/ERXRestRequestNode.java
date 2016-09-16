@@ -49,7 +49,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	private String _name;
 	private boolean _rootNode;
 	private Object _value;
-	private LinkedHashMap<String, Object> _attributes;
+	private Map<String, Object> _attributes;
 	private NSMutableArray<ERXRestRequestNode> _children;
 	private Object _associatedObject;
 

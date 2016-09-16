@@ -55,10 +55,10 @@ public class ERXKeyFilter {
 	}
 
 	private ERXKeyFilter.Base _base;
-	private LinkedHashMap<ERXKey, ERXKeyFilter> _includes;
+	private Map<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet<ERXKey> _excludes;
 	private NSMutableSet<ERXKey> _lockedRelationships;
-	private NSMutableDictionary<ERXKey, ERXKey> _map;
+	private Map<ERXKey, ERXKey> _map;
 	private NSArray<EOSortOrdering> _sortOrderings;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
@@ -121,7 +121,7 @@ public class ERXKeyFilter {
 	 * @param toKey the key to map to
 	 */
 	public void addMap(ERXKey fromKey, ERXKey toKey) {
-		_map.setObjectForKey(toKey, fromKey);
+		_map.put(fromKey, toKey);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class ERXKeyFilter {
 	 * @return the key that maps to the given key
 	 */
 	public <T> ERXKey<T> keyMap(ERXKey<T> fromKey) {
-		@SuppressWarnings("cast") ERXKey<T> toKey = (ERXKey<T>) _map.objectForKey(fromKey);
+		ERXKey<T> toKey = _map.get(fromKey);
 		if (toKey == null) {
 			toKey = fromKey;
 		}
