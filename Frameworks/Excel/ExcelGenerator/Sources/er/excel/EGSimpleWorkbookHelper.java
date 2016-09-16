@@ -65,7 +65,7 @@ public class EGSimpleWorkbookHelper {
 	public EGSimpleWorkbookHelper() {
 		_workbook = new HSSFWorkbook();
 		currentSheetIdx = 0;
-		sheets = new ArrayList<HSSFSheet>();
+		sheets = new ArrayList<>();
 		sheets.add(_workbook.createSheet("Sheet0"));
 	}
 
@@ -76,7 +76,7 @@ public class EGSimpleWorkbookHelper {
 	public EGSimpleWorkbookHelper(HSSFWorkbook workbook) {
 		_workbook = workbook;
 		currentSheetIdx = 0;
-		sheets = new ArrayList<HSSFSheet>();
+		sheets = new ArrayList<>();
 		for (int idx = 0, num = _workbook.getNumberOfSheets(); idx < num; idx++) {
 			sheets.add(_workbook.getSheetAt(idx));
 		}

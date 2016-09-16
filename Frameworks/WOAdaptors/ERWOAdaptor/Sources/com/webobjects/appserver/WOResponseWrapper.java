@@ -136,7 +136,7 @@ public class WOResponseWrapper implements HttpResponse {
 	}
 
 	public Set<String> getHeaderNames() {
-		return new NSSet<String>(wrapping.headerKeys());
+		return new NSSet<>(wrapping.headerKeys());
 	}
     
 	public List<Map.Entry<String, String>> getHeaders() {
@@ -145,7 +145,7 @@ public class WOResponseWrapper implements HttpResponse {
 		for(String headerKey: wrapping.headerKeys()) {
 			String value = wrapping.headerForKey(headerKey);
 			if (value != null) {
-				headers.add(new SimpleEntry<String, String>(headerKey, value));
+				headers.add(new SimpleEntry<>(headerKey, value));
 			}
 		}
 		

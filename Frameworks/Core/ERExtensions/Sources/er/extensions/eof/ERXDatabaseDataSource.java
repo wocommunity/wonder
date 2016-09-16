@@ -112,7 +112,7 @@ public class ERXDatabaseDataSource extends EODatabaseDataSource {
     * @param prefetchingRelationshipKeyPaths list of keys to prefetch
     */
    public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
-       NSMutableArray<String> keypaths = new NSMutableArray<String>();
+       NSMutableArray<String> keypaths = new NSMutableArray<>();
        for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
            keypaths.addObject(key.key());
        }

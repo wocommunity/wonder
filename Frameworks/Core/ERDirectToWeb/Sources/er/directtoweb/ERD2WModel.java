@@ -804,7 +804,7 @@ public class ERD2WModel extends D2WModel {
 
 	private NSArray<String> additionalModelNames() {
 		NSArray<String> modelNames = ERXProperties.arrayForKeyWithDefault("er.directtoweb.ERD2WModel.additionalModelNames", NSArray.EmptyArray);
-		NSMutableArray<String> result = new NSMutableArray<String>();
+		NSMutableArray<String> result = new NSMutableArray<>();
 		result.addObjectsFromArray(modelNames);
 		String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
 		// it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it

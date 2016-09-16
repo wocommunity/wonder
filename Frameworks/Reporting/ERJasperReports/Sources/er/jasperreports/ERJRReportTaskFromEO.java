@@ -59,7 +59,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 		ERXAssert.PRE.notNull(theObjectGID);  // If the object is new, this will be null. test and throw.
 
 		if (this.parameters == null) {
-			this.parameters = new HashMap<String, Object>();
+			this.parameters = new HashMap<>();
 		}
 	}
 
@@ -107,7 +107,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 //			EOEnterpriseObject theObject = ec.faultForGlobalID( theObjectGID, ec);
 			
 			EOEnterpriseObject theObjectToPDF = EOUtilities.localInstanceOfObject(ec, myObject);
-			jrDataSource = new ERJRFoundationDataSource(new NSArray<EOEnterpriseObject>(theObjectToPDF));
+			jrDataSource = new ERJRFoundationDataSource(new NSArray<>(theObjectToPDF));
 
 			if (jasperCompiledReportFileName != null) {
 				reportFile = ERJRUtilities.runCompiledReportToPDFFile(jasperCompiledReportFileName, frameworkName, parameters, jrDataSource);

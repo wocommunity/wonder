@@ -82,7 +82,7 @@ public class ERIMAP {
 	 * @return A array of ERMessage.
 	 */
 	public NSArray<ERMessage> getMessages(IMAPFolder folder, int firstMsg, int lastMsg) throws MessagingException {
-		NSMutableArray<ERMessage> emails = new NSMutableArray<ERMessage>();
+		NSMutableArray<ERMessage> emails = new NSMutableArray<>();
 		if (folder.isOpen()) {
 			MimeMessage[] messages = (MimeMessage[])folder.getMessages(firstMsg, lastMsg);
 			for (int index = 0; index < messages.length; index++) {

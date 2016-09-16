@@ -106,7 +106,7 @@ public class ERXTaskThread extends Thread {
 	@SuppressWarnings("unchecked")
 	public static <T> NSArray<T> taskForTaskClass(Class<T> clazz) {
 		NSArray<ERXTaskInfo> taskInfos = taskInfos();
-		NSMutableArray<T> tasks = new NSMutableArray<T>();
+		NSMutableArray<T> tasks = new NSMutableArray<>();
 		for (ERXTaskInfo taskInfo : taskInfos) {
 			Object r = taskInfo.task();
 			log.debug("ERXTaskThread.taskForTaskClass(): r = {}", r);

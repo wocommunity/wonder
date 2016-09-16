@@ -146,7 +146,7 @@ public class ERXDictionaryUtilities {
      * @return NSDictionary containing all of the object-key pairs.
      */
     public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, NSArray<String> keys) {
-        NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<>();
         if(object != null && keys != null) {
             for (Enumeration<String> e = keys.objectEnumerator(); e.hasMoreElements();) {
                 String key = e.nextElement();

@@ -152,7 +152,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	protected boolean isKeyPathRequested(String keyPath) {
 		if (_prefetchingKeyPaths == null) {
-			NSMutableSet<String> prefetchingKeyPaths = new NSMutableSet<String>();
+			NSMutableSet<String> prefetchingKeyPaths = new NSMutableSet<>();
 			NSKeyValueCoding options = options();
 			if (options != null) {
 				String prefetchingKeyPathsStr = (String) options.valueForKey("prefetchingKeyPaths");
@@ -1490,7 +1490,7 @@ public class ERXRouteController extends WODirectAction {
         		}
         		if (nameMatches) {
         			int parameterCount = 0;
-		        	List<Annotation> params = new LinkedList<Annotation>();
+		        	List<Annotation> params = new LinkedList<>();
         			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
         				for (Annotation parameterAnnotation : parameterAnnotations) {
         					if (parameterAnnotation instanceof PathParam || parameterAnnotation instanceof QueryParam || parameterAnnotation instanceof CookieParam || parameterAnnotation instanceof HeaderParam) {
@@ -1710,7 +1710,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		NSArray<String> accessControlAllowRequestMethods = null;
 		if (accessControlAllowRequestMethodsStr != null) {
-			accessControlAllowRequestMethods = new NSArray<String>(accessControlAllowRequestMethodsStr.split(","));
+			accessControlAllowRequestMethods = new NSArray<>(accessControlAllowRequestMethodsStr.split(","));
 		}
 		return accessControlAllowRequestMethods;
 	}
@@ -1727,7 +1727,7 @@ public class ERXRouteController extends WODirectAction {
 		String accessControlAllowRequestHeadersStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestHeaders", requestHeadersStr);
 		NSArray<String> accessControlAllowRequestHeaders = null;
 		if (accessControlAllowRequestHeadersStr != null) {
-			accessControlAllowRequestHeaders = new NSArray<String>(accessControlAllowRequestHeadersStr.split(","));
+			accessControlAllowRequestHeaders = new NSArray<>(accessControlAllowRequestHeadersStr.split(","));
 		}
 		return accessControlAllowRequestHeaders;
 	}
@@ -1886,7 +1886,7 @@ public class ERXRouteController extends WODirectAction {
 	protected static void _registerControllerForRequest(ERXRouteController controller, WORequest request) {
 		NSMutableArray<ERXRouteController> controllers = _controllersForRequest(request);
 		if (controllers == null) {
-			controllers = new NSMutableArray<ERXRouteController>();
+			controllers = new NSMutableArray<>();
 			if (request != null) {
 				NSMutableDictionary<String, Object> userInfo = ((ERXRequest)request).mutableUserInfo();
 				userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);

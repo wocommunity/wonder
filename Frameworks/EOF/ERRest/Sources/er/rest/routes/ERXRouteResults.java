@@ -45,7 +45,7 @@ public class ERXRouteResults implements WOActionResults {
 		_restContext = restContext;
 		_format = format;
 		_responseNode = responseNode;
-		_headers = new NSMutableDictionary<String, String>();
+		_headers = new NSMutableDictionary<>();
 	}
 	
 	/**

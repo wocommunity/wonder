@@ -77,7 +77,7 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPer
 		this.parameters = parameters;
 		
 		if (this.parameters == null) {
-			this.parameters = new HashMap<String, Object>();
+			this.parameters = new HashMap<>();
 		}
 		
 	}

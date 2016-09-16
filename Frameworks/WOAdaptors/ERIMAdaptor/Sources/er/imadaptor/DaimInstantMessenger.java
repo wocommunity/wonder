@@ -113,9 +113,9 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 		private List<String> _offlineBuddies;
 
 		public DaimOscarClient() {
-			_buddies = new LinkedList<String>();
-			_onlineBuddies = new LinkedList<String>();
-			_offlineBuddies = new LinkedList<String>();
+			_buddies = new LinkedList<>();
+			_onlineBuddies = new LinkedList<>();
+			_offlineBuddies = new LinkedList<>();
 		}
 
 		public boolean isBuddyOnline(String buddyName) {

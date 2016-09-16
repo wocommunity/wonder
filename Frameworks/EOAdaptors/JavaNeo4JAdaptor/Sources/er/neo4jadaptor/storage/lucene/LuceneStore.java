@@ -42,7 +42,7 @@ public class LuceneStore <Type extends PropertyContainer> implements Store<Neo4J
 		this.index = (Index<Type>) IndexProvider.instance.getIndexForEntity(db, entity);
 		this.db = db;
 		this.entity = entity;
-		this.facetCreator = new LayeringFilter<Type>();
+		this.facetCreator = new LayeringFilter<>();
 	}
 
 	// this method is not defined in Store interface as lucene objects can't exist

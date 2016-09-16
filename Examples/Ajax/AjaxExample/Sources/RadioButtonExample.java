@@ -14,7 +14,7 @@ public class RadioButtonExample extends com.webobjects.appserver.WOComponent {
 	public RadioButtonExample(WOContext context) {
 		super(context);
 		_values = ExampleDataFactory.values("Radio Button #", 10);
-		_selectedItems = new NSMutableSet<String>();
+		_selectedItems = new NSMutableSet<>();
 	}
 	
 	public NSMutableSet<String> selectedItems() {

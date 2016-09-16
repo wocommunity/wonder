@@ -49,7 +49,7 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		
 		public NSArray simpleData() {
 			if (simpleData == null) {
-				simpleData = new NSMutableArray<SimplePerson>();
+				simpleData = new NSMutableArray<>();
 				SimplePerson p = new SimplePerson("Mike", 29);
 				simpleData.add(p);
 				simpleData.add(p);
@@ -64,7 +64,7 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		public NSArray eoData() {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			NSArray<Company> originalCompanies = ExampleDataFactory.companies(editingContext);
-			NSMutableArray<Company> companiesWithDupes = new NSMutableArray<Company>();
+			NSMutableArray<Company> companiesWithDupes = new NSMutableArray<>();
 			companiesWithDupes.addObjectsFromArray(originalCompanies);
 			companiesWithDupes.addObjectsFromArray(originalCompanies);
 			return companiesWithDupes;
@@ -85,7 +85,7 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 			return verified; 
 		}
 
-		private NSArray<Object> complexData = new NSArray<Object>(
+		private NSArray<Object> complexData = new NSArray<>(
 				// AK: new json doesn't handle this
 				new Object[] { TEST1, TEST2, TEST1, Integer.valueOf(0), "test", new NSTimestamp(), NSPropertyListSerialization.propertyListFromString("<0000c0a8004a0000d2f5480400000113c81c0584c55806fa>"
 				) });

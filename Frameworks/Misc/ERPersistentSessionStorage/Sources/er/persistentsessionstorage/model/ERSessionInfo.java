@@ -24,7 +24,7 @@ public class ERSessionInfo extends er.persistentsessionstorage.model.eogen._ERSe
 
 	private static final Logger log = LoggerFactory.getLogger(ERSessionInfo.class);
 
-	public static final ERSessionInfoClazz<ERSessionInfo> clazz = new ERSessionInfoClazz<ERSessionInfo>();
+	public static final ERSessionInfoClazz<ERSessionInfo> clazz = new ERSessionInfoClazz<>();
 
 	public static class ERSessionInfoClazz<T extends ERSessionInfo> extends
 			er.persistentsessionstorage.model.eogen._ERSessionInfo._ERSessionInfoClazz<T> {

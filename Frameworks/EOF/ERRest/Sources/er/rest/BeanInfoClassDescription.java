@@ -97,7 +97,7 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 
 	@Override
 	public NSArray attributeKeys() {
-		NSMutableArray<String> attributes = new NSMutableArray<String>();
+		NSMutableArray<String> attributes = new NSMutableArray<>();
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (isAttribute(descriptor)) {
 				attributes.addObject(descriptor.getName());
@@ -108,7 +108,7 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 
 	@Override
 	public NSArray toOneRelationshipKeys() {
-		NSMutableArray<String> relationships = new NSMutableArray<String>();
+		NSMutableArray<String> relationships = new NSMutableArray<>();
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (!isAttribute(descriptor) && !isToMany(descriptor) && !"class".equals(descriptor.getName())) {
 				relationships.addObject(descriptor.getName());
@@ -119,7 +119,7 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 
 	@Override
 	public NSArray toManyRelationshipKeys() {
-		NSMutableArray<String> relationships = new NSMutableArray<String>();
+		NSMutableArray<String> relationships = new NSMutableArray<>();
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (isToMany(descriptor)) {
 				relationships.addObject(descriptor.getName());

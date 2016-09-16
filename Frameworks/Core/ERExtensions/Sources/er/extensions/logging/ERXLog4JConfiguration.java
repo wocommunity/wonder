@@ -63,7 +63,7 @@ public class ERXLog4JConfiguration extends WOComponent {
         private static Map<Level, LoggerLevel> levelsByLog4JLevel;
 
         static {
-            levelsByLog4JLevel = new HashMap<Level, LoggerLevel>(8);
+            levelsByLog4JLevel = new HashMap<>(8);
             for (LoggerLevel level : LoggerLevel.values()) {
                 levelsByLog4JLevel.put(level.level(), level);
             }
@@ -93,7 +93,7 @@ public class ERXLog4JConfiguration extends WOComponent {
         private String id;
         private static Map<String, PageSection> sectionsById;
         static {
-            sectionsById = new HashMap<String, PageSection>(4);
+            sectionsById = new HashMap<>(4);
             for (PageSection section : PageSection.values()) {
                 sectionsById.put(section.id(), section);
             }
@@ -282,7 +282,7 @@ public class ERXLog4JConfiguration extends WOComponent {
      */
     public NSArray appenders() {
         if (null == _appenders) {
-            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>(new Comparator<AppenderSkeleton>() {
+            Set<AppenderSkeleton> appenders = new TreeSet<>(new Comparator<AppenderSkeleton>() {
                 public int compare(AppenderSkeleton o1, AppenderSkeleton o2) {
                     int result = 0;
                     if (o1 == o2)  {

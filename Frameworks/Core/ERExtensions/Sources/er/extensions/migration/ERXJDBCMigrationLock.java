@@ -86,7 +86,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			}
 			try {
 				EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-				NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 				row.setObjectForKey(Integer.valueOf(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
 				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
@@ -167,7 +167,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 			row.setObjectForKey(Integer.valueOf(0), "updateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
@@ -240,7 +240,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 			row.setObjectForKey(Integer.valueOf(versionNumber), "version");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			int count;
@@ -354,7 +354,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 
 	protected String dbUpdaterCreateStatement(EOModel model, JDBCAdaptor adaptor) {
 		EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-		NSMutableDictionary<String, String> flags = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> flags = new NSMutableDictionary<>();
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		flags.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);

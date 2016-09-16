@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.foundation.ERXProperties;
 
 public class DirectAction extends WODirectAction {
-  private static NSMutableArray<String> _sessionIDs = new NSMutableArray<String>();
+  private static NSMutableArray<String> _sessionIDs = new NSMutableArray<>();
 
   public DirectAction(WORequest aRequest) {
     super(aRequest);

@@ -13,7 +13,7 @@ public class Session extends ERXSession {
   public Session() {
     setStoresIDsInCookies(true);
     setStoresIDsInURLs(false);
-    _notifications = new NSMutableArray<String>();
+    _notifications = new NSMutableArray<>();
   }
   
   public void addNotification(String notification) {

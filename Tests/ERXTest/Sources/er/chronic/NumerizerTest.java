@@ -8,7 +8,7 @@ import er.chronic.numerizer.Numerizer;
 
 public class NumerizerTest extends TestCase {
   public void testStraightParsing() {
-    Map<Integer, String> strings = new LinkedHashMap<Integer, String>();
+    Map<Integer, String> strings = new LinkedHashMap<>();
     strings.put(Integer.valueOf(1), "one");
     strings.put(Integer.valueOf(5), "five");
     strings.put(Integer.valueOf(10), "ten");

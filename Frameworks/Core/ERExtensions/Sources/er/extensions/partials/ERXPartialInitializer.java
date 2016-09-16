@@ -78,7 +78,7 @@ public class ERXPartialInitializer {
 
 	@SuppressWarnings({ "unchecked", "cast" })
 	public void initializePartialEntities(EOModelGroup modelGroup) {
-		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<EOEntity, EOEntity>();
+		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<>();
 
 		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
@@ -100,7 +100,7 @@ public class ERXPartialInitializer {
 						while (partialAttributes.hasMoreElements()) {
 							EOAttribute partialAttribute = (EOAttribute) partialAttributes.nextElement();
 							if (partialEntity.attributeNamed(partialAttribute.name()) == null) {
-								NSMutableDictionary<String, Object> attributePropertyList = new NSMutableDictionary<String, Object>();
+								NSMutableDictionary<String, Object> attributePropertyList = new NSMutableDictionary<>();
 								partialAttribute.encodeIntoPropertyList(attributePropertyList);
 								String factoryMethodArgumentType = (String) attributePropertyList.objectForKey("factoryMethodArgumentType");
 								// OFFICIALLY THE DUMBEST DAMN THING I'VE EVER
@@ -122,7 +122,7 @@ public class ERXPartialInitializer {
 						while (partialRelationships.hasMoreElements()) {
 							EORelationship partialRelationship = (EORelationship) partialRelationships.nextElement();
 							if (partialEntity.relationshipNamed(partialRelationship.name()) == null) {
-								NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+								NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<>();
 								partialRelationship.encodeIntoPropertyList(relationshipPropertyList);
 
 								EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, partialEntity);
@@ -150,7 +150,7 @@ public class ERXPartialInitializer {
 			}
 		}
 
-		NSMutableSet<EOEntity> convertedEntities = new NSMutableSet<EOEntity>();
+		NSMutableSet<EOEntity> convertedEntities = new NSMutableSet<>();
 		modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
@@ -194,7 +194,7 @@ public class ERXPartialInitializer {
 				}
 			}
 			
-			NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<>();
 			relationship.encodeIntoPropertyList(relationshipPropertyList);
 			relationshipPropertyList.setObjectForKey(baseEntity.name(), "destination");
 			

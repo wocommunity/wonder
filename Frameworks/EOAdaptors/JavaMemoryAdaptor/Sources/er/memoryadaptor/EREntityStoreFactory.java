@@ -26,7 +26,7 @@ public class EREntityStoreFactory {
   public static final String RESET_ALL_ENTITIES = "EREntityStoreResetAllEntities";
   
   public EREntityStoreFactory(Class<? extends EREntityStore> clazz) {
-    _entityStores = new NSMutableDictionary<String, EREntityStore>();
+    _entityStores = new NSMutableDictionary<>();
     _entityStoreClazz = clazz;
     NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("resetAllEntities", new Class[] { NSNotification.class }), RESET_ALL_ENTITIES, null);
   }
@@ -83,7 +83,7 @@ public class EREntityStoreFactory {
     NSSet<EOEntity> relatedEntities = _relatedEntities(entity);
     EREntityStore store = _entityStoreForExternalName(_entityExternalName(entity), transactional);
     if (relatedEntities.count() > 0 && !(store instanceof JoinEntityStore)) {
-      NSMutableDictionary<EOEntity, EREntityStore> stores = new NSMutableDictionary<EOEntity, EREntityStore>(new EREntityStore[] { store }, new EOEntity[] { entity });
+      NSMutableDictionary<EOEntity, EREntityStore> stores = new NSMutableDictionary<>(new EREntityStore[] { store }, new EOEntity[] { entity });
       for (EOEntity related : relatedEntities) {
         store = _entityStoreForExternalName(_entityExternalName(related), transactional);
         stores.setObjectForKey(store, related);
@@ -121,7 +121,7 @@ public class EREntityStoreFactory {
   public void beginTransaction() {
     if (!_hasTransaction) {
       _hasTransaction = true;
-      _transactionEntityStores = new NSMutableDictionary<String, EREntityStore>();
+      _transactionEntityStores = new NSMutableDictionary<>();
     }
   }
 
@@ -145,7 +145,7 @@ public class EREntityStoreFactory {
   }
   
   private NSSet<EOEntity> _relatedEntities(EOEntity entity) {
-    NSMutableSet<EOEntity> entities = new NSMutableSet<EOEntity>();
+    NSMutableSet<EOEntity> entities = new NSMutableSet<>();
     for (EOAttribute attrib : entity.attributesToFetch()) {
       if (attrib.isDerived()) {
         attrib = entity._attributeForPath(attrib.definition());

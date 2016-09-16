@@ -130,7 +130,7 @@ public class ERTagCloud extends ERXComponent {
       }
       NSArray<String> categories = categories();
       if (categories == null) {
-        NSMutableArray<String> mutableCategories = new NSMutableArray<String>();
+        NSMutableArray<String> mutableCategories = new NSMutableArray<>();
         int categoryCount = categoryCount();
         for (int i = 1; i <= categoryCount; i++) {
           mutableCategories.addObject(tagClassPrefix() + i);

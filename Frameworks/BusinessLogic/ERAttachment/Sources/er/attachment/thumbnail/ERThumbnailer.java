@@ -5,7 +5,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.attachment.utils.ERMimeType;
 
 public class ERThumbnailer {
-	private static NSMutableArray<IERThumbnailer> _thumbnailers = new NSMutableArray<IERThumbnailer>();
+	private static NSMutableArray<IERThumbnailer> _thumbnailers = new NSMutableArray<>();
 
 	static {
 		ERThumbnailer.registerThumbnailer(new ERImageThumbnailer());

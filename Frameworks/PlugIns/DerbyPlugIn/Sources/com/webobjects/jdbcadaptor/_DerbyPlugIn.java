@@ -206,27 +206,27 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 		
 		@Override
 		public NSArray<EOSQLExpression> _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
+			return new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
 		}
 
 		@Override
 		public NSArray<EOSQLExpression> dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(pkTable)));
+			return new NSArray<>(_expressionForString("drop table " + formatTableName(pkTable)));
 		}
 
 		@Override
 		public NSArray<EOSQLExpression> dropTableStatementsForEntityGroup(final NSArray<EOEntity> entityGroup) {
-			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(entityGroup.objectAtIndex(0).externalName())));
+			return new NSArray<>(_expressionForString("drop table " + formatTableName(entityGroup.objectAtIndex(0).externalName())));
 		}
 		
 		@Override
 		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
 			NSArray<EOSQLExpression> statements;
 			if (allowsNull) {
-				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " null"));
+				statements = new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " null"));
 			} else {
-				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " not null"));
+				statements = new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " not null"));
 			}
 			return statements;
 		}
@@ -305,7 +305,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 					sql.append(constraint);
 				sql.append(fkSql);
 
-				return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
+				return new NSArray<>(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
 		}
@@ -314,23 +314,23 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 		@Override
 		public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray<EOSQLExpression>(_expressionForString("create table " + formatTableName(pkTable) + " (name char(40) primary key, pk INT)"));
+			return new NSArray<>(_expressionForString("create table " + formatTableName(pkTable) + " (name char(40) primary key, pk INT)"));
 		}
 		
 		@Override
 		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
-			return new NSArray<EOSQLExpression>(_expressionForString("rename column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " to " + formatColumnName(newName)));
+			return new NSArray<>(_expressionForString("rename column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " to " + formatColumnName(newName)));
 		}
 
 		@Override
 		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-			return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add column " + clause));
+			return new NSArray<>(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add column " + clause));
 		}
 		
 		@Override
 	    public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-	    	return new NSArray<EOSQLExpression>(_expressionForString("rename table " + formatTableName(tableName) + " to " + formatTableName(newName)));
+	    	return new NSArray<>(_expressionForString("rename table " + formatTableName(tableName) + " to " + formatTableName(newName)));
 	    }
 
 		@Override

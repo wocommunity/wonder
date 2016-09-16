@@ -68,11 +68,11 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final ERXKey<String> NON_NULL_KEY_PATH = new ERXKey<String>("nonNullKeyPath");
-	private static final ERXKey<String> TRUE_VALUE = new ERXKey<String>("trueValue");
-	private static final ERXKey<String> FALSE_VALUE = new ERXKey<String>("falseValue");
-	private static final ERXKey<String> NEGATE = new ERXKey<String>("negate");
-	private static final ERXKey<String> LOCALIZE = new ERXKey<String>("localize");
+	private static final ERXKey<String> NON_NULL_KEY_PATH = new ERXKey<>("nonNullKeyPath");
+	private static final ERXKey<String> TRUE_VALUE = new ERXKey<>("trueValue");
+	private static final ERXKey<String> FALSE_VALUE = new ERXKey<>("falseValue");
+	private static final ERXKey<String> NEGATE = new ERXKey<>("negate");
+	private static final ERXKey<String> LOCALIZE = new ERXKey<>("localize");
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
@@ -125,7 +125,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	 * @return array of context keys this assignment depends upon.
 	 */
 	public NSArray<String> dependentKeys(String keyPath) {
-		return new NSArray<String>(NON_NULL_KEY_PATH.valueInObject(value()));
+		return new NSArray<>(NON_NULL_KEY_PATH.valueInObject(value()));
 	}
 
 	/**

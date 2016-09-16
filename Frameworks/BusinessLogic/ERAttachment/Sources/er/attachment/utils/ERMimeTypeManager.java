@@ -95,7 +95,7 @@ public class ERMimeTypeManager {
   private List<ERMimeType> _mimeTypes;
 
   private ERMimeTypeManager() {
-    _mimeTypes = new LinkedList<ERMimeType>();
+    _mimeTypes = new LinkedList<>();
   }
 
   /**

@@ -607,7 +607,7 @@ public class Neo4JAdaptorTest extends TestCase {
 		// fetch in descending order
 		results = fetchAll(
 				FirstEntity.ENTITY_NAME,
-				new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareDescending))
+				new NSArray<>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareDescending))
 				);
 	
 		Integer previous = Integer.MAX_VALUE;
@@ -624,7 +624,7 @@ public class Neo4JAdaptorTest extends TestCase {
 		// fetch in ascending order
 		results = fetchAll(
 				FirstEntity.ENTITY_NAME,
-				new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareAscending))
+				new NSArray<>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareAscending))
 				);
 	
 		previous = Integer.MIN_VALUE;

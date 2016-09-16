@@ -71,7 +71,7 @@ public class ERXS {
 	}
 
 	public static <T> void sort(NSMutableArray<T> array, EOSortOrdering... orderings) {
-		EOSortOrdering.sortArrayUsingKeyOrderArray(array, new NSArray<EOSortOrdering>(orderings));
+		EOSortOrdering.sortArrayUsingKeyOrderArray(array, new NSArray<>(orderings));
 	}
 
 	public static <T> void sort(NSMutableArray<T> array, NSArray<EOSortOrdering> orderings) {
@@ -79,7 +79,7 @@ public class ERXS {
 	}
 
 	public static <T> NSArray<T> sorted(NSArray<T> array, EOSortOrdering... orderings) {
-		return ERXS.sorted(array, new NSArray<EOSortOrdering>(orderings));
+		return ERXS.sorted(array, new NSArray<>(orderings));
 	}
 
 	@SuppressWarnings("unchecked")

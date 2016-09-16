@@ -39,7 +39,7 @@ public class ApplicationsPage extends MonitorComponent {
     public String newApplicationName;
 
     public NSArray<MApplication> applications() {
-    	NSMutableArray<MApplication> applications = new NSMutableArray<MApplication>();
+    	NSMutableArray<MApplication> applications = new NSMutableArray<>();
     	applications.addObjectsFromArray(mySession().siteConfig().applicationArray());
     	EOSortOrdering order= new EOSortOrdering("name", EOSortOrdering.CompareAscending);
     	EOSortOrdering.sortArrayUsingKeyOrderArray(applications, new NSArray(order));

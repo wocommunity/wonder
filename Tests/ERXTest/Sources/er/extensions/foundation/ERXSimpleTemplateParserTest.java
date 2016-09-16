@@ -15,7 +15,7 @@ public class ERXSimpleTemplateParserTest extends ERXTestCase {
 	public void testParseTemplatedStringWithNSDictionaryObject() {
 		String template = "The @@animal.description@@ brown @@animal.type@@ jumped over the fence";
 		
-		NSMutableDictionary<String, String> variables = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> variables = new NSMutableDictionary<>();
 		variables.setObjectForKey("LAZY", "animal.description");
 		variables.setObjectForKey("FOX", "animal.type");
 		

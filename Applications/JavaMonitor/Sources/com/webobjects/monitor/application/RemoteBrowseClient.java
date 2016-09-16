@@ -95,10 +95,10 @@ public class RemoteBrowseClient extends MonitorComponent {
 			WOResponse aResponse = null;
 			boolean requestSucceeded = false;
 			if (aString != null && aString.length() > 0) {
-				aHeadersDict.setObjectForKey(new NSMutableArray<String>(aString), "filepath");
+				aHeadersDict.setObjectForKey(new NSMutableArray<>(aString), "filepath");
 			}
 			if (showFiles) {
-				aHeadersDict.setObjectForKey(new NSMutableArray<String>("YES"), "showFiles");
+				aHeadersDict.setObjectForKey(new NSMutableArray<>("YES"), "showFiles");
 			}
 
 			aRequest = new WORequest(MObject._GET, RemoteBrowseClient.getPathString, MObject._HTTP1, aHeadersDict,

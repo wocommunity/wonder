@@ -36,7 +36,7 @@ public class GCTextEncoding extends GCAbstractEncoding {
 
   @Override
   protected String _encode(Number maxValue, List<Number> dataSet) {
-    NSMutableArray<String> values = new NSMutableArray<String>();
+    NSMutableArray<String> values = new NSMutableArray<>();
     if (dataSet != null) {
       if (maxValue == null) {
         maxValue = Float.valueOf(100.0f);

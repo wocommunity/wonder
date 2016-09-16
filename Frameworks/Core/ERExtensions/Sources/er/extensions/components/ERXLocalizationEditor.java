@@ -97,9 +97,9 @@ public class ERXLocalizationEditor extends WOComponent {
     	NSMutableDictionary dataDictionary = new NSMutableDictionary();
        	selectedFilename = currentFilename;
        	selectedFramework = currentFramework;
-    	NSMutableSet<String> allKeys = new NSMutableSet<String>();
+    	NSMutableSet<String> allKeys = new NSMutableSet<>();
     	for (String language : availableLanguages()) {
-			NSArray<String> languageArray = new NSArray<String>(language);
+			NSArray<String> languageArray = new NSArray<>(language);
 			URL url = ERXFileUtilities.pathURLForResourceNamed(currentFilename, currentFramework, languageArray);
 			if (url != null) {
 				NSDictionary<String, Object> dict = (NSDictionary<String, Object>)ERXFileUtilities.readPropertyListFromFileInFramework(currentFilename, currentFramework, languageArray);
@@ -107,7 +107,7 @@ public class ERXLocalizationEditor extends WOComponent {
 				for (String key : dict.allKeys()) {
 					NSMutableDictionary<String, Object> entry = (NSMutableDictionary<String, Object>) dataDictionary.objectForKey(key);
 					if(entry == null) {
-						entry = new NSMutableDictionary<String, Object>();
+						entry = new NSMutableDictionary<>();
 						entry.setObjectForKey(key, "key");
 						dataDictionary.setObjectForKey(entry, key);
 						data.addObject(entry);
@@ -171,7 +171,7 @@ public class ERXLocalizationEditor extends WOComponent {
 
     public void saveFramework() throws IOException {
     	for (String language : availableLanguages()) {
-			NSArray<String> languageArray = new NSArray<String>(language);
+			NSArray<String> languageArray = new NSArray<>(language);
 			URL url = ERXFileUtilities.pathURLForResourceNamed(selectedFilename, selectedFramework, languageArray);
 			NSMutableDictionary dict = new NSMutableDictionary();
      		for (Enumeration entries = data.objectEnumerator(); entries.hasMoreElements();) {

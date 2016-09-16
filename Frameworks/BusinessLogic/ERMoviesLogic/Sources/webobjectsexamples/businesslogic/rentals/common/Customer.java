@@ -78,7 +78,7 @@ public class Customer extends _Customer {
 	}
 
 	public NSArray<Fee> allFees() {
-		NSMutableArray<Fee> allFees = new NSMutableArray<Fee>();
+		NSMutableArray<Fee> allFees = new NSMutableArray<>();
 		NSArray<Rental> rentals = rentals();
 		if (rentals != null) {
 			int count = rentals.count();
@@ -111,7 +111,7 @@ public class Customer extends _Customer {
 
 	public NSArray<Rental> allRentals() {
 		NSArray<Rental> rentals = rentals();
-        return (rentals != null) ? rentals : new NSArray<Rental>();
+        return (rentals != null) ? rentals : new NSArray<>();
 	}
 
 	public Number numberOfAllRentals() {

@@ -13,7 +13,7 @@ public class FilesObjectMetaData
     private String contentLength;
     private String eTag;
     private String lastModified;
-    private Map<String, String> metaData = new HashMap<String, String>();
+    private Map<String, String> metaData = new HashMap<>();
 
     /**
      * An object storing the metadata for an FS Cloud object

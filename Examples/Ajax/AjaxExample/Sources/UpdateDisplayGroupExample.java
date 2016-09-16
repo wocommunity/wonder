@@ -37,7 +37,7 @@ public class UpdateDisplayGroupExample extends WOComponent {
 		else {
 			newOrdering = EOSortOrdering.sortOrderingWithKey(name, EOSortOrdering.CompareAscending);
 		}
-		dg.setSortOrderings(new NSArray<EOSortOrdering>(newOrdering));
+		dg.setSortOrderings(new NSArray<>(newOrdering));
 		dg.qualifyDisplayGroup();
 	}
 

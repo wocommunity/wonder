@@ -241,7 +241,7 @@ public abstract class ERMailDelivery {
 
 	protected NSMutableArray<ERMailAttachment> _inlineAttachments() {
 		if (_inlineAttachments == null)
-			_inlineAttachments = new NSMutableArray<ERMailAttachment>();
+			_inlineAttachments = new NSMutableArray<>();
 		return _inlineAttachments;
 	}
 
@@ -251,7 +251,7 @@ public abstract class ERMailDelivery {
 
 	protected NSMutableArray<ERMailAttachment> _attachments() {
 		if (_attachments == null)
-			_attachments = new NSMutableArray<ERMailAttachment>();
+			_attachments = new NSMutableArray<>();
 		return _attachments;
 	}
 
@@ -346,7 +346,7 @@ public abstract class ERMailDelivery {
 	 */
 	public void setToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress address = internetAddressWithEmailAndPersonal(toAddress, personalName);
-		setInternetAddresses(new NSArray<InternetAddress>(address), Message.RecipientType.TO);
+		setInternetAddresses(new NSArray<>(address), Message.RecipientType.TO);
 	}
 
 	/** 
@@ -747,7 +747,7 @@ public abstract class ERMailDelivery {
 			// don't do anything.
 			return;
 		}
-		NSMutableDictionary<String, String> newDictionary = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> newDictionary = new NSMutableDictionary<>();
 		for (String key: mailAdresses) {
 			newDictionary.takeValueForKey(addressesDictionary.objectForKey(key), key);
 		}

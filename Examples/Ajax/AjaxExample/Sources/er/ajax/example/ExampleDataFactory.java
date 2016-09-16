@@ -17,7 +17,7 @@ public class ExampleDataFactory {
 	private static NSMutableArray<Word> _exampleData;
 
 	public static NSMutableArray<Word> randomWords(int count) {
-		NSMutableArray<Word> words = new NSMutableArray<Word>();
+		NSMutableArray<Word> words = new NSMutableArray<>();
 		Random rand = new Random();
 		for (int i = 0; i < count; i++) {
 			String s = "";
@@ -34,7 +34,7 @@ public class ExampleDataFactory {
 
 	public static synchronized NSArray<Word> someWords(int count) {
 		NSArray<Word> allWords = allWords();
-		NSMutableArray<Word> someWords = new NSMutableArray<Word>();
+		NSMutableArray<Word> someWords = new NSMutableArray<>();
 		for (int i = 0; i < count; i ++) {
 			someWords.addObject(allWords.objectAtIndex((int)(Math.random() * allWords.count())));
 		}
@@ -44,7 +44,7 @@ public class ExampleDataFactory {
 	public static synchronized NSArray<Word> allWords() {
 		// some sample data. if we don't find the file, just create random strings
 		if (_exampleData == null) {
-			_exampleData = new NSMutableArray<Word>();
+			_exampleData = new NSMutableArray<>();
 			File f = new File("/usr/share/dict/words");
 			if (f.exists()) {
 				try {
@@ -66,14 +66,14 @@ public class ExampleDataFactory {
 			if (_exampleData.count() == 0) {
 				_exampleData.addObjectsFromArray(ExampleDataFactory.randomWords(1000));
 			}
-			EOSortOrdering.sortArrayUsingKeyOrderArray(_exampleData, new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
+			EOSortOrdering.sortArrayUsingKeyOrderArray(_exampleData, new NSArray<>(EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
 
 		}
 		return _exampleData.immutableClone();
 	}
 
 	public static NSMutableArray<Product> products(int count) {
-		NSMutableArray<Product> products = new NSMutableArray<Product>();
+		NSMutableArray<Product> products = new NSMutableArray<>();
 		for (int i = 0; i < count; i++) {
 			String title = ERXLoremIpsumGenerator.words(1, 5);
 			String summary = ERXLoremIpsumGenerator.paragraph();
@@ -84,14 +84,14 @@ public class ExampleDataFactory {
 	}
 
 	public static NSMutableArray<ComplexPerson> family() {
-		NSMutableArray<ComplexPerson> people = new NSMutableArray<ComplexPerson>();
+		NSMutableArray<ComplexPerson> people = new NSMutableArray<>();
 		ComplexPerson mike = new ComplexPerson("Mike", 29);
 		ComplexPerson kirsten = new ComplexPerson("Kirsten", 29);
 		ComplexPerson andrew = new ComplexPerson("Andrew", 2);
 		mike.setSpouse(kirsten);
 		kirsten.setSpouse(mike);
-		mike.setChildren(new NSArray<ComplexPerson>(andrew));
-		kirsten.setChildren(new NSArray<ComplexPerson>(andrew));
+		mike.setChildren(new NSArray<>(andrew));
+		kirsten.setChildren(new NSArray<>(andrew));
 		people.add(mike);
 		people.add(kirsten);
 		people.add(andrew);
@@ -112,7 +112,7 @@ public class ExampleDataFactory {
 	}
 
 	public static NSMutableArray<Comment> comments(int count) {
-		NSMutableArray<Comment> comments = new NSMutableArray<Comment>();
+		NSMutableArray<Comment> comments = new NSMutableArray<>();
 		for (int i = 1; i < count; i++) {
 			Comment comment = new Comment();
 			comment.setText("This is comment #" + i);
@@ -122,7 +122,7 @@ public class ExampleDataFactory {
 	}
 
 	public static NSMutableArray<String> values(String prefix, int count) {
-		NSMutableArray<String> values = new NSMutableArray<String>();
+		NSMutableArray<String> values = new NSMutableArray<>();
 		for (int i = 0; i < count; i++) {
 			values.addObject(prefix + i);
 		}
@@ -130,7 +130,7 @@ public class ExampleDataFactory {
 	}
 
 	public static NSMutableArray<Item> items(String idSuffix, String prefix, int count) {
-		NSMutableArray<Item> items = new NSMutableArray<Item>();
+		NSMutableArray<Item> items = new NSMutableArray<>();
 		for (int i = 0; i < count; i++) {
 			items.addObject(new Item(String.valueOf(i) + idSuffix, prefix + i));
 		}

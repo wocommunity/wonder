@@ -66,7 +66,7 @@ public class ValueMap {
 		List<Object> list = map.get(att);
 		
 		if (list == null) {
-			list = new ArrayList<Object>();
+			list = new ArrayList<>();
 			map.put(att, list);
 		}
 		list.add(value);

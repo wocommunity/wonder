@@ -533,7 +533,7 @@ public class ERXDatabaseContextDelegate {
     private class ReentranceProtector {
     	public ReentranceProtector() {}
     	
-    	private NSMutableArray<EODatabaseContext> _accessing = new NSMutableArray<EODatabaseContext>();
+    	private NSMutableArray<EODatabaseContext> _accessing = new NSMutableArray<>();
     	
     	public synchronized boolean canEnter(EODatabaseContext dbc) {
     		if(_accessing.containsObject(dbc)) {
@@ -629,7 +629,7 @@ public class ERXDatabaseContextDelegate {
 						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
 						boolean fromThreadStorage = false;
 						if (currentObjects != null) {
-							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<EOEnterpriseObject>();
+							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<>();
 							for (Object tmpItem : currentObjects) {
 								if (tmpItem instanceof AutoBatchFaultingEnterpriseObject) {
 									tmpList.add((EOEnterpriseObject) tmpItem);
@@ -644,7 +644,7 @@ public class ERXDatabaseContextDelegate {
 							candidates = ec.registeredObjects();
 						}
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
-						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<>();
 						NSMutableArray faults = new NSMutableArray();
 						for (EOEnterpriseObject current : candidates) {
 							if (current instanceof AutoBatchFaultingEnterpriseObject) {
@@ -717,12 +717,12 @@ public class ERXDatabaseContextDelegate {
 						markStart("ToOne.Calculation", source, key);
 						long timestamp = source.batchFaultingTimeStamp();
 						boolean fromThreadStorage = false;
-						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
+						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<>();
 						NSMutableSet faults = new NSMutableSet();
 						NSArray<EOEnterpriseObject> candidates = null;
 						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
 						if (currentObjects != null) {
-							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<EOEnterpriseObject>();
+							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<>();
 							for (Object tmpItem : currentObjects) {
 								if (tmpItem instanceof AutoBatchFaultingEnterpriseObject) {
 									tmpList.add((EOEnterpriseObject) tmpItem);

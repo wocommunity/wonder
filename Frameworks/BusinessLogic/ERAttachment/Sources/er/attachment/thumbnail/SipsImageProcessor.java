@@ -17,7 +17,7 @@ public class SipsImageProcessor extends ERImageProcessor {
         throw new IOException("Failed to create the folder '" + outputFile.getParentFile() + "'.");
       }
 
-      List<String> commands = new LinkedList<String>();
+      List<String> commands = new LinkedList<>();
       commands.add("/usr/bin/sips");
       commands.add("--resampleHeightWidthMax");
       commands.add(String.valueOf(Math.max(resizeWidth, resizeHeight)));

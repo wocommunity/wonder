@@ -214,7 +214,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			return jdbcadaptor.plugIn();
 		}
 
-		private static NSMutableDictionary<String, NSMutableArray> pkCache = new NSMutableDictionary<String, NSMutableArray>();
+		private static NSMutableDictionary<String, NSMutableArray> pkCache = new NSMutableDictionary<>();
 		private int defaultBatchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXPrimaryKeyBatchSize", -1);
 		
 		/**

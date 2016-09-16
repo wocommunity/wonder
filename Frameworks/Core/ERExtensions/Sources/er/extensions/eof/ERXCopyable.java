@@ -257,7 +257,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		 *         {@link EOProperty}
 		 */
 		public static NSArray<CopyType> copyTypesFor(EOProperty property) {
-			NSMutableArray<CopyType> validCopyTypes = new NSMutableArray<ERXCopyable.CopyType>();
+			NSMutableArray<CopyType> validCopyTypes = new NSMutableArray<>();
 			for (CopyType copyType : values()) {
 				if (copyType.validPropertyClasses().contains(property.getClass())) {
 					validCopyTypes.add(copyType);
@@ -623,7 +623,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 			NSArray<EORelationship> classRelationships = Utility._classRelationshipsDictionary.objectForKey(entityName);
 			if (classRelationships == null) {
 				NSArray<EORelationship> allRelationships = entity.relationships();
-				NSMutableArray<EORelationship> relationships = new NSMutableArray<EORelationship>();
+				NSMutableArray<EORelationship> relationships = new NSMutableArray<>();
 				for (EORelationship relationship : allRelationships) {
 					if (entity.classProperties().containsObject(relationship)) {
 						relationships.addObject(relationship);
@@ -830,7 +830,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 			NSArray<EOAttribute> classAttributes = Utility._classAttributesDictionary.objectForKey(entityName);
 			if (classAttributes == null) {
 				NSArray<EOAttribute> allAttributes = entity.attributes();
-				NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+				NSMutableArray<EOAttribute> attributes = new NSMutableArray<>();
 				for (EOAttribute attribute : allAttributes) {
 					if (entity.classProperties().containsObject(attribute)) {
 						attributes.addObject(attribute);
@@ -1461,7 +1461,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 		public static NSArray<EOAttribute> primaryAndForeignKeyAttributes(ERXEnterpriseObject source) {
 			EOEntity entity = Utility.entity(source);
 			NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
-			NSMutableSet<EOAttribute> keyAttributes = new NSMutableSet<EOAttribute>(primaryKeyAttributes);
+			NSMutableSet<EOAttribute> keyAttributes = new NSMutableSet<>(primaryKeyAttributes);
 			NSArray<EORelationship> classRelationships = Utility.classRelationships(entity);
 			for (EORelationship relationship : classRelationships) {
 				NSArray<EOAttribute> foreignKeyAttributes = relationship.sourceAttributes();

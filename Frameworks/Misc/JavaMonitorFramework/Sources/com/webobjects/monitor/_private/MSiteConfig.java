@@ -466,7 +466,7 @@ public class MSiteConfig extends MObject {
     public static MSiteConfig getSiteConfigFromHostAndPort(String configHostName, int aPort) throws MonitorException {
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog. DebugLevelInformational, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("!@#$!@#$ getSiteConfigFromHostAndPort creates a WOHTTPConnection");
-        NSDictionary monitorRequest = new NSDictionary<String, String>("SITE", "queryWotaskd");
+        NSDictionary<String, String> monitorRequest = new NSDictionary<>("SITE", "queryWotaskd");
         NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
 
         WORequest aRequest = new ERXRequest(MObject._POST, MObject.directActionString, MObject._HTTP1, NSDictionary.EmptyDictionary, content, null);

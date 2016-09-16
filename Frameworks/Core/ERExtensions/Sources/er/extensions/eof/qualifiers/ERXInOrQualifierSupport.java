@@ -57,7 +57,7 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 
 		public OrIsInVisitor() {
 			_canBeRepresentedAsInSet = true;
-			_values = new NSMutableArray<Object>();
+			_values = new NSMutableArray<>();
 		}
 
 		public boolean canBeRepresentedAsInSet() {

@@ -5,8 +5,8 @@ import java.util.UUID;
 import er.extensions.eof.ERXKey;
 
 public class Product {
-  public static final ERXKey<String> TITLE = new ERXKey<String>("title");
-  public static final ERXKey<String> SUMMARY = new ERXKey<String>("title");
+  public static final ERXKey<String> TITLE = new ERXKey<>("title");
+  public static final ERXKey<String> SUMMARY = new ERXKey<>("title");
 
   private String _id;
   private String _title;

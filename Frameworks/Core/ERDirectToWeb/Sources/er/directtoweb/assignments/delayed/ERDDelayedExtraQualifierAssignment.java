@@ -172,7 +172,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
     }
 
     protected EOQualifier extraQualifier(D2WContext c, NSDictionary<String, Object> dict) {
-        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
         EOQualifier result = null;
         for (String key : dict.allKeys()) {
             Object value = null;

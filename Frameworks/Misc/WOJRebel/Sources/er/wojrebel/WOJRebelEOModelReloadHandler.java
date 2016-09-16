@@ -33,8 +33,8 @@ public class WOJRebelEOModelReloadHandler {
   private static final Logger log = LoggerFactory.getInstance();
 
 
-  private final Map<EOModel, Long> modelCache = Collections.synchronizedMap(new WeakHashMap<EOModel, Long>());
-  private final Map<EOObjectStoreCoordinator, EOModelGroup> oscCache = new WeakHashMap<EOObjectStoreCoordinator, EOModelGroup>();
+  private final Map<EOModel, Long> modelCache = Collections.synchronizedMap(new WeakHashMap<>());
+  private final Map<EOObjectStoreCoordinator, EOModelGroup> oscCache = new WeakHashMap<>();
   private Field _ERXEntityCache;
   private Method _ERXEntityClassDescriptionCacheReset;
   private Object _ERXEntityClassDescriptionFactory;
@@ -45,7 +45,7 @@ public class WOJRebelEOModelReloadHandler {
 
   public synchronized void updateLoadedModels(NSNotification n) {
     boolean reloaded = false;
-    List<EOModel> modelList = new ArrayList<EOModel>(modelCache.keySet());
+    List<EOModel> modelList = new ArrayList<>(modelCache.keySet());
     for (EOModel model : modelList) {
       reloaded |= shouldUpdateModel(model);
     }

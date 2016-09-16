@@ -134,7 +134,7 @@ public class ERQSJobSupervisorTest {
 		
 		ERQSJobDescription4Test jd = new ERQSJobDescription4Test();
 		// We use a NSDictionary because there is a constructor easy to use
-		jd.setJobInfos(new NSDictionary<String, Object>("Value", "key")); 
+		jd.setJobInfos(new NSDictionary<>("Value", "key")); 
 		jd.setIsEnterpriseObject(false);
 		jd.setClassPath("er.quartzscheduler.foundation.ERQSJobSupervisor");
 		jd.setCronExpression("0 0 12 * * ?");
@@ -174,7 +174,7 @@ public class ERQSJobSupervisorTest {
 		
 		ERQSJobDescription4Test newJd = new ERQSJobDescription4Test();
 		newJd.setName("newName");
-		NSArray<ERQSJobDescription> newJobsList = new NSArray<ERQSJobDescription>(newJd);
+		NSArray<ERQSJobDescription> newJobsList = new NSArray<>(newJd);
 		// As the the new list of jobs doesn't contain the previous one, it must be removed.
 		js.removeObsoleteJobs(newJobsList);
 		aSet = js.getScheduledJobKeys();
@@ -208,7 +208,7 @@ public class ERQSJobSupervisorTest {
 		jd2.setClassPath("er.quartzscheduler.foundation.ERQSExtendedAbstractJob4Test");
 		jd2.setCronExpression("0 0 12 * * ?");
 		jd2.setIsEnterpriseObject(false);
-		NSArray<ERQSJobDescription> jds = new NSArray<ERQSJobDescription>(new ERQSJobDescription4Test[] {jd1, jd2});
+		NSArray<ERQSJobDescription> jds = new NSArray<>(new ERQSJobDescription4Test[] {jd1, jd2});
 		js.addOrModifyJobs(jds);
 		Set<JobKey> aSet = js.getScheduledJobKeys();
 		assertTrue(aSet.size() == 2);

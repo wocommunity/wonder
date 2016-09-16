@@ -64,7 +64,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	 * @return a configuration dictionary
 	 */
 	public NSDictionary<String, Object> agentDefaults() {
-		NSMutableDictionary<String, Object> d = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> d = new NSMutableDictionary<>();
 		d.setObjectForKey(DEFAULT_RESOLUTION, TARGET_RESOLUTION_KEY);
 		d.setObjectForKey(DEFAULT_AUTHOR, AUTHOR_KEY);
 		d.setObjectForKey(GENERATOR_NAME, GENERATOR_NAME_KEY);

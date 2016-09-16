@@ -119,7 +119,7 @@ public class ERXComponentUtilities {
 		if (removeQueryParameterAssociations) {
 			mutableAssociations = (NSMutableDictionary) associations;
 		}
-		NSMutableDictionary<String, WOAssociation> queryParameterAssociations = new NSMutableDictionary<String, WOAssociation>();
+		NSMutableDictionary<String, WOAssociation> queryParameterAssociations = new NSMutableDictionary<>();
 		Enumeration keyEnum = associations.keyEnumerator();
 		while (keyEnum.hasMoreElements()) {
 			String key = (String) keyEnum.nextElement();
@@ -327,7 +327,7 @@ public class ERXComponentUtilities {
 	 */
 	public static NSArray<String> componentTree() {
 		WOContext context = ERXWOContext.currentContext();
-		NSMutableArray<String> result = new NSMutableArray<String>();
+		NSMutableArray<String> result = new NSMutableArray<>();
 		if (context != null) {
 			WOComponent c = context.component();
 			while (c != null) {

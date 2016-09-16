@@ -158,7 +158,7 @@ public class ERXWOComponentContent extends WODynamicElement {
 				// that skips all the children that are explicitly wrapped in an ERXWOTemplate.
 				NSMutableArray<WOElement> originalChildrenElements = group.childrenElements();
 				if (originalChildrenElements != null && originalChildrenElements.count() > 0) {
-					NSMutableArray<WOElement> nonTemplateChildrenElements = new NSMutableArray<WOElement>();
+					NSMutableArray<WOElement> nonTemplateChildrenElements = new NSMutableArray<>();
 					for (WOElement originalChild : originalChildrenElements) {
 						if (!(originalChild instanceof ERXWOTemplate)) {
 							nonTemplateChildrenElements.addObject(originalChild);

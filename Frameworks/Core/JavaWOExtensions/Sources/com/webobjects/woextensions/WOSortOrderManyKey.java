@@ -128,9 +128,9 @@ public class WOSortOrderManyKey extends WOComponent {
         NSArray<EOSortOrdering> sortOrderings = aDisplayGroup.sortOrderings();
         NSMutableArray<EOSortOrdering> aSortOrderingArray;
         if (sortOrderings!=null) {
-            aSortOrderingArray = new NSMutableArray<EOSortOrdering>(sortOrderings);
+            aSortOrderingArray = new NSMutableArray<>(sortOrderings);
         } else {
-            aSortOrderingArray = new NSMutableArray<EOSortOrdering>();
+            aSortOrderingArray = new NSMutableArray<>();
         }
         EOSortOrdering aNewSortOrdering = EOSortOrdering.sortOrderingWithKey(aKey, aSelector);
         aSortOrderingArray.insertObjectAtIndex(aNewSortOrdering, 0);

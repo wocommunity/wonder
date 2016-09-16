@@ -101,7 +101,7 @@ public class TaskInfo extends _TaskInfo {
 	// Lazily initialize the helper class
 	private ERXUnmodeledToManyRelationship<TaskInfo, ResultItem> resultItemsRelationship() {
 		if (_resultItemsRelationship == null) {
-			_resultItemsRelationship = new ERXUnmodeledToManyRelationship<TaskInfo, ResultItem>(this,
+			_resultItemsRelationship = new ERXUnmodeledToManyRelationship<>(this,
 							ResultItem.ENTITY_NAME, ResultItem.XKEY_TASK_INFO);
 		}
 		return _resultItemsRelationship;

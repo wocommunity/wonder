@@ -177,7 +177,7 @@ public class DictClient implements Serializable
 	if(r.code != DictCommandResult.DATABASES_PRESENT)
 	    throw new DictClientException(r);
 
-	databases = new ArrayList<Database>();
+	databases = new ArrayList<>();
 	String line;
 	while(true) {
 	    line = in.readLine();
@@ -211,7 +211,7 @@ public class DictClient implements Serializable
 	if(r.code != DictCommandResult.STRATEGIES_PRESENT)
 	    throw new DictClientException(r);
 
-	strategies = new ArrayList<Strategy>();
+	strategies = new ArrayList<>();
 	String line;
 	while(true) {
 	    line = in.readLine();
@@ -237,7 +237,7 @@ public class DictClient implements Serializable
 	    System.out.println("DictClient.matchWord(\"" + db + "\", \"" +
 			       strategy + "\", \"" + word + "\")");
 
-	ArrayList<Match> matches = new ArrayList<Match>();
+	ArrayList<Match> matches = new ArrayList<>();
 
 	out.print("MATCH " + db + " " + strategy +
 		  " \"" + word + "\"\n");
@@ -271,7 +271,7 @@ public class DictClient implements Serializable
 	    System.out.println
 		("DictClient.defineWord(\"" + db + "\", \"" + word + "\")");
 
-	ArrayList<Definition> definitions = new ArrayList<Definition>();
+	ArrayList<Definition> definitions = new ArrayList<>();
 
 	out.print("DEFINE " + db + " \"" + word + "\"\n");
 	out.flush();

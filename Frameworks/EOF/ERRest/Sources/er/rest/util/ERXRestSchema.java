@@ -19,10 +19,10 @@ import er.rest.ERXRestClassDescriptionFactory;
 
 public class ERXRestSchema {
 	public static NSDictionary<String, Object> schemaForEntityNamed(String entityName, ERXKeyFilter filter) {
-		NSMutableDictionary<String, Object> schema = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> schema = new NSMutableDictionary<>();
 		schema.setObjectForKey(entityName, "name");
 		
-		NSDictionary<String, Object> properties = ERXRestSchema.schemaPropertiesForEntityNamed(entityName, filter, new HashSet<String>());
+		NSDictionary<String, Object> properties = ERXRestSchema.schemaPropertiesForEntityNamed(entityName, filter, new HashSet<>());
 		schema.setObjectForKey(properties, "properties");
 		return schema;
 	}
@@ -34,7 +34,7 @@ public class ERXRestSchema {
 		}
 		entities.add(entityName);
 		
-		NSMutableDictionary<String, Object> properties = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> properties = new NSMutableDictionary<>();
 
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
 		
@@ -44,13 +44,13 @@ public class ERXRestSchema {
 		}
 
 		for (String attributeName : classDescription.attributeKeys()) {
-			ERXKey<Object> key = new ERXKey<Object>(attributeName);
+			ERXKey<Object> key = new ERXKey<>(attributeName);
 			if (filter.matches(key, ERXKey.Type.Attribute)) {
 				EOAttribute attribute = null;
 				if (entity != null) {
 					attribute = entity.attributeNamed(key.key());
 				}
-				NSMutableDictionary<String, Object> property = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> property = new NSMutableDictionary<>();
 
 				boolean optional = attribute != null && attribute.allowsNull();
 				property.setObjectForKey(optional, "optional");
@@ -94,7 +94,7 @@ public class ERXRestSchema {
 		}
 
 		for (String toOneRelationshipName : classDescription.toOneRelationshipKeys()) {
-			ERXKey<Object> key = new ERXKey<Object>(toOneRelationshipName);
+			ERXKey<Object> key = new ERXKey<>(toOneRelationshipName);
 			if (filter.matches(key, ERXKey.Type.ToOneRelationship)) {
 				EOClassDescription destinationClassDescription = classDescription.classDescriptionForDestinationKey(key.key());
 				ERXKeyFilter destinationFilter = filter._filterForKey(key);
@@ -113,7 +113,7 @@ public class ERXRestSchema {
 		}
 
 		for (String toManyRelationshipName : classDescription.toManyRelationshipKeys()) {
-			ERXKey<Object> key = new ERXKey<Object>(toManyRelationshipName);
+			ERXKey<Object> key = new ERXKey<>(toManyRelationshipName);
 			if (filter.matches(key, ERXKey.Type.ToManyRelationship)) {
 				EOClassDescription destinationClassDescription = classDescription.classDescriptionForDestinationKey(key.key());
 				ERXKeyFilter destinationFilter = filter._filterForKey(key);

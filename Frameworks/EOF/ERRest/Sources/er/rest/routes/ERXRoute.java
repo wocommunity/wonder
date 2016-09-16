@@ -189,7 +189,7 @@ public class ERXRoute {
 		_action = action;
 
 		Matcher keyMatcher = Pattern.compile("\\{([^}]+)\\}").matcher(urlPattern);
-		_keys = new NSMutableArray<ERXRoute.Key>();
+		_keys = new NSMutableArray<>();
 		StringBuffer routeRegex = new StringBuffer();
 		if (!urlPattern.startsWith("^")) {
 			routeRegex.append('^');
@@ -311,7 +311,7 @@ public class ERXRoute {
 		if (_method == ERXRoute.Method.All || _method == null || method == null || method.equals(_method)) {
 			Matcher routeMatcher = _routePattern.matcher(url);
 			if (routeMatcher.matches()) {
-				keys = new NSMutableDictionary<ERXRoute.Key, String>();
+				keys = new NSMutableDictionary<>();
 				int keyCount = _keys.count();
 				for (int keyNum = 0; keyNum < keyCount; keyNum++) {
 					ERXRoute.Key key = _keys.objectAtIndex(keyNum);
@@ -371,7 +371,7 @@ public class ERXRoute {
 	public static NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, ERXRestContext context) {
 		NSMutableDictionary<ERXRoute.Key, Object> objects = null;
 		if (keys != null) {
-			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
+			objects = new NSMutableDictionary<>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
@@ -379,12 +379,12 @@ public class ERXRoute {
 				if (value != null) {
 					objects.setObjectForKey(value, key);
 				} else {
-					objects = new NSMutableDictionary<ERXRoute.Key, Object>();
+					objects = new NSMutableDictionary<>();
 				}
 			}
 		}
 		else {
-			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
+			objects = new NSMutableDictionary<>();
 		}
 		return objects;
 	}
@@ -401,7 +401,7 @@ public class ERXRoute {
 	public NSDictionary<String, Object> objects(NSDictionary<ERXRoute.Key, String> keys, ERXRestContext context) {
 		NSMutableDictionary<String, Object> objects = null;
 		if (keys != null) {
-			objects = new NSMutableDictionary<String, Object>();
+			objects = new NSMutableDictionary<>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();

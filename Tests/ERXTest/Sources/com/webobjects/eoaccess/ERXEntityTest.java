@@ -83,8 +83,8 @@ public class ERXEntityTest extends ERXTestCase {
     public void testClassAttributes() {
         NSArray<EOAttribute> attrs = ((ERXEntity)ERXModelGroup.defaultGroup().entityNamed("Employee")).classAttributes();
         @SuppressWarnings("unchecked")
-        NSSet<String> foundAttrs = new NSSet<String>((NSArray<String>)attrs.valueForKey("name"));
-	NSSet<String> expectedAttrs = new NSSet<String>(new String[] {
+        NSSet<String> foundAttrs = new NSSet<>((NSArray<String>)attrs.valueForKey("name"));
+	NSSet<String> expectedAttrs = new NSSet<>(new String[] {
            "address1", "address2", "bestSalesTotal", "city", "firstName", "lastName", "manager", "state", "zipcode"
                                                                      } );
         Assert.assertEquals(expectedAttrs, foundAttrs);
@@ -93,8 +93,8 @@ public class ERXEntityTest extends ERXTestCase {
     public void testClassRelationships() {
         NSArray<EORelationship> rels = ((ERXEntity)ERXModelGroup.defaultGroup().entityNamed("Employee")).classRelationships();
         @SuppressWarnings("unchecked")
-        NSSet<String> foundRels = new NSSet<String>((NSArray<String>)rels.valueForKey("name"));
-        NSSet<String> expectedRels = new NSSet<String>(new String[] { "company", "department", "paychecks", "roles" } );
+        NSSet<String> foundRels = new NSSet<>((NSArray<String>)rels.valueForKey("name"));
+        NSSet<String> expectedRels = new NSSet<>(new String[] { "company", "department", "paychecks", "roles" } );
         Assert.assertEquals(expectedRels, foundRels);
     }
 

@@ -240,7 +240,7 @@ public class ERXExceptionUtilities {
 		if (cleanupStackTrace && skipPatterns == null) {
 			String skipPatternsFile = ERXProperties.stringForKey("er.extensions.stackTrace.skipPatternsFile");
 			if (skipPatternsFile != null) {
-				NSMutableArray<Pattern> mutableSkipPatterns = new NSMutableArray<Pattern>();
+				NSMutableArray<Pattern> mutableSkipPatterns = new NSMutableArray<>();
 
 				Enumeration<String> frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
 				while (frameworksEnum.hasMoreElements()) {

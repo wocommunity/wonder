@@ -46,7 +46,7 @@ import com.webobjects.foundation.NSNotificationCenter;
  */
 public abstract class ERXShutdownHook extends Thread {
 
-	static final Set<ERXShutdownHook> ALL_HOOKS = new HashSet<ERXShutdownHook>();
+	static final Set<ERXShutdownHook> ALL_HOOKS = new HashSet<>();
 	
 	public static void initERXShutdownHook() {
 		System.out.println( "WILL ADD SHUTDOWNHOOK" );

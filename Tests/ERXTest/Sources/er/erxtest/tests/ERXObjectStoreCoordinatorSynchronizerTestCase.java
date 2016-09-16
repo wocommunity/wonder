@@ -179,10 +179,10 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     editingContext_osc1.saveChanges();
 
     // Fetch employees relationship of Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc1.employees());
 
     // Fetch employees relationship of Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc2.employees());
   }
 
   public void testAddToFaultedToMany() {
@@ -214,10 +214,10 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc1.employees());
 
     // Check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc2.employees());
 
     // Create employee for Company1 in OSC2 and Save
     String employeeFirstName2 = "Employee" + UUID.randomUUID().toString();
@@ -227,10 +227,10 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee_osc1, employee_osc2 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee_osc1, employee_osc2 }), company_osc1.employees());
 
     // Check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee_osc1, employee_osc2 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee_osc1, employee_osc2 }), company_osc2.employees());
   }
 
   public void testAddToFaultedToManyWithUncommittedToManyEntries() {
@@ -264,20 +264,20 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Check employees for Company1 in OSC2 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
 
     // Check employees for Company1 in OSC1 (should contain only Employee2)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc1.employees());
 
     // Save Employee1 in OSC2
     editingContext_osc2.saveChanges();
     sleep();
 
     // Check employees for Company1 in OSC2 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
 
     // Check employees for Company1 in OSC1 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc1.employees());
   }
 
   public void testRemoveFromFaultedToMany() {
@@ -299,14 +299,14 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     sleep();
 
     // Fetch employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc1.employees());
 
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
     assertNotNull(company_osc2);
     // Fetch and check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc2.employees());
 
     // gonna break
     NSArray employees_osc2 = company_osc2.employees();
@@ -362,10 +362,10 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 //    }
 
     // Fetch and check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc1.employees());
 
     // Fetch and check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc2.employees());
 
     // ... Do someting with the deleted object in OSC2
 

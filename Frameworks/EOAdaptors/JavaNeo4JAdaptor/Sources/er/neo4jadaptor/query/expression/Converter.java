@@ -60,7 +60,7 @@ public class Converter {
 	}
 	
 	private Collection<Sentence> convertCollection(Collection<EOQualifier> qualifiers) {
-		Collection<Sentence> components = new ArrayList<Sentence>();
+		Collection<Sentence> components = new ArrayList<>();
 		
 		for (EOQualifier q : qualifiers) {
 			components.add(convert(q));
@@ -99,7 +99,7 @@ public class Converter {
 		Object value = NSTranslator.instance.toNeutralValue(qual.value(), entity.attributeNamed(key));
 		EOEntity currentEntity = entity;
 		String [] splits = key.split("\\.");
-		Collection<EORelationship> rels = new ArrayList<EORelationship>();
+		Collection<EORelationship> rels = new ArrayList<>();
 		
 		for (int i=0; i<splits.length - 1; i++) {
 			EORelationship rel = currentEntity.relationshipNamed(splits[i]);

@@ -184,7 +184,7 @@ public class ERXUtilities {
         EOEntity entity = null;
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
-            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<String, EOEntity>();
+            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<>();
                 for (Enumeration<EOEntity> e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
                     EOEntity anEntity = e.nextElement();
                     entityNameDict.setObjectForKey(anEntity, anEntity.name().toLowerCase());    

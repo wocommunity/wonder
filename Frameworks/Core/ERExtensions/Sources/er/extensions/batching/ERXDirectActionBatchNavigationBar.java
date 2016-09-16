@@ -149,7 +149,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 			while (tmpArray.count() < 9 && batchIndex <= maxPages) {
 				// TODO cug: showing 9 page numbers right now as a default, maybe make this configurable
 
-				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<>();
 				entry.setObjectForKey(Integer.valueOf(batchIndex), "batchNumber");
 				entry.setObjectForKey(Integer.valueOf(batchIndex).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disable");
@@ -163,7 +163,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 			if (batchStart >= 2) {
 				// we add page number 1 at the start and some dots between 1 and the other numbers
 
-				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<>();
 				entry.setObjectForKey(Integer.valueOf(1), "batchNumber");
 				entry.setObjectForKey(Integer.valueOf(1).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disabled");
@@ -173,7 +173,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				if (batchStart > 2) {
 					// there are batches hidden, so we add the dots in here
 
-					entry = new NSMutableDictionary<String, Object>();
+					entry = new NSMutableDictionary<>();
 					entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 					entry.setObjectForKey("...", "batchString");
 					entry.setObjectForKey(Boolean.TRUE, "disabled");
@@ -188,9 +188,9 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 
 			if (batchEnd < maxPages - 1) {
 				// add dots at the end, because we have more than one batch more on the right side
-				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<>();
 
-				entry = new NSMutableDictionary<String, Object>();
+				entry = new NSMutableDictionary<>();
 				entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 				entry.setObjectForKey("...", "batchString");
 				entry.setObjectForKey(Boolean.TRUE, "disabled");
@@ -201,7 +201,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 
 			if (batchEnd < maxPages) {
 				// add the last batch
-				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<>();
 
 				entry.setObjectForKey(lastBatch(), "batchNumber");
 				entry.setObjectForKey(lastBatch().toString(), "batchString");

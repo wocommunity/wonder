@@ -23,7 +23,7 @@ public class ERXRestTransaction {
 		_maximumSequenceID = Integer.MIN_VALUE;
 		_identifier = identifier;
 		_editingContext = editingContext;
-		_records = new TreeMap<Integer, Object>();
+		_records = new TreeMap<>();
 	}
 
 	public int minimumSequenceID() {

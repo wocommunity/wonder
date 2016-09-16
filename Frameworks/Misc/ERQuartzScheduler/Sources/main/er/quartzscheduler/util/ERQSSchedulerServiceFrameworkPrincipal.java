@@ -245,7 +245,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
     {
     	try 
     	{
-    		NSMutableArray<JobDetail> jobDetailList = new NSMutableArray<JobDetail>();
+    		NSMutableArray<JobDetail> jobDetailList = new NSMutableArray<>();
     		List<String> groups = getScheduler().getJobGroupNames();
 
     		for (int i = 0; i < groups.size(); i++)
@@ -436,7 +436,7 @@ public abstract class ERQSSchedulerServiceFrameworkPrincipal extends ERXFramewor
 		List<JobDetail> allJobs = getAllJobs();
 		if (allJobs.size() > 0)
 		{
-			NSMutableArray<JobKey> jobKeys = new NSMutableArray<JobKey>(allJobs.size());
+			NSMutableArray<JobKey> jobKeys = new NSMutableArray<>(allJobs.size());
 			for (JobDetail jobDetail : allJobs) 
 			{
 				jobKeys.add(jobDetail.getKey());

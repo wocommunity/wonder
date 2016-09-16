@@ -165,7 +165,7 @@ public class ERXExpiringCache<K, V> {
 		if (expirationTime != ERXExpiringCache.NO_TIMEOUT) {
 			expirationTime = System.currentTimeMillis() + expirationTime;
 		}
-		Entry<V> entry = new Entry<V>(object, expirationTime, currentVersionKey);
+		Entry<V> entry = new Entry<>(object, expirationTime, currentVersionKey);
 		setEntryForKey(entry, key);
 	}
 
@@ -355,7 +355,7 @@ public class ERXExpiringCache<K, V> {
 
 		public void addCache(ERXExpiringCache cache) {
 			synchronized (_caches) {
-				_caches.add(new WeakReference<ERXExpiringCache>(cache));
+				_caches.add(new WeakReference<>(cache));
 				if (_stopped) {
 					start();
 				}
@@ -428,7 +428,7 @@ public class ERXExpiringCache<K, V> {
 	 * Returns all keys.
 	 */
 	public synchronized NSArray<K> allKeys() {
-		NSMutableArray<K> result = new NSMutableArray<K>(_backingDictionary.count());
+		NSMutableArray<K> result = new NSMutableArray<>(_backingDictionary.count());
 		for (K key : _backingDictionary.allKeys()) {
 			result.addObject(key);
 		}

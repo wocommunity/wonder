@@ -599,7 +599,7 @@ public class ERXEC extends EOEditingContext {
 		Thread currentThread = Thread.currentThread();
 		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
 		if(currentTraces == null) {
-			currentTraces = new NSMutableArray<Exception>();
+			currentTraces = new NSMutableArray<>();
 			openLockTraces.setObjectForKey(currentTraces, currentThread);
 		}
 		currentTraces.addObject(openLockTrace);
@@ -1463,7 +1463,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	private boolean savingChanges;
-	private NSMutableArray<NSNotification> queuedNotifications = new NSMutableArray<NSNotification>();
+	private NSMutableArray<NSNotification> queuedNotifications = new NSMutableArray<>();
 
 	protected static Map<ERXEC, String> activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
 
@@ -1563,7 +1563,7 @@ public class ERXEC extends EOEditingContext {
 	private void processQueuedNotifications() {
 		NSMutableArray<NSNotification> queuedNotificationsClone;
 		synchronized (queuedNotifications) {
-			queuedNotificationsClone = new NSMutableArray<NSNotification>(queuedNotifications);
+			queuedNotificationsClone = new NSMutableArray<>(queuedNotifications);
 			queuedNotifications.removeAllObjects();
 		}
 		for (NSNotification notification : queuedNotificationsClone) {

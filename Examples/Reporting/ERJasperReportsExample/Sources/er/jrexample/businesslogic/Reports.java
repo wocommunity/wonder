@@ -29,11 +29,11 @@ public class Reports {
 		// EOQualifier, null for this demo
 		EOQualifier qualifier = null;
 		
-		ERXFetchSpecification<Movie> fs = new ERXFetchSpecification<Movie>(Movie.ENTITY_NAME, qualifier, sortOrderings);
+		ERXFetchSpecification<Movie> fs = new ERXFetchSpecification<>(Movie.ENTITY_NAME, qualifier, sortOrderings);
 		
 		String reportDescription = "A report that subtotals revenue by Studio and lists the Movie revenue detail for each Studio";
 		
-		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		HashMap<String, Object> parameters = new HashMap<>();
 		parameters.put("reportDescription", reportDescription);
 		parameters.put("userName", "WOWODC Demo");
 		

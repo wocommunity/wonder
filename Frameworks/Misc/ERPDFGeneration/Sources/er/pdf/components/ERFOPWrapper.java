@@ -30,7 +30,7 @@ public class ERFOPWrapper extends ERPDFWrapper {
 	public NSData responseAsPdf(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		
-		NSMutableDictionary<String, Object> config = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> config = new NSMutableDictionary<>();
 	    for (Map.Entry<String, WOAssociation> entry : associations().entrySet()) {
 	      Object value = entry.getValue().valueInComponent(component);
 	      if (value != null) {

@@ -124,7 +124,7 @@ public class RepeaterMonthName extends Repeater<RepeaterMonthName.MonthName> {
   }
 
   public static RepeaterMonthName scan(Token token) {
-    Map<Pattern, RepeaterMonthName.MonthName> scanner = new HashMap<Pattern, RepeaterMonthName.MonthName>();
+    Map<Pattern, RepeaterMonthName.MonthName> scanner = new HashMap<>();
     scanner.put(RepeaterMonthName.JAN_PATTERN, RepeaterMonthName.MonthName.JANUARY);
     scanner.put(RepeaterMonthName.FEB_PATTERN, RepeaterMonthName.MonthName.FEBRUARY);
     scanner.put(RepeaterMonthName.MAR_PATTERN, RepeaterMonthName.MonthName.MARCH);

@@ -40,7 +40,7 @@ public class NSDictionaryErsatz extends Ersatz {
 	 * @return partial ersatz
 	 */
 	public static NSDictionaryErsatz partial(EOEntity entity, NSDictionary<String, Object> snapshot) {
-		NSMutableArray<EOAttribute> atts = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> atts = new NSMutableArray<>();
 		
 		for (EOAttribute att : entity.attributes()) {
 			if (snapshot.containsKey(att.name())) {
@@ -57,7 +57,7 @@ public class NSDictionaryErsatz extends Ersatz {
 	 * @return ersatz with values specified in the given dictionary
 	 */
 	public static NSDictionaryErsatz fromDictionary(NSDictionary<EOAttribute, Object> dict) {
-		NSMutableDictionary<String, Object> md = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> md = new NSMutableDictionary<>();
 		
 		for (Map.Entry<EOAttribute, Object> e : dict.entrySet()) {
 			md.put(e.getKey().name(), e.getValue());
@@ -78,7 +78,7 @@ public class NSDictionaryErsatz extends Ersatz {
 	 * @return EOF snapshot
 	 */
 	public static NSMutableDictionary<String, Object> toSnapshot(Ersatz ersatz) {
-		NSMutableDictionary<String, Object> md = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> md = new NSMutableDictionary<>();
 		
 		for (EOAttribute att : ersatz.attributes()) { 
 			Object val = ersatz.get(att);

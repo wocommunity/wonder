@@ -22,7 +22,7 @@ public class DependentListsExample extends WOComponent {
 	
 	public DependentListsExample(WOContext context) {
 		super(context);
-		_states = new NSMutableArray<State>();
+		_states = new NSMutableArray<>();
 		for (int stateNum = 0; stateNum < 30; stateNum++) {
 			State state = new State("State " + stateNum);
 			for (int countyNum = 0; countyNum < 30; countyNum++) {
@@ -107,7 +107,7 @@ public class DependentListsExample extends WOComponent {
 
 		public State(String name) {
 			_name = name;
-			_counties = new NSMutableArray<County>();
+			_counties = new NSMutableArray<>();
 		}
 
 		public String name() {
@@ -136,7 +136,7 @@ public class DependentListsExample extends WOComponent {
 		public County(State state, String name) {
 			_state = state;
 			_name = name;
-			_streets = new NSMutableArray<Street>();
+			_streets = new NSMutableArray<>();
 		}
 		
 		public State state() {

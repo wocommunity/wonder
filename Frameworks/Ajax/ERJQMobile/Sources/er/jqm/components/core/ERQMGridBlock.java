@@ -8,7 +8,7 @@ import er.jqm.components.ERQMComponentBase;
 
 public class ERQMGridBlock extends ERQMComponentBase
 {
-	public static final NSArray<String> BLOCK_NAME = new NSArray<String>("a", "a", "b", "c", "d", "e"); // 0 element dummy
+	public static final NSArray<String> BLOCK_NAME = new NSArray<>("a", "a", "b", "c", "d", "e"); // 0 element dummy
 
 	public ERQMGridBlock(WOContext aContext)
 	{

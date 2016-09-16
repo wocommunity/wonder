@@ -72,8 +72,8 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public NSArray<EOSQLExpression> _foreignKeyConstraintStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
         if (entityGroup == null)
             return NSArray.EmptyArray;
-        NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
-        NSMutableSet<String> generatedStatements = new NSMutableSet<String>();
+        NSMutableArray<EOSQLExpression> result = new NSMutableArray<>();
+        NSMutableSet<String> generatedStatements = new NSMutableSet<>();
         for (EOEntity currentEntity : entityGroup) {
             if (currentEntity.externalName() != null) {
                 NSArray<EORelationship> relationships = currentEntity.relationships();
@@ -126,8 +126,8 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (entityGroup == null) {
             return NSArray.EmptyArray;
         }
-        NSMutableSet<String> sequenceNames = new NSMutableSet<String>();
-        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSMutableSet<String> sequenceNames = new NSMutableSet<>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<>();
         for (EOEntity entity : entityGroup) {
             String sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
             if (!sequenceNames.containsObject(sequenceName)) {
@@ -151,7 +151,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (entityGroup == null) {
             return NSArray.EmptyArray;
         }
-        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<>();
         for (EOEntity entity : entityGroup) {
             // timc 2006-11-06 create result here so we can check for
             // enableIdentifierQuoting while building the statement
@@ -175,7 +175,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      */
     @Override
     public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
-        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<>();
         NSArray<EOSQLExpression> superResults = super.foreignKeyConstraintStatementsForRelationship(relationship);
         for (EOSQLExpression expression : superResults) {
             String s = expression.statement();
@@ -219,7 +219,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      */
     @Override
     public NSArray<EOSQLExpression> primaryKeyConstraintStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
-        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<>();
         for (EOEntity entity : entityGroup) {
             if (!entityUsesSeparateTable(entity))
                 continue;
@@ -283,8 +283,8 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      */
     @Override
     public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
-        NSMutableSet<String> sequenceNames = new NSMutableSet<String>();
-        NSMutableArray<EOSQLExpression> results = new NSMutableArray<EOSQLExpression>();
+        NSMutableSet<String> sequenceNames = new NSMutableSet<>();
+        NSMutableArray<EOSQLExpression> results = new NSMutableArray<>();
         for (EOEntity entity : entityGroup) {
             NSArray<EOAttribute> priKeyAttributes = entity.primaryKeyAttributes();
             if (priKeyAttributes.count() == 1) {
@@ -342,7 +342,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      */
     @Override
     public NSArray<EOSQLExpression> createTableStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
-		NSMutableSet<String> columnNames = new NSMutableSet<String>();
+		NSMutableSet<String> columnNames = new NSMutableSet<>();
 		StringBuffer aStatement = new StringBuffer(128);
 		if (entityGroup != null && entityGroup.count() > 0) {
 			EOSQLExpression sqlExpr = _expressionForEntity(entityGroup.objectAtIndex(0));
@@ -355,7 +355,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 					}
 				}
 			}
-			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
+			return new NSArray<>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(')').toString()));
 		}
 		return NSArray.EmptyArray;
 	}
@@ -415,9 +415,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
       NSArray<EOSQLExpression> statements;
       if (allowsNull) {
-        statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " drop not null"));
+        statements = new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " drop not null"));
       } else {
-        statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " set not null"));
+        statements = new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " set not null"));
       }
       return statements;
     }
@@ -440,29 +440,29 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
           usingClause = " USING " + usingExpression;
         }
       }
-      NSArray<EOSQLExpression> statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
+      NSArray<EOSQLExpression> statements = new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
       return statements;
     }
 
     @Override
     public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
-      return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
+      return new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " rename column " + formatColumnName(columnName) + " to " + formatColumnName(newName)));
     }
 
     @Override
     public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
       String clause = _columnCreationClauseForAttribute(attribute);
-      return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
+      return new NSArray<>(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add " + clause));
     }
 
     @Override
     public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-    	return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
+    	return new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " rename to " + formatTableName(newName)));
     }
     
     @Override
     public NSArray<EOSQLExpression> statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
-    	return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
+    	return new NSArray<>(_expressionForString("alter table " + formatTableName(tableName) + " drop column " + formatTableName(columnName) + " cascade"));
     }
 
 /*

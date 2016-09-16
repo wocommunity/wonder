@@ -123,7 +123,7 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 		if (!postOrder) {
 			throw new IllegalArgumentException("ERXPrefixQualifierTraversal requires a postOrder traversal.");
 		}
-		_qualifiers = new NSMutableArray<EOQualifier>();
+		_qualifiers = new NSMutableArray<>();
 		super.traverse(q, postOrder);
 	}
 }

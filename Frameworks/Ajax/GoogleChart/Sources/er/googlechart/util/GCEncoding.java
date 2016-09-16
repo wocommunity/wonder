@@ -32,7 +32,7 @@ public class GCEncoding {
   }
 
   protected static List<Number> _convertToNumberList(List dataSet) {
-    List<Number> numbers = new LinkedList<Number>();
+    List<Number> numbers = new LinkedList<>();
     for (Object datum : dataSet) {
       Number number = GCEncoding.numberFromObject(datum);
       numbers.add(number);
@@ -47,7 +47,7 @@ public class GCEncoding {
       outerList = dataSets;
     }
     else if (!dataSets.isEmpty() && dataSets.get(0).getClass().isArray()) {
-      outerList = new LinkedList<List>();
+      outerList = new LinkedList<>();
       for (Object obj : dataSets) {
         Object[] innerObjects = (Object[]) obj;
         List innerList = new LinkedList();
@@ -58,7 +58,7 @@ public class GCEncoding {
       }
     }
     else {
-      outerList = new LinkedList<List>();
+      outerList = new LinkedList<>();
       outerList.add(dataSets);
     }
 

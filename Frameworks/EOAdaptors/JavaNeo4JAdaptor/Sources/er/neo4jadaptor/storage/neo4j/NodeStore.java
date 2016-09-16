@@ -93,7 +93,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		id = EOUtilities.convertToAttributeType(pk, id);
 		
-		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<EOAttribute, Object>(new NodeNumber(id), pk);
+		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<>(new NodeNumber(id), pk);
 		
 		return NSDictionaryErsatz.fromDictionary(dict);
 	}

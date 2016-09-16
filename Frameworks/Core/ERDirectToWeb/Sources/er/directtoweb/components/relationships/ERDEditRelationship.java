@@ -34,7 +34,7 @@ public class ERDEditRelationship extends ERDCustomEditComponent {
 	public NSDictionary<String, Object> settings() {
 		String pageConfiguration = d2wContext().dynamicPage();
 		if(pageConfiguration != null) {
-			return new NSDictionary<String, Object>(pageConfiguration, parentPageConfiguration);
+			return new NSDictionary<>(pageConfiguration, parentPageConfiguration);
 		}
 		return null;
 	}

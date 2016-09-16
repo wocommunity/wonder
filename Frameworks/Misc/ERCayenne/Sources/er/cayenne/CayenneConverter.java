@@ -525,7 +525,7 @@ public class CayenneConverter {
     /**
      * Keys: java class names, Values: SQL int type definitions from java.sql.Types
      */
-    private static final Map<String, Integer> javaSqlEnum = new HashMap<String, Integer>();
+    private static final Map<String, Integer> javaSqlEnum = new HashMap<>();
 
     static {
         javaSqlEnum.put(JAVA_LONG, Integer.valueOf(Types.BIGINT));

@@ -50,7 +50,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 	static {
 		NSMutableDictionary<String,NSArray<String>> skips = new NSMutableDictionary<String,NSArray<String>>();
 
-		NSArray<String> memorySkips = new NSArray<String>(new String[] { "testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression" } );
+		NSArray<String> memorySkips = new NSArray<>(new String[] { "testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression" } );
 		skips.setObjectForKey(memorySkips, "Memory");
                 skips.setObjectForKey(NSArray.EmptyArray, "JDBC");
 
@@ -231,7 +231,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 		if (skipTestsForAdaptor.objectForKey(adaptor.name()).contains("testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression")) return;
 		EOSQLExpressionFactory factory = new EOSQLExpressionFactory(adaptor);
 		NSArray<EOEntity> entities = EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).entities();
-		NSMutableDictionary<String,Number> counts = new NSMutableDictionary<String,Number>();
+		NSMutableDictionary<String,Number> counts = new NSMutableDictionary<>();
 
 		for (EOEntity entity : entities) {
 			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
@@ -245,7 +245,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 
 		ERXTestUtilities.createCompanyAnd3Employees();
 
-		NSMutableSet<String> hasMore = new NSMutableSet<String>();
+		NSMutableSet<String> hasMore = new NSMutableSet<>();
 
 		for (EOEntity entity : entities) {
 			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
@@ -262,7 +262,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 				hasMore.add(entity.name());
 		}
 
-		Assert.assertEquals(new NSSet<String>(new String[] { "Company", "Employee", "Paycheck" } ), hasMore);
+		Assert.assertEquals(new NSSet<>(new String[] { "Company", "Employee", "Paycheck" } ), hasMore);
 	}
 
 	/**

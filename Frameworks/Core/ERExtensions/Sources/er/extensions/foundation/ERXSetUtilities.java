@@ -34,7 +34,7 @@ public class ERXSetUtilities {
 			return set;
 		}
 		int count = set.count();
-		NSMutableSet<T> filteredSet = new NSMutableSet<T>(count);
+		NSMutableSet<T> filteredSet = new NSMutableSet<>(count);
 		Enumeration setEnum = set.objectEnumerator();
 		while (setEnum.hasMoreElements()) {
 			Object object = setEnum.nextElement();
@@ -86,7 +86,7 @@ public class ERXSetUtilities {
 	 * @return an array with sorted elements
 	 */
 	public static <T> NSArray<T> sortedArrayFromSet(NSSet<T> set, EOSortOrdering... orderings) {
-		return sortedArrayFromSet(set, new NSArray<EOSortOrdering>(orderings));
+		return sortedArrayFromSet(set, new NSArray<>(orderings));
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class ERXSetUtilities {
 	 * @throws IllegalArgumentException if comparator is <code>null</code>
 	 */
 	public static <T> NSArray<T> sortedArrayFromSet(NSSet<T> set, NSComparator comparator) throws NSComparator.ComparisonException {
-		NSMutableArray<T> array = new NSMutableArray<T>((T[]) set.toArray());
+		NSMutableArray<T> array = new NSMutableArray<>((T[]) set.toArray());
 		array.sortUsingComparator(comparator);
 		return array;
 	}

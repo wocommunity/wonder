@@ -129,7 +129,7 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 	 **/
 	public NSMutableDictionary<String, ?> nextPageValues() {
 		if ( _nextPageValues == null ) {
-			_nextPageValues = new NSMutableDictionary<String, Object>();
+			_nextPageValues = new NSMutableDictionary<>();
 		}
 		return _nextPageValues;
 	}

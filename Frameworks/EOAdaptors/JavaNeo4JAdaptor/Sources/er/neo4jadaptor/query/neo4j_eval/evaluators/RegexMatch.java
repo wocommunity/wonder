@@ -22,7 +22,7 @@ public class RegexMatch <T extends PropertyContainer> implements Evaluator<T> {
 	public static <T extends PropertyContainer> RegexMatch<T> wildcardMatch(Retriever<T, String> valueRetriever, String expression) {
 		Pattern p = Pattern.compile(wildcardExpressionToRegex(expression));
 		
-		return new RegexMatch<T>(valueRetriever, p);
+		return new RegexMatch<>(valueRetriever, p);
 	}
 	
 	private RegexMatch(Retriever<T, String> valueRetriever, Pattern pattern) {

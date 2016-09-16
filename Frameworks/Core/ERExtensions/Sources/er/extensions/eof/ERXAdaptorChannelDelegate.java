@@ -71,7 +71,7 @@ public class ERXAdaptorChannelDelegate {
 		if (collectLastStatements()) {
 			// this collects the last 10 statements executed for dumping them  
 			if (_lastStatements == null) {
-				_lastStatements = new LinkedList<String>();
+				_lastStatements = new LinkedList<>();
 			}
 			_lastStatements.addLast(ERXEOAccessUtilities.createLogString(channel, expression, System.currentTimeMillis() - _lastMilliseconds));
 			
@@ -134,7 +134,7 @@ public class ERXAdaptorChannelDelegate {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
-		_lastStatements = new LinkedList<String>();
+		_lastStatements = new LinkedList<>();
 		log.info("************************************************");
 	}
 	

@@ -180,7 +180,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				super.removeEntryForKey(entry, key);
 			}
 		};
-		_urls = new ERXExpiringCache<String, String>(refresh() * 50);
+		_urls = new ERXExpiringCache<>(refresh() * 50);
 	}
 
 	/**
@@ -435,7 +435,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @return array of delayed requests
 	 */
 	public NSArray<DelayedRequest> activeRequests() {
-		NSMutableArray<DelayedRequest> result = new NSMutableArray<DelayedRequest>();
+		NSMutableArray<DelayedRequest> result = new NSMutableArray<>();
 		for (String id : _futures.allKeys()) {
 			DelayedRequest request = _futures.objectForKey(id);
 			if (request != null) {

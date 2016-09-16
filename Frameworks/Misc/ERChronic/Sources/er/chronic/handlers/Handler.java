@@ -145,7 +145,7 @@ public class Handler {
         throw new IllegalArgumentException("More than two elements specified for endian precedence array: " + endianPrecendence + ".");
       }
 
-      Map<EndianPrecedence, Handler> endianHandlers = new HashMap<EndianPrecedence, Handler>();
+      Map<EndianPrecedence, Handler> endianHandlers = new HashMap<>();
       // handler for dd/mm/yyyy
       endianHandlers.put(EndianPrecedence.Little, new Handler(new SdSmSyHandler(), new TagPattern(ScalarDay.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarMonth.class), new TagPattern(SeparatorSlashOrDash.class), new TagPattern(ScalarYear.class), new TagPattern(SeparatorAt.class, true), new HandlerTypePattern(Handler.HandlerType.TIME, true)));
 
@@ -157,11 +157,11 @@ public class Handler {
 
       definitions = new HashMap<Handler.HandlerType, List<Handler>>();
 
-      List<Handler> timeHandlers = new LinkedList<Handler>();
+      List<Handler> timeHandlers = new LinkedList<>();
       timeHandlers.add(new Handler(null, new TagPattern(RepeaterTime.class), new TagPattern(Grabber.class, true), new TagPattern(RepeaterDayPortion.class, true)));
       definitions.put(Handler.HandlerType.TIME, timeHandlers);
 
-      List<Handler> dateHandlers = new LinkedList<Handler>();
+      List<Handler> dateHandlers = new LinkedList<>();
       dateHandlers.add(new Handler(new RdnRmnSdTTzSyHandler(), new TagPattern(RepeaterDayName.class), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new TagPattern(RepeaterTime.class), new TagPattern(SeparatorSlashOrDash.class, true), new TagPattern(TimeZone.class), new TagPattern(ScalarYear.class)));
       // DIFF: We add scalar year as a standalone match
       dateHandlers.add(new Handler(new SyHandler(), new TagPattern(ScalarYear.class)));
@@ -188,7 +188,7 @@ public class Handler {
       definitions.put(Handler.HandlerType.DATE, dateHandlers);
 
       // tonight at 7pm
-      List<Handler> anchorHandlers = new LinkedList<Handler>();
+      List<Handler> anchorHandlers = new LinkedList<>();
       anchorHandlers.add(new Handler(new RHandler(), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class), new TagPattern(SeparatorAt.class, true), new TagPattern(Repeater.class, true), new TagPattern(Repeater.class, true)));
       // DIFF: Add support for "next" and "last" grabbers
       anchorHandlers.add(new Handler(new RHandler(), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class), new TagPattern(Repeater.class), new TagPattern(SeparatorAt.class, true), new TagPattern(Grabber.class, true), new TagPattern(Repeater.class, true), new TagPattern(Repeater.class, true)));
@@ -196,14 +196,14 @@ public class Handler {
       definitions.put(Handler.HandlerType.ANCHOR, anchorHandlers);
 
       // 3 weeks from now, in 2 months
-      List<Handler> arrowHandlers = new LinkedList<Handler>();
+      List<Handler> arrowHandlers = new LinkedList<>();
       arrowHandlers.add(new Handler(new SRPHandler(), new TagPattern(Scalar.class), new TagPattern(Repeater.class), new TagPattern(Pointer.class)));
       arrowHandlers.add(new Handler(new PSRHandler(), new TagPattern(Pointer.class), new TagPattern(Scalar.class), new TagPattern(Repeater.class)));
       arrowHandlers.add(new Handler(new SRPAHandler(), new TagPattern(Scalar.class), new TagPattern(Repeater.class), new TagPattern(Pointer.class), new HandlerTypePattern(Handler.HandlerType.ANCHOR)));
       definitions.put(Handler.HandlerType.ARROW, arrowHandlers);
 
       // 3rd week in march
-      List<Handler> narrowHandlers = new LinkedList<Handler>();
+      List<Handler> narrowHandlers = new LinkedList<>();
       narrowHandlers.add(new Handler(new ORSRHandler(), new TagPattern(Ordinal.class), new TagPattern(Repeater.class), new TagPattern(SeparatorIn.class), new TagPattern(Repeater.class)));
       narrowHandlers.add(new Handler(new ORGRHandler(), new TagPattern(Ordinal.class), new TagPattern(Repeater.class), new TagPattern(Grabber.class), new TagPattern(Repeater.class)));
       definitions.put(Handler.HandlerType.NARROW, narrowHandlers);
@@ -228,7 +228,7 @@ public class Handler {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: date " + handler);
         }
-        List<Token> goodTokens = new LinkedList<Token>();
+        List<Token> goodTokens = new LinkedList<>();
         for (Token token : range.subList(tokens)) {
           if (token.getTag(Separator.class) == null) {
             goodTokens.add(token);
@@ -244,7 +244,7 @@ public class Handler {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: anchor " + handler);
         }
-        List<Token> goodTokens = new LinkedList<Token>();
+        List<Token> goodTokens = new LinkedList<>();
         for (Token token : range.subList(tokens)) {
           if (token.getTag(Separator.class) == null) {
             goodTokens.add(token);
@@ -260,7 +260,7 @@ public class Handler {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: arrow " + handler);
         }
-        List<Token> goodTokens = new LinkedList<Token>();
+        List<Token> goodTokens = new LinkedList<>();
         for (Token token : range.subList(tokens)) {
           if (token.getTag(SeparatorAt.class) == null && token.getTag(SeparatorSlashOrDash.class) == null && token.getTag(SeparatorComma.class) == null) {
             goodTokens.add(token);
@@ -276,7 +276,7 @@ public class Handler {
         if (options.isDebug()) {
           System.out.println("Chronic.tokensToSpan: narrow " + handler);
         }
-        //List<Token> goodTokens = new LinkedList<Token>();
+        //List<Token> goodTokens = new LinkedList<>();
         //for (Token token : tokens) {
         //if (token.getTag(Separator.class) == null) {
         //  goodTokens.add(token);
@@ -525,7 +525,7 @@ public class Handler {
 
     // handle ambiguous times if :ambiguous_time_range is specified
     if (options.getAmbiguousTimeRange() != 0) {
-      List<Token> ttokens = new LinkedList<Token>();
+      List<Token> ttokens = new LinkedList<>();
       for (int i = 0; i < tokenSize; i++) {
         Token t0 = tokens.get(i);
         ttokens.add(t0);

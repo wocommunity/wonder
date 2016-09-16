@@ -142,7 +142,7 @@ public class ERXMigrationDatabase {
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
 		_adaptorChannel = adaptorChannel;
 		_model = model;
-		_tables = new NSMutableArray<ERXMigrationTable>();
+		_tables = new NSMutableArray<>();
 		_languages = languages;
 		if(_languages == null) { _languages = NSArray.EmptyArray; }
 	}

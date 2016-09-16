@@ -119,7 +119,7 @@ public class PFProfilerRequestHandler extends WORequestHandler {
                 String filter = request.stringFormValueForKey("filter");
                 Set<String> filters = null;
                 if (filter != null) {
-                    filters = new HashSet<String>();
+                    filters = new HashSet<>();
                     NSArray filterNamesArray = NSArray.componentsSeparatedByString(filter, ",");
                     Enumeration filterNamesEnum = filterNamesArray.objectEnumerator();
                     while (filterNamesEnum.hasMoreElements()) {
@@ -134,7 +134,7 @@ public class PFProfilerRequestHandler extends WORequestHandler {
                 }
                 boolean tree = "tree".equals(requestPath);
                 PFStatsChecker.checkForErrors(stats);
-                appendNodesStatsToResponse(stats, response, context, minimumPercentage, filters, new HashSet<PFStatsNode>(), tree);
+                appendNodesStatsToResponse(stats, response, context, minimumPercentage, filters, new HashSet<>(), tree);
             }
             response.appendContentString("</pre>");
             response.appendContentString("</body></html>");

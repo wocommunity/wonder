@@ -61,7 +61,7 @@ public class WOExceptionPage extends WOComponent {
             if (aMessage!=null) {
                 _reasonLines = NSArray.componentsSeparatedByString(exception.getMessage(), "\n");
             } else {
-                _reasonLines = new NSArray<String>();
+                _reasonLines = new NSArray<>();
             }
         }
         return _reasonLines;

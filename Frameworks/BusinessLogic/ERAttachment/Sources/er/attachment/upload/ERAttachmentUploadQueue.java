@@ -49,7 +49,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
 
         try {
             EOGlobalID attachmentID = editingContext.globalIDForObject(attachment);
-            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<T>(attachment._pendingUploadFile(), attachmentID);
+            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<>(attachment._pendingUploadFile(), attachmentID);
 
             enqueue(entry);
         } finally {

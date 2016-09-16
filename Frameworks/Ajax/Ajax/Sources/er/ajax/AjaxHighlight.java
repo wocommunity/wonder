@@ -50,7 +50,7 @@ import er.extensions.eof.ERXEOControlUtilities;
  */
 public class AjaxHighlight extends WODynamicGroup {
 	private static final String HIGHLIGHTED_KEY = "er.ajax.AjaxHighlight.highlighted";
-	private NSDictionary _associations;
+	private NSDictionary<String, WOAssociation> _associations;
 	private WOAssociation _value;
 	private WOAssociation _id;
 	private WOAssociation _elementName;
@@ -70,7 +70,7 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _hideEffect;
 	private WOAssociation _hideDuration;
 
-	public AjaxHighlight(String name, NSDictionary associations, WOElement template) {
+	public AjaxHighlight(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(name, associations, template);
 		_associations = associations;
 		_value = (WOAssociation) associations.valueForKey("value");

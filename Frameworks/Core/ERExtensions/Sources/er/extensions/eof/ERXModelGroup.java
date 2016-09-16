@@ -115,7 +115,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @property er.extensions.ERXModelGroup.patchedModelClassName
  * @property er.extensions.ERXModelGroup.prototypeModelName if defined, overrides the default name, erprototypes.eomodeld.
  * @property er.extensions.ERXModelGroup.prototypeModelNames defines the names of the models that are prototypes. They get put in front of the model load order. The default is <code>(erprototypes)</code>.
- * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries defaut is true
+ * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries default is true
  * @property er.extensions.ERXModelGroup.sqlDumpDirectory
  * @property [MODEL_NAME].DBConnectionRecycle
  * @property [MODEL_NAME].DBDebugLevel
@@ -180,9 +180,9 @@ public class ERXModelGroup extends EOModelGroup {
 			ERXEntityClassDescription.factory().reset();
 		}
 
-		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
-		NSMutableArray<String> modelNames = new NSMutableArray<String>();
-		NSMutableSet<NSBundle> bundles = new NSMutableSet<NSBundle>();
+		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<>();
+		NSMutableArray<String> modelNames = new NSMutableArray<>();
+		NSMutableSet<NSBundle> bundles = new NSMutableSet<>();
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(frameworkBundles);
 
@@ -213,8 +213,8 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 
-		NSMutableArray<URL> modelURLs = new NSMutableArray<URL>();
-		// First, add prototyes if specified
+		NSMutableArray<URL> modelURLs = new NSMutableArray<>();
+		// First, add prototypes if specified
 		for(Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator(); prototypeModelNamesEnum.hasMoreElements(); ) {
 			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
 			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName); // WO53
@@ -228,7 +228,7 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 			}
 		}
-		// Next, add all models that are stated explicitely
+		// Next, add all models that are stated explicitly
 		for(Enumeration<String> modelLoadOrderEnum = _modelLoadOrder.objectEnumerator(); modelLoadOrderEnum.hasMoreElements(); ) {
 			String modelName = modelLoadOrderEnum.nextElement();
 			URL modelURL = modelNameURLDictionary.removeObjectForKey(modelName);
@@ -401,7 +401,7 @@ public class ERXModelGroup extends EOModelGroup {
 			return;
 		}
 		NSMutableSet nsmutableset = new NSMutableSet(128);
-		NSSet<String> nsset = new NSSet<String>(eomodel.entityNames());
+		NSSet<String> nsset = new NSSet<>(eomodel.entityNames());
 		while (enumeration.hasMoreElements()) {
 			EOModel eomodel1 = (EOModel) enumeration.nextElement();
 			nsmutableset.addObjectsFromArray(eomodel1.entityNames());
@@ -605,7 +605,7 @@ public class ERXModelGroup extends EOModelGroup {
 	public int entityCode(EOEntity entity) {
 		Integer cachedValue = cache.get(entity);
 		if (cachedValue == null) {
-			NSDictionary d = entity.userInfo();
+			NSDictionary<String, Object> d = entity.userInfo();
 			if (d == null)
 				d = NSDictionary.EmptyDictionary;
 			Object o = d.objectForKey("entityCode");
@@ -752,12 +752,12 @@ public class ERXModelGroup extends EOModelGroup {
 		
 		NSDictionary<String, Object> connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
-			connectionDictionary = new NSMutableDictionary<String, Object>();
+			connectionDictionary = new NSMutableDictionary<>();
 			log.warn("The EOModel '{}' does not have a connection dictionary, providing an empty one.", model.name());
 			model.setConnectionDictionary(connectionDictionary);
 		}
 
-		NSMutableDictionary<String, Object> newConnectionDictionary = new NSMutableDictionary<String, Object>(connectionDictionary);
+		NSMutableDictionary<String, Object> newConnectionDictionary = new NSMutableDictionary<>(connectionDictionary);
 		if (serverUrl != null) {
 			newConnectionDictionary.setObjectForKey(serverUrl, "serverUrl");
 		}

@@ -120,7 +120,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public void selectRunning() {
-        NSMutableArray selected = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> selected = new NSMutableArray<>();
         for (Enumeration enumerator = displayGroup.allObjects().objectEnumerator(); enumerator.hasMoreElements();) {
             MInstance instance = (MInstance) enumerator.nextElement();
             if (instance.isRunning_M()) {
@@ -131,7 +131,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public void selectNotRunning() {
-        NSMutableArray selected = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> selected = new NSMutableArray<>();
         for (Enumeration enumerator = displayGroup.allObjects().objectEnumerator(); enumerator.hasMoreElements();) {
             MInstance instance = (MInstance) enumerator.nextElement();
             if (!instance.isRunning_M()) {
@@ -330,7 +330,7 @@ public class AppDetailPage extends MonitorComponent {
     private void sendUpdateInstances(NSArray<MInstance> instances) {
         handler().startReading();
         try {
-            NSMutableSet<MHost> hosts = new NSMutableSet<MHost>();
+            NSMutableSet<MHost> hosts = new NSMutableSet<>();
             for (MInstance instance : instances) {
                 hosts.addObject(instance.host());
             }
@@ -380,7 +380,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     private void startInstances(NSArray<MInstance> possibleInstances) {
-        NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> instances = new NSMutableArray<>();
         for (MInstance anInstance : possibleInstances) {
             if ((anInstance.state == MObject.DEAD) || (anInstance.state == MObject.STOPPING) || (anInstance.state == MObject.CRASHING)
                     || (anInstance.state == MObject.UNKNOWN)) {
@@ -772,7 +772,7 @@ public class AppDetailPage extends MonitorComponent {
         if (instancesArray == null) {
             instancesArray = NSArray.EmptyArray;
         }
-        NSMutableArray<MInstance> result = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> result = new NSMutableArray<>();
         result.addObjectsFromArray(currentApplication.instanceArray());
         EOSortOrdering order = new EOSortOrdering("id", EOSortOrdering.CompareAscending);
         EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
@@ -782,7 +782,7 @@ public class AppDetailPage extends MonitorComponent {
             page.displayGroup.setObjectArray(instancesArray);
         }
         if (selected != null) {
-            NSMutableArray<MInstance> active = new NSMutableArray<MInstance>();
+            NSMutableArray<MInstance> active = new NSMutableArray<>();
             for (MInstance instance : selected) {
                 if (instancesArray.containsObject(instance)) {
                     active.addObject(instance);

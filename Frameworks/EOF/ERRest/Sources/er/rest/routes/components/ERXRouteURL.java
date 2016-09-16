@@ -59,7 +59,7 @@ public class ERXRouteURL extends ERXComponent {
 		boolean secure = ERXComponentUtilities.booleanValueForBinding(this, "secure", ERXRequest.isRequestSecure(context().request()));
 		boolean includeSessionID = context().hasSession() && context().session().storesIDsInURLs();
 
-		NSMutableDictionary<String, Object> queryParameters = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> queryParameters = new NSMutableDictionary<>();
 		for (String bindingKey : bindingKeys()) {
 			if (bindingKey.startsWith("?")) {
 				Object value = valueForBinding(bindingKey);

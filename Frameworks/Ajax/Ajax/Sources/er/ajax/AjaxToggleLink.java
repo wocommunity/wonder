@@ -85,7 +85,7 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 		response.appendContentString(effect);
 		response.appendContentString("', ");
 		
-		NSMutableDictionary<String, WOAssociation> options = new NSMutableDictionary<String, WOAssociation>();
+		NSMutableDictionary<String, WOAssociation> options = new NSMutableDictionary<>();
 		if (durationAssociation != null) {
 			options.setObjectForKey(durationAssociation, "duration");
 		}

@@ -102,7 +102,7 @@ public class RepeaterTime extends Repeater<Tick> {
       boolean done = false;
       if (pointer == Pointer.PointerType.FUTURE) {
         if (tick.isAmbiguous()) {
-          List<Calendar> futureDates = new LinkedList<Calendar>();
+          List<Calendar> futureDates = new LinkedList<>();
           futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue() + offsetFix));
           futureDates.add(Time.cloneAndAdd(tomorrowMidnight, Calendar.SECOND, tick.intValue()));
@@ -115,7 +115,7 @@ public class RepeaterTime extends Repeater<Tick> {
           }
         }
         else {
-          List<Calendar> futureDates = new LinkedList<Calendar>();
+          List<Calendar> futureDates = new LinkedList<>();
           futureDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           futureDates.add(Time.cloneAndAdd(tomorrowMidnight, Calendar.SECOND, tick.intValue()));
           for (Calendar futureDate : futureDates) {
@@ -129,7 +129,7 @@ public class RepeaterTime extends Repeater<Tick> {
       }
       else {
         if (tick.isAmbiguous()) {
-          List<Calendar> pastDates = new LinkedList<Calendar>();
+          List<Calendar> pastDates = new LinkedList<>();
           pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, halfDay + tick.intValue() + offsetFix));
           pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           pastDates.add(Time.cloneAndAdd(yesterdayMidnight, Calendar.SECOND, tick.intValue() + halfDay));
@@ -142,7 +142,7 @@ public class RepeaterTime extends Repeater<Tick> {
           }
         }
         else {
-          List<Calendar> pastDates = new LinkedList<Calendar>();
+          List<Calendar> pastDates = new LinkedList<>();
           pastDates.add(Time.cloneAndAdd(midnight, Calendar.SECOND, tick.intValue() + offsetFix));
           pastDates.add(Time.cloneAndAdd(yesterdayMidnight, Calendar.SECOND, tick.intValue()));
           for (Calendar pastDate : pastDates) {

@@ -46,7 +46,7 @@ public class ERXBatchFetchUtilities {
      * @param keys the array of ERXKeys to fault
 	 */
     public static void batchFetch(NSArray<? extends EOEnterpriseObject> sourceObjects, ERXKey<?>... keys) {
-    	NSMutableArray<String> keypaths = new NSMutableArray<String>();
+    	NSMutableArray<String> keypaths = new NSMutableArray<>();
     	for (ERXKey<?> key : keys) {
     		keypaths.addObject(key.key());
     	}
@@ -267,7 +267,7 @@ public class ERXBatchFetchUtilities {
             //keyed by top level so we can combine like root paths
             NSDictionary subPathsKeyedByTopLevel = subPathsKeyedByTopLevel(keypathStrings);
 
-            NSMutableArray<KeyPath> keyPathObjects = new NSMutableArray<KeyPath>();
+            NSMutableArray<KeyPath> keyPathObjects = new NSMutableArray<>();
 
             Enumeration e = subPathsKeyedByTopLevel.keyEnumerator();
             while (e.hasMoreElements()) {

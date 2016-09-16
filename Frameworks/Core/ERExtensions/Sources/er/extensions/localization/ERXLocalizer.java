@@ -219,7 +219,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	static NSArray<String> availableLanguages;
 	static String defaultLanguage;
 
-	static NSMutableDictionary<String, ERXLocalizer> localizers = new NSMutableDictionary<String, ERXLocalizer>();
+	static NSMutableDictionary<String, ERXLocalizer> localizers = new NSMutableDictionary<>();
 
 	public static class Observer {
 		public void fileDidChange(NSNotification n) {
@@ -372,7 +372,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			}
 		}
 		else {
-			localizers = new NSMutableDictionary<String, ERXLocalizer>();
+			localizers = new NSMutableDictionary<>();
 		}
 	}
 
@@ -437,7 +437,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		return localizerForLanguage(languages.objectAtIndex(0));
 	}
 
-	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<String>(new String[] { "Japanese" });
+	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<>(new String[] { "Japanese" });
 
 	/**
 	 * <div class="en">
@@ -534,7 +534,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    */
 	public static NSArray<String> fileNamesToWatch() {
 		if (fileNamesToWatch == null) {
-			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray<String>(new String[] { "Localizable.strings", "ValidationTemplate.strings" }));
+			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray<>(new String[] { "Localizable.strings", "ValidationTemplate.strings" }));
 			if (log.isDebugEnabled())
         log.debug("FileNamesToWatch: {}", fileNamesToWatch.componentsJoinedByString(" / "));
 		}
@@ -592,7 +592,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (frameworkSearchPath == null) {
 		  frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
 		  if(frameworkSearchPath == null) {
-		    NSMutableArray<String> defaultValue = new NSMutableArray<String>();
+		    NSMutableArray<String> defaultValue = new NSMutableArray<>();
 		    for (Enumeration<NSBundle> e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
 		      NSBundle bundle = e.nextElement();
 		      String name = bundle.name();
@@ -707,12 +707,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private Map<Pattern, String> _singularifyRules;
 
 	public ERXLocalizer(String aLanguage) {
-		_plurifyRules = new HashMap<Pattern, String>();
-		_singularifyRules = new HashMap<Pattern, String>();
+		_plurifyRules = new HashMap<>();
+		_singularifyRules = new HashMap<>();
 		
 		language = aLanguage;
-		cache = new NSMutableDictionary<String, Object>();
-		createdKeys = new NSMutableDictionary<String, Object>();
+		cache = new NSMutableDictionary<>();
+		createdKeys = new NSMutableDictionary<>();
 
 		// We first check to see if we have a locale register for the language name
 		String shortLanguage = ERXProperties.stringForKey("er.extensions.ERXLocalizer." + aLanguage + ".locale");
@@ -762,7 +762,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (log.isDebugEnabled())
 		  log.debug("Loading templates for language: {} for files: {} with search path: {}", language, fileNamesToWatch().componentsJoinedByString(" / "), frameworkSearchPath().componentsJoinedByString(" / "));
 
-		NSArray<String> languages = new NSArray<String>(language);
+		NSArray<String> languages = new NSArray<>(language);
 		Enumeration<String> fn = fileNamesToWatch().objectEnumerator();
 		while (fn.hasMoreElements()) {
 			String fileName = fn.nextElement();
@@ -781,7 +781,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 						// HACK: ak we have could have a collision between the search path for validation strings and
 						// the normal localized strings.
 						if (fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
-							NSMutableDictionary<String, Object> newDict = new NSMutableDictionary<String, Object>();
+							NSMutableDictionary<String, Object> newDict = new NSMutableDictionary<>();
 							for (Enumeration<String> keys = dict.keyEnumerator(); keys.hasMoreElements();) {
 								String key = keys.nextElement();
 								newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
@@ -858,7 +858,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			plurifyRules = defaultPlurifyRules();
 		}
 		else {
-			plurifyRules = new LinkedHashMap<Pattern, String>();
+			plurifyRules = new LinkedHashMap<>();
 			String[] rulePairs = plurifyRulesStr.split(":");
 			for (int i = 0; i < rulePairs.length; i ++) {
 				String[] rulePair = rulePairs[i].split("=");
@@ -886,7 +886,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 *         <div class="ja">デフォルト複数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultPlurifyRules() {
-		Map<Pattern, String> defaultPlurifyRules = new LinkedHashMap<Pattern, String>();
+		Map<Pattern, String> defaultPlurifyRules = new LinkedHashMap<>();
 
 		defaultPlurifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
 		defaultPlurifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
@@ -969,7 +969,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			singularifyRules = defaultSingularifyRules();
 		}
 		else {
-			singularifyRules = new LinkedHashMap<Pattern, String>();
+			singularifyRules = new LinkedHashMap<>();
 			String[] rulePairs = plurifyRulesStr.split(":");
 			for (int i = 0; i < rulePairs.length; i ++) {
 				String[] rulePair = rulePairs[i].split("=");
@@ -997,7 +997,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 *         <div class="ja">デフォルト単数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultSingularifyRules() {
-		Map<Pattern, String> defaultSingularifyRules = new LinkedHashMap<Pattern, String>();
+		Map<Pattern, String> defaultSingularifyRules = new LinkedHashMap<>();
 
 		defaultSingularifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
 		defaultSingularifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
@@ -1415,7 +1415,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	// name is already localized!
 	// subclasses can override for more sensible behaviour
 	public String plurifiedStringWithTemplateForKey(String key, String name, int count, Object helper) {
-		NSDictionary<String, Object> dict = new NSDictionary<String, Object>(new Object[] { plurifiedString(name, count), Integer.valueOf(count) }, 
+		NSDictionary<String, Object> dict = new NSDictionary<>(new Object[] { plurifiedString(name, count), Integer.valueOf(count) }, 
 				new String[] { "pluralString", "pluralCount" });
 		return localizedTemplateStringForKeyWithObjectOtherObject(key, dict, helper);
 	}

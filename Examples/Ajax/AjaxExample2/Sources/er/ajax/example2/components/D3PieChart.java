@@ -48,7 +48,7 @@ public class D3PieChart extends AjaxWOWODCPage {
     		List<PieSegment> dataList = peopleByRegion.entrySet().stream().map(entry -> new PieSegment(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 			dataList.sort((e1, e2) -> e2.nbPersons - e1.nbPersons);
 
-    		segments = new NSArray<D3PieChart.PieSegment>(dataList);
+    		segments = new NSArray<>(dataList);
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
@@ -68,8 +68,8 @@ public class D3PieChart extends AjaxWOWODCPage {
 	}
 
 	static public class PieSegment {
-		static public ERXKey<String> REGION = new ERXKey<String>("region");
-		static public ERXKey<Map> PERSONS = new ERXKey<Map>("persons");
+		static public ERXKey<String> REGION = new ERXKey<>("region");
+		static public ERXKey<Map> PERSONS = new ERXKey<>("persons");
 		
 		public String region;
 		public NSArray<Map<String,Object>> persons;

@@ -19,7 +19,7 @@ import er.jqm.components.ERQMComponentBase;
  */
 public class ERQMGrid extends ERQMComponentBase
 {
-	public static final NSArray<String> COLUMN_NAME = new NSArray<String>("a", "a", "a", "b", "c", "d"); // 0 + 1 element dummy
+	public static final NSArray<String> COLUMN_NAME = new NSArray<>("a", "a", "a", "b", "c", "d"); // 0 + 1 element dummy
 
 	public ERQMGrid(WOContext aContext)
 	{

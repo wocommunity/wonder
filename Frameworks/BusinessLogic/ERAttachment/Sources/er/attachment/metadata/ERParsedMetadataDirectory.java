@@ -35,7 +35,7 @@ public class ERParsedMetadataDirectory implements IERMetadataDirectory {
    */
   public ERParsedMetadataDirectory(String directoryName) {
     _directoryName = directoryName;
-    _metadataEntries = new LinkedList<ERMetadataEntry>();
+    _metadataEntries = new LinkedList<>();
   }
 
   /**
