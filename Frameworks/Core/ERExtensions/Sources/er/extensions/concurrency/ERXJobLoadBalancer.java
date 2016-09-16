@@ -150,7 +150,7 @@ public class ERXJobLoadBalancer {
     }
     
     /**
-     * Signals to the load balncer that the worker identified is alive
+     * Signals to the load balancer that the worker identified is alive
      * Clients should call this periodically, and certainly more often than the timeout
      * 
      * @param workerId which worker is alive
