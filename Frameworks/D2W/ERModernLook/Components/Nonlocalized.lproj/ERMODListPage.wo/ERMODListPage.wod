@@ -43,10 +43,6 @@ QuickSearch: ERMD2WListFilter {
 	d2wContext = d2wContext;
 }
 
-ShowQuickSearch: WOConditional {
-	condition = d2wContext.searchKey;
-}
-
 ReturnButton: CCSmartAjaxButton {
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;
