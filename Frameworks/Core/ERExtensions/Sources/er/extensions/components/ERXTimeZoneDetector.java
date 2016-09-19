@@ -69,7 +69,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			synchronized (ERXTimeZoneDetector.class) {
 				if (allZones == null) {
 					String[] ids = TimeZone.getAvailableIDs();
-					NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>(ids.length);
+					NSMutableArray<TimeZone> tzs = new NSMutableArray<>(ids.length);
 					for (int i = 0; i < ids.length; i++) {
 						TimeZone tz = TimeZone.getTimeZone(ids[i]);
 						tzs.addObject(tz);
@@ -89,7 +89,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 		NSArray<TimeZone> result = EOQualifier.filteredArrayWithQualifier(allZones(), q);
 		if (dst) {
 			Date d = new NSTimestamp(2010, southern ? 0 : 5, 1, 0, 0, 0, TimeZone.getTimeZone("GMT"));
-			NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>();
+			NSMutableArray<TimeZone> tzs = new NSMutableArray<>();
 			for (TimeZone tz : result) {
 				if (tz.inDaylightTime(d)) {
 					tzs.addObject(tz);
@@ -176,7 +176,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			return result;
 		}
 		
-		NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>(ids.count());
+		NSMutableArray<TimeZone> tzs = new NSMutableArray<>(ids.count());
 		for (int i = 0; i < ids.count(); i++) {
 			TimeZone tz = TimeZone.getTimeZone(ids.objectAtIndex(i));
 			tzs.addObject(tz);

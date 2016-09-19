@@ -37,7 +37,7 @@ public class MoviesController extends ERXDefaultRouteController {
 			return schemaResponse(showFilter());
 		}
 		
-		ERXRestFetchSpecification<Movie> fetchSpec = new ERXRestFetchSpecification<Movie>(entityName(), null, null, showFilter(), null, 20);
+		ERXRestFetchSpecification<Movie> fetchSpec = new ERXRestFetchSpecification<>(entityName(), null, null, showFilter(), null, 20);
 		return response(fetchSpec, showFilter());
 	}
 

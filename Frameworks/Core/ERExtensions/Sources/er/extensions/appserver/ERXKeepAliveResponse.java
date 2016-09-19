@@ -24,7 +24,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 	/**
 	 * Queue to push the items into.
 	 */
-	protected Queue<byte[]> _queue = new ConcurrentLinkedQueue<byte[]>();
+	protected Queue<byte[]> _queue = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * Current data to write to client.

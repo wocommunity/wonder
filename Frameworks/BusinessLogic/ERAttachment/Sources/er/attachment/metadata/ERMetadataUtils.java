@@ -9,8 +9,8 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 
 public class ERMetadataUtils {
-  private static Map<String, Integer> IPTC_NAME_TO_TYPE = new HashMap<String, Integer>();
-  private static Map<String, Integer> EXIF_NAME_TO_TYPE = new HashMap<String, Integer>();
+  private static Map<String, Integer> IPTC_NAME_TO_TYPE = new HashMap<>();
+  private static Map<String, Integer> EXIF_NAME_TO_TYPE = new HashMap<>();
   static {
 		ERMetadataUtils.IPTC_NAME_TO_TYPE.put("Caption/Abstract", Integer.valueOf(IptcDirectory.TAG_CAPTION));
 		ERMetadataUtils.IPTC_NAME_TO_TYPE.put("City", Integer.valueOf(IptcDirectory.TAG_CITY));

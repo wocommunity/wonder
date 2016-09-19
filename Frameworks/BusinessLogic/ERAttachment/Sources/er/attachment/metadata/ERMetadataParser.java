@@ -72,8 +72,8 @@ public class ERMetadataParser {
    * Constructs a new ERMetadataParser.
    */
   public ERMetadataParser() {
-    _metadataParsers = new LinkedList<IERMetadataParser>();
-    _metadataDirectoryParsers = new LinkedList<IERMetadataDirectoryParser>();
+    _metadataParsers = new LinkedList<>();
+    _metadataDirectoryParsers = new LinkedList<>();
   }
 
   /**

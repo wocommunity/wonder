@@ -33,7 +33,7 @@ public class AddResultsPage extends ERXComponent {
 
         NSArray<String> lines = NSArray.componentsSeparatedByString(boxResults, "\n");
 
-        NSMutableArray<String> resultLines = new NSMutableArray<String>();
+        NSMutableArray<String> resultLines = new NSMutableArray<>();
 
         log.debug("boxResults lines # {}", lines.size());
         for (String line : lines) {

@@ -184,7 +184,7 @@ public class ERXMigrator {
 		}
 		Map<IERXMigration, ERXModelVersion> migrations = _buildDependenciesForModelsNamed(modelNames, skipModelNames);
 
-		Map<IERXPostMigration, ERXModelVersion> postMigrations = new LinkedHashMap<IERXPostMigration, ERXModelVersion>();
+		Map<IERXPostMigration, ERXModelVersion> postMigrations = new LinkedHashMap<>();
 		Iterator<IERXMigration> migrationsIter = migrations.keySet().iterator();
 		while (migrationsIter.hasNext()) {
 			IERXMigration migration = migrationsIter.next();
@@ -260,9 +260,9 @@ public class ERXMigrator {
 	}
 
 	protected Map<IERXMigration, ERXModelVersion> _buildDependenciesForModelsNamed(NSArray<String> modelNames, NSArray<String> skipModelNames) {
-		Map<IERXMigration, ERXModelVersion> migrations = new LinkedHashMap<IERXMigration, ERXModelVersion>();
+		Map<IERXMigration, ERXModelVersion> migrations = new LinkedHashMap<>();
 		try {
-			Map<String, Integer> versions = new HashMap<String, Integer>();
+			Map<String, Integer> versions = new HashMap<>();
 
 			EOModelGroup modelGroup = EOModelGroup.defaultGroup();
 			Enumeration modelNamesEnum = modelNames.objectEnumerator();
@@ -277,8 +277,8 @@ public class ERXMigrator {
 				}
 			}
 
-			Set<String> processedModelNames = new HashSet<String>();
-			Set<String> pendingModelNames = new HashSet<String>(versions.keySet());
+			Set<String> processedModelNames = new HashSet<>();
+			Set<String> pendingModelNames = new HashSet<>(versions.keySet());
 			while (!pendingModelNames.isEmpty()) {
 				Iterator<String> modelNamesIter = pendingModelNames.iterator();
 				while (modelNamesIter.hasNext()) {

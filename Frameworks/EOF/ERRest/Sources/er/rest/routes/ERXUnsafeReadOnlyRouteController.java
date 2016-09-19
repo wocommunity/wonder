@@ -109,7 +109,7 @@ public class ERXUnsafeReadOnlyRouteController<T extends EOEnterpriseObject> exte
 			return schemaResponse(showFilter());
 		}
 		
-		ERXRestFetchSpecification<T> fetchSpec = new ERXRestFetchSpecification<T>(entityName(), null, null, queryFilter(), null, 25);
+		ERXRestFetchSpecification<T> fetchSpec = new ERXRestFetchSpecification<>(entityName(), null, null, queryFilter(), null, 25);
 		return response(fetchSpec, showFilter());
 	}
 }

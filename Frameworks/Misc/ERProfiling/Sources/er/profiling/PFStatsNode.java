@@ -47,7 +47,7 @@ public class PFStatsNode {
 
     public void addError(String error) {
         if (_errors == null) {
-            _errors = new LinkedList<String>();
+            _errors = new LinkedList<>();
         }
         _errors.add(error);
     }
@@ -195,7 +195,7 @@ public class PFStatsNode {
 
     public PFStatsNode push(String name, String type, Object target, Object context) {
         if (_children == null) {
-            _children = new LinkedList<PFStatsNode>();
+            _children = new LinkedList<>();
         }
         PFStatsNode stats = new PFStatsNode(name, type, target, context);
         stats._parent = this;
@@ -232,7 +232,7 @@ public class PFStatsNode {
     public void incrementCounter(String counterName) {
         synchronized (this) {
             if (_counters == null) {
-                _counters = new TreeMap<String, Long>();
+                _counters = new TreeMap<>();
             }
             Long counter = _counters.get(counterName);
             if (counter == null) {

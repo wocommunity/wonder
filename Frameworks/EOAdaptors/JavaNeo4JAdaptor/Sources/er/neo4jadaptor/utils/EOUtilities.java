@@ -31,7 +31,7 @@ public class EOUtilities {
 
 	public static String unflattenedKey(EOEntity entity, String keypath) {
 		EOEntity currentEntity = entity;
-		List<String> splits = new ArrayList<String>();
+		List<String> splits = new ArrayList<>();
 		StringBuilder b = new StringBuilder();
 		
 		Collections.addAll(splits, DOT_PATTERN.split(keypath));
@@ -96,7 +96,7 @@ public class EOUtilities {
 			}
 		}
 		
-		List<Ersatz> list = new ArrayList<Ersatz>();
+		List<Ersatz> list = new ArrayList<>();
 		
 		while (c.hasNext()) {
 			list.add(c.next());

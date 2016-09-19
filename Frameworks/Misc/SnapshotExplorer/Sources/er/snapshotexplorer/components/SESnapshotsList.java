@@ -17,7 +17,7 @@ public class SESnapshotsList extends ERXComponent {
 
   public SESnapshotsList(WOContext context) {
     super(context);
-    _snapshotStatsDisplayGroup = new ERXDisplayGroup<SESnapshotStats>();
+    _snapshotStatsDisplayGroup = new ERXDisplayGroup<>();
     _snapshotStatsDisplayGroup.setNumberOfObjectsPerBatch(25);
   }
 

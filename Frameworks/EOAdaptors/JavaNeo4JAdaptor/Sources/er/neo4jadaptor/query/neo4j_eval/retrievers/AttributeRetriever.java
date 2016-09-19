@@ -35,7 +35,7 @@ public class AttributeRetriever <T> implements Retriever<PropertyContainer, T> {
 				}
 			}
 		}
-		return new AttributeRetriever<Object>(attribute);
+		return new AttributeRetriever<>(attribute);
 	}
 	
 	private AttributeRetriever(EOAttribute attribute) {

@@ -291,7 +291,7 @@ public class ERMailUtils {
 	public static NSArray<String> convertInternetAddressesToNSArray(Address[] addressesArray) {
 		if (addressesArray == null)
 			return NSArray.EmptyArray;
-		NSMutableArray<String> addresses = new NSMutableArray<String>(addressesArray.length);
+		NSMutableArray<String> addresses = new NSMutableArray<>(addressesArray.length);
 
 		for (int i = 0; i < addressesArray.length; i++) {
 			Address anAddress = addressesArray[i];
@@ -385,7 +385,7 @@ public class ERMailUtils {
 			str = str.replace("\t", ",");
 			str = str.replaceAll(",+", ",");
 			String[] tokens = str.split(",");
-			return new NSArray<String>(tokens);
+			return new NSArray<>(tokens);
 		}
 		return null;
 	}

@@ -57,7 +57,7 @@ public class Talent extends _Talent {
 	}
 
 	public NSArray moviesStarredIn() {
-		NSMutableArray<Object> moviesStarredIn = new NSMutableArray<Object>();
+		NSMutableArray<Object> moviesStarredIn = new NSMutableArray<>();
 		NSArray movies = (NSArray) (roles().valueForKey("movie"));
 		if (movies != null) {
 			int count = movies.count();

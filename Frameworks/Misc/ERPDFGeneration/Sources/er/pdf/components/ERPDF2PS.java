@@ -62,7 +62,7 @@ public class ERPDF2PS extends ERXStatelessComponent {
         tempFile.deleteOnExit();
         psFile = File.createTempFile("pdftops", "ps");
         psFile.deleteOnExit();
-        NSMutableArray<String> array = new NSMutableArray<String>(pdftops, "-expand", tempFile.getPath(), psFile.getPath());
+        NSMutableArray<String> array = new NSMutableArray<>(pdftops, "-expand", tempFile.getPath(), psFile.getPath());
         if (duplex()) {
           array.add(1, "-duplex");
         }

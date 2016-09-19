@@ -15,7 +15,7 @@ public class RowToggle extends AjaxWOWODCPage {
 
   public RowToggle(WOContext context) {
     super(context);
-    _selectedProducts = new NSMutableSet<Product>();
+    _selectedProducts = new NSMutableSet<>();
   }
   
   @Override

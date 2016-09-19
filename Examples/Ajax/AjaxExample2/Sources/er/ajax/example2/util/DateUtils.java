@@ -42,7 +42,7 @@ public class DateUtils {
   }
 
   public static EOQualifier dateWithinKeypathRangeQualifier(String startDateKey, String endDateKey, NSTimestamp date, boolean exclusive) {
-    NSMutableArray<EOQualifier> startQualifiers = new NSMutableArray<EOQualifier>();
+    NSMutableArray<EOQualifier> startQualifiers = new NSMutableArray<>();
     if (exclusive) {
       startQualifiers.addObject(new ERXKeyValueQualifier(startDateKey, EOQualifier.QualifierOperatorLessThan, date));
     }
@@ -52,7 +52,7 @@ public class DateUtils {
     }
     EOQualifier startQualifier = new ERXOrQualifier(startQualifiers);
 
-    NSMutableArray<EOQualifier> endQualifiers = new NSMutableArray<EOQualifier>();
+    NSMutableArray<EOQualifier> endQualifiers = new NSMutableArray<>();
     if (exclusive) {
       endQualifiers.addObject(new ERXKeyValueQualifier(endDateKey, EOQualifier.QualifierOperatorGreaterThan, date));
     }
@@ -62,7 +62,7 @@ public class DateUtils {
     }
     EOQualifier endQualifier = new ERXOrQualifier(endQualifiers);
 
-    EOAndQualifier qualifier = new ERXAndQualifier(new NSArray<EOQualifier>(new EOQualifier[] { startQualifier, endQualifier }));
+    EOAndQualifier qualifier = new ERXAndQualifier(new NSArray<>(new EOQualifier[] { startQualifier, endQualifier }));
     return qualifier;
 
     /*
@@ -150,7 +150,7 @@ public class DateUtils {
       if (_endDate != null) {
         EOQualifier qualifier1 = new ERXKeyValueQualifier(_startDateKey, EOQualifier.QualifierOperatorGreaterThanOrEqualTo, _startDate);
         EOQualifier qualifier2 = new ERXKeyValueQualifier(_startDateKey, EOQualifier.QualifierOperatorLessThanOrEqualTo, _endDate);
-        return new ERXAndQualifier(new NSArray<EOQualifier>(new EOQualifier[] { qualifier1, qualifier2 }));
+        return new ERXAndQualifier(new NSArray<>(new EOQualifier[] { qualifier1, qualifier2 }));
       }
       return new ERXKeyValueQualifier(_startDateKey, EOQualifier.QualifierOperatorGreaterThanOrEqualTo, _startDate);
     }
@@ -181,7 +181,7 @@ public class DateUtils {
   }
 
   public static NSArray<Integer> years(int _year, int _offset, int _count) {
-    NSMutableArray<Integer> years = new NSMutableArray<Integer>();
+    NSMutableArray<Integer> years = new NSMutableArray<>();
     for (int i = 0; i < _count; i++) {
       years.addObject(Integer.valueOf(_year + _offset + i));
     }

@@ -57,7 +57,7 @@ public class DatabasePool {
 	 */
 	public static final boolean WARMUP_DEFAULT_VALUE = false;
 	
-	private final Map<String, GraphDatabaseService> map = new HashMap<String, GraphDatabaseService>();
+	private final Map<String, GraphDatabaseService> map = new HashMap<>();
 	private final boolean WARMUP_DATABASE = ERXProperties.booleanForKeyWithDefault(WARMUP_PROPERTY_KEY, WARMUP_DEFAULT_VALUE);
 	private final String databaseType = ERXProperties.stringForKey(DBTYPE_PROPERTY_KEY);
 	

@@ -211,7 +211,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
                 else {
                   pk = Long.valueOf(pkObj.longValue());
                 }
-                results.addObject(new NSDictionary<String, Object>(pk, attrName));
+                results.addObject(new NSDictionary<>(pk, attrName));
               }
             }
           }
@@ -244,7 +244,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
           Number numCount = (Number) row.objectForKey("COUNT");
           if (numCount != null && numCount.longValue() == 0L) {
             EOSynchronizationFactory f = createSynchronizationFactory();
-            NSArray<EOSQLExpression> statements = f.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
+            NSArray<EOSQLExpression> statements = f.primaryKeySupportStatementsForEntityGroup(new NSArray<>(entity));
             int stmCount = statements.count();
             for (int i = 0; i < stmCount; i++) {
               channel.evaluateExpression(statements.objectAtIndex(i));

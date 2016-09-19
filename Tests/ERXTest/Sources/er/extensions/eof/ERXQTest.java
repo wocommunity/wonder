@@ -156,7 +156,7 @@ public class ERXQTest extends TestCase {
 	}
 
 	private NSArray<EOGenericRecord> personArray() {
-		NSMutableArray<EOGenericRecord> persons = new NSMutableArray<EOGenericRecord>();
+		NSMutableArray<EOGenericRecord> persons = new NSMutableArray<>();
 		persons.add(createPerson("Bill", "Smith"));
 		persons.add(createPerson("Bob", "Anything"));
 		persons.add(createPerson("John", "Smith"));

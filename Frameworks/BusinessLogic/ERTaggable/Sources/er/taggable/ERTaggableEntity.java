@@ -142,7 +142,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     Class<? extends ERTaggableEntity> taggableEntityClass = ERTaggableEntity._taggableEntities.objectForKey(entity.name());
     ERTaggableEntity<T> taggableEntity;
     if (taggableEntityClass == null) {
-      taggableEntity = new ERTaggableEntity<T>(entity);
+      taggableEntity = new ERTaggableEntity<>(entity);
     }
     else {
       try {
@@ -233,7 +233,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public static NSArray<EOEntity> taggableEntities() {
-    NSMutableArray<EOEntity> taggableEntities = new NSMutableArray<EOEntity>();
+    NSMutableArray<EOEntity> taggableEntities = new NSMutableArray<>();
     for (EOModel model : EOModelGroup.defaultGroup().models()) {
       for (EOEntity entity : model.entities()) {
         if (ERTaggableEntity.isTaggable(entity)) {
@@ -544,7 +544,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return an ERTaggable wrapper
    */
   public ERTaggable<T> taggable(T eo) {
-    return new ERTaggable<T>(this, eo);
+    return new ERTaggable<>(this, eo);
   }
 
   /**
@@ -582,12 +582,12 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSArray<String> splitTagNames(Object tags) {
-    NSMutableSet<String> tagNames = new NSMutableSet<String>();
+    NSMutableSet<String> tagNames = new NSMutableSet<>();
     if (tags != null) {
       if (tags instanceof String) {
         String[] strTags;
         if (ERTaggableEntity.isWhitespaceSeparator(_separator)) {
-          List<String> strTagsList = new LinkedList<String>();
+          List<String> strTagsList = new LinkedList<>();
           ERXCommandLineTokenizer tagTokenizer = new ERXCommandLineTokenizer((String) tags);
           while (tagTokenizer.hasMoreTokens()) {
             String tag = tagTokenizer.nextElement();
@@ -851,7 +851,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, NSSelector selector, int count, int limit, EOQualifier additionalQualifier) {
-    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
+    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<>();
     ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
     tagNameAttribute.setName("tagName");
     fetchAttributes.addObject(tagNameAttribute);
@@ -867,7 +867,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 	}
 	EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), combinedAdditionalQualifier, null);
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit, fetchAttributes);
-    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>(tagNameAttribute);
+    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<>(tagNameAttribute);
     sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
     if (selector != null) {
       sqlHelper.addHavingCountClauseToExpression(selector, count, sqlExpression);
@@ -883,7 +883,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       sqlExpression.setStatement(sqlBuffer.toString());
     }
 
-    NSMutableDictionary<String, Integer> tagCounts = new NSMutableDictionary<String, Integer>();
+    NSMutableDictionary<String, Integer> tagCounts = new NSMutableDictionary<>();
     NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, fetchAttributes);
     for (NSDictionary rawRow : rawRows) {
       if (!NSKeyValueCoding.NullValue.equals(rawRow.objectForKey("tagName"))) {
@@ -944,7 +944,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       throw new IllegalArgumentException("Composite primary keys are not supported for findRelatedTags.");
     }
 
-    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
+    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<>();
     fetchAttributes.addObjectsFromArray(_entity.primaryKeyAttributes());
 
     ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
@@ -955,7 +955,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     EOQualifier tagNameQualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
     EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), tagNameQualifier, null);
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, -1, fetchAttributes);
-    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>();
+    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<>();
     groupByAttributes.addObjectsFromArray(pkAttrs);
     sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
     sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
@@ -966,7 +966,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     // sqlExpr.selectStatementForAttributes. 
     sqlHelper.removeSelectFromExpression(tagNameAttribute, sqlExpression);
 
-    NSMutableArray<Object> itemPrimaryKeys = new NSMutableArray<Object>();
+    NSMutableArray<Object> itemPrimaryKeys = new NSMutableArray<>();
     NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, pkAttrs);
     EOAttribute pkAttr = pkAttrs.objectAtIndex(0);
     for (NSDictionary rawRow : rawRows) {
@@ -974,7 +974,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       itemPrimaryKeys.addObject(pk);
     }
 
-    NSMutableArray<EOAttribute> tagsFetchAttributes = new NSMutableArray<EOAttribute>();
+    NSMutableArray<EOAttribute> tagsFetchAttributes = new NSMutableArray<>();
     // MS: We put this in just because we want to force it to do the join ... We have to
     // pull them out later.
     tagsFetchAttributes.addObjectsFromArray(_entity.primaryKeyAttributes());
@@ -990,7 +990,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     EOQualifier idQualifier = new ERXKey<Object>("id").in(itemPrimaryKeys);
     EOFetchSpecification tagsFetchSpec = new EOFetchSpecification(_entity.name(), idQualifier, null);
     EOSQLExpression tagsSqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, tagsFetchSpec, 0, -1, tagsFetchAttributes);
-    NSMutableArray<EOAttribute> tagsGroupByAttributes = new NSMutableArray<EOAttribute>(new EOAttribute[] { tagNameAttribute, tagIDAttribute });
+    NSMutableArray<EOAttribute> tagsGroupByAttributes = new NSMutableArray<>(new EOAttribute[] { tagNameAttribute, tagIDAttribute });
     sqlHelper.addGroupByClauseToExpression(tagsGroupByAttributes, tagsSqlExpression);
 
     // MS: This is lame, but the dynamic attribute is not properly resolved
@@ -1004,7 +1004,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       tagsFetchAttributes.removeObject(attribute);
     }
 
-    NSMutableArray<String> relatedTagNames = new NSMutableArray<String>();
+    NSMutableArray<String> relatedTagNames = new NSMutableArray<>();
     NSArray<NSDictionary> tagsRawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), tagsSqlExpression, tagsFetchAttributes);
     for (NSDictionary rawRow : tagsRawRows) {
       String name = (String) rawRow.objectForKey("tagName");
@@ -1051,7 +1051,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       }
     }
 
-    NSMutableDictionary<String, U> cloud = new NSMutableDictionary<String, U>();
+    NSMutableDictionary<String, U> cloud = new NSMutableDictionary<>();
 
     int divisor = ((max - min) / categoryList.count()) + 1;
     for (Map.Entry<String, Integer> entry : tagHash.entrySet()) {

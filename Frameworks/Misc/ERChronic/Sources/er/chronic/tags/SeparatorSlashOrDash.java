@@ -21,7 +21,7 @@ public class SeparatorSlashOrDash extends Separator {
   }
 
   public static SeparatorSlashOrDash scan(Token token, Options options) {
-    Map<Pattern, Separator.SeparatorType> scanner = new HashMap<Pattern, Separator.SeparatorType>();
+    Map<Pattern, Separator.SeparatorType> scanner = new HashMap<>();
     scanner.put(SeparatorSlashOrDash.DASH_PATTERN, Separator.SeparatorType.DASH);
     scanner.put(SeparatorSlashOrDash.SLASH_PATTERN, Separator.SeparatorType.SLASH);
     for (Pattern scannerItem : scanner.keySet()) {

@@ -30,7 +30,7 @@ public class PFMarkup implements PFProfiler.Delegate {
     public void requestStarted(WORequest request) {
         // just trigger markup enablement on heatEnabled right now
         _markupEnabled = PFHeatMap.isHeatEnabled();
-        _markerList.set(new LinkedList<MarkerStats>());
+        _markerList.set(new LinkedList<>());
         try {
             _contentField = WOMessage.class.getDeclaredField("_content");
             _contentField.setAccessible(true);

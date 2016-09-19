@@ -76,7 +76,7 @@ public class ERJRFoundationDataSource implements JRDataSource {
 				if (debugRow != null) {
 					log.info("DetailRow: {}", debugRow);
 				} //~ if (debugRow != null)
-				debugRow = new NSMutableDictionary<String, Object>();
+				debugRow = new NSMutableDictionary<>();
 				if (currRow instanceof EOEnterpriseObject) {
 					EOEnterpriseObject eo = (EOEnterpriseObject) currRow;
 					debugRow.takeValueForKey(eo.editingContext().globalIDForObject(eo), "_globalID");

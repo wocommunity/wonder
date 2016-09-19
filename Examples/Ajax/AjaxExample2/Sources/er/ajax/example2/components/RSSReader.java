@@ -25,7 +25,7 @@ public class RSSReader extends AjaxWOWODCPage {
 
   public RSSReader(WOContext context) {
     super(context);
-    _feeds = new NSMutableArray<FeedWrapper>();
+    _feeds = new NSMutableArray<>();
     _feeds.addObject(new FeedWrapper("Project Wonder", "http://projectwonder.blogspot.com/feeds/posts/default"));
     _feeds.addObject(new FeedWrapper("WOLips", "http://feeds.feedburner.com/wolips"));
     _feeds.addObject(new FeedWrapper("Miguel Arroz", "http://terminalapp.net/feed/"));
@@ -80,7 +80,7 @@ public class RSSReader extends AjaxWOWODCPage {
 
     @SuppressWarnings("unchecked")
     public NSArray entries() throws IllegalArgumentException, IOException, FeedException {
-      return new NSArray<SyndEntry>(syndFeed().getEntries());
+      return new NSArray<>(syndFeed().getEntries());
     }
 
     public SyndFeed syndFeed() throws IOException, IllegalArgumentException, FeedException {

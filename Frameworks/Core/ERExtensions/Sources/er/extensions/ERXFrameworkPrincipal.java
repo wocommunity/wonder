@@ -76,8 +76,8 @@ public abstract class ERXFrameworkPrincipal {
     protected final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
-    protected static final NSMutableDictionary<String, ERXFrameworkPrincipal> initializedFrameworks = new NSMutableDictionary<String, ERXFrameworkPrincipal>();
-    protected static final NSMutableArray<ERXFrameworkPrincipal> launchingFrameworks = new NSMutableArray<ERXFrameworkPrincipal>();
+    protected static final NSMutableDictionary<String, ERXFrameworkPrincipal> initializedFrameworks = new NSMutableDictionary<>();
+    protected static final NSMutableArray<ERXFrameworkPrincipal> launchingFrameworks = new NSMutableArray<>();
 
     public static class Observer {
         

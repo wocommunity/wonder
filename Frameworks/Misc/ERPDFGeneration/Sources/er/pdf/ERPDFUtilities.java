@@ -55,7 +55,7 @@ public class ERPDFUtilities {
    *         a PDF
    */
   public static WOActionResults pageAsPdf(WOElement element, NSDictionary<String, Object> config) {
-    NSMutableDictionary<String, WOAssociation> associations = new NSMutableDictionary<String, WOAssociation>();
+    NSMutableDictionary<String, WOAssociation> associations = new NSMutableDictionary<>();
     if (config != null) {
       for (Map.Entry<String, Object> entry : config.entrySet()) {
         associations.setObjectForKey(WOAssociation.associationWithValue(entry.getValue()), entry.getKey());
@@ -123,7 +123,7 @@ public class ERPDFUtilities {
    * @return an NSData object containing raw PDF data.
    */
   public static NSData htmlAsPdf(String html, String encoding, String urlPrefix, NSDictionary<String, Object> config) {
-    NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
+    NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<>() : config.mutableClone();
     PDFBuilder builder = PDFBuilderFactory.newBuilder((String) _config.removeObjectForKey("engine"));
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     try {
@@ -151,7 +151,7 @@ public class ERPDFUtilities {
 	public static NSData xml2Fop2Pdf(String xml, String fopxsl, NSDictionary<String, Object> config) throws Throwable {
 		log.debug("xml2Fop2Pdf(String xml (length)={}, String fopxsl={}, NSDictionary<String,Object> config={}) - start", xml.length(), fopxsl, config);
 
-		NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
+		NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<>() : config.mutableClone();
 		FOPBuilder fopb = FOPBuilderFactory.newBuilder();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {

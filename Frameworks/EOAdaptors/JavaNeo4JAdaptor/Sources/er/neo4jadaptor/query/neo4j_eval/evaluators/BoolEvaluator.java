@@ -25,11 +25,11 @@ public final class BoolEvaluator <T extends PropertyContainer> implements Evalua
 	private final boolean interruptOn;
 	
 	public static <T extends PropertyContainer> Evaluator<T> and(Iterable<Evaluator<T>> evaluators) {
-		return new BoolEvaluator<T>(evaluators, false);
+		return new BoolEvaluator<>(evaluators, false);
 	}
 
 	public static <T extends PropertyContainer> Evaluator<T> or(Iterable<Evaluator<T>> evaluators) {
-		return new BoolEvaluator<T>(evaluators, true);
+		return new BoolEvaluator<>(evaluators, true);
 	}
 	
 	public Comparator<HasCost> COST_COMPARATOR = new Comparator<HasCost>() {

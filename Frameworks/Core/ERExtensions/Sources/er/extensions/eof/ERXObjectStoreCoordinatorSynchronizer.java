@@ -77,7 +77,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		_coordinators = new NSMutableArray();
 		_queue = new ProcessChangesQueue();
 		_defaultSettings = new SynchronizerSettings(true, true, true, true);
-		_settings = new NSMutableDictionary<EOObjectStoreCoordinator, SynchronizerSettings>();
+		_settings = new NSMutableDictionary<>();
 
 		_queueThread = new Thread(_queue);
 		_queueThread.setName("ERXOSCProcessChanges");

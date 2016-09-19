@@ -225,7 +225,7 @@ public class ERXResponseRewriter {
 			pageInfo = null;
 		}
 		if (pageInfo == null) {
-			pageInfo = new NSMutableDictionary<String, Object>();
+			pageInfo = new NSMutableDictionary<>();
 			pageInfo.setObjectForKey(contextID, ERXResponseRewriter.ORIGINAL_CONTEXT_ID_KEY);
 			pageInfoDict.put(page, pageInfo);
 		}
@@ -257,7 +257,7 @@ public class ERXResponseRewriter {
 	public static NSMutableDictionary<String, Object> pageUserInfo(WOComponent page) {
 		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._pageUserInfos.get(page);
 		if (pageInfo == null) {
-			pageInfo = new NSMutableDictionary<String, Object>();
+			pageInfo = new NSMutableDictionary<>();
 			ERXResponseRewriter._pageUserInfos.put(page, pageInfo);
 		}
 		return pageInfo;
@@ -587,7 +587,7 @@ public class ERXResponseRewriter {
 		NSMutableDictionary<String, Object> userInfo = ERXResponseRewriter.ajaxPageUserInfo(context);
 		NSMutableSet<String> addedResources = (NSMutableSet<String>) userInfo.objectForKey(ERXResponseRewriter.ADDED_RESOURCES_KEY);
 		if (addedResources == null) {
-			addedResources = new NSMutableSet<String>();
+			addedResources = new NSMutableSet<>();
 			userInfo.setObjectForKey(addedResources, ERXResponseRewriter.ADDED_RESOURCES_KEY);
 		}
 		return addedResources;

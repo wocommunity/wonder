@@ -61,7 +61,7 @@ public class DirectAction extends WODirectAction {
     }
 
     private NSDictionary historyEntry(MApplication app) {
-        NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<>();
         result.setObjectForKey(app.name(), "applicationName");
         NSArray<MInstance> allInstances = app.instanceArray();
         result.setObjectForKey(Integer.valueOf(allInstances.count()), "configuredInstances");

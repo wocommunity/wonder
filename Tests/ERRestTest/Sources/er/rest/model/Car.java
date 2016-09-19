@@ -15,7 +15,7 @@ public class Car {
 
     public static NSArray<Car> cars() {
         if (_cars == null) {
-            NSMutableArray<Car> cars = new NSMutableArray<Car>();
+            NSMutableArray<Car> cars = new NSMutableArray<>();
             cars.addObject(new Car(Manufacturer.MINI, "Cooper S"));
             cars.addObject(new Car(Manufacturer.PORSCHE, "911"));
             cars.addObject(new Car(Manufacturer.PORSCHE, "Cayenne"));

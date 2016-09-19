@@ -41,7 +41,7 @@ public class ERXSwitchComponent extends WODynamicElement {
 		componentAttributes.removeObjectForKey("_componentName");
 		componentCache = new NSMutableDictionary();
 		template = paramWOElement;
-		elementIDByName = new NSMutableDictionary<String, String>();
+		elementIDByName = new NSMutableDictionary<>();
 	}
 
 	@Override

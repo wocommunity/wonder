@@ -233,7 +233,7 @@ public abstract class ERXHttpDataObjectBase {
   protected List<NameValuePair> queryParams() {
     return queryParams;
   }
-  private List<NameValuePair> queryParams = new ArrayList<NameValuePair>();	
+  private List<NameValuePair> queryParams = new ArrayList<>();	
 
   //***********************************************************
   // Methods

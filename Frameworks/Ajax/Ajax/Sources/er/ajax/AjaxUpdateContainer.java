@@ -92,7 +92,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
 		// PROTOTYPE OPTIONS
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));

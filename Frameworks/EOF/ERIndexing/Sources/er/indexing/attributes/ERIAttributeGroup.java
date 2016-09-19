@@ -33,7 +33,7 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     }
 
     public NSArray<ERIAttributeGroup> groups() {
-        NSMutableArray<ERIAttributeGroup> result = new NSMutableArray<ERIAttributeGroup>();
+        NSMutableArray<ERIAttributeGroup> result = new NSMutableArray<>();
         ERIAttributeGroup current = this;
 
         result.addObject(current);
@@ -45,7 +45,7 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     }
 
     public NSArray<ERIAttribute> allAttributes() {
-        NSMutableArray<ERIAttribute> result = new NSMutableArray<ERIAttribute>();
+        NSMutableArray<ERIAttribute> result = new NSMutableArray<>();
         for (ERIAttributeGroup group : groups()) {
             result.addObjectsFromArray(attributes());
         }

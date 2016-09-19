@@ -272,7 +272,7 @@ public class MApplication extends MObject {
         values = aDict.mutableClone();
     }
     
-    private static NSDictionary _defaults = new NSDictionary <Object, Object>(new Object[]{
+    private static NSDictionary<Object, Object> _defaults = new NSDictionary<>(new Object[]{
                                                                 Integer.valueOf(2001),
                                                                 Integer.valueOf(30),
                                                                 Boolean.TRUE,
@@ -443,7 +443,7 @@ public class MApplication extends MObject {
     }
 
     public NSArray<MInstance> runningInstances_M() {
-        NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> instances = new NSMutableArray<>();
         int numInstances = _instanceArray.count();
         for (int i=0; i<numInstances; i++) {
             MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);

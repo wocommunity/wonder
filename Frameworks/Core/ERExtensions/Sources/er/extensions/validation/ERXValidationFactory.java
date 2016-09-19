@@ -9,6 +9,7 @@ package er.extensions.validation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class ERXValidationFactory {
     /** Regular ERXValidationException constructor parameters */
     private static Class[] _regularConstructor = new Class[] { String.class, Object.class, String.class, Object.class };
 
-    /** holds the marker for an un defined validation template */
+    /** holds the marker for an undefined validation template */
     private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
     
     /**
@@ -157,14 +158,14 @@ public class ERXValidationFactory {
             ERXValidationException.ExceedsMaximumLengthException,
             ERXValidationException.ValueConversionException
         };
-        _mappings = new NSDictionary<String, String>(objects, keys);
+        _mappings = new NSDictionary<>(objects, keys);
     }
 
     /** holds the validation exception class */
     private Class _validationExceptionClass;
 
     /** holds the template cache for a given set of keys */
-    private Hashtable<ERXMultiKey, String> _cache = new Hashtable<ERXMultiKey, String>(1000);
+    private Map<ERXMultiKey, String> _cache = new Hashtable<>(1000);
 
     /** holds the default template delimiter, "@@" */
     private String _delimiter = "@@";
@@ -358,7 +359,7 @@ public class ERXValidationFactory {
         if (additionalExceptions == null || additionalExceptions.isEmpty()) {
             return NSArray.EmptyArray;
         }
-        NSMutableArray<ERXValidationException> erveAdditionalExceptions = new NSMutableArray<ERXValidationException>();
+        NSMutableArray<ERXValidationException> erveAdditionalExceptions = new NSMutableArray<>();
         for (ValidationException e : additionalExceptions) {
             ERXValidationException erve = convertException(e);
             if (erve != null)
@@ -453,7 +454,7 @@ public class ERXValidationFactory {
      *		is reset.
      */
     public void resetTemplateCache(NSNotification n) {
-        _cache = new Hashtable<ERXMultiKey, String>(1000);
+        _cache = new Hashtable<>(1000);
         log.debug("Resetting template cache");
     }
 

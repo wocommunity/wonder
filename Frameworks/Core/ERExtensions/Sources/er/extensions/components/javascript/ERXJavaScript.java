@@ -56,7 +56,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	private static ERXExpiringCache<Object, WOResponse> cache(WOSession session) {
     	ERXExpiringCache<Object, WOResponse> cache = (ERXExpiringCache<Object, WOResponse>) session.objectForKey("ERXJavaScript.cache");
     	if(cache == null) {
-    		cache = new ERXExpiringCache<Object, WOResponse>(60);
+    		cache = new ERXExpiringCache<>(60);
     		session.setObjectForKey(cache, "ERXJavaScript.cache");
     	}
     	return cache;

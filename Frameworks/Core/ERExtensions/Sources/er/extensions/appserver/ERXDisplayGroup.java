@@ -133,7 +133,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	/**
 	 * Holds the extra qualifiers.
 	 */
-	private NSMutableDictionary<String, EOQualifier> _extraQualifiers = new NSMutableDictionary<String, EOQualifier>();
+	private NSMutableDictionary<String, EOQualifier> _extraQualifiers = new NSMutableDictionary<>();
 
 	public void setQualifierForKey(EOQualifier qualifier, String key) {
 		if(qualifier != null) {
@@ -293,7 +293,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if (objects == null || objects.isEmpty()) {
 			return false;
 		}
-		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		NSMutableSet<T> selection = new NSMutableSet<>(selectedObjects());
 		int selectionCountBefore = selection.count();
 		selection.addObjectsFromArray(objects);
 		setSelectedObjects(selection.allObjects());
@@ -321,9 +321,9 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if (objects == null || objects.isEmpty()) {
 			return false;
 		}
-		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		NSMutableSet<T> selection = new NSMutableSet<>(selectedObjects());
 		int selectionCountBefore = selection.count();
-		NSSet<T> objectsToRemove = new NSSet<T>(objects);
+		NSSet<T> objectsToRemove = new NSSet<>(objects);
 		selection.subtractSet(objectsToRemove);
 		setSelectedObjects(selection.allObjects());
 		return selection.count() != selectionCountBefore;

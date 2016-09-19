@@ -77,7 +77,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 
 	public NSMutableDictionary<String, String> createAjaxOptions(WOComponent component) {
 		// PROTOTYPE OPTIONS
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("observeDelay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onCreate", AjaxOption.SCRIPT));
@@ -133,7 +133,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary<String, String> options) {
 		WOComponent component = context.component();
 		String submitButtonName = nameInContext(context, component, element);
-		NSMutableDictionary<String, String> observerOptions = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> observerOptions = new NSMutableDictionary<>();
 		if (options != null) {
 			observerOptions.addEntriesFromDictionary(options);
 		}

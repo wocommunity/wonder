@@ -36,8 +36,8 @@ public class MInstance extends MObject {
 
     static NSTimestampFormatter shutdownFormatter = new NSTimestampFormatter("%a @ %H:00");
 
-    public static final ERXKey<MHost> HOST = new ERXKey<MHost>("host");
-    public static final ERXKey<String> HOST_NAME = new ERXKey<String>("hostName");
+    public static final ERXKey<MHost> HOST = new ERXKey<>("host");
+    public static final ERXKey<String> HOST_NAME = new ERXKey<>("hostName");
 
     /*
      * String hostName; Integer id; Integer port; String applicationName;

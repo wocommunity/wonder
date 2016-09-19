@@ -46,10 +46,10 @@ public class ERXPartialBase0 extends ERXMigrationDatabase.Migration implements I
 	  GenderType male = GenderType.createGenderType(ec, "Male");
 	  ec.saveChanges();
 	  
-	  NSArray<String> maleFirstName = new NSArray<String>(new String[] {"David", "Stephen", "Frank", "John", "Edward"});
-	  NSArray<String> femaleFirstName = new NSArray<String>(new String[] {"Sally", "Susan", "Linda", "Jane", "Ellen"});
+	  NSArray<String> maleFirstName = new NSArray<>(new String[] {"David", "Stephen", "Frank", "John", "Edward"});
+	  NSArray<String> femaleFirstName = new NSArray<>(new String[] {"Sally", "Susan", "Linda", "Jane", "Ellen"});
 	  
-	  NSArray<String> lastNames = new NSArray<String>(new String[] {"Smith", "Jones", "Parsons", "Hand", "Best", "Jobs", "Cooke", "White", "Brown", "Crowe"});
+	  NSArray<String> lastNames = new NSArray<>(new String[] {"Smith", "Jones", "Parsons", "Hand", "Best", "Jobs", "Cooke", "White", "Brown", "Crowe"});
 
 	  for ( String name : maleFirstName) {
 		  for ( String surname : lastNames) {

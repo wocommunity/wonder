@@ -94,7 +94,7 @@ public class T06EOFFactorialUpdateTask extends ERXTask<EOGlobalID> implements Ca
 			ERXFetchSpecification<ResultItem> fs = taskInfo.fetchSpecificationForResultItems();
 			
 			// Batch iterator
-			ERXFetchSpecificationBatchIterator<ResultItem> fsIterator = new ERXFetchSpecificationBatchIterator<ResultItem>(fs, ec);
+			ERXFetchSpecificationBatchIterator<ResultItem> fsIterator = new ERXFetchSpecificationBatchIterator<>(fs, ec);
 
 			// Loop for a period of time
 			while (fsIterator.hasNext() && !_isStopped) {

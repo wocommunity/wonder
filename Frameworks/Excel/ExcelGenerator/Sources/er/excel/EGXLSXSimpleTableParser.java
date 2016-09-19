@@ -23,7 +23,7 @@ public class EGXLSXSimpleTableParser extends EGSimpleTableParser {
 //	private XSSFWorkbook _workbook;
 //	private NSMutableDictionary<String, NSDictionary<String, String>> _fontDicts;
 //	private NSMutableDictionary<String, NSDictionary<String, String>> _styleDicts;
-//	private NSMutableDictionary<String, XSSFFont> _fonts = new NSMutableDictionary<String, XSSFFont>();
+//	private NSMutableDictionary<String, XSSFFont> _fonts = new NSMutableDictionary<>();
 //	private NSMutableDictionary<NSDictionary<String, ?>, XSSFCellStyle> _styles = new NSMutableDictionary<NSDictionary<String, ?>, XSSFCellStyle>();
 //	
 	public EGXLSXSimpleTableParser(InputStream contentStream) {

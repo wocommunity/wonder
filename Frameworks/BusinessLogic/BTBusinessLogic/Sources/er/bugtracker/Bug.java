@@ -347,7 +347,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
-    public static final BugClazz<Bug> clazz = new BugClazz<Bug>();
+    public static final BugClazz<Bug> clazz = new BugClazz<>();
 
     public void close() {
         setState(State.CLOSED);

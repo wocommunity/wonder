@@ -103,7 +103,7 @@ public abstract class ERXEnterpriseObjectChangeListener<T extends EOEnterpriseOb
 	@SuppressWarnings("unchecked")
 	protected NSArray<T> relevantChanges(EOEditingContext editingContext, NSDictionary dict, String key) {
 		NSArray allObjects = (NSArray) dict.objectForKey(key);
-		NSMutableArray<T> changedObjects = new NSMutableArray<T>();
+		NSMutableArray<T> changedObjects = new NSMutableArray<>();
 		for (Enumeration enumeration = allObjects.objectEnumerator(); enumeration.hasMoreElements();) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) enumeration.nextElement();
 			String changedEntityName = eo.entityName();

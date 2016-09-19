@@ -63,7 +63,7 @@ public interface IERXRestDelegate {
 	 * @author mschrag
 	 */
 	public static class Factory {
-		private static NSMutableDictionary<String, IERXRestDelegate> _delegates = new NSMutableDictionary<String, IERXRestDelegate>();
+		private static NSMutableDictionary<String, IERXRestDelegate> _delegates = new NSMutableDictionary<>();
 		private static IERXRestDelegate _defaultDelegate = new ERXEORestDelegate();
 		private static IERXRestDelegate _defaultBeanDelegate = new ERXNoOpRestDelegate();
 

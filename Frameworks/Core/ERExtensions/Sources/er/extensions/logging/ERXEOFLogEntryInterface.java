@@ -7,7 +7,7 @@
 package er.extensions.logging;
 
 /**
- * Interface implemented by EnterpriseObjects to inialize with
+ * Interface implemented by EnterpriseObjects to initialize with
  * a logging event and optionally a layout. This is used in conjunction
  * with the {@link ERXEOFAppender}.
  */

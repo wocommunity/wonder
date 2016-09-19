@@ -10,7 +10,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 
 public class Neo4JUtils {
-	private static final Map<EORelationship, RelationshipType> resultsCache = new HashMap<EORelationship, RelationshipType>();
+	private static final Map<EORelationship, RelationshipType> resultsCache = new HashMap<>();
 	
 	/**
 	 * Get Neo4J relationship type for the given EO relationship

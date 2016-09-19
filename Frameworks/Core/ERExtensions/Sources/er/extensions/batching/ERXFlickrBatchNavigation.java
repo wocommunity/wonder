@@ -210,7 +210,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		int currentPageNumber = currentBatchIndex();
 		int pageSize = numberOfObjectsPerBatch();
 		if (_lastPageCount != pageCount || _lastCurrentPageNumber != currentPageNumber || _lastPageSize != pageSize) {
-			_pageNumbers = new NSMutableArray<PageNumber>();
+			_pageNumbers = new NSMutableArray<>();
 
 			int nearEdgeCount;
 			int endCount;
@@ -392,9 +392,9 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	public NSArray<? extends Number> possibleBatchSizes() {
 		Object value = valueForBinding("batchSizes");
 		if(value == null) {
-			return new NSArray<Integer>(new Integer[] {Integer.valueOf(10), Integer.valueOf(50), Integer.valueOf(100), Integer.valueOf(0)});
+			return new NSArray<>(new Integer[] {Integer.valueOf(10), Integer.valueOf(50), Integer.valueOf(100), Integer.valueOf(0)});
 		}
-		NSMutableArray<Integer> result = new NSMutableArray<Integer>();
+		NSMutableArray<Integer> result = new NSMutableArray<>();
 		if (value instanceof String) {
 			String[] parts = value.toString().split("\\s*,");
 			for (int i = 0; i < parts.length; i++) {

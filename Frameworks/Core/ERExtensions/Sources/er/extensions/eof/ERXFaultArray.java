@@ -36,7 +36,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 			setEditingContext(array.lastObject().editingContext());
 			int i = 0;
 			for (T eo : array) {
-				_refs[i] = new WeakReference<T>(eo);
+				_refs[i] = new WeakReference<>(eo);
 				_array[i] = editingContext().globalIDForObject(eo);
 				i++;
 			}
@@ -73,7 +73,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 				} else {
 					// System.out.println("object: " + result.isFault());
 				}
-				_refs[index] = new WeakReference<T>(result);
+				_refs[index] = new WeakReference<>(result);
 			} else {
 				// System.out.println("no fault");
 			}

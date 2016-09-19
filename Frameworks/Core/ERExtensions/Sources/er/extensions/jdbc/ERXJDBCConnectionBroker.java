@@ -8,6 +8,7 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,7 @@ import er.extensions.foundation.ERXValueUtilities;
 public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker {
     private static final Logger log = LoggerFactory.getLogger(ERXJDBCConnectionBroker.class);
 
-    private static Hashtable brokers = new Hashtable();
+    private static Map<String, ERXJDBCConnectionBroker> brokers = new Hashtable<>();
 
     private Thread reaper;
 
@@ -123,7 +124,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         for (int i = 0; i < keys.length; i++) {
 			key += d.objectForKey(keys[i]) + "\0";
 		}
-        ERXJDBCConnectionBroker broker = (ERXJDBCConnectionBroker) brokers.get(key);
+        ERXJDBCConnectionBroker broker = brokers.get(key);
         if (broker == null) {
             broker = newConnectionBrokerWithConnectionDictionary(d);
             brokers.put(key, broker);

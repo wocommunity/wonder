@@ -55,7 +55,7 @@ public class ERPCategoryChart extends ERPChart {
 
 	private static final Logger log = LoggerFactory.getLogger(ERPCategoryChart.class);
 
-    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[]{
+    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<>(new String[]{
             "BarChart", "StackedBarChart", "BarChart3D", "StackedBarChart3D", "AreaChart", 
             "StackedAreaChart", "LineChart", "WaterfallChart"
     });

@@ -43,7 +43,7 @@ public class TemporaryNodePool {
 	}
 	
 	private void createPool(int poolSize) {
-		List<Node> nodes = new ArrayList<Node>();
+		List<Node> nodes = new ArrayList<>();
 		Transaction tx = db.beginTx();
 		
 		try {

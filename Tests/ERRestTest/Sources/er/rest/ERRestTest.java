@@ -84,7 +84,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"Name\":\"Mike\"}\n", output);
@@ -94,7 +94,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToPlist() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.plist().toString(dict);
         assertEquals("{\n\t\"Name\" = \"Mike\";\n}\n", output);
@@ -104,7 +104,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToXML() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.xml().toString(dict);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <Name>Mike</Name>\n</NSDictionary>\n", output);
@@ -125,7 +125,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitiveArrayToJSON() {
-        String output = ERXRestFormat.json().toString(null, new NSArray<String>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+        String output = ERXRestFormat.json().toString(null, new NSArray<>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
         assertEquals("[\"a\",\"b\",\"c\"]\n", output);
     }
 
@@ -143,7 +143,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitivesToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "String");
         dict.setObjectForKey(Integer.valueOf(32), "int");
         dict.setObjectForKey(Boolean.TRUE, "boolean");
@@ -159,8 +159,8 @@ public class ERRestTest extends TestCase {
     }
 
     public void testArrayOfStringsToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
-        dict.setObjectForKey(new NSArray<String>(new String[] { "a", "b", "c" }), "array");
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
+        dict.setObjectForKey(new NSArray<>(new String[] { "a", "b", "c" }), "array");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"array\":[\"a\",\"b\",\"c\"]}\n", output);
 
@@ -169,8 +169,8 @@ public class ERRestTest extends TestCase {
     }
 
     public void testArrayOfIntegersToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
-        dict.setObjectForKey(new NSArray<Integer>(new Integer[] { Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3) }), "array");
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
+        dict.setObjectForKey(new NSArray<>(new Integer[] { Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3) }), "array");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"array\":[1,2,3]}\n", output);
 
@@ -180,7 +180,7 @@ public class ERRestTest extends TestCase {
 
     // MS: plist in WO quotes everything, even numbers ... it's pretty messed up
     public void testPrimitivesToPlist() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "String");
         dict.setObjectForKey(Integer.valueOf(32), "int");
         dict.setObjectForKey(Boolean.TRUE, "boolean");
@@ -207,7 +207,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitivesToXML() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "String");
         dict.setObjectForKey(Integer.valueOf(32), "int");
         dict.setObjectForKey(Boolean.TRUE, "boolean");
@@ -257,7 +257,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Person> ps = new NSArray<Person>(Person.createPerson(editingContext, "Mike"));
+            NSArray<Person> ps = new NSArray<>(Person.createPerson(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
             assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<people type=\"array\">\n" + "  <person type=\"person\">\n" + "    <age nil=\"true\"/>\n" + "    <name>Mike</name>\n" + "    <salary nil=\"true\"/>\n" + "  </person>\n" + "</people>\n", format.toString(EOClassDescription.classDescriptionForEntityName(Person.ENTITY_NAME), ps, ERXKeyFilter.filterWithAttributes(), new ERXRestContext(editingContext)));
 
@@ -309,7 +309,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -325,7 +325,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", false, true, true, true, true));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -357,7 +357,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", false, true, true, false, false));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -547,8 +547,8 @@ public class ERRestTest extends TestCase {
     }
 
     public void testMap() {
-        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
-        LinkedHashMap<String, Object> message = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> message = new LinkedHashMap<>();
         message.put("subject", "this is a subject");
         message.put("message", "this is a message");
         message.put("priority", Integer.valueOf(10));

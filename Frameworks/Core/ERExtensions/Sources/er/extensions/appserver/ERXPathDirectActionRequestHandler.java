@@ -142,7 +142,7 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 	 * @return the dictionary of form values
 	 */
 	public static NSDictionary<String, String> formValuesFromRequest(WORequest request, boolean useActionClass, boolean useActionName) {
-		NSMutableDictionary params = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> params = new NSMutableDictionary<>();
 		boolean foundRequestHandler = false;
 		for (Enumeration<String> e = NSArray.componentsSeparatedByString(request.uri(), "/").objectEnumerator(); e.hasMoreElements();) {
 			String part = e.nextElement();

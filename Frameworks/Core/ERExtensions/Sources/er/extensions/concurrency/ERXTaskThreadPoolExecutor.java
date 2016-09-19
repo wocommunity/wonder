@@ -65,7 +65,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public Future<?> submit(Runnable task) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<Object> ftask = new ERXFutureTask<Object>(task, null);
+        ERXFutureTask<Object> ftask = new ERXFutureTask<>(task, null);
         execute(ftask);
         return ftask;
     }
@@ -73,7 +73,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public <T> Future<T> submit(Runnable task, T result) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<T> ftask = new ERXFutureTask<T>(task, result);
+        ERXFutureTask<T> ftask = new ERXFutureTask<>(task, result);
         execute(ftask);
         return ftask;
     }
@@ -81,7 +81,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public <T> Future<T> submit(Callable<T> task) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<T> ftask = new ERXFutureTask<T>(task);
+        ERXFutureTask<T> ftask = new ERXFutureTask<>(task);
         execute(ftask);
         return ftask;
     }

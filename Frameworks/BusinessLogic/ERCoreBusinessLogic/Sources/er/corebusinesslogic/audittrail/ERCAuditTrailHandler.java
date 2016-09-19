@@ -70,7 +70,7 @@ public class ERCAuditTrailHandler {
         }
     }
 
-    protected NSMutableDictionary<String, Configuration> configuration = new NSMutableDictionary<String, Configuration>();
+    protected NSMutableDictionary<String, Configuration> configuration = new NSMutableDictionary<>();
 
     public void modelGroupDidLoad(NSNotification n) {
         configuration.removeAllObjects();
@@ -188,7 +188,7 @@ public class ERCAuditTrailHandler {
     }
 
     protected NSDictionary serializeObject(EOEnterpriseObject eo) {
-        NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<>();
         result.addEntriesFromDictionary(eo.snapshot());
         for (Enumeration e = eo.snapshot().keyEnumerator(); e.hasMoreElements();) {
             String key = (String) e.nextElement();

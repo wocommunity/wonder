@@ -128,7 +128,7 @@ public class AjaxDraggable extends AjaxComponent {
       }
       Map<String, Object> draggablesMap = componentDraggablesMap.get(page);
       if (draggablesMap == null) {
-        draggablesMap = new HashMap<String, Object>();
+        draggablesMap = new HashMap<>();
         componentDraggablesMap.put(page, draggablesMap);
       }
       String id = draggableID();
@@ -143,7 +143,7 @@ public class AjaxDraggable extends AjaxComponent {
   }
 
   public NSDictionary<String, String> createAjaxOptions() {
-    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 	// PROTOTYPE OPTIONS
     ajaxOptionsArray.addObject(new AjaxOption("starteffect", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));

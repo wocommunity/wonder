@@ -13,7 +13,7 @@ public class ERXStringBufferRestResponse implements IERXRestResponse {
 	}
 
 	public ERXStringBufferRestResponse(StringBuffer buffer) {
-		_headers = new NSMutableDictionary<String, String>();
+		_headers = new NSMutableDictionary<>();
 		_buffer = buffer;
 	}
 

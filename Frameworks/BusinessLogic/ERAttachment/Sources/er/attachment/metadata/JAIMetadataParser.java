@@ -26,7 +26,7 @@ public class JAIMetadataParser implements IERMetadataParser {
   public static int EXIF = 0xE1;
   public static int IPTC = 0xED;
 
-  private static Set<String> UNWANTED = new HashSet<String>();
+  private static Set<String> UNWANTED = new HashSet<>();
 
   static {
     JAIMetadataParser.UNWANTED.add("com.sun.media.imageioimpl.plugins.jpeg.CLibJPEGImageReader");

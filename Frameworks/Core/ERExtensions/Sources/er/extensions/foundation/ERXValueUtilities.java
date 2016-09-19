@@ -754,7 +754,7 @@ public class ERXValueUtilities {
 	public static String[] stringsToStringArray(String ... anyStrings) {
 		int aryLen = anyStrings.length;
 		if(aryLen <= 0) return null;
-		ArrayList<String> strlist = new ArrayList<String>();
+		ArrayList<String> strlist = new ArrayList<>();
 		String wkStr = null;
 		for(int loop = 0; loop < aryLen; loop++){
 			wkStr = anyStrings[loop];
@@ -788,7 +788,7 @@ public class ERXValueUtilities {
 	public static Object[] objectsToObjectArray(Object ... anyObjects) {
 		int aryLen = anyObjects.length;
 		if(aryLen <= 0) return null;
-		ArrayList<Object> objlist = new ArrayList<Object>();
+		ArrayList<Object> objlist = new ArrayList<>();
 		Object wkObj = null;
 		for(int loop = 0; loop < aryLen; loop++){
 			wkObj = anyObjects[loop];

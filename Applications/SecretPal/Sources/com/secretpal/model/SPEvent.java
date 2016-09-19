@@ -30,7 +30,7 @@ public class SPEvent extends _SPEvent {
 
     NSArray<SPPerson> allPeople = SPMembership.PERSON.arrayValueInObject(group().memberships());
 		NSArray<SPPerson> eligibleGivers = _eligibleGivers(allPeople);
-		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<SPPerson>();
+		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<>();
 		
 		log.info("{} eligible givers out of {} people", eligibleGivers.count(), allPeople.count());
 
@@ -78,7 +78,7 @@ public class SPEvent extends _SPEvent {
 	}
 
 	public NSArray<SPPerson> _eligibleGivers(NSArray<SPPerson> allPeople) {
-    NSMutableArray<SPPerson> eligibleGivers = new NSMutableArray<SPPerson>();
+    NSMutableArray<SPPerson> eligibleGivers = new NSMutableArray<>();
     for (SPPerson possibleGiver : allPeople) {
       NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(possibleGiver));
       // If someone has NO possible receivers right at the start, just leave them out ... This is to support
@@ -91,7 +91,7 @@ public class SPEvent extends _SPEvent {
 	}
 	
 	public NSArray<SPPerson> _eligibleReceiversForPerson(SPPerson giver, NSArray<SPPerson> allPeople, NSArray<SPPerson> consumedReceivers) {
-	  NSMutableArray<SPPerson> eligibleReceivers = new NSMutableArray<SPPerson>();
+	  NSMutableArray<SPPerson> eligibleReceivers = new NSMutableArray<>();
     NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(giver));
 	  for (SPPerson possibleReceiver : allPeople) {
 	    if (!giver.equals(possibleReceiver) && !consumedReceivers.containsObject(possibleReceiver) && !noNoPeople.containsObject(possibleReceiver)) {
@@ -110,7 +110,7 @@ public class SPEvent extends _SPEvent {
   }
   
   public NSArray<SPPerson> noNoPersonPossibilitiesForPerson(SPPerson person) {
-    NSMutableArray<SPPerson> noNoPalPossibilities = new NSMutableArray<SPPerson>();
+    NSMutableArray<SPPerson> noNoPalPossibilities = new NSMutableArray<>();
     NSArray<SPPerson> noNoPals = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(person));
     for (SPMembership membership : group().memberships()) {
       if (!membership.person().equals(person) && !noNoPals.containsObject(membership.person())) {

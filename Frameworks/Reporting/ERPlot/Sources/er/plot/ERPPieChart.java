@@ -49,7 +49,7 @@ public class ERPPieChart extends ERPChart {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[] {"PieChart", "PieChart3D", "RingChart"});
+    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<>(new String[] {"PieChart", "PieChart3D", "RingChart"});
         
     /**
      * Utility class to accomodate for accumulating data (the superclass can only replace values, 

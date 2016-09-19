@@ -53,7 +53,7 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
             if(value == null) {
                 value = currentOperatorString;
             }
-            result.addObject(new ERXKeyValuePair<String, String>(currentOperatorString, value));
+            result.addObject(new ERXKeyValuePair<>(currentOperatorString, value));
         }
         return result;
     }
@@ -78,7 +78,7 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
         if(choice == null) {
             choice = value;
         }
-        return new ERXKeyValuePair<String, String>(value, choice);        
+        return new ERXKeyValuePair<>(value, choice);
     }
     
     public void  setSelectedElement(ERXKeyValuePair<String, String> newSelection) {
@@ -92,7 +92,7 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     }
     
     static {
-        _stringQualifierOperators = new NSArray<String>(new String[]{"starts with", "contains", "ends with", "is", "like"});
+        _stringQualifierOperators = new NSArray<>(new String[]{"starts with", "contains", "ends with", "is", "like"});
         _allQualifierOperators = _stringQualifierOperators.arrayByAddingObjectsFromArray(EOQualifier.relationalQualifierOperators());
     }
 }

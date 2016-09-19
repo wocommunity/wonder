@@ -15,7 +15,7 @@ public class InstantMessengerConnection {
 	private Map<String, Conversation> _conversations;
 
 	protected InstantMessengerConnection() {
-		_conversations = new HashMap<String, Conversation>();
+		_conversations = new HashMap<>();
 		_messageQueue = new InstantMessageQueue();
 		_messageQueue.start();
 	}
@@ -54,7 +54,7 @@ public class InstantMessengerConnection {
 	}
 
 	public List<Conversation> conversations() {
-		List<Conversation> conversations = new LinkedList<Conversation>(_conversations.values());
+		List<Conversation> conversations = new LinkedList<>(_conversations.values());
 		return conversations;
 	}
 

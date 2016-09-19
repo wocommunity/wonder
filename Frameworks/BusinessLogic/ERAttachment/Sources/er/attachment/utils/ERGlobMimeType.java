@@ -29,7 +29,7 @@ public class ERGlobMimeType extends ERMimeType {
    * </span>
    */
   public ERGlobMimeType(String _mimeType) {
-    super(_mimeType, _mimeType, null, new NSArray<String>());
+    super(_mimeType, _mimeType, null, new NSArray<>());
   }
 
   @Override

@@ -1623,7 +1623,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return all of the properties in the system mapped to their evaluated values, sorted by key
      */
     public static Map<String, String> propertiesMap(Properties properties, boolean protectValues) {
-    	Map<String, String> props = new TreeMap<String, String>();
+    	Map<String, String> props = new TreeMap<>();
     	for (Enumeration e = properties.keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
     		if (protectValues && key.toLowerCase().contains("password")) {
@@ -2048,7 +2048,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * 
 	 * <div class="ja">オペレータ処理とオペレータ・キーのマップを保持しま</div>
 	 */
-	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<String, ERXProperties.Operator>();
+	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<>();
 
 	/**
 	 * <div class="en">
@@ -2273,7 +2273,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public NSDictionary<String, String> compute(String key, String value, String parameters) {
 			String decryptedValue = ERXCrypto.defaultCrypter().decrypt(value);
-			return new NSDictionary<String, String>(decryptedValue, key);
+			return new NSDictionary<>(decryptedValue, key);
 		}
 	}
 
@@ -2385,10 +2385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				}
 
 				if (ipNumberMatches) {
-					computedProperties = new NSDictionary<String, String>(value, key);
+					computedProperties = new NSDictionary<>(value, key);
 				}
 				else {
-					computedProperties = new NSDictionary<String, String>();
+					computedProperties = new NSDictionary<>();
 				}
 			}
 			return computedProperties;
@@ -2415,7 +2415,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 */
 	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
 		NSArray<String> operatorKeys = ERXProperties.operators.allKeys();
-		for (Object keyObj : new TreeSet<Object>(originalProperties.keySet())) {
+		for (Object keyObj : new TreeSet<>(originalProperties.keySet())) {
 			String key = (String) keyObj;
 			if (key != null && key.length() > 0) {
 				String value = originalProperties.getProperty(key);
@@ -2485,7 +2485,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	        return;
 	    }
 	    String applicationName = application.name();
-	    for (Object keyObj : new TreeSet<Object>(properties.keySet())) {
+	    for (Object keyObj : new TreeSet<>(properties.keySet())) {
 	        String key = (String) keyObj;
 	        if (key != null && key.length() > 0) {
 	            String value = properties.getProperty(key);
@@ -2530,7 +2530,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public static final String IncludePropsKey = ".includeProps";
 		
-		private Stack<File> _files = new Stack<File>();
+		private Stack<File> _files = new Stack<>();
 		
 		@Override
 		public synchronized Object put(Object key, Object value) {

@@ -22,27 +22,27 @@ import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 public class MObject implements NSKeyValueCoding {
 
     /********** Useful Statics **********/
-    public static NSArray loadSchedulerArray = new NSArray <Object>(new Object[]{"Default" , "Round Robin" , "Random" , "Load Average", "Custom"});
-    public static NSArray loadSchedulerArrayValues = new NSArray <Object>(new Object[]{"DEFAULT" , "ROUNDROBIN" , "RANDOM" , "LOADAVERAGE", "CUSTOM"});
+    public static NSArray<Object> loadSchedulerArray = new NSArray<>(new Object[]{"Default" , "Round Robin" , "Random" , "Load Average", "Custom"});
+    public static NSArray<Object> loadSchedulerArrayValues = new NSArray<>(new Object[]{"DEFAULT" , "ROUNDROBIN" , "RANDOM" , "LOADAVERAGE", "CUSTOM"});
     
-    public static NSArray hostTypeArray = new NSArray <Object>(new Object[]{"MacOSX" , "Windows" , "Unix"});
+    public static NSArray<Object> hostTypeArray = new NSArray<>(new Object[]{"MacOSX" , "Windows" , "Unix"});
     
-    public static NSArray urlVersionArray = new NSArray <Object>(new Object[]{Integer.valueOf(4), Integer.valueOf(3)});
+    public static NSArray<Object> urlVersionArray = new NSArray<>(new Object[]{Integer.valueOf(4), Integer.valueOf(3)});
     
     protected static String[] weekNames = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    public static NSArray weekArray = new NSArray <String>(weekNames);
+    public static NSArray<String> weekArray = new NSArray<>(weekNames);
 
     public static String[] timesOfDay =
         new String[]{"0000", "0100", "0200", "0300", "0400", "0500", "0600", "0700", "0800", "0900", "1000", "1100",
                      "1200", "1300", "1400", "1500", "1600", "1700", "1800", "1900", "2000", "2100", "2200", "2300"};
-    public static NSArray timeOfDayArray = new NSArray <String>(timesOfDay);
+    public static NSArray<String> timeOfDayArray = new NSArray<>(timesOfDay);
 
     protected static Integer[] schedulingIntervals =
         new Integer[]{Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4),
                       Integer.valueOf(6), Integer.valueOf(8), Integer.valueOf(12) };
-    public static NSArray schedulingIntervalArray = new NSArray<Integer>(schedulingIntervals);
+    public static NSArray<Integer> schedulingIntervalArray = new NSArray<>(schedulingIntervals);
     
-    public static NSArray schedulingTypeArray = new NSArray<Object>(new Object[]{"HOURLY", "DAILY", "WEEKLY"});
+    public static NSArray<Object> schedulingTypeArray = new NSArray<>(new Object[]{"HOURLY", "DAILY", "WEEKLY"});
 
     /*
                          1 Hour  =    60 minutes =   3600 seconds =   3600000 ms

@@ -354,7 +354,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             EOEntity entity = expression.entity();
             EORelationship rel;
             EOAttribute att;
-            NSMutableArray<EOProperty> path = new NSMutableArray<EOProperty>();
+            NSMutableArray<EOProperty> path = new NSMutableArray<>();
             int numPieces = pieces.count();
 
             if (numPieces == 1 && null == entity.anyRelationshipNamed(name)) {

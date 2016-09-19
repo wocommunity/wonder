@@ -13,7 +13,7 @@ public class PFStatsChecker {
     public static Set<PFStatsNode> checkForErrors(PFStatsNode node) {
         node.clearErrors();
 
-        Set<PFStatsNode> errorNodes = new HashSet<PFStatsNode>();
+        Set<PFStatsNode> errorNodes = new HashSet<>();
         Map<String, List<PFStatsNode>> duplicates = new HashMap<String, List<PFStatsNode>>();
         checkForDupeSQL(node, duplicates);
         for (Map.Entry<String, List<PFStatsNode>> statement : duplicates.entrySet()) {
@@ -34,7 +34,7 @@ public class PFStatsChecker {
             String statement = ((EOSQLExpression) node.target()).statement();
             List<PFStatsNode> dupes = duplicates.get(statement);
             if (dupes == null) {
-                dupes = new LinkedList<PFStatsNode>();
+                dupes = new LinkedList<>();
                 duplicates.put(statement, dupes);
             }
             dupes.add(node);

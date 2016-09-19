@@ -30,7 +30,7 @@ public class Session extends ERXSession {
                     defaultEditingContext(), 
                     Movie.ENTITY_NAME);
 
-            movieDisplayGroup = new ERXBatchingDisplayGroup<Movie>();
+            movieDisplayGroup = new ERXBatchingDisplayGroup<>();
             movieDisplayGroup.setDataSource(dataSource);
             movieDisplayGroup.setNumberOfObjectsPerBatch(10);
             movieDisplayGroup.setSortOrderings(Movie.TITLE.ascInsensitives());
@@ -72,7 +72,7 @@ public class Session extends ERXSession {
 	
 	public NSMutableArray<Transaction> transactions() {
 		if (transactions == null) {
-			transactions = new NSMutableArray<Transaction>();
+			transactions = new NSMutableArray<>();
 		}
 		return transactions;
 	}

@@ -58,7 +58,7 @@ public class ERQMInputFlipSwitch extends ERQMComponentBase
 
 	public NSArray<String> list()
 	{
-		return new NSArray<String>(off(), on());
+		return new NSArray<>(off(), on());
 	}
 
 	@Override

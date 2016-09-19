@@ -75,10 +75,10 @@ public class ERXBeanSerializer extends AbstractSerializer {
 	 */
 	private static Class<?>[] _JSONClasses = new Class[] {};
 
-	private static Set<String> _ignoreMethodNames = new HashSet<String>();
+	private static Set<String> _ignoreMethodNames = new HashSet<>();
 	
 	static {
-		_ignoreMethodNames = new HashSet<String>();
+		_ignoreMethodNames = new HashSet<>();
 		_ignoreMethodNames.add("equals");
 		_ignoreMethodNames.add("hashCode");
 		_ignoreMethodNames.add("main");
@@ -99,8 +99,8 @@ public class ERXBeanSerializer extends AbstractSerializer {
 		log.info("analyzing " + clazz.getName());
 		BeanData bd = new BeanData();
 		bd.beanInfo = Introspector.getBeanInfo(clazz, Object.class);
-		bd.readableProps = new HashMap<String, Method>();
-		bd.writableProps = new HashMap<String, Method>();
+		bd.readableProps = new HashMap<>();
+		bd.writableProps = new HashMap<>();
 		for (MethodDescriptor md : bd.beanInfo.getMethodDescriptors()) {
 			Method method = md.getMethod();
 			if (!Modifier.isStatic(method.getModifiers())) {

@@ -71,7 +71,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sessionDidCreate", new Class[] { NSNotification.class }), WOSession.SessionDidCreateNotification, null);
 
 		_application = WOApplication.application();
-		_instantMessengers = new HashMap<String, InstantMessengerConnection>();
+		_instantMessengers = new HashMap<>();
 
 		_centralizeScreenName = ERXProperties.stringForKey(InstantMessengerAdaptor.CENTRALIZE_SCREEN_NAME_KEY);
 		_factory = getFactory(InstantMessengerAdaptor.IM_FACTORY_KEY);

@@ -30,9 +30,9 @@ public class ERXResponse extends WOResponse {
 	public static final String DisablePageCachingKey = "com.webobjects.appserver.Response.DisablePageCaching";
 
 	public static class Context {
-		protected LinkedHashMap<String, ERXResponse> partials = new LinkedHashMap<String, ERXResponse>();
+		protected LinkedHashMap<String, ERXResponse> partials = new LinkedHashMap<>();
 
-		protected Stack<ERXResponse> stack = new Stack<ERXResponse>();
+		protected Stack<ERXResponse> stack = new Stack<>();
 	}
 
 	private LinkedHashMap<String, Integer> marks;
@@ -89,7 +89,7 @@ public class ERXResponse extends WOResponse {
 	 */
 	public void pushContent() {
 		if (_contentStack == null) {
-			_contentStack = new Stack<Object>();
+			_contentStack = new Stack<>();
 		}
 		_contentStack.push(_content);
 		Object newContent;
@@ -127,7 +127,7 @@ public class ERXResponse extends WOResponse {
 	 */
 	public void mark(String key) {
 		if (marks == null) {
-			marks = new LinkedHashMap<String, Integer>();
+			marks = new LinkedHashMap<>();
 		}
 		marks.put(key, _contentLength());
 	}

@@ -110,7 +110,7 @@ public class ERXWOSwitch extends WODynamicElement {
 
     public ERXWOSwitch(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
         super(name, associations, template);
-        NSMutableDictionary<Object, WOElement> dict = new NSMutableDictionary<Object, WOElement>();
+        NSMutableDictionary<Object, WOElement> dict = new NSMutableDictionary<>();
         _case = associations.objectForKey("case");
         for(Enumeration e = ((WODynamicGroup)template).childrenElements().objectEnumerator(); e.hasMoreElements(); ) {
             WOElement child = (WOElement)e.nextElement();

@@ -62,7 +62,7 @@ public class ERXJDBCUtilities {
 		protected boolean _quoteSource;
 		protected boolean _quoteDestination;
 
-		protected NSMutableArray<EOEntity> _entities = new NSMutableArray<EOEntity>();
+		protected NSMutableArray<EOEntity> _entities = new NSMutableArray<>();
 
 		public CopyTask(EOModelGroup aModelGroup) {
 			addEntitiesFromModelGroup(aModelGroup);
@@ -189,7 +189,7 @@ public class ERXJDBCUtilities {
 				throw new NullPointerException("attributes cannot be null!");
 			}
 
-			NSMutableArray<String> columns = new NSMutableArray<String>();
+			NSMutableArray<String> columns = new NSMutableArray<>();
 			for (int i = attributes.length; i-- > 0;) {
 				EOAttribute att = attributes[i];
 				String column = att.columnName();
@@ -209,7 +209,7 @@ public class ERXJDBCUtilities {
 		}
 
 		protected EOAttribute[] attributesArray(NSArray<EOAttribute> array) {
-			NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+			NSMutableArray<EOAttribute> attributes = new NSMutableArray<>();
 			for (int i = 0; i < array.count(); i++) {
 				EOAttribute att = array.objectAtIndex(i);
 				if (!ERXStringUtilities.stringIsNullOrEmpty(att.columnName())) {
@@ -289,7 +289,7 @@ public class ERXJDBCUtilities {
 					log.info("table {}, inserted {} rows", tableName, rows.getRow());
 				}
 
-				NSMutableSet<File> tempfilesToDelete = new NSMutableSet<File>();
+				NSMutableSet<File> tempfilesToDelete = new NSMutableSet<>();
 				// call upps.setInt, upps.setBinaryStream, ...
 				for (int i = 0; i < columnNamesWithoutQuotes.length; i++) {
 					// first we need to get the type

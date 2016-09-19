@@ -143,7 +143,7 @@ public class PersonController extends ERXDefaultRouteController {
 		if (isSchemaRequest()) {
 			return schemaResponse(showFilter());
 		}
-		ERXRestFetchSpecification<Person> fetchSpec = new ERXRestFetchSpecification<Person>(Person.ENTITY_NAME, null, null, queryFilter(), Person.NAME.ascs(), 25);
+		ERXRestFetchSpecification<Person> fetchSpec = new ERXRestFetchSpecification<>(Person.ENTITY_NAME, null, null, queryFilter(), Person.NAME.ascs(), 25);
 		return response(fetchSpec, showFilter());
 	}
 }

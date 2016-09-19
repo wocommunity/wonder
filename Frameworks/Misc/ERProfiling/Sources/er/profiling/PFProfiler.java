@@ -37,13 +37,13 @@ public class PFProfiler {
     private static long _statsID;
 
     static {
-        _currentStats = new ThreadLocal<PFStatsNode>();
+        _currentStats = new ThreadLocal<>();
 
         // ideally this should match your backtrack cache size, but i didn't
         // want to touch WOApplication too early
-        _stats = new LRUMap<String, PFStatsNode>(30);
+        _stats = new LRUMap<>(30);
 
-        _delegates = new LinkedList<PFProfiler.Delegate>();
+        _delegates = new LinkedList<>();
 
         _statsID = 0;
 

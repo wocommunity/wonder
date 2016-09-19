@@ -10,12 +10,12 @@ import er.erxtest.ERXTestCase;
 public class NSDictionaryTest extends ERXTestCase {
 
 	public void testNSDictionary() {
-		NSDictionary<Object, Object> dict = new NSDictionary<Object, Object>();
+		NSDictionary<Object, Object> dict = new NSDictionary<>();
 		assertTrue(dict.isEmpty());
 	}
 
 	 public void testNSDictionaryIsImmutable() {
-	    NSDictionary<Object, Object> dict = new NSDictionary<Object, Object>();
+	    NSDictionary<Object, Object> dict = new NSDictionary<>();
 	    try {
 	      dict.put("abc", "def");
 	      fail("NSDictionary is not immutable");
@@ -24,90 +24,90 @@ public class NSDictionaryTest extends ERXTestCase {
 	 }
 	
 	public void testNSDictionaryMapOfKV() {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put("key", "value");
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(map);
+		NSDictionary<String, String> dict = new NSDictionary<>(map);
 		assertEquals("value", dict.get("key"));
 	}
 
 	public void testNSDictionaryMapOfKVNull() {
 		try {
-			new NSDictionary<String, String>((Map<String, String>)null);
+			new NSDictionary<>((Map<String, String>)null);
 			fail("NullPointerException expected");
 		} catch (NullPointerException e) {
 		}
 	}
 
 	public void testNSDictionaryMapOfKVInvalid() {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put("key", null);
 		try {
-			new NSDictionary<String, String>(map);
+			new NSDictionary<>(map);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 	}
 
 	public void testNSDictionaryMapOfKVBoolean() {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put("key", "value");
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(map, true);
+		NSDictionary<String, String> dict = new NSDictionary<>(map, true);
 		assertEquals("value", dict.get("key"));
-		dict = new NSDictionary<String, String>(map, false);
+		dict = new NSDictionary<>(map, false);
 		assertEquals("value", dict.get("key"));
 	}
 
 	public void testNSDictionaryMapOfKVBooleanNull() {
 		try {
-			new NSDictionary<String, String>((Map<String, String>)null, true);
+			new NSDictionary<>((Map<String, String>)null, true);
 			fail("NullPointerException expected");
 		} catch (NullPointerException e) {
 		}
 		try {
-			new NSDictionary<String, String>((Map<String, String>)null, false);
+			new NSDictionary<>((Map<String, String>)null, false);
 			fail("NullPointerException expected");
 		} catch (NullPointerException e) {
 		}
 	}
 
 	public void testNSDictionaryMapOfKVBooleanInvalid() {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put("key", null);
 		try {
-			new NSDictionary<String, String>(map, false);
+			new NSDictionary<>(map, false);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
-		new NSDictionary<String, String>(map, true);
+		new NSDictionary<>(map, true);
 	}
 	
 	public void testNSDictionaryNSArrayOfVNSArrayOfK() {
-		NSArray<String> keys = new NSArray<String>(new String[] { "key1", "key2" });
-		NSArray<String> values = new NSArray<String>(new String[] { "value1", "value2" });
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSArray<String> keys = new NSArray<>(new String[] { "key1", "key2" });
+		NSArray<String> values = new NSArray<>(new String[] { "value1", "value2" });
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		assertEquals("value1", dict.get("key1"));
 		assertEquals("value2", dict.get("key2"));
 	}
 	
 	public void testNSDictionaryNSArrayOfVNSArrayOfKNull() {
-	    NSArray<String> array = new NSArray<String>(new String[] { "value1", "value2" });
+	    NSArray<String> array = new NSArray<>(new String[] { "value1", "value2" });
 	    try {
-	      new NSDictionary<String, String>((NSArray<String>)null, array);
+	      new NSDictionary<>((NSArray<String>)null, array);
 	      fail("IllegalArgumentException expected");
 	    } catch (IllegalArgumentException e) {
 	    }
 	    try {
-	      new NSDictionary<String, String>(array, (NSArray<String>)null);
+	      new NSDictionary<>(array, (NSArray<String>)null);
 	      fail("IllegalArgumentException expected");
 	    } catch (IllegalArgumentException e) {
 	    }
-	    new NSDictionary<String, String>((NSArray<String>)null, (NSArray<String>)null);
+	    new NSDictionary<>((NSArray<String>)null, (NSArray<String>)null);
 	}
 
 	public void testNSDictionaryNSDictionaryOfKV() {
-		NSMutableDictionary<String, String> mutableDict = new NSMutableDictionary<String, String>("value", "key");
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(mutableDict);
-		NSDictionary<String, String> dict2 = new NSDictionary<String, String>(dict);
+		NSMutableDictionary<String, String> mutableDict = new NSMutableDictionary<>("value", "key");
+		NSDictionary<String, String> dict = new NSDictionary<>(mutableDict);
+		NSDictionary<String, String> dict2 = new NSDictionary<>(dict);
 		assertEquals(mutableDict, dict);
 		assertEquals(mutableDict, dict2);
 		mutableDict.put("key", "newValue");
@@ -117,7 +117,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	
 	public void testNSDictionaryNSDictionaryOfKVNull() {
 	  try {
-	    new NSDictionary<String, String>((NSDictionary<String, String>) null);
+	    new NSDictionary<>((NSDictionary<String, String>) null);
 	    fail("NullPointerException expected");
 	  } catch (NullPointerException e) {
 	  }
@@ -126,7 +126,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testNSDictionaryVArrayKArray() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		assertEquals(2, dict.size());
 		assertEquals("value1", dict.get("key1"));
 		assertEquals("value2", dict.get("key2"));
@@ -135,42 +135,42 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testNSDictionaryVArrayKArrayNull() {
 		String[] values = new String[] {"value1", "value2"};
 		try {
-			new NSDictionary<String, String>((String[])null, values);
+			new NSDictionary<>((String[])null, values);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 
 		try {
-			new NSDictionary<String, String>(values, (String[])null);
+			new NSDictionary<>(values, (String[])null);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 
-		NSDictionary<String, String> dict = new NSDictionary<String, String>((String[])null, (String[])null);
+		NSDictionary<String, String> dict = new NSDictionary<>((String[])null, (String[])null);
 		assertTrue(dict.isEmpty());
 	}
 
 	
 	public void testNSDictionaryVK() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");
 		assertEquals("value", dict.get("key"));
 	}
 
 	public void testNSDictionaryVKNull() {
 		try {
-			new NSDictionary<String, String>((String) null, "key");
+			new NSDictionary<>((String) null, "key");
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 
 		try {
-			new NSDictionary<String, String>("value", (String) null);
+			new NSDictionary<>("value", (String) null);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 
 		try {
-			new NSDictionary<String, String>((String) null, (String) null);
+			new NSDictionary<>((String) null, (String) null);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
@@ -180,7 +180,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testAllKeys() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSArray<String> keyArray = dict.allKeys();
 		assertEquals(2, keyArray.size());
 		assertTrue(keyArray.contains("key1"));
@@ -190,7 +190,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testAllKeysForObject() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value", "value"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSArray<String> keyArray = dict.allKeysForObject("value");
 		assertEquals(2, keyArray.size());
 		assertTrue(keyArray.contains("key1"));
@@ -200,8 +200,8 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testObjectsForKeys() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
-		NSArray<String> objectArray = dict.objectsForKeys(new NSArray<String>(new String[] { "key1", "key2", "key3" }), "null");
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
+		NSArray<String> objectArray = dict.objectsForKeys(new NSArray<>(new String[] { "key1", "key2", "key3" }), "null");
 		assertEquals(3, objectArray.size());
 		assertTrue(objectArray.contains("value1"));
 		assertTrue(objectArray.contains("value2"));
@@ -211,7 +211,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testAllValues() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSArray<String> keyArray = dict.allValues();
 		assertEquals(2, keyArray.size());
 		assertTrue(keyArray.contains("value1"));
@@ -221,7 +221,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testCount() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		assertEquals(2, dict.count());
 	}
 
@@ -233,7 +233,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testHashMap() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		Map<String, String> hashMap = dict.hashMap();
 		assertEquals(2, hashMap.size());
 		assertEquals("value1", hashMap.get("key1"));
@@ -243,15 +243,15 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testIsEqualToDictionary() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
-		NSDictionary<String, String> dict2 = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
+		NSDictionary<String, String> dict2 = new NSDictionary<>(values, keys);
 		assertTrue(dict.isEqualToDictionary(dict2));
 	}
 
 	public void testImmutableClone() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSDictionary<String, String> clone = dict.immutableClone();
 		
 		assertEquals(NSDictionary.class, clone.getClass());
@@ -261,7 +261,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	public void testMutableClone() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSDictionary<String, String> clone = dict.mutableClone();
 		
 		assertEquals(NSMutableDictionary.class, clone.getClass());
@@ -269,7 +269,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	}
 
 	public void testKeyEnumerator() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");	
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");	
 		Enumeration<String> e = dict.keyEnumerator();
 		
 		assertTrue(e.hasMoreElements());
@@ -282,7 +282,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	}
 	
 	public void testObjectEnumerator() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");	
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");	
 		Enumeration<String> e = dict.objectEnumerator();
 		
 		assertTrue(e.hasMoreElements());
@@ -295,23 +295,23 @@ public class NSDictionaryTest extends ERXTestCase {
 	}
 	
 	public void testObjectForKey() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");
 		assertEquals("value", dict.objectForKey("key"));
 	}
 
 	public void testValueForKey() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");
 		assertEquals("value", dict.valueForKey("key"));
 	}
 
 	public void testValueForKeyPath() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("value", "key");
+		NSDictionary<String, String> dict = new NSDictionary<>("value", "key");
 		assertEquals("value", dict.valueForKeyPath("key"));
 		
-		dict = new NSDictionary<String, String>("value", "key.path");
+		dict = new NSDictionary<>("value", "key.path");
 		assertEquals("value", dict.valueForKeyPath("key.path"));
 		
-		NSDictionary<String, String> subDict = new NSDictionary<String, String>("value", "path");
+		NSDictionary<String, String> subDict = new NSDictionary<>("value", "path");
 		NSDictionary<String, NSDictionary<String,String>> dict2 = new NSDictionary<String, NSDictionary<String,String>>(subDict, "key");
 		assertEquals("value", dict2.valueForKeyPath("key.path"));
 	}
@@ -319,7 +319,7 @@ public class NSDictionaryTest extends ERXTestCase {
   public void testClone() {
 		String[] keys = new String[] {"key1", "key2"};
 		String[] values = new String[] {"value1", "value2"};
-		NSDictionary<String, String> dict = new NSDictionary<String, String>(values, keys);
+		NSDictionary<String, String> dict = new NSDictionary<>(values, keys);
 		NSDictionary<String, String> clone = (NSDictionary<String, String>) dict.clone();
 		
 		assertEquals(NSDictionary.class, clone.getClass());
@@ -336,7 +336,7 @@ public class NSDictionaryTest extends ERXTestCase {
 
 	public void testPutAllMap() {
 		try {
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, String> map = new HashMap<>();
 			map.put("key", "value");
 			NSDictionary.emptyDictionary().putAll(map);
 			fail("PutAll should throw UnsupportedOperationException");
@@ -361,7 +361,7 @@ public class NSDictionaryTest extends ERXTestCase {
 	}
 
 	public void testUnknownKeyException() {
-		NSDictionary<String, String> dict = new NSDictionary<String, String>("John", "name");
+		NSDictionary<String, String> dict = new NSDictionary<>("John", "name");
 		try {
 			throw new NSKeyValueCoding.UnknownKeyException("error", dict, "name");
 		} catch (NSKeyValueCoding.UnknownKeyException e) {

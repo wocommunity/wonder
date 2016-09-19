@@ -82,7 +82,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     	if(object() != null) {
     		String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
     		if(primaryKeyString != null) {
-    			dict = new NSDictionary<String, Object>(primaryKeyString, "__key");
+    			dict = new NSDictionary<>(primaryKeyString, "__key");
     		}
     	}
     	return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");

@@ -70,7 +70,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 
 	public ERXSimpleMulticastSynchronizer(IChangeListener listener) throws IOException {
 		super(listener);
-		_incomingCacheChanges = new NSMutableDictionary<String, RemoteChange>();
+		_incomingCacheChanges = new NSMutableDictionary<>();
 		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
 		if (localBindAddressStr == null) {
 			_localBindAddress = WOApplication.application().hostAddress();

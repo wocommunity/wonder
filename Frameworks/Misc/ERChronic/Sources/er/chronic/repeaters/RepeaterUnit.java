@@ -29,7 +29,7 @@ public abstract class RepeaterUnit extends Repeater<Object> {
 
   public static RepeaterUnit scan(Token token) {
     try {
-      Map<Pattern, RepeaterUnit.UnitName> scanner = new HashMap<Pattern, RepeaterUnit.UnitName>();
+      Map<Pattern, RepeaterUnit.UnitName> scanner = new HashMap<>();
       scanner.put(RepeaterUnit.YEAR_PATTERN, RepeaterUnit.UnitName.YEAR);
       scanner.put(RepeaterUnit.SEASON_PATTERN, RepeaterUnit.UnitName.SEASON);
       scanner.put(RepeaterUnit.MONTH_PATTERN, RepeaterUnit.UnitName.MONTH);

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Stack;
 
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class ERXLongPrimaryKeyFactory {
 	private  Boolean         encodeEntityInPkValue;
 	private  Boolean         encodeHostInPkValue;
 	private  Integer 		hostCode;
-	private  Hashtable      pkCache      = new Hashtable();
+	private  Map<String, Stack> pkCache      = new Hashtable();
 	
 	private  Integer increaseBy;
 	
@@ -375,7 +376,7 @@ public class ERXLongPrimaryKeyFactory {
 	 * @return the Stack with primary key values for the specified entity.
 	 */
 	private Stack cacheStack(String ename) {
-		Stack s = (Stack) pkCache.get(ename);
+		Stack s = pkCache.get(ename);
 		if (s == null) {
 			s = new Stack();
 			pkCache.put(ename, s);

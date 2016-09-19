@@ -15,7 +15,7 @@ public class ERXThrashTest {
   static List<ThrashTest> useScheme(String scheme) throws Throwable {
     // System.out.println("useScheme:: start, scheme = \""+scheme+"\"");
 
-    List<ThrashTest> tests = new LinkedList<ThrashTest>();
+    List<ThrashTest> tests = new LinkedList<>();
 
     String[] parts = scheme.split(":");
     // System.out.println("useScheme:: parts # "+parts.length);
@@ -69,7 +69,7 @@ public class ERXThrashTest {
     //List<ThrashTest> tests = useScheme(System.getProperty("thrash.scheme", "scheme:SimpleFetchTest::0-100,2-100"));
     List<ThrashTest> tests = useScheme(System.getProperty("thrash.scheme", "scheme:SimpleInsertTest::0-100,2-100"));
 
-    List<Thread> threads = new LinkedList<Thread>();
+    List<Thread> threads = new LinkedList<>();
     for (ThrashTest test : tests) {
       Thread thread = new Thread(test);
       thread.start();

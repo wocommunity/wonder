@@ -23,8 +23,8 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			}
 			for (ERXRestRequestNode child : node.children()) {
 				linksNode = new ERXRestRequestNode("links", false);
-				nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
-				nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
+				nodesToAdd = new NSMutableArray<>();
+				nodesToRemove = new NSMutableArray<>();
 				recordsNode.addChild(child);
 				for (ERXRestRequestNode subChild : child.children()) {
 					if (subChild.isArray() ) {
@@ -77,8 +77,8 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		else {  
 			rootNode.addChild(node);
 			rootObjectName = ERXStringUtilities.uncapitalize(node.type());
-			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
-			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
+			nodesToAdd = new NSMutableArray<>();
+			nodesToRemove = new NSMutableArray<>();
 			for (ERXRestRequestNode subChild : node.children()) {
 				if (subChild.isArray() ) {
 					// Return link to the relationship instead of id array if there are over 300 objects or the request will be too large for some browsers

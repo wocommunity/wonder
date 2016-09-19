@@ -17,7 +17,7 @@ import er.extensions.migration.IERXPostMigration;
 public class BugTracker0 extends ERXMigrationDatabase.Migration implements IERXPostMigration {
   @Override
   public NSArray<ERXModelVersion> modelDependencies() {
-    return new NSArray<ERXModelVersion>(new ERXModelVersion[] { new ERXModelVersion("ERTaggable", 0),  new ERXModelVersion("ERAttachment", 1) });
+    return new NSArray<>(new ERXModelVersion[] { new ERXModelVersion("ERTaggable", 0),  new ERXModelVersion("ERAttachment", 1) });
   }
 
   @Override

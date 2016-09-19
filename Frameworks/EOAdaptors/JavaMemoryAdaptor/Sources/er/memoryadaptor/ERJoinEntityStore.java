@@ -76,7 +76,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
   @Override
   public void insertRow(NSDictionary<String, Object> row, EOEntity entity) {
-    NSMutableDictionary<String, Object> newRow = new NSMutableDictionary<String, Object>();
+    NSMutableDictionary<String, Object> newRow = new NSMutableDictionary<>();
     EOEntity target = entity;
     /* XXX: This assumes that EOF isn't going to try to insert into two different tables at once */
     for (Entry<String, Object> entry : row.entrySet()) {
@@ -98,7 +98,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
   }
 
   private class InnerJoinEntityStore extends EREntityStore {
-    NSMutableDictionary<EOAttribute, EOAttribute> attributeMap = new NSMutableDictionary<EOAttribute, EOAttribute>();
+    NSMutableDictionary<EOAttribute, EOAttribute> attributeMap = new NSMutableDictionary<>();
     EREntityStore srcStore;
     EREntityStore destStore;
     EORelationship relationship;
@@ -173,7 +173,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
           throw new NoSuchElementException("No more rows are available");
         }
         _hasNext = null;
-        NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(src);
+        NSMutableDictionary<String, Object> row = new NSMutableDictionary<>(src);
         EOEntity entity = relationship.entity();
         for (EOAttribute attrib : (NSArray<EOAttribute>) entity.attributesToFetch()) {
           EORelationship rel = entity._relationshipForPath(attrib.relationshipPath());

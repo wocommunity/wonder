@@ -79,7 +79,7 @@ public class RepeaterDayName extends Repeater<RepeaterDayName.DayName> {
   }
 
   public static RepeaterDayName scan(Token token) {
-    Map<Pattern, RepeaterDayName.DayName> scanner = new HashMap<Pattern, RepeaterDayName.DayName>();
+    Map<Pattern, RepeaterDayName.DayName> scanner = new HashMap<>();
     scanner.put(RepeaterDayName.MON_PATTERN, RepeaterDayName.DayName.MONDAY);
     scanner.put(RepeaterDayName.TUE_PATTERN, RepeaterDayName.DayName.TUESDAY);
     scanner.put(RepeaterDayName.TUE_PATTERN_1, RepeaterDayName.DayName.TUESDAY);

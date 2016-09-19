@@ -33,13 +33,13 @@ public class TaskInfoList extends WOComponent {
 		if ( _dg == null ) {
 			// Show most recent first.
 			EOSortOrdering pkOrder = new EOSortOrdering("id", EOSortOrdering.CompareDescending);
-			ERXFetchSpecification<TaskInfo> fs = new ERXFetchSpecification<TaskInfo>(TaskInfo.ENTITY_NAME, null, new ERXSortOrderings(pkOrder));
+			ERXFetchSpecification<TaskInfo> fs = new ERXFetchSpecification<>(TaskInfo.ENTITY_NAME, null, new ERXSortOrderings(pkOrder));
 			
 			EOEditingContext ec = ERXEC.newEditingContext();
 			EODatabaseDataSource ds = new EODatabaseDataSource(ec, TaskInfo.ENTITY_NAME);
 			ds.setFetchSpecification(fs);
 			
-			_dg = new ERXDisplayGroup<TaskInfo>();
+			_dg = new ERXDisplayGroup<>();
 			_dg.setDataSource(ds);
 			
 			_dg.setNumberOfObjectsPerBatch(10);

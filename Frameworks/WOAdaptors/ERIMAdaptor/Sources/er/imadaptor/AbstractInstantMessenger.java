@@ -11,7 +11,7 @@ public abstract class AbstractInstantMessenger implements IInstantMessenger {
 	public AbstractInstantMessenger(String screenName, String password) {
 		_screenName = screenName;
 		_password = password;
-		_listeners = new LinkedList<IMessageListener>();
+		_listeners = new LinkedList<>();
 	}
 
 	public String getScreenName() {

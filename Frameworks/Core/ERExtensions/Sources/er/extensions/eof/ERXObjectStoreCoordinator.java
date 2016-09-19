@@ -73,7 +73,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		Thread currentThread = Thread.currentThread();
 		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
 		if(currentTraces == null) {
-			currentTraces = new NSMutableArray<Exception>();
+			currentTraces = new NSMutableArray<>();
 			openLockTraces.setObjectForKey(currentTraces, currentThread);
 		}
 		currentTraces.addObject(openLockTrace);

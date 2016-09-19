@@ -58,7 +58,7 @@ public class ERXFetchResultCache {
 			NSArray result = null;
 			
 			if(gids != null) {
-				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>(gids.count());
+				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<>(gids.count());
 				EODatabase database = dbc.database();
 				for (EOGlobalID gid : gids) {
 					NSDictionary snapshotForGlobalID = database.snapshotForGlobalID(gid);

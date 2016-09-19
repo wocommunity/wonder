@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.components.ERXComponent;
 
 public class FoundationAndjQueryTab extends ERXComponent {
-	private NSMutableArray<Map> selectedPersons = new NSMutableArray<Map>();
+	private NSMutableArray<Map> selectedPersons = new NSMutableArray<>();
 	private NSArray<Map> persons;
 	private Map person;
 	

@@ -301,7 +301,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 */
 	public ERXRouteRequestHandler(NameFormat entityNameFormat) {
 		_entityNameFormat = entityNameFormat;
-		_routes = new NSMutableArray<ERXRoute>();
+		_routes = new NSMutableArray<>();
 		_parseUnknownExtensions = ERXProperties.booleanForKeyWithDefault("ERXRest.parseUnknownExtensions", true);
 	}
 
@@ -363,7 +363,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the routes for the given controller class
 	 */
 	public NSArray<ERXRoute> routesForControllerClass(Class<? extends ERXRouteController> routeController) {
-		NSMutableArray<ERXRoute> routes = new NSMutableArray<ERXRoute>();
+		NSMutableArray<ERXRoute> routes = new NSMutableArray<>();
 		for (ERXRoute route : _routes) {
 			if (route.controller() == routeController) {
 				routes.add(route);
@@ -785,7 +785,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			mutableUserInfo = userInfo.mutableClone();
 		}
 		else {
-			mutableUserInfo = new NSMutableDictionary<String, Object>();
+			mutableUserInfo = new NSMutableDictionary<>();
 		}
 
 		ERXRoute matchingRoute = routeForMethodAndPath(method, path, mutableUserInfo);
@@ -819,7 +819,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	@Override
 	public NSArray getRequestHandlerPathForRequest(WORequest request) {
-		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<Object>();
+		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<>();
 
 		try {
 			String path = request._uriDecomposed().requestHandlerPath();

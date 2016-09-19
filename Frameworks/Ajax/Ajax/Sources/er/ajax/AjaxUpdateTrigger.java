@@ -29,11 +29,11 @@ import er.extensions.components.ERXComponentUtilities;
  * @author mschrag
  */
 public class AjaxUpdateTrigger extends WODynamicElement {
-	private NSDictionary _associations;
+	private NSDictionary<String, WOAssociation> _associations;
 	private WOAssociation _updateContainerIDs;
 	private WOAssociation _resetAfterUpdate;
 
-	public AjaxUpdateTrigger(String name, NSDictionary associations, WOElement template) {
+	public AjaxUpdateTrigger(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(name, associations, template);
 		_associations = associations;
 		_updateContainerIDs = (WOAssociation) associations.objectForKey("updateContainerIDs");

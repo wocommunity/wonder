@@ -55,7 +55,7 @@ public class ERXStringUtilitiesTest extends ERXTestCase {
 	@Before
 	public void setUp() throws Exception {
 		// Set up the levs array
-		NSMutableArray<LevenshteinExample> l = new NSMutableArray<ERXStringUtilitiesTest.LevenshteinExample>();
+		NSMutableArray<LevenshteinExample> l = new NSMutableArray<>();
 
 		// When the values are the same, the distance is zero.
 		l.add(new LevenshteinExample("", "", 0));

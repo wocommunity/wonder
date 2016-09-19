@@ -242,7 +242,7 @@ public class JSONRequestHandler extends WORequestHandler {
 						Map<String, JSONRPCBridge> componentBridges = (Map<String, JSONRPCBridge>) session.objectForKey(bridgesKey);
 						if (componentBridges == null) {
 							int limit = ERXProperties.intForKeyWithDefault((componentInstance == null) ? "er.ajax.json.globalBacktrackCacheSize" : "er.ajax.json.backtrackCacheSize", WOApplication.application().pageCacheSize());
-							componentBridges = new LRUMap<String, JSONRPCBridge>(limit);
+							componentBridges = new LRUMap<>(limit);
 							session.setObjectForKey(componentBridges, bridgesKey);
 						}
 						jsonBridge = componentBridges.get(componentNameAndInstance);

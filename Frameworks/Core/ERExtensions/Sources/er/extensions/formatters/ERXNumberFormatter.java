@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.util.Hashtable;
+import java.util.Map;
 
 import com.webobjects.foundation.NSNumberFormatter;
 
@@ -36,7 +37,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	private static final long serialVersionUID = 1L;
 
 	/** holds a reference to the repository */
-	private static Hashtable _repository = new Hashtable();
+	private static Map<String, NSNumberFormatter> _repository = new Hashtable<>();
 	protected static final String DefaultKey = "ERXNumberFormatter.DefaultKey";
 	
 	static {
@@ -82,7 +83,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		formatter = (NSNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
     	} else {
-    		formatter = (NSNumberFormatter)_repository.get(pattern);
+    		formatter = _repository.get(pattern);
     		if(formatter == null) {
     			formatter = new ERXNumberFormatter(pattern);
     			_repository.put(pattern, formatter);

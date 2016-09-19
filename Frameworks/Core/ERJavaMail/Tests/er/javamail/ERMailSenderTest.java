@@ -16,7 +16,7 @@ import er.extensions.foundation.ERXProperties;
 
 public class ERMailSenderTest extends TestCase {
 	public List<RelayInfo> relays() {
-		List<RelayInfo> relays = new LinkedList<RelayInfo>();
+		List<RelayInfo> relays = new LinkedList<>();
 		relays.add(new RelayInfo(null, "mail.pobox.com", "mschrag@pobox.com", "mschrag@pobox.com"));
 		relays.add(new RelayInfo("other", "mailother.pobox.com", "mschrag@pobox.com", "mschrag@pobox.com"));
 		return relays;
@@ -118,7 +118,7 @@ public class ERMailSenderTest extends TestCase {
 	}
 
 	public static class TestSMTPTransport extends Transport {
-		private static List<SentMessage>	_sentMessages	= new LinkedList<SentMessage>();
+		private static List<SentMessage>	_sentMessages	= new LinkedList<>();
 
 		public TestSMTPTransport(Session session, URLName urlname) {
 			super(session, urlname);
@@ -163,7 +163,7 @@ public class ERMailSenderTest extends TestCase {
 
 		public static List<SentMessage> sentMessages() {
 			synchronized (_sentMessages) {
-				return new LinkedList<SentMessage>(_sentMessages);
+				return new LinkedList<>(_sentMessages);
 			}
 		}
 	}

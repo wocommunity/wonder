@@ -238,7 +238,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		NSMutableSet<Object> s = new NSMutableSet<Object>();
+		NSMutableSet<Object> s = new NSMutableSet<>();
 		boolean updated = false;
 		for (Object o : c) {
 			s.add(o);
@@ -254,7 +254,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		NSMutableSet<Object> s = new NSMutableSet<Object>();
+		NSMutableSet<Object> s = new NSMutableSet<>();
 		boolean updated = false;
 		for (Object o : c) {
 			s.add(o);

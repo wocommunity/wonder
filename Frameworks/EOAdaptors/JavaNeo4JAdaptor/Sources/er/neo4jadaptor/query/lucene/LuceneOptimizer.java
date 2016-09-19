@@ -128,7 +128,7 @@ public class LuceneOptimizer <Type extends PropertyContainer> {
 
 		log.debug("Querying lucene with {}.", q);
 		
-		return new LuceneIndexHits<Type>(hits);
+		return new LuceneIndexHits<>(hits);
 	} 
 	
 	private Map<EORelationship, List<Type>> relationshipsToNodes(EOEntity entity, EOQualifier qualifier) {
@@ -139,9 +139,9 @@ public class LuceneOptimizer <Type extends PropertyContainer> {
 		collectUsedRelationships(relToQualifiers, entity, qualifier);
 		
 		for (EORelationship r : relToQualifiers.keySet()) {
-			NSArray<EOQualifier> qualifiers = new NSArray<EOQualifier>(relToQualifiers.get(r));
+			NSArray<EOQualifier> qualifiers = new NSArray<>(relToQualifiers.get(r));
 			Query luceneQuery;
-			List<Type> nodes = new ArrayList<Type>();
+			List<Type> nodes = new ArrayList<>();
 			
 			luceneQuery = luceneConverter.fullQuery(r.destinationEntity(), new EOAndQualifier(qualifiers));
 			for (Type node : index.query(luceneQuery)) {
@@ -186,7 +186,7 @@ public class LuceneOptimizer <Type extends PropertyContainer> {
 					List<EOKeyValueQualifier> list = result.get(r);
 					
 					if (list == null) {
-						list = new ArrayList<EOKeyValueQualifier>();
+						list = new ArrayList<>();
 						result.put(r, list);
 					}
 					list.add(new EOKeyValueQualifier(segments[1], kvq.selector(), kvq.value()));

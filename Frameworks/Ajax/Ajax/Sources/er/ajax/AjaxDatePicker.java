@@ -85,8 +85,8 @@ public class AjaxDatePicker extends AjaxComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
-    private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
+    private static final NSArray<String> _dayNames = new NSArray<>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
+    private static final NSArray<String> _monthNames = new NSArray<>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
 
     private static String defaultImagesDir;
 	
@@ -176,7 +176,7 @@ public class AjaxDatePicker extends AjaxComponent {
     }
     
     private NSArray<String> localizeStringArray(NSArray<String> strings) {
-    	NSMutableArray<String> localizedStrings = new NSMutableArray<String>(strings.count());
+    	NSMutableArray<String> localizedStrings = new NSMutableArray<>(strings.count());
     	ERXLocalizer l = ERXLocalizer.currentLocalizer();
     	for (String string : strings)
     		localizedStrings.add(l.localizedStringForKeyWithDefault(string));
@@ -213,7 +213,7 @@ public class AjaxDatePicker extends AjaxComponent {
     @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
 		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));

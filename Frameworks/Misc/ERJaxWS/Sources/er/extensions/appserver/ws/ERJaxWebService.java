@@ -330,11 +330,11 @@ public class ERJaxWebService<T>
         }
         else
         {
-            wsdls = new HashMap<String, SDDocument>();
+            wsdls = new HashMap<>();
             // wsdl=1 --> Doc
             // Sort WSDL, Schema documents based on SystemId so that the same
             // document gets wsdl=x mapping
-            Map<String, SDDocument> systemIds = new TreeMap<String, SDDocument>();
+            Map<String, SDDocument> systemIds = new TreeMap<>();
             for(SDDocument sdd : sdef)
             {
                 if(sdd == sdef.getPrimary())
@@ -364,7 +364,7 @@ public class ERJaxWebService<T>
                 }
             }
 
-            revWsdls = new HashMap<SDDocument, String>();    // Doc --> wsdl=1
+            revWsdls = new HashMap<>();    // Doc --> wsdl=1
             for(Entry<String, SDDocument> e : wsdls.entrySet())
             {
                 if(!e.getKey().equals("WSDL"))

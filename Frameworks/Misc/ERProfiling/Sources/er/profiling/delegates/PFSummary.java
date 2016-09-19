@@ -66,7 +66,7 @@ public class PFSummary implements PFProfiler.Delegate {
 
             Set<PFStatsNode> errorNodes = PFStatsChecker.checkForErrors(rootStats);
             if (!errorNodes.isEmpty()) {
-                Set<String> errorTypes = new HashSet<String>();
+                Set<String> errorTypes = new HashSet<>();
                 for (PFStatsNode errorNode : errorNodes) {
                     errorTypes.add(errorNode.name());
                 }

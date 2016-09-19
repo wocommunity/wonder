@@ -62,7 +62,7 @@ public class ERTaggableEntity0 extends ERXMigrationDatabase.Migration {
 
   @Override
   public NSArray<ERXModelVersion> modelDependencies() {
-    return new NSArray<ERXModelVersion>(new ERXModelVersion("ERTaggable", 0));
+    return new NSArray<>(new ERXModelVersion("ERTaggable", 0));
   }
 
   @Override
@@ -100,7 +100,7 @@ public class ERTaggableEntity0 extends ERXMigrationDatabase.Migration {
     EOEntity joinEntity = ERTaggableEntity.registerTaggable(model.entityNamed(entityName), tagsRelationshipName, model.modelGroup().entityNamed(tagEntityName), null);
     EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
     EOSchemaGeneration generation = databaseContext.adaptorContext().adaptor().synchronizationFactory();
-    NSArray<EOSQLExpression> createTableStatements = generation.createTableStatementsForEntityGroup(new NSArray<EOEntity>(joinEntity));
+    NSArray<EOSQLExpression> createTableStatements = generation.createTableStatementsForEntityGroup(new NSArray<>(joinEntity));
     ERXJDBCUtilities.executeUpdateScript(channel, ERXMigrationDatabase._stringsForExpressions(createTableStatements));
   }
 }

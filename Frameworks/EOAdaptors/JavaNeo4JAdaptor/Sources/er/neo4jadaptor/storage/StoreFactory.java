@@ -58,7 +58,7 @@ public class StoreFactory {
 		if (store == null) {
 			int countPrimaryKeys = entity.primaryKeyAttributes().count();
 			Store<Ersatz, Neo4JErsatz> neoStore;
-			LuceneStore<Type> luceneStore = new LuceneStore<Type>(db, entity);
+			LuceneStore<Type> luceneStore = new LuceneStore<>(db, entity);
 			
 			if (countPrimaryKeys == 1) {
 				neoStore = new NodeStore(db, entity, spaceManager, tempNodePool);
@@ -67,7 +67,7 @@ public class StoreFactory {
 			} else {
 				throw new IllegalArgumentException();
 			}
-			store = new CompositeStore<Type>(neoStore, luceneStore);
+			store = new CompositeStore<>(neoStore, luceneStore);
 			
 			map.put(label, store);
 		}

@@ -20,7 +20,7 @@ public class ToggleExample extends WOComponent {
 		super(context);
 		_text = "This text should not change!";
 		_names = ExampleDataFactory.values("Name ", 4);
-		_selectedNames = new NSMutableSet<String>();
+		_selectedNames = new NSMutableSet<>();
 	}
 
 	public void setNameSelected(boolean selected) {

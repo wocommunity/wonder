@@ -100,7 +100,7 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 
 	@Override
 	protected NSArray<String> additionalJavascriptFiles() {
-		return new NSArray<String>("js/dndupload.js");
+		return new NSArray<>("js/dndupload.js");
 	}
 	
 	@Override

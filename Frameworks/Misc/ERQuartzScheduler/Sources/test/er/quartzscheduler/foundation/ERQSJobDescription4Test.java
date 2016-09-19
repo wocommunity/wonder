@@ -80,8 +80,8 @@ public class ERQSJobDescription4Test implements ERQSJobDescription
 	public NSArray<String> recipients(final boolean executionSucceeded) 
 	{
 		if (executionSucceeded)
-			return new NSArray<String>(EMAIL_WHEN_SUCCEDED);
-		return new NSArray<String>(EMAIL_WHEN_FAILED);
+			return new NSArray<>(EMAIL_WHEN_SUCCEDED);
+		return new NSArray<>(EMAIL_WHEN_FAILED);
 	}
 
 	public void setFirstExecutionDate(final NSTimestamp firstExecutionDate) 

@@ -26,11 +26,11 @@ public class LuceneErsatz <Type extends PropertyContainer> extends Ersatz {
 		// store object entity name
 		index.add(obj, LuceneStore.TYPE_PROPERTY_NAME, entity.name());
 		
-		return new LuceneErsatz<Type>(entity, obj, index, false);
+		return new LuceneErsatz<>(entity, obj, index, false);
 	}
 	
 	public static <Type extends PropertyContainer> LuceneErsatz<Type> createForUpdate(EOEntity entity, Type obj, Index<Type> index) {
-		return new LuceneErsatz<Type>(entity, obj, index, true);
+		return new LuceneErsatz<>(entity, obj, index, true);
 	}
 	
 	private LuceneErsatz(EOEntity entity, Type obj, Index<Type> index, boolean removeBeforeAdding) {

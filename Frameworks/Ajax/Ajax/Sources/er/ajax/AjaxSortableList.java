@@ -131,7 +131,7 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public NSDictionary<String, String> createAjaxOptions() {
-    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("tag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("treeTag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("only", AjaxOption.STRING_ARRAY));
@@ -200,7 +200,7 @@ public class AjaxSortableList extends AjaxComponent {
     }
     else if (listItemIDArrayObj instanceof String) {
       String listItemIDStr = (String) listItemIDArrayObj;
-      listItemIDArray = new NSArray<String>(listItemIDStr);
+      listItemIDArray = new NSArray<>(listItemIDStr);
     }
     else {
       throw new IllegalArgumentException("Unknown list item ID array " + listItemIDArrayObj);
@@ -213,7 +213,7 @@ public class AjaxSortableList extends AjaxComponent {
       reorderedList = (NSMutableArray<Object>) list;
     }
     else {
-      reorderedList = new NSMutableArray<Object>();
+      reorderedList = new NSMutableArray<>();
     }
 
     int startIndex = 0;

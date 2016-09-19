@@ -58,25 +58,25 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @see AjaxValue
  */
 public class AjaxOptions extends WODynamicElement {
-  private NSMutableDictionary _bindings;
+  private NSMutableDictionary<String, WOAssociation> _associations;
   private WOElement _children;
 
-  public AjaxOptions(String name, NSDictionary bindings, WOElement children) {
+  public AjaxOptions(String name, NSDictionary<String, WOAssociation> bindings, WOElement children) {
     super(name, bindings, children);
-    _bindings = bindings.mutableClone();
+    _associations = bindings.mutableClone();
     _children = children;
   }
 
   @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     response.appendContentCharacter('{');
-    NSMutableDictionary options = _bindings;
-    WOAssociation optionsBinding = (WOAssociation) _bindings.objectForKey("options");
+    NSMutableDictionary options = _associations;
+    WOAssociation optionsBinding = _associations.objectForKey("options");
     if (optionsBinding != null) {
       NSDictionary passedInOptions = (NSDictionary) optionsBinding.valueInComponent(context.component());
       if (passedInOptions != null) {
         options = passedInOptions.mutableClone();
-        options.addEntriesFromDictionary(_bindings);
+        options.addEntriesFromDictionary(_associations);
       }
     }
     AjaxOptions._appendToResponse(options, response, context);

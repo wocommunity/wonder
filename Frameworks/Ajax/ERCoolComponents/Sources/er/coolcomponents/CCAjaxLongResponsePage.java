@@ -325,10 +325,10 @@ public class CCAjaxLongResponsePage extends WOComponent {
 
 			Object task = task();
 			if (task instanceof Callable) {
-				_future = new ERXFutureTask<Object>((Callable<Object>)task);
+				_future = new ERXFutureTask<>((Callable<Object>)task);
 			} else {
 				// Runnable interface only
-				_future = new ERXFutureTask<Object>((Runnable)task, null);
+				_future = new ERXFutureTask<>((Runnable)task, null);
 			}
 
 			// This is where we hand off the task to our executor service to run

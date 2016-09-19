@@ -449,7 +449,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
-	private static Map<EOEditingContext, String> _contexts = new WeakHashMap<EOEditingContext, String>();
+	private static Map<EOEditingContext, String> _contexts = new WeakHashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public static Map<EOEditingContext, String> contexts() {
@@ -461,7 +461,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		else {
 			contexts = (Map<EOEditingContext, String>) session.objectForKey("_jsonContexts");
 			if (contexts == null) {
-				contexts = new HashMap<EOEditingContext, String>();
+				contexts = new HashMap<>();
 				session.setObjectForKey(contexts, "_jsonContexts");
 			}
 		}

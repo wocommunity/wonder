@@ -29,7 +29,7 @@ public class Year {
   }
   
   public NSArray<Year> previousYears(int number) {
-  	NSMutableArray<Year> years = new NSMutableArray<Year>();
+  	NSMutableArray<Year> years = new NSMutableArray<>();
   	for(int i = number; i >= 0; i--) {
   		years.add(new Year(_year - i));
   	}

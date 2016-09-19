@@ -29,7 +29,7 @@ public class ERXRestFormat {
 	public static final String BINARY_PLIST_KEY = "bplist";
 	public static final String EMBER_KEY = "ember";
 
-	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
+	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<>();
 	
 	static {
 		// MS: The whole naming thing is stupid, I know ... we need to separate mime type from extensions from the name 

@@ -89,7 +89,7 @@ public class WOEventSetupPage extends WOEventPage {
 
         map = EOEvent.eventTypeDescriptions(currentClass);
 
-        descs = new NSMutableArray<String>();
+        descs = new NSMutableArray<>();
         descs.setArray(map.allValues());
         descs.removeObject(map.objectForKey(EOEvent.EventGroupName));
         try {

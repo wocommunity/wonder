@@ -73,7 +73,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
 	private static final long serialVersionUID = 1L;
 
     /** holds all subclass related Logger's */
-    private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+    private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<>();
      
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCustomObject.shouldTrimSpaces", false);
