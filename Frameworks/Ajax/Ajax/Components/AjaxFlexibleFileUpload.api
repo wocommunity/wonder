@@ -35,5 +35,6 @@
     <binding name="mimeType"/>
     <binding name="clearedFunction"/>
         <binding name="clearedAction"/>
+    <binding name="accept"/>
     </wo>
 </wodefinitions>

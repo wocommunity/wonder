@@ -220,6 +220,8 @@
         this._settings = {
             // Location of the server-side upload script
             action: 'upload.php',
+            // accept attribute e.g. '.docx,.pdf'
+            accept: '',
             // File upload name
             name: 'userfile',
             // Select & upload multiple files at once FF3.6+, Chrome 4+
@@ -343,6 +345,7 @@
             var input = document.createElement("input");
             input.setAttribute('type', 'file');
             input.setAttribute('name', this._settings.name);
+            input.setAttribute('accept', this._settings.accept);
             if(this._settings.multiple) input.setAttribute('multiple', 'multiple');
             
             addStyles(input, {

@@ -24,6 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * this component to be used in or out of a form. The component is fully styleable (including the upload button) and
  * supports upload progress and canceling.
  * 
+ * @binding accept the attribute specifies the types of files that the server accepts (that can be submitted through a file upload) 
  * @binding cancelLabel the label for for the cancel button (defaults to "Cancel")
  * @binding startingText the text to display when the progress is starting (defaults "Upload Starting...");
  * @binding selectFileLabel the label for the select file button (defaults to "Select File...")
@@ -219,6 +220,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	NSMutableArray<String> _options = new NSMutableArray<>("action:'" + uploadUrl() + "'");
     	
     	// add options
+    	if (canGetValueForBinding("accept")) {
+    		_options.addObject("accept:'"+ valueForBinding("accept") +"'");
+    	}
     	_options.addObject("data:{" + ajaxUploadData() + "}");
     	_options.addObject("name:'" + uploadName() + "'");
     	_options.add("iframeId:'"+ iframeId() +"'");
