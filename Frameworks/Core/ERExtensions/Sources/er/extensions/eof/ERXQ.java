@@ -1164,7 +1164,7 @@ public class ERXQ {
 	 * values are added to the EOQualifier list as EOKeyValueQualifier objects. Values can be an EOQualifier, which just gets included
 	 * in the list of EOQualifiers. When String-Object pairs or ERXKey-Object pairs appear in the list, they are turned into an
 	 * EOKeyValueQualifier and added to the list.
-         * <p>
+	 * <p>
 	 * An IllegalArgumentException is thrown if objects are not of the right type or if a bad sequence is used, such as a sequence of
 	 * String-Object-Object or String-String-String.
 	 * <p>
@@ -1172,6 +1172,7 @@ public class ERXQ {
 	 * <p>
 	 * @param values a list of objects that can be used to create an EOQualifier. An NSDictionary or EOQualifier can stand alone in the
 	 *               list. A String or ERXKey must be followed by an Object.
+	 * @return an EOQualifier
 	 */
 	public static EOQualifier matchingValues(Object... values) {
 

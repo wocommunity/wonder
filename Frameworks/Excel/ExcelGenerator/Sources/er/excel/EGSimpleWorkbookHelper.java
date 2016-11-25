@@ -21,20 +21,17 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
  * The <code>stringAtLocation</code> and <code>numberAtLocation</code> methods are also
  * guaranteed to not return null. This allows one to use code like the following, without
  * fear of an exception.
- * </p>
- * <blockquote><pre>
+ * <pre><code>
  * EGSimpleWorkbookHelper helper = new EGSimpleWorkbookHelper();
  * helper.currentSheet().setNumberAtLocation(24, 2, 2);
  * helper.currentSheet().setStringAtLocation("Hello", 3, 4);
  * String aNumber = helper.currentSheet().numberAtLocation(1, 1).toString();
- * </pre></blockquote>
- * </p><p>
+ * </code></pre>
  * The POI classes use numbers for rows and, implicitly, columns. This class also allows
  * the use of the string-based column names one always sees on spreadsheets. So the methods
  * that take a row number and a column number and return a call can also take a column name,
  * such as "A", "B", ..., "Z", "AA", "AB", and so on. Using a column name not wholly
  * composed of capital letters will generate a IllegalArgumentException.
- * </p>
  */
 public class EGSimpleWorkbookHelper {
 

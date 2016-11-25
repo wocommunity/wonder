@@ -24,7 +24,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * values that can be grouped and how to group them
  * into a set of ranges, if required.
  */
- 
 public class DRSubMasterCriteria {
     private static final Logger log = LoggerFactory.getLogger(DRSubMasterCriteria.class);
 
@@ -112,7 +111,7 @@ public class DRSubMasterCriteria {
         return possVals;
     }
 
-    /** Contructor that uses a {@link NSDictionary} which defines the properties. */
+    /** Constructor that uses a {@link NSDictionary} which defines the properties. */
     public DRSubMasterCriteria(NSDictionary smcdict, NSArray apossibleValues) {
         this(
              (String)smcdict.objectForKey("key"),
@@ -250,7 +249,7 @@ public class DRSubMasterCriteria {
      * When {@link #useTimeFormat()} is set, then date values
      * will be converted to a string before a comparison by using this format.
      * The string can be any valid {@link NSTimestampFormatter} string,
-     * which means that you can also use {@link java.util.DateFormatter}
+     * which means that you can also use {@link java.text.DateFormat}
      * patterns.
      */
     public String format() {

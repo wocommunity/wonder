@@ -397,7 +397,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the manual upload button
 	 * 
-	 * @return JS function bound to the manul upload button
+	 * @return JS function bound to the manual upload button
 	 */
 	public String manualSubmitUploadFunction() {
 		return String.format("AUP.submit('%s');", id());
@@ -406,7 +406,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the clear button
 	 * 
-	 * @return JS function bound ot the clear button
+	 * @return JS function bound to the clear button
 	 */
 	public String clearUploadFunction() {
 		return String.format("AUP.clear('%s');", id());
@@ -554,7 +554,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Returns a closeHTTPSession DA action URL passed to the iframe to cancel the client-side upload
 	 * 
-	 * @return url sent to the iframe to cancel
+	 * @return URL sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
 		NSDictionary<String, Object> queryParams = new NSDictionary<>(Boolean.FALSE, WOApplication.application().sessionIdKey());

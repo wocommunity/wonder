@@ -188,6 +188,7 @@
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="https://docs.oracle.com/javase/8/docs/api/"/>
             <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
+            <link href="https://commons.apache.org/proper/commons-lang/javadocs/api-release/"/>
             <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
             <link href="http://joda-time.sourceforge.net/api-release/" />

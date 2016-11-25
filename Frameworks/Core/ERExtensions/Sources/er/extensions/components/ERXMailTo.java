@@ -35,7 +35,7 @@ public class ERXMailTo extends WOComponent {
 
     /**
      * Generates the href link from email binding of the form:
-     * "<a href=mailto:foo@bar.com>".
+     * "&lt;a href=mailto:foo@bar.com&gt;".
      * @return generated href
      */
     public String href() {

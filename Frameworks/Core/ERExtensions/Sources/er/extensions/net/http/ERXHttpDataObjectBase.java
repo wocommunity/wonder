@@ -17,12 +17,12 @@ import org.apache.http.message.BasicNameValuePair;
 import er.extensions.foundation.ERXProperties;
 
 /**
- * Access Sample :
+ * Access Sample:
  * 
  * <pre><code>
  * ERXML.Doc doc = ERXML.doc(...); // Create the Post XML Doc
  *
- * ERXHttpPostData httpData = new ERXHttpPostData(<<hostname>>);
+ * ERXHttpPostData httpData = new ERXHttpPostData(&lt;&lt;hostname&gt;&gt;);
  * httpData.setScheme(ERXHttpPostData.SCHEME_HTTP);
  * httpData.setPath(&lt;&lt;Path&gt;&gt;);
  * httpData.setContentType("text/xml");

@@ -1511,7 +1511,7 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
@@ -1566,7 +1566,7 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 		}
 
-		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
@@ -2484,7 +2484,7 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
@@ -2539,7 +2539,7 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 		}
 
-		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
 			for (int j = 0; j < abyte0.length; j++) {
