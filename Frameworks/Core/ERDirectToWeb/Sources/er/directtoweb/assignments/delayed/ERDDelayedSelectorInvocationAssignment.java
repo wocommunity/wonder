@@ -148,7 +148,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                 }
 
                 if ( _log.isDebugEnabled() ) {
-                    final StringBuilder sb = new StringBuilder('(');
+                    final StringBuilder sb = new StringBuilder("(");
 
                     if ( arguments != null ) {
                         for ( int i = 0; i < arguments.length; i++ ) {

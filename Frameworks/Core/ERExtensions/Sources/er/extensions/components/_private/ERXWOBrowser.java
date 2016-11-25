@@ -83,7 +83,7 @@ public class ERXWOBrowser extends WOInput {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder('<').append(getClass().getSimpleName()).append(" list: ").append(_list)
+		return new StringBuilder().append('<').append(getClass().getSimpleName()).append(" list: ").append(_list)
 				.append(" item: ").append(_item).append(" string: ").append(_displayString)
 				.append(" selections: ").append(_selections).append(" selectedValues: ")
 				.append(_selectedValues).append(" multiple: ").append(_multiple)
