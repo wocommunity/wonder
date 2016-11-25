@@ -1,4 +1,5 @@
 package er.modern.movies.test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -6,7 +7,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
