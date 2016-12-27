@@ -56,8 +56,8 @@ public class SeleniumStartTesting extends WODirectAction {
 		
 		StringBuilder queryStr = new StringBuilder();
 //		queryStr.append("baseUrl=" + baseUrl);
-		queryStr.append("test=" + context.directActionURLForActionNamed("SeleniumTestSuite" + (suite != null ? "/" + suite :  ""), null));
-		queryStr.append("&resultsUrl=" + context.directActionURLForActionNamed( "SeleniumTestResults", null));
+		queryStr.append("test=" + context.directActionURLForActionNamed("SeleniumTestSuite" + (suite != null ? "/" + suite :  ""), null, context.request().isSecure(), false));
+		queryStr.append("&resultsUrl=" + context.directActionURLForActionNamed( "SeleniumTestResults", null, context.request().isSecure(), false));
 		//TODO: add filename check here
 		String resultsFile = (String)context().request().formValueForKey(RESULTS_FILE_KEY);
 		if (resultsFile != null)
