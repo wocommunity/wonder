@@ -87,5 +87,12 @@
 	    <bound name="ignoreActionResponse"/>
     </validation>
 	<binding name="accesskey"/>
+    <binding name="id"/>
+        <binding name="title"/>
+        <binding name="style"/>
+        <binding name="class"/>
+        <binding name="onLoading"/>
+        <binding name="string"/>
+        <binding name="effectDuration"/>
     </wo>
 </wodefinitions>
