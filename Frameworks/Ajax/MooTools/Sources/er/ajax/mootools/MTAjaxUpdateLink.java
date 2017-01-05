@@ -110,7 +110,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		WOComponent component = context.component();
 		NSMutableDictionary options = createAjaxOptions(component);
 
-		StringBuffer onClickBuffer = new StringBuffer();
+		StringBuilder onClickBuffer = new StringBuilder();
 
 		String onClick = (String) valueForBinding("onClick", component);
 		String onClickBefore = (String) valueForBinding("onClickBefore", component);

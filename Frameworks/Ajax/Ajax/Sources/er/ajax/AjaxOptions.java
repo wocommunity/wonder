@@ -1,5 +1,6 @@
 package er.ajax;
 
+import java.io.IOException;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOAssociation;
@@ -94,7 +95,7 @@ public class AjaxOptions extends WODynamicElement {
    * @param context WOContext to provide WOComponent to resolve binding values in
    */
   public static void _appendToResponse(NSDictionary options, WOResponse response, WOContext context) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     AjaxOptions._appendToBuffer(options, sb, context);
     response.appendContentString(sb.toString());
   }
@@ -103,10 +104,10 @@ public class AjaxOptions extends WODynamicElement {
    * Adds JSON formatted key-value pairs from options to end of response content.  Does not adds the surrounding "{" and "}" signifying a dictionary / object. 
    *
    * @param options dictionary of key-value pairs, intended to have come from AjaxOption
-   * @param stringBuffer StringBuffer to add JSON formatted key-value pairs to
+   * @param appendable appendable to add JSON formatted key-value pairs to
    * @param context WOContext to provide WOComponent to resolve binding values in
    */
-  public static void _appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
+  public static void _appendToBuffer(NSDictionary options, Appendable appendable, WOContext context) {
     if (options != null) {
       WOComponent component = context.component();
       boolean hasPreviousOptions = false;
@@ -121,13 +122,17 @@ public class AjaxOptions extends WODynamicElement {
             bindingValue = association.valueInComponent(component);
           }
           if (bindingValue != null) {
-            if (hasPreviousOptions) {
-              stringBuffer.append(", ");
+            try {
+              if (hasPreviousOptions) {
+                appendable.append(", ");
+              }
+              appendable.append(bindingName);
+              appendable.append(':');
+              appendable.append(bindingValue.toString());
+              hasPreviousOptions = true;
+            } catch (IOException e) {
+              // ignore
             }
-            stringBuffer.append(bindingName);
-            stringBuffer.append(':');
-            stringBuffer.append(bindingValue.toString());
-            hasPreviousOptions = true;
           }
         }
       }
@@ -138,13 +143,17 @@ public class AjaxOptions extends WODynamicElement {
    * Adds JSON formatted key-value pairs from options to end of response content.  Adds the surrounding "{" and "}" signifying a dictionary / object. 
    *
    * @param options dictionary of key-value pairs, intended to have come from AjaxOption
-   * @param stringBuffer StringBuffer to add JSON formatted key-value pairs to
+   * @param appendable appendable to add JSON formatted key-value pairs to
    * @param context WOContext to provide WOComponent to resolve binding values in
    */
-  public static void appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
-    stringBuffer.append('{');
-    AjaxOptions._appendToBuffer(options, stringBuffer, context);
-    stringBuffer.append('}');
+  public static void appendToBuffer(NSDictionary options, Appendable appendable, WOContext context) {
+    try {
+      appendable.append('{');
+      AjaxOptions._appendToBuffer(options, appendable, context);
+      appendable.append('}');
+    } catch (IOException e) {
+      // ignore
+    }
   }
 
   /**

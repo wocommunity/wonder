@@ -180,7 +180,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 		if ( !isDisabled ) {
 			boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
 			if (isLocal) {
-				StringBuffer str = new StringBuffer();
+				StringBuilder str = new StringBuilder();
 				boolean isLocalSharedList = hasBinding("isLocalSharedList") && ((Boolean) valueForBinding("isLocalSharedList")).booleanValue();
 				String listJS = null;
 				if (isLocalSharedList) {

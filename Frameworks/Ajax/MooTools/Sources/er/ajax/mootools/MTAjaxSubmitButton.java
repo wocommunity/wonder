@@ -147,7 +147,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			formReference = "document." + formName;
 		}
 
-		StringBuffer onClickBuffer = new StringBuffer();
+		StringBuilder onClickBuffer = new StringBuilder();
 
 		// JavaScript function to be fired before submit is sent i.e. confirm();
 		String onClickBefore = (String)valueForBinding("onClickBefore", component);

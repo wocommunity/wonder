@@ -71,7 +71,7 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
           formReference = "document." + formName;
         }
 
-        StringBuffer onClickBuffer = new StringBuffer();
+        StringBuilder onClickBuffer = new StringBuilder();
         String onClickBefore = (String)valueForBinding("onClickBefore", component);
         if (onClickBefore != null) {
             onClickBuffer.append("if (");

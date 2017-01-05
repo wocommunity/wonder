@@ -264,7 +264,7 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript to load CSS and show calendar display
      */
     public String showCalendarScript() {
-    	StringBuffer script = new StringBuffer(200);
+    	StringBuilder script = new StringBuilder(200);
     	// Load the CSS like this to avoid odd race conditions when this is used in an AjaxModalDialog: at times
     	// the CSS does not appear to be available and the calendar appears in the background
     	script.append("AOD.loadCSS('");

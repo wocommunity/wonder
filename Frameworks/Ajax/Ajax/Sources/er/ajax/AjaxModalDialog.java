@@ -238,7 +238,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public static void update(WOContext context, String title) {
 		AjaxModalDialog currentDialog = currentDialog(context);
-		StringBuffer js = new StringBuffer(300);
+		StringBuilder js = new StringBuilder(300);
 		js.append("Modalbox.show('");
 		js.append(currentDialog.openDialogURL(context));
 		js.append("', ");

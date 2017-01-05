@@ -126,7 +126,7 @@ public class AjaxDroppable extends AjaxComponent {
 		  AjaxSubmitButton.fillInAjaxOptions(this, this, _elementID, options);
 	  }
 	 
-	  StringBuffer onDropBuffer = new StringBuffer();
+	  StringBuilder onDropBuffer = new StringBuilder();
 	  onDropBuffer.append("ADP.droppedFunc(" + contextID + "," + elementID + "," + droppableElementID + "," + draggableKeyName + "," + updateContainerID + "," + actionUrl + "," + form + "," + onbeforedrop + "," + ondrop + ",");
 	  AjaxOptions.appendToBuffer(options, onDropBuffer, context());
 	  onDropBuffer.append(')');

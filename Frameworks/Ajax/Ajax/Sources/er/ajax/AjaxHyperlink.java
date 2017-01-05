@@ -40,7 +40,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 	}
 
 	public String onClick(WOContext context) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		String onClickBefore = (String) valueForBinding("onClickBefore", context.component());
 		if (onClickBefore != null) {
