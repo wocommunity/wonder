@@ -62,10 +62,9 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 
     
 	
-	@SuppressWarnings({"rawtypes","unchecked"})
 	public NSMutableDictionary createAjaxOptions(WOComponent component) {
 	
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("observeDelay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onCancel", AjaxOption.FUNCTION));
@@ -80,8 +79,7 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerTarget", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerOptions", AjaxOption.DICTIONARY));
 
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-		return options;
+		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 	}
 

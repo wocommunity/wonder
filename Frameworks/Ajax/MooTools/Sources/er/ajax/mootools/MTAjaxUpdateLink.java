@@ -59,10 +59,9 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected NSMutableDictionary<String, Object> createAjaxOptions(WOComponent component) {
+	protected NSMutableDictionary<String, String> createAjaxOptions(WOComponent component) {
 		
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("async", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("onRequest", AjaxOption.FUNCTION));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.FUNCTION));
@@ -74,7 +73,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerTarget", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerOptions", AjaxOption.DICTIONARY));
 		
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 		options.setObjectForKey("'get'", "method");
 		if (options.objectForKey("async") == null) {

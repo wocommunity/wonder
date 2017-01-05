@@ -11,7 +11,6 @@ import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxRoundEffect extends AjaxDynamicElement {
   private WOAssociation _elementNameAssociation;
@@ -19,7 +18,7 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
   private WOAssociation _generateTagsAssociation;
   private WOAssociation _idAssociation;
 
-  public AjaxRoundEffect(String name, NSDictionary associations, WOElement children) {
+  public AjaxRoundEffect(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
     super(name, associations, children);
     _elementNameAssociation = (WOAssociation) associations.objectForKey("elementName");
     if (_elementNameAssociation == null) {
@@ -48,15 +47,14 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
   }
 
   public NSDictionary createAjaxOptions(WOComponent component) {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("corners", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("color", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("bgColor", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("blend", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("border", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("compact", AjaxOption.BOOLEAN));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-    return options;
+    return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
   }
 
   @Override

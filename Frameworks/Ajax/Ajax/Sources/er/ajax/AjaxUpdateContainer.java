@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -35,7 +36,7 @@ import er.extensions.foundation.ERXValueUtilities;
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
 
-	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
+	public AjaxUpdateContainer(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 

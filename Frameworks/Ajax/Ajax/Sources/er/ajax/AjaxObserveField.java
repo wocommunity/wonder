@@ -90,8 +90,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 
-		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-		return options;
+		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 	}
 
 	@Override

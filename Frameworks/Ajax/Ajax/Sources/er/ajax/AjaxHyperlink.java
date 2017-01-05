@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -35,7 +36,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class AjaxHyperlink extends AjaxDynamicElement {
 
-	public AjaxHyperlink(String name, NSDictionary associations, WOElement children) {
+	public AjaxHyperlink(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -68,14 +69,14 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 	}
 
 	protected NSDictionary createAjaxOptions(WOComponent component) {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		// PROTOTYPE OPTIONS
 		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		options.setObjectForKey("'get'", "method");
 		return options;
 	}

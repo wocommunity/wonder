@@ -75,7 +75,7 @@ public class AjaxDroppable extends AjaxComponent {
 
   public NSDictionary createAjaxOptions() {
 	  // PROTOTYPE OPTIONS
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("accept", AjaxOption.STRING_ARRAY));
     ajaxOptionsArray.addObject(new AjaxOption("containment", AjaxOption.STRING_ARRAY));
     ajaxOptionsArray.addObject(new AjaxOption("hoverclass", AjaxOption.STRING));
@@ -83,7 +83,7 @@ public class AjaxDroppable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("greedy", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onHover", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	if (options.objectForKey("evalScripts") == null) {
 		options.setObjectForKey("true", "evalScripts");
 	}

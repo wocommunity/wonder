@@ -84,10 +84,9 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		return (String) valueForBinding("name", context.elementID(), component);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public NSMutableDictionary createAjaxOptions(WOComponent component) {
 
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("onCancel", AjaxOption.FUNCTION));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.FUNCTION));
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.FUNCTION));
@@ -103,7 +102,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		String name = nameInContext(component.context(), component);
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		MTAjaxSubmitButton.fillInAjaxOptions(this, component, name, options);
-		return options;		
+		return options;
 
 	}
 

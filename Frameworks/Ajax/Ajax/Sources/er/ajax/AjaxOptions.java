@@ -40,7 +40,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Example (and fictitious) usage code:
  * <pre><code>
  * public NSDictionary createAjaxOptions(WOComponent component) {
- *     NSMutableArray&lt;AjaxOption&gt; ajaxOptionsArray = new NSMutableArray&lt;AjaxOption&gt;();
+ *     NSMutableArray&lt;AjaxOption&gt; ajaxOptionsArray = new NSMutableArray&lt;&gt;();
  *     ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
  *     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
  *     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
