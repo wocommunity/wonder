@@ -12,6 +12,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
+@Deprecated
 public class AjaxRoundEffect extends AjaxDynamicElement {
   private WOAssociation _elementNameAssociation;
   private WOAssociation _classAssociation;
