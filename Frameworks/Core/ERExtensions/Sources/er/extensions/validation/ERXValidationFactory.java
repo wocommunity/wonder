@@ -532,6 +532,9 @@ public class ERXValidationFactory {
         // 2nd try everything minus the type.
         if (template == null)
             template = templateForKeyPath(entityName + "." + property, targetLanguage);
+        // 2.5th try entity plus type
+        if (template == null)
+            template = templateForKeyPath(entityName + "." + type, targetLanguage);
         // 3rd try property plus type
         if (template == null)
             template = templateForKeyPath(property + "." + type, targetLanguage);
