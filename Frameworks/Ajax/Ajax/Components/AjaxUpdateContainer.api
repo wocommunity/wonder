@@ -28,5 +28,7 @@
 	<binding name="id"/>
         <binding name="asynchronous"/>
     <binding defaults="Boolean" name="stopped"/>
+    <binding name="class"/>
+    <binding name="style"/>
     </wo>
 </wodefinitions>
