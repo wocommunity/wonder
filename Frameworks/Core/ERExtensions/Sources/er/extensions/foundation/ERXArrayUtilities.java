@@ -2048,7 +2048,7 @@ public class ERXArrayUtilities {
     
     public static String[] toStringArray(NSArray<?> a) {
         String[] b = new String[a.count()];
-        for (int i = a.count(); i-- > 0; b[i] = a.objectAtIndex(i).toString()) {
+        for (int i = a.count(); i-- > 0; b[i - 1] = a.objectAtIndex(i - 1).toString()) {
           // do nothing
         }
         return b;
