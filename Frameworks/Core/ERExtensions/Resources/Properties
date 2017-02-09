@@ -254,6 +254,14 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## This is only used when the JDBCAdaptor is used in the first place
 # er.extensions.ERXJDBCAdaptor.switchReadWrite=false
 #
+
+## In servlet context, when not using JNDI to obtain the database channel, you will 
+## get annoying error messages like
+## javax.naming.NameNotFoundException: Name "comp/env/jdbc" not found in context
+## Disable the JNDI configuration to suppress these messages.
+# extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration=false
+#
+
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################
