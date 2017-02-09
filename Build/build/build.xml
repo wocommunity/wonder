@@ -23,18 +23,18 @@
     <property name="framework.erjars.commons.io" value="commons-io-2.5.jar" />
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
     <property name="framework.erjars.commons.lang3" value="commons-lang3-3.5.jar" />
-    <property name="framework.erjars.fluent-hc" value="fluent-hc-4.5.2.jar" />
-    <property name="framework.erjars.httpclient" value="httpclient-4.5.2.jar" />
-    <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.5.2.jar" />
-    <property name="framework.erjars.httpcore" value="httpcore-4.4.5.jar" />
-    <property name="framework.erjars.httpmime" value="httpmime-4.5.2.jar" />
+    <property name="framework.erjars.fluent-hc" value="fluent-hc-4.5.3.jar" />
+    <property name="framework.erjars.httpclient" value="httpclient-4.5.3.jar" />
+    <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.5.3.jar" />
+    <property name="framework.erjars.httpcore" value="httpcore-4.4.6.jar" />
+    <property name="framework.erjars.httpmime" value="httpmime-4.5.3.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
-    <property name="framework.erjars.joda" value="joda-time-2.9.6.jar" />
+    <property name="framework.erjars.joda" value="joda-time-2.9.7.jar" />
     <property name="framework.erjars.junit" value="junit-4.12.jar" />
     <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
     <property name="framework.erjars.ognl" value="ognl-3.1.12.jar" />
-    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.21.jar" />
-    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.21.jar" />
+    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.22.jar" />
+    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.22.jar" />
 
     <target name="ERJars.all">
         <fail message="Please check versions of jar files included in ERJars project. See properties in Build/build//build.xml.">
