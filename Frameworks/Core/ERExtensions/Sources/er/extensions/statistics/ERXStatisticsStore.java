@@ -133,17 +133,27 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 				
 				Thread currentThread = Thread.currentThread();
-				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-				if (traces == null) {
-					traces = _errorTraces.remove(currentThread);
-					names = _errorTracesNames.remove(currentThread);
-				}
-				if (traces == null) {
-					traces = _warnTraces.remove(currentThread);
-					names = _warnTracesNames.remove(currentThread);
-				}
 				
+				// get the most sever traces for the current thread
+				Map<Thread, StackTraceElement[]> traces = _fatalTraces.get(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.get(currentThread);
+				if (traces == null) {
+					traces = _errorTraces.get(currentThread);
+					names = _errorTracesNames.get(currentThread);
+				}
+				if (traces == null) {
+					traces = _warnTraces.get(currentThread);
+					names = _warnTracesNames.get(currentThread);
+				}
+
+				// remove the current thread for _all_ traces
+				_fatalTraces.remove(currentThread);
+				_fatalTracesNames.remove(currentThread);
+				_errorTraces.remove(currentThread);
+				_errorTracesNames.remove(currentThread);
+				_warnTraces.remove(currentThread);
+				_warnTracesNames.remove(currentThread);
+
 				synchronized (_requestThreads) {
 					_requestThreads.remove(Thread.currentThread());
 				}
