@@ -59,12 +59,12 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegate(Object delegate) {
-        	if (hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is already included");
-        	}
-        	
-            _NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-            delegates.add(delegateObject);
+    	if (hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is already included");
+    	}
+
+    	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+    	delegates.add(delegateObject);
     }
     
 
@@ -74,13 +74,12 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegateAtStart(Object delegate) {
-        	if (hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is already included");
-        	}
-        	
-        	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-	        delegates.add(0, delegateObject);
-    	
+    	if (hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is already included");
+    	}
+
+    	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+    	delegates.add(0, delegateObject);
     }
     
     
@@ -90,19 +89,18 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to remove as one of the delegates called
      */
     public void removeDelegate(Object delegate) {
-        	if ( ! hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is not present");
-        	}
-        	
-	        for (int i = 0; i < delegates.size(); i++) {
-	        	_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
-	        	if (delegateObject.delegate().equals(delegate))
-	        	{
-	        		delegates.remove(i);
-	        		break;
-	        	}
-	        }
-      
+    	if ( ! hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is not present");
+    	}
+
+    	for (int i = 0; i < delegates.size(); i++) {
+    		_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
+    		if (delegateObject.delegate().equals(delegate))
+    		{
+    			delegates.remove(i);
+    			break;
+    		}
+    	}
     }
     
 
@@ -113,15 +111,15 @@ public abstract class ERXMulticastingDelegate {
      * @return <code>true</code> if delegate is represented in delegates()
      */
     public boolean hasDelegate(Object delegate) {
-	        for (int i = 0; i < delegates.size(); i++) {
-	        	_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
-	        	if (delegateObject.delegate().equals(delegate))
-	        	{
-	        		return true;
-	        	}
-	        }
-	        return false;
+    	for (int i = 0; i < delegates.size(); i++) {
+    		_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
+    		if (delegateObject.delegate().equals(delegate))
+    		{
+    			return true;
+    		}
+    	}
     	
+    	return false;
     }
     
     
@@ -133,7 +131,7 @@ public abstract class ERXMulticastingDelegate {
      * @return the delegates in the order they will be called
      */
     public NSArray delegates() {
-    		return new NSArray(delegates);
+    	return new NSArray(delegates);
     }
     
 
@@ -144,15 +142,15 @@ public abstract class ERXMulticastingDelegate {
      * @param orderedDelegates array of <code>com.webobjects.foundation._NSDelegate</code> in the order in which delegates should be called
      */
     public void setDelegateOrder(NSArray orderedDelegates) {
-	        for (int i = 0; i < orderedDelegates.count(); i++) {
-	            if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
-	                throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
-	                        " must be instanceof _NSDelegate");
-	            }
-	        }
-	        delegates.clear();
-	        delegates.addAll(orderedDelegates);
-   
+    	for (int i = 0; i < orderedDelegates.count(); i++) {
+    		if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
+    			throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
+    					" must be instanceof _NSDelegate");
+    		}
+    	}
+    	delegates.clear();
+    	delegates.addAll(orderedDelegates);
+
     }
 
 
