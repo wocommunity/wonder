@@ -134,7 +134,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				
 				Thread currentThread = Thread.currentThread();
 				
-				// get the most sever traces for the current thread
+				// get the most severe trace for the current thread
 				Map<Thread, StackTraceElement[]> traces = _fatalTraces.get(currentThread);
 				Map<Thread, String> names = _fatalTracesNames.get(currentThread);
 				if (traces == null) {
