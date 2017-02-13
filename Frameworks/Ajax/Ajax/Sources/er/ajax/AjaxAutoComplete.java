@@ -323,7 +323,7 @@ public class AjaxAutoComplete extends AjaxComponent {
         	if(hasItem) {
                 setValueForBinding(value, "item");
          	}
-            response.appendContentString(displayStringForValue(value));
+            response.appendContentHTMLString(displayStringForValue(value));
         }
         response.appendContentString("</li>");
     }
