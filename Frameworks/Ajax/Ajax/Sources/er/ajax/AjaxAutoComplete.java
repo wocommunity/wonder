@@ -233,9 +233,11 @@ public class AjaxAutoComplete extends AjaxComponent {
 				setValueForBinding(ds, "item");
 			}
 			Object displayValue = valueForBinding("displayString", valueForBinding("item", ds));
-			str.append(displayValue.toString());
-			// TODO: We should escape the javascript string delimiter (") to keep the javascript interpreter happy.
-			//str.append(displayValue.toString().replaceAll("\"", "\\\\\\\\\"")); // doesn't work
+			String escapedValue = displayValue.toString();
+			if (escapedValue.contains("\"")) {
+				escapedValue = escapedValue.replaceAll("(?<!\\\\)\"", "\\\\\\\"");
+			}
+			str.append(escapedValue);
 			str.append(cnt);
 			str.append("\"");
 		}
