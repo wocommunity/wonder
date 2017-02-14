@@ -61,6 +61,9 @@ import er.extensions.foundation.ERXValueUtilities;
  *          <cite>displayString</cite> binding) of the object.
  * @binding displayString optional custom string representation of the current
  *          element.
+ * @binding escapeHTML pass <code>false</code> to prevent escaping of HTML in the
+ *          displayString value, defaults to <code>true</code>. This is applied
+ *          only when isLocal is false.
  * @binding isLocal boolean indicating if you want the list to be completely
  *          client-side. Binding a true value, would mean that the list will
  *          be filtered on the client.
@@ -323,7 +326,12 @@ public class AjaxAutoComplete extends AjaxComponent {
         	if(hasItem) {
                 setValueForBinding(value, "item");
          	}
-            response.appendContentHTMLString(displayStringForValue(value));
+            boolean escapeHTML = booleanValueForBinding("escapeHTML", true);
+            if (escapeHTML) {
+                response.appendContentHTMLString(displayStringForValue(value));
+            } else {
+                response.appendContentString(displayStringForValue(value));
+            }
         }
         response.appendContentString("</li>");
     }
