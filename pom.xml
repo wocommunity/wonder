@@ -395,12 +395,12 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.21</version>
+                <version>1.7.23</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.21</version>
+                <version>1.7.23</version>
             </dependency>
             <dependency>
                 <groupId>ognl</groupId>
@@ -552,7 +552,7 @@
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
-                <version>4.5.2</version>
+                <version>4.5.3</version>
             </dependency>
             <dependency>
                 <groupId>org.htmlparser</groupId>
@@ -715,22 +715,22 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.9.6</version>
+                <version>2.9.7</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.2</version>
+                <version>4.5.3</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.4.5</version>
+                <version>4.4.6</version>
             </dependency>
             <dependency>
                 <groupId>com.drewnoakes</groupId>
                 <artifactId>metadata-extractor</artifactId>
-                <version>2.9.1</version>
+                <version>2.10.1</version>
             </dependency>
             <dependency>
                 <groupId>org.neo4j</groupId>
