@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright ï¿½ 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -48,6 +48,11 @@ and limitations under the License.
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#if	defined(AIX)
+#include <arpa/inet.h> /* inet_addr() */
+#include <sys/param.h>
+#endif
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 255

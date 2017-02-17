@@ -2175,7 +2175,7 @@ public class ERXArrayUtilities {
         int size = array.size();
         String[] b = new String[size];
         for (int i = size; i > 0; i--) {
-            b[i] = array.get(i).toString();
+            b[i - 1] = array.get(i - 1).toString();
         }
         return b;
     }
