@@ -12,7 +12,7 @@
 			
 			table {
 				width: 100%;
-				border: 1px solid rgb(200,200,200);
+				border: 1px solid rgb(230,230,230);
 				border-collapse: collapse;
 			}
 
@@ -24,16 +24,16 @@
 			}
 
 			th {
-				background-color: rgb(230,230,230);
+				background-color: rgb(240,240,240);
 			}
 
 			
 			table tr:nth-child(odd) {
-				background-color: rgb(250,250,250);
+				background-color: rgb(252,252,252);
 			}
 			
 			table tr:nth-child(even) {
-				background-color: rgb(240,240,240);
+				background-color: rgb(245,245,245);
 			}
 
 			.filename-container {
@@ -53,8 +53,8 @@
 			.src-container {
 				font-family: monospace;
 				font-size: small;
+				border: 1px solid rgb(230,230,230);
 				color: rgb(50,50,50);
-				border: 1px solid rgb(200,200,200);
 				padding: 0px;
 				margin: 10px 0px;
 				overflow: hidden;
@@ -72,21 +72,21 @@
 			}
 			
 			.odd-line {
-				background-color: rgb( 250,250,250);
+				background-color: rgb( 252,252,252);
 			}
 			
 			.even-line {
-				background-color: rgb( 240,240,240);
+				background-color: rgb( 245,245,245);
 			}
 
 			.error-line {
-				background-color: rgb(255,180,180);
+				background-color: rgb(255,150,160);
 			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<h3><wo:str value="$exception.class.name" /><wo:if condition="$exception.cause"><span style="font-size: smaller; color: gray">(<wo:str value="$exception.cause" />)</span></wo:if></h3>
+			<h3><wo:str value="$exceptionParser.exception" /><wo:if condition="$exception.cause"> <span style="font-size: smaller; color: gray">(<wo:str value="$exception.cause" />)</span></wo:if></h3>
 			<p><wo:str value="$exceptionParser.message" /></p>
 			<wo:if condition="$showSource">
 	<div class="filename-container"><strong><wo:str value="$firstLineOfTrace.fileName" /></strong></div>
@@ -94,7 +94,7 @@
 	<wo:repetition list="$lines" item="$currentSourceLine" index="$currentSourceLineIndex"><wo:container elementName="span" class="$sourceLineClass"><span><wo:str value="$currentActualLineNumber" /></span> <wo:str value="$currentSourceLine" /></wo:container></wo:repetition>
 	</div>
 			</wo:if>
-			<table class="table table-condensed table-bordered table-striped">
+			<table>
 				<tr>
 					<th>File</th>
 					<th>Line #</th>
