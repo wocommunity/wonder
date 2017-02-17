@@ -6,8 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import java.util.List;
+
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.woextensions.WOTable;
 
 import er.extensions.eof.ERXConstant;
@@ -133,10 +134,10 @@ public class ERXTable extends WOTable {
      */
     @Override
     public void pushItem() {
-        NSArray aList = list();
+        List aList = list();
         //int index;
         if (goingVertically()) {
-            int c=aList.count() % maxColumns();
+            int c=aList.size() % maxColumns();
             index = currentRow+rowCount()*currentCol;
             if (c!=0 && currentCol>c) index-=(currentCol-c);
         } else {
@@ -144,7 +145,7 @@ public class ERXTable extends WOTable {
         }
         // WO 5.1 guarding against OOB index
         // WORepetition count=x seems to go to x+1 in 5.1, even though it is not displayed
-        Object item = index < aList.count() ? aList.objectAtIndex(index) :  null;
+        Object item = index < aList.size() ? aList.get(index) :  null;
         setValueForBinding(item, "item");
         if (canSetValueForBinding("row"))
             setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
