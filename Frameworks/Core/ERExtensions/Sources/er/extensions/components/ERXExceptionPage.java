@@ -59,10 +59,29 @@ public class ERXExceptionPage extends ERXComponent {
 	 */
 	public WOParsedErrorLine currentErrorLine;
 
+	/**
+	 * A path modifier to put between bundle path and modules so that source code locations outside the
+	 * regular path can be accommodated.
+	 */
+	private String pathModifier;
+	
 	public ERXExceptionPage( WOContext aContext ) {
 		super( aContext );
+		pathModifier = "";
 	}
 
+	/**
+	 * Specifying a path fragment here will insert that between bundle path and source module path. Example
+	 * modifier: "/../.." to go two directories up. May be needed for non-standard workspace setups.
+	 * 
+	 * @param modifier modifier to insert, should start with a "/"
+	 * 
+	 */
+	public void setPathModifier( String modifier ) {
+		pathModifier = modifier;
+	}
+	
+	
 	/**
 	 * @return First line of the stack trace, essentially the causing line.
 	 */
@@ -97,10 +116,10 @@ public class ERXExceptionPage extends ERXComponent {
 		String path = null;
 
 		if( NSBundle.mainBundle() instanceof NSMavenProjectBundle ) {
-			path = bundle.bundlePath() + "/src/main/java/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
+			path = bundle.bundlePath() + pathModifier + "/src/main/java/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
 		}
 		else {
-			path = bundle.bundlePath() + "/Sources/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
+			path = bundle.bundlePath() + pathModifier + "/Sources/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
 		}
 
 		return Paths.get( path );
