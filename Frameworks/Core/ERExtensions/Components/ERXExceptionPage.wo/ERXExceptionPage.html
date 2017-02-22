@@ -86,7 +86,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<h3><wo:str value="$exceptionParser.exception" /><wo:if condition="$exception.cause"> <span style="font-size: smaller; color: gray">(<wo:str value="$exception.cause" />)</span></wo:if></h3>
+			<h3><wo:str value="$exceptionParser.typeException" /><wo:if condition="$exception.cause"> <span style="font-size: smaller; color: gray">(<wo:str value="$exception.cause" />)</span></wo:if></h3>
 			<p><wo:str value="$exceptionParser.message" /></p>
 			<wo:if condition="$showSource">
 	<div class="filename-container"><strong><wo:str value="$firstLineOfTrace.fileName" /></strong></div>
