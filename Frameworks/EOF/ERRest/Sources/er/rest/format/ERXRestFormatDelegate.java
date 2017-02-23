@@ -68,7 +68,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 			else {
 				String type = ERXRestNameRegistry.registry().internalNameForExternalName(externalType);
 				if (_underscoreNames) {
-					type = ERXStringUtilities.camelCaseToUnderscore(type, false);
+					type = ERXStringUtilities.underscoreToCamelCase(type, true);
 				}
 				node.setType(type);
 			}
