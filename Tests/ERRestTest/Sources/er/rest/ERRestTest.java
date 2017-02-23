@@ -496,7 +496,7 @@ public class ERRestTest extends TestCase {
         editingContext.lock();
         try {
             NSArray<Person> ps = new NSArray<>(Person.createPerson(editingContext, "Mike"));
-            ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
+            ERXRestFormat format = new ERXRestFormat("xml", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
             assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<people type=\"array\">\n" + "  <person type=\"person\">\n" + "    <age nil=\"true\"/>\n" + "    <name>Mike</name>\n" + "    <salary nil=\"true\"/>\n" + "  </person>\n" + "</people>\n", format.toString(EOClassDescription.classDescriptionForEntityName(Person.ENTITY_NAME), ps, ERXKeyFilter.filterWithAttributes(), new ERXRestContext(editingContext)));
 
             Person p = Person.createPerson(editingContext, "Mike");
