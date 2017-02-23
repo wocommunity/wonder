@@ -627,12 +627,25 @@ public class ERRestTest extends TestCase {
         }
     }
 
-    public void testSimpleEO() {
+    public void testSimpleEOAndJSON() {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
             Company c = Company.createCompany(editingContext, "Company");
             assertEquals("{\"type\":\"Company\",\"name\":\"Company\",\"revenue\":null,\"employees\":[]}\n", ERXRestFormat.json().toString(c));
+        }
+        finally {
+            editingContext.unlock();
+            editingContext.dispose();
+        }
+    }
+
+    public void testSimpleEOAndXML() {
+        EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
+        editingContext.lock();
+        try {
+            Company c = Company.createCompany(editingContext, "Company");
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<Company type=\"Company\">\n" + "  <name>Company</name>\n" + "  <revenue nil=\"true\"/>\n" + "  <employees type=\"Person\">\n" + "  </employees>\n" + "</Company>\n", ERXRestFormat.xml().toString(c));
         }
         finally {
             editingContext.unlock();
