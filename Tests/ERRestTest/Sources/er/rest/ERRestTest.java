@@ -35,6 +35,7 @@ import er.rest.model.Car;
 import er.rest.model.Company;
 import er.rest.model.Manufacturer;
 import er.rest.model.Person;
+import er.rest.utils.ERXEONoIdRestDelegate;
 
 public class ERRestTest extends TestCase {
     private EOObjectStoreCoordinator _osc;
@@ -46,6 +47,9 @@ public class ERRestTest extends TestCase {
         System.setProperty("NSProjectBundleEnabled", "true");
         System.setProperty("NSPropertiesInitializationWarning", "false");
         NSBundle.mainBundle();
+
+        // register special that excludes the id attribute for EOs
+        IERXRestDelegate.Factory.setDefaultDelegate(new ERXEONoIdRestDelegate());
 
         EOObjectStoreCoordinator osc = new EOObjectStoreCoordinator();
         // EOEditingContext editingContext = ERXEC.newEditingContext(osc);
