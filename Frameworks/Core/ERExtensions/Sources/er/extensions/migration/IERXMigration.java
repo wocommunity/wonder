@@ -6,11 +6,11 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 /**
- * IERXMigration is the interface that you must implemnt to provide a migration from one version to another.
- * 
- * You should not saveChanges() on the editingcontext passed into the methods of this interface (unless it cannot be
+ * IERXMigration is the interface that you must implement to provide a migration from one version to another.
+ * <p>
+ * You should not saveChanges() on the editing context passed into the methods of this interface (unless it cannot be
  * avoided), because there is a transaction above you.
- * 
+ * <p>
  * You also must be very careful of the EO operations you perform with this editing context. You may be in the process
  * of upgrading across multiple model versions, so it is possible that you model you are using may be out of sync with
  * the underlying database at the time this particular migration is being performed in the sequence. For instance, you

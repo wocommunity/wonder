@@ -230,11 +230,10 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		String id = (String) valueForBinding("id", context.component());
 		return id;
 	}
-    
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
 	public NSDictionary createAjaxOptions(WOComponent component) {
 
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("async", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("onRequest", AjaxOption.FUNCTION));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.FUNCTION));
@@ -246,7 +245,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerTarget", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("spinnerOptions", AjaxOption.DICTIONARY));
 		
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		options.setObjectForKey("'" + _url + "'", "url");
 		options.setObjectForKey("'" + _updateContainerID + "'", "update");
 		options.setObjectForKey("'get'", "method");

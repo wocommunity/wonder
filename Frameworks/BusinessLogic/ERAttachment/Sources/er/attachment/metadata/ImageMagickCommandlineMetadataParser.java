@@ -43,7 +43,7 @@ public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
   }
 
   private byte[] extractMetadata(File importFile, String type) throws IOException, ERMetadataParserException {
-    List<String> imageMagickCommandList = new LinkedList<String>();
+    List<String> imageMagickCommandList = new LinkedList<>();
     imageMagickCommandList.add(_imageMagickBinary.getAbsolutePath());
 
     imageMagickCommandList.add(importFile.getAbsolutePath());
@@ -68,14 +68,9 @@ public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
 
     byte[] metadataBytes;
     if (metadataFile.exists() && metadataFile.length() > 0) {
-      FileInputStream fis = new FileInputStream(metadataFile);
-      try {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try (FileInputStream fis = new FileInputStream(metadataFile); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
         StreamUtils.copy(fis, baos, ImageMagickCommandlineMetadataParser.BUFFER_SIZE);
         metadataBytes = baos.toByteArray();
-      }
-      finally {
-        fis.close();
       }
       metadataFile.delete();
     }

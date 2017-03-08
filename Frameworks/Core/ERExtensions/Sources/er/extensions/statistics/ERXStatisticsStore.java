@@ -101,7 +101,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		long _maximumRequestFatalTime;
 		long _lastLog;
 
-		Map<Thread, Long> _requestThreads = new WeakHashMap<Thread, Long>();
+		Map<Thread, Long> _requestThreads = new WeakHashMap<>();
 		Map<Thread, Map<Thread, StackTraceElement[]>> _warnTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _errorTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _fatalTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
@@ -133,17 +133,27 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 				
 				Thread currentThread = Thread.currentThread();
-				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-				if (traces == null) {
-					traces = _errorTraces.remove(currentThread);
-					names = _errorTracesNames.remove(currentThread);
-				}
-				if (traces == null) {
-					traces = _warnTraces.remove(currentThread);
-					names = _warnTracesNames.remove(currentThread);
-				}
 				
+				// get the most severe trace for the current thread
+				Map<Thread, StackTraceElement[]> traces = _fatalTraces.get(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.get(currentThread);
+				if (traces == null) {
+					traces = _errorTraces.get(currentThread);
+					names = _errorTracesNames.get(currentThread);
+				}
+				if (traces == null) {
+					traces = _warnTraces.get(currentThread);
+					names = _warnTracesNames.get(currentThread);
+				}
+
+				// remove the current thread for _all_ traces
+				_fatalTraces.remove(currentThread);
+				_fatalTracesNames.remove(currentThread);
+				_errorTraces.remove(currentThread);
+				_errorTracesNames.remove(currentThread);
+				_warnTraces.remove(currentThread);
+				_warnTracesNames.remove(currentThread);
+
 				synchronized (_requestThreads) {
 					_requestThreads.remove(Thread.currentThread());
 				}
@@ -276,7 +286,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 		
 		private void checkThreads() {
-			Map<Thread, Long> requestThreads = new HashMap<Thread, Long>();
+			Map<Thread, Long> requestThreads = new HashMap<>();
 			synchronized (_requestThreads) {
 	            requestThreads.putAll(_requestThreads);
 			}
@@ -329,7 +339,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private Map<Thread, String> getCurrentThreadNames(Set<Thread> keySet) {
-			Map<Thread, String> names = new HashMap<Thread, String>();
+			Map<Thread, String> names = new HashMap<>();
 			for (Thread thread : keySet) {
 				names.put(thread, thread.getName());
 			}
@@ -351,7 +361,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		return stats;
 	}
 
-	protected NSMutableArray<WOSession> sessions = new NSMutableArray<WOSession>();
+	protected NSMutableArray<WOSession> sessions = new NSMutableArray<>();
 
 	@Override
 	protected void _applicationCreatedSession(WOSession wosession) {
@@ -437,7 +447,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 	@Override
 	public HashMap getAverageSessionMemory() {
-		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<String, Long>();
+		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<>();
 		NSDictionary<String, Long> startMemory = null;
 		NSMutableDictionary<String, Long> currentMemory = memoryUsage();
 		try {

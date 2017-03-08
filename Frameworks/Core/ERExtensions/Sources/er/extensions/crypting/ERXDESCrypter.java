@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -69,9 +70,9 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 						KeyGenerator gen = KeyGenerator.getInstance("DES");
 						gen.init(new SecureRandom());
 						_secretDESKey = gen.generateKey();
-						ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(_secretKeyPath)));
-						out.writeObject(_secretDESKey);
-						out.close();
+						try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(_secretKeyPath)))) {
+							out.writeObject(_secretDESKey);
+						}
 						is = new FileInputStream(new File(_secretKeyPath));
 					}
 					catch (java.security.NoSuchAlgorithmException ex) {
@@ -89,10 +90,8 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 			if (is != null) {
 				log.debug("About to try to recover key");
 
-				try {
-					ObjectInputStream in = new ObjectInputStream(is);
+				try (ObjectInputStream in = new ObjectInputStream(is)) {
 					_secretDESKey = (Key) in.readObject();
-					in.close();
 				}
 				catch (Exception e) {
 					throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -100,6 +99,12 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 			}
 			else {
 				throw new RuntimeException("No secret key found. You should add a 'SecretKey.ser' file into your app's resources or use setSecretKeyPath(String aPath)");
+			}
+			try {
+				is.close();
+			}
+			catch (IOException e) {
+				// ignore
 			}
 		}
 		return _secretDESKey;

@@ -31,7 +31,7 @@ public class HandlerTest extends TestCase {
   
   public void testHandlerClass1() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(Repeater.class));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
@@ -45,7 +45,7 @@ public class HandlerTest extends TestCase {
   
   public void testHandlerClass2() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(Repeater.class), new TagPattern(Repeater.class, true));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
@@ -64,7 +64,7 @@ public class HandlerTest extends TestCase {
 
   public void testHandlerClass3() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(Repeater.class), new HandlerTypePattern(Handler.HandlerType.TIME, true));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
@@ -78,7 +78,7 @@ public class HandlerTest extends TestCase {
 
   public void testHandlerClass4() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(RepeaterMonthName.class), new TagPattern(ScalarDay.class), new HandlerTypePattern(Handler.HandlerType.TIME, true));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("may"));
     tokens.get(0).tag(new RepeaterMonthName(RepeaterMonthName.MonthName.MAY));
     
@@ -92,7 +92,7 @@ public class HandlerTest extends TestCase {
 
   public void testHandlerClass5() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(Repeater.class), new HandlerTypePattern(Handler.HandlerType.TIME, true));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("friday"));
     tokens.get(0).tag(new RepeaterDayName(RepeaterDayName.DayName.FRIDAY));
     
@@ -111,7 +111,7 @@ public class HandlerTest extends TestCase {
 
   public void testHandlerClass6() {
     Handler handler = new Handler(new DummyHandler(), new TagPattern(Scalar.class), new TagPattern(Repeater.class), new TagPattern(Pointer.class));
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     tokens.add(new Token("3"));
     tokens.add(new Token("years"));
     tokens.add(new Token("past"));

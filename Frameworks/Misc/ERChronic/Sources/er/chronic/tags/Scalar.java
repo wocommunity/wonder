@@ -12,7 +12,7 @@ import er.chronic.utils.Token;
 public class Scalar extends Tag<Number> {
   public static final Pattern SCALAR_PATTERN = Pattern.compile("^\\d*$");
   public static final Pattern FRACTIONAL_SCALAR_PATTERN = Pattern.compile("^\\d\\.\\d*$");
-  public static Set<String> TIMES = new HashSet<String>();
+  public static Set<String> TIMES = new HashSet<>();
 
   static {
     Scalar.TIMES.add("am");

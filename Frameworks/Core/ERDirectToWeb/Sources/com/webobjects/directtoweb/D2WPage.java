@@ -106,7 +106,7 @@ public class D2WPage extends D2WComponent {
 	public NSMutableDictionary<String, Object> extraBindings() {
 		if (_extraBindings != null) {
 			NSMutableDictionary<String, Object> oldBindings = _extraBindings;
-			_extraBindings = new NSMutableDictionary<String, Object>(16);
+			_extraBindings = new NSMutableDictionary<>(16);
 
 			for (Enumeration<String> e = oldBindings.keyEnumerator(); e.hasMoreElements();) {
 				String key = e.nextElement();

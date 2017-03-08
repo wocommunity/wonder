@@ -54,7 +54,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   }
 
   public NSDictionary createAjaxOptions(WOComponent component) {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("okButton", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("okText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("cancelLink", AjaxOption.BOOLEAN));
@@ -79,8 +79,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("valueWhenEmpty", AjaxOption.STRING));
     //ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-    return options;
+    return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
   }
 
   @Override

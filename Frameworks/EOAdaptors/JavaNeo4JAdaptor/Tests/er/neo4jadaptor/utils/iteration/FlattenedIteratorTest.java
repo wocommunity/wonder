@@ -10,7 +10,7 @@ public class FlattenedIteratorTest extends TestCase {
 	public void test1_discoveredNPETest() {
 		// it used to fail when internal iterator was not present, due to NullPointerException
 		List<Iterator<Object>> iterators = new ArrayList<Iterator<Object>>();
-		FlattenedIterator<Object> it = new FlattenedIterator<Object>(iterators.iterator());
+		FlattenedIterator<Object> it = new FlattenedIterator<>(iterators.iterator());
 		
 		while (it.hasNext()) {
 			it.next();

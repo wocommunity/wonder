@@ -24,14 +24,14 @@ public class ERXTaskObjectStoreCoordinatorPool {
 		
 		static ERXRoundRobinCollection<EOObjectStoreCoordinator> initializePool() {
 			int maxCoordinators = ERXProperties.intForKeyWithDefault("er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators", 1);
-			NSMutableArray<EOObjectStoreCoordinator> coordinators = new NSMutableArray<EOObjectStoreCoordinator>(maxCoordinators);
+			NSMutableArray<EOObjectStoreCoordinator> coordinators = new NSMutableArray<>(maxCoordinators);
 			for (int i = 0; i < maxCoordinators; i++) {
 				int poolItemID = i + 1;
 				ERXObjectStoreCoordinator osc = new ERXObjectStoreCoordinator(true);
 				osc.setName("TaskPool-" + poolItemID + "/" + maxCoordinators);
 				coordinators.add(osc);
 			}
-			return new ERXRoundRobinCollection<EOObjectStoreCoordinator>(coordinators.immutableClone());
+			return new ERXRoundRobinCollection<>(coordinators.immutableClone());
 		}
 	}
 	

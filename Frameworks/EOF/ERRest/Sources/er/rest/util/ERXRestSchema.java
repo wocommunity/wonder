@@ -26,7 +26,7 @@ public class ERXRestSchema {
 		NSMutableDictionary<String, Object> schema = new NSMutableDictionary<>();
 		schema.setObjectForKey(entityName, "name");
 		
-		NSDictionary<String, Object> properties = ERXRestSchema.schemaPropertiesForEntityNamed(entityName, filter, new HashSet<String>());
+		NSDictionary<String, Object> properties = ERXRestSchema.schemaPropertiesForEntityNamed(entityName, filter, new HashSet<>());
 		schema.setObjectForKey(properties, "properties");
 		return schema;
 	}

@@ -34,7 +34,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * <li>set the er.extensions.ERXAdaptorChannelDelegate.enabled=false in your
  * properties, which will prevent creation of the channel here</li>
  * <li>create the channel yourself and set the delegate to
- * {@link new ERXAdaptorChannelDelegate()}</li>
+ * <code>new ERXAdaptorChannelDelegate()</code></li>
  * </ul>
  * otherwise you just need to set
  * er.extensions.ERXAdaptorChannelDelegate.enabled=true
@@ -71,7 +71,7 @@ public class ERXAdaptorChannelDelegate {
 		if (collectLastStatements()) {
 			// this collects the last 10 statements executed for dumping them  
 			if (_lastStatements == null) {
-				_lastStatements = new LinkedList<String>();
+				_lastStatements = new LinkedList<>();
 			}
 			_lastStatements.addLast(ERXEOAccessUtilities.createLogString(channel, expression, System.currentTimeMillis() - _lastMilliseconds));
 			
@@ -134,7 +134,7 @@ public class ERXAdaptorChannelDelegate {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
-		_lastStatements = new LinkedList<String>();
+		_lastStatements = new LinkedList<>();
 		log.info("************************************************");
 	}
 	

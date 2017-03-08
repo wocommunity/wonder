@@ -24,6 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * this component to be used in or out of a form. The component is fully styleable (including the upload button) and
  * supports upload progress and canceling.
  * 
+ * @binding accept the attribute specifies the types of files that the server accepts (that can be submitted through a file upload) 
  * @binding cancelLabel the label for for the cancel button (defaults to "Cancel")
  * @binding startingText the text to display when the progress is starting (defaults "Upload Starting...");
  * @binding selectFileLabel the label for the select file button (defaults to "Select File...")
@@ -193,7 +194,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 */
 	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>(WOApplication.application().sessionIdKey()
+		NSMutableArray<String> _data = new NSMutableArray<>(WOApplication.application().sessionIdKey()
 				+ ":'" + session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
@@ -216,9 +217,12 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return array of AjaxUpload options
 	 */
     protected NSArray<String> _ajaxUploadOptions() {
-    	NSMutableArray<String> _options = new NSMutableArray<String>("action:'" + uploadUrl() + "'");
+    	NSMutableArray<String> _options = new NSMutableArray<>("action:'" + uploadUrl() + "'");
     	
     	// add options
+    	if (canGetValueForBinding("accept")) {
+    		_options.addObject("accept:'"+ valueForBinding("accept") +"'");
+    	}
     	_options.addObject("data:{" + ajaxUploadData() + "}");
     	_options.addObject("name:'" + uploadName() + "'");
     	_options.add("iframeId:'"+ iframeId() +"'");
@@ -249,7 +253,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return array of label/text strings
      */
     protected NSArray<String> _ajaxUploadLabels() {
-    	NSMutableArray<String> _labels = new NSMutableArray<String>();
+    	NSMutableArray<String> _labels = new NSMutableArray<>();
     	_labels.addObject(String.format("upload_canceling:'%s'", cancelingText()));
     	_labels.addObject(String.format("upload_starting:'%s'", startingText()));
     	_labels.addObject(String.format("upload_failed:'%s'", localizedStringForBinding(Keys.failedText, "Upload Failed")));
@@ -270,7 +274,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return array of AFU options
      */
     protected NSArray<String> _options() {
-    	NSMutableArray<String> _options = new NSMutableArray<String>(String.format("refreshtime:%s", refreshTime()));
+    	NSMutableArray<String> _options = new NSMutableArray<>(String.format("refreshtime:%s", refreshTime()));
     	_options.addObject("autosubmit:" + autoSubmit());
     	_options.addObject("allowcancel:" + valueForBinding(Keys.allowCancel));
       _options.add("clearUploadProgressOnSuccess:" + clearUploadProgressOnSuccess());
@@ -332,7 +336,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return a dictionary containing the current state of the upload.
 	 */
 	public NSDictionary<String, ?> uploadState() {
-		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<>();
 		AjaxUploadProgress progress = uploadProgress();
 		if (progress != null) {
 			stateObj.takeValueForKey(progressAmount(), "progress");
@@ -397,7 +401,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the manual upload button
 	 * 
-	 * @return JS function bound to the manul upload button
+	 * @return JS function bound to the manual upload button
 	 */
 	public String manualSubmitUploadFunction() {
 		return String.format("AUP.submit('%s');", id());
@@ -406,7 +410,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the clear button
 	 * 
-	 * @return JS function bound ot the clear button
+	 * @return JS function bound to the clear button
 	 */
 	public String clearUploadFunction() {
 		return String.format("AUP.clear('%s');", id());
@@ -554,10 +558,10 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Returns a closeHTTPSession DA action URL passed to the iframe to cancel the client-side upload
 	 * 
-	 * @return url sent to the iframe to cancel
+	 * @return URL sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String, Object> queryParams = new NSDictionary<String, Object>(Boolean.FALSE, WOApplication.application().sessionIdKey());
+		NSDictionary<String, Object> queryParams = new NSDictionary<>(Boolean.FALSE, WOApplication.application().sessionIdKey());
 		String url = context()._directActionURL("ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()), 0, false);
 		log.debug("URL: {}", url);
 		return url;

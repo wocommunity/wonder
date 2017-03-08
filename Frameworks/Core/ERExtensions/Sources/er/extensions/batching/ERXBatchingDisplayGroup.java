@@ -291,7 +291,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * @param prefetchingRelationshipKeyPaths the prefetching key paths to override those in the underlying fetch spec
 	 */
 	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
-		NSMutableArray<String> keypaths = new NSMutableArray<String>();
+		NSMutableArray<String> keypaths = new NSMutableArray<>();
     	for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
     		keypaths.addObject(key.key());
     	}

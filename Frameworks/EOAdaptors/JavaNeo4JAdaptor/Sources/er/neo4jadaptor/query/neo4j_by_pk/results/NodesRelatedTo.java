@@ -36,7 +36,7 @@ public class NodesRelatedTo implements Results<Node> {
 				Node node = nodeCursor.next();
 				Iterable<Relationship> relationships = node.getRelationships(Direction.INCOMING, relationshipType);
 				
-				return new IteratorCursor<Relationship>(relationships.iterator());
+				return new IteratorCursor<>(relationships.iterator());
 			}
 			
 			public boolean hasNext() {
@@ -48,7 +48,7 @@ public class NodesRelatedTo implements Results<Node> {
 			}
 		};
 		
-		relationshipsIterator = new FlattenedCursor<Relationship>(twoLevelIt);
+		relationshipsIterator = new FlattenedCursor<>(twoLevelIt);
 	}
 	
 	public boolean hasNext() {

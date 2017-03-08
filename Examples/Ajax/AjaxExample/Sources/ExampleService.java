@@ -25,7 +25,7 @@ public class ExampleService {
 	}
 
 	public NSArray somePeople() {
-		NSMutableArray<ComplexPerson> people = new NSMutableArray<ComplexPerson>();
+		NSMutableArray<ComplexPerson> people = new NSMutableArray<>();
 		people.add(new ComplexPerson("Mike", 29));
 		people.add(new ComplexPerson("Andrew", 2));
 		people.add(new ComplexPerson("Kirsten", 29));

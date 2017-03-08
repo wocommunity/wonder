@@ -51,7 +51,7 @@ public class ByPrimaryKeyFilter<T extends PropertyContainer> extends Filter<T> {
 					// it's primary key
 					Results<T> filter = (Results<T>) primaryKeyReference(db, (Collection<? extends Number>) values);
 					
-					return new EvaluatingFilter<T>(filter, entity, qualifier);
+					return new EvaluatingFilter<>(filter, entity, qualifier);
 				}
 				if (rel != null 
 						&& ! RelationshipStore.shouldBeStoredAsRelationship(rel.entity()) 
@@ -59,7 +59,7 @@ public class ByPrimaryKeyFilter<T extends PropertyContainer> extends Filter<T> {
 					// it's using foreign key
 					Results<T> filter = (Results<T>) foreignKeyReference(db, rel, (Collection<? extends Number>) values);
 					
-					return new EvaluatingFilter<T>(filter, entity, qualifier);
+					return new EvaluatingFilter<>(filter, entity, qualifier);
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -276,19 +276,19 @@ public class ERXTcpIp {
 							noIpAndNoNetwork = LOCAL_IP_ADDRESS;
 
 						// 使用する IP をセットします
-						_machineIpList = new NSArray<String>( new String[] {noIpAndNoNetwork});
+						_machineIpList = new NSArray<>( new String[] {noIpAndNoNetwork});
 
 						log.warn("No IpAddress --- no network! use Address : {}", noIpAndNoNetwork);
 					}
 				} else {
 					// 使用する IP をセットします
-					_machineIpList = new NSArray<String>( new String[] {machineIp});
+					_machineIpList = new NSArray<>( new String[] {machineIp});
 				}
 			} catch (Exception e) {
 				// ここでの処理失敗は致命的
 				log.error( "getIpAddress error!!!" );
 
-				_machineIpList = new NSArray<String>( new String[] {LOCAL_IP_ADDRESS});
+				_machineIpList = new NSArray<>( new String[] {LOCAL_IP_ADDRESS});
 			}
 
 			if(log.isInfoEnabled())
@@ -314,7 +314,7 @@ public class ERXTcpIp {
 	 */
 	private static NSArray<String> _machineIpList() throws Exception {
 		// ワーク用
-		NSMutableArray<String> workArray = new NSMutableArray<String>();
+		NSMutableArray<String> workArray = new NSMutableArray<>();
 
 		// 全ネットワーク・インタフェース
 		Enumeration<NetworkInterface> enNi = NetworkInterface.getNetworkInterfaces();
@@ -349,7 +349,7 @@ public class ERXTcpIp {
 		workArray.sortUsingComparator(NSComparator.AscendingStringComparator);
 
 		// 戻す配列の準備
-		NSMutableArray<String> resultArray = new NSMutableArray<String>(workArray.count());
+		NSMutableArray<String> resultArray = new NSMutableArray<>(workArray.count());
 
 		for(String obj : workArray) {
 			resultArray.addObject(obj.substring(5));
@@ -373,7 +373,7 @@ public class ERXTcpIp {
 	 * </div>
 	 */
 	public static NSArray<String> fullDomainIpList(NSArray<String> data) {
-		NSMutableArray<String> results = new NSMutableArray<String>(data.count());
+		NSMutableArray<String> results = new NSMutableArray<>(data.count());
 		for (String string : data) {
 			if(ERXStringUtilities.stringIsNullOrEmpty(string)) {
 				continue;

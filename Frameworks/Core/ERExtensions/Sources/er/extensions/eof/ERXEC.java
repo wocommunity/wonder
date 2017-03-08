@@ -599,7 +599,7 @@ public class ERXEC extends EOEditingContext {
 		Thread currentThread = Thread.currentThread();
 		NSMutableArray<Exception> currentTraces = openLockTraces.objectForKey(currentThread);
 		if(currentTraces == null) {
-			currentTraces = new NSMutableArray<Exception>();
+			currentTraces = new NSMutableArray<>();
 			openLockTraces.setObjectForKey(currentTraces, currentThread);
 		}
 		currentTraces.addObject(openLockTrace);
@@ -1463,7 +1463,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	private boolean savingChanges;
-	private NSMutableArray<NSNotification> queuedNotifications = new NSMutableArray<NSNotification>();
+	private NSMutableArray<NSNotification> queuedNotifications = new NSMutableArray<>();
 
 	protected static Map<ERXEC, String> activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
 
@@ -1563,7 +1563,7 @@ public class ERXEC extends EOEditingContext {
 	private void processQueuedNotifications() {
 		NSMutableArray<NSNotification> queuedNotificationsClone;
 		synchronized (queuedNotifications) {
-			queuedNotificationsClone = new NSMutableArray<NSNotification>(queuedNotifications);
+			queuedNotificationsClone = new NSMutableArray<>(queuedNotifications);
 			queuedNotifications.removeAllObjects();
 		}
 		for (NSNotification notification : queuedNotificationsClone) {
@@ -1982,41 +1982,44 @@ public class ERXEC extends EOEditingContext {
 	 */
 
 	public static String outstandingLockDescription() {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		boolean hadLocks = false;
-		pw.print("Currently " +activeEditingContexts.size() + " active ECs : "+ activeEditingContexts + ")");
-		for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
-			synchronized (ec) {
-			NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
-			if (traces != null && traces.count() > 0) {
-				hadLocks = true;
-				pw.println("\n------------------------");
-				pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
-				if(ec.creationTrace != null) {
-					ec.creationTrace.printStackTrace(pw);
-				}
-				if(!ERXEC.traceOpenLocks()) {
-					pw.println("Stack tracing is disabled");
-				} else {
-					for (Thread thread : traces.keySet()) {
-						pw.println("Outstanding at @" + thread);
-						for(Exception ex: traces.objectForKey(thread)) {
-							ex.printStackTrace(pw);
+		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+			boolean hadLocks = false;
+			pw.print("Currently " + activeEditingContexts.size() + " active ECs : "+ activeEditingContexts + ")");
+			for (ERXEC ec : ERXEC.activeEditingContexts.keySet()) {
+				synchronized (ec) {
+					NSMutableDictionary<Thread, NSMutableArray<Exception>> traces = ec.openLockTraces;
+					if (traces != null && traces.count() > 0) {
+						hadLocks = true;
+						pw.println("\n------------------------");
+						pw.println("Editing Context: " + ec + " Locking thread: " + ec.lockingThreadName + "->" + ec.lockingThread);
+						if(ec.creationTrace != null) {
+							ec.creationTrace.printStackTrace(pw);
 						}
+						if(!ERXEC.traceOpenLocks()) {
+							pw.println("Stack tracing is disabled");
+						} else {
+							for (Thread thread : traces.keySet()) {
+								pw.println("Outstanding at @" + thread);
+								for(Exception ex: traces.objectForKey(thread)) {
+									ex.printStackTrace(pw);
+								}
+							}
+						}
+					} else {
+						// pw.println("\n------------------------");
+						// pw.println("Editing Context: " + ec + " unlocked");
 					}
 				}
-			} else {
-				// pw.println("\n------------------------");
-				// pw.println("Editing Context: " + ec + " unlocked");
 			}
+			if(!hadLocks) {
+				pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
+			}
+			return sw.toString();
 		}
+		catch (IOException e) {
+			// ignore
 		}
-		if(!hadLocks) {
-			pw.print("No open editing contexts (of " + activeEditingContexts.size() + ")");
-		}
-        pw.close();
-		return sw.toString();
+		return null;
 	}
 	
 	/**

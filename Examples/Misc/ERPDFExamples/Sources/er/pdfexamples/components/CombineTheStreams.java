@@ -21,7 +21,7 @@ public class CombineTheStreams extends ERXComponent {
 
 	public CombineTheStreams(WOContext context) {
 		super(context);
-		pdfsToCombine = new NSMutableArray<InputStream>();
+		pdfsToCombine = new NSMutableArray<>();
 	}
 
 

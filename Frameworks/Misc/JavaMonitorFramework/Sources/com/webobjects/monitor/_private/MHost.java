@@ -335,7 +335,7 @@ public class MHost extends MObject {
 
     private static WORequest syncRequest(MSiteConfig aConfig) {
         if (_syncRequest == null) {
-            NSMutableDictionary<String, NSDictionary> data = new NSMutableDictionary<String, NSDictionary>(aConfig
+            NSMutableDictionary<String, NSDictionary> data = new NSMutableDictionary<>(aConfig
                     .dictionaryForArchive(), "SiteConfig");
             NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>> updateWotaskd = new NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>(
                     data, "sync");

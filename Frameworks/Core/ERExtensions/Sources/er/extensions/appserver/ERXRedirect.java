@@ -274,7 +274,7 @@ public class ERXRedirect extends WOComponent {
 		if (_queryParameters != null) {
 			params = (NSMutableDictionary<String, Object>) _queryParameters.mutableClone();
 		} else {
-			params = new NSMutableDictionary<String, Object>();
+			params = new NSMutableDictionary<>();
 		}
 		if (!_includeSessionID) {
 			params.takeValueForKey(Boolean.FALSE.toString(), WOApplication.application().sessionIdKey());

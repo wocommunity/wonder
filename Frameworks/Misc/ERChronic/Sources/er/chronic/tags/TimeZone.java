@@ -28,7 +28,7 @@ public class TimeZone extends Tag<Object> {
   }
 
   public static TimeZone scanForAll(Token token, Options options) {
-    Map<Pattern, Object> scanner = new HashMap<Pattern, Object>();
+    Map<Pattern, Object> scanner = new HashMap<>();
     scanner.put(TimeZone.TIMEZONE_PATTERN, TZ);
     scanner.put(TimeZone.TMINUS_PATTERN, TZ);
     for (Pattern scannerItem : scanner.keySet()) {

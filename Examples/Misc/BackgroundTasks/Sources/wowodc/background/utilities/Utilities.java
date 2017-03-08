@@ -83,7 +83,7 @@ public class Utilities {
 	public static NSMutableArray<String> errorMessages() {
 		NSMutableArray<String> errors = (NSMutableArray<String>) ERXThreadStorage.valueForKey(ERRORS_KEY);
 		if (errors == null) {
-			errors = new NSMutableArray<String>();
+			errors = new NSMutableArray<>();
 			ERXThreadStorage.takeValueForKey(errors, ERRORS_KEY);
 		}
 		return errors;

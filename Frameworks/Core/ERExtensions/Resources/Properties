@@ -254,6 +254,14 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## This is only used when the JDBCAdaptor is used in the first place
 # er.extensions.ERXJDBCAdaptor.switchReadWrite=false
 #
+
+## In servlet context, when not using JNDI to obtain the database channel, you will 
+## get annoying error messages like
+## javax.naming.NameNotFoundException: Name "comp/env/jdbc" not found in context
+## Disable the JNDI configuration to suppress these messages.
+# extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration=false
+#
+
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################
@@ -513,6 +521,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 # If you are using SSL and want to use secure session cookies, set to true
 #
 # er.extensions.ERXSession.useSecureSessionCookies=false
+
+# If you want to set the SameSite policy for session and instance cookies
+# you can set this property to one of the following values:
+# LAX, NORMAL, STRICT
+#
+# er.extensions.ERXSession.cookies.SameSite=STRICT
 
 #########################################################################
 # ERXJDBCConnectionBroker 

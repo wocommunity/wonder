@@ -1,7 +1,6 @@
 package er.modern.movies.test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
@@ -11,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 
 /**
  * Test integration of ERCPreference values for batch size and sort order.
@@ -131,6 +129,29 @@ public class ERCPreferIT extends AbstractSelenideIT {
         // verify sort order is 'descending'
         $(".ComboTHLinkDes").should(Condition.exist);
 
+    }
+     
+    @Test
+    public void toggleRatingColumn() {
+        open("/");
+        $(By.linkText("Login")).click();
+        $(".QueryAllMovieLine").$(By.linkText("Find")).click();
+        $(".ListMovieObjTable").shouldHave(text("Surreal"));
+        $(".ColumnSelector").hover();
+        // disable the "Category" column
+        $(".ColumnSelectorMenu").$(By.linkText("Category")).click();
+        // there should be no more "Surreal" occurences in the table 
+        $(".ListMovieObjTable").shouldNotHave(text("Surreal"));
+        // leave the page and go back
+        $(By.linkText("Home")).click();
+        $(".QueryAllMovieLine").$(By.linkText("Find")).click();
+        // still no "Surreal" occurences in the table 
+        $(".ListMovieObjTable").shouldNotHave(text("Surreal"));
+        $(".ColumnSelector").hover();
+        // enable the "Category" column
+        $(".ColumnSelectorMenu").$(By.linkText("Category")).click();
+        // "Surreal" should occur in the table again
+        $(".ListMovieObjTable").shouldHave(text("Surreal"));
     }
     
 }

@@ -181,13 +181,12 @@ public class ERXGoogleSpell {
 			URLConnection connection = url.openConnection();
 			connection.setDoOutput(true);
 
-			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-			out.write(request.toString());
-			out.close();
+			try (OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream())) {
+				out.write(request.toString());
+			}
 
 			Correction[] corrections;
-			InputStream in = connection.getInputStream();
-			try {
+			try (InputStream in = connection.getInputStream()) {
 				Document responseDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 				responseDocument.normalize();
 				NodeList correctionNodes = responseDocument.getElementsByTagName("c");
@@ -209,9 +208,6 @@ public class ERXGoogleSpell {
 						corrections[correctionNum] = new Correction(offset, length, confidence, correctionStrs);
 					}
 				}
-			}
-			finally {
-				in.close();
 			}
 			return corrections;
 		}

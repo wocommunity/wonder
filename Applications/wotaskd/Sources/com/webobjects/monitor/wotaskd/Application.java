@@ -345,7 +345,7 @@ public class Application extends ERXApplication  {
 				int intWotaskdJmxPort = Integer.parseInt(_jmxPort);
 				
 				// Set up the Password and Access file
-				HashMap<String, String> envPwd = new HashMap<String, String>();																
+				HashMap<String, String> envPwd = new HashMap<>();
 				envPwd.put("jmx.remote.x.password.file", _jmxPasswordFile);	
 				envPwd.put("jmx.remote.x.access.file", _jmxAccessFile);		
 				

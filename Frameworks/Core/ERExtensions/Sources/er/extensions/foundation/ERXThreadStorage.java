@@ -67,7 +67,7 @@ public class ERXThreadStorage {
     			}
     	);
     	
-    	_problematicKeys = new NSSet<String>(
+    	_problematicKeys = new NSSet<>(
     			new String[] {
     					// already handled by "_problematcTypes"
     					// ERXWOContext.CONTEXT_DICTIONARY_KEY
@@ -256,7 +256,7 @@ public class ERXThreadStorage {
 			Map map = storageMap(false);
 			Set blessedKeys = (Set<String>) map.get(KEYS_ADDED_IN_CURRENT_THREAD_KEY);
 			if (blessedKeys == null) {
-				blessedKeys = new HashSet<String>();
+				blessedKeys = new HashSet<>();
 				map.put(KEYS_ADDED_IN_CURRENT_THREAD_KEY, blessedKeys);
 			}
 			blessedKeys.add(key);

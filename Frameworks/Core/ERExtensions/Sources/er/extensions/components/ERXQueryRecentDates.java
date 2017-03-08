@@ -46,7 +46,7 @@ public class ERXQueryRecentDates extends WOComponent {
         "3 months",
         "6 months"
     };
-    private static NSArray<Integer> indexes = new NSArray<Integer>(
+    private static NSArray<Integer> indexes = new NSArray<>(
         ERXConstant.ZeroInteger,
         ERXConstant.OneInteger,
         ERXConstant.TwoInteger,

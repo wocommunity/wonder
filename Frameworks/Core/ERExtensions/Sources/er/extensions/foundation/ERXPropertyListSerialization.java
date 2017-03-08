@@ -112,16 +112,10 @@ import com.webobjects.foundation._NSUtilities;
  *
  * <pre><code>
  * File tempFile = File.createTempFile(&quot;myPlist&quot;, &quot;plist&quot;);
- * FileOutputStream out = null;
- * try {
- * 	out = new FileOutputStream(tempFile);
- * 	ERXPropertyListSerialization.propertyListWriteToStream(plist, out, ERXPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
+ * try (FileOutputStream out = new FileOutputStream(tempFile)) {
+ *   ERXPropertyListSerialization.propertyListWriteToStream(plist, out, ERXPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
  * } catch (Exception e) {
- * 	e.printStackTrace();
- * } finally {
- * 	if (out != null) {
- * 		out.close();
- * 	}
+ *   e.printStackTrace();
  * }
  * </code></pre>
  *
@@ -565,7 +559,7 @@ public class ERXPropertyListSerialization {
 						// This has been taken care of before
 						break;
 					case ARRAY: {
-						NSMutableArray<Object> array = new NSMutableArray<Object>();
+						NSMutableArray<Object> array = new NSMutableArray<>();
 						boolean foundOpenTag = false;
 						while (!_stack.isEmpty()) {
 							XMLNode currentNode = _stack.peek();
@@ -588,7 +582,7 @@ public class ERXPropertyListSerialization {
 						break;
 					}
 					case DICTIONARY: {
-						NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<Object, Object>();
+						NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<>();
 						boolean foundOpenTag = false;
 						while (!_stack.isEmpty()) {
 							XMLNode currentNode = _stack.peek();
@@ -784,7 +778,7 @@ public class ERXPropertyListSerialization {
 
 			@Override
 			public void startDocument() throws SAXException {
-				_stack = new Stack<XMLNode>();
+				_stack = new Stack<>();
 				_plist = null;
 				_curChars = new StringBuffer();
 			}
@@ -1430,7 +1424,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof NSArray<?>) {
 				NSArray<?> array = (NSArray<?>) obj;
 				int i = array.count();
-				NSMutableArray<Object> newArray = new NSMutableArray<Object>(i);
+				NSMutableArray<Object> newArray = new NSMutableArray<>(i);
 				for (int j = 0; j < i; j++) {
 					newArray.addObject(copyPropertyList(array.objectAtIndex(j)));
 				}
@@ -1438,7 +1432,7 @@ public class ERXPropertyListSerialization {
 			}
 			if (obj instanceof NSDictionary<?, ?>) {
 				NSDictionary<?, ?> dictionary = (NSDictionary<?, ?>) obj;
-				NSMutableDictionary<Object, Object> newDictionary = new NSMutableDictionary<Object, Object>(dictionary.count());
+				NSMutableDictionary<Object, Object> newDictionary = new NSMutableDictionary<>(dictionary.count());
 				Object key = null;
 				Object value = null;
 				for (Enumeration<?> enumeration = dictionary.keyEnumerator(); enumeration.hasMoreElements(); newDictionary.setObjectForKey(copyPropertyList(value), copyPropertyList(key))) {
@@ -1517,7 +1511,7 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
@@ -1572,7 +1566,7 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 		}
 
-		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
@@ -1745,11 +1739,11 @@ public class ERXPropertyListSerialization {
 				aBufferIndex = _readDataContentsIntoData(ac, aBufferIndex, data);
 				aobj[0] = data;
 			} else if (ac[aBufferIndex] == '[') {
-				NSMutableArray<Object> array = new NSMutableArray<Object>();
+				NSMutableArray<Object> array = new NSMutableArray<>();
 				aBufferIndex = _readArrayContentsIntoArray(ac, aBufferIndex, array);
 				aobj[0] = array;
 			} else if (ac[aBufferIndex] == '{') {
-				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<Object, Object>();
+				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<>();
 				aBufferIndex = _readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
 				aobj[0] = dictionary;
 			} else {
@@ -2363,7 +2357,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof NSArray<?>) {
 				NSArray<?> array = (NSArray<?>) obj;
 				int i = array.count();
-				NSMutableArray<Object> newArray = new NSMutableArray<Object>(i);
+				NSMutableArray<Object> newArray = new NSMutableArray<>(i);
 				for (int j = 0; j < i; j++) {
 					newArray.addObject(copyPropertyList(array.objectAtIndex(j)));
 				}
@@ -2371,7 +2365,7 @@ public class ERXPropertyListSerialization {
 			}
 			if (obj instanceof NSDictionary<?, ?>) {
 				NSDictionary<?, ?> dictionary = (NSDictionary<?, ?>) obj;
-				NSMutableDictionary<Object, Object> newDictionary = new NSMutableDictionary<Object, Object>(dictionary.count());
+				NSMutableDictionary<Object, Object> newDictionary = new NSMutableDictionary<>(dictionary.count());
 				Object key = null;
 				Object value = null;
 				for (Enumeration<?> enumeration = dictionary.keyEnumerator(); enumeration.hasMoreElements(); newDictionary.setObjectForKey(copyPropertyList(value), copyPropertyList(key))) {
@@ -2490,7 +2484,7 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
@@ -2545,7 +2539,7 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 		}
 
-		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, @SuppressWarnings("unused") int i) {
+		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
 			for (int j = 0; j < abyte0.length; j++) {
@@ -2664,11 +2658,11 @@ public class ERXPropertyListSerialization {
 				aBufferIndex = _readDataContentsIntoData(ac, aBufferIndex, data);
 				aobj[0] = data;
 			} else if (ac[aBufferIndex] == '(') {
-				NSMutableArray<Object> array = new NSMutableArray<Object>();
+				NSMutableArray<Object> array = new NSMutableArray<>();
 				aBufferIndex = _readArrayContentsIntoArray(ac, aBufferIndex, array);
 				aobj[0] = array;
 			} else if (ac[aBufferIndex] == '{') {
-				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<Object, Object>();
+				NSMutableDictionary<Object, Object> dictionary = new NSMutableDictionary<>();
 				aBufferIndex = _readDictionaryContentsIntoDictionary(ac, aBufferIndex, dictionary);
 				aobj[0] = dictionary;
 			} else {
@@ -3167,7 +3161,7 @@ public class ERXPropertyListSerialization {
 			 */
 			// Note: as of 10.6 GM, the mutability option was turned off in CF
 			public NSArray<Object> toNSArray() {
-				NSMutableArray<Object> anArray = new NSMutableArray<Object>();
+				NSMutableArray<Object> anArray = new NSMutableArray<>();
 
 				for (int i = 0; i < _objref.length; i++) {
 					Object ref = _objectTable.get(_objref[i]);
@@ -3237,7 +3231,7 @@ public class ERXPropertyListSerialization {
 			 */
 			// Note: as of 10.6 GM, the mutability option was turned off in CF
 			public NSSet<Object> toNSSet() {
-				NSMutableSet<Object> aSet = new NSMutableSet<Object>();
+				NSMutableSet<Object> aSet = new NSMutableSet<>();
 
 				for (int i = 0; i < _objref.length; i++) {
 					Object ref = _objectTable.get(_objref[i]);
@@ -3334,7 +3328,7 @@ public class ERXPropertyListSerialization {
 			 * @return NSDictionary
 			 */
 			public NSDictionary<String, ?> toNSDictionary() {
-				NSMutableDictionary<String, ?> aDict = new NSMutableDictionary<String, Object>(_keyref.length);
+				NSMutableDictionary<String, ?> aDict = new NSMutableDictionary<>(_keyref.length);
 				for (int i = 0; i < _keyref.length; i++) {
 
 					if (_keyref[i] < 0 || _keyref[i] >= _objectTable.size()) {
@@ -3464,8 +3458,8 @@ public class ERXPropertyListSerialization {
 			public EncodedDictionary(byte[] data) {
 				// The data is actually the marker and the object ref to follow.
 				super(data);
-				_keyRefs = new ArrayList<Long>();
-				_valueRefs = new ArrayList<Long>();
+				_keyRefs = new ArrayList<>();
+				_valueRefs = new ArrayList<>();
 			}
 
 			public void addKeyRef(long ref) {
@@ -3502,7 +3496,7 @@ public class ERXPropertyListSerialization {
 			public EncodedArray(byte[] data) {
 				// The data is actually the marker and the object ref to follow.
 				super(data);
-				_valueRefs = new ArrayList<Long>();
+				_valueRefs = new ArrayList<>();
 			}
 
 			public void addValueRef(long ref) {
@@ -3531,7 +3525,7 @@ public class ERXPropertyListSerialization {
 			public EncodedSet(byte[] data) {
 				// The data is actually the marker and the object ref to follow.
 				super(data);
-				_valueRefs = new ArrayList<Long>();
+				_valueRefs = new ArrayList<>();
 			}
 
 			public void addValueRef(long ref) {
@@ -3902,15 +3896,15 @@ public class ERXPropertyListSerialization {
 			// do uniquing
 
 			// flatten plist into object table
-			List<EncodedObject> objectList = new ArrayList<EncodedObject>(512);
-			Map<Object, Long> uniquingTable = new HashMap<Object, Long>(2048);
+			List<EncodedObject> objectList = new ArrayList<>(512);
+			Map<Object, Long> uniquingTable = new HashMap<>(2048);
 			long theTopObject = encodeObject(plist, objectList, uniquingTable);
 
 			// determine ref size
 			long numberOfObjects = objectList.size();
 			int refsize = EncodedObject.refSizeForValue(numberOfObjects);
 
-			List<Long> objectOffsets = new ArrayList<Long>(objectList.size());
+			List<Long> objectOffsets = new ArrayList<>(objectList.size());
 			// write the byte
 			for (EncodedObject object : objectList) {
 				objectOffsets.add(Long.valueOf(theData.length()));
@@ -3962,12 +3956,8 @@ public class ERXPropertyListSerialization {
 		public Object propertyListWithURL(URL url) {
 			try {
 				 URLConnection conn = url.openConnection();
-				 InputStream is = conn.getInputStream();
-				 try {
+				 try (InputStream is = conn.getInputStream()) {
 					 return _propertyListWithStream(is);
-				 }
-				 finally {
-					 is.close();
 				 }
 			} catch (RuntimeException e) {
 				throw new RuntimeException("Failed to decode binary plist at " + url, e);
@@ -4036,12 +4026,8 @@ public class ERXPropertyListSerialization {
 
 			try {
 				 URLConnection conn = url.openConnection();
-				 InputStream is = conn.getInputStream();
-				 try {
+				 try (InputStream is = conn.getInputStream()) {
 					 return propertyListDocumentWithStream(is);
-				 }
-				 finally {
-					 is.close();
 				 }
 			} catch (RuntimeException e) {
 				throw new RuntimeException("Failed to decode binary plist at " + url, e);
@@ -4211,7 +4197,7 @@ public class ERXPropertyListSerialization {
 
 			// Parse the OBJECT INDEX TABLE
 			// ----------------------------
-			objectIndexTable = new ArrayList<Long>((int) numObjects);
+			objectIndexTable = new ArrayList<>((int) numObjects);
 			for (int i = 0; i < numObjects; i++) {
 				if (offsetIntSize == 1) {
 					objectIndexTable.add(Long.valueOf(readByte(theBytes, ((int) ((i * numberOfBytes) + offsetTableOffset)))));
@@ -4226,7 +4212,7 @@ public class ERXPropertyListSerialization {
 
 			// Parse the OBJECT TABLE
 			// ----------------------
-			objectTable = new ArrayList<Object>((int) numObjects);
+			objectTable = new ArrayList<>((int) numObjects);
 			for (Long index : objectIndexTable) {
 				parseObject(theBytes, index.intValue());
 			}
@@ -5647,12 +5633,8 @@ public class ERXPropertyListSerialization {
 	public static Object propertyListWithURL(URL url, PListFormat type, String encoding) {
 		try {
 			 URLConnection conn = url.openConnection();
-			 InputStream is = conn.getInputStream();
-			 try {
+			 try (InputStream is = conn.getInputStream()) {
 				 return propertyListWithStream(is, type, encoding);
-			 }
-			 finally {
-				 is.close();
 			 }
 		} catch (RuntimeException e) {
 			throw new RuntimeException("Failed to decode plist at " + url, e);

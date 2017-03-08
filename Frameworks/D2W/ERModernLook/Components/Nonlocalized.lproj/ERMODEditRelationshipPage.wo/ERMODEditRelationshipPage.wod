@@ -118,6 +118,11 @@ RepetitionUpdateContainer : AjaxUpdateContainer {
     id = idForRepetitionContainer;
 }
 
+QuickSearch: ERMD2WListFilter {
+	displayGroup = relationshipDisplayGroup;
+	d2wContext = d2wContext;
+}
+
 ToManyListRepetition: WOSwitchComponent {
     WOComponentName = d2wContext.toManyRepetitionComponentName;
     d2wContext = localContext;

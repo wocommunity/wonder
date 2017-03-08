@@ -32,6 +32,8 @@ public abstract class AbstractSelenideIT {
 
     @Before
     public void setUp() throws Exception {
+        // use custom firefox instance
+//        System.setProperty("browser", "er.modern.movies.test.FirefoxWebDriverProvider");
         System.setProperty("selenide.baseUrl",
                 "http://127.0.0.1:9876/cgi-bin/WebObjects/ERModernMoviesTest.woa");
         // use phantomjs headless browser

@@ -238,7 +238,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public static void update(WOContext context, String title) {
 		AjaxModalDialog currentDialog = currentDialog(context);
-		StringBuffer js = new StringBuffer(300);
+		StringBuilder js = new StringBuilder(300);
 		js.append("Modalbox.show('");
 		js.append(currentDialog.openDialogURL(context));
 		js.append("', ");
@@ -681,7 +681,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return binding values converted into Ajax options for ModalBox
 	 */
 	protected NSMutableDictionary createModalBoxOptions() {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("title", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("width", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("centerVertically", AjaxOption.BOOLEAN));

@@ -95,7 +95,7 @@ public class ERIndex {
 
         private final Document _document;
 
-        private final NSMutableDictionary<String, String> _values = new NSMutableDictionary<String, String>();
+        private final NSMutableDictionary<String, String> _values = new NSMutableDictionary<>();
 
         public IndexDocument(Document document) {
             _document = document;
@@ -276,7 +276,7 @@ public class ERIndex {
 
     protected class Transaction {
 
-        private final NSMutableArray<Job> _jobs = new NSMutableArray<Job>();
+        private final NSMutableArray<Job> _jobs = new NSMutableArray<>();
 
         private final EOEditingContext _editingContext;
 
@@ -326,7 +326,7 @@ public class ERIndex {
    
     protected abstract class TransactionHandler {
 
-        protected Map<EOEditingContext, Transaction> activeChanges = new WeakHashMap<EOEditingContext, Transaction>();
+        protected Map<EOEditingContext, Transaction> activeChanges = new WeakHashMap<>();
 
         TransactionHandler() {
             registerNotifications();
@@ -636,7 +636,7 @@ public class ERIndex {
 	}
 
 	private NSArray<EOKeyGlobalID> findGlobalIDs(Query query, Filter filter, Sort sort, int start, int end) {
-		NSMutableArray<EOKeyGlobalID> result = new NSMutableArray<EOKeyGlobalID>();
+		NSMutableArray<EOKeyGlobalID> result = new NSMutableArray<>();
 		try {
 			Searcher searcher = indexSearcher();
 			long startTime = System.currentTimeMillis();
@@ -715,7 +715,7 @@ public class ERIndex {
     }
     
     public NSArray<String> findTermStringsForPrefix(String field, String prefix) {
-    	NSMutableArray<String> terms = new NSMutableArray<String>();
+    	NSMutableArray<String> terms = new NSMutableArray<>();
     	try {
     		IndexReader reader = indexReader(); 
     		TermEnum tenum = new PrefixTermEnum(reader, new Term(field, prefix));

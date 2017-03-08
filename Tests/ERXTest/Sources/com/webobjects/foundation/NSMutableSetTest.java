@@ -12,123 +12,123 @@ import er.erxtest.ERXTestCase;
 public class NSMutableSetTest extends ERXTestCase {
 
 	public void testNSMutableSet() {
-		NSMutableSet<?> set = new NSMutableSet<Object>();
+		NSMutableSet<?> set = new NSMutableSet<>();
 		assertTrue(set.isEmpty());
 	}
 
 	public void testNSMutableSetCollectionOfQextendsE() {
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>(list);
+		NSMutableSet<String> set = new NSMutableSet<>(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSMutableSetE() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSMutableSetEArray() {
 		String[] strings = new String[] {"abc", "abc"};
-		NSMutableSet<String> set = new NSMutableSet<String>(strings);
+		NSMutableSet<String> set = new NSMutableSet<>(strings);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSMutableSetInt() {
-		NSMutableSet<?> set = new NSMutableSet<Object>(1);
+		NSMutableSet<?> set = new NSMutableSet<>(1);
 		assertTrue(set.isEmpty());
 	}
 
 	public void testNSMutableSetNSArrayOfQextendsE() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>(list);
+		NSMutableSet<String> set = new NSMutableSet<>(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSMutableSetNSSetOfQextendsE() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
-		NSMutableSet<String> copy = new NSMutableSet<String>(set);
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
+		NSMutableSet<String> copy = new NSMutableSet<>(set);
 		assertEquals(1, copy.size());
 		assertTrue(copy.contains("abc"));
 	}
 
 	public void testNSMutableSetSetOfQextendsEBoolean() {
-		Set<String> source = new HashSet<String>();
+		Set<String> source = new HashSet<>();
 		source.add("abc");
 		source.add(null);
 		
-		NSMutableSet<String> set = new NSMutableSet<String>(source, true);
+		NSMutableSet<String> set = new NSMutableSet<>(source, true);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 		
 		try {
-			set = new NSMutableSet<String>(source, false);
+			set = new NSMutableSet<>(source, false);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 	}
 
 	public void testAddObject() {
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addObject("abc");
 		assertTrue(set.contains("abc"));
 	}
 	
 	public void testAddObjects() {
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addObjects("abc", "123");
 		assertEquals(2, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testAddObjectsFromArray() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addObjectsFromArray(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testRemoveAllObjects() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		set.removeAllObjects();
 		assertTrue(set.isEmpty());
 	}
 
 	public void testRemoveObject() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		Object removed = set.removeObject("abc");
 		assertTrue(set.isEmpty());
 		assertEquals("abc", removed);
 	}
 
 	public void testSubtractSet() {
-		NSMutableSet<String> otherSet = new NSMutableSet<String>();
+		NSMutableSet<String> otherSet = new NSMutableSet<>();
 		otherSet.add("abc");
 		otherSet.add("123");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		set.subtractSet(otherSet);
 		assertTrue(set.isEmpty());
 	}
 
 	public void testUnionSet() {
-		NSMutableSet<String> otherSet = new NSMutableSet<String>();
+		NSMutableSet<String> otherSet = new NSMutableSet<>();
 		otherSet.add("abc");
 		otherSet.add("123");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		set.unionSet(otherSet);
 		assertEquals(2, set.size());
 		assertTrue(set.contains("abc"));
@@ -136,8 +136,8 @@ public class NSMutableSetTest extends ERXTestCase {
 	}
 
 	public void testSetSet() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
-		NSMutableSet<String> otherSet = new NSMutableSet<String>("123");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
+		NSMutableSet<String> otherSet = new NSMutableSet<>("123");
 		otherSet.add("def");
 		
 		set.setSet(otherSet);
@@ -145,7 +145,7 @@ public class NSMutableSetTest extends ERXTestCase {
 	}
 
   public void testClone() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		NSMutableSet<String> clone = (NSMutableSet<String>) set.clone();
 		assertEquals(set, clone);
 		
@@ -153,7 +153,7 @@ public class NSMutableSetTest extends ERXTestCase {
 	}
 
 	public void testImmutableClone() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		NSSet<String> clone = set.immutableClone();
 		assertEquals(1, clone.size());
 		assertTrue(clone.contains("abc"));
@@ -164,52 +164,52 @@ public class NSMutableSetTest extends ERXTestCase {
 	}
 
 	public void testClear() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		set.clear();
 		assertTrue(set.isEmpty());
 	}
 
 	public void testAdd() {
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.add("abc");
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testAddAllCollection() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addAll(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testRemove() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc");
+		NSMutableSet<String> set = new NSMutableSet<>("abc");
 		boolean removed = set.remove("abc");
 		assertTrue(set.isEmpty());
 		assertTrue(removed);
 	}
 
 	public void testRemoveAllCollection() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("123");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addAll(list);
 		set.removeAll(list);
 		assertTrue(set.isEmpty());
 	}
 
 	public void testRetainAllCollection() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("123");
 		
-		NSMutableSet<String> set = new NSMutableSet<String>();
+		NSMutableSet<String> set = new NSMutableSet<>();
 		set.addAll(list);
 		
 		list.remove("123");	
@@ -220,7 +220,7 @@ public class NSMutableSetTest extends ERXTestCase {
 	}
 	
 	public void testNSMutableSetIterator() {
-		NSMutableSet<String> set = new NSMutableSet<String>("abc", "def");
+		NSMutableSet<String> set = new NSMutableSet<>("abc", "def");
 		int size = set.size();
 		NSMutableSet<String> check = set.mutableClone();
 		

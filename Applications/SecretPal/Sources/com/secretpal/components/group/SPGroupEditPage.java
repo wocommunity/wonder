@@ -87,7 +87,7 @@ public class SPGroupEditPage extends SPPage {
   }
 
   public WOActionResults sendMembershipInvites() {
-    NSMutableArray<String> failedEmailAddresses = new NSMutableArray<String>();
+    NSMutableArray<String> failedEmailAddresses = new NSMutableArray<>();
     SPUtilities.sendInvitationEmails(_group, _inviteEmailAddresses, context(), session().notifications(), session().errors(), failedEmailAddresses);
     if (failedEmailAddresses.count() == 0) {
       _inviteEmailAddresses = null;

@@ -46,7 +46,7 @@ public abstract class ApplicationStarter extends Thread implements ErrorCollecto
     @Override
     public void run() {
         try {
-            _errors = new NSMutableSet<String>();
+            _errors = new NSMutableSet<>();
             bounce();
         } catch (InterruptedException e) {
             log(e);

@@ -77,7 +77,7 @@ public class CCSegmentedSlider extends ERXComponent {
 
 
 	public NSDictionary<String, Object> options() {
-		NSMutableDictionary<String, Object> options = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> options = new NSMutableDictionary<>();
 		if (hasBinding("initialSelection")) {
 			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("initialSelection", true)),
 					"initialSelection");

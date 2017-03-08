@@ -77,11 +77,11 @@ public abstract class ERXRemoteSynchronizer {
 		_listener = listener;
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
 		if (includeEntityNames != null) {
-			_includeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
+			_includeEntityNames = new NSSet<>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
 		}
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
+			_excludeEntityNames = new NSSet<>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
 		}
 	}
 
@@ -219,7 +219,7 @@ public abstract class ERXRemoteSynchronizer {
 	}
 
 	protected NSArray<EOGlobalID> readGIDs(DataInputStream dis) throws IOException {
-		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+		NSMutableArray<EOGlobalID> gids = new NSMutableArray<>();
 		int gidCount = dis.readByte();
 		for (int gidNum = 0; gidNum < gidCount; gidNum++) {
 			EOGlobalID gid = readGID(dis);
@@ -303,7 +303,7 @@ public abstract class ERXRemoteSynchronizer {
 				if (shouldSynchronizeEntity(entityName)) {
 					NSMutableSet<EOGlobalID> globalIDsForEntity = (NSMutableSet<EOGlobalID>) result.objectForKey(entityName);
 					if (globalIDsForEntity == null) {
-						globalIDsForEntity = new NSMutableSet<EOGlobalID>();
+						globalIDsForEntity = new NSMutableSet<>();
 						result.setObjectForKey(globalIDsForEntity, entityName);
 					}
 					globalIDsForEntity.addObject(keyGID);
@@ -323,7 +323,7 @@ public abstract class ERXRemoteSynchronizer {
 			filteredCacheChanges = cacheChanges;
 		}
 		else {
-			NSMutableArray<ERXDatabase.CacheChange> mutableFilteredCacheChanges = new NSMutableArray<ERXDatabase.CacheChange>();
+			NSMutableArray<ERXDatabase.CacheChange> mutableFilteredCacheChanges = new NSMutableArray<>();
 			for (ERXDatabase.CacheChange cacheChange : cacheChanges) {
 				EOGlobalID gid = cacheChange.gid();
 				if (gid instanceof EOKeyGlobalID) {

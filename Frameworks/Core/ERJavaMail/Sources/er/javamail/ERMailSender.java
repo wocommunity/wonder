@@ -85,7 +85,7 @@ public class ERMailSender implements Runnable {
 
 	private ERMailSender() {
 		_stats = new Stats();
-		_messages = new ERQueue<ERMessage>(ERJavaMail.sharedInstance().senderQueueSize());
+		_messages = new ERQueue<>(ERJavaMail.sharedInstance().senderQueueSize());
 
         if (WOApplication.application() == null || WOApplication.application ().isDebuggingEnabled()) {
             _milliSecondsWaitRunLoop = 2000;
@@ -350,7 +350,7 @@ public class ERMailSender implements Runnable {
 
 				// If there are still messages pending ...
 				if (!_messages.empty()) {
-					Map<String, Transport> transports = new HashMap<String, Transport>();
+					Map<String, Transport> transports = new HashMap<>();
 					
 					try {
 						while (!_messages.empty()) {

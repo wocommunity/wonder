@@ -65,8 +65,8 @@ public class WRNestedList extends WOComponent  {
 
     /**
      * Method to return the tag name for the list.  If the 'isOrdered' binding is
-     * present, the list is an ORDERED-LIST (<OL>), otherwise the list is an
-     * UNORDERED LIST (<UL>).  This information populates the elementName of the
+     * present, the list is an ORDERED-LIST (&lt;OL&gt;), otherwise the list is an
+     * UNORDERED LIST (&lt;UL&gt;).  This information populates the elementName of the
      * generic element for the list.
      */
 

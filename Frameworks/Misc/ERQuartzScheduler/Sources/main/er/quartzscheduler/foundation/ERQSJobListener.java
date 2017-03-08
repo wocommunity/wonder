@@ -101,12 +101,12 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 			id = (EOGlobalID) jobexecutioncontext.getMergedJobDataMap().get(ERQSJob.ENTERPRISE_OBJECT_KEY);
 
 			if (id != null)
-				userInfo = new NSDictionary<String, Object>(id, ERQSJob.ENTERPRISE_OBJECT_KEY);
+				userInfo = new NSDictionary<>(id, ERQSJob.ENTERPRISE_OBJECT_KEY);
 			else
 			{
 				aJobDescription = (ERQSJobDescription) jobexecutioncontext.getMergedJobDataMap().get(ERQSJob.NOT_PERSISTENT_OBJECT_KEY);
 				if (aJobDescription != null)
-					userInfo = new NSDictionary<String, Object>(aJobDescription, ERQSJob.NOT_PERSISTENT_OBJECT_KEY);
+					userInfo = new NSDictionary<>(aJobDescription, ERQSJob.NOT_PERSISTENT_OBJECT_KEY);
 			}
 			if (userInfo != null && userInfo.size() > 0)
 				NSNotificationCenter.defaultCenter().postNotification(JOB_WILL_RUN, null, userInfo);
@@ -130,7 +130,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 */
 	public void jobWasExecuted(final JobExecutionContext jobexecutioncontext, final JobExecutionException jobexecutionexception) 
 	{
-		NSMutableDictionary<String, Object> userInfo = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> userInfo = new NSMutableDictionary<>();
 		String errorMsg = null;
 
 		if (log.isDebugEnabled())
@@ -241,7 +241,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 		if (toEmail.length() > 0)
 		{
 			if (recipients == null)
-				recipients = new NSArray<String>(toEmail);
+				recipients = new NSArray<>(toEmail);
 			else
 				recipients = recipients.mutableClone().arrayByAddingObject(toEmail);
 		}

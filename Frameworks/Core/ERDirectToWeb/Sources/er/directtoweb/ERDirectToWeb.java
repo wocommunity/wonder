@@ -280,7 +280,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * @param d2wContext
      */
 	public static NSArray<EOSortOrdering> sortOrderings(D2WContext d2wContext) {
-		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<>();
 		NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext.valueForKey("defaultSortOrdering");
 		if (sortOrderingDefinition != null) {
 			for (int i = 0; i < sortOrderingDefinition.count();) {

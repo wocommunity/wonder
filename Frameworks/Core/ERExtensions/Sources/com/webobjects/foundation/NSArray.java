@@ -172,7 +172,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	public static final String SumOperatorName = "sum";
 	public static final String AverageOperatorName = "avg";
 	private static final String SerializationValuesFieldKey = "objects";
-	private static NSMutableDictionary<String, Operator> _operators = new NSMutableDictionary<String, Operator>(8);
+	private static NSMutableDictionary<String, Operator> _operators = new NSMutableDictionary<>(8);
 	protected static final int _NSArrayClassHashCode = _CLASS.hashCode();
 	protected Object[] _objects;
 	protected transient int _hashCache;
@@ -660,7 +660,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		int stringLength = string.length();
 
 		if ((separator == null) || (separator.length() == 0)) {
-			return new NSArray<String>(string);
+			return new NSArray<>(string);
 		}
 		int separatorLength = separator.length();
 
@@ -677,10 +677,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 
 			if (count == 0) {
-				return new NSArray<String>(string);
+				return new NSArray<>(string);
 			}
 
-			objects = new NSMutableArray<String>(count + 1);
+			objects = new NSMutableArray<>(count + 1);
 			int end = stringLength - 1;
 			for (index = 0; index <= end; ++index) {
 				if (parseData[index] == charSeparator) {
@@ -698,7 +698,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				objects.addObject(string.substring(start, stringLength));
 			}
 		} else {
-			objects = new NSMutableArray<String>(4);
+			objects = new NSMutableArray<>(4);
 			int end = stringLength - separatorLength;
 			while (true) { 
 				if (start >= stringLength) {
@@ -758,7 +758,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 		}
 		Object[] objects = objectsNoCopy();
-		NSMutableArray<Object> values = new NSMutableArray<Object>(objects.length);
+		NSMutableArray<Object> values = new NSMutableArray<>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(objects[i], key);
 			values.addObject(value == null ? ((Object) (NSKeyValueCoding.NullValue)) : value);

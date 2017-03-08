@@ -11,7 +11,7 @@ public class SdRmnSyHandler extends RmnSdSyHandler {
 
   @Override
   public Span handle(List<Token> tokens, Options options) {
-    List<Token> newTokens = new LinkedList<Token>();
+    List<Token> newTokens = new LinkedList<>();
     newTokens.add(tokens.get(1));
     newTokens.add(tokens.get(0));
     newTokens.add(tokens.get(2));

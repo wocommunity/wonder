@@ -34,7 +34,7 @@ public class ERD2WContextInspector extends ERXStatelessComponent {
     public String d2wContextString() {
         D2WContext context = (D2WContext) valueForBinding("d2wContext");
         StringBuilder d2wContextString = new StringBuilder();
-        List<String> keys = new ArrayList<String>(context._localValues().keySet());
+        List<String> keys = new ArrayList<>(context._localValues().keySet());
         Collections.sort(keys);
         for (String key : keys) {
             Object value = context.valueForKey(key);

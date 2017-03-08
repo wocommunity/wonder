@@ -104,7 +104,7 @@ public class ERXRuntimeUtilities {
      * @param e
      */
     public static NSMutableDictionary<String, Object> informationForException(Exception e) {
-		NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<>();
 		if (e instanceof EOGeneralAdaptorException) {
 			// AK NOTE: you might have sensitive info in your failed ops...
 			NSDictionary dict = ((EOGeneralAdaptorException) e).userInfo();
@@ -136,7 +136,7 @@ public class ERXRuntimeUtilities {
     }
 
     public static NSMutableDictionary<String, Object> informationForBundles() {
-    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
+    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<>();
     	NSMutableDictionary<String, Object> bundleVersions = new NSMutableDictionary<String, Object>();
     	for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
     		NSBundle bundle = (NSBundle) bundles.nextElement();
@@ -151,7 +151,7 @@ public class ERXRuntimeUtilities {
     }
 
     public static NSMutableDictionary<String, Object> informationForContext(WOContext context) {
-    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
+    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<>();
     	if (context != null) {
     		if(context.page() != null) {
     			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
@@ -176,7 +176,7 @@ public class ERXRuntimeUtilities {
     		if(context.request() != null) {
 				extraInfo.setObjectForKey(context.request().uri(), "URL");
 				if(context.request().headers() != null) {
-					NSMutableDictionary<String, Object> headers = new NSMutableDictionary<String, Object>();
+					NSMutableDictionary<String, Object> headers = new NSMutableDictionary<>();
 					for (Object key : context.request().headerKeys()) {
 						String value = context.request().headerForKey(key);
 						if(value != null) {
@@ -369,7 +369,7 @@ public class ERXRuntimeUtilities {
         Result result;
 		try {
             if (log.isDebugEnabled()) {
-                log.debug("Will execute command {}", new NSArray<String>(command).componentsJoinedByString(" "));
+                log.debug("Will execute command {}", new NSArray<>(command).componentsJoinedByString(" "));
             }
             if (dir == null && envp == null) {
                 p = rt.exec(command);
@@ -625,7 +625,7 @@ public class ERXRuntimeUtilities {
 	 */
 	public static synchronized void addThreadInterrupt(Thread thread, String message) {
 		if(flags == null) {
-			flags = new NSMutableDictionary<Thread, String>();
+			flags = new NSMutableDictionary<>();
 		}
 		synchronized (flags) {
 			if (!flags.containsKey(thread)) {

@@ -108,7 +108,7 @@ public class AjaxUtils {
 	 * @param context
 	 *            the context
 	 * @param response
-	 *            the response
+	 *            the response to write into
 	 * @param framework
 	 *            the framework that contains the file
 	 * @param fileName
@@ -129,7 +129,7 @@ public class AjaxUtils {
 	 * @param context
 	 *            the context
 	 * @param response
-	 *            the response
+	 *            the response to write into
 	 * @param fileName
 	 *            the name of the javascript file to add
 	 */
@@ -143,7 +143,7 @@ public class AjaxUtils {
 	 * @param context
 	 *            the context
 	 * @param response
-	 *            the response
+	 *            the response to write into
 	 * @param framework
 	 *            the framework that contains the file
 	 * @param fileName
@@ -159,7 +159,7 @@ public class AjaxUtils {
 	 * @param context
 	 *            the context
 	 * @param response
-	 *            the response
+	 *            the response to write into
 	 * @param fileName
 	 *            the name of the CSS file to add
 	 */
@@ -197,7 +197,7 @@ public class AjaxUtils {
 	/**
 	 * Returns an {@link er.ajax.AjaxResponse} with the given javascript as the body of the response.
 	 * 
-	 * @param context the WOContext
+	 * @param context the context
 	 * @param javascript the javascript to send
 	 * @return a new response
 	 */
@@ -398,11 +398,11 @@ public class AjaxUtils {
 	 * ID to the specified value. Useful if you want to update multiple small
 	 * regions on a page with a single request, e.g. when an AjaxObserveField
 	 * triggers an action.
-	 * 
+	 * <p>
 	 * This method is also available on instances. The example
 	 * below uses the method on AjaxResponse.
 	 * 
-	 * <pre>
+	 * <code><pre>
 	 * public WOActionResults cartItemChanged() {
 	 * 	ShoppingCart cart; // assume this exists
 	 * 	ShoppingCartItem item; // assume this exists
@@ -414,7 +414,7 @@ public class AjaxUtils {
 	 * 	response.appendScriptFooterIfNecessary();
 	 * 	return response;
 	 * }
-	 * </pre>
+	 * </code></pre>
 	 * 
 	 * @see AjaxResponse#updateDomElement(String, Object, String, String, String)
 	 * @see AjaxResponse#updateDomElement(String, Object)

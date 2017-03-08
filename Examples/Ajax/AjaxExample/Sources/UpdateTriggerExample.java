@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 public class UpdateTriggerExample extends WOComponent {
 
-	private NSMutableArray<String> _updateContainerIDs = new NSMutableArray<String>();
+	private NSMutableArray<String> _updateContainerIDs = new NSMutableArray<>();
 
 	public UpdateTriggerExample(WOContext context) {
 		super(context);

@@ -66,16 +66,16 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         nullString = null;
         nullERXKey = null;
 
-        one = new NSMutableDictionary<String,String>();
+        one = new NSMutableDictionary<>();
         one.setObjectForKey("Bob", "firstName");
         one.setObjectForKey("Barker", "lastName");
         one.setObjectForKey("blue", "favoriteColor");
 
-        two = new NSMutableDictionary<String,String>();
+        two = new NSMutableDictionary<>();
         two.setObjectForKey("Bob", "firstName");
         two.setObjectForKey("red", "favoriteColor");
 
-        three = new NSMutableDictionary<String,String>();
+        three = new NSMutableDictionary<>();
         three.setObjectForKey("Frank", "firstName");
         three.setObjectForKey("Further", "lastName");
         three.setObjectForKey("green", "favoriteColor");
@@ -110,8 +110,8 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // {Frank = ("green"); Bob = ("blue", "red");
         //
         color1 = new NSMutableDictionary<String,NSArray<String>>();
-        color1.setObjectForKey(new NSArray<String>("green"), "Frank");
-        color1.setObjectForKey(new NSArray<String>(new String[] { "blue", "red" }), "Bob");
+        color1.setObjectForKey(new NSArray<>("green"), "Frank");
+        color1.setObjectForKey(new NSArray<>(new String[] { "blue", "red" }), "Bob");
 
         // {
         //  Further = ({lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; });
@@ -125,8 +125,8 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // {Further = ("green"); Barker = ("blue"); }
         //
         color2 = new NSMutableDictionary<String,NSArray<String>>();
-        color2.setObjectForKey(new NSArray<String>("green"), "Further");
-        color2.setObjectForKey(new NSArray<String>("blue"), "Barker");
+        color2.setObjectForKey(new NSArray<>("green"), "Further");
+        color2.setObjectForKey(new NSArray<>("blue"), "Barker");
 
         // {
         //  Further = ({lastName = "Further"; firstName = "Frank"; favoriteColor = "green"; });
@@ -142,14 +142,14 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // {Further = ("green"); Barker = ("blue"); **** NULL GROUPING KEY **** = ("red"); }
         //
         color3 = new NSMutableDictionary<String,NSArray<String>>();
-        color3.setObjectForKey(new NSArray<String>("green"), "Further");
-        color3.setObjectForKey(new NSArray<String>("blue"), "Barker");
-        color3.setObjectForKey(new NSArray<String>("red"), ERXArrayUtilities.NULL_GROUPING_KEY);
+        color3.setObjectForKey(new NSArray<>("green"), "Further");
+        color3.setObjectForKey(new NSArray<>("blue"), "Barker");
+        color3.setObjectForKey(new NSArray<>("red"), ERXArrayUtilities.NULL_GROUPING_KEY);
 
         // {**** NULL GROUPING KEY **** = ("blue", "red", "green"); }
         //
         color4 = new NSMutableDictionary<String,NSArray<String>>();
-        color4.setObjectForKey(new NSArray<String>(new String[] { "blue", "red", "green" }), ERXArrayUtilities.NULL_GROUPING_KEY);
+        color4.setObjectForKey(new NSArray<>(new String[] { "blue", "red", "green" }), ERXArrayUtilities.NULL_GROUPING_KEY);
 
         // {
         //  **** NULL GROUPING KEY **** = (
@@ -169,14 +169,14 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         // {extra = ("blue", "red", "green"); }
         //
         color5 = new NSMutableDictionary<String,NSArray<String>>();
-        color5.setObjectForKey(new NSArray<String>(new String[] { "blue", "red", "green" }), "extra");
+        color5.setObjectForKey(new NSArray<>(new String[] { "blue", "red", "green" }), "extra");
 
         //{extra = ("red"); Further = ("green"); Barker = ("blue"); }
         //
         color6 = new NSMutableDictionary<String,NSArray<String>>();
-        color6.setObjectForKey(new NSArray<String>("red"), "extra");
-        color6.setObjectForKey(new NSArray<String>("green"), "Further");
-        color6.setObjectForKey(new NSArray<String>("blue"), "Barker");
+        color6.setObjectForKey(new NSArray<>("red"), "extra");
+        color6.setObjectForKey(new NSArray<>("green"), "Further");
+        color6.setObjectForKey(new NSArray<>("blue"), "Barker");
 
         // {
         //  extra = ({firstName = "Bob"; favoriteColor = "red"; });
@@ -643,9 +643,9 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     }
 
     public void testIteratorHasMatchWithQualifierEvaluation() {
-    	NSArray<String> array1 = new NSArray<String>("red");
-        NSArray<String> array2 = new NSArray<String>("red", "blue");
-        NSArray<String> array3 = new NSArray<String>("green", "blue");
+    	NSArray<String> array1 = new NSArray<>("red");
+        NSArray<String> array2 = new NSArray<>("red", "blue");
+        NSArray<String> array3 = new NSArray<>("green", "blue");
 
         assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array1.iterator(), trueQualifierEvaluation));
         assertTrue(ERXArrayUtilities.iteratorHasMatchWithQualifierEvaluation(array2.iterator(), trueQualifierEvaluation));
@@ -815,7 +815,7 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, four);
         assertEquals(new NSArray<>("two", "one", "three"), second);
 
-        second = new NSMutableArray<String>("two", "one");
+        second = new NSMutableArray<>("two", "one");
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, null);
         assertEquals(new NSArray<>("two", "one"), second);
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(second, new ArrayList<>());
@@ -1091,9 +1091,9 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     public void testRemoveNullValues() {
 
         NSArray<Object> nullArray = null;
-        NSArray<Object> first = new NSArray<Object>();
-        NSArray<Object> second = new NSArray<Object>(NSKeyValueCoding.NullValue);
-        NSArray<Object> third = new NSArray<Object>(new Object[] { "one", "two" });
+        NSArray<Object> first = new NSArray<>();
+        NSArray<Object> second = new NSArray<>(NSKeyValueCoding.NullValue);
+        NSArray<Object> third = new NSArray<>(new Object[] { "one", "two" });
 
         Assert.assertEquals(nullArray, ERXArrayUtilities.removeNullValues(nullArray));
         Assert.assertEquals(first, ERXArrayUtilities.removeNullValues(first));
@@ -1108,12 +1108,12 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
 
         // TODO - When we are using junit 4.5, the org.junit.Assert class has methods for comparing language arrays directly, so do not use these NSArray instances.
         //
-        Assert.assertEquals(new NSArray<String>(str1), new NSArray<String>(str2));
+        Assert.assertEquals(new NSArray<>(str1), new NSArray<>(str2));
 
         String[] str3 = new String[] { "one" };
         String[] str4 = ERXArrayUtilities.objectArrayCastToStringArray(new Object[] { "one" });
 
-        Assert.assertEquals(new NSArray<String>(str3), new NSArray<String>(str4));
+        Assert.assertEquals(new NSArray<>(str3), new NSArray<>(str4));
     }
 
     public void testObjectLangArrayToString() {
@@ -1135,10 +1135,10 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     public void testRemoveNullValuesFromEnd() {
 
         NSArray<Object> nullArray = null;
-        NSArray<Object> first = new NSArray<Object>();
-        NSArray<Object> second = new NSArray<Object>(NSKeyValueCoding.NullValue);
-        NSArray<Object> third = new NSArray<Object>(new Object[] { "one", "two" });
-        NSArray<Object> fourth = new NSArray<Object>(new Object[] { "one", "two", NSKeyValueCoding.NullValue });
+        NSArray<Object> first = new NSArray<>();
+        NSArray<Object> second = new NSArray<>(NSKeyValueCoding.NullValue);
+        NSArray<Object> third = new NSArray<>(new Object[] { "one", "two" });
+        NSArray<Object> fourth = new NSArray<>(new Object[] { "one", "two", NSKeyValueCoding.NullValue });
 
         Assert.assertEquals(nullArray, ERXArrayUtilities.removeNullValuesFromEnd(nullArray));
         Assert.assertEquals(first, ERXArrayUtilities.removeNullValuesFromEnd(first));
@@ -1151,7 +1151,7 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
         String[] str1 = new String[] {};
         String[] str2 = ERXArrayUtilities.toStringArray(new NSArray<>());
 
-        assertEquals(new NSArray<String>(str1), new NSArray<String>(str2));
+        assertEquals(new NSArray<>(str1), new NSArray<>(str2));
     }
 
     public void testDictionaryOfObjectsIndexedByKeyPath() {
@@ -1590,11 +1590,11 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
 
     public void testStdDev() {
     	String numKey = "num";
-    	NSDictionary<String, Integer> uno = new NSDictionary<String, Integer>(Integer.valueOf(1), numKey);
-    	NSDictionary<String, Integer> dos = new NSDictionary<String, Integer>(Integer.valueOf(2), numKey);
-    	NSDictionary<String, Integer> tres = new NSDictionary<String, Integer>(Integer.valueOf(3), numKey);
-    	NSDictionary<String, Integer> quatro = new NSDictionary<String, Integer>(Integer.valueOf(4), numKey);
-    	NSDictionary<String, Integer> cinco = new NSDictionary<String, Integer>(Integer.valueOf(5), numKey);
+    	NSDictionary<String, Integer> uno = new NSDictionary<>(Integer.valueOf(1), numKey);
+    	NSDictionary<String, Integer> dos = new NSDictionary<>(Integer.valueOf(2), numKey);
+    	NSDictionary<String, Integer> tres = new NSDictionary<>(Integer.valueOf(3), numKey);
+    	NSDictionary<String, Integer> quatro = new NSDictionary<>(Integer.valueOf(4), numKey);
+    	NSDictionary<String, Integer> cinco = new NSDictionary<>(Integer.valueOf(5), numKey);
     	NSArray<NSDictionary<String, Integer>> numbers = new NSArray<NSDictionary<String,Integer>>(uno, dos, tres, quatro, cinco);
     	BigDecimal pop = ERXValueUtilities.bigDecimalValue(ERXArrayUtilities.stdDev(numbers, numKey, true));
     	assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(pop) == 0);

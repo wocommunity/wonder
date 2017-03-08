@@ -121,13 +121,8 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 							progress.dispose();
 							throw e;
 						}
-						FileOutputStream fos = new FileOutputStream(progress.tempFile());
-						try {
+						try (FileOutputStream fos = new FileOutputStream(progress.tempFile())) {
 							progress.copyAndTrack(uploadInputStream, fos, _maxUploadSize);
-						}
-						finally {
-							fos.flush();
-							fos.close();
 						}
 						if (!progress.isCanceled() && !progress.shouldReset()) {
 							downloadFinished(progress);

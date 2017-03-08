@@ -256,7 +256,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * <span class="ja"> JavaMail のデフォルト・セッションです。 即時配信処理より共有されています。 延期配信は独自の JavaMail セッションを使用しています。 </span>
 	 */
 	protected javax.mail.Session _defaultSession;
-	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
+	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<>();
 
 	/**
 	 * <span class="en"> Sets the default JavaMail session to a particular value. This value is set by default at
@@ -812,7 +812,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return 指定パタンのマッチに使用する or qualifier </span>
 	 */
 	protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray<String> emailPatterns) {
-		NSMutableArray<EOQualifier> patternQualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> patternQualifiers = new NSMutableArray<>();
 		for (String pattern : emailPatterns) {
 			patternQualifiers.addObject(EOQualifier.qualifierWithQualifierFormat("toString caseInsensitiveLike '" + pattern + "'", null));
 		}
@@ -836,7 +836,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	public NSArray<String> filterEmailAddresses(NSArray<String> emailAddresses) {
 		NSMutableArray<String> filteredAddresses = null;
 		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (hasWhiteList() || hasBlackList())) {
-			filteredAddresses = new NSMutableArray<String>(emailAddresses);
+			filteredAddresses = new NSMutableArray<>(emailAddresses);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Filtering email addresses: " + filteredAddresses);

@@ -45,17 +45,17 @@ public class LuceneFilter <Type extends PropertyContainer> extends Filter<Type> 
 		
 		// optimization
 		if (LuceneOptimizer.canBeOptimized(hits, qualifier)) {
-			LuceneOptimizer<Type> optimizer = new LuceneOptimizer<Type>(index);
+			LuceneOptimizer<Type> optimizer = new LuceneOptimizer<>(index);
 			
 			objects = optimizer.optimize(q, entity, qualifier); 			
 		} else {
-			objects = new LuceneIndexHits<Type>(hits);
+			objects = new LuceneIndexHits<>(hits);
 		}
 		
 		if (luceneConverter.isQueryFullyCovered()) {
 			return objects;
 		} else {
-			return new EvaluatingFilter<Type>(objects, entity, qualifier);
+			return new EvaluatingFilter<>(objects, entity, qualifier);
 		}
 	}
 }

@@ -15,18 +15,16 @@ import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
 /**
- * <p>
  * ERAttachmentFlexibleEditor is a wrapper around {@link ERAttachmentFlexibleUpload} and {@link ERAttachmentViewer}
  * It provides a one stop shop for editing a to-one relationship between a masterObject and
  * an ERAttachment. Switching back and forth between edit and view modes is handled by ajax updates.
- * </p>
- * 
  * <p>
- * There is one scenario where there is the potential for an orphaned ERAttachment and associated file. 
- * 1. User lands on an edit page for the masterObject
- * 2. User selects and successfully uploads a file for the attachment
- * 3. User leaves the masterObject edit page without saving changes
- * </p>
+ * There is one scenario where there is the potential for an orphaned ERAttachment and associated file.
+ * <ol>
+ * <li>User lands on an edit page for the masterObject</li>
+ * <li>User selects and successfully uploads a file for the attachment</li>
+ * <li>User leaves the masterObject edit page without saving changes</li>
+ * </ol>
  * 
  * @binding masterObject (required) - Parent object owning the relationship to this attachment
  * @binding relationshipKey (required) - Name of the to-one relationship to the attachment
@@ -76,7 +74,6 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  * @property er.attachment.height
  * 
  * @author david
- *
  */
 public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	/**

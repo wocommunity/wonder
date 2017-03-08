@@ -196,7 +196,7 @@ public class AjaxOption {
    * @return dictionary produced by evaluating the array of AjaxOption on a WOComponent and adding the resulting name and JavaScript formatted values
    */
   public static NSMutableDictionary<String, String> createAjaxOptionsDictionary(NSArray<AjaxOption> ajaxOptions, WOComponent component) {
-	NSMutableDictionary<String, String> optionsDictionary = new NSMutableDictionary<String, String>();
+	NSMutableDictionary<String, String> optionsDictionary = new NSMutableDictionary<>();
     for (AjaxOption ajaxOption : ajaxOptions) {
       ajaxOption.addToDictionary(component, optionsDictionary);
     }
@@ -211,7 +211,7 @@ public class AjaxOption {
    * @return dictionary produced by evaluating the array of AjaxOption on a WOComponent and adding the resulting name and JavaScript formatted values
    */
   public static NSMutableDictionary<String, String> createAjaxOptionsDictionary(NSArray<AjaxOption> ajaxOptions, WOComponent component, NSDictionary<String, ? extends WOAssociation> associations) {
-    NSMutableDictionary<String, String> optionsDictionary = new NSMutableDictionary<String, String>();
+    NSMutableDictionary<String, String> optionsDictionary = new NSMutableDictionary<>();
     for (AjaxOption ajaxOption : ajaxOptions) {
       ajaxOption.addToDictionary(component, associations, optionsDictionary);
     }

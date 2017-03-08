@@ -25,19 +25,19 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Autocompleting combo-box similar to Google suggest.
  * <p>
- * This is a component that look like a text field, where when you start
- * entering value, it start giving you a menu of options related to what you
+ * This is a component that looks like a text field, where when you start
+ * entering value, it starts giving you a menu of options related to what you
  * type. Think about the auto-completion feature of many IDE (XCode / Eclipse)
  * inside a textField.
  * <p>
- * The scriptaculous library has 2 version of the autocompleter combo-box : 
+ * The scriptaculous library has 2 versions of the autocompleter combo-box: 
  * a local version and an ajax version.
  * 
  * <h3>Local</h3>
  * The local version hold the list of values all in memory (client-side), there
- * is no interaction. If the number of elements is big enough to be in a
- * WOPopUP, then this variant is well suited for you. If the list of element to
- * show is too big, then you might prefer the 'ajax' version.<br> You have to
+ * is no interaction. If the number of elements is small enough to be in a
+ * WOPopUpButton, then this variant is well suited for you. If the list of element
+ * to show is too big, then you might prefer the 'ajax' version.<br>You have to
  * tell the component that it is local (by default it is 'ajax' type) using the
  * <code>isLocal</code> binding. Then the <code>list</code> binding will
  * need to provide all the objects needed to be found. Filtering of the list as
@@ -51,8 +51,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding list bound to a method that should return the whole list of object
  *          to be displayed. When used in an Ajax context, the component will
  *          push first to the <cite>value</cite> binding, giving you the chance
- *          to narrow the list of elements displayed. When used in a Local
- *          context, the list should contain all possible objects. the list will
+ *          to narrow the list of elements displayed. When used in a local
+ *          context, the list should contain all possible objects. The list will
  *          be filtered by the scriptaculous engine.
  * @binding value string that will hold the text entered in the field. It is
  *          continuously updated.
@@ -61,12 +61,15 @@ import er.extensions.foundation.ERXValueUtilities;
  *          <cite>displayString</cite> binding) of the object.
  * @binding displayString optional custom string representation of the current
  *          element.
+ * @binding escapeHTML pass <code>false</code> to prevent escaping of HTML in the
+ *          displayString value, defaults to <code>true</code>. This is applied
+ *          only when isLocal is false.
  * @binding isLocal boolean indicating if you want the list to be completely
  *          client-side. Binding a true value, would mean that the list will
- *          filtered on the client.
+ *          be filtered on the client.
  * @binding isLocalSharedList boolean indicating if the list needs to be shared.
  * @binding localSharedVarName the name of the javascript variable to use to 
- *          store the list in.  The list is stored in the userInfo dictionary
+ *          store the list in. The list is stored in the userInfo dictionary
  *          on the server side to allow for shared use by multiple auto complete 
  *          components.
  * @binding token
@@ -147,9 +150,9 @@ public class AjaxAutoComplete extends AjaxComponent {
     	}
     	return indicator;
     }
-    
-    protected NSDictionary createAjaxOptions() {
-      NSMutableArray ajaxOptionsArray = new NSMutableArray();
+
+    protected NSDictionary<String, String> createAjaxOptions() {
+      NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
       ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
       ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
@@ -166,22 +169,21 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
       ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
-      NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
-      return options;
+      return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     }
-   
+
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
     @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
+		boolean isDisabled = booleanValueForBinding("disabled", false);
 		if ( !isDisabled ) {
-			boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
+			boolean isLocal = booleanValueForBinding("isLocal", false);
 			if (isLocal) {
-				StringBuffer str = new StringBuffer();
-				boolean isLocalSharedList = hasBinding("isLocalSharedList") && ((Boolean) valueForBinding("isLocalSharedList")).booleanValue();
+				StringBuilder str = new StringBuilder();
+				boolean isLocalSharedList = booleanValueForBinding("isLocalSharedList", false);
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
@@ -209,20 +211,19 @@ public class AjaxAutoComplete extends AjaxComponent {
 			} else {
 				String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
 				AjaxUtils.appendScriptHeader(res);
-				res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
+				res.appendContentString("new Ajax.Autocompleter('" + fieldName + "', '" + divName + "', '" + actionUrl + "', ");
 				AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
 				res.appendContentString(");");
 				AjaxUtils.appendScriptFooter(res);
 			}
 		}
-    }
+	}
 
-	String listeJS() {
+	protected String listeJS() {
 		StringBuilder str = new StringBuilder();
 		str.append("new Array(");
 		NSArray list = (NSArray) valueForBinding("list");
 		int max = list.count();
-		String cnt = "";
 		boolean hasItem = hasBinding("item");
 		for (int i = 0; i < max; i++) {
 			Object ds = list.objectAtIndex(i);
@@ -234,30 +235,31 @@ public class AjaxAutoComplete extends AjaxComponent {
 				setValueForBinding(ds, "item");
 			}
 			Object displayValue = valueForBinding("displayString", valueForBinding("item", ds));
-			str.append(displayValue.toString());
-			// TODO: We should escape the javascript string delimiter (") to keep the javascript interpreter happy.
-			//str.append(displayValue.toString().replaceAll("\"", "\\\\\\\\\"")); // doesn't work
-			str.append(cnt);
-			str.append("\"");
+			String escapedValue = displayValue.toString();
+			if (escapedValue.contains("\"")) {
+				escapedValue = escapedValue.replaceAll("(?<!\\\\)\"", "\\\\\\\"");
+			}
+			str.append(escapedValue);
+			str.append('"');
 		}
 		str.append(')');
 		return str.toString();
-	}		
+	}
 
     /**
      * Adds all required resources.
      */
     @Override
     protected void addRequiredWebResources(WOResponse res) {
-		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
+		boolean isDisabled = booleanValueForBinding("disabled", false);
 		if ( !isDisabled ) {
 			addScriptResourceInHead(res, "prototype.js");
 			addScriptResourceInHead(res, "effects.js");
 			addScriptResourceInHead(res, "controls.js");
 			addScriptResourceInHead(res, "wonder.js");
 		}
-    }
-    
+	}
+
 	public String stringValue() {
 		String strValue = null;
 		if (hasBinding("selection")) {
@@ -324,7 +326,12 @@ public class AjaxAutoComplete extends AjaxComponent {
         	if(hasItem) {
                 setValueForBinding(value, "item");
          	}
-            response.appendContentString(displayStringForValue(value));
+            boolean escapeHTML = booleanValueForBinding("escapeHTML", true);
+            if (escapeHTML) {
+                response.appendContentHTMLString(displayStringForValue(value));
+            } else {
+                response.appendContentString(displayStringForValue(value));
+            }
         }
         response.appendContentString("</li>");
     }

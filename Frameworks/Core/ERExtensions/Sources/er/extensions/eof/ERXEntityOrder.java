@@ -28,7 +28,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 public abstract class ERXEntityOrder
 {
     private static final Logger log = LoggerFactory.getLogger(ERXEntityOrder.class);
-    protected NSMutableDictionary<String, Integer> groupedEntities = new NSMutableDictionary<String, Integer>();
+    protected NSMutableDictionary<String, Integer> groupedEntities = new NSMutableDictionary<>();
     protected NSArray<EOEntity> allEntities = null;
 
 
@@ -89,7 +89,7 @@ public abstract class ERXEntityOrder
         while (entities.count() > 0) {
             // Entities that are eligible for this group are NOT added to the master list
             // immediately to avoid dependencies between entities in the same group
-            NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<String,Integer>();
+            NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<>();
 
             Integer group = Integer.valueOf(groupNum++);
             log.trace("Building group {}", group);
@@ -115,7 +115,7 @@ public abstract class ERXEntityOrder
             // If an error is found, log out information to make debugging easier
             if (groupDictionary.count() == 0) {
                 log.error("Stopping, circular relationships found for {}", entities.valueForKey("name"));
-                NSSet<String> remainingEntities = new NSSet<String>((NSArray<String>)entities.valueForKey("name"));
+                NSSet<String> remainingEntities = new NSSet<>((NSArray<String>)entities.valueForKey("name"));
                 for (int i = 0; i < entities.count(); i++) {
                     EOEntity entity = entities.objectAtIndex(i);
                     NSSet<String> remainingDependencies = dependentEntities(dependencies, entity).setByIntersectingSet(remainingEntities);

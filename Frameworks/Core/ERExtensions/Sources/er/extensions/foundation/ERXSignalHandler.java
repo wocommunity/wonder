@@ -31,7 +31,7 @@ public class ERXSignalHandler implements SignalHandler {
 		}
 		NSMutableArray<SignalHandler> listeners = _handler.signals.objectForKey(signalName);
 		if(listeners == null) {
-			listeners = new NSMutableArray<SignalHandler>();
+			listeners = new NSMutableArray<>();
 			
 	        Signal signal = new Signal(signalName);
 	        Signal.handle(signal, _handler);
@@ -49,7 +49,7 @@ public class ERXSignalHandler implements SignalHandler {
 		signalName = normalize(signalName);
 		NSMutableArray<SignalHandler> listeners = _handler.signals.objectForKey(signalName);
 		if(listeners == null) {
-			listeners = new NSMutableArray<SignalHandler>();
+			listeners = new NSMutableArray<>();
 		}
 		listeners.removeObject(handler);
 	}

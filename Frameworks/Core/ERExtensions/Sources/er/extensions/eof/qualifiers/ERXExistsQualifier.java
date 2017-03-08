@@ -68,7 +68,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 */
 	static final Logger log = LoggerFactory.getLogger(ERXExistsQualifier.class);
 
-	private static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ \\.'\"\\(]|$)");
+	private static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ ,\\.'\"\\(]|$)");
 
 	public static final String EXISTS_ALIAS = "exists";
 	public static final boolean UseSQLInClause = true;
@@ -279,12 +279,15 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
             
             String destEntityForeignKey;
+            NSArray<EOAttribute> destinationAttributes;
             if (relationship != null) {
                 EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
                 destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(parentChildJoin.destinationAttribute().columnName());
+                destinationAttributes = relationship.destinationAttributes();
             } else {
                 EOAttribute pk = srcEntity.primaryKeyAttributes().lastObject();
                 destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(pk.columnName());
+                destinationAttributes = destEntity.primaryKeyAttributes();
             }
             
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
@@ -295,7 +298,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 
             EOSQLExpression subExpression = factory.expressionForEntity(destEntity);
             subExpression.setUseAliases(true);
-            subExpression.prepareSelectExpressionWithAttributes(relationship.destinationAttributes(), false, fetchSpecification);
+            subExpression.prepareSelectExpressionWithAttributes(destinationAttributes, false, fetchSpecification);
 
             for (Enumeration bindEnumeration = subExpression.bindVariableDictionaries().objectEnumerator(); bindEnumeration.hasMoreElements();) {
                 expression.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
@@ -313,16 +316,6 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             	// (AR) Write the IN clause
                 sb.append(srcEntityForeignKey);
                 sb.append(" IN ( ");
-                
-                // (AR) Rewrite first SELECT part of subExprStr
-                EOAttribute destPK = destEntity.primaryKeyAttributes().lastObject();
-                String destEntityPrimaryKey = expression.sqlStringForAttribute(destPK);
-                int indexOfFirstPeriod = destEntityPrimaryKey.indexOf(".");
-                destEntityPrimaryKey = destEntityPrimaryKey.substring(indexOfFirstPeriod);
-                subExprStr = StringUtils.replaceOnce(
-                		subExprStr,
-                		"SELECT " + EXISTS_ALIAS + "0" + destEntityPrimaryKey + " FROM", 
-                		"SELECT " + EXISTS_ALIAS + "0" + destEntityForeignKey + " FROM");
             } else {
                 sb.append(" EXISTS ( ");
             }
@@ -361,7 +354,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             EOEntity entity = expression.entity();
             EORelationship rel;
             EOAttribute att;
-            NSMutableArray<EOProperty> path = new NSMutableArray<EOProperty>();
+            NSMutableArray<EOProperty> path = new NSMutableArray<>();
             int numPieces = pieces.count();
 
             if (numPieces == 1 && null == entity.anyRelationshipNamed(name)) {

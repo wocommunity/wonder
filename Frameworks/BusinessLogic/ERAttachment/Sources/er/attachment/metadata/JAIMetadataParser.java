@@ -26,7 +26,7 @@ public class JAIMetadataParser implements IERMetadataParser {
   public static int EXIF = 0xE1;
   public static int IPTC = 0xED;
 
-  private static Set<String> UNWANTED = new HashSet<String>();
+  private static Set<String> UNWANTED = new HashSet<>();
 
   static {
     JAIMetadataParser.UNWANTED.add("com.sun.media.imageioimpl.plugins.jpeg.CLibJPEGImageReader");
@@ -36,8 +36,7 @@ public class JAIMetadataParser implements IERMetadataParser {
   public ERMetadataDirectorySet parseMetadata(File importFile) throws ERMetadataParserException {
     try {
       ERMetadataDirectorySet rawAssetMetadata = new ERMetadataDirectorySet();
-      ImageInputStream imageInputStream = ImageIO.createImageInputStream(importFile);
-      try {
+      try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(importFile)) {
         Iterator imageReadersIter = ImageIO.getImageReaders(imageInputStream);
         while (imageReadersIter.hasNext()) {
           ImageReader imageReader = (ImageReader) imageReadersIter.next();
@@ -64,9 +63,6 @@ public class JAIMetadataParser implements IERMetadataParser {
             }
           }
         }
-      }
-      finally {
-        imageInputStream.close();
       }
       return rawAssetMetadata;
     }

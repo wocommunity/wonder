@@ -2,7 +2,7 @@ package er.extensions.components;
 
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * <div class="en">
@@ -137,7 +137,7 @@ public class ERXLoremIpsumGenerator {
 	 *         <div class="ja">Lorem Ipsum テキストより段落</div>
 	 */
 	public static String paragraph() {
-		return _paragraphs[RandomUtils.nextInt(_paragraphs.length)];
+		return _paragraphs[RandomUtils.nextInt(0, _paragraphs.length)];
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class ERXLoremIpsumGenerator {
 	 *         <div class="ja">Lorem Ipsum テキストよりランダム文</div>
 	 */
 	public static String sentence() {
-		return sentence(paragraph(), RandomUtils.nextInt(20) + 1);
+		return sentence(paragraph(), RandomUtils.nextInt(0, 20) + 1);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class ERXLoremIpsumGenerator {
 	 */
 	public static String word() {
 		String paragraph = paragraph();
-		int start = paragraph.indexOf(' ', RandomUtils.nextInt(paragraph.length() - 20));
+		int start = paragraph.indexOf(' ', RandomUtils.nextInt(0, paragraph.length() - 20));
 
 		return paragraph.substring(start, paragraph.indexOf(' ', start + 1)).replaceAll("[.,;\\s]*$", "").toLowerCase().trim();
 	}
@@ -343,7 +343,7 @@ public class ERXLoremIpsumGenerator {
 		if (max < min) {
 			max = min + 1;
 		}
-		return words(RandomUtils.nextInt(min) + max - min + 1);
+		return words(RandomUtils.nextInt(0, min) + max - min + 1);
 	}
 
 	/**

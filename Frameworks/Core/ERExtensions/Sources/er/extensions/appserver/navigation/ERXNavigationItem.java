@@ -225,7 +225,7 @@ public class ERXNavigationItem implements Serializable {
 					}
 				}
 				else {
-					log.warn("For nav core object: {} and child binding: {} recieved binding object: {}", this, childrenBinding(), o);
+					log.warn("For nav core object: {} and child binding: {} received binding object: {}", this, childrenBinding(), o);
 				}
 			}
 		}

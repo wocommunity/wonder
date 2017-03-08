@@ -125,6 +125,11 @@ import er.rest.routes.jsr311.Paths;
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
+	 * Header used to override the method of a request. Useful when client code can use only GET and POST methods.
+	 */
+	private static final String X_HTTP_METHOD_OVERRIDE_HEADER_KEY = "x-http-method-override";
+
+	/**
 	 * A NameFormat that behaves like Rails -- plural entities, plural routes, lowercase underscore names
 	 * (names_like_this).
 	 */
@@ -823,8 +828,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		try {
 			String path = request._uriDecomposed().requestHandlerPath();
+			String method = request.headerForKey(X_HTTP_METHOD_OVERRIDE_HEADER_KEY, request.method());
 
-			ERXRoute matchingRoute = setupRequestWithRouteForMethodAndPath(request, request.method(), path);
+			ERXRoute matchingRoute = setupRequestWithRouteForMethodAndPath(request, method, path);
 			if (matchingRoute != null) {
 				@SuppressWarnings("unchecked")
 				NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);

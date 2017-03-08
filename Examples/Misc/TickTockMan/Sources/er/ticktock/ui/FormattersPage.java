@@ -64,7 +64,7 @@ public class FormattersPage extends WOComponent {
 
 	public NSArray<String> units() {
 		if (_units == null)
-			_units = new NSArray<String>(new String[] { "year", "month", "day", "hour", "minute", "seconds" });
+			_units = new NSArray<>(new String[] { "year", "month", "day", "hour", "minute", "seconds" });
 		return _units;
 	}
 

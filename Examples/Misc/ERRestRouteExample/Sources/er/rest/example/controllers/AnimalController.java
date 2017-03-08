@@ -101,7 +101,7 @@ public class AnimalController extends ERXDefaultRouteController {
 		if (isSchemaRequest()) {
 			return schemaResponse(showFilter());
 		}
-		ERXRestFetchSpecification<Animal> fetchSpec = new ERXRestFetchSpecification<Animal>(Animal.ENTITY_NAME, null, null, queryFilter(), Animal.NAME.ascs(), 25);
+		ERXRestFetchSpecification<Animal> fetchSpec = new ERXRestFetchSpecification<>(Animal.ENTITY_NAME, null, null, queryFilter(), Animal.NAME.ascs(), 25);
 		return response(fetchSpec, showFilter());
 	}
 }

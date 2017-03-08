@@ -40,7 +40,7 @@ public class Client {
 		ClientCompany updatedCompany = client.objectWithPath("Company/1.json");
 		System.out.println("Client.main: updated company = " + updatedCompany);
 		
-		NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+		NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
 		dict.setObjectForKey("Schrag", "lastName");
 		dict.setObjectForKey("Mike", "firstName");
 		dict.setObjectForKey(new NSDictionary<String, Object>("true", "nested"), "child");

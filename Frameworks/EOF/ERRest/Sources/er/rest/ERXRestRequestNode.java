@@ -49,7 +49,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	private String _name;
 	private boolean _rootNode;
 	private Object _value;
-	private LinkedHashMap<String, Object> _attributes;
+	private Map<String, Object> _attributes;
 	private NSMutableArray<ERXRestRequestNode> _children;
 	private Object _associatedObject;
 
@@ -234,7 +234,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the NSCollection/Java object that corresponds to this node hierarchy
 	 */
 	public Object toNSCollection(ERXRestFormat.Delegate delegate) {
-		return toNSCollection(delegate, new NSMutableDictionary<Object, Object>());
+		return toNSCollection(delegate, new NSMutableDictionary<>());
 	}
 
 	/**
@@ -1473,7 +1473,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			requestNode = new ERXRestRequestNode(entityName, true);
 			requestNode.setType(entityName);
 		}
-		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, context, new HashSet<Object>());
+		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, context, new HashSet<>());
 		return requestNode;
 	}
 

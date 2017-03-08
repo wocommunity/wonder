@@ -5,13 +5,16 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomComponent;
 import er.directtoweb.pages.ERD2WPage;
+import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Class for DirectToWeb Component ERDAttributeRepetition.
@@ -24,6 +27,7 @@ import er.extensions.appserver.ERXWOContext;
  * @d2wKey propertyKey
  * @d2wKey alternateKeyInfo
  * @d2wKey sectionsContents
+ * @d2wKey displayVariant
  */
 public class ERDAttributeRepetition extends ERDCustomComponent {
 	/**
@@ -36,6 +40,8 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDAttributeRepetition.class);
 
+    public static final String DisplayVariantChanged = "DisplayVariantChanged";
+    
     /**
      * Public constructor
      * @param context the context
@@ -79,7 +85,44 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
      * @return the display variant, if specified
      */
     public String displayVariant() {
-        return (String)d2wContext().valueForKey(ERD2WPage.Keys.displayVariant);
+        String displayVariant = (String)d2wContext().valueForKey(ERD2WPage.Keys.displayVariant);
+        if (!("omit".equals(displayVariant) || "blank".equals(displayVariant))) {
+            // the property is neither omitted nor blanked via the rules, 
+            // so we let the user decide
+            String key = ERD2WPage.Keys.displayVariant + "." + propertyKey();
+            String preference =
+                    (String) userPreferencesValueForPageConfigurationKey(key);
+            if (!ERXStringUtilities.isBlank(preference)) {
+                displayVariant = preference;
+            }
+        }
+        return displayVariant;
+    }
+
+    /**
+     * Utility method to get a value from the user prefs.
+     * 
+     * @param key
+     */
+    protected Object userPreferencesValueForKey(String key) {
+        Object result = null;
+        NSKeyValueCoding userPreferences = (NSKeyValueCoding) d2wContext().valueForKey(
+                "userPreferences");
+        if (userPreferences != null) {
+            result = userPreferences.valueForKey(key);
+        }
+        return result;
+    }
+
+    /**
+     * Utility method to get a value for the current page configuration from the
+     * user prefs.
+     * 
+     * @param key
+     */
+    protected Object userPreferencesValueForPageConfigurationKey(String key) {
+        key = ERXExtensions.userPreferencesKeyFromContext(key, d2wContext());
+        return userPreferencesValueForKey(key);
     }
 
     /**

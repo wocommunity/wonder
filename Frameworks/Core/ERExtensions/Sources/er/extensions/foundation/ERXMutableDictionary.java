@@ -28,11 +28,8 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 	public static final long serialVersionUID = 8091318522043166356L;
 
 	public static NSData toBlob(NSDictionary<?,?> d) {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(bout);
+		try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); ObjectOutputStream oos = new ObjectOutputStream(bout)) {
 			oos.writeObject(d);
-			oos.close();
 			NSData sp = new NSData(bout.toByteArray());
 			return sp;
 		}
@@ -48,11 +45,8 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 
 	@SuppressWarnings("unchecked")
 	public static NSDictionary fromBlob(NSData d) {
-		try {
-			ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
-			ObjectInputStream ois = new ERXMappingObjectStream(bis);
+		try (ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes()); ObjectInputStream ois = new ERXMappingObjectStream(bis)) {
 			NSDictionary<?,?> dd = (NSDictionary<?,?>) ois.readObject();
-			ois.close();
 			return dd;
 		}
 		catch (IOException e) {

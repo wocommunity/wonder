@@ -143,7 +143,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitiveArrayToJSON() {
-        String output = ERXRestFormat.json().toString(null, new NSArray<String>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+        String output = ERXRestFormat.json().toString(null, new NSArray<>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
         assertEquals("[\"a\",\"b\",\"c\"]\n", output);
     }
 
@@ -798,8 +798,8 @@ public class ERRestTest extends TestCase {
     }
 
     public void testMap() {
-        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
-        LinkedHashMap<String, Object> message = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> message = new LinkedHashMap<>();
         message.put("subject", "this is a subject");
         message.put("message", "this is a message");
         message.put("priority", Integer.valueOf(10));

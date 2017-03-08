@@ -1,6 +1,7 @@
 <html>
-<body>
-<style>
+<head>
+<title>ERProfiling</title>
+<style type="text/css">
 body {
         color: rgb(80, 80, 80);
 }
@@ -25,8 +26,9 @@ code {
         margin-right: 20px;
         white-space: pre;
 }
-
 </style>
+</head>
+<body>
 
 <h1>ERProfiling</h1>
 
@@ -60,16 +62,16 @@ When ERProfiling is enabled, every page will have a profiling bar at the bottom 
 	<li>The "194.71ms" says that the entire page took 194.71ms to fully process (that's the time from the start of the request to the end of the last appendToResponse).</li>
 	<li>The next section shows a histogram of processing. I call this the "bleed factor". The &lt;1ms:39% (1228) says that there were 1228 operations on the page that each took less than 1ms to happen for a total cost of 39% of the full request time. 
 	    The &lt;100ms shows the count and cost of the operations that took from 10ms to 100ms.
-	    The &lt=100ms shows the count and cost of the operations that took 100ms or more to run.
-	    A high 10ms percentage means that your page is bleeding -- you have lots of very small operations (for instance, tons of simple components on a page). A high &gt=100ms number means that you have large expensive operations (like SQL).
+	    The &lt;=100ms shows the count and cost of the operations that took 100ms or more to run.
+	    A high 10ms percentage means that your page is bleeding -- you have lots of very small operations (for instance, tons of simple components on a page). A high &gt;=100ms number means that you have large expensive operations (like SQL).
 	    As an example, a D2W query page would have a high bleed whereas a query results page would have a low bleed and a high cost.
 	</li>
-	<li>The "SQL: 7% (4)" says that 7% of the cost of the page was SQL execution as a result of 4 queries. Notice that "SQL" is a link. We will come back to that.</ul>
+	<li>The "SQL: 7% (4)" says that 7% of the cost of the page was SQL execution as a result of 4 queries. Notice that "SQL" is a link. We will come back to that.</li>
 	<li>The "D2W: 0% (0)" says that 0% of the page was a result of processing D2W rules and that 0 keys were evaluated. This actually counts valueForKey evaluations rather than rules (right now). Notice that "D2W" is a link. We will come back to that.</li>
 	<li>The "take:0%, invoke:0%, append:92%" shows the distribution of the request cost across each of the three request-response loop phases. In this case, we didn't submit a form, so 92% of the cost of our page is in appendToResponse. 
 	    The difference between the sum of these values and 100% is overhead that is occurring outside of the phases of the loop (we will continue to refine profiling to give more understanding of that overhead in the future). Notice that each of the
 	    phases is a link, along with the "all three" option. We will come back to that.</li>
-	<li>The "all" link. We will come back to that.</ul>
+	<li>The "all" link. We will come back to that.</li>
 	<li>The "heat on/off" link. We will come back to that.</li>
 </ol>
 
@@ -190,7 +192,7 @@ will be corrected in the future.
  
 <h2>URL Tricks</h2>
 <p>
-Not all of the features of ERProfiling are exposed with UI (yet). There are some tricks you can perform by modifying the profiling tree URLs. A typical profiler URL looks like "http://localhost:5789/cgi-bin/WebObjects/MDTask.woa/profiler/tree?id=d651678e-2eea-4322-bacd-81cd1568f51e&filter=SQL". ERProfiling registers a custom request
+Not all of the features of ERProfiling are exposed with UI (yet). There are some tricks you can perform by modifying the profiling tree URLs. A typical profiler URL looks like "http://localhost:5789/cgi-bin/WebObjects/MDTask.woa/profiler/tree?id=d651678e-2eea-4322-bacd-81cd1568f51e&amp;filter=SQL". ERProfiling registers a custom request
 handler bound to "profiler."
 
 <ul>

@@ -38,13 +38,13 @@ public class VersionsPage extends ERXComponent {
         NSArray<EOEnterpriseObject> digests1 = (NSArray<EOEnterpriseObject>)result1.valueForKey("digests");
         NSArray<EOEnterpriseObject> digests2 = (NSArray<EOEnterpriseObject>)result2.valueForKey("digests");
 
-        NSMutableDictionary<String,String> dict1 = new NSMutableDictionary<String,String>();
-        NSMutableDictionary<String,String> dict2 = new NSMutableDictionary<String,String>();
+        NSMutableDictionary<String,String> dict1 = new NSMutableDictionary<>();
+        NSMutableDictionary<String,String> dict2 = new NSMutableDictionary<>();
 
         for (EOEnterpriseObject eo : digests1) { dict1.setObjectForKey(eo.valueForKey("digest").toString(), eo.valueForKey("rname").toString()); }
         for (EOEnterpriseObject eo : digests2) { dict2.setObjectForKey(eo.valueForKey("digest").toString(), eo.valueForKey("rname").toString()); }
 
-        NSMutableArray<String> same = new NSMutableArray<String>();
+        NSMutableArray<String> same = new NSMutableArray<>();
 
         for (String key : dict1.allKeys()) {
             if (dict1.objectForKey(key) != null && dict2.objectForKey(key) != null && dict1.objectForKey(key).equals(dict2.objectForKey(key))) {
@@ -62,19 +62,19 @@ public class VersionsPage extends ERXComponent {
         NSArray<EOEnterpriseObject> digests1 = (NSArray<EOEnterpriseObject>)result1.valueForKey("digests");
         NSArray<EOEnterpriseObject> digests2 = (NSArray<EOEnterpriseObject>)result2.valueForKey("digests");
 
-        NSMutableDictionary<String,String> dict1 = new NSMutableDictionary<String,String>();
-        NSMutableDictionary<String,String> dict2 = new NSMutableDictionary<String,String>();
+        NSMutableDictionary<String,String> dict1 = new NSMutableDictionary<>();
+        NSMutableDictionary<String,String> dict2 = new NSMutableDictionary<>();
 
         for (EOEnterpriseObject eo : digests1) { dict1.setObjectForKey(eo.valueForKey("digest").toString(), eo.valueForKey("rname").toString()); }
         for (EOEnterpriseObject eo : digests2) { dict2.setObjectForKey(eo.valueForKey("digest").toString(), eo.valueForKey("rname").toString()); }
 
-        NSSet<String> set1 = new NSSet<String>((NSArray<String>)digests1.valueForKey("rname"));
-        NSSet<String> set2 = new NSSet<String>((NSArray<String>)digests1.valueForKey("rname"));
+        NSSet<String> set1 = new NSSet<>((NSArray<String>)digests1.valueForKey("rname"));
+        NSSet<String> set2 = new NSSet<>((NSArray<String>)digests1.valueForKey("rname"));
 
         NSSet<String> addedTo1 = set1.setBySubtractingSet(set2);
         NSSet<String> addedTo2 = set2.setBySubtractingSet(set1);
 
-        NSMutableArray<String> same = new NSMutableArray<String>();
+        NSMutableArray<String> same = new NSMutableArray<>();
 
         for (String str : addedTo1) {
             same.add(str+" "+dict1.objectForKey(str)+" ADDED TO ONE");

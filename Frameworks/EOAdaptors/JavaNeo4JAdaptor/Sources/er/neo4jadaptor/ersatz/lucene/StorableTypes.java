@@ -130,7 +130,7 @@ public enum StorableTypes implements Coder {
 		this.typeId = typeId;
 	}
 
-	private static Map<String, StorableTypes> map = new HashMap<String, StorableTypes>();
+	private static Map<String, StorableTypes> map = new HashMap<>();
 	
 	static {
 		for (StorableTypes type : values()) {

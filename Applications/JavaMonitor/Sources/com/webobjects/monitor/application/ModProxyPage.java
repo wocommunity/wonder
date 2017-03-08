@@ -15,7 +15,7 @@ public class ModProxyPage extends MonitorComponent
 {
 	private static final long serialVersionUID = 1L;
 
-	public NSArray<String> loadBalencers = new NSArray<String>("byrequests", "bytraffic", "bybusyness");
+	public NSArray<String> loadBalencers = new NSArray<>("byrequests", "bytraffic", "bybusyness");
 	public String loadBalancerItem;
 	public String loadBalancer = "byrequests";
 
@@ -73,7 +73,7 @@ public class ModProxyPage extends MonitorComponent
 
 			result.append("<Proxy balancer://" + anApp.name() + ".woa>\n");
 
-			NSMutableArray<String> reversePathes = new NSMutableArray<String>();
+			NSMutableArray<String> reversePathes = new NSMutableArray<>();
 
 			for (Enumeration<MInstance> e2 = anApp.instanceArray().objectEnumerator(); e2.hasMoreElements();)
 			{
@@ -180,8 +180,8 @@ public class ModProxyPage extends MonitorComponent
 		result.append("RewriteEngine On\n\n");
 		result.append("# Rewrite rules\n");
 
-		NSMutableArray<String> rewriteRules = new NSMutableArray<String>();
-		NSMutableArray<String> properitesRules = new NSMutableArray<String>();
+		NSMutableArray<String> rewriteRules = new NSMutableArray<>();
+		NSMutableArray<String> properitesRules = new NSMutableArray<>();
 
 		for (Enumeration<MApplication> e = siteConfig().applicationArray().objectEnumerator(); e.hasMoreElements();)
 		{

@@ -26,7 +26,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
+	private final NSArray<Boolean> _options = new NSArray<>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 
 	public static class BooleanProxy implements Serializable {
 		/**
@@ -66,8 +66,8 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
     private static final BooleanProxy FALSE = new BooleanProxy(Boolean.FALSE);
     private static final BooleanProxy NULL = new BooleanProxy(null);
     
-	private final NSArray<BooleanProxy> _proxyOptions = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE });
-	private final NSArray<BooleanProxy> _proxyOptionsWithNull = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE, NULL});
+	private final NSArray<BooleanProxy> _proxyOptions = new NSArray<>(new BooleanProxy[] { TRUE, FALSE });
+	private final NSArray<BooleanProxy> _proxyOptionsWithNull = new NSArray<>(new BooleanProxy[] { TRUE, FALSE, NULL});
 	
 	public Boolean _option;
 	public BooleanProxy _proxy;

@@ -9,6 +9,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOProperty;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -38,6 +39,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.extensions.partials.enabled
  * @author mschrag
+ * @author jtabert
  */
 public class ERXPartialInitializer {
 	private static final Logger log = LoggerFactory.getLogger(ERXModelGroup.class);
@@ -78,11 +80,12 @@ public class ERXPartialInitializer {
 
 	@SuppressWarnings({ "unchecked", "cast" })
 	public void initializePartialEntities(EOModelGroup modelGroup) {
-		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<EOEntity, EOEntity>();
+		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<>();
 
 		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
+			// TODO: merge userInfo from model
 			Enumeration entitiesEnum = model.entities().objectEnumerator();
 			while (entitiesEnum.hasMoreElements()) {
 				EOEntity partialExtensionEntity = (EOEntity) entitiesEnum.nextElement();
@@ -100,21 +103,36 @@ public class ERXPartialInitializer {
 						while (partialAttributes.hasMoreElements()) {
 							EOAttribute partialAttribute = (EOAttribute) partialAttributes.nextElement();
 							if (partialEntity.attributeNamed(partialAttribute.name()) == null) {
-								NSMutableDictionary<String, Object> attributePropertyList = new NSMutableDictionary<String, Object>();
+								NSMutableDictionary<String, Object> attributePropertyList = new NSMutableDictionary<>();
 								partialAttribute.encodeIntoPropertyList(attributePropertyList);
 								String factoryMethodArgumentType = (String) attributePropertyList.objectForKey("factoryMethodArgumentType");
-								// OFFICIALLY THE DUMBEST DAMN THING I'VE EVER
-								// SEEN
+								// OFFICIALLY THE DUMBEST DAMN THING I'VE EVER SEEN
 								if ("EOFactoryMethodArgumentIsString".equals(factoryMethodArgumentType)) {
 									attributePropertyList.setObjectForKey("EOFactoryMethodArgumentIsNSString", "factoryMethodArgumentType");
 								}
 								EOAttribute primaryAttribute = new EOAttribute(attributePropertyList, partialEntity);
 								primaryAttribute.awakeWithPropertyList(attributePropertyList);
 								partialEntity.addAttribute(primaryAttribute);
+								// check if the attribute is a class property
+								if (!partialExtensionEntity.classPropertyNames().contains(partialAttribute.name())) {
+									EOProperty p = partialEntity.propertyNamed(partialAttribute.name());
+									if (p != null) {
+										partialEntity.classProperties().remove(p);
+										log.debug("Removing partial attribute {}.{} from {}.classProperties because it is not defined as class property.", partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
+									}
+								}
+								// check if the attribute is used for locking
+								if (!partialExtensionEntity.attributesUsedForLocking().contains(partialAttribute)) {
+									EOAttribute a = partialEntity.attributeNamed(partialAttribute.name());
+									if (a != null) {
+										partialEntity.attributesUsedForLocking().remove(a);
+										log.debug("Removing partial attribute {}.{} from {} attributesUsedForLocking because it is not defined as locking attribute.", partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
+									}
+								}
 							}
 							else {
-								log.debug("Skipping partial attribute {}.{} because {} already has an attribute of the same name.",
-										partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
+								// TODO: merge userInfo from attribute
+								log.debug("Skipping partial attribute {}.{} because {} already has an attribute of the same name.", partialExtensionEntity.name(), partialAttribute.name(), partialEntity.name());
 							}
 						}
 
@@ -122,16 +140,24 @@ public class ERXPartialInitializer {
 						while (partialRelationships.hasMoreElements()) {
 							EORelationship partialRelationship = (EORelationship) partialRelationships.nextElement();
 							if (partialEntity.relationshipNamed(partialRelationship.name()) == null) {
-								NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+								NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<>();
 								partialRelationship.encodeIntoPropertyList(relationshipPropertyList);
 
 								EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, partialEntity);
 								primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
 								partialEntity.addRelationship(primaryRelationship);
+								// check if the relationship is a class property
+								if (!partialExtensionEntity.classPropertyNames().contains(partialRelationship.name())) {
+									EOProperty p = partialEntity.propertyNamed(partialRelationship.name());
+									if (p != null) {
+										partialEntity.classProperties().remove(p);
+										log.debug("Removing partial relationship {}.{} from {} classProperties because it is not defined as class property.", partialExtensionEntity.name(), partialRelationship.name(), partialEntity.name());
+									}
+								}
 							}
 							else {
-								log.debug("Skipping partial relationship {}.{} because {} already has a relationship of the same name.",
-										partialExtensionEntity.name(), partialRelationship.name(), partialEntity.name());
+								// TODO: merge userInfo from relationship
+								log.debug("Skipping partial relationship {}.{} because {} already has a relationship of the same name.", partialExtensionEntity.name(), partialRelationship.name(), partialEntity.name());
 							}
 						}
 
@@ -150,7 +176,7 @@ public class ERXPartialInitializer {
 			}
 		}
 
-		NSMutableSet<EOEntity> convertedEntities = new NSMutableSet<EOEntity>();
+		NSMutableSet<EOEntity> convertedEntities = new NSMutableSet<>();
 		modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
@@ -194,7 +220,7 @@ public class ERXPartialInitializer {
 				}
 			}
 			
-			NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<>();
 			relationship.encodeIntoPropertyList(relationshipPropertyList);
 			relationshipPropertyList.setObjectForKey(baseEntity.name(), "destination");
 			

@@ -29,7 +29,7 @@ public class AutoCompleteExample extends WOComponent {
      * in allValues that contain this value.
      */
     public NSArray currentValues(String v) {
-        NSMutableArray<Word> result = new NSMutableArray<Word>();
+        NSMutableArray<Word> result = new NSMutableArray<>();
         for(Enumeration e = allValues.objectEnumerator(); e.hasMoreElements() && result.count() < 10;) {
         	Word c = (Word) e.nextElement();
             if(v == null || c.name.toLowerCase().indexOf(v.toLowerCase()) >= 0) {

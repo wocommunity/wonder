@@ -37,7 +37,7 @@ public class ERWOAdaptorUtilities {
 		// headers
         NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
         for (Map.Entry<String, String> header: request.getHeaders()) {
-        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
+        	headers.setObjectForKey(new NSArray<>(header.getValue().split(",")), header.getKey());
         }
         
         // content

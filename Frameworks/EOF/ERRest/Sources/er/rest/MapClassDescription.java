@@ -21,7 +21,7 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	private Map<String, ?> _map;
 
 	public MapClassDescription() {
-		this(new HashMap<String, Object>());
+		this(new HashMap<>());
 	}
 	
 	public MapClassDescription(Map<String, ?> map) {

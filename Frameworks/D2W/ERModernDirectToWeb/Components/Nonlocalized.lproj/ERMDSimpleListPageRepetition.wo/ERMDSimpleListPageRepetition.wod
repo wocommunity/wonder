@@ -103,9 +103,19 @@ HasLeftActionsConditional : WOConditional {
 	condition = hasLeftActions;
 }
 
+HasNoRightActionsConditional : WOConditional {
+	condition = hasRightActions;
+	negate = true;
+}
+
 HasRightActionsConditional : WOConditional {
 	condition = hasRightActions;
 }
+
+ColumnSelector : ERMD2WColumnSelector {
+	d2wContext = d2wContext;
+}
+
 D2wContextEntityName : WOString {
   value = d2wContext.entity.name;
 }

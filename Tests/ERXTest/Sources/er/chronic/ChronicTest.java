@@ -17,7 +17,7 @@ import er.chronic.utils.Token;
 public class ChronicTest extends TestCase {
 
   public void testPostNormalizeAmPmAliases() {
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
 
     // affect wanted patterns
     tokens.add(new Token("5:00"));
@@ -33,7 +33,7 @@ public class ChronicTest extends TestCase {
     assertEquals(2, tokens.size());
 
     // don't affect unwanted patterns
-    tokens = new LinkedList<Token>();
+    tokens = new LinkedList<>();
     tokens.add(new Token("friday"));
     tokens.add(new Token("morning"));
     tokens.get(0).tag(new RepeaterDayName(DayName.FRIDAY));

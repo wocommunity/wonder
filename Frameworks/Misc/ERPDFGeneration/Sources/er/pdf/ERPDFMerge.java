@@ -76,7 +76,7 @@ public class ERPDFMerge {
 		
 		try {
 			List<InputStream> pdfs = streamOfPDFFiles;
-			List<PdfReader> readers = new ArrayList<PdfReader>();
+			List<PdfReader> readers = new ArrayList<>();
 			int totalPages = 0;
 			Iterator<InputStream> iteratorPDFs = pdfs.iterator();
 			

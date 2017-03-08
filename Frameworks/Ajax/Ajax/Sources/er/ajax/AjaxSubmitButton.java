@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -75,7 +76,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
   public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
-  public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
+  public AjaxSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
     super(name, associations, children);
   }
 
@@ -93,7 +94,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
   public NSMutableDictionary createAjaxOptions(WOComponent component) {
 	// PROTOTYPE OPTIONS
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
@@ -155,7 +156,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       formReference = "document." + formName;
     }
     
-    StringBuffer onClickBuffer = new StringBuffer();
+    StringBuilder onClickBuffer = new StringBuilder();
 
 	String onClickBefore = (String)valueForBinding("onClickBefore", component);
 	if (onClickBefore != null) {

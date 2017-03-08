@@ -31,7 +31,7 @@ public class SEModelStats {
 
   public NSArray<SEEntityStats> entityStats() {
     ensureSnapshotsLoaded();
-    return new NSArray<SEEntityStats>(_entityStats.values());
+    return new NSArray<>(_entityStats.values());
   }
 
   public int snapshotCount() {
@@ -45,7 +45,7 @@ public class SEModelStats {
   @SuppressWarnings( { "unchecked", "cast" })
   protected void ensureSnapshotsLoaded() {
     if (_entityStats == null) {
-      _entityStats = new NSMutableDictionary<String, SEEntityStats>();
+      _entityStats = new NSMutableDictionary<>();
       EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(_model, ERXEC.newEditingContext());
       databaseContext.lock();
       try {

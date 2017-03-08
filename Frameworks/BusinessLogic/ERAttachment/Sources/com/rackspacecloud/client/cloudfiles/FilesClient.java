@@ -375,7 +375,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
        		if(limit > 0) {
     			parameters.add(new BasicNameValuePair("limit", String.valueOf(limit)));
     		}
@@ -414,7 +414,7 @@ public class FilesClient
     				log.error("Got unexpected type of XML node name '{}'.", accountNode.getNodeName());
     				return null;
     			}
-    			ArrayList <FilesContainerInfo> containerList = new ArrayList<FilesContainerInfo>();
+    			ArrayList <FilesContainerInfo> containerList = new ArrayList<>();
     			NodeList containerNodes = accountNode.getChildNodes();
     			for(int i=0; i < containerNodes.getLength(); ++i) {
     				Node containerNode = containerNodes.item(i);
@@ -447,7 +447,7 @@ public class FilesClient
     		}		
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
-    			return new ArrayList<FilesContainerInfo>();
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -517,7 +517,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
     		
        		if(limit > 0) {
     			parameters.add(new BasicNameValuePair("limit", String.valueOf(limit)));
@@ -551,7 +551,7 @@ public class FilesClient
     			StrTokenizer tokenize = new StrTokenizer(response.getResponseBodyAsString());
     			tokenize.setDelimiterString("\n");
     			String [] containers = tokenize.getTokenArray();    			
-    			ArrayList <FilesContainer> containerList = new ArrayList<FilesContainer>();
+    			ArrayList <FilesContainer> containerList = new ArrayList<>();
     			for(String container : containers) { 
     				containerList.add(new FilesContainer(container, this));
     			}
@@ -559,7 +559,7 @@ public class FilesClient
     		}		
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
-    			return new ArrayList<FilesContainer>();
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -621,7 +621,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {    		
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
     		parameters.add(new BasicNameValuePair ("format", "xml"));
     		if (startsWith != null) {
     			parameters.add(new BasicNameValuePair (FilesConstants.LIST_CONTAINER_NAME_QUERY, startsWith));    		}
@@ -669,7 +669,7 @@ public class FilesClient
     				log.error("Got unexpected type of XML node name '{}'.", containerList.getNodeName());
     				return null;
     			}
-       			ArrayList <FilesObject> objectList = new ArrayList<FilesObject>();
+       			ArrayList <FilesObject> objectList = new ArrayList<>();
     			NodeList objectNodes = containerList.getChildNodes();
     			for(int i=0; i < objectNodes.getLength(); ++i) {
     				Node objectNode = objectNodes.item(i);
@@ -721,7 +721,7 @@ public class FilesClient
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
     			log.debug("Container {} has no Objects", container);
-    			return new ArrayList<FilesObject>();
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -1490,7 +1490,7 @@ public class FilesClient
 		if (!isValidObjectName(path))
 			throw new FilesInvalidNameException(path);
 		storeObject(container, new byte[0], "application/directory", path,
-				new HashMap<String, String>());
+				new HashMap<>());
 	}
 
     /**
@@ -1565,7 +1565,7 @@ public class FilesClient
     	{
     		HttpGet method = null;
     		try {
-     			LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+     			LinkedList<NameValuePair> params = new LinkedList<>();
     			if (limit > 0) {
     				params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
     			}
@@ -1596,7 +1596,7 @@ public class FilesClient
     				StrTokenizer tokenize = new StrTokenizer(response.getResponseBodyAsString());
     				tokenize.setDelimiterString("\n");
     				String [] containers = tokenize.getTokenArray();
-    				List<String> returnValue = new ArrayList<String>();
+    				List<String> returnValue = new ArrayList<>();
     				for (String containerName: containers)
     				{
     					returnValue.add(containerName);
@@ -1792,7 +1792,7 @@ public class FilesClient
     	{
     		HttpGet method = null;
     		try {
-    			LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+    			LinkedList<NameValuePair> params = new LinkedList<>();
     			params.add(new BasicNameValuePair("format", "xml"));
     			if (limit > 0) {
     				params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
@@ -1833,7 +1833,7 @@ public class FilesClient
      	    			log.error("Got unexpected type of XML node name '{}'.", accountNode.getNodeName());
      	    			return null;
      	    		}
-     	    		ArrayList <FilesCDNContainer> containerList = new ArrayList<FilesCDNContainer>();
+     	    		ArrayList <FilesCDNContainer> containerList = new ArrayList<>();
      	    		NodeList containerNodes = accountNode.getChildNodes();
      	    		for(int i=0; i < containerNodes.getLength(); ++i) {
      	    			Node containerNode = containerNodes.item(i);
@@ -1918,7 +1918,7 @@ public class FilesClient
      */
     public boolean createManifestObject(String container, String contentType, String name, String manifest, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	return createManifestObject(container, contentType, name, manifest, new HashMap<String, String>(), callback);
+    	return createManifestObject(container, contentType, name, manifest, new HashMap<>(), callback);
     }
     /**
      * Create a manifest on the server, including metadata
@@ -2048,7 +2048,7 @@ public class FilesClient
      */
     public String storeObjectAs (String container, File obj, String contentType, String name) throws IOException, HttpException, FilesException
     {
-    	return storeObjectAs(container, obj, contentType, name, new HashMap<String,String>(), null);
+    	return storeObjectAs(container, obj, contentType, name, new HashMap<>(), null);
     }	
     
     /**
@@ -2066,7 +2066,7 @@ public class FilesClient
      */
     public String storeObjectAs (String container, File obj, String contentType, String name, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	return storeObjectAs(container, obj, contentType, name, new HashMap<String,String>(), callback);
+    	return storeObjectAs(container, obj, contentType, name, new HashMap<>(), callback);
     }	
     
     /**
@@ -2665,7 +2665,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     					metaData = new FilesObjectMetaData(mimeType, contentLength, eTag, lastModified);
 
     					Header [] headers = response.getResponseHeaders();
-    					HashMap<String,String> headerMap = new HashMap<String,String>();
+    					HashMap<String,String> headerMap = new HashMap<>();
 
     					for (Header h: headers)
     					{
@@ -2900,18 +2900,16 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     static void writeInputStreamToFile (InputStream is, File f) throws IOException
     {
-    	BufferedOutputStream bf = new BufferedOutputStream (new FileOutputStream (f));
-    	byte[] buffer = new byte [1024];
-    	int read = 0;
+    	try (BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(f))) {
+    		byte[] buffer = new byte [1024];
+    		int read = 0;
 
-    	while ((read = is.read(buffer)) > 0)
-    	{
-    		bf.write(buffer, 0, read);
+    		while ((read = is.read(buffer)) > 0) {
+    			bf.write(buffer, 0, read);
+    		}
+    	} finally {
+    		is.close();
     	}
-
-    	is.close();
-    	bf.flush();
-    	bf.close();
     }
     
     /**
@@ -2925,13 +2923,13 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     static String inputStreamToString(InputStream stream, String encoding) throws IOException {
     	char buffer[] = new char[4096];
     	StringBuilder sb = new StringBuilder();
-    	InputStreamReader isr = new InputStreamReader(stream, "utf-8"); // For now, assume utf-8 to work around server bug
+    	try (InputStreamReader isr = new InputStreamReader(stream, "utf-8")) { // For now, assume utf-8 to work around server bug
     	
-    	int nRead = 0;
-    	while((nRead = isr.read(buffer)) >= 0) {
-    		sb.append(buffer, 0, nRead);
+    		int nRead = 0;
+    		while((nRead = isr.read(buffer)) >= 0) {
+    			sb.append(buffer, 0, nRead);
+    		}
     	}
-    	isr.close();
     	
     	return sb.toString();
     }
@@ -3217,7 +3215,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 	public boolean updateObjectManifest(String container, String object, String manifest) throws FilesAuthorizationException, 
 			HttpException, IOException, FilesInvalidNameException
 			{
-		      return updateObjectMetadataAndManifest(container, object, new HashMap<String, String>(), manifest);
+		      return updateObjectMetadataAndManifest(container, object, new HashMap<>(), manifest);
 			}
 
 	/**

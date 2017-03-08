@@ -32,7 +32,7 @@ import er.extensions.components._private.ERXHyperlink;
  * @author timo
  */
 public class ERXDataHyperlink extends ERXHyperlink {
-	private final static NSArray<String> BINDINGS_HANDLED_BY_SUPER_CLASS = new NSArray<String>(new String[] {"id", "class", "onclick", "otherTagString"});
+	private final static NSArray<String> BINDINGS_HANDLED_BY_SUPER_CLASS = new NSArray<>(new String[] {"id", "class", "onclick", "otherTagString"});
 	private NSMutableDictionary<String, WOAssociation> _bindingAssociations;
 	
 	@SuppressWarnings("unchecked")
@@ -41,7 +41,7 @@ public class ERXDataHyperlink extends ERXHyperlink {
 		// super._associations that directly affect WOHyperlink
 		super(s, associations, woelement);
 		if (_pageName != null) {
-			_bindingAssociations = new NSMutableDictionary<String, WOAssociation>();
+			_bindingAssociations = new NSMutableDictionary<>();
 			NSMutableDictionary<String, WOAssociation> superAssociations = super._associations;
 			for (String key : superAssociations.allKeys()) {
 				// leave anything listed in BINDINGS_HANDLED_BY_SUPERCLASS in

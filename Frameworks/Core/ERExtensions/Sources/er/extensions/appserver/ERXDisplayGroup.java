@@ -53,6 +53,11 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	private transient Field displayedObjectsField;
 	
 	/**
+	 * cache filtered objects to avoid repeated qualification
+	 */
+	private transient NSArray<T> _filteredObjects;
+	
+	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
@@ -128,7 +133,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	/**
 	 * Holds the extra qualifiers.
 	 */
-	private NSMutableDictionary<String, EOQualifier> _extraQualifiers = new NSMutableDictionary<String, EOQualifier>();
+	private NSMutableDictionary<String, EOQualifier> _extraQualifiers = new NSMutableDictionary<>();
 
 	public void setQualifierForKey(EOQualifier qualifier, String key) {
 		if(qualifier != null) {
@@ -195,6 +200,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		} else {
 			result = super.fetch();
 		}
+		// flush cache
+		_filteredObjects = null;
 		return result;
 	}
 
@@ -203,15 +210,12 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 * @return filtered objects
 	 */
 	public NSArray<T> filteredObjects() {
-		// FIXME AK: need to cache here
-		NSArray<T> result;
-		EOQualifier q=qualifier();
-		if (q!=null) {
-			result=EOQualifier.filteredArrayWithQualifier(allObjects(),q);
-		} else {
-			result=allObjects();
+		if (qualifier() == null) {
+			return allObjects();
+		} else if (_filteredObjects == null) {
+			_filteredObjects = EOQualifier.filteredArrayWithQualifier(allObjects(), qualifier());
 		}
-		return result;
+		return _filteredObjects;
 	}
 
 	/**
@@ -289,7 +293,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if (objects == null || objects.isEmpty()) {
 			return false;
 		}
-		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		NSMutableSet<T> selection = new NSMutableSet<>(selectedObjects());
 		int selectionCountBefore = selection.count();
 		selection.addObjectsFromArray(objects);
 		setSelectedObjects(selection.allObjects());
@@ -317,9 +321,9 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		if (objects == null || objects.isEmpty()) {
 			return false;
 		}
-		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		NSMutableSet<T> selection = new NSMutableSet<>(selectedObjects());
 		int selectionCountBefore = selection.count();
-		NSSet<T> objectsToRemove = new NSSet<T>(objects);
+		NSSet<T> objectsToRemove = new NSSet<>(objects);
 		selection.subtractSet(objectsToRemove);
 		setSelectedObjects(selection.allObjects());
 		return selection.count() != selectionCountBefore;

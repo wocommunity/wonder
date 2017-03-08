@@ -17,7 +17,7 @@ public class SEEntityStats {
   public SEEntityStats(EODatabaseContext databaseContext, EOEntity entity) {
     _databaseContext = databaseContext;
     _entity = entity;
-    _snapshotStats = new NSMutableArray<SESnapshotStats>();
+    _snapshotStats = new NSMutableArray<>();
   }
 
   public EOEntity entity() {
@@ -37,7 +37,7 @@ public class SEEntityStats {
   }
 
   public void forget() {
-    NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+    NSMutableArray<EOGlobalID> gids = new NSMutableArray<>();
     for (SESnapshotStats snapshotStats : snapshotStats()) {
       gids.addObject(snapshotStats.gid());
     }

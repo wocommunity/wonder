@@ -74,7 +74,7 @@ public class Token {
    */
   @SuppressWarnings("unchecked")
   public <T extends Tag<?>> List<T> getTags(Class<T> tagClass) {
-    List<T> matches = new LinkedList<T>();
+    List<T> matches = new LinkedList<>();
     Iterator<Tag<?>> tagIter = _tags.iterator();
     while (tagIter.hasNext()) {
       Tag<?> tag = tagIter.next();

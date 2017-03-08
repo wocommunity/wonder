@@ -29,7 +29,7 @@ public class ERMetadataDirectorySet {
     _width = -1;
     _height = -1;
     _caption = null;
-    _metadataDirectories = new LinkedList<IERMetadataDirectory>();
+    _metadataDirectories = new LinkedList<>();
   }
 
   /**
@@ -266,7 +266,7 @@ public class ERMetadataDirectorySet {
   }
 
   protected List<IERMetadataDirectory> removeUnparsedDirectories() {
-    List<IERMetadataDirectory> unparsedMetadataDirectories = new LinkedList<IERMetadataDirectory>();
+    List<IERMetadataDirectory> unparsedMetadataDirectories = new LinkedList<>();
     Iterator<IERMetadataDirectory> metadataDirectoriesIter = _metadataDirectories.iterator();
     while (metadataDirectoriesIter.hasNext()) {
       IERMetadataDirectory metadataDirectory = metadataDirectoriesIter.next();
@@ -279,7 +279,7 @@ public class ERMetadataDirectorySet {
   }
 
   protected void parseUnparsedDirectoriesWith(IERMetadataDirectoryParser metadataDirectoryParser) {
-    Iterator<IERMetadataDirectory> metadataDirectoriesIter = new LinkedList<IERMetadataDirectory>(getMetadataDirectories()).iterator();
+    Iterator<IERMetadataDirectory> metadataDirectoriesIter = new LinkedList<>(getMetadataDirectories()).iterator();
     while (metadataDirectoriesIter.hasNext()) {
       IERMetadataDirectory metadataDirectory = metadataDirectoriesIter.next();
       ERParsedMetadataDirectory parsedMetadataDirectory;

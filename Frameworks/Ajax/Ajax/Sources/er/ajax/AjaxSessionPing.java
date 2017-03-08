@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
@@ -9,7 +10,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.appserver.ERXResponse;
@@ -35,7 +35,7 @@ import er.extensions.appserver.ERXResponse;
  */
 public class AjaxSessionPing extends AjaxDynamicElement {
 
-    public AjaxSessionPing(String name, NSDictionary associations, WOElement children) {
+    public AjaxSessionPing(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
         super(name, associations, children);
     }
 
@@ -66,15 +66,14 @@ public class AjaxSessionPing extends AjaxDynamicElement {
      * @return the bindings in the form of an AjaxOptions dictionary
      */
     public NSDictionary createAjaxOptions(WOComponent component) {
-        NSMutableArray ajaxOptionsArray = new NSMutableArray();
+        NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
         ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.TRUE, AjaxOption.BOOLEAN));
         ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.FALSE, AjaxOption.BOOLEAN));
         ajaxOptionsArray.addObject(new AjaxOption("frequency", Integer.valueOf(60), AjaxOption.NUMBER));
         ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
         ajaxOptionsArray.addObject(new AjaxOption("onFailure", "function(response) { window.close();}", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("parameters", AjaxOption.STRING));
-        NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-        return options;
+        return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     }
 
     /**

@@ -53,7 +53,7 @@ public class ImageMagickImageProcessor extends ERImageProcessor {
       throw new IOException("Failed to create folder '" + outputFile.getParentFile() + "'.");
     }
 
-    List<String> imageMagickCommandList = new LinkedList<String>();
+    List<String> imageMagickCommandList = new LinkedList<>();
     imageMagickCommandList.add(_imageMagickConvertBinary.getAbsolutePath());
     imageMagickCommandList.add("-limit");
     imageMagickCommandList.add("Memory");
@@ -135,7 +135,7 @@ public class ImageMagickImageProcessor extends ERImageProcessor {
     }
 
     if (watermarkFile != null) {
-      List<String> watermarkCommandList = new LinkedList<String>();
+      List<String> watermarkCommandList = new LinkedList<>();
       watermarkCommandList.add(_imageMagickCompositeBinary.getAbsolutePath());
 
       watermarkCommandList.add("-watermark");

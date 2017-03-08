@@ -422,6 +422,101 @@ ul.L2WithChildren li.Nav2Selected {
 }
 
 
+/* COLUMN SELECTOR DROP-DOWN MENU */
+/* inspired by http://koen.kivits.com/articles/pure-css-menu/ */
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.icon-menu3 {
+	width: 1.375em;
+}
+
+.ColumnSelector {
+	position: relative;
+}
+
+.LftActionCell .ColumnSelector {
+	float: left;
+}
+
+.RtActionCell .ColumnSelector {
+	float: right;
+}
+
+.ColumnSelector:hover .ColumnSelectorMenu {
+    visibility: visible;
+}
+
+.ColumnSelectorMenu {
+	position: absolute;
+    z-index: 1;
+    visibility: hidden;
+    transition: visibility .5s;
+	background-color: #414b5e;
+	margin-top: 1.5em;
+	padding: .8em;
+}
+
+.LftActionCell .ColumnSelectorMenu {
+	left: -10px;
+}
+
+.RtActionCell .ColumnSelectorMenu {
+    right: -6px;
+}
+
+/* menu pointer */
+.ColumnSelectorMenu:before {
+	content: "";
+	width: 0;
+	height: 0;
+	border-bottom: 10px solid #414b5e;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	position: absolute;
+	top: -10px;
+}
+
+.LftActionCell .ColumnSelectorMenu:before {
+	left: 5px;
+}
+
+.RtActionCell .ColumnSelectorMenu:before {
+	right: 8px;
+}
+
+.ColumnSelectorMenu li {
+	list-style-type: disc;
+	margin-left: 1.2em;
+	white-space: nowrap;
+	line-height: 1.3em;
+}
+
+.ColumnSelectorMenu a {
+	color: inherit;
+	cursor: pointer;
+}
+
+.ColumnSelectorMenu li.omit {
+	list-style-type: circle;
+}
+
+.ColumnSelectorMenu li.omit a {
+	color: #999da6;
+}
+
+.ColumnSelectorMenu li.omit a:hover {
+	color: inherit;
+}
+
+.ColumnSelectorMenu a:hover {
+	text-decoration: underline;
+}
 
 
 /* ACTION LIST */
@@ -1362,15 +1457,43 @@ div.RtActionCell li {
 	position: relative;
 	top: 22px;
 	width: 40%;
-	padding: 0 100px;
+	padding: 0 50px;
 	margin: auto;
 	z-index: 100;
 }
 
-.ListFilter input {
+/* adapt position when used to filter relationships */
+.AttrVal .ListFilter {
+	top: -3px;
+	padding: 4px 50px;
+}
+
+.ListFilter .ListFilterSearch  {
 	font-size: 16px;
-	padding: 1px 3px;
-	width: 70%;
+	display: inline-block;
+	width: 100%;
+}
+
+.ListFilter .ListFilterSearch input {
+	width: 100%;
+}
+
+/* apply lighter border and smaller font-size when used to filter relationships */
+.AttrVal .ListFilter .ListFilterSearch input {
+	border: 1px solid #aaa;
+	font-size: 11px;
+}
+
+.ListFilter .ListFilterChoices {
+	font-size: 16px;
+	margin-left: 20px;
+	display: inline-block;
+	width: 100%;
+}
+
+.ListFilter.ComboListFilter .ListFilterSearch, .ListFilter.ComboListFilter .ListFilterChoices {
+	/* input and select side-by-side, so reduce width */
+	width: 40%;
 }
 
 /* ATTACHMENT */

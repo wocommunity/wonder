@@ -21,7 +21,7 @@ public class SPEventPage extends SPPage {
 
 	public SPEventPage(WOContext context) {
 		super(context);
-		_expandedMemberships = new NSMutableSet<SPMembership>();
+		_expandedMemberships = new NSMutableSet<>();
 	}
 
 	protected void _expandSecretPals() {

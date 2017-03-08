@@ -382,7 +382,7 @@ public class WOToManyRelationship extends WOComponent {
 
             if (isMandatory() && theList().count() > 0) {
                 Object anObject = theList().objectAtIndex(0);
-                aTempValue = new NSArray<Object>(anObject);
+                aTempValue = new NSArray<>(anObject);
             }
             else {
                 aTempValue = null;
@@ -406,7 +406,7 @@ public class WOToManyRelationship extends WOComponent {
                 if (theList().count() > 0) {
                     Object anObject = theList().objectAtIndex(0);
 
-                    set_privateSelections(new NSArray<Object>(anObject));
+                    set_privateSelections(new NSArray<>(anObject));
                 }
 
             }

@@ -114,14 +114,10 @@ public class Java2DImageProcessor extends ERImageProcessor {
       graphics.dispose();
     }
 
-    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
-    try {
+    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
       String outputMimeTypeStr = outputMimeType.mimeType();
       String outputType = outputMimeTypeStr.substring(outputMimeTypeStr.indexOf('/') + 1);
       ImageIO.write(image, outputType, bos);
-    }
-    finally {
-      bos.close();
     }
 
     if (!outputFile.exists()) {

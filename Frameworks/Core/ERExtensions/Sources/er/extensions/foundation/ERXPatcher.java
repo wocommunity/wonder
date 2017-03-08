@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.webobjects.appserver.WOActionResults;
@@ -1358,7 +1359,7 @@ public class ERXPatcher {
 	}
 
 	public static class EntityTable {
-		private Hashtable entityHashtable = new Hashtable();
+		private Map<String, Entity> entityHashtable = new Hashtable<>();
 		private static EntityTable defaultEntityTable = null;
 		private static Entity[] entities = { new Entity("nbsp", 160), new Entity("iexcl", 161), new Entity("cent", 162), new Entity("pound", 163), new Entity("curren", 164), new Entity("yen", 165), new Entity("brvbar", 166), new Entity("sect", 167), new Entity("uml", 168), new Entity("copy", 169), new Entity("ordf", 170), new Entity("laquo", 171), new Entity("not", 172), new Entity("shy", 173), new Entity("reg", 174), new Entity("macr", 175), new Entity("deg", 176), new Entity("plusmn", 177), new Entity("sup2", 178), new Entity("sup3", 179), new Entity("acute", 180), new Entity("micro", 181), new Entity("para", 182), new Entity("middot", 183), new Entity("cedil", 184), new Entity("sup1", 185), new Entity("ordm", 186), new Entity("raquo", 187), new Entity("frac14", 188), new Entity("frac12", 189),
 				new Entity("frac34", 190), new Entity("iquest", 191), new Entity("Agrave", 192), new Entity("Aacute", 193), new Entity("Acirc", 194), new Entity("Atilde", 195), new Entity("Auml", 196), new Entity("Aring", 197), new Entity("AElig", 198), new Entity("Ccedil", 199), new Entity("Egrave", 200), new Entity("Eacute", 201), new Entity("Ecirc", 202), new Entity("Euml", 203), new Entity("Igrave", 204), new Entity("Iacute", 205), new Entity("Icirc", 206), new Entity("Iuml", 207), new Entity("ETH", 208), new Entity("Ntilde", 209), new Entity("Ograve", 210), new Entity("Oacute", 211), new Entity("Ocirc", 212), new Entity("Otilde", 213), new Entity("Ouml", 214), new Entity("times", 215), new Entity("Oslash", 216), new Entity("Ugrave", 217), new Entity("Uacute", 218), new Entity("Ucirc", 219),
@@ -1394,9 +1395,7 @@ public class ERXPatcher {
 
 		public String entityName(short i) {
 			String string = null;
-			Enumeration enumeration = entityHashtable.elements();
-			while (enumeration.hasMoreElements()) {
-				Entity entity = (Entity) enumeration.nextElement();
+			for (Entity entity : entityHashtable.values()) {
 				if (entity.code == i) {
 					string = entity.name;
 					break;
@@ -1426,11 +1425,11 @@ public class ERXPatcher {
 		}
 
 		public Entity install(Entity entity) {
-			return (Entity) entityHashtable.put(entity.name, entity);
+			return entityHashtable.put(entity.name, entity);
 		}
 
 		public Entity lookup(String string) {
-			return (Entity) entityHashtable.get(string);
+			return entityHashtable.get(string);
 		}
 	}
 }

@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -322,7 +322,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     
     public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {
         if(_qualifierKeys == null) {
-            _qualifierKeys = new HashMap<String, Support>();
+            _qualifierKeys = new HashMap<>();
             EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
             EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
         }
@@ -737,10 +737,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
     }
 
-    /** Holds a reference to the random object */
-    // FIXME: Not a thread safe object, access should be synchronized.
-    private static Random _random=new Random();
-
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
@@ -751,11 +747,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static String randomizeDirectActionURL(String daURL) {
-	synchronized(_random) {
-	    int r=_random.nextInt();
+	    int r=ThreadLocalRandom.current().nextInt();
 	    char c=daURL.indexOf('?')==-1 ? '?' : '&';
 	    return  daURL+c+"r="+r;
-	}
     }
     /**
      * This method can be used with Direct Action URLs to make sure
@@ -766,8 +760,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static void addRandomizeDirectActionURL(StringBuffer daURL) {
-	synchronized(_random) {
-	    int r=_random.nextInt();
+	    int r=ThreadLocalRandom.current().nextInt();
 	    char c='?';
 	    for (int i=0; i<daURL.length(); i++) {
 		if (daURL.charAt(i)=='?') {
@@ -777,7 +770,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    daURL.append(c);
 	    daURL.append("r=");
 	    daURL.append(r);
-	}
     }
     
     /**
@@ -879,7 +871,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Frees all of the resources associated with a given
      * process and then destroys the process.
      * @param p process to destroy
+     * @deprecated use {@link ERXRuntimeUtilities#freeProcessResources(Process)} instead
      */
+    @Deprecated
     public static void freeProcessResources(Process p) {
         if (p!=null) {
             try {

@@ -36,7 +36,7 @@ public class RollingShutdownBouncer extends ApplicationStarter {
 
         if (inactiveInstances.isEmpty()) {
         	addObjectsFromArrayIfAbsentToErrorMessageArray(
-        			new NSArray<String>("You must have at least one inactive instance to perform a rolling shutdown bounce."));
+        			new NSArray<>("You must have at least one inactive instance to perform a rolling shutdown bounce."));
         	return;
         }
         
@@ -53,7 +53,7 @@ public class RollingShutdownBouncer extends ApplicationStarter {
         NSMutableArray<MInstance> restartingInstances = runningInstances.mutableClone();
         refuseNewSessions(restartingInstances, activeHosts);
         
-        NSMutableArray<MInstance> stoppingInstances = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> stoppingInstances = new NSMutableArray<>();
         for (int i = numInstancesToStartPerHost; i > 0; i--) {
         	if (restartingInstances.isEmpty()) {
         		break;
@@ -87,7 +87,7 @@ public class RollingShutdownBouncer extends ApplicationStarter {
 
 	protected NSArray<MInstance> instancesToStart(NSArray<MInstance> inactiveInstances, NSArray<MHost> activeHosts, 
 			int numInstancesToStartPerHost) {
-		NSMutableArray<MInstance> startingInstances = new NSMutableArray<MInstance>();
+		NSMutableArray<MInstance> startingInstances = new NSMutableArray<>();
         for (int i = 0; i < numInstancesToStartPerHost; i++) {
             for (MHost host : activeHosts) {
                 NSArray<MInstance> inactiveInstancesForHost = MInstance.HOST.eq(host).filtered(inactiveInstances);
@@ -158,7 +158,7 @@ public class RollingShutdownBouncer extends ApplicationStarter {
 	protected void restartInstances(NSArray<MInstance> runningInstances, NSArray<MHost> activeHosts, boolean useScheduling)
 			throws InterruptedException {
 		for (MInstance instance : runningInstances) {
-        	NSArray<MInstance> instanceInArray = new NSArray<MInstance>(instance);
+        	NSArray<MInstance> instanceInArray = new NSArray<>(instance);
             handler().sendStopInstancesToWotaskds(instanceInArray, activeHosts);
             
             sleep(10 * 1000);

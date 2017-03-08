@@ -33,8 +33,8 @@ public class GracefulBouncer extends ApplicationStarter {
     protected void bounce() throws InterruptedException {
 
         NSArray<MInstance> instances = application().instanceArray().immutableClone();
-        NSMutableArray<MInstance> runningInstances = new NSMutableArray<MInstance>();
-        NSMutableSet<MHost> activeHosts = new NSMutableSet<MHost>();
+        NSMutableArray<MInstance> runningInstances = new NSMutableArray<>();
+        NSMutableSet<MHost> activeHosts = new NSMutableSet<>();
         NSMutableDictionary<MHost, NSMutableArray<MInstance>> inactiveInstancesByHost = new NSMutableDictionary<MHost, NSMutableArray<MInstance>>();
         NSMutableDictionary<MHost, NSMutableArray<MInstance>> activeInstancesByHost = new NSMutableDictionary<MHost, NSMutableArray<MInstance>>();
         for (MInstance instance : instances) {
@@ -44,14 +44,14 @@ public class GracefulBouncer extends ApplicationStarter {
                 activeHosts.addObject(host);
                 NSMutableArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
                 if (currentInstances == null) {
-                    currentInstances = new NSMutableArray<MInstance>();
+                    currentInstances = new NSMutableArray<>();
                     activeInstancesByHost.setObjectForKey(currentInstances, host);
                 }
                 currentInstances.addObject(instance);
             } else {
                 NSMutableArray<MInstance> currentInstances = inactiveInstancesByHost.objectForKey(host);
                 if (currentInstances == null) {
-                    currentInstances = new NSMutableArray<MInstance>();
+                    currentInstances = new NSMutableArray<>();
                     inactiveInstancesByHost.setObjectForKey(currentInstances, host);
                 }
                 currentInstances.addObject(instance);
@@ -60,7 +60,7 @@ public class GracefulBouncer extends ApplicationStarter {
         
         if (inactiveInstancesByHost.isEmpty()) {
         	addObjectsFromArrayIfAbsentToErrorMessageArray(
-        			new NSArray<String>("You must have at least one inactive instance to perform a graceful bounce."));
+        			new NSArray<>("You must have at least one inactive instance to perform a graceful bounce."));
         	return;
         }
         
@@ -77,7 +77,7 @@ public class GracefulBouncer extends ApplicationStarter {
             useScheduling &= instance.schedulingEnabled() != null && instance.schedulingEnabled().booleanValue();
         }
 
-        NSMutableArray<MInstance> startingInstances = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> startingInstances = new NSMutableArray<>();
         for (int i = 0; i < numToStartPerHost; i++) {
             for (MHost host : activeHosts) {
                 NSArray<MInstance> inactiveInstances = inactiveInstancesByHost.objectForKey(host);
@@ -145,7 +145,7 @@ public class GracefulBouncer extends ApplicationStarter {
         log("Refused new sessions: " + runningInstances);
 
         // turn scheduling on again, but only
-        NSMutableArray<MInstance> restarting = new NSMutableArray<MInstance>();
+        NSMutableArray<MInstance> restarting = new NSMutableArray<>();
         for (MHost host : activeHosts) {
             NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
             for (int i = 0; i < currentInstances.count() - numToStartPerHost; i++) {

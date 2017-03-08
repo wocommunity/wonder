@@ -88,7 +88,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 			}
 			ConcurrentHashMap<String, ERXKeepAliveResponse> sessionResponses = responses.get(sessionID);
 			if (sessionResponses == null) {
-				ConcurrentHashMap<String, ERXKeepAliveResponse> newSessionResponses = new ConcurrentHashMap<String, ERXKeepAliveResponse>();
+				ConcurrentHashMap<String, ERXKeepAliveResponse> newSessionResponses = new ConcurrentHashMap<>();
 				ConcurrentHashMap<String, ERXKeepAliveResponse> prevSessionResponses = responses.putIfAbsent(sessionID, newSessionResponses);
 				sessionResponses = (prevSessionResponses == null) ? newSessionResponses : prevSessionResponses;
 			}

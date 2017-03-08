@@ -48,8 +48,8 @@ public class WOExceptionParser {
         NSBundle bundle;
         String path, content;
         NSDictionary dic = null;
-        NSMutableArray<NSBundle> allBundles = new NSMutableArray<NSBundle>(NSBundle.frameworkBundles());
-        NSMutableArray<String> ignored = new NSMutableArray<String>();
+        NSMutableArray<NSBundle> allBundles = new NSMutableArray<>(NSBundle.frameworkBundles());
+        NSMutableArray<String> ignored = new NSMutableArray<>();
 
         for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {
             bundle = (NSBundle) enumerator.nextElement();

@@ -368,7 +368,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 		protected Stack<T> stack(WOContext context) {
 			Stack<T> stack = (Stack<T>) context.userInfoForKey(_key);
 			if (stack == null) {
-				stack = new Stack<T>();
+				stack = new Stack<>();
 				context.setUserInfoForKey(stack, _key);
 			}
 			return stack;

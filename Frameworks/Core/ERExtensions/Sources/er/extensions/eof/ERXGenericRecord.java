@@ -88,7 +88,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	private transient EOEntity _entity;
 
 	/** holds all subclass related Logger's */
-	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<>();
 
 	private static final Object uuidPrototypeName = "uuid";
 
@@ -778,7 +778,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			EOAttribute primaryKeyAttribute = primaryKeyAttributes.objectAtIndex(0);			
 			String prototypeName = primaryKeyAttribute.prototypeName();
 			if (prototypeName != null && prototypeName.equals(uuidPrototypeName)) {
-				return new NSDictionary<String, Object>(UUIDUtilities.generateAsNSData(), primaryKeyAttribute.name());
+				return new NSDictionary<>(UUIDUtilities.generateAsNSData(), primaryKeyAttribute.name());
 			}
 		}
 		return null;
@@ -793,7 +793,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public void _setValueForPrimaryKey(Object value, String pkAttributeName) {
 		if (_primaryKeyDictionary == null) {
-			_primaryKeyDictionary = new NSDictionary<String, Object>(value, pkAttributeName);
+			_primaryKeyDictionary = new NSDictionary<>(value, pkAttributeName);
 		}
 		else {
 			NSMutableDictionary<String, Object> mutablePrimaryKeyDictionary = _primaryKeyDictionary.mutableClone();

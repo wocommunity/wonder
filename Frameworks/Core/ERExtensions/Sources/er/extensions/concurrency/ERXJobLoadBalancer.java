@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +121,7 @@ public class ERXJobLoadBalancer {
     
     
     
-    private Hashtable _ttlsPerType=new Hashtable();
+    private Map<String, Long> _ttlsPerType = new Hashtable<>();
     /**
      * @param type
      * @return the ttl for a given worker type.  An instance that has not called heartbeat for more than this TTL
@@ -128,7 +129,7 @@ public class ERXJobLoadBalancer {
      */
     public long ttlForWorkerType(String type) {
         // to do specify TTL per type?
-        Long result=(Long)_ttlsPerType.get(type);
+        Long result = _ttlsPerType.get(type);
         if (result==null) {
             result = Long.valueOf(ERXProperties.longForKeyWithDefault(DEFAULT_DEAD_TIMEOUT_MILLIS, 60000L)); // 1mn by default
             _ttlsPerType.put(type, result);
@@ -149,7 +150,7 @@ public class ERXJobLoadBalancer {
     }
     
     /**
-     * Signals to the load balncer that the worker identified is alive
+     * Signals to the load balancer that the worker identified is alive
      * Clients should call this periodically, and certainly more often than the timeout
      * 
      * @param workerId which worker is alive

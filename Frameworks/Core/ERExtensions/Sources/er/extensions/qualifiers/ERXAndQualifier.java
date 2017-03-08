@@ -25,7 +25,7 @@ public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQual
 	}
 	
 	public ERXAndQualifier(EOQualifier... qualifiers) {
-		super(new NSArray<EOQualifier>(qualifiers));
+		super(new NSArray<>(qualifiers));
 	}
 
 	@SuppressWarnings("unchecked")

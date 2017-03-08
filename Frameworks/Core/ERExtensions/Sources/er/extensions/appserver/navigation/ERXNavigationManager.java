@@ -110,7 +110,7 @@ public class ERXNavigationManager {
 		NSMutableDictionary<String, String> navigationFlightPlan = (NSMutableDictionary<String, String>) 
 				session.objectForKey(ERXNavigationManager.NAVIGATION_MAP_KEY);
 		if (navigationFlightPlan == null) {
-			navigationFlightPlan = new NSMutableDictionary<String, String>();
+			navigationFlightPlan = new NSMutableDictionary<>();
 		}
 		if (uri != null) {
 			navigationFlightPlan.setObjectForKey(navigationItem.navigationPath().replace('/', '.'), uri.replace('.', '_'));
@@ -146,7 +146,7 @@ public class ERXNavigationManager {
     }
 
     protected void setNavigationItems(NSArray items) {
-        NSMutableDictionary<String, ERXNavigationItem> itemsByName = new NSMutableDictionary<String, ERXNavigationItem>();
+        NSMutableDictionary<String, ERXNavigationItem> itemsByName = new NSMutableDictionary<>();
         if (items != null && items.count() > 0) {
             for (Enumeration e = items.objectEnumerator(); e.hasMoreElements();) {
                 ERXNavigationItem item = (ERXNavigationItem)e.nextElement();
@@ -189,7 +189,7 @@ public class ERXNavigationManager {
         }
         setNavigationItems(navigationMenus);
         // compute default child items
-        NSMutableDictionary<Object, String> fakeContext = new NSMutableDictionary<Object, String>();
+        NSMutableDictionary<Object, String> fakeContext = new NSMutableDictionary<>();
         for (ERXNavigationItem anItem : navigationItemsByName().allValues()) {
         	anItem.childItemsInContext(fakeContext);
         }

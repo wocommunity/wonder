@@ -11,7 +11,8 @@ import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />
+ * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.
+ * <p>
  * It can also handle non-relationships, you must set the possibleChoices to an NSArray and
  * relationshipName to a property name. It works whether the object is an EO or not. The name could/should probably
  * change because it handles not only relationships, but it was wrongly named n the first place...

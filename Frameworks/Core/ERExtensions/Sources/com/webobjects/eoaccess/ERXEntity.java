@@ -107,7 +107,7 @@ public class ERXEntity extends EOEntity {
 	}
 
 	public NSArray<EOAttribute> classAttributes() {
-		NSMutableArray<EOAttribute> found = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> found = new NSMutableArray<>();
 		for (String name : (NSArray<String>)this.classPropertyNames()) {
 			if (this.attributeNamed(name) != null)
 				found.add(this.attributeNamed(name));
@@ -116,7 +116,7 @@ public class ERXEntity extends EOEntity {
 	}
 
 	public NSArray<EORelationship> classRelationships() {
-                NSMutableArray<EORelationship> found = new NSMutableArray<EORelationship>();
+                NSMutableArray<EORelationship> found = new NSMutableArray<>();
 		for (String name : (NSArray<String>)this.classPropertyNames()) {
 			if (this.relationshipNamed(name) != null)
 				found.add(this.relationshipNamed(name));

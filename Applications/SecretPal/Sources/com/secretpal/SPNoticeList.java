@@ -7,7 +7,7 @@ public class SPNoticeList {
 	private NSMutableArray<String> _notices;
 
 	public SPNoticeList() {
-		_notices = new NSMutableArray<String>();
+		_notices = new NSMutableArray<>();
 	}
 	
 	public synchronized boolean hasNotices() {

@@ -8,18 +8,19 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * DRAttributes are to display what EOAttributes are to the back-end.  
+ * DRAttributes are to display what EOAttributes are to the back-end.
  * Each DRAttribute can be defined with:
- * <li>'keyPath' (what you want to ask the dictionary or EO)
- * <li>'label' (what you want to call the attribute for display)
- * <li>a boolean for 'shouldTotal'
- * <li>a boolean for 'shouldSort'
- * <li>'format' for formatting dates
- * <li> a toggle turning a attribute into a group. 
+ * <ul>
+ * <li>'keyPath' (what you want to ask the dictionary or EO)</li>
+ * <li>'label' (what you want to call the attribute for display)</li>
+ * <li>a boolean for 'shouldTotal'</li>
+ * <li>a boolean for 'shouldSort'</li>
+ * <li>'format' for formatting dates</li>
+ * <li> a toggle turning a attribute into a group.</li>
+ * </ul>
  * 
  * Each group can have 0 or more DRAttributes within it.
  * @author david neumann
- *
  */
 public class DRAttribute {
     

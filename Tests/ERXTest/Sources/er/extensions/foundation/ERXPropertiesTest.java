@@ -52,7 +52,7 @@ public class ERXPropertiesTest extends ERXTestCase {
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "(\"a\", \"b\", \"c\")");
     assertSame(ERXProperties.arrayForKey(ERXPropertiesTest.Key), ERXProperties.arrayForKey(ERXPropertiesTest.Key));
-    assertEquals(new NSArray<String>(new String[] { "a", "b", "c" }), ERXProperties.arrayForKey(ERXPropertiesTest.Key));
+    assertEquals(new NSArray<>(new String[] { "a", "b", "c" }), ERXProperties.arrayForKey(ERXPropertiesTest.Key));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "()");
     assertEquals(NSArray.EmptyArray, ERXProperties.arrayForKey(ERXPropertiesTest.Key));
@@ -75,7 +75,7 @@ public class ERXPropertiesTest extends ERXTestCase {
     ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
     assertNull(ERXProperties.arrayForKey(ERXPropertiesTest.Key));
     assertNull(ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, null));
-    NSArray<String> defaultValue = new NSArray<String>(new String[] { "a" });
+    NSArray<String> defaultValue = new NSArray<>(new String[] { "a" });
     assertSame(defaultValue, ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
     
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "");
@@ -87,14 +87,14 @@ public class ERXPropertiesTest extends ERXTestCase {
     assertEquals(NSArray.EmptyArray, ERXProperties.arrayForKey(ERXPropertiesTest.Key));
     assertEquals(NSArray.EmptyArray, ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, null));
     
-    NSArray<String> value = new NSArray<String>(new String[] { "a", "b", "c" });
+    NSArray<String> value = new NSArray<>(new String[] { "a", "b", "c" });
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "(\"a\", \"b\", \"c\")");
     assertEquals(value, ERXProperties.arrayForKey(ERXPropertiesTest.Key));
     assertEquals(value, ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, null));
     assertNotSame(value, ERXProperties.arrayForKey(ERXPropertiesTest.Key));
 
     ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "a");
-    assertEquals(new NSArray<String>("a"), ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+    assertEquals(new NSArray<>("a"), ERXProperties.arrayForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
 
     try {
       ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "('a')");
@@ -120,7 +120,7 @@ public class ERXPropertiesTest extends ERXTestCase {
 //    ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
 //    assertNull(ERXProperties.setForKey(ERXPropertiesTest.Key));
 //    assertNull(ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, null));
-//    NSSet<String> defaultValue = new NSSet<String>(new String[] { "a" });
+//    NSSet<String> defaultValue = new NSSet<>(new String[] { "a" });
 //    assertSame(defaultValue, ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
 //    
 //    ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "");
@@ -132,14 +132,14 @@ public class ERXPropertiesTest extends ERXTestCase {
 //    assertEquals(NSSet.EmptySet, ERXProperties.setForKey(ERXPropertiesTest.Key));
 //    assertEquals(NSSet.EmptySet, ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, null));
 //    
-//    NSSet<String> value = new NSSet<String>(new String[] { "a", "b", "c" });
+//    NSSet<String> value = new NSSet<>(new String[] { "a", "b", "c" });
 //    ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "(\"a\", \"b\", \"c\")");
 //    assertEquals(value, ERXProperties.setForKey(ERXPropertiesTest.Key));
 //    assertEquals(value, ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, null));
 //    assertNotSame(value, ERXProperties.setForKey(ERXPropertiesTest.Key));
 //
 //    ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "a");
-//    assertEquals(new NSSet<String>("a"), ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
+//    assertEquals(new NSSet<>("a"), ERXProperties.setForKeyWithDefault(ERXPropertiesTest.Key, defaultValue));
 //
 //    try {
 //      ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "('a')");

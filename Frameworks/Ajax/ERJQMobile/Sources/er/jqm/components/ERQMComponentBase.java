@@ -43,7 +43,7 @@ abstract public class ERQMComponentBase extends ERXNonSynchronizingComponent
 
 	public void logDeprecated(String message)
 	{
-		NSMutableArray<String> componentStack = new NSMutableArray<String>();
+		NSMutableArray<String> componentStack = new NSMutableArray<>();
 		componentStack.add(componentName());
 		WOComponent next = parent();
 		while (next != null)
@@ -223,8 +223,8 @@ abstract public class ERQMComponentBase extends ERXNonSynchronizingComponent
 
 	public String otherTagString()
 	{
-		NSMutableArray<String> additionalClasses = new NSMutableArray<String>();
-		NSMutableArray<String> additionalStyles = new NSMutableArray<String>();
+		NSMutableArray<String> additionalClasses = new NSMutableArray<>();
+		NSMutableArray<String> additionalStyles = new NSMutableArray<>();
 		StringBuilder tags = new StringBuilder();
 
 		if (hasBinding("otherTagString"))

@@ -51,7 +51,7 @@ public class EvaluationQueryConverter <T extends PropertyContainer> extends Quer
 			
 			if (operator.equals(ComparisonOperator.ILIKE)) {
 				value = ((String) value).toLowerCase();
-				textRetriever = new LowercaseRetriever<T>(textRetriever);
+				textRetriever = new LowercaseRetriever<>(textRetriever);
 			}
 			
 			return RegexMatch.wildcardMatch(textRetriever, (String) value);

@@ -11,8 +11,8 @@ public class DragAndDropLists extends WOComponent {
 
   public DragAndDropLists(WOContext context) {
     super(context);
-    _leftList = new NSMutableArray<DragItem>();
-    _rightList = new NSMutableArray<DragItem>();
+    _leftList = new NSMutableArray<>();
+    _rightList = new NSMutableArray<>();
     for (int dragItemNum = 0; dragItemNum < 10; dragItemNum++) {
       _leftList.addObject(new DragItem("Drag Item #" + dragItemNum));
     }

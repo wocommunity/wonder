@@ -31,14 +31,14 @@ public class SPUtilities {
 	
 	public static String confirmationUrl(SPMembership membership, WOContext context) {
 		context.generateCompleteURLs();
-		String confirmationUrl = context.directActionURLForActionNamed("confirm", new NSDictionary<String, Object>(membership.confirmationCode(), SPUtilities.CONFIRMATION_CODE_KEY), true, false);
+		String confirmationUrl = context.directActionURLForActionNamed("confirm", new NSDictionary<>(membership.confirmationCode(), SPUtilities.CONFIRMATION_CODE_KEY), true, false);
 		context.generateRelativeURLs();
 		return confirmationUrl;
 	}
 
 	public static String resetPasswordUrl(SPPerson person, WOContext context) {
 		context.generateCompleteURLs();
-		String resetPasswordUrl = context.directActionURLForActionNamed("resetPassword", new NSDictionary<String, Object>(person.resetPasswordCode(), SPUtilities.RESET_PASSWORD_CODE_KEY), true, false);
+		String resetPasswordUrl = context.directActionURLForActionNamed("resetPassword", new NSDictionary<>(person.resetPasswordCode(), SPUtilities.RESET_PASSWORD_CODE_KEY), true, false);
 		context.generateRelativeURLs();
 		return resetPasswordUrl;
 	}
@@ -54,7 +54,7 @@ public class SPUtilities {
 			mail.setFromAddress("donotreply@secret-pal.com");
 			mail.setReplyToAddress("donotreply@secret-pal.com");
 			mail.setSubject(subject);
-			mail.setToAddresses(new NSArray<String>(person.emailAddress()));
+			mail.setToAddresses(new NSArray<>(person.emailAddress()));
 			mail.setDelegate(delegate);
 			mail.sendMail();
 			sentEmail = true;

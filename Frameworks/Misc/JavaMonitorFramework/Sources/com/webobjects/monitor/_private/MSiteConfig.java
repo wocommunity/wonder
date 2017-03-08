@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -305,12 +305,10 @@ public class MSiteConfig extends MObject {
 
 
     /********** Password Methods **********/
-    private static Random _randomGenerator = new Random();
-
-    static public long myrand() {
-        long nextLong = _randomGenerator.nextLong();
+    public static long myrand() {
+        long nextLong = ThreadLocalRandom.current().nextLong();
         while (nextLong == Long.MIN_VALUE) {
-            nextLong = _randomGenerator.nextLong();
+            nextLong = ThreadLocalRandom.current().nextLong();
         }
         return Math.abs(nextLong);
     }
@@ -468,7 +466,7 @@ public class MSiteConfig extends MObject {
     public static MSiteConfig getSiteConfigFromHostAndPort(String configHostName, int aPort) throws MonitorException {
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog. DebugLevelInformational, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("!@#$!@#$ getSiteConfigFromHostAndPort creates a WOHTTPConnection");
-        NSDictionary monitorRequest = new NSDictionary<String, String>("SITE", "queryWotaskd");
+        NSDictionary<String, String> monitorRequest = new NSDictionary<>("SITE", "queryWotaskd");
         NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
 
         WORequest aRequest = new ERXRequest(MObject._POST, MObject.directActionString, MObject._HTTP1, NSDictionary.EmptyDictionary, content, null);

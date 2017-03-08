@@ -1,7 +1,8 @@
 package er.extensions.foundation;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation._NSDelegate;
 
 
@@ -49,7 +50,7 @@ import com.webobjects.foundation._NSDelegate;
  */
 public abstract class ERXMulticastingDelegate {
 
-    private NSMutableArray delegates = new NSMutableArray();
+    private CopyOnWriteArrayList delegates = new CopyOnWriteArrayList();
 
 
     /**
@@ -58,14 +59,12 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegate(Object delegate) {
-    	synchronized (delegates) {
-        	if (hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is already included");
-        	}
-        	
-            _NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-            delegates.addObject(delegateObject);
-        }
+    	if (hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is already included");
+    	}
+
+    	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+    	delegates.add(delegateObject);
     }
     
 
@@ -75,14 +74,12 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to add as one of the delegates called
      */
     public void addDelegateAtStart(Object delegate) {
-    	synchronized (delegates) {
-        	if (hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is already included");
-        	}
-        	
-        	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
-	        delegates.insertObjectAtIndex(delegateObject, 0);
+    	if (hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is already included");
     	}
+
+    	_NSDelegate delegateObject = new _NSDelegate(getClass(), delegate);
+    	delegates.add(0, delegateObject);
     }
     
     
@@ -92,20 +89,18 @@ public abstract class ERXMulticastingDelegate {
      * @param delegate Object to remove as one of the delegates called
      */
     public void removeDelegate(Object delegate) {
-    	synchronized (delegates) {
-        	if ( ! hasDelegate(delegate)) {
-        		throw new IllegalArgumentException("Delegate is not present");
-        	}
-        	
-	        for (int i = 0; i < delegates.count(); i++) {
-	        	_NSDelegate delegateObject = (_NSDelegate)delegates.objectAtIndex(i);
-	        	if (delegateObject.delegate().equals(delegate))
-	        	{
-	        		delegates.removeObjectAtIndex(i);
-	        		break;
-	        	}
-	        }
-        }
+    	if ( ! hasDelegate(delegate)) {
+    		throw new IllegalArgumentException("Delegate is not present");
+    	}
+
+    	for (int i = 0; i < delegates.size(); i++) {
+    		_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
+    		if (delegateObject.delegate().equals(delegate))
+    		{
+    			delegates.remove(i);
+    			break;
+    		}
+    	}
     }
     
 
@@ -116,16 +111,15 @@ public abstract class ERXMulticastingDelegate {
      * @return <code>true</code> if delegate is represented in delegates()
      */
     public boolean hasDelegate(Object delegate) {
-    	synchronized (delegates) {
-	        for (int i = 0; i < delegates.count(); i++) {
-	        	_NSDelegate delegateObject = (_NSDelegate)delegates.objectAtIndex(i);
-	        	if (delegateObject.delegate().equals(delegate))
-	        	{
-	        		return true;
-	        	}
-	        }
-	        return false;
+    	for (int i = 0; i < delegates.size(); i++) {
+    		_NSDelegate delegateObject = (_NSDelegate)delegates.get(i);
+    		if (delegateObject.delegate().equals(delegate))
+    		{
+    			return true;
+    		}
     	}
+    	
+    	return false;
     }
     
     
@@ -137,9 +131,7 @@ public abstract class ERXMulticastingDelegate {
      * @return the delegates in the order they will be called
      */
     public NSArray delegates() {
-    	synchronized (delegates) {
-    		return delegates.immutableClone();
-    	}
+    	return new NSArray(delegates);
     }
     
 
@@ -150,15 +142,15 @@ public abstract class ERXMulticastingDelegate {
      * @param orderedDelegates array of <code>com.webobjects.foundation._NSDelegate</code> in the order in which delegates should be called
      */
     public void setDelegateOrder(NSArray orderedDelegates) {
-    	synchronized (delegates) {
-	        for (int i = 0; i < orderedDelegates.count(); i++) {
-	            if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
-	                throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
-	                        " must be instanceof _NSDelegate");
-	            }
-	        }
-	        delegates = orderedDelegates.mutableClone();
+    	for (int i = 0; i < orderedDelegates.count(); i++) {
+    		if ( ! (orderedDelegates.objectAtIndex(i) instanceof _NSDelegate)) {
+    			throw new IllegalArgumentException("Object of class " + orderedDelegates.objectAtIndex(i).getClass().getName() +
+    					" must be instanceof _NSDelegate");
+    		}
     	}
+    	delegates.clear();
+    	delegates.addAll(orderedDelegates);
+
     }
 
 
@@ -173,14 +165,12 @@ public abstract class ERXMulticastingDelegate {
      */
     protected Object perform(String methodName, Object args[], Object defaultResult) {
         Object result = null;
-    	synchronized (delegates) {
-            for (int i = 0; (result == null || result.equals(defaultResult)) && i < delegates.count(); i++) {
-                _NSDelegate delegate = (_NSDelegate) delegates.objectAtIndex(i);
+            for (int i = 0; (result == null || result.equals(defaultResult)) && i < delegates.size(); i++) {
+                _NSDelegate delegate = (_NSDelegate) delegates.get(i);
                 if (delegate.respondsTo(methodName)) {
                     result = delegate.perform(methodName, args);
                 }
             }
-    	}
 
         return result == null ? defaultResult : result;
     }

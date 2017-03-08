@@ -48,7 +48,7 @@ public class ERMemoryAdaptorTest extends ERXTestCase {
 
 	public void testDelete() {
 		EOEditingContext editingContext = ERXEC.newEditingContext();
-		NSMutableArray<Company> companies = new NSMutableArray<Company>();
+		NSMutableArray<Company> companies = new NSMutableArray<>();
 		for (int i = 0; i < 10; i++) {
 			Company c = Company.createCompany(editingContext, "Test Company " + i);
 			companies.addObject(c);

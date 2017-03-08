@@ -22,14 +22,14 @@ public class ParserTest extends TestCase {
 	static {
 		// XXX When we want to test parsing while in any timezone, we can un-comment this code.
 		//
-		//NSMutableArray<String> allIDs = new NSMutableArray<String>(TimeZone.getAvailableIDs());
+		//NSMutableArray<String> allIDs = new NSMutableArray<>(TimeZone.getAvailableIDs());
 		//allIDs.remove(TimeZone.getDefault().getID());
 		//allIDs.add(TimeZone.getDefault().getID());
 		//tzIDs = allIDs.immutableClone();
 		//
 		// until then...
 		//
-		tzIDs = new NSArray<String>(new String[] { "America/Los_Angeles", TimeZone.getDefault().getID() });
+		tzIDs = new NSArray<>(new String[] { "America/Los_Angeles", TimeZone.getDefault().getID() });
 	}
 
 	public TestSuite suite() {

@@ -7,6 +7,7 @@
 
 package com.webobjects.woextensions;
 
+import java.util.List;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -15,12 +16,12 @@ import com.webobjects.foundation.NSArray;
 public class WOTable extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
-	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
 
-    protected NSArray _list;
+    protected List _list;
     protected int _maxColumns;
     public int currentRow;
     public int currentCol;
@@ -38,9 +39,9 @@ public class WOTable extends WOComponent {
         return true;
     }
 
-    public NSArray list()  {
+    public List list()  {
         if (_list==null) {
-            _list = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
+            _list = (List)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
             if (_list == null) {
                 _list = NSArray.EmptyArray;
             }
@@ -67,9 +68,9 @@ public class WOTable extends WOComponent {
 
     public int rowCount()  {
         if (_rowCount == -1) {
-            NSArray aList = list();
+        	List aList = list();
             int aMaxColCount = maxColumns();
-            int aListCount = aList.count();
+            int aListCount = aList.size();
             int aRemainder = 0;
             if (aMaxColCount!=0)  {
                 _rowCount = aListCount / aMaxColCount;
@@ -85,12 +86,12 @@ public class WOTable extends WOComponent {
     public int colCount()  {
         if (_colCount == -1) {
             int aMaxColumns = maxColumns();
-            NSArray aList = list();
+            List aList = list();
             if (currentRow < (rowCount() - 1)) {
                 _colCount = aMaxColumns;
             } else {
                 if (aMaxColumns!=0)
-                    _colCount = aList.count() % aMaxColumns;
+                    _colCount = aList.size() % aMaxColumns;
                 if (_colCount == 0) {
                     _colCount = aMaxColumns;
                 }
@@ -109,9 +110,9 @@ public class WOTable extends WOComponent {
 
 
     public void pushItem()  {
-        NSArray aList = list();
+    	List aList = list();
         int index = currentCol+maxColumns()*currentRow;
-        Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
+        Object item = index < aList.size() ? aList.get(index) : null;
         setValueForBinding(item, "item");
         if (canSetValueForBinding("row")) {
             setValueForBinding(Integer.valueOf(currentRow), "row");
