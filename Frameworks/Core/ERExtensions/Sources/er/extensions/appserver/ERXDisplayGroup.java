@@ -205,6 +205,13 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		return result;
 	}
 
+	@Override
+	public void setQualifier(EOQualifier qualifier) {
+		super.setQualifier(qualifier);
+		// flush cache
+		_filteredObjects = null;
+	}
+	
 	/**
 	 * Returns all objects, filtered by the qualifier().
 	 * @return filtered objects
