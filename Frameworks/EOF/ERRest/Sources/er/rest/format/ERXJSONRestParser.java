@@ -74,6 +74,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 		return _ERXJSONConfig.createDefaultConfig(context);
 	}
 
+	@Override
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();

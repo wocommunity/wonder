@@ -1,6 +1,10 @@
 package er.rest.util;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +31,6 @@ public class ERXRestSchema {
 		return schema;
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected static NSDictionary<String, Object> schemaPropertiesForEntityNamed(String entityName, ERXKeyFilter filter, Set<String> entities) {
 		if (entities.contains(entityName)) {
 			return null;
@@ -69,6 +72,22 @@ public class ERXRestSchema {
 					}
 				}
 				else if (Date.class.isAssignableFrom(attributeClass)) {
+					property.setObjectForKey("string", "type");
+					property.setObjectForKey("date-time", "format");
+				}
+				else if (LocalDate.class.isAssignableFrom(attributeClass)) {
+					property.setObjectForKey("string", "type");
+					property.setObjectForKey("date", "format");
+				}
+				else if (LocalDateTime.class.isAssignableFrom(attributeClass)) {
+					property.setObjectForKey("string", "type");
+					property.setObjectForKey("date-time", "format");
+				}
+				else if (LocalTime.class.isAssignableFrom(attributeClass)) {
+					property.setObjectForKey("string", "type");
+					property.setObjectForKey("time", "format");
+				}
+				else if (OffsetDateTime.class.isAssignableFrom(attributeClass)) {
 					property.setObjectForKey("string", "type");
 					property.setObjectForKey("date-time", "format");
 				}

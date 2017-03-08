@@ -17,6 +17,8 @@ public interface IERXRestDelegate {
 	 * 
 	 * @param obj
 	 *            the object to return a pk for
+	 * @param context
+	 *            the REST context
 	 * @return the primary key of the object
 	 */
 	public Object primaryKeyForObject(Object obj, ERXRestContext context);
@@ -26,6 +28,10 @@ public interface IERXRestDelegate {
 	 * 
 	 * @param entity
 	 *            the entity
+	 * @param id
+	 *            the ID of the object
+	 * @param context
+	 *            the REST context
 	 * @return a new instance of the entity
 	 */
 	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context);
@@ -37,6 +43,8 @@ public interface IERXRestDelegate {
 	 *            the entity
 	 * @param id
 	 *            the ID of the object
+	 * @param context
+	 *            the REST context
 	 * @return the object with the given entity and ID
 	 */
 	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context);

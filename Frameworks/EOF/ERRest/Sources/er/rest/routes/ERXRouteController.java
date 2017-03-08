@@ -417,7 +417,6 @@ public class ERXRouteController extends WODirectAction {
 		ERXRestFormat format = _format;
 		if (format == null) {
 			String type = null;
-			@SuppressWarnings("unchecked")
 			NSDictionary<String, Object> userInfo = request().userInfo();
 			if (userInfo != null) {
 				type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);

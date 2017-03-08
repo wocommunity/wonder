@@ -1,7 +1,7 @@
 package er.rest;
 
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
@@ -18,13 +18,13 @@ import com.webobjects.foundation.NSMutableArray;
  * @author mschrag
  */
 public class NSDictionaryClassDescription extends EOClassDescription implements IERXNonEOClassDescription {
-	private NSDictionary _map;
+	private NSDictionary<String, Object> _map;
 
 	public NSDictionaryClassDescription() {
-		this(NSDictionary.EmptyDictionary);
+		this(NSDictionary.emptyDictionary());
 	}
 	
-	public NSDictionaryClassDescription(NSDictionary map) {
+	public NSDictionaryClassDescription(NSDictionary<String, Object> map) {
 		_map = map;
 	}
 
@@ -46,42 +46,36 @@ public class NSDictionaryClassDescription extends EOClassDescription implements 
 	}
 
 	@Override
-	public NSArray attributeKeys() {
-		NSMutableArray/*<String>*/ attributes = new NSMutableArray/*<String>*/();
-		for (Enumeration keyEnum = _map.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			Object key = keyEnum.nextElement();
-			Object value = _map.objectForKey(key);
-			Class type = value.getClass();
+	public NSArray<String> attributeKeys() {
+		NSMutableArray<String> attributes = new NSMutableArray<>();
+		for (Map.Entry<String, Object> entry : _map.entrySet()) {
+			Class type = entry.getValue().getClass();
 			if (isAttribute(type)) {
-				attributes.addObject(key);
+				attributes.addObject(entry.getKey());
 			}
 		}
 		return attributes;
 	}
 
 	@Override
-	public NSArray toOneRelationshipKeys() {
-		NSMutableArray/*<String>*/ relationships = new NSMutableArray/*<String>*/();
-		for (Enumeration keyEnum = _map.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			Object key = keyEnum.nextElement();
-			Object value = _map.objectForKey(key);
-			Class type = value.getClass();
+	public NSArray<String> toOneRelationshipKeys() {
+		NSMutableArray<String> relationships = new NSMutableArray<>();
+		for (Map.Entry<String, Object> entry : _map.entrySet()) {
+			Class type = entry.getValue().getClass();
 			if (!isAttribute(type) && !isToMany(type)) {
-				relationships.addObject(key);
+				relationships.addObject(entry.getKey());
 			}
 		}
 		return relationships;
 	}
 
 	@Override
-	public NSArray toManyRelationshipKeys() {
-		NSMutableArray/*<String>*/ relationships = new NSMutableArray/*<String>*/();
-		for (Enumeration keyEnum = _map.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			Object key = keyEnum.nextElement();
-			Object value = _map.objectForKey(key);
-			Class type = value.getClass();
+	public NSArray<String> toManyRelationshipKeys() {
+		NSMutableArray<String> relationships = new NSMutableArray<>();
+		for (Map.Entry<String, Object> entry : _map.entrySet()) {
+			Class type = entry.getValue().getClass();
 			if (isToMany(type)) {
-				relationships.addObject(key);
+				relationships.addObject(entry.getKey());
 			}
 		}
 		return relationships;
@@ -104,6 +98,7 @@ public class NSDictionaryClassDescription extends EOClassDescription implements 
 		}
 	}
 
+	@Override
 	public Object createInstance() {
 		return _map.mutableClone();
 	}

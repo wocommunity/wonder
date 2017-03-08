@@ -70,7 +70,6 @@ public class ERXRestTransactionRequestAdaptor {
 	
 	public ERXRestTransaction executingTransaction(WOContext context, WORequest request) {
 		ERXRestTransaction transaction = null;
-		@SuppressWarnings("unchecked")
 		NSDictionary<String, Object> userInfo = request.userInfo();
 		if (userInfo != null) {
 			transaction = (ERXRestTransaction)userInfo.objectForKey(ERXRestTransactionRequestAdaptor.EXECUTING_TRANSACTION_KEY);
@@ -79,7 +78,6 @@ public class ERXRestTransactionRequestAdaptor {
 	}
 	
 	protected void setExecutingTransaction(ERXRestTransaction transaction, WOContext context, WORequest request) {
-		@SuppressWarnings("unchecked")
 		NSDictionary<String, Object> immutableUserInfo = request.userInfo();
 		NSMutableDictionary<String, Object> userInfo = (immutableUserInfo == null) ? new NSMutableDictionary<>() : immutableUserInfo.mutableClone();
 		userInfo.setObjectForKey(transaction, ERXRestTransactionRequestAdaptor.EXECUTING_TRANSACTION_KEY);

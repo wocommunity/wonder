@@ -11,11 +11,13 @@ public class ERXWORestRequest implements IERXRestRequest {
 	public ERXWORestRequest(WORequest request) {
 		_request = request;
 	}
-	
+
+	@Override
 	public String stringContent() {
 		return _request.contentString();
 	}
 
+	@Override
 	public InputStream streamContent() {
 		InputStream is = _request.contentInputStream();
 		if (is == null) {
@@ -23,11 +25,13 @@ public class ERXWORestRequest implements IERXRestRequest {
 		}
 		return is;
 	}
-	
+
+	@Override
 	public NSArray<String> keyNames() {
 		return _request.formValueKeys();
 	}
-	
+
+	@Override
 	public Object objectForKey(String key) {
 		return _request.formValueForKey(key);
 	}
