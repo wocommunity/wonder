@@ -3,7 +3,8 @@ package er.extensions.virus;
 import java.io.File;
 import java.io.InputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -19,7 +20,7 @@ import er.extensions.foundation.ERXProperties;
  * @author darkv
  */
 public class ERXClamAvVirusScanner extends ERXVirusScanner {
-	private static final Logger log = Logger.getLogger(ERXClamAvVirusScanner.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXClamAvVirusScanner.class);
 	private static final String clamscan = ERXProperties.stringForKeyWithDefault(
 			"er.extensions.virus.ERXClamAvVirusScanner", "/usr/bin/clamscan");
 	private int status = -1;
@@ -50,7 +51,7 @@ public class ERXClamAvVirusScanner extends ERXVirusScanner {
 				log.warn("Unexpected return code from ClamAV");
 			}
 		} catch (Exception e) {
-			log.error(e, e);
+			log.error("Could not check file {}.", file, e);
 		}
 	}
 
@@ -69,7 +70,7 @@ public class ERXClamAvVirusScanner extends ERXVirusScanner {
 				log.warn("Unexpected return code from ClamAV");
 			}
 		} catch (Exception e) {
-			log.error(e, e);
+			log.error("Could not scan input stream.", e);
 		}
 	}
 

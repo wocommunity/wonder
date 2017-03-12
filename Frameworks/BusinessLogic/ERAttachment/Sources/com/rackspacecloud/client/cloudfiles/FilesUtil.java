@@ -9,14 +9,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Cloud Files utilities
  */
 public class FilesUtil
 {
-    private static Logger logger = Logger.getLogger(FilesUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(FilesUtil.class);
 
     /**
      * The name of the properties file we're looking for
@@ -37,15 +38,11 @@ public class FilesUtil
     private static synchronized void loadPropertiesFromClasspath() throws IOException
     {
         props = new Properties();
-        InputStream io = FilesUtil.class.getClassLoader().getResourceAsStream(file);
-        if (io == null)
-        {
-            throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
-        }
-        try {
-        	loadProperties(io);
-        } finally {
-        	io.close();
+        try (InputStream io = FilesUtil.class.getClassLoader().getResourceAsStream(file)) {
+            if (io == null) {
+                throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
+            }
+            loadProperties(io);
         }
     }
 
@@ -83,7 +80,7 @@ public class FilesUtil
             }
             catch (Exception e)
             {
-                logger.warn("Unable to load properties file.", e);
+                log.warn("Unable to load properties file.", e);
             }
         }
         return props != null ? props.getProperty(key) : null;
@@ -107,7 +104,7 @@ public class FilesUtil
             }
             catch (Exception e)
             {
-                logger.warn("Unable to load properties file.", e);
+                log.warn("Unable to load properties file.", e);
             }
         }
         return props != null ? props.getProperty(key, defaultValue) : defaultValue;
@@ -125,7 +122,7 @@ public class FilesUtil
         final String property = getProperty(key);
         if (property == null)
         {
-            logger.warn("Could not load integer property " + key + ".");
+            log.warn("Could not load integer property {}.", key);
             return -1;
         }
         try
@@ -134,7 +131,7 @@ public class FilesUtil
         }
         catch (NumberFormatException e)
         {
-            logger.warn("Invalid format for a number in properties file: " + property + ".", e);
+            log.warn("Invalid format for a number in properties file: {}.", property, e);
             return -1;
         }
     }

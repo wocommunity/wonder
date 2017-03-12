@@ -95,7 +95,7 @@ public class Key<E> {
 	 * @param upper The upper bound. [null] represents infinity.
 	 */
 	public Expression between( E lower, E upper, boolean inclusive ) {
-		List<Expression> expressions = new ArrayList<Expression>();
+		List<Expression> expressions = new ArrayList<>();
 
 		if( lower != null ) {
 			if( inclusive ) {

@@ -16,7 +16,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -47,7 +48,7 @@ import er.extensions.eof.ERXKey;
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities {
-	private static final Logger log = Logger.getLogger(ERXArrayUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXArrayUtilities.class);
 
 	   /**
 	    * Holds the null grouping key for use when grouping objects
@@ -59,7 +60,7 @@ public class ERXArrayUtilities {
     private static volatile boolean initialized = false;
 
     /** Caches sort orderings for given keys */
-    private final static NSDictionary<String, NSSelector> _selectorsByKey = new NSDictionary<String, NSSelector>(new NSSelector[] {
+    private final static NSDictionary<String, NSSelector> _selectorsByKey = new NSDictionary<>(new NSSelector[] {
         EOSortOrdering.CompareAscending,
         EOSortOrdering.CompareCaseInsensitiveAscending,
         EOSortOrdering.CompareCaseInsensitiveDescending,
@@ -521,7 +522,7 @@ public class ERXArrayUtilities {
      */
     @Deprecated
     public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(Enumeration<T> enumeration, EOQualifierEvaluation qualifier) {
-        NSMutableArray<T> result = new NSMutableArray<T>();
+        NSMutableArray<T> result = new NSMutableArray<>();
         while (enumeration.hasMoreElements()) {
             T object = enumeration.nextElement();
             if (qualifier.evaluateWithObject(object)) 
@@ -607,7 +608,7 @@ public class ERXArrayUtilities {
      */
     @Deprecated
     public static <T> NSArray<T> filteredArrayWithQualifierEvaluation(Iterator<T> iterator, EOQualifierEvaluation qualifier) {
-        NSMutableArray<T> result = new NSMutableArray<T>();
+        NSMutableArray<T> result = new NSMutableArray<>();
         while (iterator.hasNext()) {
             T object = iterator.next();
             if (qualifier.evaluateWithObject(object)) 
@@ -692,10 +693,13 @@ public class ERXArrayUtilities {
      */
     public static <T> NSArray<T> arrayMinusObject(Collection<T> array, T object) {
         if (object == null) {
-            return new NSArray<T>(array);
+            return new NSArray<>(array);
         }
         NSMutableArray<T> result = new NSMutableArray<>(array);
-        result.remove(object);
+        boolean removed = true;
+        while (removed) {
+        	removed = result.remove(object);
+        }
         return result.immutableClone();
     }
 
@@ -712,7 +716,7 @@ public class ERXArrayUtilities {
      */
     public static <T> NSArray<T> arrayByAddingObjectsFromArrayWithoutDuplicates(Collection<? extends T> array1, Collection<? extends T> array2) {
         if (array2 == null || array2.isEmpty()) {
-            if (array1.isEmpty()) {
+            if (array1 == null || array1.isEmpty()) {
                 return NSArray.emptyArray();
             } else if (array1 instanceof NSArray) {
                 return ((NSArray)array1).immutableClone();
@@ -1088,7 +1092,7 @@ public class ERXArrayUtilities {
     public static <T> NSArray<T> sortedArraySortedWithKey(NSArray<T> array, String key, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort array of objects with null key.", key);
-        NSArray<EOSortOrdering> order=new NSArray<EOSortOrdering>(new EOSortOrdering[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
+        NSArray<EOSortOrdering> order=new NSArray<>(new EOSortOrdering[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
         return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
     }
 
@@ -1107,7 +1111,7 @@ public class ERXArrayUtilities {
         if (keys.count() < 2)
             return sortedArraySortedWithKey(array, keys.lastObject(), selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector);
 
-        NSMutableArray<EOSortOrdering> order = new NSMutableArray<EOSortOrdering>(keys.count());
+        NSMutableArray<EOSortOrdering> order = new NSMutableArray<>(keys.count());
         for (Enumeration<String> keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
             String key = keyEnumerator.nextElement();
             order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector));
@@ -1133,7 +1137,7 @@ public class ERXArrayUtilities {
     public static void sortArrayWithKey(NSMutableArray<?> array, String key, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of eos.", array);
         ERXAssert.PRE.notNull("Attempting to sort array of eos with null key.", key);
-        NSArray<EOSortOrdering> order=new NSArray<EOSortOrdering>(new EOSortOrdering[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
+        NSArray<EOSortOrdering> order=new NSArray<>(new EOSortOrdering[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
         EOSortOrdering.sortArrayUsingKeyOrderArray(array, order);
     }
 
@@ -1858,7 +1862,7 @@ public class ERXArrayUtilities {
             spec = spec.fetchSpecificationWithQualifierBindings(bindings);
         }
 
-        result = new NSArray<T>(array);
+        result = new NSArray<>(array);
 
         if ((qualifier = spec.qualifier()) != null) {
             result = EOQualifier.filteredArrayWithQualifier(result, qualifier);
@@ -2066,7 +2070,7 @@ public class ERXArrayUtilities {
      * @return array of dictionaries containing values for the key paths
      */
     public static NSArray<?> arrayForKeysPath(NSArray<?> array, NSArray<String> keys) {
-        NSMutableArray<Object> result=new NSMutableArray<Object>();
+        NSMutableArray<Object> result=new NSMutableArray<>();
         if (array != null && keys != null) {
             for (Enumeration<?> e = array.objectEnumerator(); e.hasMoreElements();) {
                 Object object = e.nextElement();
@@ -2094,7 +2098,7 @@ public class ERXArrayUtilities {
     public static <T> NSArray<T> removeNullValues(NSArray<T> target, NSArray<T> array) {
         if (target == null) return null;
         if (array == null) return target;
-        NSMutableArray<T> result = new NSMutableArray<T>();
+        NSMutableArray<T> result = new NSMutableArray<>();
         int i = 0;
         for (T object : array) {
             if (!(object instanceof NSKeyValueCoding.Null)) {
@@ -2134,7 +2138,7 @@ public class ERXArrayUtilities {
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
     public static String objectArrayToString(Object[][] array) {
-        NSMutableArray<Object> result = new NSMutableArray<Object>();
+        NSMutableArray<Object> result = new NSMutableArray<>();
         for (Object[] oa : array) {
             result.add(objectArrayToString(oa));
         }
@@ -2147,7 +2151,7 @@ public class ERXArrayUtilities {
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
     public static String objectArraysToString(NSArray<Object[][]> array) {
-        NSMutableArray<Object> aa = new NSMutableArray<Object>();
+        NSMutableArray<Object> aa = new NSMutableArray<>();
         for (Object[][] oa : array) {
             aa.add(objectArrayToString(oa));
         }
@@ -2171,7 +2175,7 @@ public class ERXArrayUtilities {
         int size = array.size();
         String[] b = new String[size];
         for (int i = size; i > 0; i--) {
-            b[i] = array.get(i).toString();
+            b[i - 1] = array.get(i - 1).toString();
         }
         return b;
     }

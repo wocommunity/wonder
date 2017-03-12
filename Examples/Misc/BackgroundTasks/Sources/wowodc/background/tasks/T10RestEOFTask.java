@@ -4,7 +4,8 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.ResultItem;
@@ -43,8 +44,7 @@ import er.extensions.foundation.IERXStatus;
  * @author kieran
  */
 public class T10RestEOFTask implements Callable<EOGlobalID>, IERXStatus, IERXPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T10RestEOFTask.class);
+	private static final Logger log = LoggerFactory.getLogger(T10RestEOFTask.class);
 	
 	// Duration of the example task in milliseconds
 	private final long DURATION = 15000;
@@ -97,10 +97,10 @@ public class T10RestEOFTask implements Callable<EOGlobalID>, IERXStatus, IERXPer
 				resultItem.setNumberToCheck(_numberToCheck);
 
 				if (Utilities.isPrime(_numberToCheck)) {
-					log.info("==>> " + _numberToCheck + " is a PRIME number.");
+					log.info("==>> {} is a PRIME number.", _numberToCheck);
 					resultItem.setIsPrime(Boolean.TRUE);
 				} else {
-					log.debug(_numberToCheck + " is not a prime number but is a COMPOSITE number.");
+					log.debug("{} is not a prime number but is a COMPOSITE number.", _numberToCheck);
 					resultItem.setIsPrime(Boolean.FALSE);
 				}
 				

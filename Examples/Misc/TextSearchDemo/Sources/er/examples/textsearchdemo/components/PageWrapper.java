@@ -19,7 +19,7 @@ public class PageWrapper extends ERXStatelessComponent {
 	public WOActionResults returnAction() {
 		WOComponent backPage = (WOComponent)this.objectValueForBinding("backPage");
 		if (backPage == null) {
-			backPage = pageWithName(Main.class.getName());
+			backPage = pageWithName(Main.class);
 		}
 		return backPage;
 	}

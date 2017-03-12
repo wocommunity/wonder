@@ -1,7 +1,7 @@
 Summary: woadaptor is a Apache 2.4 module to connect to wotaskd.
 Name: woadaptor-httpd24
 Version: 6
-Release: 1
+Release: 2.1
 Prefix: /
 BuildArch: x86_64
 Group: Project Wonder/Deployment
@@ -50,9 +50,11 @@ rm -rf %{buildroot}
 service httpd graceful > /dev/null 2>&1
 
 %preun
-mv /etc/httpd/conf.d/webobjects.conf /etc/httpd/conf.d/webobjects.conf.bak
-rm %{_libdir}/httpd/modules/mod_WebObjects.so
-service httpd graceful
+if [ "$1" = "0" ]; then
+  mv /etc/httpd/conf.d/webobjects.conf /etc/httpd/conf.d/webobjects.conf.bak
+  rm %{_libdir}/httpd/modules/mod_WebObjects.so
+  service httpd graceful
+fi
 
 %files
 %defattr(-,root,wheel,-)

@@ -5,7 +5,8 @@ package com.webobjects.jdbcadaptor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSForwardException;
@@ -14,7 +15,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
 
 public class DateJDBCColumn extends ERXJDBCColumn {
-	private static final Logger log = Logger.getLogger(DateJDBCColumn.class);
+	private static final Logger log = LoggerFactory.getLogger(DateJDBCColumn.class);
 
 	public DateJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
 		super(attribute, channel, column, rs);
@@ -62,7 +63,7 @@ public class DateJDBCColumn extends ERXJDBCColumn {
 		try {
 			return super._fetchValue(flag);
 		} catch(NSForwardException ex) {
-			log.error("There's an error with this attribute: " + _attribute);
+			log.error("There's an error with this attribute: {}", _attribute);
 			throw ex;
 		}
 	}

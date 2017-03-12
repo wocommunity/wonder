@@ -29,7 +29,7 @@ public class ExampleWebSocket extends DefaultWOWebSocket {
 	 */
 	@Override
 	public void receive(String message) {
-		NSDictionary<String, String> userInfo = new NSDictionary<String, String>(
+		NSDictionary<String, String> userInfo = new NSDictionary<>(
 				new String[] { message, username }, new String[] { "message", "username" });
 		NSNotificationCenter.defaultCenter().postNotification(CHAT_MESSAGE_RECEIVED, this, userInfo);
 	}

@@ -62,7 +62,6 @@ import er.extensions.validation.ERXValidationFactory;
  * forget to update an inverse relationship. To turn this feature on, you must set the system default 
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  *
- * @property ERDebuggingEnabled
  * @property er.extensions.ERXCustomObject.shouldTrimSpaces
  */
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
@@ -74,7 +73,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
 	private static final long serialVersionUID = 1L;
 
     /** holds all subclass related Logger's */
-    private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+    private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<>();
      
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCustomObject.shouldTrimSpaces", false);
@@ -154,7 +153,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void mightDelete() {
         if (tranLogMightDelete.isDebugEnabled())
-        	tranLogMightDelete.debug("Object:" + description());
+        	tranLogMightDelete.debug("Object: " + this);
     }
 
     /* (non-Javadoc)
@@ -165,7 +164,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
             throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeDeletedException");            
         }
         if (tranLogWillDelete.isDebugEnabled())
-            tranLogWillDelete.debug("Object:" + description());
+            tranLogWillDelete.debug("Object: " + this);
     }
     
     /* (non-Javadoc)
@@ -183,7 +182,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
                      tranLogWillInsert.error("Found illegal value in to many "+key+" for "+this+": "+o);
                  }
              }
-             tranLogWillInsert.debug("Object:" + description());
+             tranLogWillInsert.debug("Object: " + this);
          }
          if(shouldTrimSpaces())
              trimSpaces();
@@ -205,7 +204,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
                  }
              }
              if (tranLogWillUpdate.isDebugEnabled())
-                 tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
+                 tranLogWillUpdate.debug("Object: " + this + " changes: " + changesFromCommittedSnapshot());
          }
          if(shouldTrimSpaces())
              trimSpaces();
@@ -221,21 +220,21 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void didDelete(EOEditingContext ec) {
         if (tranLogDidDelete.isDebugEnabled())
-            tranLogDidDelete.debug("Object:" + description());
+            tranLogDidDelete.debug("Object: " + this);
     }
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#didUpdate()
      */
     public void didUpdate() {
         if (tranLogDidUpdate.isDebugEnabled())
-            tranLogDidUpdate.debug("Object:" + description());
+            tranLogDidUpdate.debug("Object: " + this);
     }
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#didInsert()
      */
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
-            tranLogDidInsert.debug("Object:" + description());
+            tranLogDidInsert.debug("Object: " + this);
 
         //We're going to blow the primaryKey cache:
         _primaryKey = null;
@@ -246,7 +245,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void willRevert() {
         if ( tranLogWillRevert.isDebugEnabled() )
-            tranLogWillRevert.debug("Object: " + description());
+            tranLogWillRevert.debug("Object: " + this);
     }
 
     /* (non-Javadoc)
@@ -254,7 +253,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void didRevert(EOEditingContext ec) {
         if ( tranLogDidRevert.isDebugEnabled() )
-            tranLogDidRevert.debug("Object: " + description());
+            tranLogDidRevert.debug("Object: " + this);
         flushCaches();
     }
 
@@ -490,32 +489,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @return primary key dictionary for the current object, if the object does not have
      *      a primary key assigned yet and is not in the middle of a transaction then
      *      a new primary key dictionary is created, cached and returned.
-     * @deprecated use {@link #rawPrimaryKeyDictionary(boolean)} instead
-     */
-    @Deprecated
-    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
-        return rawPrimaryKeyDictionary(inTransaction);
-    }
-
-    /**
-     * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
-     * This implementation operates in the following fashion. If it is called
-     * passing in 'false' and it has not yet been saved to the database, meaning
-     * this object does not yet have a primary key assigned, then it will have the
-     * adaptor channel generate a primary key for it. Then when the object is saved
-     * to the database it will use the previously generated primary key instead of
-     * having the adaptor channel generate another primary key. If 'true' is passed in
-     * then this method will either return the previously generated primaryKey
-     * dictionary or null if it does not have one. Typically you should only call
-     * this method with the 'false' parameter seeing as unless you are doing something
-     * really funky you won't be dealing with this object when it is in the middle of
-     * a transaction. The delegate {@link ERXDatabaseContextDelegate} is the only class
-     * that should be calling this method and passing in 'true'.
-     * @param inTransaction boolean flag to tell the object if it is currently in the
-     *      middle of a transaction.
-     * @return primary key dictionary for the current object, if the object does not have
-     *      a primary key assigned yet and is not in the middle of a transaction then
-     *      a new primary key dictionary is created, cached and returned.
      */
     @Override
     public NSDictionary<String, Object> rawPrimaryKeyDictionary(boolean inTransaction) {
@@ -615,12 +588,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
 
-    /**
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String description() { return toString(); }
-    
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#toLongString()
      */
@@ -700,9 +667,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     
     /**
      * This method performs a few checks before invoking
-     * super's implementation. If the property key:
-     * <b>ERDebuggingEnabled</b> is set to true then the method
-     * <code>checkConsistency</code> will be called on this object.
+     * super's implementation.
+     * 
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
@@ -714,11 +680,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
         super.validateForSave();
-        // FIXME: Should move all of the keys into on central place for easier management.
-        //    Also might want to have a flag off of ERXApplication is debugging is enabled.
-        // FIXME: Should have a better flag than just ERDebuggingEnabled
-        if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
-            checkConsistency();
     }
 
     /**
@@ -763,17 +724,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         super.validateForDelete();
     }
 
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#checkConsistency()
-     */
-    // CHECKME: This method was very useful at NS, might not be as useful here.
-    public void checkConsistency() throws NSValidation.ValidationException {}
-    
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#batchCheckConsistency()
-     */
-    public void batchCheckConsistency() throws NSValidation.ValidationException {}
-    
 	/**
 	 * Overridden to support two-way relationship setting.
 	 */

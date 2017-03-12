@@ -10,9 +10,6 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * This is a simple class for converting ASCII strings to HTML and vice versa.
@@ -26,9 +23,6 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXSimpleHTMLFormatter.class);
 
     /** holds the HTML return string */
     private final static String HTMLReturn = "<br />";

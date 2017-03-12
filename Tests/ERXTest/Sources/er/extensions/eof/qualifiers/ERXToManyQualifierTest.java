@@ -6,20 +6,20 @@ import com.webobjects.foundation.NSArray;
 
 public class ERXToManyQualifierTest extends TestCase {
 	
-	NSArray<Integer> ints = new NSArray<Integer>(new Integer[] {
+	NSArray<Integer> ints = new NSArray<>(new Integer[] {
 			Integer.valueOf(1), 
 			Integer.valueOf(2), 
 			Integer.valueOf(3), 
 			Integer.valueOf(4),
 			});
-	NSArray<Integer> ints2 = new NSArray<Integer>(new Integer[] {
+	NSArray<Integer> ints2 = new NSArray<>(new Integer[] {
 			Integer.valueOf(1), 
 			Integer.valueOf(2), 
 			Integer.valueOf(3), 
 			Integer.valueOf(3),
 			Integer.valueOf(4),
 			});
-	NSArray<Integer> test1 = new NSArray<Integer>(new Integer[] {
+	NSArray<Integer> test1 = new NSArray<>(new Integer[] {
 			Integer.valueOf(1), 
 			Integer.valueOf(2), 
 			Integer.valueOf(3), 
@@ -27,13 +27,13 @@ public class ERXToManyQualifierTest extends TestCase {
 			Integer.valueOf(5),
 			Integer.valueOf(6),
 			});
-	NSArray<Integer> test2 = new NSArray<Integer>(new Integer[] {
+	NSArray<Integer> test2 = new NSArray<>(new Integer[] {
 			Integer.valueOf(1), 
 			Integer.valueOf(2), 
 			Integer.valueOf(3), 
 			Integer.valueOf(5),
 			});
-	NSArray<Integer> test3 = new NSArray<Integer>(new Integer[] {
+	NSArray<Integer> test3 = new NSArray<>(new Integer[] {
 			Integer.valueOf(1), 
 			Integer.valueOf(2), 
 			Integer.valueOf(3), 

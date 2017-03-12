@@ -12,7 +12,7 @@ import er.rest.ERXRestUtils;
  * @property <code>er.rest.format.ERXJSONRestWriter.shouldPrettyPrint</code> Boolean property to enable pretty-printing of JSON response. Defaults to false.
  * @property <code>er.rest.format.ERXJSONRestWriter.prettyPrintIndent</code> Integer property to set the pretty print indentation space count. Defaults to <code>2</code>.
  */
-public class ERXJSONRestWriter implements IERXRestWriter {
+public class ERXJSONRestWriter extends ERXRestWriter {
 
 	// Lazily initialized static constants
 	private static class CONSTANTS {
@@ -31,10 +31,7 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		return node;
 	}
 
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
-		response.setHeader("application/json", "Content-Type");
-	}
-
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		node = processNode(node);
 		if (node != null) {
@@ -42,6 +39,7 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		}
 		
 		appendHeadersToResponse(node, response, context);
+		response.setContentEncoding(contentEncoding());
 		Object object = node.toJavaCollection(delegate);
 		if (object == null) {
 			response.appendContentString("undefined");
@@ -55,5 +53,10 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 			response.appendContentString(json);
 		}
 		response.appendContentString("\n");
+	}
+
+	@Override
+	public String contentType() {
+		return "application/json";
 	}
 }

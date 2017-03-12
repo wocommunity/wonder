@@ -29,7 +29,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.webobjects.appserver.WOApplication;
@@ -97,22 +98,17 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
 
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXProperties.class);
-    private static final Map AppSpecificPropertyNames = new HashMap(128);
+    private static final Logger log = LoggerFactory.getLogger(ERXProperties.class);
+    private static final Logger configLog = LoggerFactory.getLogger(ERXConfigurationManager.class);
 
-    /** WebObjects version number as string */
-    private static String _webObjectsVersion;
-    
-    /** WebObjects version number as double */ 
-    private static double _webObjectsVersionDouble;
+    private static final Map<String, String> AppSpecificPropertyNames = new HashMap<>(128);
 
     /** 
     * <div class="en">Internal cache of type converted values to avoid reconverting attributes that are asked for frequently</div> 
     * 
     * <div class="ja">タイプ変換されている値を内部でキャシュし、何回も同じ変換をする必要なくなります</div>
     */
-    private static Map _cache = Collections.synchronizedMap(new HashMap());
+    private static Map<String, Object> _cache = Collections.synchronizedMap(new HashMap<>());
 
     
     /**
@@ -137,16 +133,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * the native Java System.getProperty call.
      */
     public static final boolean _useLoadtimeAppSpecifics;
-
-    /**
-     * Set in flattenPropertyNames().
-     *
-     * The flattenPropertyNames() method is called from ERXSystem.updateProperties(), 
-     *     which is called from ERXConfigurationManager.loadConfiguration(),
-     *         which is called from ERXExtensions.finishInitialization(),
-     *             which is registered to be called at ApplicationDidFinishLaunching-time by ERXApplication.
-     */
-    private String _appNameSuffix;
 
     static {
        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault(System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true);
@@ -185,7 +171,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </div>
      */
     public static void populateSystemProperties() {
-        System.setProperty("com.webobjects.version", webObjectsVersion());
+        System.setProperty("com.webobjects.version", "5.4");
     }
 
     /** 
@@ -343,134 +329,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return wonderVersion;
     }
 
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as string. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをStringとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as string</div>
-     *         <div class="ja">WebObjects バージョン番号を String として戻ります。</div>
-     * @see #webObjectsVersionAsDouble()
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
-     * @deprecated Wonder is used with WO 5.4 only
-     */ 
-    @Deprecated
-	public static String webObjectsVersion() {
-        if (_webObjectsVersion == null) {
-            _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
-            
-            // if _webObjectsVersion is a null-string, we assume it's WebObjects 5.1.x
-            if (_webObjectsVersion.equals("")) 
-                _webObjectsVersion = "5.1";
-        }
-        return _webObjectsVersion;
-    }
-
-    /** 
-     * <div class="en">
-     * Returns WebObjects version as double. If it's one of those 
-     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this method will return more precise 
-     * version numbers such as 5.2.1. Note that version 5.0 series 
-     * is not supported and may return incorrect version numbers 
-     * (it will return 5.1). 
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョンをdoubleとして戻します。
-     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
-     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
-     * </div>
-     * 
-     * @return <div class="en">WebObjects version number as double</div>
-     *         <div class="ja">WebObjects バージョン番号を double として戻ります。</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static double webObjectsVersionAsDouble() {
-        if (_webObjectsVersionDouble == 0.0d) {
-            String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
-            int cutoffIndex = woVersionString.indexOf(' ');
-            if (cutoffIndex == -1) {
-            	cutoffIndex = woVersionString.indexOf('-');
-            }
-            if (cutoffIndex != -1) {
-            	woVersionString = woVersionString.substring(0, cutoffIndex);
-            }
-            try {
-                _webObjectsVersionDouble = Double.parseDouble(woVersionString);
-            } catch (NumberFormatException ex) {
-                log.error("An exception occurred while parsing webObjectVersion " + woVersionString 
-                    + " as a double value: " + ex.getClass().getName() + " " + ex.getMessage());
-            }
-        }
-        return _webObjectsVersionDouble;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.2 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     *  WebObjectsのバージョン番号が5.2以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.2 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.2以上であれば</div>
-     * @see #webObjectsVersion
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs52OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            return webObjectsVersionAsDouble() >= 5.2d;
-        }
-        return true;
-    }
-
-    /**
-     * <div class="en">
-     * Quick convenience method used to determine if the current
-     * WebObjects version is 5.22 or higher.
-     * </div>
-     * 
-     * <div class="ja">
-     * WebObjectsのバージョン番号が5.22以上の場合にはtrueが戻ります
-     * </div>
-     * 
-     * @return <div class="en">if the version of WebObjects is 5.22 or better</div>
-     *         <div class="ja">true もし、バージョン番号が5.22以上であれば</div>
-     * @deprecated Wonder is used with WO 5.4 only
-     */
-    @Deprecated
-	public static boolean webObjectsVersionIs522OrHigher() {
-        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
-            String webObjectsVersion = webObjectsVersion();
-            if("5.2".equals(webObjectsVersion)) {
-                String sourceVersion = sourceVersionString();
-                if("9260000".equals(sourceVersion)) {
-                    return true;
-                }
-            }
-            return webObjectsVersionAsDouble() >= 5.22d;
-        }
-        return true;
-    }
-
     
     /**
      * <div class="en">
@@ -488,7 +346,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return <div class="en">array de-serialized from the string in the system properties</div>
      *         <div class="ja">システム・プロパティー内の連結した String を NSArray に変換した配列</div>
      */
-	public static NSArray arrayForKey(String s) {
+	public static NSArray<String> arrayForKey(String s) {
         return arrayForKeyWithDefault(s, null);
     }
 
@@ -519,7 +377,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             if (AppSpecificPropertyNames.size() > 128) {
                 AppSpecificPropertyNames.clear();
             }
-            String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
+            String appSpecificPropertyName = AppSpecificPropertyNames.get(propertyName);
             if (appSpecificPropertyName == null) {
                 final WOApplication application = WOApplication.application();
                 if (application != null) {
@@ -557,9 +415,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return <div class="en">array de-serialized from the string in the system properties or default value</div>
      *         <div class="ja">システム・プロパティー内の連結した String を NSArray に変換した配列</div>
      */
-	public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
+	public static NSArray<String> arrayForKeyWithDefault(final String s, final NSArray<String> defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-		NSArray value;
+		NSArray<String> value;
 		Object cachedValue = _cache.get(propertyName);
 		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
@@ -567,7 +425,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = (NSArray) cachedValue;
 		} else {
 			value = ERXValueUtilities.arrayValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			_cache.put(s, value == null ? UndefinedMarker : value);
 			if (value == null) {
 				value = defaultValue;
 			}
@@ -630,7 +488,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Boolean) cachedValue).booleanValue();
 		} else {
 			Boolean objValue = ERXValueUtilities.BooleanValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(propertyName, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(propertyName, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -692,7 +550,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = (NSDictionary) cachedValue;
 		} else {
 			value = ERXValueUtilities.dictionaryValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, value == null ? (Object)UndefinedMarker : value);
+			_cache.put(s, value == null ? UndefinedMarker : value);
 			if (value == null) {
 				value = defaultValue;
 			}
@@ -870,7 +728,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             propertyValue = bigDecimal.toString();
             System.setProperty(propertyName, propertyValue);
         }
-        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : bigDecimal);
+        _cache.put(propertyName, propertyValue == null ? UndefinedMarker : bigDecimal);
         return bigDecimal;
     }
 
@@ -902,7 +760,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Integer) cachedValue).intValue();
 		} else {
 			Integer objValue = ERXValueUtilities.IntegerValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -943,7 +801,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Long) cachedValue).longValue();
 		} else {
 			Long objValue = ERXValueUtilities.LongValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -985,7 +843,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Float) cachedValue).floatValue();
 		} else {
 			Float objValue = ERXValueUtilities.FloatValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -1027,7 +885,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			value = ((Double) cachedValue).doubleValue();
 		} else {
 			Double objValue = ERXValueUtilities.DoubleValueWithDefault(ERXSystem.getProperty(propertyName), null);
-			_cache.put(s, objValue == null ? (Object)UndefinedMarker : objValue);
+			_cache.put(s, objValue == null ? UndefinedMarker : objValue);
 			if (objValue == null) {
 				value = defaultValue;
 			} else {
@@ -1236,7 +1094,46 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     	return array;
     }
-    
+
+    /**
+     * Returns an enum value for a given enum class and system property. If the property is not
+     * set or matches no enum constant, <code>null</code> will be returned. The search for the
+     * enum value is case insensitive, i.e. a property value "foo" will match the enum constant
+     * <code>FOO</code>.
+     * 
+     * @param enumClass the enum class
+     * @param key the property key
+     * @return the enum value
+     */
+    public static <T extends Enum> T enumValueForKey(Class<T> enumClass, String key) {
+    	return enumValueForKeyWithDefault(enumClass, key, null);
+    }
+
+    /**
+     * Returns an enum value for a given enum class and system property. If the property is not
+     * set or matches no enum constant, the specified default value will be returned. The
+     * search for the enum value is case insensitive, i.e. a property value "foo" will match
+     * the enum constant <code>FOO</code>.
+     * 
+     * @param enumClass the enum class
+     * @param key the property key
+     * @param defaultValue the default value
+     * @return the enum value
+     */
+    public static <T extends Enum> T enumValueForKeyWithDefault(Class<T> enumClass, String key, T defaultValue) {
+    	T result = defaultValue;
+    	String stringValue = stringForKey(key);
+    	if (stringValue != null) {
+    		for (T enumValue : enumClass.getEnumConstants()) {
+    			if (enumValue.name().equalsIgnoreCase(stringValue)) {
+    				result = enumValue;
+    				break;
+    			}
+    		}
+    	}
+    	return result;
+    }
+
     /**
      * <div class="en">
      * Sets an array in the System properties for
@@ -1351,7 +1248,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *             <div class="ja">プロパティー・ファイルへのパス</div>
      * 
      * @return <div class="en">properties object with the values from the file specified.</div>
-     *         <div class="ja"ファイルの内容を持つプロパティー・オブジェクト</div>
+     *         <div class="ja">ファイルの内容を持つプロパティー・オブジェクト</div>
      */
     // FIXME: This shouldn't eat the exception
 	public static Properties propertiesFromPath(String path) {
@@ -1364,15 +1261,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
         File file = new File(path);
         if (! file.exists()  ||  ! file.isFile()  ||  ! file.canRead()) {
-            log.warn("File " + path + " doesn't exist or can't be read.");
+            log.warn("File '{}' doesn't exist or can't be read.", path);
             return prop;
         }
 
         try {
         	prop.load(file);
-            log.debug("Loaded configuration file at path: "+ path);
+            log.debug("Loaded configuration file at path: {}", path);
         } catch (IOException e) {
-            log.error("Unable to initialize properties from file \"" + path + "\"", e);
+            log.error("Unable to initialize properties from file '{}'", path, e);
         }
         return prop;
     }
@@ -1460,7 +1357,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	if(path != null && path.length() > 0) {
     		path = getActualPath(path);
     		if(propertiesPaths.containsObject(path)) {
-    			log.error("Path was already included: " + path + "");
+    			log.error("Path was already included: {}", path);
     		}
     		projectsInfo.addObject("  " + info +" -> " + path);
     		propertiesPaths.addObject(path);
@@ -1510,7 +1407,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			    	addIfPresent("{$user.home}/WebObjects.properties", userHomePath, propertiesPaths, projectsInfo);
 				}
 				catch (java.io.IOException ex) {
-					ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
+					log.error("Failed to load the configuration file '{}'.", file, ex);
 				}
 			}
         }
@@ -1526,11 +1423,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				    	addIfPresent("Optional Configuration", optionalPath, propertiesPaths, projectsInfo);
 					}
 					catch (java.io.IOException ex) {
-						ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
+						log.error("Failed to load configuration file '{}'.", file, ex);
 					}
 				}
 				else {
-					ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
+					log.error("The optional configuration file '{}' either does not exist or could not be read.", file);
 				}
 			}
 		}
@@ -1679,15 +1576,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     				try {
     					Properties props = ERXProperties.propertiesFromFile(file);
     					if(log.isDebugEnabled()) {
-    						log.debug("Loaded: " + file + "\n" + ERXProperties.logString(props));
+    						log.debug("Loaded: {}\n{}", file, ERXProperties.logString(props));
     					}
     					ERXProperties.transferPropertiesFromSourceToDest(props, dest);
     				} catch (java.io.IOException ex) {
-    					log.error("Unable to load optional configuration file: " + configFile, ex);
+    					log.error("Unable to load optional configuration file: {}", configFile, ex);
     				}
     			}
     			else {
-    				ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
+    				configLog.error("The optional configuration file '{}' either does not exist or cannot be read.", file);
     			}
     		}
     	}
@@ -1726,7 +1623,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return all of the properties in the system mapped to their evaluated values, sorted by key
      */
     public static Map<String, String> propertiesMap(Properties properties, boolean protectValues) {
-    	Map<String, String> props = new TreeMap<String, String>();
+    	Map<String, String> props = new TreeMap<>();
     	for (Enumeration e = properties.keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
     		if (protectValues && key.toLowerCase().contains("password")) {
@@ -1772,7 +1669,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </div>
      */
     public static NSArray<Property> allProperties() {
-    	NSMutableArray props = new NSMutableArray();
+    	NSMutableArray<Property> props = new NSMutableArray<>();
     	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
     		String object = "" + ERXSystem.getProperty(key);
@@ -1803,8 +1700,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
 	public static String pathForPropertiesUnderProjectPath(String projectPath) {
         String path = null; 
-        final NSArray supportedPropertiesPaths = new NSArray(new Object[] 
-                                        {"/Properties", "/Resources/Properties"});
+        final NSArray<String> supportedPropertiesPaths = new NSArray<>("/Properties", "/Resources/Properties");
         Enumeration e = supportedPropertiesPaths.objectEnumerator();
         while (e.hasMoreElements()) {
             File file = new File(projectPath + (String) e.nextElement());
@@ -1812,7 +1708,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 try {
                     path = file.getCanonicalPath();
                 } catch (IOException ex) {
-                    log.error(ex.getClass().getName() + ": " + ex.getMessage());
+                    log.error("Could not get canonical path from {}", file, ex);
                 }
                 break;
             }
@@ -1922,7 +1818,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     			applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
     		}
     		catch (IOException e) {
-    			ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    			log.error("Failed to load machine Properties file '{}'.", fileName, e);
     		}
     	}
     	return applicationMachinePropertiesPath;
@@ -1987,8 +1883,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         try {
             actualPath = file.getCanonicalPath();
         } catch (Exception ex) {
-            log.warn("The file at " + path + " does not seem to exist: " 
-                + ex.getClass().getName() + ": " + ex.getMessage());
+            log.warn("The file at {} does not seem to exist.", path , ex);
         }
         return actualPath;
     }
@@ -2153,7 +2048,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * 
 	 * <div class="ja">オペレータ処理とオペレータ・キーのマップを保持しま</div>
 	 */
-	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<String, ERXProperties.Operator>();
+	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<>();
 
 	/**
 	 * <div class="en">
@@ -2378,7 +2273,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public NSDictionary<String, String> compute(String key, String value, String parameters) {
 			String decryptedValue = ERXCrypto.defaultCrypter().decrypt(value);
-			return new NSDictionary<String, String>(decryptedValue, key);
+			return new NSDictionary<>(decryptedValue, key);
 		}
 	}
 
@@ -2490,10 +2385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				}
 
 				if (ipNumberMatches) {
-					computedProperties = new NSDictionary<String, String>(value, key);
+					computedProperties = new NSDictionary<>(value, key);
 				}
 				else {
-					computedProperties = new NSDictionary<String, String>();
+					computedProperties = new NSDictionary<>();
 				}
 			}
 			return computedProperties;
@@ -2520,7 +2415,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 */
 	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
 		NSArray<String> operatorKeys = ERXProperties.operators.allKeys();
-		for (Object keyObj : new TreeSet<Object>(originalProperties.keySet())) {
+		for (Object keyObj : new TreeSet<>(originalProperties.keySet())) {
 			String key = (String) keyObj;
 			if (key != null && key.length() > 0) {
 				String value = originalProperties.getProperty(key);
@@ -2590,7 +2485,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	        return;
 	    }
 	    String applicationName = application.name();
-	    for (Object keyObj : new TreeSet<Object>(properties.keySet())) {
+	    for (Object keyObj : new TreeSet<>(properties.keySet())) {
 	        String key = (String) keyObj;
 	        if (key != null && key.length() > 0) {
 	            String value = properties.getProperty(key);
@@ -2625,6 +2520,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * @author mschrag
 	 */
 	public static class _Properties extends Properties {
+		private static final Logger log = LoggerFactory.getLogger(ERXProperties.class);
 		/**
 		 * Do I need to update serialVersionUID?
 		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -2634,7 +2530,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public static final String IncludePropsKey = ".includeProps";
 		
-		private Stack<File> _files = new Stack<File>();
+		private Stack<File> _files = new Stack<>();
 		
 		@Override
 		public synchronized Object put(Object key, Object value) {
@@ -2660,7 +2556,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 	existingIncludeProps = "";
                 }
                 if (existingIncludeProps.indexOf(propsFile.getPath()) > -1) {
-                    log.error("_Properties.load(): recursive includeProps detected! " + propsFile + " in " + existingIncludeProps);
+                    log.error("_Properties.load(): recursive includeProps detected! {} in {}", propsFile, existingIncludeProps);
                     log.error("_Properties.load() cannot proceed - QUITTING!");
                     System.exit(1);
                 }
@@ -2671,7 +2567,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 super.put(_Properties.IncludePropsKey, existingIncludeProps);
 
                 try {
-                    log.info("_Properties.load(): Including props file: " + propsFile);
+                    log.info("_Properties.load(): Including props file: {}", propsFile);
 					load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
@@ -2683,14 +2579,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		public synchronized void load(File propsFile) throws IOException {
 			_files.push(propsFile.getParentFile());
-			try {
-	            BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile));
-	            try {
-	            	load(is);
-	            }
-	            finally {
-	            	is.close();
-	            }
+			try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(propsFile))) {
+	            load(is);
 			}
 			finally {
 				_files.pop();

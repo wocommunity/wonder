@@ -77,14 +77,14 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
-	public AjaxUpdateLink(String name, NSDictionary associations, WOElement children) {
+	public AjaxUpdateLink(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 	
 	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		WOComponent component = context.component();
 		NSMutableDictionary options = createAjaxOptions(component);
-		StringBuffer onClickBuffer = new StringBuffer();
+		StringBuilder onClickBuffer = new StringBuilder();
 
 		String onClick = (String) valueForBinding("onClick", component);
 		String onClickBefore = (String) valueForBinding("onClickBefore", component);
@@ -279,7 +279,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	// PROTOTYPE OPTIONS
 	protected NSMutableDictionary createAjaxOptions(WOComponent component) {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
@@ -288,7 +288,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", AjaxOption.BOOLEAN));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
 		options.setObjectForKey("'get'", "method");
 		if (options.objectForKey("asynchronous") == null) {

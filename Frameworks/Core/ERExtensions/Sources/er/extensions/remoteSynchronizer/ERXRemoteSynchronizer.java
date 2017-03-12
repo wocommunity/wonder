@@ -6,7 +6,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOGlobalID;
@@ -35,7 +36,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public abstract class ERXRemoteSynchronizer {
-	public static Logger log = Logger.getLogger(ERXRemoteSynchronizer.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXRemoteSynchronizer.class);
 
 	public static boolean remoteSynchronizerEnabled() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.remoteSynchronizer.enabled", false);
@@ -76,11 +77,11 @@ public abstract class ERXRemoteSynchronizer {
 		_listener = listener;
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
 		if (includeEntityNames != null) {
-			_includeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
+			_includeEntityNames = new NSSet<>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
 		}
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
+			_excludeEntityNames = new NSSet<>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
 		}
 	}
 
@@ -89,25 +90,19 @@ public abstract class ERXRemoteSynchronizer {
 		if (messageType == ERXRemoteSynchronizer.INSERT) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotInserted change = new ERXDatabase.SnapshotInserted(gid, NSDictionary.EmptyDictionary);
-			if (log.isDebugEnabled()) {
-				log.info("Remote instance (" + remoteChange.identifier() + ") inserted " + change);
-			}
+			log.info("Remote instance ({}) inserted {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.UPDATE) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotUpdated change = new ERXDatabase.SnapshotUpdated(gid, NSDictionary.EmptyDictionary);
-			if (log.isDebugEnabled()) {
-				log.info("Remote instance (" + remoteChange.identifier() + ") updated " + change);
-			}
+			log.info("Remote instance ({}) updated {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.DELETE) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotDeleted change = new ERXDatabase.SnapshotDeleted(gid, NSDictionary.EmptyDictionary);
-			if (log.isDebugEnabled()) {
-				log.info("Remote instance (" + remoteChange.identifier() + ") deleted " + change);
-			}
+			log.info("Remote instance ({}) deleted {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.TO_MANY_UPDATE) {
@@ -117,9 +112,7 @@ public abstract class ERXRemoteSynchronizer {
 			NSArray<EOGlobalID> removedGIDs = readGIDs(dis);
 			boolean removeAll = dis.readBoolean();
 			ERXDatabase.ToManySnapshotUpdated change = new ERXDatabase.ToManySnapshotUpdated(sourceGID, name, addedGIDs, removedGIDs, removeAll);
-			if (log.isDebugEnabled()) {
-				log.info("Remote instance (" + remoteChange.identifier() + ") update to-many " + change);
-			}
+			log.info("Remote instance ({}) update to-many {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (!handleMessageType(messageType, remoteChange, dis)) {
@@ -226,7 +219,7 @@ public abstract class ERXRemoteSynchronizer {
 	}
 
 	protected NSArray<EOGlobalID> readGIDs(DataInputStream dis) throws IOException {
-		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+		NSMutableArray<EOGlobalID> gids = new NSMutableArray<>();
 		int gidCount = dis.readByte();
 		for (int gidNum = 0; gidNum < gidCount; gidNum++) {
 			EOGlobalID gid = readGID(dis);
@@ -310,7 +303,7 @@ public abstract class ERXRemoteSynchronizer {
 				if (shouldSynchronizeEntity(entityName)) {
 					NSMutableSet<EOGlobalID> globalIDsForEntity = (NSMutableSet<EOGlobalID>) result.objectForKey(entityName);
 					if (globalIDsForEntity == null) {
-						globalIDsForEntity = new NSMutableSet<EOGlobalID>();
+						globalIDsForEntity = new NSMutableSet<>();
 						result.setObjectForKey(globalIDsForEntity, entityName);
 					}
 					globalIDsForEntity.addObject(keyGID);
@@ -330,7 +323,7 @@ public abstract class ERXRemoteSynchronizer {
 			filteredCacheChanges = cacheChanges;
 		}
 		else {
-			NSMutableArray<ERXDatabase.CacheChange> mutableFilteredCacheChanges = new NSMutableArray<ERXDatabase.CacheChange>();
+			NSMutableArray<ERXDatabase.CacheChange> mutableFilteredCacheChanges = new NSMutableArray<>();
 			for (ERXDatabase.CacheChange cacheChange : cacheChanges) {
 				EOGlobalID gid = cacheChange.gid();
 				if (gid instanceof EOKeyGlobalID) {

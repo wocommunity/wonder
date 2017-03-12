@@ -9,8 +9,10 @@ package er.extensions.validation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
+import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -39,9 +41,7 @@ import er.extensions.localization.ERXLocalizer;
  * exceptions and generating validation messages.
  */
 public class ERXValidationFactory {
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERXValidationFactory.class);
+    private final static Logger log = LoggerFactory.getLogger(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
@@ -69,7 +69,7 @@ public class ERXValidationFactory {
     /** Regular ERXValidationException constructor parameters */
     private static Class[] _regularConstructor = new Class[] { String.class, Object.class, String.class, Object.class };
 
-    /** holds the marker for an un defined validation template */
+    /** holds the marker for an undefined validation template */
     private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
     
     /**
@@ -158,14 +158,14 @@ public class ERXValidationFactory {
             ERXValidationException.ExceedsMaximumLengthException,
             ERXValidationException.ValueConversionException
         };
-        _mappings = new NSDictionary<String, String>(objects, keys);
+        _mappings = new NSDictionary<>(objects, keys);
     }
 
     /** holds the validation exception class */
     private Class _validationExceptionClass;
 
     /** holds the template cache for a given set of keys */
-    private Hashtable<ERXMultiKey, String> _cache = new Hashtable<ERXMultiKey, String>(1000);
+    private Map<ERXMultiKey, String> _cache = new Hashtable<>(1000);
 
     /** holds the default template delimiter, "@@" */
     private String _delimiter = "@@";
@@ -225,12 +225,12 @@ public class ERXValidationFactory {
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
         try {
-            log.debug("Creating exception for type: " + type + " validationExceptionClass: " + validationExceptionClass().getName());
+            log.debug("Creating exception for type: {} validationExceptionClass: {}", type, validationExceptionClass());
             erve = (ERXValidationException)regularValidationExceptionConstructor().newInstance(new Object[] {type, eo, property, value});
         } catch (InvocationTargetException ite) {
-            log.error("Caught InvocationTargetException creating regular validation exception: " + ite.getTargetException());            
+            log.error("Caught InvocationTargetException creating regular validation exception: {}", ite.getTargetException());
         } catch (Exception e) {
-            log.error("Caught exception creating regular validation exception: " + e);
+            log.error("Caught exception creating regular validation exception.", e);
         }
         return erve;
     }
@@ -304,8 +304,7 @@ public class ERXValidationFactory {
      */
     public ERXValidationException convertException(ValidationException eov, Object value) {
         ERXValidationException erve = null;
-        if (log.isDebugEnabled())
-            log.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
+        log.debug("Converting exception: {} value: {}", eov, (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
             Object o = eov.object();
@@ -332,13 +331,13 @@ public class ERXValidationFactory {
             ERXValidationException original = (ERXValidationException)eov;
             if(shouldRecreateException(original, value)) {
                 erve = createException(original.eoObject(), original.key(), original.value(), original.type());
-                log.debug("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
+                log.debug("Converting exception: {} value: {}", original, (original.value() != null ? original.value() : "<NULL>"));
             } else {
                 erve = original;
             }
         }
         if (erve == null) {
-            log.error("Unable to convert validation exception: " + eov, eov);
+            log.error("Unable to convert validation exception.", eov);
         } else {
             NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
             if (erveAdditionalExceptions.count() > 0)
@@ -360,7 +359,7 @@ public class ERXValidationFactory {
         if (additionalExceptions == null || additionalExceptions.isEmpty()) {
             return NSArray.EmptyArray;
         }
-        NSMutableArray<ERXValidationException> erveAdditionalExceptions = new NSMutableArray<ERXValidationException>();
+        NSMutableArray<ERXValidationException> erveAdditionalExceptions = new NSMutableArray<>();
         for (ValidationException e : additionalExceptions) {
             ERXValidationException erve = convertException(e);
             if (erve != null)
@@ -435,8 +434,7 @@ public class ERXValidationFactory {
                 targetLanguage = ERXLocalizer.currentLocalizer() != null ? ERXLocalizer.currentLocalizer().language() : ERXLocalizer.defaultLanguage();
             }
             
-            if (log.isDebugEnabled ())
-                log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
+            log.debug("templateForException with entityName: {}; property: {}; type: {}; targetLanguage: {}", entityName, property, type, targetLanguage);
             ERXMultiKey k = new ERXMultiKey (new Object[] {entityName, property,
                 type,targetLanguage});
             template = _cache.get(k);
@@ -456,8 +454,8 @@ public class ERXValidationFactory {
      *		is reset.
      */
     public void resetTemplateCache(NSNotification n) {
-        _cache = new Hashtable<ERXMultiKey, String>(1000);
-        if (log.isDebugEnabled()) log.debug("Resetting template cache");
+        _cache = new Hashtable<>(1000);
+        log.debug("Resetting template cache");
     }
 
     /**
@@ -528,14 +526,15 @@ public class ERXValidationFactory {
                                                    String property,
                                                    String type,
                                                    String targetLanguage) {
-        if (log.isDebugEnabled())
-            log.debug("Looking up template for entity named \"" + entityName + "\" property \"" + property
-                      + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"");
+        log.debug("Looking up template for entity named '{}' property '{}' type '{}' target language '{}'.", entityName, property, type, targetLanguage);
         // 1st try the whole string.
         String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);
         // 2nd try everything minus the type.
         if (template == null)
             template = templateForKeyPath(entityName + "." + property, targetLanguage);
+        // 2.5th try entity plus type
+        if (template == null)
+            template = templateForKeyPath(entityName + "." + type, targetLanguage);
         // 3rd try property plus type
         if (template == null)
             template = templateForKeyPath(property + "." + type, targetLanguage);

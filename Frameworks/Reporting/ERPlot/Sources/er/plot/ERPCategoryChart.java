@@ -9,6 +9,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -51,7 +53,9 @@ public class ERPCategoryChart extends ERPChart {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[]{
+	private static final Logger log = LoggerFactory.getLogger(ERPCategoryChart.class);
+
+    public static final NSArray<String> SUPPORTED_TYPES = new NSArray<>(new String[]{
             "BarChart", "StackedBarChart", "BarChart3D", "StackedBarChart3D", "AreaChart", 
             "StackedAreaChart", "LineChart", "WaterfallChart"
     });
@@ -124,7 +128,7 @@ public class ERPCategoryChart extends ERPChart {
                     (showUrls() ? Boolean.TRUE : Boolean.FALSE )
             });
         } catch(Throwable t) {
-            log.error(t.getMessage(), t);
+            log.error("Could not create chart.", t);
             throw  NSForwardException._runtimeExceptionForThrowable(t);
         }
         return chart;

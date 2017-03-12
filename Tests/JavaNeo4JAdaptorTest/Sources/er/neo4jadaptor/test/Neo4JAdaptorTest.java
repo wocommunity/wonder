@@ -19,9 +19,6 @@ import er.neo4jadaptor.test.eo.ThirdEntity;
 import er.neo4jadaptor.test.tools.Tools;
 
 public class Neo4JAdaptorTest extends TestCase {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Neo4JAdaptorTest.class);
-	
 	private EOEditingContext ec;
 	
 	@Override
@@ -610,7 +607,7 @@ public class Neo4JAdaptorTest extends TestCase {
 		// fetch in descending order
 		results = fetchAll(
 				FirstEntity.ENTITY_NAME,
-				new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareDescending))
+				new NSArray<>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareDescending))
 				);
 	
 		Integer previous = Integer.MAX_VALUE;
@@ -627,7 +624,7 @@ public class Neo4JAdaptorTest extends TestCase {
 		// fetch in ascending order
 		results = fetchAll(
 				FirstEntity.ENTITY_NAME,
-				new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareAscending))
+				new NSArray<>(EOSortOrdering.sortOrderingWithKey(FirstEntity.NUMBER_KEY, EOSortOrdering.CompareAscending))
 				);
 	
 		previous = Integer.MIN_VALUE;

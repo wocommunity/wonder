@@ -6,11 +6,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSDictionary;
@@ -33,8 +34,7 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutput
  */
 
 public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
-
-    private static final Logger log = Logger.getLogger(ERJGroupsNotificationCenter.class);
+    private static final Logger log = LoggerFactory.getLogger(ERJGroupsNotificationCenter.class);
 
     private String _groupName;
 
@@ -78,15 +78,15 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
                     NSDictionary userInfo = (NSDictionary) dis.readObject();
                     NSNotification notification = new NSNotification(name, object, userInfo);
                     if (log.isDebugEnabled()) {
-                        log.debug("Received notification: " + notification);
+                        log.debug("Received notification: {}", notification);
                     } else if (log.isInfoEnabled()) {
-                        log.info("Received " + notification.name() + " notification.");
+                        log.info("Received {} notification.", notification.name());
                     }
                     postLocalNotification(notification);
                 } catch (IOException e) {
-                    log.error("Failed to read notification: " + e, e);
+                    log.error("Failed to read notification.", e);
                 } catch (ClassNotFoundException e) {
-                    log.error("Failed to find class: " + e, e);
+                    log.error("Failed to find class.", e);
                 }
             }
 
@@ -133,9 +133,9 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         dos.flush();
         dos.close();
         if (log.isDebugEnabled()) {
-            log.debug("Sending notification: " + notification);
+            log.debug("Sending notification: {}", notification);
         } else if (log.isInfoEnabled()) {
-            log.info("Sending " + notification.name() + " notification.");
+            log.info("Sending {} notification.", notification.name());
         }
         Message message = new Message(null, null, baos.buffer(), 0, baos.size());
         _channel.send(message);

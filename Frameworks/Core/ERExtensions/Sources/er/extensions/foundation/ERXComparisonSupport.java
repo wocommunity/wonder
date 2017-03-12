@@ -3,8 +3,6 @@ package er.extensions.foundation;
 import java.text.Collator;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -21,10 +19,6 @@ import er.extensions.localization.ERXLocalizer;
  */
 
 public class ERXComparisonSupport {
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXComparisonSupport.class);
-    
     private static Class stringClass = String.class;
 
     private static final int MAGIC = -42;

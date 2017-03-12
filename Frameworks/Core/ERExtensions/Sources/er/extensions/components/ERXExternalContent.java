@@ -7,7 +7,6 @@ import java.net.URLConnection;
 import java.util.Enumeration;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -33,9 +32,6 @@ public class ERXExternalContent extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXExternalContent.class);
-	
     /**
      * Public constructor
      * @param context the context
@@ -85,10 +81,10 @@ public class ERXExternalContent extends ERXStatelessComponent {
     		if(encoding == null) {
     			encoding = CharEncoding.UTF_8;
     		}
-    		InputStream stream = connection.getInputStream();
-    		byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
-    		stream.close();
-    		result = new String(bytes, encoding);
+    		try (InputStream stream = connection.getInputStream()) {
+    			byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
+    			result = new String(bytes, encoding);
+    		}
     	} catch (IOException ex) {
     		throw NSForwardException._runtimeExceptionForThrowable(ex);
     	}

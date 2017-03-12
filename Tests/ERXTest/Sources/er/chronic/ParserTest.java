@@ -17,21 +17,19 @@ import er.chronic.utils.Time;
 
 public class ParserTest extends TestCase {
 
-	public static final Calendar TIME_2006_08_16_14_00_00 = Time.construct(2006, 8, 16, 14, 0, 0, 0);
-
 	static final NSArray<String> tzIDs;
 
 	static {
 		// XXX When we want to test parsing while in any timezone, we can un-comment this code.
 		//
-		//NSMutableArray<String> allIDs = new NSMutableArray<String>(TimeZone.getAvailableIDs());
+		//NSMutableArray<String> allIDs = new NSMutableArray<>(TimeZone.getAvailableIDs());
 		//allIDs.remove(TimeZone.getDefault().getID());
 		//allIDs.add(TimeZone.getDefault().getID());
 		//tzIDs = allIDs.immutableClone();
 		//
 		// until then...
 		//
-		tzIDs = new NSArray<String>(new String[] { "America/Los_Angeles", TimeZone.getDefault().getID() });
+		tzIDs = new NSArray<>(new String[] { "America/Los_Angeles", TimeZone.getDefault().getID() });
 	}
 
 	public TestSuite suite() {
@@ -83,7 +81,7 @@ public class ParserTest extends TestCase {
 		protected void setUp() throws Exception {
 			super.setUp();
 			TimeZone.setDefault(TimeZone.getTimeZone(tzID));
-			_time_2006_08_16_14_00_00 = TIME_2006_08_16_14_00_00;
+			_time_2006_08_16_14_00_00 = Time.construct(2006, 8, 16, 14, 0, 0, 0);
 		}
 
 		protected void assertEquals(Calendar ec, Span span) {
@@ -99,7 +97,7 @@ public class ParserTest extends TestCase {
 		}
 
 		public Span parse_now(String string, Options options) {
-			options.setNow(TIME_2006_08_16_14_00_00);
+			options.setNow(_time_2006_08_16_14_00_00);
 			options.setCompatibilityMode(true);
 			//options.setDebug(true);
 			return Chronic.parse(string, options);

@@ -19,11 +19,8 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
-import com.webobjects.directtoweb.QueryPageInterface;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -283,7 +280,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * @param d2wContext
      */
 	public static NSArray<EOSortOrdering> sortOrderings(D2WContext d2wContext) {
-		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<>();
 		NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext.valueForKey("defaultSortOrdering");
 		if (sortOrderingDefinition != null) {
 			for (int i = 0; i < sortOrderingDefinition.count();) {
@@ -302,14 +299,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
     	return ERXValueUtilities.booleanValue(context.valueForKey(key));
-    }
-
-    /**
-     * @deprecated This is duplicated from {link: er.extensions.ERXExtensions#userInfoUnit(EOEnterpriseObject, String)}
-     */
-    public static String userInfoUnit(EOEnterpriseObject object, String key) {
-    	String result = er.extensions.ERXExtensions.userInfoUnit(object, key);
-        return result;
     }
 
     /**

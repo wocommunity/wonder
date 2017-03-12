@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.formatters.ERXDateTimeFormatter;
 import er.extensions.formatters.ERXJodaFormat;
 import er.extensions.localization.ERXLocalizer;
 
@@ -58,6 +59,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
+ * @binding manualInput false if you want to prevent manual input from the user and force him/her to use the date picker, defaults to true
  * 
  * @binding startDay specify the first day of week to use 0(Sunday)-6(Saturday). The default use the current localizer.
  * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
@@ -84,8 +86,8 @@ public class AjaxDatePicker extends AjaxComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
-    private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
+    private static final NSArray<String> _dayNames = new NSArray<>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
+    private static final NSArray<String> _monthNames = new NSArray<>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
 
     private static String defaultImagesDir;
 	
@@ -134,13 +136,19 @@ public class AjaxDatePicker extends AjaxComponent {
 		else if (hasBinding("formatter")) {
     		formatter = (Format) valueForBinding("formatter");
     		if (formatter instanceof NSTimestampFormatter) {
-    			format = translateSimpleDateFormatSymbols(((NSTimestampFormatter)formatter).pattern());
+    			format = ((NSTimestampFormatter)formatter).pattern();
     		}
     		else if (formatter instanceof SimpleDateFormat) {
     			format = ((SimpleDateFormat)formatter).toPattern();
     		}
     		else if (formatter instanceof ERXJodaFormat) {
     			format = ((ERXJodaFormat)formatter).pattern();
+    		}
+    		else if (formatter instanceof ERXDateTimeFormatter) {
+    			format = ((ERXDateTimeFormatter)formatter).pattern();
+    			if (format == null) {
+    				throw new RuntimeException("ERXDateTimeFormatter is missing pattern information: " + formatter);
+    			}
     		}
     		else {
     			throw new RuntimeException("Can't handle formatter of class " + formatter.getClass().getCanonicalName());
@@ -175,7 +183,7 @@ public class AjaxDatePicker extends AjaxComponent {
     }
     
     private NSArray<String> localizeStringArray(NSArray<String> strings) {
-    	NSMutableArray<String> localizedStrings = new NSMutableArray<String>(strings.count());
+    	NSMutableArray<String> localizedStrings = new NSMutableArray<>(strings.count());
     	ERXLocalizer l = ERXLocalizer.currentLocalizer();
     	for (String string : strings)
     		localizedStrings.add(l.localizedStringForKeyWithDefault(string));
@@ -193,6 +201,14 @@ public class AjaxDatePicker extends AjaxComponent {
     		return (NSArray<String>)valueForBinding("monthNames");
     	return localizeStringArray(_monthNames);
     }
+    
+    public String otherTagString() {
+    	String otherTagString = (String)valueForStringBinding("otherTagString", "");
+    	if (booleanValueForBinding("manualInput", true) == false) {
+    		otherTagString = otherTagString + " readonly";
+    	}
+    	return otherTagString;
+    }
 
     /**
      * Sets up AjaxOptions prior to rendering.
@@ -204,7 +220,7 @@ public class AjaxDatePicker extends AjaxComponent {
     @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
 		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));
@@ -232,6 +248,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         return showCalendarScript();
     }
     
@@ -239,6 +258,9 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
+        if (booleanValueForBinding("readonly", false) || booleanValueForBinding("disabled", false)) {
+            return null;
+        }
         	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());
@@ -249,7 +271,7 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript to load CSS and show calendar display
      */
     public String showCalendarScript() {
-    	StringBuffer script = new StringBuffer(200);
+    	StringBuilder script = new StringBuilder(200);
     	// Load the CSS like this to avoid odd race conditions when this is used in an AjaxModalDialog: at times
     	// the CSS does not appear to be available and the calendar appears in the background
     	script.append("AOD.loadCSS('");

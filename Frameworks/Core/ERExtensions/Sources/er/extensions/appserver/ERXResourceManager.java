@@ -6,7 +6,8 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -43,7 +44,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class ERXResourceManager extends WOResourceManager {
-	protected static Logger log = Logger.getLogger(ERXResourceManager.class);
+	private static Logger log = LoggerFactory.getLogger(ERXResourceManager.class);
 	private WODeployedBundle TheAppProjectBundle;
 	private _NSThreadsafeMutableDictionary<String, WOURLValuedElementData> _urlValuedElementsData;
 	private IVersionManager _versionManager;	
@@ -125,7 +126,7 @@ public class ERXResourceManager extends WOResourceManager {
 			WODeployedBundle wodeployedbundle = WODeployedBundle.deployedBundle();
 			obj = wodeployedbundle.projectBundle();
 			if (obj != null) {
-				log.warn("Application project found: Will locate resources in '" + ((WOProjectBundle) obj).projectPath() + "' rather than '" + wodeployedbundle.bundlePath() + "' .");
+				log.warn("Application project found: Will locate resources in '{}' rather than '{}'.", ((WOProjectBundle) obj).projectPath(), wodeployedbundle.bundlePath());
 			}
 			else {
 				obj = wodeployedbundle;
@@ -415,6 +416,7 @@ public class ERXResourceManager extends WOResourceManager {
 	 * @author mschrag
 	 */
 	public static class PropertiesVersionManager implements IVersionManager {
+		private static Logger log = LoggerFactory.getLogger(ERXResourceManager.class);
 		private String _defaultVersion;
 
 		public PropertiesVersionManager() {
@@ -444,7 +446,7 @@ public class ERXResourceManager extends WOResourceManager {
 					resourceUrl = url.toExternalForm();
 				}
 				catch (MalformedURLException e) {
-					ERXResourceManager.log.error("Failed to construct URL from '" + resourceUrl + "'.", e);
+					log.error("Failed to construct URL from '{}'.", resourceUrl, e);
 				}
 			}
 			return resourceUrl;

@@ -5,8 +5,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-
 import wowodc.background.tasks.T06EOFFactorialUpdateTask;
 import wowodc.eof.TaskInfo;
 
@@ -20,10 +18,6 @@ import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.formatters.ERXTimeDurationFormatter;
 
 public class TaskInfoPage extends ERXComponent  implements IERXRefreshPage {
-	
-	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(TaskInfoPage.class);
-	
     public TaskInfoPage(WOContext context) {
         super(context);
     }

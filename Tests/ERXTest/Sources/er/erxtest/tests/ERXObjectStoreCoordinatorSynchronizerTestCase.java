@@ -1,5 +1,7 @@
 package er.erxtest.tests;
+
 import java.util.Enumeration;
+import java.util.UUID;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
@@ -16,7 +18,6 @@ import er.erxtest.model.Employee;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXObjectStoreCoordinatorPool;
-import er.extensions.foundation.ERXRandomGUID;
 
 /**
  * Run this with ERXMainRunner.
@@ -44,7 +45,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
   
   public void testInsertEO() {
     // Create Company in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -62,7 +63,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 
   public void testUpdateEO() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -75,7 +76,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 
     for (int i = 0; i < 10; i++) {
       // Change Company1's name in OSC1
-      String companyName_1 = "Company" + ERXRandomGUID.newGid() + "_osc1";
+      String companyName_1 = "Company" + UUID.randomUUID().toString() + "_osc1";
       company_osc1.setName(companyName_1);
       editingContext_osc1.saveChanges();
       sleep();
@@ -91,7 +92,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
       assertEquals(company_osc2, company_osc2_with_companyName1);
 
       // Change Company1's name in OSC2
-      String companyName_2 = "Company" + ERXRandomGUID.newGid() + "_osc2";
+      String companyName_2 = "Company" + UUID.randomUUID().toString() + "_osc2";
       company_osc2.setName(companyName_2);
       editingContext_osc2.saveChanges();
       sleep();
@@ -110,7 +111,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 
   public void testMergeEOChanges() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -123,12 +124,12 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 
     for (int i = 0; i < 10; i++) {
       // Change Company1's name in OSC1
-      String companyName_1 = "Company" + ERXRandomGUID.newGid() + "_osc1";
+      String companyName_1 = "Company" + UUID.randomUUID().toString() + "_osc1";
       String companyAddress1_1 = company_osc1.address1();
       company_osc1.setName(companyName_1);
 
       // Change Company1's address in OSC2
-      String companyAddress1_2 = "Address" + ERXRandomGUID.newGid() + "_osc2";
+      String companyAddress1_2 = "Address" + UUID.randomUUID().toString() + "_osc2";
       company_osc2.setAddress1(companyAddress1_2);
 
       // Save Company1's new name in OSC1, address in OSC2 should be untouched but merged with new name
@@ -161,7 +162,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 
   public void testAddToUnfaultedToMany() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -172,21 +173,21 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertNotNull(company_osc2);
 
     // Create and Save Employee1 in Company1 in OSC1
-    String employeeFirstName = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName = "Employee" + UUID.randomUUID().toString();
     String employeeLastName = "Jones";
     Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName, employeeLastName, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
 
     // Fetch employees relationship of Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc1.employees());
 
     // Fetch employees relationship of Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc2.employees());
   }
 
   public void testAddToFaultedToMany() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -206,35 +207,35 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 	NSArray employees_osc2 = company_osc2.employees();
 
     // Create and Save Employee1 for Company1 in OSC1
-    String employeeFirstName = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName = "Employee" + UUID.randomUUID().toString();
     String employeeLastName = "Jones";
     Employee employee_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName, employeeLastName, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
     // Check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc1.employees());
 
     // Check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(employee_osc1), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(employee_osc1), company_osc2.employees());
 
     // Create employee for Company1 in OSC2 and Save
-    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName2 = "Employee" + UUID.randomUUID().toString();
     String employeeLastName2 = "Jones";
     Employee employee_osc2 = Employee.createEmployee(editingContext_osc2, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc2);
     editingContext_osc2.saveChanges();
     sleep();
 
     // Check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee_osc1, employee_osc2 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee_osc1, employee_osc2 }), company_osc1.employees());
 
     // Check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee_osc1, employee_osc2 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee_osc1, employee_osc2 }), company_osc2.employees());
   }
 
   public void testAddToFaultedToManyWithUncommittedToManyEntries() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
@@ -246,7 +247,7 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertNotNull(company_osc2);
 
     // Create (but do not save) Employee1 for Company1 in OSC2
-    String employeeFirstName1 = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName1 = "Employee" + UUID.randomUUID().toString();
     String employeeLastName1 = "Jones";
     Employee employee1_osc2 = Employee.createEmployee(editingContext_osc2, employeeFirstName1, employeeLastName1, Boolean.FALSE, company_osc2);
 
@@ -256,56 +257,56 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
     assertEOEquals(employee1_osc2, employees_osc2_BeforeInsert.objectAtIndex(0));
 
     // Create and save Employee2 for Company1 in OSC1
-    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName2 = "Employee" + UUID.randomUUID().toString();
     String employeeLastName2 = "Jones";
     Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
     // Check employees for Company1 in OSC2 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
 
     // Check employees for Company1 in OSC1 (should contain only Employee2)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc1.employees());
 
     // Save Employee1 in OSC2
     editingContext_osc2.saveChanges();
     sleep();
 
     // Check employees for Company1 in OSC2 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc2.employees());
 
     // Check employees for Company1 in OSC1 (should contain both Employees)
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc2, employee2_osc1 }), company_osc1.employees());
   }
 
   public void testRemoveFromFaultedToMany() {
     // Create Company1 in OSC1
-    String companyName = "Company" + ERXRandomGUID.newGid();
+    String companyName = "Company" + UUID.randomUUID().toString();
     EOEditingContext editingContext_osc1 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc1 = Company.createCompany(editingContext_osc1, companyName);
     editingContext_osc1.saveChanges();
     sleep();
 
     // Create and Save Employee1 and Employee2 for Company1 in OSC1
-    String employeeFirstName1 = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName1 = "Employee" + UUID.randomUUID().toString();
     String employeeLastName1 = "Jones";
     Employee employee1_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName1, employeeLastName1, Boolean.FALSE, company_osc1);
-    String employeeFirstName2 = "Employee" + ERXRandomGUID.newGid();
+    String employeeFirstName2 = "Employee" + UUID.randomUUID().toString();
     String employeeLastName2 = "Jones";
     Employee employee2_osc1 = Employee.createEmployee(editingContext_osc1, employeeFirstName2, employeeLastName2, Boolean.FALSE, company_osc1);
     editingContext_osc1.saveChanges();
     sleep();
 
     // Fetch employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc1.employees());
 
     // Fetch Company1 in OSC2
     EOEditingContext editingContext_osc2 = ERXEC.newEditingContext(ERXObjectStoreCoordinatorPool._pool().nextObjectStore());
     Company company_osc2 = Company.fetchCompany(editingContext_osc2, Company.NAME_KEY, companyName);
     assertNotNull(company_osc2);
     // Fetch and check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee1_osc1, employee2_osc1 }), company_osc2.employees());
 
     // gonna break
     NSArray employees_osc2 = company_osc2.employees();
@@ -361,10 +362,10 @@ public class ERXObjectStoreCoordinatorSynchronizerTestCase extends ERXTestCase {
 //    }
 
     // Fetch and check employees for Company1 in OSC1
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc1.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc1.employees());
 
     // Fetch and check employees for Company1 in OSC2
-    assertContainsExactlyEOs(new NSArray<Employee>(new Employee[] { employee2_osc1 }), company_osc2.employees());
+    assertContainsExactlyEOs(new NSArray<>(new Employee[] { employee2_osc1 }), company_osc2.employees());
 
     // ... Do someting with the deleted object in OSC2
 

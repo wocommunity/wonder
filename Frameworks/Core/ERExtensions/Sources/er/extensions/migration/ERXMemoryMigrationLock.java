@@ -15,7 +15,7 @@ public class ERXMemoryMigrationLock implements IERXMigrationLock {
 	private NSMutableDictionary<String, Integer> _modelVersions;
 
 	public ERXMemoryMigrationLock() {
-		_modelVersions = new NSMutableDictionary<String, Integer>();
+		_modelVersions = new NSMutableDictionary<>();
 	}
 
 	public void setVersionNumber(EOAdaptorChannel channel, EOModel model, int versionNumber) {

@@ -77,7 +77,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 		if (name != null) {
 			int i = name.lastIndexOf(46);
 			if (i < 0) {
-				result = new StringBuilder('"').append(name).append('"').toString();
+				result = new StringBuilder().append('"').append(name).append('"').toString();
 			} else {
 				result =
 					new StringBuilder(name.substring(0, i))
@@ -98,7 +98,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 		if (string == null) {
 			return null;
 		}
-		return new StringBuilder('\'').append(string).append('\'').toString();
+		return new StringBuilder().append('\'').append(string).append('\'').toString();
 	}
 	
 	/**

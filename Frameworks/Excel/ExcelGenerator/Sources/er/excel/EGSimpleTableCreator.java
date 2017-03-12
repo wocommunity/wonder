@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -35,9 +34,6 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * @author ak
  */
 public class EGSimpleTableCreator {
-	/** logging support */
-	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class);
-	
 	private static NSDictionary _fontDef;
 
 	private static NSDictionary _styleDef;

@@ -1,7 +1,5 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -22,9 +20,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak
  */
 public class ERXUniquingWrapper extends WODynamicGroup {
-	
-	private static final Logger log = Logger.getLogger(ERXTolerantWrapper.class);
-	
 	private WOAssociation _id;
 
 	public ERXUniquingWrapper(String name, NSDictionary associations, WOElement template) {

@@ -1,7 +1,5 @@
 package webobjectsexamples.businesslogic.movies.common;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
@@ -10,9 +8,6 @@ import er.corebusinesslogic.ERCoreUserInterface;
 public class AppUser extends _AppUser implements ERCoreUserInterface {
 
     private static final long serialVersionUID = 1L;
-
-    @SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(AppUser.class);
 
     /*
      * ERCore user interface implementation

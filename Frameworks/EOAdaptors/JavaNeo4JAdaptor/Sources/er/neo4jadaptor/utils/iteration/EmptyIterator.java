@@ -3,7 +3,7 @@ package er.neo4jadaptor.utils.iteration;
 import java.util.Iterator;
 
 public final class EmptyIterator <T> implements Iterator<T> {
-	public static final EmptyIterator<?> instance = new EmptyIterator<Object>();
+	public static final EmptyIterator<?> instance = new EmptyIterator<>();
 	
 	private EmptyIterator() {
 		

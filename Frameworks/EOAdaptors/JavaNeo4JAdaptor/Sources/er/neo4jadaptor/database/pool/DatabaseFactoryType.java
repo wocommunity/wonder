@@ -7,6 +7,8 @@ import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.EmbeddedReadOnlyGraphDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXProperties;
 
@@ -23,7 +25,7 @@ public enum DatabaseFactoryType {
 	 */
 	EMBEDDED_READ_ONLY(DatabaseFactoryTypeLabels.LABEL_EMBEDDED_READ_ONLY, new Neo4JDatabaseFactory() {
 		public GraphDatabaseService get(String path, Map<String, String> config) {
-			log.info("Creating Neo4J embedded read-only database instance with config " + config + " in " + path);
+			log.info("Creating Neo4J embedded read-only database instance with config {} in {}.", config, path);
 			
 			return new EmbeddedReadOnlyGraphDatabase(path, config);
 		}
@@ -34,7 +36,7 @@ public enum DatabaseFactoryType {
 	 */
 	EMBEDDED_WRITABLE(DatabaseFactoryTypeLabels.LABEL_EMBEDDED_WRITABLE, new Neo4JDatabaseFactory() {
 		public GraphDatabaseService get(String path, Map<String, String> config) {
-			log.info("Creating Neo4J embedded writable database instance with config " + config + " in " + path);
+			log.info("Creating Neo4J embedded writable database instance with config {} in {}.", config, path);
 			
 			return new EmbeddedGraphDatabase(path, config);
 		}
@@ -47,7 +49,7 @@ public enum DatabaseFactoryType {
 	 */
 	HIGHLY_AVAILABLE(DatabaseFactoryTypeLabels.LABEL_HIGHLY_AVAILABLE, new Neo4JDatabaseFactory() {
 		public GraphDatabaseService get(String path, Map<String, String> config) {
-			log.info("Creating Neo4J highly-available database instance with config " + config + " in " + path);
+			log.info("Creating Neo4J highly-available database instance with config {} in {}.", config, path);
 			
 			try {
 				Constructor<? extends GraphDatabaseService> constructor = haConstructor();
@@ -80,7 +82,7 @@ public enum DatabaseFactoryType {
 		}
 	});
 	
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DatabaseFactoryType.class);
+	private static final Logger log = LoggerFactory.getLogger(DatabaseFactoryType.class);
 
 	private static final String HA_SERVER_ID_KEY = ERXProperties.stringForKey("neo4j.pool.database.highly-available.server-id-config-key");
 	private static final String HA_CLASS_NAME = ERXProperties.stringForKey("neo4j.pool.database.highly-available.class");

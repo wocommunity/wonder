@@ -1,8 +1,8 @@
 package er.ajax.json.client;
 
-import com.webobjects.appserver.WOContext;
+import java.util.UUID;
 
-import er.extensions.foundation.ERXRandomGUID;
+import com.webobjects.appserver.WOContext;
 
 /**
  * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back to your application (along with a session ID if
@@ -52,7 +52,7 @@ public class AjaxJSONClient extends AjaxStatelessJSONClient {
 		String instance = stringValueForBinding("instance");
 		if (instance == null) {
 			if (_instance == null && !global()) {
-				_instance = ERXRandomGUID.newGid();
+				_instance = UUID.randomUUID().toString();
 				instance = _instance;
 			}
 			instance = _instance;

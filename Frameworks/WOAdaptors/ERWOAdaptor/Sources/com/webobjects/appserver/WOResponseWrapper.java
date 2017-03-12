@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.Cookie;
@@ -19,6 +18,8 @@ import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
@@ -30,7 +31,7 @@ import com.webobjects.foundation.NSSet;
  * @author ravim
  */
 public class WOResponseWrapper implements HttpResponse {
-    private static final Logger log = Logger.getLogger(WOResponseWrapper.class);
+    private static final Logger log = LoggerFactory.getLogger(WOResponseWrapper.class);
 
 	private WOResponse wrapping;
 	private ChannelBuffer _content;
@@ -98,7 +99,7 @@ public class WOResponseWrapper implements HttpResponse {
 						_content.writeBytes(stream, length);
 						wrapping.setContentStream(null, 0, 0l);
 					} finally {
-						try { if(stream != null) { stream.close();} } catch(IOException e) { log.error(e); }
+						try { if(stream != null) { stream.close();} } catch(IOException e) { log.error("Could not close stream.", e); }
 					}
 				} catch (IOException exception) {
 					throw NSForwardException._runtimeExceptionForThrowable(exception);
@@ -135,7 +136,7 @@ public class WOResponseWrapper implements HttpResponse {
 	}
 
 	public Set<String> getHeaderNames() {
-		return new NSSet<String>(wrapping.headerKeys());
+		return new NSSet<>(wrapping.headerKeys());
 	}
     
 	public List<Map.Entry<String, String>> getHeaders() {
@@ -144,7 +145,7 @@ public class WOResponseWrapper implements HttpResponse {
 		for(String headerKey: wrapping.headerKeys()) {
 			String value = wrapping.headerForKey(headerKey);
 			if (value != null) {
-				headers.add(new SimpleEntry<String, String>(headerKey, value));
+				headers.add(new SimpleEntry<>(headerKey, value));
 			}
 		}
 		

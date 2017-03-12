@@ -59,9 +59,9 @@ See BUILD.txt to find out how to build Wonder.
 Binaries
 --------------------
 
-Binaries can be downloaded from the [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+Binaries can be downloaded from the [releases page](https://github.com/wocommunity/wonder/releases) or [community build server](http://jenkins.wocommunity.org/job/Wonder/)
 
 Changelog
 --------------------
 
-You can find a [changelog](https://github.com/projectwonder/wonder/wiki/Changelog) in the Wiki section on Github.
+You can find changelogs for older releases in the Wiki section or for more recent releases on the [releases page](https://github.com/wocommunity/wonder/releases).

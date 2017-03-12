@@ -6,6 +6,8 @@ import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.foundation.ERXProperties;
 
@@ -26,7 +28,7 @@ import er.extensions.foundation.ERXProperties;
  * @author Jedrzej Sobanski
  */
 public class DatabasePool {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DatabasePool.class);
+	private static final Logger log = LoggerFactory.getLogger(DatabasePool.class);
 	
 	/**
 	 * Singleton instance.
@@ -55,7 +57,7 @@ public class DatabasePool {
 	 */
 	public static final boolean WARMUP_DEFAULT_VALUE = false;
 	
-	private final Map<String, GraphDatabaseService> map = new HashMap<String, GraphDatabaseService>();
+	private final Map<String, GraphDatabaseService> map = new HashMap<>();
 	private final boolean WARMUP_DATABASE = ERXProperties.booleanForKeyWithDefault(WARMUP_PROPERTY_KEY, WARMUP_DEFAULT_VALUE);
 	private final String databaseType = ERXProperties.stringForKey(DBTYPE_PROPERTY_KEY);
 	

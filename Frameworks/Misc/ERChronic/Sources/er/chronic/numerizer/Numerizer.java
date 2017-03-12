@@ -65,7 +65,7 @@ public class Numerizer {
   protected static BigPrefix[] BIG_PREFIXES;
    
   static {
-    List<DirectNum> directNums = new LinkedList<DirectNum>();
+    List<DirectNum> directNums = new LinkedList<>();
     directNums.add(new DirectNum("eleven", "11"));
     directNums.add(new DirectNum("twelve", "12"));
     directNums.add(new DirectNum("thirteen", "13"));
@@ -90,7 +90,7 @@ public class Numerizer {
     directNums.add(new DirectNum("\\ba\\b(.)", "1$1"));
     Numerizer.DIRECT_NUMS = directNums.toArray(new DirectNum[directNums.size()]);
     
-    List<TenPrefix> tenPrefixes = new LinkedList<TenPrefix>();
+    List<TenPrefix> tenPrefixes = new LinkedList<>();
     tenPrefixes.add(new TenPrefix("twenty", 20));
     tenPrefixes.add(new TenPrefix("thirty", 30));
     tenPrefixes.add(new TenPrefix("fourty", 40)); // Common mis-spelling
@@ -103,7 +103,7 @@ public class Numerizer {
     tenPrefixes.add(new TenPrefix("ninty", 90)); // Common mis-spelling
     Numerizer.TEN_PREFIXES = tenPrefixes.toArray(new TenPrefix[tenPrefixes.size()]);
     
-    List<BigPrefix> bigPrefixes = new LinkedList<BigPrefix>();
+    List<BigPrefix> bigPrefixes = new LinkedList<>();
     bigPrefixes.add(new BigPrefix("hundred", 100L));
     bigPrefixes.add(new BigPrefix("thousand", 1000L));
     bigPrefixes.add(new BigPrefix("million", 1000000L));

@@ -27,15 +27,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSMutableArray;
 
 import er.selenium.SeleniumTest;
 
 public class SeleniumSeleneseImporter implements SeleniumTestImporter {
-	private static final Logger log = Logger.getLogger(SeleniumSeleneseImporter.class);
-	
 	public String name() {
 		return "selenese";
 	}

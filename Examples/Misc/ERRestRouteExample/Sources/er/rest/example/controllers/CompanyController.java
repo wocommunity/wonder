@@ -87,7 +87,7 @@ public class CompanyController extends ERXRouteController {
 		if (isSchemaRequest()) {
 			return schemaResponse(showFilter());
 		}
-		ERXRestFetchSpecification<Company> fetchSpec = new ERXRestFetchSpecification<Company>(Company.ENTITY_NAME, null, null, queryFilter(), Company.NAME.ascs(), 25);
+		ERXRestFetchSpecification<Company> fetchSpec = new ERXRestFetchSpecification<>(Company.ENTITY_NAME, null, null, queryFilter(), Company.NAME.ascs(), 25);
 		return response(fetchSpec, showFilter());
 	}
 }

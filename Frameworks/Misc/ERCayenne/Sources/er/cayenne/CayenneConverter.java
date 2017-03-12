@@ -86,26 +86,24 @@ import er.extensions.eof.ERXGenericRecord;
  */
 
 /**
- * 
- * <p>CayenneModeler (which comes with Cayenne) includes a tool to convert EOModels to Cayenne models: create a new project and then choose Tools -> "Import EOModel".<br>
- * I suggest trying that first. In my experience it didn't work well because the prototypes in ERPrototypes were not resolved.</p>
- *
- * <p>This framework will allow you to convert an EOModel to a Cayenne model.</p>
- *
- * <p>To use it just add the framework to your build path and then add this line to you application's constructor (replace MyModel with the name of your model):<br>
- * 
- * new er.cayenne.CayenneConverter().run(EOModelGroup.defaultGroup().modelNamed("MyModel"));</p>
- *
- * <p>Run your WO app.<br>
- * This will create a Cayenne DataMap file (called MyModel.map.xml) in the root of your Sources folder. <br>
- * To use it you will need to run CayenneModeler and create a new project.<br>
- * Then give a name to the DataDomain (top-level) node that is created in the new project<br>
- * Then choose File -> Import DataMap and select the .map.xml file that was generated.</p>
- *
- * <p>The converter does not copy the connection dictionary from your model - you will need to re-enter that information by creating a DataNode using CayenneModeler.</p>
- *
- * <p>The converter attempts to convert qualifiers for any fetch specifications you've defined in your model, but this should be considered just a best attempt, not guaranteed to be correct.</p>
- * 
+ * CayenneModeler (which comes with Cayenne) includes a tool to convert EOModels to Cayenne models: create a new project and then choose Tools -&gt; "Import EOModel".<br>
+ * I suggest trying that first. In my experience it didn't work well because the prototypes in ERPrototypes were not resolved.
+ * <p>
+ * This framework will allow you to convert an EOModel to a Cayenne model.
+ * <p>
+ * To use it just add the framework to your build path and then add this line to you application's constructor (replace MyModel with the name of your model):
+ * <pre><code>
+ * new er.cayenne.CayenneConverter().run(EOModelGroup.defaultGroup().modelNamed("MyModel"));
+ * </code></pre>
+ * <h3>Run your WO app.</h3>
+ * This will create a Cayenne DataMap file (called MyModel.map.xml) in the root of your Sources folder 
+ * To use it you will need to run CayenneModeler and create a new project.
+ * Then give a name to the DataDomain (top-level) node that is created in the new project.
+ * Then choose File -&gt; Import DataMap and select the .map.xml file that was generated.
+ * <p>
+ * The converter does not copy the connection dictionary from your model - you will need to re-enter that information by creating a DataNode using CayenneModeler.
+ * <p>
+ * The converter attempts to convert qualifiers for any fetch specifications you've defined in your model, but this should be considered just a best attempt, not guaranteed to be correct.
  */
 public class CayenneConverter {
 
@@ -157,10 +155,9 @@ public class CayenneConverter {
 			
 			File sourcesFolder = new File(projectFolder.getAbsolutePath(), "Sources");
 			File newModelFile = new File(sourcesFolder.getAbsolutePath(), model.name() + ".map.xml");
-			PrintWriter writer = new PrintWriter(newModelFile, "UTF8");
-			dataMap.encodeAsXML(writer);
-			writer.flush();
-			writer.close();
+			try (PrintWriter writer = new PrintWriter(newModelFile, "UTF8")) {
+				dataMap.encodeAsXML(writer);
+			}
 			
 			System.err.println("\nWrote cayenne map (model) file to: " +  newModelFile.getCanonicalPath() + "\n");
 			
@@ -526,7 +523,7 @@ public class CayenneConverter {
     /**
      * Keys: java class names, Values: SQL int type definitions from java.sql.Types
      */
-    private static final Map<String, Integer> javaSqlEnum = new HashMap<String, Integer>();
+    private static final Map<String, Integer> javaSqlEnum = new HashMap<>();
 
     static {
         javaSqlEnum.put(JAVA_LONG, Integer.valueOf(Types.BIGINT));

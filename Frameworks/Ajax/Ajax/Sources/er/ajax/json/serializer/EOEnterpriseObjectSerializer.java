@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.jabsorb.JSONSerializer;
@@ -30,7 +31,6 @@ import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXRandomGUID;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -449,7 +449,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
-	private static Map<EOEditingContext, String> _contexts = new WeakHashMap<EOEditingContext, String>();
+	private static Map<EOEditingContext, String> _contexts = new WeakHashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public static Map<EOEditingContext, String> contexts() {
@@ -461,7 +461,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		else {
 			contexts = (Map<EOEditingContext, String>) session.objectForKey("_jsonContexts");
 			if (contexts == null) {
-				contexts = new HashMap<EOEditingContext, String>();
+				contexts = new HashMap<>();
 				session.setObjectForKey(contexts, "_jsonContexts");
 			}
 		}
@@ -475,7 +475,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			if (id != null) {
 				return id;
 			}
-			id = ERXRandomGUID.newGid();
+			id = UUID.randomUUID().toString();
 			contexts.put(ec, id);
 			return id;
 		}

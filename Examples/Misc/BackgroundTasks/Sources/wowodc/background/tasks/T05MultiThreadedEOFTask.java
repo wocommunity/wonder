@@ -8,7 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.ResultItem;
@@ -47,8 +48,7 @@ import er.extensions.foundation.IERXStatus;
  * @author kieran
  */
 public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
-	
-	private static final Logger log = Logger.getLogger(T05MultiThreadedEOFTask.class);
+	private static final Logger log = LoggerFactory.getLogger(T05MultiThreadedEOFTask.class);
 	
 	// Duration of the example task in milliseconds
 	// Random between 5 and 15 seconds
@@ -151,8 +151,7 @@ public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Call
 					try {
 						Future<?> future = ChildTaskPool.EXECUTOR_SERVICE.submit(childTask);
 						
-						if (log.isInfoEnabled())
-							log.info("Submitted task corresponding to " + future);
+						log.info("Submitted task corresponding to {}", future);
 						isRejected = false;
 						childFutures.add(future);
 						
@@ -304,7 +303,7 @@ public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Call
 			EOEditingContext ec = newEditingContext();
 			ec.lock();
 			try {
-				log.info("Started child in " + Thread.currentThread().getName() + " with OSC " + ec.parentObjectStore());
+				log.info("Started child in {} with OSC {}", Thread.currentThread().getName(), ec.parentObjectStore());
 				
 				TaskInfo taskInfo = (TaskInfo) ec.faultForGlobalID(_childTaskInfoGID, ec);
 				
@@ -315,10 +314,10 @@ public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Call
 					resultItem.setNumberToCheck(_childCurrentNumber);
 
 					if (Utilities.isPrime(_childCurrentNumber)) {
-						log.info("==>> " + _childCurrentNumber + " is a PRIME number.");
+						log.info("==>> {} is a PRIME number.", _childCurrentNumber);
 						resultItem.setIsPrime(Boolean.TRUE);
 					} else {
-						log.debug(_childCurrentNumber + " is not a prime number but is a COMPOSITE number.");
+						log.debug("{} is not a prime number but is a COMPOSITE number.", _childCurrentNumber);
 						resultItem.setIsPrime(Boolean.FALSE);
 					}
 					

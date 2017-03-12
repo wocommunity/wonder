@@ -2,7 +2,8 @@ package er.bugtracker;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -16,7 +17,7 @@ import er.extensions.components.ERXLoremIpsumGenerator;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class BTDataCreator {
-	private static final Logger log = Logger.getLogger(BTDataCreator.class);
+	private static final Logger log = LoggerFactory.getLogger(BTDataCreator.class);
 
 	EOEditingContext ec;
 
@@ -133,7 +134,7 @@ public class BTDataCreator {
 		requirementSubTypes = RequirementSubType.clazz.allObjects(ec).mutableClone();
 
 		int maxUsers = 20;
-		log.info("Creating users: " + maxUsers);
+		log.info("Creating users: {}", maxUsers);
 
 		for (int i = 100; i < 100 + maxUsers; i++) {
 			People user = People.clazz.createAndInsertObject(ec);
@@ -191,7 +192,7 @@ public class BTDataCreator {
 
 		int maxItems = maxUsers * 10;
 
-		log.info("Creating bugs: " + maxItems);
+		log.info("Creating bugs: {}", maxItems);
 
 		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
@@ -212,7 +213,7 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating requirements: " + maxItems);
+		log.info("Creating requirements: {}", maxItems);
 
 		for (int i = 0; i < maxItems; i++) {
 			People.clazz.setCurrentUser(randomUser());
@@ -236,7 +237,7 @@ public class BTDataCreator {
 			addComments(bug);
 		}
 
-		log.info("Creating test items: " + maxItems * 2);
+		log.info("Creating test items: {}", maxItems * 2);
 
 		for (int i = 0; i < maxItems * 2; i++) {
 			People.clazz.setCurrentUser(randomUser());

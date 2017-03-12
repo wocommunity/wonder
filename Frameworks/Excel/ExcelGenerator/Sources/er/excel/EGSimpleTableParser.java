@@ -15,18 +15,19 @@ import java.text.ParseException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -82,12 +83,10 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * @author ak
  */
 public class EGSimpleTableParser {
-	
-	/** logging support */
-	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class);
+	private static final Logger log = LoggerFactory.getLogger(EGSimpleTableParser.class);
 	
 	private InputStream _contentStream;
-	private HSSFWorkbook _workbook;
+	private Workbook _workbook;
 	private NSMutableDictionary _styles = new NSMutableDictionary();
 	private NSMutableDictionary _fonts = new NSMutableDictionary();
 	private NSMutableDictionary _styleDicts;
@@ -122,12 +121,12 @@ public class EGSimpleTableParser {
 			
 			return new NSData(out.toByteArray());
 		} catch (IOException e) {
-			log.error(e,e);
+			log.error("Could not create NSData from workbook.",e);
 		}
 		return null;
 	}
 
-    public HSSFWorkbook workbook() {
+    public Workbook workbook() {
     	if(_workbook == null) {
     		parse();
     	}
@@ -252,10 +251,9 @@ public class EGSimpleTableParser {
     		InputStream stream = _contentStream;
     		document = builder.parse(stream);
     		
-    		_workbook = new HSSFWorkbook();
+    		_workbook = createWorkbook();
     		
-    		if (log.isDebugEnabled())
-    		    log.debug(document.getDocumentElement());
+    		log.debug("{}", document.getDocumentElement());
     		
     		NodeList nodes = document.getDocumentElement().getChildNodes();
     		for (int i = 0; i < nodes.getLength(); i++) {
@@ -267,6 +265,10 @@ public class EGSimpleTableParser {
     	} catch(Exception ex) {
     	    throw new NSForwardException(ex);
     	}
+    }
+    
+    protected Workbook createWorkbook() {
+    	return new HSSFWorkbook();
     }
     
     private void parseNode(Node node) {
@@ -335,13 +337,13 @@ public class EGSimpleTableParser {
     	addEntriesFromNode(sheetDict, tableNode);
         if(sheetName.matches("[\\/\\\\\\*\\?\\[\\]]")) {
             sheetName = sheetName.replaceAll("[\\/\\\\\\*\\?\\[\\]]", "-");
-            log.warn("Illegal characters in sheet name (/\\*?[]): " + sheetName);
+            log.warn("Illegal characters in sheet name (/\\*?[]): {}", sheetName);
         }
         if(sheetName.length() > 31) {
             sheetName = sheetName.substring(0,31);
-            log.warn("Sheet name too long (max 31 Characters): " + sheetName);
+            log.warn("Sheet name too long (max 31 Characters): {}", sheetName);
         }
-        HSSFSheet sheet = _workbook.createSheet(sheetName);
+        Sheet sheet = _workbook.createSheet(sheetName);
  
         NodeList rowNodes = tableNode.getChildNodes();
     	
@@ -350,7 +352,7 @@ public class EGSimpleTableParser {
     	takeNumberValueForKey(sheetDict, "defaultRowHeight", sheet, null);
     	takeNumberValueForKey(sheetDict, "defaultRowHeightInPoints", sheet, null);
     	
-    	if (log.isDebugEnabled()) log.debug("Sheet: " + _workbook.getNumberOfSheets());
+    	log.debug("Sheet: {}", _workbook.getNumberOfSheets());
     	
     	int rowNum = 0;
     	for (int j = 0; j < rowNodes.getLength(); j++) {
@@ -360,10 +362,8 @@ public class EGSimpleTableParser {
     			NSMutableDictionary rowDict = new NSMutableDictionary(sheetDict);
     			addEntriesFromNode(rowDict, rowNode);
 
-                        if(log.isDebugEnabled()) {
-                            log.debug("Row: " + rowNum);
-                        }
-    			HSSFRow row = sheet.createRow(rowNum);
+                log.debug("Row: {}", rowNum);
+    			Row row = sheet.createRow(rowNum);
     			
     			rowNum = rowNum + 1;
     			NodeList cellNodes = rowNode.getChildNodes();
@@ -373,7 +373,7 @@ public class EGSimpleTableParser {
     						&& ("td".equals(cellNode.getLocalName().toLowerCase())
     								|| "th".equals(cellNode.getLocalName().toLowerCase()))) {
     					int currentColumnNumber = row.getPhysicalNumberOfCells();
-						HSSFCell cell = row.createCell(currentColumnNumber); 
+						Cell cell = row.createCell(currentColumnNumber); 
     					Object value = null;
     					if(cellNode.getFirstChild() != null) {
     	   					value = cellNode.getFirstChild().getNodeValue();
@@ -385,9 +385,7 @@ public class EGSimpleTableParser {
     					String cellTypeName = dictValueForKey(cellDict, "cellType", "CELL_TYPE_NUMERIC");
     					String cellFormatName = dictValueForKey(cellDict, "cellFormat", "0.00;-;-0.00");
     					
-    					if(log.isDebugEnabled()) {
-    						log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
-    					}
+    					log.debug("{}: {}-{}", value, cellFormatName, cellTypeName);
     					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(Cell.class, cellTypeName);
     					
     					switch(cellType.intValue()) {
@@ -400,16 +398,14 @@ public class EGSimpleTableParser {
     								if(value != null) {
     									NSNumberFormatter f = ERXNumberFormatter.numberFormatterForPattern(cellFormatName);
     									Number numberValue = (Number)f.parseObject(value.toString());
-    									if(log.isDebugEnabled()) {
-    										log.debug(f.pattern() + ": " + numberValue);
-    									}
+    									log.debug("{}: {}", f.pattern(), numberValue);
     									if(numberValue != null) {
     										cell.setCellValue(numberValue.doubleValue());
     									}
     								}
      								break;
     							} catch (ParseException e1) {
-    								log.info(e1);
+    								log.info("Could not parse '{}'.", value, e1);
     							}
     							
     						case HSSFCell.CELL_TYPE_BOOLEAN:
@@ -419,9 +415,7 @@ public class EGSimpleTableParser {
     									Integer integer = Integer.parseInt(value.toString());
     									cell.setCellValue(integer > 0);
     								} catch (NumberFormatException ex) {
-    									if (log.isDebugEnabled()) {
-    										log.debug(ex.getMessage(), ex);
-    									}
+    									log.debug("Could not parse '{}'.", value, ex);
     	    							cell.setCellValue(new Boolean(value.toString()));
     								}
     							}
@@ -430,7 +424,7 @@ public class EGSimpleTableParser {
     						case HSSFCell.CELL_TYPE_STRING:
 							default:
 								cell.setCellType(cellType.intValue());
-								cell.setCellValue(new HSSFRichTextString(value != null ? value.toString() : null));
+								cell.setCellValue(createRichTextString(value));
 								break;
     					}
     					
@@ -440,14 +434,14 @@ public class EGSimpleTableParser {
 	      						try {
 	      							sheet.autoSizeColumn((short) currentColumnNumber);
 	      						} catch (Exception ex) {
-	      							log.warn(ex);
+	      							log.warn("Exception during autosizing column {}.", currentColumnNumber, ex);
 	      						}
     						} else {
         						try {
         							short width = Integer.valueOf(cellWidthString).shortValue();
         							sheet.setColumnWidth(currentColumnNumber, width * 256);
         						} catch (Exception ex) {
-        							log.warn(ex);
+        							log.warn("Exception during width change of column {}.", currentColumnNumber, ex);
         						}
     						}
     					}
@@ -458,11 +452,11 @@ public class EGSimpleTableParser {
     							short height = Integer.valueOf(cellHeightString).shortValue();
     							row.setHeightInPoints(height);
     						} catch (Exception ex) {
-    							log.warn(ex);
+    							log.warn("Exception during height change of row {}", row, ex);
     						}
     					}
     					
-    					HSSFCellStyle style = styleWithDictionary(cellDict);
+    					CellStyle style = styleWithDictionary(cellDict);
     					
     					if(style != null) {
     						cell.setCellStyle(style);
@@ -478,17 +472,19 @@ public class EGSimpleTableParser {
     						}
     					}
     					
-    					if(log.isDebugEnabled()) {
-    					    log.debug("Cell: " + value);
-    					}
+    					log.debug("Cell: {}", value);
     				}
     			}
     		}
     	}
     }
     
-    private HSSFFont fontWithID(String id) {
-    	HSSFFont font = (HSSFFont)_fonts.objectForKey(id);
+    protected RichTextString createRichTextString(Object value) {
+    	return new HSSFRichTextString(value != null ? value.toString() : null);
+    }
+    
+    private Font fontWithID(String id) {
+    	Font font = (Font)_fonts.objectForKey(id);
     	if(font == null) {
     		font = _workbook.createFont();
     		
@@ -526,12 +522,10 @@ public class EGSimpleTableParser {
 			"alignment","verticalAlignment","format"
 	});
     
-    private HSSFCellStyle styleWithDictionary(NSDictionary dict) {
+    private CellStyle styleWithDictionary(NSDictionary dict) {
     	String cellClass = dictValueForKey(dict, "class", null);
     	
-    	if(log.isDebugEnabled()) {
-        	log.debug("before - " + cellClass + ": " + dict);
-    	}
+    	log.debug("before - {}: {}", cellClass, dict);
     	dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(dict, STYLE_KEYS);
     	if(cellClass != null) {
     		// first, we pull in the default named styles, remembering
@@ -550,17 +544,15 @@ public class EGSimpleTableParser {
     		stylesFromClass.addEntriesFromDictionary(dict);
     		dict = stylesFromClass.immutableClone();
     	}
-    	if(log.isDebugEnabled()) {
-        	log.debug("after - " + cellClass + ": " + dict);
-    	}
+    	log.debug("after - {}: {}", cellClass, dict);
     	
-    	HSSFCellStyle cellStyle = (HSSFCellStyle)_styles.objectForKey(dict);
+    	CellStyle cellStyle = (CellStyle)_styles.objectForKey(dict);
     	if(cellStyle == null) {
     		cellStyle = _workbook.createCellStyle();
     		
     		String fontID = dictValueForKey(dict, "font", null);
     		if(fontID != null) {
-    			HSSFFont font = fontWithID(fontID);
+    			Font font = fontWithID(fontID);
     			if(font == null) {
     				throw new IllegalArgumentException("Font ID not found!");
     			}
@@ -591,15 +583,13 @@ public class EGSimpleTableParser {
     		
     		String formatString = dictValueForKey(dict, "format", null);
     		if(formatString != null) {
-    			HSSFDataFormat format = _workbook.createDataFormat();
+    			DataFormat format = _workbook.createDataFormat();
     			short formatId = format.getFormat(formatString);
     			cellStyle.setDataFormat(formatId);
     		}
     		
     		_styles.setObjectForKey(cellStyle, dict);
-                if(log.isDebugEnabled()) {
-                    log.debug("Created style (" + cellClass + "): " + dict);
-                }
+            log.debug("Created style ({}): {}", cellClass, dict);
     	}
     	return cellStyle;
     }

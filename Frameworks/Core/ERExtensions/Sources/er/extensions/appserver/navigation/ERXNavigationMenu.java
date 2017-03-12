@@ -6,7 +6,8 @@
 //
 package er.extensions.appserver.navigation;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -29,8 +30,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXNavigationMenu.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigationMenu.class);
     
     public ERXNavigationItem aNavigationItem;
 
@@ -96,8 +96,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
             // init numOfLevels
             int numOfLevels = menuLevelsToShow();
             
-            if (log.isDebugEnabled())
-                log.debug("Number of levels: " + numOfLevels);
+            log.debug("Number of levels: {}", numOfLevels);
             
             //set the values in the arrays
             setLevel1Items(itemsForLevel(1));
@@ -123,8 +122,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     
     public NSArray itemsForLevel(int level) {
         NSArray children = navigationState().navigationItemsForLevel(level, this);
-        if (log.isDebugEnabled())
-            log.debug("Children: " + children.count() + " for level: " + level);
+        log.debug("Children: {} for level: {}", children.count(), level);
         if (children.count() > 0)
             _renderLevelCount++;
         return children;

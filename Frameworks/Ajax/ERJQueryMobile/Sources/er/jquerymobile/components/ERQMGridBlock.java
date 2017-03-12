@@ -1,7 +1,5 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
@@ -10,8 +8,6 @@ import er.extensions.foundation.ERXStringUtilities;
 
 @SuppressWarnings("serial")
 public class ERQMGridBlock extends ERXNonSynchronizingComponent {
-
-  protected static final Logger log = Logger.getLogger(ERQMGridBlock.class);
 
   //********************************************************************
   //  Properies

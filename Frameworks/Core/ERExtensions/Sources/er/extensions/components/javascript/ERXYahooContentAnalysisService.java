@@ -64,7 +64,7 @@ public class ERXYahooContentAnalysisService {
 		String postData = queryParameters.toExternalForm();
 
 		HttpURLConnection conn = (HttpURLConnection) new URL("http://search.yahooapis.com/ContentAnalysisService/V1/termExtraction").openConnection();
-		NSMutableArray<String> terms = new NSMutableArray<String>();
+		NSMutableArray<String> terms = new NSMutableArray<>();
 		try {
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -77,9 +77,9 @@ public class ERXYahooContentAnalysisService {
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
 
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream()), true);
-			pw.print(postData);
-			pw.close();
+			try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream()), true)) {
+				pw.print(postData);
+			}
 
 			Document resultsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(conn.getInputStream());
 			resultsDoc.normalize();

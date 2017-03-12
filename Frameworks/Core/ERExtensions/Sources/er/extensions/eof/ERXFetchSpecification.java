@@ -184,7 +184,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @param keyPaths list of attribute keys
 	 */
 	public void setRawRowKeyPaths(String keyPath, String... keyPaths) {
-		super.setRawRowKeyPaths(new NSArray<String>(keyPath, keyPaths));
+		super.setRawRowKeyPaths(new NSArray<>(keyPath, keyPaths));
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @param prefetchingRelationshipKeyPaths list of keys to prefetch
 	 */
 	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
-		NSMutableArray<String> keypaths = new NSMutableArray<String>();
+		NSMutableArray<String> keypaths = new NSMutableArray<>();
 		for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
 			keypaths.addObject(key.key());
 		}
@@ -252,7 +252,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @return this
 	 */
 	public ERXFetchSpecification<T> sort(EOSortOrdering sortOrdering) {
-		setSortOrderings(new NSArray<EOSortOrdering>(sortOrdering));
+		setSortOrderings(new NSArray<>(sortOrdering));
 		return this;
 	}
 	
@@ -268,7 +268,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		if (fs instanceof ERXFetchSpecification) {
 			return (ERXFetchSpecification) fs;
 		}
-		return new ERXFetchSpecification<T>(fs);
+		return new ERXFetchSpecification<>(fs);
 	}
 	
 	/**
@@ -282,7 +282,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		if (fs instanceof ERXFetchSpecification) {
 			return (ERXFetchSpecification) fs;
 		}
-		return new ERXFetchSpecification<T>(fs);
+		return new ERXFetchSpecification<>(fs);
 	}
 	
 	/**

@@ -108,7 +108,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Holds array of join clauses.
      */
-    private NSMutableArray<JoinClause> _alreadyJoined = new NSMutableArray<JoinClause>();
+    private NSMutableArray<JoinClause> _alreadyJoined = new NSMutableArray<>();
     
     /**
      * Fetch spec limit ivar
@@ -119,7 +119,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * Fetch spec range ivar
      */
     private NSRange _fetchRange;
-    private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<NSRange>("fetchRange");
+    private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<>("fetchRange");
 
     private Boolean _enableIdentifierQuoting;
     
@@ -291,7 +291,7 @@ public class PostgresqlExpression extends JDBCExpression {
         jc.table2 = rightTable + " " + rightAlias;
         NSArray<EOJoin> joins = r.joins();
         int joinsCount = joins.count();
-        NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
+        NSMutableArray<String> joinStrings = new NSMutableArray<>(joinsCount);
         for( int i = 0; i < joinsCount; i++ ) {
             EOJoin currentJoin = joins.objectAtIndex(i);
             String left;
@@ -627,11 +627,11 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     @Override
     public String joinClauseString() {
-        NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
+        NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<>();
         StringBuilder sb = new StringBuilder();
         JoinClause jc;
         EOSortOrdering.sortArrayUsingKeyOrderArray
-            ( _alreadyJoined, new NSArray<EOSortOrdering>( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
+            ( _alreadyJoined, new NSArray<>( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
         if (_alreadyJoined.count() > 0) {
             jc = _alreadyJoined.objectAtIndex(0);
             
@@ -716,7 +716,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
 	private NSArray<String> quoteArrayContents(NSArray<String> a) {
     	Enumeration enumeration = a.objectEnumerator();
-    	NSMutableArray<String> result = new NSMutableArray<String>();
+    	NSMutableArray<String> result = new NSMutableArray<>();
     	while (enumeration.hasMoreElements()) {
     		String identifier = (String) enumeration.nextElement();
     		String quotedString = quoteIdentifier(identifier);

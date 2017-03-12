@@ -36,9 +36,9 @@ public class ERXTimestampUtilities {
         } else if (defaultValue.equals("tomorrow")) {
             value = ERXTimestampUtilities.tomorrow();
         } else if (defaultValue.equals("distantPast")) {
-            value = ERXTimestampUtilities.distantPast();
+            value = NSTimestamp.DistantPast;
         } else if (defaultValue.equals("distantFuture")) {
-            value = ERXTimestampUtilities.distantFuture();
+            value = NSTimestamp.DistantFuture;
         }
         return value;
     }
@@ -211,37 +211,6 @@ public class ERXTimestampUtilities {
     }
 
     /**
-     * Cover method for returning DistantPast
-     * off of NSTimestamp.
-     * @deprecated use {@link NSTimestamp#DistantPast}
-     * @return a date in the distant past
-     */
-    @Deprecated
-    public static NSTimestamp distantPast() {
-       return NSTimestamp.DistantPast;
-    }
-
-    /**
-     * Cover method for returning DistantFuture
-     * off of NSTimestamp.
-     * @deprecated use {@link NSTimestamp#DistantFuture}
-     * @return a date in the distant future
-     */
-    @Deprecated
-    public static NSTimestamp distantFuture() {
-        return NSTimestamp.DistantFuture;
-    }
-
-    /**
-     * @deprecated use {@link #timestampByAddingTime(NSTimestamp, NSTimestamp)}
-     */
-    @Deprecated
-    public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp t1) {
-        ERXTimestamp time = getInstance(t1);
-        return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
-    }
-
-    /**
      * Adds the time (hours, minutes and seconds) from
      * the second timestamp to the first timestamp.
      * @param ts timestamp to have the time added too.
@@ -252,32 +221,6 @@ public class ERXTimestampUtilities {
     public static NSTimestamp timestampByAddingTime(NSTimestamp ts, NSTimestamp t1) {
         ERXTimestamp time = getInstance(t1);
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
-    }
-
-    /**
-     * Compares two timestamps.
-     * @deprecated use {@link Timestamp#before(Timestamp)}
-     * @param ts1 first timestamp
-     * @param ts2 second timestamp
-     * @return true if the the second timestamp is earlier than the
-     *		first timestamp.
-     */
-    @Deprecated
-    public static boolean isEarlierThan(NSTimestamp ts1, NSTimestamp ts2) {
-        return ts1.compare(ts2) == NSComparator.OrderedAscending;
-    }
-
-    /**
-     * Compares two timestamps.
-     * @deprecated use {@link Timestamp#after(Timestamp)}
-     * @param ts1 first timestamp
-     * @param ts2 second timestamp
-     * @return true if the the second timestamp is later than the
-     *		first timestamp.
-     */
-    @Deprecated
-    public static boolean isLaterThan(NSTimestamp ts1, NSTimestamp ts2) {
-        return ts1.compare(ts2) == NSComparator.OrderedDescending;
     }
 
     /************** Start Of UnixTimeAdditions ***************/

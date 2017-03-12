@@ -184,11 +184,8 @@ public class ERS3AttachmentProcessor extends
 			IOException {
 		try {
 			AWSAuthConnection conn = attachment.awsConnection();
-			FileInputStream attachmentFileInputStream = new FileInputStream(
-					uploadedFile);
-			BufferedInputStream attachmentInputStream = new BufferedInputStream(
-					attachmentFileInputStream);
-			try {
+			try (FileInputStream attachmentFileInputStream = new FileInputStream(uploadedFile);
+				BufferedInputStream attachmentInputStream = new BufferedInputStream(attachmentFileInputStream)) {
 				S3StreamObject attachmentStreamObject = new S3StreamObject(
 						attachmentInputStream, null);
 
@@ -215,8 +212,6 @@ public class ERS3AttachmentProcessor extends
 							+ response.connection.getResponseCode() + ": "
 							+ response.connection.getResponseMessage());
 				}
-			} finally {
-				attachmentInputStream.close();
 			}
 		} finally {
 			if (attachment._isPendingDelete()) {

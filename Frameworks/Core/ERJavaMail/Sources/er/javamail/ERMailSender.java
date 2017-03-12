@@ -18,7 +18,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -51,7 +52,7 @@ public class ERMailSender implements Runnable {
 
 	public static final String InvalidEmailNotification = "InvalidEmailNotification";
 
-	static Logger log = Logger.getLogger(ERMailSender.class);
+	private static final Logger log = LoggerFactory.getLogger(ERMailSender.class);
 
 	private static ERMailSender _sharedMailSender;
 
@@ -84,14 +85,14 @@ public class ERMailSender implements Runnable {
 
 	private ERMailSender() {
 		_stats = new Stats();
-		_messages = new ERQueue<ERMessage>(ERJavaMail.sharedInstance().senderQueueSize());
+		_messages = new ERQueue<>(ERJavaMail.sharedInstance().senderQueueSize());
 
         if (WOApplication.application() == null || WOApplication.application ().isDebuggingEnabled()) {
             _milliSecondsWaitRunLoop = 2000;
         }
         
 		if (log.isDebugEnabled()) {
-			log.debug("ERMailSender initialized (JVM heap size: " + _stats.formattedUsedMemory() + ")");
+			log.debug("ERMailSender initialized (JVM heap size: {})", _stats.formattedUsedMemory());
 		}
 	}
 
@@ -136,14 +137,14 @@ public class ERMailSender implements Runnable {
 				catch (MessagingException ex) {
 					allRecipientsString = "(not available)";
 				}
-				// log.debug ("Adding a message in the queue: \n" + allRecipientsString);
 			}
 
 			_messages.push(message);
 			_stats.updateMemoryUsage();
 
-			if (log.isDebugEnabled())
-				log.debug("(" + _stats.formattedUsedMemory() + ") Added the message in the queue: " + allRecipientsString);
+			if (log.isDebugEnabled()) {
+				log.debug("({}) Added the message in the queue: {}", _stats.formattedUsedMemory(), allRecipientsString);
+			}
 		}
 		catch (ERQueue.SizeOverflowException e) {
 			throw new ERMailSender.SizeOverflowException(e);
@@ -234,7 +235,7 @@ public class ERMailSender implements Runnable {
 			try {
 
 				if (debug) {
-					log.debug("Sending a message ... " + aMessage);
+					log.debug("Sending a message ... {}", aMessage);
 					Enumeration<String> e = aMessage.getAllHeaderLines();
 					while (e.hasMoreElements()) {
 						String header = e.nextElement();
@@ -255,12 +256,12 @@ public class ERMailSender implements Runnable {
 					catch (MessagingException ex) {
 						allRecipientsString = "(not available)";
 					}
-					log.debug("(" + _stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
+					log.debug("({}) Message sent: {}", _stats.formattedUsedMemory(), allRecipientsString);
 				}
 			}
 			catch (SendFailedException e) {
 				if (debug)
-					log.debug("Failed to send message: \n" + message.allRecipientsAsString() + e.getMessage());
+					log.debug("Failed to send message:\n{}", message.allRecipientsAsString(), e);
 				_stats.incrementErrorCount();
 
 				NSArray<String> invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
@@ -273,8 +274,8 @@ public class ERMailSender implements Runnable {
 				exception = e;
 			}
 			catch (Throwable t) {
-				log.error("An unexpected error occured while sending message: " + message + " mime message: " + aMessage
-						+ " sending to: " + Arrays.toString(aMessage.getAllRecipients()) + " transport: " + transport, t);
+				log.error("An unexpected error occured while sending message: {} mime message: {}"
+						+ " sending to: {} transport: {}", message, aMessage, Arrays.toString(aMessage.getAllRecipients()), transport, t);
 				// Need to let someone know that something very, very bad happened
 				message._deliveryFailed(t);
 				throw NSForwardException._runtimeExceptionForThrowable(t);
@@ -288,7 +289,7 @@ public class ERMailSender implements Runnable {
 			}
 		}
 		else if (log.isDebugEnabled()) {
-			log.debug("Message has instructed me not to send it, not sending message: " + message);
+			log.debug("Message has instructed me not to send it, not sending message: {}", message);
 		}
 	}
 
@@ -317,11 +318,11 @@ public class ERMailSender implements Runnable {
 				}
 			}
 		} catch (MessagingException e) {
-			log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
+			log.error("Unable to connect to SMTP Transport. MessagingException: {}", e.getMessage(), e);
 			if (_throwExceptionIfConnectionFails) {
 				throw e;
 			} else {
-				log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
+				log.error("Unable to connect to SMTP Transport. MessagingException: {}", e.getMessage(), e);
 			}
 		}
 
@@ -349,7 +350,7 @@ public class ERMailSender implements Runnable {
 
 				// If there are still messages pending ...
 				if (!_messages.empty()) {
-					Map<String, Transport> transports = new HashMap<String, Transport>();
+					Map<String, Transport> transports = new HashMap<>();
 					
 					try {
 						while (!_messages.empty()) {
@@ -387,7 +388,7 @@ public class ERMailSender implements Runnable {
 							try {
 								_sendMessageNow(message, transport);
 							} catch(SendFailedException ex) {
-								log.error("Can't send message: " + message + ": " + ex, ex);
+								log.error("Can't send message: {}", message, ex);
 							}
 							// if (useSenderDelay) {
 							//     wait (senderDelayMillis);
@@ -398,7 +399,7 @@ public class ERMailSender implements Runnable {
 						}
 					}
 					catch (AuthenticationFailedException e) {
-						log.error("Unable to connect to SMTP Transport. AuthenticationFailedException: " + e.getMessage() + " waiting 20 seconds", e);
+						log.error("Unable to connect to SMTP Transport. AuthenticationFailedException: {} waiting 20 seconds", e.getMessage(), e);
 						Thread.sleep(20000);
 					}
 					catch (MessagingException e) {
@@ -409,7 +410,7 @@ public class ERMailSender implements Runnable {
 							log.error("Can't find to mail server, exiting");
 							return;
 						} else {
-							log.error("General mail error: " + e, e);
+							log.error("General mail error.", e);
 						}
 					}
 					finally {
@@ -492,8 +493,7 @@ public class ERMailSender implements Runnable {
 			_peakMemoryUsage = 0.0d;
 			updateMemoryUsage();
 			lastResetTime = new NSTimestamp();
-			if (log.isDebugEnabled())
-				log.debug(savedStatsString + " has been reset to initial value.");
+			log.debug("{} has been reset to initial value.", savedStatsString);
 		}
 
 		/** 

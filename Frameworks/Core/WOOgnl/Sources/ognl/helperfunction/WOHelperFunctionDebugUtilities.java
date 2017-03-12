@@ -2,7 +2,8 @@ package ognl.helperfunction;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -14,7 +15,7 @@ import com.webobjects.appserver.WOComponent;
  * @author mschrag
  */
 public class WOHelperFunctionDebugUtilities {
-	public static Logger log = Logger.getLogger(WOHelperFunctionDebugUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(WOHelperFunctionDebugUtilities.class);
 	private static boolean _resolvedMethods;
 	private static Method _debugEnabledForComponentMethod;
 
@@ -25,7 +26,7 @@ public class WOHelperFunctionDebugUtilities {
 				_debugEnabledForComponentMethod = WOApplication.application().getClass().getMethod("debugEnabledForComponent", String.class);
 			}
 			catch (Throwable e) {
-				WOHelperFunctionDebugUtilities.log.error("Binding debugging is not available because your application does not implement debugEnabledForComponent(WOComponent).", e);
+				log.error("Binding debugging is not available because your application does not implement debugEnabledForComponent(WOComponent).", e);
 			}
 		}
 	}
@@ -46,7 +47,7 @@ public class WOHelperFunctionDebugUtilities {
 			return debugEnabled.booleanValue();
 		}
 		catch (Exception e) {
-			WOHelperFunctionDebugUtilities.log.warn("Binding debugging is not available because debugEnabledForComponent(WOComponent) failed.", e);
+			log.warn("Binding debugging is not available because debugEnabledForComponent(WOComponent) failed.", e);
 			return false;
 		}
 	}

@@ -25,9 +25,6 @@ import er.neo4jadaptor.utils.iteration.Iterators;
  *
  */
 public class ForeignKeyValue implements Retriever<PropertyContainer, Number> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ForeignKeyValue.class);
-	
 	private final RelationshipType relationshipType;
 	private final EOAttribute srcAttribute;
 	

@@ -37,9 +37,6 @@ import er.neo4jadaptor.utils.EOUtilities;
  * @param <T>
  */
 public class EvaluationQueryConverter <T extends PropertyContainer> extends QueryConverter<Evaluator<T>> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EvaluationQueryConverter.class);
-	
 	public EvaluationQueryConverter() {
 	}
 	
@@ -54,7 +51,7 @@ public class EvaluationQueryConverter <T extends PropertyContainer> extends Quer
 			
 			if (operator.equals(ComparisonOperator.ILIKE)) {
 				value = ((String) value).toLowerCase();
-				textRetriever = new LowercaseRetriever<T>(textRetriever);
+				textRetriever = new LowercaseRetriever<>(textRetriever);
 			}
 			
 			return RegexMatch.wildcardMatch(textRetriever, (String) value);

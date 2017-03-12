@@ -15,6 +15,7 @@ import javax.imageio.stream.ImageInputStream;
 import org.w3c.dom.Node;
 
 import com.drew.lang.ByteArrayReader;
+import com.drew.lang.SequentialByteArrayReader;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifReader;
@@ -25,7 +26,7 @@ public class JAIMetadataParser implements IERMetadataParser {
   public static int EXIF = 0xE1;
   public static int IPTC = 0xED;
 
-  private static Set<String> UNWANTED = new HashSet<String>();
+  private static Set<String> UNWANTED = new HashSet<>();
 
   static {
     JAIMetadataParser.UNWANTED.add("com.sun.media.imageioimpl.plugins.jpeg.CLibJPEGImageReader");
@@ -35,8 +36,7 @@ public class JAIMetadataParser implements IERMetadataParser {
   public ERMetadataDirectorySet parseMetadata(File importFile) throws ERMetadataParserException {
     try {
       ERMetadataDirectorySet rawAssetMetadata = new ERMetadataDirectorySet();
-      ImageInputStream imageInputStream = ImageIO.createImageInputStream(importFile);
-      try {
+      try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(importFile)) {
         Iterator imageReadersIter = ImageIO.getImageReaders(imageInputStream);
         while (imageReadersIter.hasNext()) {
           ImageReader imageReader = (ImageReader) imageReadersIter.next();
@@ -64,9 +64,6 @@ public class JAIMetadataParser implements IERMetadataParser {
           }
         }
       }
-      finally {
-        imageInputStream.close();
-      }
       return rawAssetMetadata;
     }
     catch (IOException e) {
@@ -80,7 +77,7 @@ public class JAIMetadataParser implements IERMetadataParser {
     	ByteArrayReader reader = new ByteArrayReader((byte[]) ((IIOMetadataNode) node).getUserObject());
     	Metadata metadata = new Metadata();
     	new ExifReader().extract(reader, metadata);
-    	return metadata.getDirectory(ExifIFD0Directory.class);
+    	return metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
       }
     }
 
@@ -98,10 +95,10 @@ public class JAIMetadataParser implements IERMetadataParser {
   private IptcDirectory getIptcDirectory(Node node) {
     if ("unknown".equals(node.getNodeName())) {
       if (Integer.parseInt(node.getAttributes().getNamedItem("MarkerTag").getNodeValue()) == IPTC) {
-    	ByteArrayReader reader = new ByteArrayReader((byte[]) ((IIOMetadataNode) node).getUserObject());
+        byte[] tagBytes = (byte[]) ((IIOMetadataNode) node).getUserObject();
     	Metadata metadata = new Metadata();
-    	new IptcReader().extract(reader, metadata);
-        return metadata.getDirectory(IptcDirectory.class);
+    	new IptcReader().extract(new SequentialByteArrayReader(tagBytes), metadata, tagBytes.length);
+        return metadata.getFirstDirectoryOfType(IptcDirectory.class);
       }
     }
 

@@ -7,7 +7,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -124,7 +125,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(CCAjaxLongResponsePage.class);
+	private static final Logger log = LoggerFactory.getLogger(CCAjaxLongResponsePage.class);
 	
 	// Constants to determine the CSS stylesheet used for the long response page for this app
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
@@ -150,8 +151,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 			} else {
 				clazz = ErrorResultController.class;
 			}
-			if (log.isDebugEnabled())
-				log.debug("Default error controller class = " + clazz);
+			log.debug("Default error controller class = {}", clazz);
 			
 			return clazz;
 		}
@@ -325,10 +325,10 @@ public class CCAjaxLongResponsePage extends WOComponent {
 
 			Object task = task();
 			if (task instanceof Callable) {
-				_future = new ERXFutureTask<Object>((Callable<Object>)task);
+				_future = new ERXFutureTask<>((Callable<Object>)task);
 			} else {
 				// Runnable interface only
-				_future = new ERXFutureTask<Object>((Runnable)task, null);
+				_future = new ERXFutureTask<>((Runnable)task, null);
 			}
 
 			// This is where we hand off the task to our executor service to run
@@ -342,37 +342,33 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		// Get the result of the task
 		Object taskResult = result();
 		
-		if (log.isDebugEnabled()) log.debug("nextPage action fired. task result is " + taskResult);
+		log.debug("nextPage action fired. task result is {}", taskResult);
 		
 		// The response to be returned to the user after the task is done.
 		WOActionResults nextPageResponse = null;
 		
 		// If user canceled, we just call that controller
 		if (_wasStoppedByUser) {
-			if (log.isDebugEnabled())
-				log.debug("The task was canceled by the user, so now calling " + nextPageForCancelController());
+			log.debug("The task was canceled by the user, so now calling {}", nextPageForCancelController());
 			nextPageResponse = nextPageForCancelController().performAction();
 		} else if (taskResult instanceof Exception) {
 			// Invoke error controller
 			IERXPerformWOActionForResult errorController = nextPageForErrorController();
 			errorController.setResult(_result);
 			
-			if (log.isDebugEnabled())
-				log.debug("The task had an error, so now calling " + errorController);
+			log.debug("The task had an error, so now calling {}", errorController);
 			
 			nextPageResponse = errorController.performAction();
 		} else {
 			// Invoke the expected result controller
-			if (log.isDebugEnabled())
-				log.debug("The task completed normally. Now setting the result, " + taskResult
-						+ ", and calling " + nextPageForResultController());
+			log.debug("The task completed normally. Now setting the result, {}"
+					+ ", and calling {}", taskResult, nextPageForResultController());
 			nextPageForResultController().setResult(taskResult);
 			nextPageResponse = nextPageForResultController().performAction();
 		}
 		
 
-		if (log.isDebugEnabled())
-			log.debug("results = " + (nextPageResponse == null ? "null" : nextPageResponse.toString()));
+		log.debug("results = {}", nextPageResponse);
 
 		return nextPageResponse;
 	}

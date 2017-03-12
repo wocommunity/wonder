@@ -2,8 +2,6 @@ package er.attachment.model;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
-
 import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.QueryStringAuthGenerator;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -34,8 +32,6 @@ public class ERS3Attachment extends _ERS3Attachment implements ERRemoteAttachmen
 	private static final long serialVersionUID = 1L;
 
 	public static final String STORAGE_TYPE = "s3";
-	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(ERS3Attachment.class);
 
 	private File _pendingUploadFile;
 	private boolean _pendingDelete;

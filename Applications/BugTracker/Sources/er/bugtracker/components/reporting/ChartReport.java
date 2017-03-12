@@ -3,7 +3,6 @@ package er.bugtracker.components.reporting;
 import java.text.Format;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.data.category.CategoryDataset;
@@ -29,10 +28,6 @@ import er.plot.ERPPieChart;
 
 
 public class ChartReport extends Report {
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ChartReport.class);
-    
     public String currentType;
     
     public ChartConfiguration selectedConfiguration = (ChartConfiguration) CHART_CONFIGURATIONS.lastObject();

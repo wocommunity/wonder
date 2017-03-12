@@ -2,6 +2,8 @@ package er.neo4jadaptor.storage.neo4j;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -25,7 +27,7 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @author Jedrzej Sobanski
  */
 public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodeStore.class);
+	private static final Logger log = LoggerFactory.getLogger(NodeStore.class);
 
 	private final GraphDatabaseService db;
 	private final EOEntity entity;
@@ -54,7 +56,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		if (pkValue == null) {
 			// it happens in case of inserts of rows with attributes like "NeededByEOF0" which seem not to be real rows.
-			log.warn("Primary key value is null for " + row + ". Ignoring it (not sure if it's correct behaviour)");
+			log.warn("Primary key value is null for {}. Ignoring it (not sure if it's correct behaviour)", row);
 			return null;
 		}
 		if (pkValue != null && false == pkValue instanceof NodeNumber) {
@@ -91,7 +93,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		id = EOUtilities.convertToAttributeType(pk, id);
 		
-		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<EOAttribute, Object>(new NodeNumber(id), pk);
+		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<>(new NodeNumber(id), pk);
 		
 		return NSDictionaryErsatz.fromDictionary(dict);
 	}
@@ -118,7 +120,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 //				// primary key values are assigned node id values therefore shouldn't be possible to overwrite them
 //				throw new UnsupportedEntityException("Primary key " + entity.name() + "." + pk.name() + " can only be read only when it's a class property");
 //			}
-			log.warn("Primary key " + entity.name() + "." + pk.name() + " is class property. Its value shouldn't be set manually.");
+			log.warn("Primary key {}.{} is class property. Its value shouldn't be set manually.", entity.name(), pk.name());
 		}
 		
 		try {

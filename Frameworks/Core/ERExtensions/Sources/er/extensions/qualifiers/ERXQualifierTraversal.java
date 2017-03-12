@@ -8,7 +8,8 @@ package er.extensions.qualifiers;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
@@ -24,9 +25,7 @@ import er.extensions.eof.qualifiers.ERXExistsQualifier;
  * Subclass and implement the methods you need.
  */
 public class ERXQualifierTraversal {
-
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXQualifierTraversal.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXQualifierTraversal.class);
 
 	/**
 	 * Catch-all visitor, will get called for each qualifier.
@@ -46,7 +45,7 @@ public class ERXQualifierTraversal {
 	 * @return should traverse boolean qualifier
 	 */
 	protected boolean traverseUnknownQualifier(EOQualifierEvaluation q) {
-		log.error("Found unknown qualifier type:" + q.getClass().getName());
+		log.error("Found unknown qualifier type: {}", q.getClass().getName());
 		return true;
 	}
 

@@ -2,8 +2,6 @@ package er.extensions.components;
 
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
@@ -52,9 +50,6 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	public static final Logger log = Logger.getLogger( ERXStyleSheet.class );
-
 	/**
 	 * Public constructor
 	 * 
@@ -68,7 +63,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	protected static ERXExpiringCache<String, WOResponse> cache( WOSession session ) {
 		ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>)session.objectForKey( "ERXStylesheet.cache" );
 		if( cache == null ) {
-			cache = new ERXExpiringCache<String, WOResponse>( 60 );
+			cache = new ERXExpiringCache<>( 60 );
 			cache.startBackgroundExpiration();
 			session.setObjectForKey( cache, "ERXStylesheet.cache" );
 		}
@@ -210,7 +205,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 				cachedResponse.setHeader( md5, "checksum" );
 			}
 			md5 = cachedResponse.headerForKey( "checksum" );
-			NSDictionary<String, Object> query = new NSDictionary<String, Object>( md5, "checksum" );
+			NSDictionary<String, Object> query = new NSDictionary<>( md5, "checksum" );
 			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query, wocontext.request().isSecure(), 0, false );
 		}
 

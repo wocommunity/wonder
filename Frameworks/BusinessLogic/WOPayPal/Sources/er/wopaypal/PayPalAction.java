@@ -74,7 +74,7 @@ public class PayPalAction extends WODirectAction {
         } 
         // assemble User-Agent header
         StringBuilder ua = new StringBuilder();
-        ua.append("WebObjects/ " + ERXProperties.webObjectsVersion() + " (");
+        ua.append("WebObjects/ 5.4 (");
         ua.append(System.getProperty("os.arch"));
         ua.append("; ");
         ua.append(System.getProperty("os.name"));

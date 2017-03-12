@@ -35,6 +35,8 @@ public class ERXRouteResults implements WOActionResults {
 	 * 
 	 * @param context
 	 *            the current context
+	 * @param restContext
+	 *            the REST context
 	 * @param format
 	 *            the intended format of this response
 	 * @param responseNode
@@ -45,7 +47,7 @@ public class ERXRouteResults implements WOActionResults {
 		_restContext = restContext;
 		_format = format;
 		_responseNode = responseNode;
-		_headers = new NSMutableDictionary<String, String>();
+		_headers = new NSMutableDictionary<>();
 	}
 	
 	/**
@@ -81,6 +83,7 @@ public class ERXRouteResults implements WOActionResults {
 	 * 
 	 * @return a generated WOResponse
 	 */
+	@Override
 	public WOResponse generateResponse() {
 		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
 		

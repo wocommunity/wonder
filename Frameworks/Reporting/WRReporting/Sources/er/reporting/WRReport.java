@@ -2,7 +2,8 @@ package er.reporting;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -26,8 +27,7 @@ import er.grouping.DRRecordGroup;
 import er.grouping.DRReportModel;
 
 public class WRReport extends WOComponent  {
-    /** logging support */
-    private static final Logger log = Logger.getLogger(WRReport.class);
+    private static final Logger log = LoggerFactory.getLogger(WRReport.class);
 
     
     protected DRReportModel _model;
@@ -120,11 +120,9 @@ public class WRReport extends WOComponent  {
                 initializeDimensionArrayFromBindings("H");
                 initializeDimensionArrayFromBindings("V");
                 initializeDimensionArrayFromBindings("Z");
-                if(log.isDebugEnabled()) {
-                    log.debug("V :" + model().vList());
-                    log.debug("H :" + model().hList());
-                    log.debug("Z :" + model().zList());
-                }
+                log.debug("V :{}", model().vList());
+                log.debug("H :{}", model().hList());
+                log.debug("Z :{}", model().zList());
             } else {
                 log.error("Model is null!");
             }
@@ -162,7 +160,7 @@ public class WRReport extends WOComponent  {
 
     public void rebuildModel(NSNotification notification) {
         if(_model != null && _model == notification.object()) {
-            log.debug("rebuildModel: " + notification.object().hashCode() + ": " + _model.hashCode());
+            log.debug("rebuildModel: {}: {}", notification.object().hashCode(), _model.hashCode());
             _currentZCriteria.removeAllObjects();
             _initializedDimensionArrayFromBindings = false;
             _model = null;
@@ -512,7 +510,7 @@ public class WRReport extends WOComponent  {
                     else if("V".equals(dimension))
                         model().addToVList(group);
                 } else {
-                    log.warn("Criteria not found: " + keypath);
+                    log.warn("Criteria not found: {}", keypath);
                 }
             }
         }

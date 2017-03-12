@@ -65,7 +65,7 @@ public class ERXStats {
     public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
     public static final String STATS_TRACE_COLLECTING_ENABLED_KEY = "er.extensions.erxStats.traceCollectingEnabled";
 
-	public static final Logger log = Logger.getLogger(ERXStats.class);
+    public static final Logger log = Logger.getLogger(ERXStats.class);
 
 	public interface Group {
 		public String Default = " ";
@@ -133,7 +133,7 @@ public class ERXStats {
 	public static NSMutableDictionary<String, LogEntry> statistics() {
 		NSMutableDictionary<String, LogEntry> statistics = (NSMutableDictionary<String, LogEntry>) ERXThreadStorage.valueForKey(ERXStats.STATS_KEY);
 		if (statistics == null) {
-			statistics = new NSMutableDictionary<String, LogEntry>();
+			statistics = new NSMutableDictionary<>();
 			ERXThreadStorage.takeValueForKey(statistics, ERXStats.STATS_KEY);
 			synchronized (_allStatistics) {
 				ERXStats._allStatistics.addObject(statistics);
@@ -190,7 +190,7 @@ public class ERXStats {
 	 *         recorded
 	 */
 	public static NSSet<String> aggregateKeys() {
-		NSMutableSet<String> keys = new NSMutableSet<String>();
+		NSMutableSet<String> keys = new NSMutableSet<>();
 		for (NSMutableDictionary<String, LogEntry> statistics : ERXStats._allStatistics) {
 			keys.addObjectsFromArray(statistics.allKeys());
 		}
@@ -227,7 +227,7 @@ public class ERXStats {
 	 * @return an aggregate set of log entries
 	 */
 	public static NSArray<LogEntry> aggregateLogEntries() {
-		NSMutableArray<LogEntry> aggregateLogEntries = new NSMutableArray<LogEntry>();
+		NSMutableArray<LogEntry> aggregateLogEntries = new NSMutableArray<>();
 		for (String key : aggregateKeys()) {
 			LogEntry logEntry = ERXStats.aggregateLogEntryForKey(key);
 			if (logEntry != null) {
@@ -428,7 +428,7 @@ public class ERXStats {
 				_lastMark = 0;
 			}
 			else {
-				ERXStats.log.info("You called ERXStats.end before calling ERXStats.start.");
+				log.info("You called ERXStats.end before calling ERXStats.start.");
 			}
 		}
 
@@ -465,7 +465,7 @@ public class ERXStats {
 
 		public NSArray traces() {
 			if(_traceArray == null) {
-				NSMutableSet<String> traces =  new NSMutableSet<String>();
+				NSMutableSet<String> traces =  new NSMutableSet<>();
 				for (String trace : _traces) {
 					trace = trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n", "...\n");
 					trace = trace.replaceAll("(\\.\\.\\.\\s+)+", "...\n\t");

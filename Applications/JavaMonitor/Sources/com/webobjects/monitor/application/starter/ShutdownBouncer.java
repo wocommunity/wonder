@@ -25,8 +25,8 @@ public class ShutdownBouncer extends ApplicationStarter {
     protected void bounce() throws InterruptedException {
 
         NSArray<MInstance> instances = application().instanceArray().immutableClone();
-        NSMutableArray<MInstance> runningInstances = new NSMutableArray<MInstance>();
-        NSMutableSet<MHost> activeHosts = new NSMutableSet<MHost>();
+        NSMutableArray<MInstance> runningInstances = new NSMutableArray<>();
+        NSMutableSet<MHost> activeHosts = new NSMutableSet<>();
         for (MInstance instance : instances) {
             MHost host = instance.host();
             if (instance.isRunning_M()) {

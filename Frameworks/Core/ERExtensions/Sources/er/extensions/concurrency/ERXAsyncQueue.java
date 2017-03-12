@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * @param <T> 
  */
 public abstract class ERXAsyncQueue<T> extends Thread {
-	private LinkedList<T> _jobs = new LinkedList<T>();
+	private LinkedList<T> _jobs = new LinkedList<>();
 
   public ERXAsyncQueue() {
 	  super("ERXAsyncQueue");

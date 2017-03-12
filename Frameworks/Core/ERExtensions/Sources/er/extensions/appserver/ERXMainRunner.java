@@ -41,7 +41,7 @@ public class ERXMainRunner extends ERXApplication {
 		try {
 			String mainClassName = null;
 			String mainMethodName = "main";
-			NSMutableArray<String> argsArray = new NSMutableArray<String>();
+			NSMutableArray<String> argsArray = new NSMutableArray<>();
 			if (_args != null) {
 				for (int i = 0; i < _args.length; i++) {
 					if ("-mainClass".equalsIgnoreCase(_args[i])) {

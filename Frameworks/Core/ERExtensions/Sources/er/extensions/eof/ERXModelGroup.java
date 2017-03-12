@@ -16,7 +16,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
@@ -114,7 +115,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @property er.extensions.ERXModelGroup.patchedModelClassName
  * @property er.extensions.ERXModelGroup.prototypeModelName if defined, overrides the default name, erprototypes.eomodeld.
  * @property er.extensions.ERXModelGroup.prototypeModelNames defines the names of the models that are prototypes. They get put in front of the model load order. The default is <code>(erprototypes)</code>.
- * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries defaut is true
+ * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries default is true
  * @property er.extensions.ERXModelGroup.sqlDumpDirectory
  * @property [MODEL_NAME].DBConnectionRecycle
  * @property [MODEL_NAME].DBDebugLevel
@@ -128,11 +129,9 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @property [MODEL_NAME].removeJdbc2Info
  */
 public class ERXModelGroup extends EOModelGroup {
-
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXModelGroup.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXModelGroup.class);
 	
-	private Hashtable cache;
+	private Map<EOEntity, Integer> cache;
 
 	/**
 	 * Key for languages, can be either in properties or in the model object's user info.
@@ -158,7 +157,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Default public constructor
 	 */
 	public ERXModelGroup() {
-		cache = new Hashtable();
+		cache = new Hashtable<>();
 	}
 
 	/**
@@ -172,7 +171,7 @@ public class ERXModelGroup extends EOModelGroup {
 		NSArray<NSBundle> frameworkBundles = NSBundle.frameworkBundles();
 		
 		if (log.isDebugEnabled()) {
-			log.debug("Loading bundles" + frameworkBundles.valueForKey("name"));
+			log.debug("Loading bundles ()", frameworkBundles.valueForKey("name"));
 		}
 		// clear the cached class descriptions - if descriptions are there, they
 		// are from a previous load of the models, and may be out of date
@@ -181,9 +180,9 @@ public class ERXModelGroup extends EOModelGroup {
 			ERXEntityClassDescription.factory().reset();
 		}
 
-		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
-		NSMutableArray<String> modelNames = new NSMutableArray<String>();
-		NSMutableSet<NSBundle> bundles = new NSMutableSet<NSBundle>();
+		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<>();
+		NSMutableArray<String> modelNames = new NSMutableArray<>();
+		NSMutableSet<NSBundle> bundles = new NSMutableSet<>();
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(frameworkBundles);
 
@@ -197,7 +196,7 @@ public class ERXModelGroup extends EOModelGroup {
 					// AK: we don't want to use temp files. This is actually an error in the 
 					// builds or it happens when you open and change models from installed frameworks
 					// but I'm getting so annoyed by this that we just skip the models here
-					log.info("Not adding model, it's only a temp file: " + indexPath);
+					log.info("Not adding model, it's only a temp file: {}", indexPath);
 					continue;
 				}
 				String modelPath = NSPathUtilities.stringByDeletingLastPathComponent(indexPath);
@@ -214,8 +213,8 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 
-		NSMutableArray<URL> modelURLs = new NSMutableArray<URL>();
-		// First, add prototyes if specified
+		NSMutableArray<URL> modelURLs = new NSMutableArray<>();
+		// First, add prototypes if specified
 		for(Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator(); prototypeModelNamesEnum.hasMoreElements(); ) {
 			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
 			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName); // WO53
@@ -229,7 +228,7 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 			}
 		}
-		// Next, add all models that are stated explicitely
+		// Next, add all models that are stated explicitly
 		for(Enumeration<String> modelLoadOrderEnum = _modelLoadOrder.objectEnumerator(); modelLoadOrderEnum.hasMoreElements(); ) {
 			String modelName = modelLoadOrderEnum.nextElement();
 			URL modelURL = modelNameURLDictionary.removeObjectForKey(modelName);
@@ -398,22 +397,22 @@ public class ERXModelGroup extends EOModelGroup {
 		Enumeration enumeration = _modelsByName.objectEnumerator();
 		String name = eomodel.name();
 		if (_modelsByName.objectForKey(name) != null) {
-			log.warn("The model '" + name + "' (path: " + eomodel.pathURL() + ") cannot be added to model group " + this + " because it already contains a model with that name.");
+			log.warn("The model '{}' (path: {}) cannot be added to model group {} because it already contains a model with that name.", name, eomodel.pathURL(), this);
 			return;
 		}
 		NSMutableSet nsmutableset = new NSMutableSet(128);
-		NSSet<String> nsset = new NSSet<String>(eomodel.entityNames());
+		NSSet<String> nsset = new NSSet<>(eomodel.entityNames());
 		while (enumeration.hasMoreElements()) {
 			EOModel eomodel1 = (EOModel) enumeration.nextElement();
 			nsmutableset.addObjectsFromArray(eomodel1.entityNames());
 		}
 		NSSet intersection = nsmutableset.setByIntersectingSet(nsset);
 		if (intersection.count() != 0) {
-			log.warn("The model '" + name + "' (path: " + eomodel.pathURL() + ") has an entity name conflict with the entities " + intersection + " already in the model group " + this);
+			log.warn("The model '{}' (path: {}) has an entity name conflict with the entities {} already in the model group {}", name, eomodel.pathURL(), intersection, this);
 			Enumeration e = intersection.objectEnumerator();
 			while (e.hasMoreElements()) {
 				String entityName = (String) e.nextElement();
-				log.debug("Removing entity " + entityName + " from model " + name);
+				log.debug("Removing entity {} from model {}", entityName, name);
 				eomodel.removeEntity(eomodel.entityNamed(entityName));
 			}
 		}
@@ -451,7 +450,7 @@ public class ERXModelGroup extends EOModelGroup {
 					ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(jdbc);
 					String sql = helper.createSchemaSQLForEntitiesInModelAndOptions(eomodel.entities(), eomodel, helper.defaultOptionDictionary(true, true));
 					ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(sql.getBytes()), dumpFile);
-					log.info("Wrote Schema SQL to " + dumpFile);
+					log.info("Wrote Schema SQL to {}", dumpFile);
 				}
 			} catch (java.io.IOException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -576,7 +575,7 @@ public class ERXModelGroup extends EOModelGroup {
 					EOEntity child = entityNamed(childName);
 
 					if (child.parentEntity() != parent && !parent.subEntities().containsObject(child)) {
-						log.debug("Found entity: " + child.name() + " which should have: " + parent.name() + " as it's parent.");
+						log.debug("Found entity: {} which should have: {} as it's parent.", child.name(), parent.name());
 						parent.addSubEntity(child);
 					}
 				}
@@ -604,9 +603,9 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @return either the userInfo.entityCode or 0 if no entry could be found
 	 */
 	public int entityCode(EOEntity entity) {
-		Integer cachedValue = (Integer) cache.get(entity);
+		Integer cachedValue = cache.get(entity);
 		if (cachedValue == null) {
-			NSDictionary d = entity.userInfo();
+			NSDictionary<String, Object> d = entity.userInfo();
 			if (d == null)
 				d = NSDictionary.EmptyDictionary;
 			Object o = d.objectForKey("entityCode");
@@ -753,12 +752,12 @@ public class ERXModelGroup extends EOModelGroup {
 		
 		NSDictionary<String, Object> connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
-			connectionDictionary = new NSMutableDictionary<String, Object>();
-			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' does not have a connection dictionary, providing an empty one");
+			connectionDictionary = new NSMutableDictionary<>();
+			log.warn("The EOModel '{}' does not have a connection dictionary, providing an empty one.", model.name());
 			model.setConnectionDictionary(connectionDictionary);
 		}
 
-		NSMutableDictionary<String, Object> newConnectionDictionary = new NSMutableDictionary<String, Object>(connectionDictionary);
+		NSMutableDictionary<String, Object> newConnectionDictionary = new NSMutableDictionary<>(connectionDictionary);
 		if (serverUrl != null) {
 			newConnectionDictionary.setObjectForKey(serverUrl, "serverUrl");
 		}
@@ -811,7 +810,7 @@ public class ERXModelGroup extends EOModelGroup {
 				jdbcInfoDictionary = (NSDictionary) modelForCopy.connectionDictionary().objectForKey("jdbc2Info");
 			}
 			else {
-				log.warn("Unable to find model named \"" + modelName + "\"");
+				log.warn("Unable to find model named '{}'.", modelName);
 				jdbcInfo = null;
 			}
 		}
@@ -859,7 +858,7 @@ public class ERXModelGroup extends EOModelGroup {
 		newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
 
 		if (newConnectionDictionary.count() == 0) {
-			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' has an empty connection dictionary.");
+			log.warn("The EOModel '{}' has an empty connection dictionary.", model.name());
 		}
 		
 		String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "true");
@@ -907,7 +906,7 @@ public class ERXModelGroup extends EOModelGroup {
 								throw new IllegalArgumentException(message);
 							}
 						}
-						log.info("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL and username, but at least one of them is a prototype model, so it shouldn't be a problem.");
+						log.info("The connection dictionaries for {} and {} have the same URL and username, but at least one of them is a prototype model, so it shouldn't be a problem.", model.name(), otherModel.name());
 					}
 				}
 			}
@@ -956,11 +955,11 @@ public class ERXModelGroup extends EOModelGroup {
 			throw new IllegalArgumentException("Model can't be null");
 		}
 		String modelName = model.name();
-		log.debug("Adjusting " + modelName);
+		log.debug("Adjusting {}", modelName);
 		NSDictionary old = model.connectionDictionary();
 
 		if (model.adaptorName() == null) {
-			log.info("Skipping model '" + modelName + "', it has no adaptor name set");
+			log.info("Skipping model '{}', it has no adaptor name set.", modelName);
 			return;
 		}
 
@@ -990,7 +989,7 @@ public class ERXModelGroup extends EOModelGroup {
 			NSMutableDictionary dict = model.connectionDictionary().mutableClone();
 			if (dict.objectForKey("password") != null) {
 				dict.setObjectForKey("<deleted for log>", "password");
-				log.debug("New Connection Dictionary for " + modelName + ": " + dict);
+				log.debug("New Connection Dictionary for {}: {}", modelName, dict);
 			}
 		}
 
@@ -1057,12 +1056,10 @@ public class ERXModelGroup extends EOModelGroup {
 		if (f != null) {
 			NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
 			if (dict != null) {
-				if (log.isDebugEnabled()) {
-					log.debug("Adjusting prototypes from " + f);
-				}
+				log.debug("Adjusting prototypes from {}", f);
 				EOEntity proto = model.entityNamed("EOPrototypes");
 				if (proto == null) {
-					log.warn("No prototypes found in model named \"" + modelName + "\", although the EOPrototypesFile default was set!");
+					log.warn("No prototypes found in model named '{}', although the EOPrototypesFile default was set!", modelName);
 				}
 				else {
 					model.removeEntity(proto);
@@ -1176,7 +1173,7 @@ public class ERXModelGroup extends EOModelGroup {
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
 			if(_prototypeModelNames.containsObject(model.name())) {
-				log.debug("Skipping prototype model " + model.name());
+				log.debug("Skipping prototype model {}", model.name());
 				continue;
 			}
 			NSDictionary userInfo = model.userInfo();
@@ -1190,11 +1187,11 @@ public class ERXModelGroup extends EOModelGroup {
 				else {
 					EOEntity prototypeEntity = entityNamed(prototypeEntityName);
 					if (prototypeEntity == null) {
-						log.info(model.name() + " references a prototype entity named " + prototypeEntityName + " which is not yet loaded.");
+						log.info("{} references a prototype entity named {} which is not yet loaded.", model.name(), prototypeEntityName);
 					}
 					else {
 						if (log.isDebugEnabled()) {
-							log.debug("Flattening " + model.name() + " using the prototype " + prototypeEntity.name());
+							log.debug("Flattening {} using the prototype {}", model.name(), prototypeEntity.name());
 						}
 						for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
 							EOEntity entity = (EOEntity) entitiesEnum.nextElement();
@@ -1204,29 +1201,29 @@ public class ERXModelGroup extends EOModelGroup {
 									String prototypeAttributeName = attribute.prototypeName();
 									if (prototypeAttributeName == null) {
 										if (attribute.externalType() == null) {
-											log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
+											log.warn("{}/{}/{} does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.", model.name(), entity.name(), attribute.name());
 										}
 									}
 									else {
 										EOAttribute prototypeAttribute = prototypeEntity.attributeNamed(prototypeAttributeName);
 										if (prototypeAttribute == null) {
-											log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " references a prototype attribute named " + prototypeAttributeName + " that does not exist in " + prototypeEntity.name() + ".");
+											log.warn("{}/{}/{} references a prototype attribute named {} that does not exist in {}.", model.name(), entity.name(), attribute.name(), prototypeAttributeName, prototypeEntity.name());
 										}
 										else if (attribute.prototype().entity() == prototypeEntity) {
 											if (log.isDebugEnabled()) {
-												log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it is already prototyped by the correct entity.");
+												log.debug("Skipping {}/{}/{} because it is already prototyped by the correct entity.", model.name(), entity.name(), attribute.name());
 											}
 										}
 										else {
 											flattenPrototypeAttribute(prototypeAttribute, attribute);
 											if (log.isDebugEnabled()) {
-												log.debug("Flattening " + model.name() + "/" + entity.name() + "/" + attribute.name() + " with the prototype attribute " + prototypeAttribute.entity().model().name() + "/" + prototypeAttribute.entity().name() + "/" + prototypeAttribute.name());
+												log.debug("Flattening {}/{}/{} with the prototype attribute {}/{}/{}", model.name(), entity.name(), attribute.name(), prototypeAttribute.entity().model().name(), prototypeAttribute.entity().name(), prototypeAttribute.name());
 											}
 										}
 									}
 								}
 								else {
-									log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it's derived or flattened.");
+									log.debug("Skipping {}/{}/{} because it's derived or flattened.", model.name(), entity.name(), attribute.name());
 								}
 							}
 						}
@@ -1320,7 +1317,7 @@ public class ERXModelGroup extends EOModelGroup {
 				// AK: the following two calls are needed to clear the cached values from the attribute
 				attribute.setClassName(className);
 				attribute.setValueFactoryMethodName(attribute.valueFactoryMethodName());
-				log.info("Attribute : " + attribute + " changed " + attribute.adaptorValueType() + " " + attribute.factoryMethodArgumentType());
+				log.info("Attribute : {} changed {} {}", attribute, attribute.adaptorValueType(), attribute.factoryMethodArgumentType());
 			}
 		}
 	}

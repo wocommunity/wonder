@@ -29,7 +29,8 @@ import java.util.Vector;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorOperation;
@@ -87,7 +88,7 @@ public class ERXStringUtilities {
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
     protected static double adjustement = 0.5;
-    private static Logger log = Logger.getLogger(ERXStringUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXStringUtilities.class);
 
     /**
      * Sets the base adjustment used for fuzzy matching
@@ -131,7 +132,7 @@ public class ERXStringUtilities {
         EOFetchSpecification fs = new EOFetchSpecification( entityName, null, null );
         fs.setFetchesRawRows( true );
         NSArray<String> pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
-        NSMutableArray<String> keyPaths = new NSMutableArray<String>(pks);
+        NSMutableArray<String> keyPaths = new NSMutableArray<>(pks);
         keyPaths.addObject( propertyKey );
         if( synonymsKey != null ) 
             keyPaths.addObject( synonymsKey );
@@ -155,7 +156,7 @@ public class ERXStringUtilities {
                     (StringUtils.getLevenshteinDistance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
                     dico.setObjectForKey( Double.valueOf(StringUtils.getLevenshteinDistance(name, comparedString)), _DISTANCE );
-                    NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
+                    NSDictionary<String, Object> pkValues = new NSDictionary<>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
                     trySynonyms = false;
@@ -174,7 +175,7 @@ public class ERXStringUtilities {
                            (StringUtils.getLevenshteinDistance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
                             dico.setObjectForKey( Double.valueOf(StringUtils.getLevenshteinDistance(name, comparedString)), _DISTANCE );
-                            NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
+                            NSDictionary<String, Object> pkValues = new NSDictionary<>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );
                             break;
@@ -258,7 +259,7 @@ public class ERXStringUtilities {
             if(file != null)
                 return ERXFileUtilities.stringFromFile(file);
         } catch (IOException e) {
-            log.error(e, e);
+            log.error("Could not read string from file {}", file, e);
         }
         return null;
     }
@@ -360,17 +361,11 @@ public class ERXStringUtilities {
         }
         path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
         if(path != null) {
-        	InputStream stream = null;
-            try {
-                stream = bundle.inputStreamForResourcePath(path);
+            try (InputStream stream = bundle.inputStreamForResourcePath(path)) {
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
                 return new String(bytes);
             } catch (IOException e) {
-                log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
-            } finally {
-            	if (stream != null) {
-            		try { stream.close(); } catch (IOException e) {}
-            	}
+                log.warn("IOException when stringFromResource({}.{} in bundle {}", name, extension, bundle.name());
             }
         }
         return null;
@@ -687,7 +682,7 @@ public class ERXStringUtilities {
 		// as apache commons lang didn't really work for me?!?
 		
 		Object[] xml = new Object[] { '<', "lt", '>', "gt", '&', "amp", '\"', "quot" };
-		NSMutableDictionary<String, String> dict = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> dict = new NSMutableDictionary<>();
 		for (int i = 0; i < xml.length; i+=2) {
 			Character charValue = ((Character) xml[i]);
 			String key = (String) xml[i+1];
@@ -699,7 +694,7 @@ public class ERXStringUtilities {
 		Object[] iso = { 160, "nbsp", 161, "iexcl", 162, "cent", 163, "pound", 164, "curren", 165, "yen", 166, "brvbar", 167, "sect", 168, "uml", 169, "copy", 170, "ordf", 171, "laquo", 172, "not", 173, "shy", 174, "reg", 175, "macr", 176, "deg", 177, "plusmn", 178, "sup2", 179, "sup3", 180, "acute", 181, "micro", 182, "para", 183, "middot", 184, "cedil", 185, "sup1", 186, "ordm", 187, "raquo", 188, "frac14", 189, "frac12", 190, "frac34", 191, "iquest", 215, "times", 247, "divide", 192, "Agrave", 193, "Aacute", 194, "Acirc", 195, "Atilde", 196, "Auml", 197, "Aring", 198, "AElig", 199, "Ccedil", 200, "Egrave", 201, "Eacute", 202, "Ecirc", 203, "Euml", 204, "Igrave", 205, "Iacute", 206, "Icirc", 207, "Iuml", 208, "ETH", 209, "Ntilde", 210, "Ograve", 211, "Oacute", 212, "Ocirc", 213, "Otilde", 214, "Ouml", 216, "Oslash", 217, "Ugrave", 218, "Uacute", 219, "Ucirc", 220, "Uuml", 221, "Yacute", 222, "THORN", 223, "szlig", 224, "agrave", 225, "aacute", 226, "acirc", 227, "atilde", 228,
 				"auml", 229, "aring", 230, "aelig", 231, "ccedil", 232, "egrave", 233, "eacute", 234, "ecirc", 235, "euml", 236, "igrave", 237, "iacute", 238, "icirc", 239, "iuml", 240, "eth", 241, "ntilde", 242, "ograve", 243, "oacute", 244, "ocirc", 245, "otilde", 246, "ouml", 248, "oslash", 249, "ugrave", 250, "uacute", 251, "ucirc", 252, "uuml", 253, "yacute", 254, "thorn", 255, "yuml" };
 		
-		dict = new NSMutableDictionary<String, String>();
+		dict = new NSMutableDictionary<>();
 		for (int i = 0; i < iso.length; i+=2) {
 			Integer charValue = ((Integer) iso[i]);
 			String key = (String) iso[i+1];
@@ -711,7 +706,7 @@ public class ERXStringUtilities {
 		Object[] symbols = new Object[] { 8704, "forall", 8706, "part", 8707, "exists", 8709, "empty", 8711, "nabla", 8712, "isin", 8713, "notin", 8715, "ni", 8719, "prod", 8721, "sum", 8722, "minus", 8727, "lowast", 8730, "radic", 8733, "prop", 8734, "infin", 8736, "ang", 8743, "and", 8744, "or", 8745, "cap", 8746, "cup", 8747, "int", 8756, "there4", 8764, "sim", 8773, "cong", 8776, "asymp", 8800, "ne", 8801, "equiv", 8804, "le", 8805, "ge", 8834, "sub", 8835, "sup", 8836, "nsub", 8838, "sube", 8839, "supe", 8853, "oplus", 8855, "otimes", 8869, "perp", 8901, "sdot", 913, "Alpha", 914, "Beta", 915, "Gamma", 916, "Delta", 917, "Epsilon", 918, "Zeta", 919, "Eta", 920, "Theta", 921, "Iota", 922, "Kappa", 923, "Lambda", 924, "Mu", 925, "Nu", 926, "Xi", 927, "Omicron", 928, "Pi", 929, "Rho", 931, "Sigma", 932, "Tau", 933, "Upsilon", 934, "Phi", 935, "Chi", 936, "Psi", 937, "Omega", 945, "alpha", 946, "beta", 947, "gamma", 948, "delta", 949, "epsilon", 950, "zeta", 951, "eta", 952, "theta",
 				953, "iota", 954, "kappa", 955, "lambda", 956, "mu", 957, "nu", 958, "xi", 959, "omicron", 960, "pi", 961, "rho", 962, "sigmaf", 963, "sigma", 964, "tau", 965, "upsilon", 966, "phi", 967, "chi", 968, "psi", 969, "omega", 977, "thetasym", 978, "upsih", 982, "piv", 338, "OElig", 339, "oelig", 352, "Scaron", 353, "scaron", 376, "Yuml", 402, "fnof", 710, "circ", 732, "tilde", 8194, "ensp", 8195, "emsp", 8201, "thinsp", 8204, "zwnj", 8205, "zwj", 8206, "lrm", 8207, "rlm", 8211, "ndash", 8212, "mdash", 8216, "lsquo", 8217, "rsquo", 8218, "sbquo", 8220, "ldquo", 8221, "rdquo", 8222, "bdquo", 8224, "dagger", 8225, "Dagger", 8226, "bull", 8230, "hellip", 8240, "permil", 8242, "prime", 8243, "Prime", 8249, "lsaquo", 8250, "rsaquo", 8254, "oline", 8364, "euro", 8482, "trade", 8592, "larr", 8593, "uarr", 8594, "rarr", 8595, "darr", 8596, "harr", 8629, "crarr", 8968, "lceil", 8969, "rceil", 8970, "lfloor", 8971, "rfloor", 9674, "loz", 9824, "spades", 9827, "clubs", 9829, "hearts",
 				9830, "diams" };
-		dict = new NSMutableDictionary<String, String>();
+		dict = new NSMutableDictionary<>();
 		for (int i = 0; i < symbols.length; i+=2) {
 			Integer charValue = ((Integer) symbols[i]);
 			String key = (String) symbols[i+1];
@@ -720,7 +715,7 @@ public class ERXStringUtilities {
 		}
 		SYMBOL_UNESCAPES = dict.immutableClone();
 
-		dict = new NSMutableDictionary<String, String>();
+		dict = new NSMutableDictionary<>();
 		dict.addEntriesFromDictionary(ISO_UNESCAPES);
 		dict.addEntriesFromDictionary(SYMBOL_UNESCAPES);
 		HTML_SAFE_UNESCAPES = dict.immutableClone();
@@ -1178,10 +1173,7 @@ public class ERXStringUtilities {
     public static String stringByTruncatingStringToByteLengthInEncoding(final String inputString, final int byteLength, final String encoding) {
         String result = null;
         
-        if ( log.isDebugEnabled() ) {
-            log.debug("stringByTruncatingStringToByteLengthInEncoding: encoding='" + encoding + "', byteLength=" +
-                      byteLength + ", inputString='" + inputString + "'");
-        }
+        log.debug("stringByTruncatingStringToByteLengthInEncoding: encoding='{}', byteLength={}, inputString='{}'", encoding, byteLength, inputString);
         
         if ( inputString != null ) {
             final byte[] bytes = toBytes(inputString, encoding);
@@ -1240,8 +1232,8 @@ public class ERXStringUtilities {
                                 // we're not expecting to get this exception.  the javadoc doesn't say
                                 // under what circumstances it happens and it would be surprising it this happened
                                 // and the conversion to byte array worked earlier.
-                                log.error("Got " + e.getClass() + " exception. byteLength=" + byteLength + ", encoding='" + encoding +
-                                          "', inputString='"+ inputString + "'.", e);
+                                log.error("Got {} exception. byteLength={}, encoding='{}', inputString='{}'.",
+                                        e.getClass(), byteLength, encoding, inputString, e);
                                 break;
                             }
                         } while ( charBuffer == null && currentLength > 0 );
@@ -1255,8 +1247,7 @@ public class ERXStringUtilities {
             }
         }
         
-        if ( log.isDebugEnabled() )
-            log.debug("stringByTruncatingStringToByteLengthInEncoding: result='" + result + "'");
+        log.debug("stringByTruncatingStringToByteLengthInEncoding: result='{}'", result);
         
         return result;
     }
@@ -1284,12 +1275,8 @@ public class ERXStringUtilities {
      * @throws IOException if the connection fails
      */
     public static String stringFromURL(URL url) throws IOException {
-    	InputStream is = url.openStream();
-    	try {
+    	try (InputStream is = url.openStream()) {
     		return ERXStringUtilities.stringFromInputStream(is);
-    	}
-    	finally {
-    		is.close();
     	}
     }
 
@@ -1303,12 +1290,8 @@ public class ERXStringUtilities {
      * @throws IOException if the connection fails
      */
     public static String stringFromURL(URL url, String encoding) throws IOException {
-    	InputStream is = url.openStream();
-    	try {
+    	try (InputStream is = url.openStream()) {
     		return ERXStringUtilities.stringFromInputStream(is, encoding);
-    	}
-    	finally {
-    		is.close();
     	}
     }
 
@@ -1597,7 +1580,7 @@ public class ERXStringUtilities {
     }
 
     private static NSDictionary<String, Object> databaseOperationAsDictionary(EODatabaseOperation op) {
-    	NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>(8);
+    	NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>(8);
     	int operator = op.databaseOperator();
     	if(operator == 0) {
     		dict.setObjectForKey("EODatabaseNothingOperator", "_databaseOperator");
@@ -1631,7 +1614,7 @@ public class ERXStringUtilities {
      * @param op
      */
     private static NSDictionary<String, Object> adaptorOperationAsDictionary(EOAdaptorOperation op) {
-    	NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+    	NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
     	int operator = op.adaptorOperator();
     	if(operator == 0) {
     		dict.setObjectForKey("EOAdaptorLockOperator", "_adaptorOperator");

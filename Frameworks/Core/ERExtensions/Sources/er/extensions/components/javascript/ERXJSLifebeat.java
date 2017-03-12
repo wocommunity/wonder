@@ -1,6 +1,7 @@
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -32,7 +33,7 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected final static Logger log=Logger.getLogger(ERXJSLifebeat.class);
+	private final static Logger log = LoggerFactory.getLogger(ERXJSLifebeat.class);
 	
 	public ERXJSLifebeat(WOContext arg0) {
 		super(arg0);
@@ -65,18 +66,18 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 			if (!application.isRefusingNewSessions()) {
 				WOSession session = application.restoreSessionWithID(sessionID, context);
 				if (session != null) {
-					log.debug("Pinging " + sessionID);
+					log.debug("Pinging {}", sessionID);
 					// CHECKME TH do we still need that?
 					// we give over the session id as we also need to touch the session anyway
 					response.setHeader(ERXSession.DONT_STORE_PAGE, sessionID);
 					response.setHeader("application/x-empty", ERXResponse.ContentTypeHeaderKey);
 				}
 				else {
-					log.debug("Couldn't ping " + sessionID);
+					log.debug("Couldn't ping {}", sessionID);
 				}
 			}
 			else {
-				log.debug("Application is refusing new sessions. Not pinging " + sessionID);
+				log.debug("Application is refusing new sessions. Not pinging {}", sessionID);
 			}
 			return response;
 		}

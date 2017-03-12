@@ -8,21 +8,20 @@ package er.testrunner;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestFailure;
 import junit.runner.BaseTestRunner;
-
-import org.apache.log4j.Logger;
 
 /**
  * Used for running a batch of tests.
  */
 
 public class ERXBatchTestInterface implements ERXTestListener {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXBatchTestInterface.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXBatchTestInterface.class);
 
     public static final boolean SHOW_EXCEPTIONS=true;
     public static final boolean HIDE_EXCEPTIONS=false;

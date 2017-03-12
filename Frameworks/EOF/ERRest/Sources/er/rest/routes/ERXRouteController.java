@@ -8,7 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
@@ -86,7 +87,7 @@ import er.rest.util.ERXRestTransactionRequestAdaptor;
  * @author mschrag
  */
 public class ERXRouteController extends WODirectAction {
-	protected static final Logger log = Logger.getLogger(ERXRouteController.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXRouteController.class);
 
 	private ERXRouteRequestHandler _requestHandler;
 	private ERXRoute _route;
@@ -151,7 +152,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	protected boolean isKeyPathRequested(String keyPath) {
 		if (_prefetchingKeyPaths == null) {
-			NSMutableSet<String> prefetchingKeyPaths = new NSMutableSet<String>();
+			NSMutableSet<String> prefetchingKeyPaths = new NSMutableSet<>();
 			NSKeyValueCoding options = options();
 			if (options != null) {
 				String prefetchingKeyPathsStr = (String) options.valueForKey("prefetchingKeyPaths");
@@ -416,7 +417,6 @@ public class ERXRouteController extends WODirectAction {
 		ERXRestFormat format = _format;
 		if (format == null) {
 			String type = null;
-			@SuppressWarnings("unchecked")
 			NSDictionary<String, Object> userInfo = request().userInfo();
 			if (userInfo != null) {
 				type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
@@ -875,7 +875,7 @@ public class ERXRouteController extends WODirectAction {
 			((ERXRouteResults)results).setHeaderForKey(value, key);
 		}
 		else {
-			ERXRouteController.log.info("Unable to set a header on an action results of type '" + results.getClass().getName() + "'.");
+			log.info("Unable to set a header on an action results of type '{}'.", results.getClass().getName());
 		}
 	}
 	
@@ -1158,7 +1158,7 @@ public class ERXRouteController extends WODirectAction {
 		} else {
 			response.setHeader("application/json", "Content-Type");			
 		}
-		log.error("Request failed: " + request().uri(), t);
+		log.error("Request failed: {}", request().uri(), t);
 		return response;
 	}
 
@@ -1175,7 +1175,7 @@ public class ERXRouteController extends WODirectAction {
 		String formattedErrorMessage = format().toString(errorMessage, null, null);
 		WOResponse response = stringResponse(formattedErrorMessage);
 		response.setStatus(status);
-		log.error("Request failed: " + request().uri() + ", " + errorMessage);
+		log.error("Request failed: {}, {}", request().uri(), errorMessage);
 		return response;
 	}
 	
@@ -1188,7 +1188,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOActionResults errorResponse(int status) {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
 		response.setStatus(status);
-		log.error("Request failed: " + request().uri() + ", " + status);
+		log.error("Request failed: {}, {}", request().uri(), status);
 		return response;
 	}
 
@@ -1437,17 +1437,17 @@ public class ERXRouteController extends WODirectAction {
 			try {
 				results = pageWithName(pageName);
 				if (!(results instanceof IERXRouteComponent)) {
-					log.error(pageName + " does not implement IERXRouteComponent, so it will be ignored.");
+					log.error("{} does not implement IERXRouteComponent, so it will be ignored.", pageName);
 					results = null;
 				}
 			}
 			catch (WOPageNotFoundException e) {
-				log.info(pageName + " does not exist, falling back to route controller.");
+				log.info("{} does not exist, falling back to route controller.", pageName);
 				results = null;
 			}
 		}
 		else {
-			log.info(pageName + " does not exist, falling back to route controller.");
+			log.info("{} does not exist, falling back to route controller.", pageName);
 		}
 		
 		if (results == null && shouldFailOnMissingHtmlPage()) {
@@ -1489,7 +1489,7 @@ public class ERXRouteController extends WODirectAction {
         		}
         		if (nameMatches) {
         			int parameterCount = 0;
-		        	List<Annotation> params = new LinkedList<Annotation>();
+		        	List<Annotation> params = new LinkedList<>();
         			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
         				for (Annotation parameterAnnotation : parameterAnnotations) {
         					if (parameterAnnotation instanceof PathParam || parameterAnnotation instanceof QueryParam || parameterAnnotation instanceof CookieParam || parameterAnnotation instanceof HeaderParam) {
@@ -1709,7 +1709,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		NSArray<String> accessControlAllowRequestMethods = null;
 		if (accessControlAllowRequestMethodsStr != null) {
-			accessControlAllowRequestMethods = new NSArray<String>(accessControlAllowRequestMethodsStr.split(","));
+			accessControlAllowRequestMethods = new NSArray<>(accessControlAllowRequestMethodsStr.split(","));
 		}
 		return accessControlAllowRequestMethods;
 	}
@@ -1726,7 +1726,7 @@ public class ERXRouteController extends WODirectAction {
 		String accessControlAllowRequestHeadersStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestHeaders", requestHeadersStr);
 		NSArray<String> accessControlAllowRequestHeaders = null;
 		if (accessControlAllowRequestHeadersStr != null) {
-			accessControlAllowRequestHeaders = new NSArray<String>(accessControlAllowRequestHeadersStr.split(","));
+			accessControlAllowRequestHeaders = new NSArray<>(accessControlAllowRequestHeadersStr.split(","));
 		}
 		return accessControlAllowRequestHeaders;
 	}
@@ -1885,7 +1885,7 @@ public class ERXRouteController extends WODirectAction {
 	protected static void _registerControllerForRequest(ERXRouteController controller, WORequest request) {
 		NSMutableArray<ERXRouteController> controllers = _controllersForRequest(request);
 		if (controllers == null) {
-			controllers = new NSMutableArray<ERXRouteController>();
+			controllers = new NSMutableArray<>();
 			if (request != null) {
 				NSMutableDictionary<String, Object> userInfo = ((ERXRequest)request).mutableUserInfo();
 				userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);

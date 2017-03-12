@@ -14,6 +14,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -25,15 +26,29 @@ import er.extensions.foundation.ERXStringUtilities;
 public class ERXDatabase extends EODatabase {
 	public static final String SnapshotCacheChanged = "SnapshotCacheChanged";
 	public static final String CacheChangeKey = "CacheChange";
-	
+	protected static int SnapshotCacheMapInitialCapacity = 1048576;
+	protected static float SnapshotCacheMapInitialLoadFactor = 0.75f;
+
 	private boolean _globalIDChanged;
 	private boolean _decrementSnapshot;
 
+	public static void setSnapshotCacheMapInitialCapacity( int capacity ) {
+		NSLog.out.appendln( "Setting SnapshotCacheMapInitialCapacity = " + capacity );
+		SnapshotCacheMapInitialCapacity = capacity;
+	}
+	
+	public static void setSnapshotCacheMapInitialLoadFactor( float loadFactor ) {
+		NSLog.out.appendln( "Setting SnapshotCacheMapInitialLoadFactor = " + loadFactor );
+		SnapshotCacheMapInitialLoadFactor = loadFactor;
+	}
+	
 	public ERXDatabase(EOAdaptor adaptor) {
 		super(adaptor);
 
 		// AK: huge performance optimization when you use badly distributed LONG keys
 
+		NSLog.out.appendln( "Using SnapshotCacheMapInitialCapacity = " + SnapshotCacheMapInitialCapacity );
+		NSLog.out.appendln( "Using SnapshotCacheMapInitialLoadFactor = " + SnapshotCacheMapInitialLoadFactor );
 		_snapshots = new NSMutableDictionary() {
 			/**
 			 * Do I need to update serialVersionUID?
@@ -42,7 +57,7 @@ public class ERXDatabase extends EODatabase {
 			 */
 			private static final long serialVersionUID = 1L;
 
-			Map hashMap = new HashMap();
+			Map hashMap = new HashMap( SnapshotCacheMapInitialCapacity, SnapshotCacheMapInitialLoadFactor );
 
 			@Override
 			public Object objectForKey(Object key) {
@@ -68,6 +83,16 @@ public class ERXDatabase extends EODatabase {
 			public NSArray allKeys() {
 				return new NSArray(hashMap.keySet());
 			}
+
+			@Override
+			public int size() {
+				return hashMap.size();
+			}
+
+			@Override
+			public int count() {
+				return hashMap.size();
+			}
 		};
 	}
 
@@ -83,6 +108,10 @@ public class ERXDatabase extends EODatabase {
 			addModel(model);
 		}
 		_database.dispose();
+	}
+
+	public int snapshotCacheSize() {
+		return _snapshots.size();
 	}
 
 	public synchronized void _notifyCacheChange(CacheChange cacheChange) {

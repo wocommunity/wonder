@@ -16,7 +16,7 @@ import java.util.Map;
  * </div>
  * 
  * <pre>{@code
- * NSMutableDictionary<String, String> env = new NSMutableDictionary<String, String>(System.getenv(), true);
+ * NSMutableDictionary<String, String> env = new NSMutableDictionary<>(System.getenv(), true);
  * 
  * for (String key : env)
  * 	logger.debug(env.valueForKey(key));

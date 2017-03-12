@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXParseException;
 
 import com.webobjects.appserver.WOContext;
@@ -34,7 +35,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	private static final long serialVersionUID = 1L;
 
 	/** logging support */
-	private static final Logger log = Logger.getLogger(EGWrapper.class);
+	private static final Logger log = LoggerFactory.getLogger(EGWrapper.class);
     
 	private String _fileName;
 	private NSDictionary _styles;
@@ -92,9 +93,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 
             String contentString = newResponse.contentString();
             contentString = contentString.replaceAll("&nbsp;", "");
-            if (log.isDebugEnabled()) {
-                log.debug("Converting content string:\n" + contentString);
-            }
+            log.debug("Converting content string:\n{}", contentString);
             byte[] bytes;
             try {
                 bytes = contentString.getBytes(CharEncoding.UTF_8);
@@ -103,7 +102,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
             }
             InputStream stream = new ByteArrayInputStream(bytes);
 
-            EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
+            EGSimpleTableParser parser = parser(stream);
             try {
 	            NSData data = parser.data();
 	            if((hasBinding("data") && canSetValueForBinding("data")) ||
@@ -119,7 +118,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	            } else {
 	                String fileName = fileName();
 	                if(fileName == null) {
-	                    fileName = "results.xls";
+	                    fileName = defaultFilename();
 	                }
 	                
 	                response.disableClientCaching();
@@ -127,7 +126,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
 	
 	                response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
-	                response.setHeader("application/vnd.ms-excel", "content-type");
+	                response.setHeader(contentType(), "content-type");
 	            }
     		} catch (Exception ex) {
     			if (ex.getCause() instanceof SAXParseException) {
@@ -165,5 +164,17 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 			if (endIndex != -1) out +=  (i++) + " ";
 		}
 		return out;
+	}
+	
+	protected String defaultFilename() {
+		return "results.xls";
+	}
+	
+	protected String contentType() {
+		return "application/vnd.ms-excel";
+	}
+	
+	protected EGSimpleTableParser parser(InputStream stream) {
+		return new EGSimpleTableParser(stream, fonts(), styles());
 	}
 }

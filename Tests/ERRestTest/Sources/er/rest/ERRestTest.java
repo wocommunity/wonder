@@ -1,7 +1,14 @@
 package er.rest;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
@@ -14,6 +21,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXEC;
@@ -27,15 +35,21 @@ import er.rest.model.Car;
 import er.rest.model.Company;
 import er.rest.model.Manufacturer;
 import er.rest.model.Person;
+import er.rest.utils.ERXEONoIdRestDelegate;
 
 public class ERRestTest extends TestCase {
     private EOObjectStoreCoordinator _osc;
 
     @Override
     public void setUp() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        NSTimeZone.setDefaultTimeZone(NSTimeZone.timeZoneWithName("UTC", true));
         System.setProperty("NSProjectBundleEnabled", "true");
         System.setProperty("NSPropertiesInitializationWarning", "false");
         NSBundle.mainBundle();
+
+        // register special that excludes the id attribute for EOs
+        IERXRestDelegate.Factory.setDefaultDelegate(new ERXEONoIdRestDelegate());
 
         EOObjectStoreCoordinator osc = new EOObjectStoreCoordinator();
         // EOEditingContext editingContext = ERXEC.newEditingContext(osc);
@@ -84,7 +98,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"Name\":\"Mike\"}\n", output);
@@ -94,7 +108,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToPlist() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.plist().toString(dict);
         assertEquals("{\n\t\"Name\" = \"Mike\";\n}\n", output);
@@ -104,13 +118,17 @@ public class ERRestTest extends TestCase {
     }
 
     public void testDictionaryToXML() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey("Mike", "Name");
         String output = ERXRestFormat.xml().toString(dict);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <Name>Mike</Name>\n</NSDictionary>\n", output);
+    }
 
-        Object parsedDict = ERXRestFormat.xml().parse(output).createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-        assertEquals(dict, parsedDict);
+    public void testXMLToDictionary() {
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "Name");
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><Name>Mike</Name></NSDictionary>";
+        Object result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+        assertEquals(dict, result);
     }
 
     public void testNullToJSON() {
@@ -125,8 +143,15 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitiveArrayToJSON() {
-        String output = ERXRestFormat.json().toString(null, new NSArray<String>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+        String output = ERXRestFormat.json().toString(null, new NSArray<>(new String[] { "a", "b", "c" }), ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
         assertEquals("[\"a\",\"b\",\"c\"]\n", output);
+    }
+
+    public void testJSONToPrimitiveArray() {
+        NSArray<String> array = new NSArray<>(new String[] { "a", "b", "c" });
+        String json = "[\"a\",\"b\",\"c\"]";
+        Object result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+        assertEquals(array, result);
     }
 
     public void testPrimitiveToJSON() {
@@ -143,23 +168,142 @@ public class ERRestTest extends TestCase {
     }
 
     public void testPrimitivesToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
-        dict.setObjectForKey("Mike", "String");
-        dict.setObjectForKey(Integer.valueOf(32), "int");
-        dict.setObjectForKey(Boolean.TRUE, "boolean");
-        dict.setObjectForKey(Long.valueOf(100000000000L), "long");
-        dict.setObjectForKey(Short.valueOf((short) 100), "short");
-        dict.setObjectForKey(Float.valueOf(100.5f), "float");
-        dict.setObjectForKey(Double.valueOf(100.5), "double");
-        dict.setObjectForKey(new NSTimestamp(1301584117085L), "timestamp");
-        dict.setObjectForKey(new Date(1301584117085L), "date");
-        dict.setObjectForKey(NSKeyValueCoding.NullValue, "nullValue");
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "String");
         String output = ERXRestFormat.json().toString(dict);
-        assertEquals("{\"int\":32,\"date\":\"2011-03-31T11:08:37Z\",\"double\":100.5,\"long\":100000000000,\"nullValue\":null,\"short\":100,\"boolean\":true,\"timestamp\":\"2011-03-31T11:08:37Z\",\"float\":100.5,\"String\":\"Mike\"}\n", output);
+        assertEquals("{\"String\":\"Mike\"}\n", output);
+
+        dict = new NSDictionary<>(Integer.valueOf(32), "int");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"int\":32}\n", output);
+
+        dict = new NSDictionary<>(Boolean.TRUE, "boolean");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"boolean\":true}\n", output);
+
+        dict = new NSDictionary<>(Long.valueOf(100000000000L), "long");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"long\":100000000000}\n", output);
+
+        dict = new NSDictionary<>(Short.valueOf((short) 100), "short");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"short\":100}\n", output);
+
+        dict = new NSDictionary<>(Float.valueOf(100.5f), "float");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"float\":100.5}\n", output);
+
+        dict = new NSDictionary<>(Double.valueOf(100.5), "double");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"double\":100.5}\n", output);
+
+        dict = new NSDictionary<>(new NSTimestamp(1301584117085L), "timestamp");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"timestamp\":\"2011-03-31T15:08:37Z\"}\n", output);
+
+        dict = new NSDictionary<>(new Date(1301584117085L), "date");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"date\":\"2011-03-31T15:08:37Z\"}\n", output);
+
+        dict = new NSDictionary<>(NSKeyValueCoding.NullValue, "nullValue");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"nullValue\":null}\n", output);
+
+        dict = new NSDictionary<>(LocalDate.of(2016, Month.AUGUST, 1), "localDate");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"localDate\":\"2016-08-01\"}\n", output);
+
+        dict = new NSDictionary<>(LocalDateTime.of(2016, Month.AUGUST, 1, 12, 5, 8), "localDateTime");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"localDateTime\":\"2016-08-01T12:05:08\"}\n", output);
+
+        dict = new NSDictionary<>(LocalTime.of(12, 5, 8), "localTime");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"localTime\":\"12:05:08\"}\n", output);
+
+        dict = new NSDictionary<>(OffsetDateTime.of(2016, 8, 1, 12, 5, 8, 0, ZoneOffset.UTC), "offsetDateTime");
+        output = ERXRestFormat.json().toString(dict);
+        assertEquals("{\"offsetDateTime\":\"2016-08-01T12:05:08Z\"}\n", output);
+    }
+
+    public void testJSONToPrimitives() {
+        ERXKeyFilter filter = ERXKeyFilter.filterWithAllRecursive();
+        ERXRestContext context = new ERXRestContext();
+        
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "String");
+        String json = "{\"String\":\"Mike\"}";
+        Object result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Integer.valueOf(32), "int");
+        json = "{\"int\":32}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Boolean.TRUE, "boolean");
+        json = "{\"boolean\":true}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Long.valueOf(100000000000L), "long");
+        json = "{\"long\":100000000000}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Short.valueOf((short) 100), "short");
+        json = "{\"short\":100}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // value is interpreted as Integer instead of Short
+        assertEquals(new NSDictionary<>(Integer.valueOf(100), "short"), result);
+
+        dict = new NSDictionary<>(Float.valueOf(100.5f), "float");
+        json = "{\"float\":100.5}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // value is interpreted as Double instead of Float
+        assertEquals(new NSDictionary<>(Double.valueOf(100.5), "float"), result);
+
+        dict = new NSDictionary<>(Double.valueOf(100.5), "double");
+        json = "{\"double\":100.5}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(new NSTimestamp(1301584117085L), "timestamp");
+        json = "{\"timestamp\":\"2011-03-31T15:08:37Z\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
+
+        dict = new NSDictionary<>(new Date(1301584117085L), "date");
+        json = "{\"date\":\"2011-03-31T15:08:37Z\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
+
+        dict = new NSDictionary<>(NSKeyValueCoding.NullValue, "nullValue");
+        json = "{\"nullValue\":null}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        assertEquals(new NSDictionary<>(), result); // null values are dropped
+
+        dict = new NSDictionary<>(LocalDate.of(2016, Month.AUGUST, 1), "localDate");
+        json = "{\"localDate\":\"2016-08-01\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
+
+        dict = new NSDictionary<>(LocalDateTime.of(2016, Month.AUGUST, 1, 12, 5, 8), "localDateTime");
+        json = "{\"localDateTime\":\"2016-08-01T12:05:08\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
+
+        dict = new NSDictionary<>(LocalTime.of(12, 5, 8), "localTime");
+        json = "{\"localTime\":\"12:05:08\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
+
+        dict = new NSDictionary<>(OffsetDateTime.of(2016, 8, 1, 12, 5, 8, 0, ZoneOffset.UTC), "offsetDateTime");
+        json = "{\"offsetDateTime\":\"2016-08-01T12:05:08Z\"}";
+        result = ERXRestFormat.json().parse(json).createObjectWithFilter(null, filter, context);
+        //assertEquals(dict, result); // String value is not interpreted as date
     }
 
     public void testArrayOfStringsToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey(new NSArray<String>(new String[] { "a", "b", "c" }), "array");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"array\":[\"a\",\"b\",\"c\"]}\n", output);
@@ -169,7 +313,7 @@ public class ERRestTest extends TestCase {
     }
 
     public void testArrayOfIntegersToJSON() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
+        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<>();
         dict.setObjectForKey(new NSArray<Integer>(new Integer[] { Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3) }), "array");
         String output = ERXRestFormat.json().toString(dict);
         assertEquals("{\"array\":[1,2,3]}\n", output);
@@ -180,64 +324,158 @@ public class ERRestTest extends TestCase {
 
     // MS: plist in WO quotes everything, even numbers ... it's pretty messed up
     public void testPrimitivesToPlist() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
-        dict.setObjectForKey("Mike", "String");
-        dict.setObjectForKey(Integer.valueOf(32), "int");
-        dict.setObjectForKey(Boolean.TRUE, "boolean");
-        dict.setObjectForKey(Long.valueOf(100000000000L), "long");
-        dict.setObjectForKey(Short.valueOf((short) 100), "short");
-        dict.setObjectForKey(Float.valueOf(100.5f), "float");
-        dict.setObjectForKey(Double.valueOf(100.5), "double");
-        dict.setObjectForKey(new NSTimestamp(1301584117085L), "timestamp");
-        dict.setObjectForKey(new Date(1301584117085L), "date");
-        dict.setObjectForKey(NSKeyValueCoding.NullValue, "nullValue");
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "String");
         String output = ERXRestFormat.plist().toString(dict);
-        assertEquals("{\n" + 
-        		"\t\"double\" = \"100.5\";\n" + 
-        		"\t\"float\" = \"100.5\";\n" + 
-        		"\t\"timestamp\" = \"2011-03-31 15:08:37 Etc/GMT\";\n" + 
-        		"\t\"boolean\" = \"true\";\n" + 
-        		"\t\"short\" = \"100\";\n" + 
-        		"\t\"nullValue\" = \"<com.webobjects.foundation.NSKeyValueCoding$Null>\";\n" + 
-        		"\t\"long\" = \"100000000000\";\n" + 
-        		"\t\"String\" = \"Mike\";\n" + 
-        		"\t\"date\" = \"Thu Mar 31 11:08:37 EDT 2011\";\n" + 
-        		"\t\"int\" = \"32\";\n" + 
-        		"}\n", output);
+        assertEquals("{\n\t\"String\" = \"Mike\";\n}\n", output);
+
+        dict = new NSDictionary<>(Integer.valueOf(32), "int");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"int\" = \"32\";\n}\n", output);
+
+        dict = new NSDictionary<>(Boolean.TRUE, "boolean");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"boolean\" = \"true\";\n}\n", output);
+
+        dict = new NSDictionary<>(Long.valueOf(100000000000L), "long");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"long\" = \"100000000000\";\n}\n", output);
+
+        dict = new NSDictionary<>(Short.valueOf((short) 100), "short");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"short\" = \"100\";\n}\n", output);
+
+        dict = new NSDictionary<>(Float.valueOf(100.5f), "float");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"float\" = \"100.5\";\n}\n", output);
+
+        dict = new NSDictionary<>(Double.valueOf(100.5), "double");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"double\" = \"100.5\";\n}\n", output);
+
+        dict = new NSDictionary<>(new NSTimestamp(1301584117085L), "timestamp");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"timestamp\" = \"2011-03-31 15:08:37 Etc/GMT\";\n}\n", output);
+
+        dict = new NSDictionary<>(new Date(1301584117085L), "date");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"date\" = \"Thu Mar 31 15:08:37 UTC 2011\";\n}\n", output);
+
+        dict = new NSDictionary<>(NSKeyValueCoding.NullValue, "nullValue");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"nullValue\" = \"<com.webobjects.foundation.NSKeyValueCoding$Null>\";\n}\n", output);
+
+        dict = new NSDictionary<>(LocalDate.of(2016, Month.AUGUST, 1), "localDate");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"localDate\" = \"2016-08-01\";\n}\n", output);
+
+        dict = new NSDictionary<>(LocalDateTime.of(2016, Month.AUGUST, 1, 12, 5, 8), "localDateTime");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"localDateTime\" = \"2016-08-01T12:05:08\";\n}\n", output);
+
+        dict = new NSDictionary<>(LocalTime.of(12, 5, 8), "localTime");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"localTime\" = \"12:05:08\";\n}\n", output);
+
+        dict = new NSDictionary<>(OffsetDateTime.of(2016, 8, 1, 12, 5, 8, 0, ZoneOffset.UTC), "offsetDateTime");
+        output = ERXRestFormat.plist().toString(dict);
+        assertEquals("{\n\t\"offsetDateTime\" = \"2016-08-01T12:05:08Z\";\n}\n", output);
     }
 
     public void testPrimitivesToXML() {
-        NSMutableDictionary<String, Object> dict = new NSMutableDictionary<String, Object>();
-        dict.setObjectForKey("Mike", "String");
-        dict.setObjectForKey(Integer.valueOf(32), "int");
-        dict.setObjectForKey(Boolean.TRUE, "boolean");
-        dict.setObjectForKey(Long.valueOf(100000000000L), "long");
-        dict.setObjectForKey(Short.valueOf((short) 100), "short");
-        dict.setObjectForKey(Float.valueOf(100.5f), "float");
-        dict.setObjectForKey(Double.valueOf(100.5), "double");
-        dict.setObjectForKey(new NSTimestamp(1301584117000L), "timestamp"); // MS: originally was 1301584117085L, but timestamps lose their millis
-        dict.setObjectForKey(new Date(1301584117000L), "date");
-        dict.setObjectForKey(NSKeyValueCoding.NullValue, "nullValue");
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "String");
         String output = ERXRestFormat.xml().toString(dict);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n" + 
-        		"  <int type = \"integer\">32</int>\n" + 
-        		"  <date type = \"datetime\">2011-03-31T11:08:37Z</date>\n" + 
-        		"  <double type = \"double\">100.5</double>\n" + 
-        		"  <long type = \"long\">100000000000</long>\n" + 
-        		"  <nullValue nil=\"true\"/>\n" + 
-        		"  <short type = \"short\">100</short>\n" + 
-        		"  <boolean type = \"boolean\">true</boolean>\n" + 
-        		"  <timestamp type = \"datetime\">2011-03-31T11:08:37Z</timestamp>\n" + 
-        		"  <float type = \"float\">100.5</float>\n" + 
-        		"  <String>Mike</String>\n" + 
-        		"</NSDictionary>\n" + 
-        		"", output);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <String>Mike</String>\n</NSDictionary>\n", output);
 
-        @SuppressWarnings("unchecked")
-        NSDictionary<String, Object> parsedDict = (NSDictionary<String, Object>) ERXRestFormat.xml().parse(output).createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-        dict.removeObjectForKey("nullValue"); // MS: we don't get an NSNull back, because dictionary.takeValueForKey(.. null) removes the key ...
-        dict.setObjectForKey(dict.objectForKey("timestamp"), "date"); // MS: dates come back and turn into NSTimestamps
-        assertEquals(dict, parsedDict);
+        dict = new NSDictionary<>(Integer.valueOf(32), "int");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <int type = \"integer\">32</int>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(Boolean.TRUE, "boolean");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <boolean type = \"boolean\">true</boolean>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(Long.valueOf(100000000000L), "long");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <long type = \"long\">100000000000</long>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(Short.valueOf((short) 100), "short");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <short type = \"short\">100</short>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(Float.valueOf(100.5f), "float");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <float type = \"float\">100.5</float>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(Double.valueOf(100.5), "double");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <double type = \"double\">100.5</double>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(new NSTimestamp(1301584117000L), "timestamp"); // MS: originally was 1301584117085L, but timestamps lose their millis
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <timestamp type = \"datetime\">2011-03-31T15:08:37Z</timestamp>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(new Date(1301584117000L), "date");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <date type = \"datetime\">2011-03-31T15:08:37Z</date>\n</NSDictionary>\n", output);
+
+        dict = new NSDictionary<>(NSKeyValueCoding.NullValue, "nullValue");
+        output = ERXRestFormat.xml().toString(dict);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NSDictionary type=\"NSDictionary\">\n  <nullValue nil=\"true\"/>\n</NSDictionary>\n", output);
+    }
+
+    public void testXMLToPrimitives() {
+        ERXKeyFilter filter = ERXKeyFilter.filterWithAllRecursive();
+        ERXRestContext context = new ERXRestContext();
+
+        NSDictionary<String, Object> dict = new NSDictionary<>("Mike", "String");
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><String>Mike</String></NSDictionary>";
+        Object result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Integer.valueOf(32), "int");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><int type = \"integer\">32</int></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Boolean.TRUE, "boolean");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><boolean type = \"boolean\">true</boolean></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Long.valueOf(100000000000L), "long");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><long type = \"long\">100000000000</long></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Short.valueOf((short) 100), "short");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><short type = \"short\">100</short></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Float.valueOf(100.5f), "float");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><float type = \"float\">100.5</float></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(Double.valueOf(100.5), "double");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><double type = \"double\">100.5</double></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(new NSTimestamp(1301584117000L), "timestamp"); // MS: originally was 1301584117085L, but timestamps lose their millis
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><timestamp type = \"datetime\">2011-03-31T15:08:37Z</timestamp></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(new Date(1301584117000L), "date");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><date type = \"datetime\">2011-03-31T15:08:37Z</date></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(dict, result);
+
+        dict = new NSDictionary<>(NSKeyValueCoding.NullValue, "nullValue");
+        xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><NSDictionary type=\"NSDictionary\"><nullValue nil=\"true\"/></NSDictionary>";
+        result = ERXRestFormat.xml().parse(xml).createObjectWithFilter(null, filter, context);
+        assertEquals(new NSDictionary<>(), result); // MS: we don't get an NSNull back, because dictionary.takeValueForKey(.. null) removes the key ...
     }
 
     public void testEOWithAttributesFilterToJSON() {
@@ -257,8 +495,8 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Person> ps = new NSArray<Person>(Person.createPerson(editingContext, "Mike"));
-            ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
+            NSArray<Person> ps = new NSArray<>(Person.createPerson(editingContext, "Mike"));
+            ERXRestFormat format = new ERXRestFormat("xml", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
             assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<people type=\"array\">\n" + "  <person type=\"person\">\n" + "    <age nil=\"true\"/>\n" + "    <name>Mike</name>\n" + "    <salary nil=\"true\"/>\n" + "  </person>\n" + "</people>\n", format.toString(EOClassDescription.classDescriptionForEntityName(Person.ENTITY_NAME), ps, ERXKeyFilter.filterWithAttributes(), new ERXRestContext(editingContext)));
 
             Person p = Person.createPerson(editingContext, "Mike");
@@ -309,7 +547,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true, true));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -325,7 +563,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", false, true, true, true, true));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -341,7 +579,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", false, true, true, false, true));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -357,7 +595,7 @@ public class ERRestTest extends TestCase {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
-            NSArray<Company> cs = new NSArray<Company>(Company.createCompany(editingContext, "Mike"));
+            NSArray<Company> cs = new NSArray<>(Company.createCompany(editingContext, "Mike"));
             ERXRestFormat format = new ERXRestFormat("json", new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", false, true, true, false, false));
             ERXKeyFilter filter = ERXKeyFilter.filterWithAttributes();
             filter.include("nonModelAttribute");
@@ -389,12 +627,25 @@ public class ERRestTest extends TestCase {
         }
     }
 
-    public void testSimpleEO() {
+    public void testSimpleEOAndJSON() {
         EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
         editingContext.lock();
         try {
             Company c = Company.createCompany(editingContext, "Company");
             assertEquals("{\"type\":\"Company\",\"name\":\"Company\",\"revenue\":null,\"employees\":[]}\n", ERXRestFormat.json().toString(c));
+        }
+        finally {
+            editingContext.unlock();
+            editingContext.dispose();
+        }
+    }
+
+    public void testSimpleEOAndXML() {
+        EOEditingContext editingContext = ERXEC.newEditingContext(_osc);
+        editingContext.lock();
+        try {
+            Company c = Company.createCompany(editingContext, "Company");
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<Company type=\"Company\">\n" + "  <name>Company</name>\n" + "  <revenue nil=\"true\"/>\n" + "  <employees type=\"Person\">\n" + "  </employees>\n" + "</Company>\n", ERXRestFormat.xml().toString(c));
         }
         finally {
             editingContext.unlock();
@@ -547,8 +798,8 @@ public class ERRestTest extends TestCase {
     }
 
     public void testMap() {
-        LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
-        LinkedHashMap<String, Object> message = new LinkedHashMap<String, Object>();
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> message = new LinkedHashMap<>();
         message.put("subject", "this is a subject");
         message.put("message", "this is a message");
         message.put("priority", Integer.valueOf(10));

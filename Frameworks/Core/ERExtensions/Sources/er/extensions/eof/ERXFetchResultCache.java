@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -42,7 +43,7 @@ public class ERXFetchResultCache {
 		}
 	};
 	
-	private static final Logger log = Logger.getLogger(ERXFetchResultCache.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXFetchResultCache.class);
 	
 	/**
 	 * Returns an array of EOs that where cached for the given fetch specification or null.
@@ -57,7 +58,7 @@ public class ERXFetchResultCache {
 			NSArray result = null;
 			
 			if(gids != null) {
-				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>(gids.count());
+				NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<>(gids.count());
 				EODatabase database = dbc.database();
 				for (EOGlobalID gid : gids) {
 					NSDictionary snapshotForGlobalID = database.snapshotForGlobalID(gid);
@@ -74,7 +75,7 @@ public class ERXFetchResultCache {
 			currentDatabase = null;
 			if(log.isDebugEnabled()) {
 				boolean hit = result != null;
-				log.info("Cache : " + (hit ? "HIT" : "MISS") + " on " + fs.entityName());
+				log.info("Cache: {} on {}", hit ? "HIT" : "MISS", fs.entityName());
 			}
 			return result;			
 		}
@@ -127,7 +128,7 @@ public class ERXFetchResultCache {
 				cache.setObjectForKeyWithVersion(gids, identifier, null, cacheTime);
 			}
 			if(log.isDebugEnabled()) {
-				log.debug("Cache : " + (cacheTime > 0 ? "SET" : "DROP") + " on " + fs.entityName());
+				log.debug("Cache: {} on {}", cacheTime > 0 ? "SET" : "DROP", fs.entityName());
 			}
 			currentDatabase = null;
 		}

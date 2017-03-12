@@ -39,8 +39,6 @@ import er.extensions.foundation.ERXProperties;
  */
 
 public class CCGoogleMap extends AjaxDynamicElement {
-    //private static Logger log = Logger.getLogger(CCGoogleMap.class);
-	
     private WOAssociation _elementId;
     private WOAssociation _elementClass;
     private WOAssociation _elementStyle;

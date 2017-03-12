@@ -70,7 +70,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
   }
   
   @Override
-  public NSDictionary _newPrimaryKey(EOEnterpriseObject object, EOEntity entity) {
+  public NSDictionary<String, Object> _newPrimaryKey(EOEnterpriseObject object, EOEntity entity) {
     EREntityStore store = _entityStoreForEntity(entity, false);
     NSArray pkAttributes = entity.primaryKeyAttributes();
     if (pkAttributes.count() > 1) {
@@ -107,7 +107,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
         throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
       }
     }
-    NSDictionary pk = new NSDictionary<String, Object>(pkValue, pkAttribute.name());
+    NSDictionary<String, Object> pk = new NSDictionary<>(pkValue, pkAttribute.name());
     return pk;
   }
 

@@ -12,13 +12,13 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -26,15 +26,12 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXEnterpriseObject;
 import er.extensions.eof.ERXReplicableInterface;
 
@@ -44,9 +41,7 @@ import er.extensions.eof.ERXReplicableInterface;
  * split into more meaning full groups of utility methods.
  */
 public class ERXUtilities {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXUtilities.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXUtilities.class);
 
     /**
      * Utility method for returning all of the primary keys for
@@ -155,7 +150,7 @@ public class ERXUtilities {
             if (bundle.name() != null)
                 frameworkNames.addObject(bundle.name());
             else
-                log.warn("Null framework name for bundle: " + bundle);
+                log.warn("Null framework name for bundle: {}", bundle);
         }
         return frameworkNames;
     }
@@ -189,7 +184,7 @@ public class ERXUtilities {
         EOEntity entity = null;
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
-            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<String, EOEntity>();
+            	NSMutableDictionary<String, EOEntity>entityNameDict = new NSMutableDictionary<>();
                 for (Enumeration<EOEntity> e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
                     EOEntity anEntity = e.nextElement();
                     entityNameDict.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
@@ -283,19 +278,6 @@ public class ERXUtilities {
     public static interface BooleanCallback {
         public boolean invoke(Object ctx);
     }
-
-    /** @deprecated use {@link NSTimestamp#DistantFuture} */
-    @Deprecated
-    public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());
-    /** @deprecated use {@link NSTimestamp#DistantFuture} */
-    @Deprecated
-    public static NSTimestamp distantFuture() { return DISTANT_FUTURE; }
-    /** @deprecated use {@link NSTimestamp#DistantPast} */
-    @Deprecated
-    public static final NSTimestamp DISTANT_PAST = new NSTimestamp(1000,1,1,1,1,1,TimeZone.getDefault());
-    /** @deprecated use {@link NSTimestamp#DistantPast} */
-    @Deprecated
-    public static NSTimestamp distantPast() { return DISTANT_PAST; }
 
     /**
      * Gets rid of all ' from a String.

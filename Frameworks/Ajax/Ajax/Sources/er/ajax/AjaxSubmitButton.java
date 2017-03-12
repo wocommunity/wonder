@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -24,6 +25,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding id the HTML ID of this submit button
  * @binding class the HTML class of this submit button
  * @binding style the HTML style of this submit button
+ * @binding tabindex tab index of this submit button
  * @binding title the HTML title of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
@@ -74,7 +76,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
   public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
-  public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
+  public AjaxSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
     super(name, associations, children);
   }
 
@@ -92,7 +94,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
   public NSMutableDictionary createAjaxOptions(WOComponent component) {
 	// PROTOTYPE OPTIONS
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
@@ -154,7 +156,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       formReference = "document." + formName;
     }
     
-    StringBuffer onClickBuffer = new StringBuffer();
+    StringBuilder onClickBuffer = new StringBuilder();
 
 	String onClickBefore = (String)valueForBinding("onClickBefore", component);
 	if (onClickBefore != null) {
@@ -276,6 +278,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	    appendTagAttributeToResponse(response, "tabindex", valueForBinding("tabindex", component));
 	    appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
     	if (functionName == null) {
     		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());

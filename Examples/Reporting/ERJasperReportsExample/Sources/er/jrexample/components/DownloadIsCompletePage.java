@@ -1,6 +1,7 @@
 package er.jrexample.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -13,8 +14,7 @@ import er.extensions.components.ERXComponent;
 import er.extensions.components.ERXDownloadResponse;
 
 public class DownloadIsCompletePage extends ERXComponent {
-
-	private static final Logger log = Logger.getLogger(DownloadIsCompletePage.class);
+	private static final Logger log = LoggerFactory.getLogger(DownloadIsCompletePage.class);
 
 	private static String WO_META_REFRESH_SENDER_ID = "AutoDownload";
 	private static String REFRESH_HEADER_KEY = "Refresh";
@@ -41,8 +41,7 @@ public class DownloadIsCompletePage extends ERXComponent {
 			_shouldDownloadOnRefresh = false;
 		} // ~ if (shouldDownloadOnRefresh())
 		super.appendToResponse(response, context);
-		if (log.isDebugEnabled())
-			log.debug("response.headers() = " + (response.headers() == null ? "null" : response.headers().toString()));
+		log.debug("response.headers() = {}", response.headers());
 	}
 
 	/**

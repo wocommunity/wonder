@@ -409,7 +409,7 @@ public class ERXMutableURL {
 	public synchronized void addQueryParameter(String key, String value) {
 		List<String> values = _queryParameters.get(key);
 		if (values == null) {
-			values = new LinkedList<String>();
+			values = new LinkedList<>();
 			_queryParameters.put(key, values);
 		}
 		if (value != null) {
@@ -470,7 +470,7 @@ public class ERXMutableURL {
 	 * @return the query parameters of this URL as a Map
 	 */
 	public synchronized Map<String, String> uniqueQueryParameters() {
-		Map<String, String> uniqueQueryParameters = new LinkedHashMap<String, String>();
+		Map<String, String> uniqueQueryParameters = new LinkedHashMap<>();
 		Iterator<Map.Entry<String, List<String>>> queryParameterIter = _queryParameters.entrySet().iterator();
 		while (queryParameterIter.hasNext()) {
 			Map.Entry<String, List<String>> queryParameter = queryParameterIter.next();
@@ -520,7 +520,7 @@ public class ERXMutableURL {
 	 *            the value to set it to
 	 */
 	public synchronized void setQueryParameter(String key, String value) {
-		LinkedList<String> queryParameters = new LinkedList<String>();
+		LinkedList<String> queryParameters = new LinkedList<>();
 		if (value != null) {
 			queryParameters.add(value);
 		}

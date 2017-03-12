@@ -2,8 +2,6 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -37,9 +35,6 @@ public class ERCMailMessage extends _ERCMailMessage {
     //	===========================================================================
     //	Class Constant(s)
     //	---------------------------------------------------------------------------
-        
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";

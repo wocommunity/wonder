@@ -3,8 +3,6 @@ package er.pdfexamples.components;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
@@ -14,14 +12,6 @@ import er.extensions.components.ERXComponent;
 import er.pdf.ERPDFMerge;
 
 public class CombineTheStreams extends ERXComponent {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(CombineTheStreams.class);
-	
-
-
-
 	public String filename = "combined_result.pdf";
 	public NSMutableArray<InputStream> pdfsToCombine;
 	public NSData data;
@@ -31,7 +21,7 @@ public class CombineTheStreams extends ERXComponent {
 
 	public CombineTheStreams(WOContext context) {
 		super(context);
-		pdfsToCombine = new NSMutableArray<InputStream>();
+		pdfsToCombine = new NSMutableArray<>();
 	}
 
 

@@ -1,12 +1,12 @@
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 public class LongResponseExample extends WOComponent {
-
-	static Logger log = Logger.getLogger(LongResponseExample.class);
+	private static final Logger log = LoggerFactory.getLogger(LongResponseExample.class);
 
 	public static class Task extends Thread {
 		int stage = 0;

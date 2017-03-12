@@ -1,6 +1,8 @@
 package er.extensions.woextensions;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -17,6 +19,8 @@ import er.extensions.eof.ERXEOControlUtilities;
  * @author ak 
  */
 public class WOToOneRelationship extends ERXArrayChooser {
+	private static final Logger log = LoggerFactory.getLogger(WOToOneRelationship.class);
+
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -71,7 +75,7 @@ public class WOToOneRelationship extends ERXArrayChooser {
     
     public void setSelection(Object value) {
         if ((value!=null) && (value instanceof NSArray)) {
-            log.warn("We were passed an array but expected an EO. Compensating by choosing first element");                	
+            log.warn("We were passed an array but expected an EO. Compensating by choosing first element");
             NSArray array = (NSArray)value;
             if (array.count() == 0) {
                 value = null;

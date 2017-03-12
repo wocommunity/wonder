@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -28,7 +29,7 @@ public class AjaxSlider extends AjaxComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(AjaxSlider.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxSlider.class);
 
     private String _trackerId;
     private String _handleId;
@@ -128,14 +129,15 @@ public class AjaxSlider extends AjaxComponent {
 
     @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	String format = null;
     	try {
-	    		String format = (String) valueForBinding("numberformat", "0");
+	    		format = (String) valueForBinding("numberformat", "0");
 	    		Number num = worequest.numericFormValueForKey(wocontext.elementID(), new NSNumberFormatter(format));
 	    		if(num != null) {
 	    			setValueForBinding(num, "value");
 	    		}
     	} catch(NumberFormatException ex) {
-    		log.error(ex);
+    		log.error("Could not format value with pattern '{}'.", format, ex);
     	}
 		super.takeValuesFromRequest(worequest, wocontext);
 	}

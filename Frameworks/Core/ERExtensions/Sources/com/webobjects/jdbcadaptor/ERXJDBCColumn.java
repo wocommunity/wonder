@@ -3,7 +3,8 @@ package com.webobjects.jdbcadaptor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSForwardException;
@@ -19,8 +20,7 @@ import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
  *
  */
 public class ERXJDBCColumn extends JDBCColumn {
-	
-	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCColumn.class);
 
 	private String _constantClassName;
 	private static final String NO_NAME = "no name";
@@ -80,7 +80,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		try {
 			return super._fetchValue(flag);
 		} catch(NSForwardException ex) {
-			log.error("There's an error with this attribute: " + _attribute);
+			log.error("There's an error with this attribute: {}", _attribute);
 			throw ex;
 		}
 	}

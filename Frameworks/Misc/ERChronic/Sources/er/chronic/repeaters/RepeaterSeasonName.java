@@ -49,7 +49,7 @@ public class RepeaterSeasonName extends Repeater<Object> {
   }
 
   public static RepeaterSeasonName scan(Token token) {
-    Map<Pattern, RepeaterSeasonName.SeasonName> scanner = new HashMap<Pattern, RepeaterSeasonName.SeasonName>();
+    Map<Pattern, RepeaterSeasonName.SeasonName> scanner = new HashMap<>();
     scanner.put(RepeaterSeasonName.SPRING_PATTERN, RepeaterSeasonName.SeasonName.SPRING);
     scanner.put(RepeaterSeasonName.SUMMER_PATTERN, RepeaterSeasonName.SeasonName.SUMMER);
     scanner.put(RepeaterSeasonName.AUTUMN_PATTERN, RepeaterSeasonName.SeasonName.AUTUMN);

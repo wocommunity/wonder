@@ -16,16 +16,13 @@ import er.neo4jadaptor.query.neo4j_eval.retrievers.Retriever;
  * @param <T>
  */
 public class RegexMatch <T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(RegexMatch.class);
-	
 	private final Retriever<T, String> valueRetriever;
 	private final Pattern pattern;
 	
 	public static <T extends PropertyContainer> RegexMatch<T> wildcardMatch(Retriever<T, String> valueRetriever, String expression) {
 		Pattern p = Pattern.compile(wildcardExpressionToRegex(expression));
 		
-		return new RegexMatch<T>(valueRetriever, p);
+		return new RegexMatch<>(valueRetriever, p);
 	}
 	
 	private RegexMatch(Retriever<T, String> valueRetriever, Pattern pattern) {

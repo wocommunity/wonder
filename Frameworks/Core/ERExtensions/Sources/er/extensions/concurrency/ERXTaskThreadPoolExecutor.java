@@ -10,7 +10,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.ERXEC;
 
@@ -39,7 +40,7 @@ import er.extensions.eof.ERXEC;
  * @author kieran
  */
 public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
-	private static final Logger log = Logger.getLogger(ERXTaskThreadPoolExecutor.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXTaskThreadPoolExecutor.class);
 
 	public ERXTaskThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 					BlockingQueue<Runnable> workQueue) {
@@ -64,7 +65,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public Future<?> submit(Runnable task) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<Object> ftask = new ERXFutureTask<Object>(task, null);
+        ERXFutureTask<Object> ftask = new ERXFutureTask<>(task, null);
         execute(ftask);
         return ftask;
     }
@@ -72,7 +73,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public <T> Future<T> submit(Runnable task, T result) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<T> ftask = new ERXFutureTask<T>(task, result);
+        ERXFutureTask<T> ftask = new ERXFutureTask<>(task, result);
         execute(ftask);
         return ftask;
     }
@@ -80,7 +81,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
 	public <T> Future<T> submit(Callable<T> task) {
         if (task == null) throw new NullPointerException();
-        ERXFutureTask<T> ftask = new ERXFutureTask<T>(task);
+        ERXFutureTask<T> ftask = new ERXFutureTask<>(task);
         execute(ftask);
         return ftask;
     }
@@ -91,9 +92,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 		if (t instanceof ERXTaskThread) {
 			((ERXTaskThread)t).setTask(r);
 			((ERXTaskThread)t).startStopWatch();
-			if (log.isDebugEnabled()) {
-				log.debug("About to execute " + (r == null ? "null" : r) + " in thread " + t);
-			}
+			log.debug("About to execute {} in thread {}", r, t);
 		}
 
 		if (r instanceof IERXExecutionStateTransition) {
@@ -114,7 +113,7 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 			thread.stopStopWatch();
 			if (log.isDebugEnabled()) {
 				String elapsedTime = thread.elapsedTime();
-				log.debug("Finished executing " + (r == null ? "null" : r) + " after " + elapsedTime);
+				log.debug("Finished executing {} after {}", r, elapsedTime);
 			}
 		}
 

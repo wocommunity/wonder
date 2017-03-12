@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -47,6 +49,11 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Logger
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ERXTimeZoneDetector.class);
+
 	public static final String TIMEZONE_SESSION_KEY = "detectedTimeZone";
 
 	private static final String TIMEZONE_DATA_KEY = "_timezone";
@@ -62,7 +69,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			synchronized (ERXTimeZoneDetector.class) {
 				if (allZones == null) {
 					String[] ids = TimeZone.getAvailableIDs();
-					NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>(ids.length);
+					NSMutableArray<TimeZone> tzs = new NSMutableArray<>(ids.length);
 					for (int i = 0; i < ids.length; i++) {
 						TimeZone tz = TimeZone.getTimeZone(ids[i]);
 						tzs.addObject(tz);
@@ -82,7 +89,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 		NSArray<TimeZone> result = EOQualifier.filteredArrayWithQualifier(allZones(), q);
 		if (dst) {
 			Date d = new NSTimestamp(2010, southern ? 0 : 5, 1, 0, 0, 0, TimeZone.getTimeZone("GMT"));
-			NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>();
+			NSMutableArray<TimeZone> tzs = new NSMutableArray<>();
 			for (TimeZone tz : result) {
 				if (tz.inDaylightTime(d)) {
 					tzs.addObject(tz);
@@ -145,7 +152,14 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			boolean dst = "1".equals(data[1]);
 			boolean southern = "1".equals(data[2]);
 			TimeZone tz = zoneWithRawOffset(rawOffset, dst, southern);
-			session.setTimeZone(tz);
+			// Call ERXSession.setTimeZone() if tz is not null
+			// https://github.com/wocommunity/wonder/issues/774
+			if (tz != null) {
+				session.setTimeZone(tz);
+			}
+			else {
+				log.warn("Unable to find a timezone for '{}'.", zoneString);
+			}
 		}
 	}
 
@@ -162,7 +176,7 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 			return result;
 		}
 		
-		NSMutableArray<TimeZone> tzs = new NSMutableArray<TimeZone>(ids.count());
+		NSMutableArray<TimeZone> tzs = new NSMutableArray<>(ids.count());
 		for (int i = 0; i < ids.count(); i++) {
 			TimeZone tz = TimeZone.getTimeZone(ids.objectAtIndex(i));
 			tzs.addObject(tz);

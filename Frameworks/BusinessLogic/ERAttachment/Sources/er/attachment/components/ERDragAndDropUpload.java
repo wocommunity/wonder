@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -31,7 +32,14 @@ import er.extensions.foundation.ERXProperties;
 /**
  * A component designed to allow drag and drop uploads of ERAttachments. 
  * Except where otherwise noted, the javascript functions have a single 
- * argument: the event.
+ * argument: the event.<p>
+ * If you want to include a file selector to the drop-area, then either
+ *  use includeFileSelector or add one in another location as:<br>
+ * &ltwo:genericContainer elementName = "input" type = "file" id = "fileSelectorID" multiple = "multiple" /&gt<br>
+ * and bind fileSelectorID to the id.<p>
+ * If you just want a file selector button without the drop area, then 
+ * use this component with no content and includeFileSelector set to true.<br>
+ * This version also uses a fix from Michael Kondratov for the completeAllFunction in dndupload.js. completeAllFunction now works as advertised.
  * 
  * @binding accept an array of accepted mimetypes. If no mimetypes are specified, all are accepted. ex. (image/png, image/jpg, text/*)
  * @binding action the action to fire when an attachment is uploaded
@@ -46,9 +54,12 @@ import er.extensions.foundation.ERXProperties;
  * @binding exitFunction a javascript function to execute when dragged files exit the drop target
  * @binding overFunction a javascript function to execute when dragged files are over the drop target
  * @binding storageType the ERAttachment storage type (db, file, s3, cf, ...)
+ * @binding includeFileSelector a file selector appears at the top of the drag-area.
+ * @binding fileSelectorID include an id to a file selector outside of the component. Can be used if more custom file selector behavior is needed.
  * 
  * @author Ramsey
- *
+ * @author Fredrik
+ * @author Michael Kondratov
  */
 public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 	/**
@@ -58,15 +69,16 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger log = Logger.getLogger(ERDragAndDropUpload.class);
+	private static final Logger log = LoggerFactory.getLogger(ERDragAndDropUpload.class);
 
 	private String dropTargetID;
-	
+
 	private boolean invokeAction = false;
 	
 	private boolean willAccept = true;
 	
 	private NSArray<String> accept;
+
 	
 	public ERDragAndDropUpload(WOContext context) {
         super(context);
@@ -82,9 +94,13 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 		return dropTargetID;
 	}
 
+	public String fileSelectorID() {
+		return valueForStringBinding("fileSelectorID", "select_" + dropTargetID());
+	}
+
 	@Override
 	protected NSArray<String> additionalJavascriptFiles() {
-		return new NSArray<String>("js/dndupload.js");
+		return new NSArray<>("js/dndupload.js");
 	}
 	
 	@Override
@@ -181,7 +197,7 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 
 	public NSArray<String> accept() {
 		if(accept == null) {
-			String acceptString = (String) valueForBinding("accept");
+			String acceptString = (String)valueForBinding("accept");
 			if(acceptString == null) {
 				accept = NSArray.emptyArray();
 			} else {

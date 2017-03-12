@@ -81,10 +81,9 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 	}
 	
 	@Override
-	@SuppressWarnings("rawtypes")
 	public NSDictionary createAjaxOptions(WOComponent component) {
 
-		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("method", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("initialDelay", AjaxOption.NUMBER));

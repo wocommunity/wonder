@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
@@ -33,6 +36,8 @@ import er.extensions.jdbc.ERXSQLHelper.CustomTypes;
  * @author mschrag
  */
 public class ERXMigrationTable {
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
+
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
 	private NSMutableArray<ERXMigrationIndex> _indexes;
@@ -48,9 +53,9 @@ public class ERXMigrationTable {
 	 */
 	protected ERXMigrationTable(ERXMigrationDatabase database, String name) {
 		_database = database;
-		_columns = new NSMutableArray<ERXMigrationColumn>();
-		_indexes = new NSMutableArray<ERXMigrationIndex>();
-		_foreignKeys = new NSMutableArray<ERXMigrationForeignKey>();
+		_columns = new NSMutableArray<>();
+		_indexes = new NSMutableArray<>();
+		_foreignKeys = new NSMutableArray<>();
 		_name = name;
 		_new = true;
 	}
@@ -134,7 +139,7 @@ public class ERXMigrationTable {
 	 */
 	public EOEntity _newEntity() {
 		EOEntity entity = _blankEntity();
-		NSMutableArray<EOAttribute> primaryKeyAttributes = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> primaryKeyAttributes = new NSMutableArray<>();
 		for (ERXMigrationColumn column : _columns) {
 			EOAttribute attribute = column._newAttribute(entity);
 			if (column.isPrimaryKey()) {
@@ -185,8 +190,8 @@ public class ERXMigrationTable {
 	 * @return the EORelationship that joins the two given columns
 	 */
 	public EORelationship _newRelationship(ERXMigrationColumn[] sourceColumns, ERXMigrationColumn[] destinationColumns) {
-		NSMutableArray<EOAttribute> sourceAttributes = new NSMutableArray<EOAttribute>();
-		NSMutableArray<EOAttribute> destinationAttributes = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> sourceAttributes = new NSMutableArray<>();
+		NSMutableArray<EOAttribute> destinationAttributes = new NSMutableArray<>();
 		
 		if (sourceColumns.length != destinationColumns.length) {
 			throw new IllegalArgumentException("The number of source columns must match the number of destination columns.");
@@ -363,7 +368,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages()) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null);
 			result.addObject(column);
@@ -382,7 +387,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull, NSArray<String> languages) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null);
 			result.addObject(column);
@@ -405,7 +410,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public  NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull, String defaultValue) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages()) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null, defaultValue);
 			result.addObject(column);
@@ -425,7 +430,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public  NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull, String defaultValue, NSArray<String> languages) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null, defaultValue);
 			result.addObject(column);
@@ -442,7 +447,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public NSArray<ERXMigrationColumn> newLocalizedClobColumns(String name, boolean allowsNull) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages()) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.CLOB, 0, 0, 0, allowsNull, null);
 			result.addObject(column);
@@ -460,7 +465,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public NSArray<ERXMigrationColumn> newLocalizedClobColumns(String name, boolean allowsNull, NSArray<String> languages) throws SQLException {
-		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<>();
 		for (String language : languages) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.CLOB, 0, 0, 0, allowsNull, null);
 			result.addObject(column);
@@ -902,7 +907,19 @@ public class ERXMigrationTable {
 	public ERXMigrationColumn newIpAddressColumn(String name, boolean allowsNull, String defaultValue) throws SQLException {
 		return newColumn(name, CustomTypes.INET, 39, 0, 0, allowsNull, null, defaultValue);
 	}
-	
+
+	/**
+	 * Returns a new UUID column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newUuidColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.BINARY, 16, 0, 0, allowsNull, null);
+	}
+
 	/**
 	 * Callback method for ERXMigrationColumn to notify the table that
 	 * it has been deleted.
@@ -921,7 +938,7 @@ public class ERXMigrationTable {
 	@SuppressWarnings("unchecked")
 	public NSArray<EOSQLExpression> _createExpressions() {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaGeneration.createTableStatementsForEntityGroup(new NSArray<EOEntity>(_newEntity()));
+		NSArray<EOSQLExpression> expressions = schemaGeneration.createTableStatementsForEntityGroup(new NSArray<>(_newEntity()));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "create table", true);
 		return expressions;
 	}
@@ -934,7 +951,7 @@ public class ERXMigrationTable {
 	public void create() throws SQLException {
 		if (_new) {
 			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
-			NSMutableArray<ERXMigrationColumn> primaryKeys = new NSMutableArray<ERXMigrationColumn>();
+			NSMutableArray<ERXMigrationColumn> primaryKeys = new NSMutableArray<>();
 			for (ERXMigrationColumn column : _columns) {
 				if (column.isPrimaryKey()) {
 					primaryKeys.addObject(column);
@@ -953,7 +970,7 @@ public class ERXMigrationTable {
 			_new = false;
 		}
 		else {
-			ERXMigrationDatabase.log.warn("You called .create() on the table '" + _name + "', but it was already created.");
+			log.warn("You called .create() on the table '{}', but it was already created.", _name);
 		}
 	}
 
@@ -965,7 +982,7 @@ public class ERXMigrationTable {
 	@SuppressWarnings("unchecked")
 	public NSArray<EOSQLExpression> _dropExpressions() {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaGeneration.dropTableStatementsForEntityGroup(new NSArray<EOEntity>(_blankEntity()));
+		NSArray<EOSQLExpression> expressions = schemaGeneration.dropTableStatementsForEntityGroup(new NSArray<>(_blankEntity()));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "drop table", true);
 		return expressions;
 	}
@@ -1020,15 +1037,15 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _setPrimaryKeyExpressions(ERXMigrationColumn... columns) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
 		EOEntity entity = columns[0].table()._blankEntity();
-		NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> attributes = new NSMutableArray<>();
 		for (ERXMigrationColumn column : columns) {
 			EOAttribute attribute = column._newAttribute(entity);
 			attributes.addObject(attribute);
 		}
 		entity.setPrimaryKeyAttributes(attributes);
-		NSArray<EOSQLExpression> expressions = schemaGeneration.primaryKeyConstraintStatementsForEntityGroup(new NSArray<EOEntity>(entity));
+		NSArray<EOSQLExpression> expressions = schemaGeneration.primaryKeyConstraintStatementsForEntityGroup(new NSArray<>(entity));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "add primary key", true);
-		NSArray<EOSQLExpression> supportExpressions = schemaGeneration.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
+		NSArray<EOSQLExpression> supportExpressions = schemaGeneration.primaryKeySupportStatementsForEntityGroup(new NSArray<>(entity));
 		return expressions.arrayByAddingObjectsFromArray(supportExpressions);
 	}
 	
@@ -1226,7 +1243,7 @@ public class ERXMigrationTable {
 		String indexName = unique ? "UNIQUE_" : "INDEX_";
 		indexName += tableName;
 		indexName += "__";
-		indexName += new NSArray<String>(columnNames).componentsJoinedByString("_");
+		indexName += new NSArray<>(columnNames).componentsJoinedByString("_");
 		return indexName;
 	}
 
@@ -1410,13 +1427,13 @@ public class ERXMigrationTable {
 	public NSArray<EOSQLExpression> _dropPrimaryKeyExpressions(ERXMigrationColumn... columns) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
 		EOEntity entity = columns[0].table()._blankEntity();
-		NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> attributes = new NSMutableArray<>();
 		for (ERXMigrationColumn column : columns) {
 			EOAttribute attribute = column._newAttribute(entity);
 			attributes.addObject(attribute);
 		}
 		entity.setPrimaryKeyAttributes(attributes);
-		NSArray<EOSQLExpression> expressions = schemaGeneration.dropPrimaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
+		NSArray<EOSQLExpression> expressions = schemaGeneration.dropPrimaryKeySupportStatementsForEntityGroup(new NSArray<>(entity));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "drop primary key", true);
 		return expressions;
 	}

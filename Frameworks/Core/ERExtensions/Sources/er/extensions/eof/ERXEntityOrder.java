@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -26,9 +27,8 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 public abstract class ERXEntityOrder
 {
-
-    private static Logger logger = Logger.getLogger(ERXEntityOrder.class);
-    protected NSMutableDictionary<String, Integer> groupedEntities = new NSMutableDictionary<String, Integer>();
+    private static final Logger log = LoggerFactory.getLogger(ERXEntityOrder.class);
+    protected NSMutableDictionary<String, Integer> groupedEntities = new NSMutableDictionary<>();
     protected NSArray<EOEntity> allEntities = null;
 
 
@@ -89,20 +89,20 @@ public abstract class ERXEntityOrder
         while (entities.count() > 0) {
             // Entities that are eligible for this group are NOT added to the master list
             // immediately to avoid dependencies between entities in the same group
-            NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<String,Integer>();
+            NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<>();
 
             Integer group = Integer.valueOf(groupNum++);
-            logger.trace("Building group " + group);
+            log.trace("Building group {}", group);
 
             // Examine each entity not already in a group and add it to this group if
             // all of its dependencies are in previously processed groups.
             int index = 0;
             while (index < entities.count()) {
                 EOEntity entity = entities.objectAtIndex(index);
-                logger.trace("Processing entity " + entity.name());
+                log.trace("Processing entity {}", entity.name());
 
                 if (hasDependenciesForEntity(dependencies, entity)) {
-                    logger.trace("Adding entity " + entity.name() + " to group " + group);
+                    log.trace("Adding entity {} to group {}", entity.name(), group);
                     groupDictionary.setObjectForKey(group, entity.name());
                     entities.removeObjectAtIndex(index);
                 }
@@ -114,12 +114,12 @@ public abstract class ERXEntityOrder
 
             // If an error is found, log out information to make debugging easier
             if (groupDictionary.count() == 0) {
-                logger.error("Stopping, circular relationships found for " + entities.valueForKey("name"));
-                NSSet<String> remainingEntities = new NSSet<String>((NSArray<String>)entities.valueForKey("name"));
+                log.error("Stopping, circular relationships found for {}", entities.valueForKey("name"));
+                NSSet<String> remainingEntities = new NSSet<>((NSArray<String>)entities.valueForKey("name"));
                 for (int i = 0; i < entities.count(); i++) {
                     EOEntity entity = entities.objectAtIndex(i);
                     NSSet<String> remainingDependencies = dependentEntities(dependencies, entity).setByIntersectingSet(remainingEntities);
-                    logger.error(entity.name() + " has dependencies on " + remainingDependencies);
+                    log.error("{} has dependencies on {}", entity.name(), remainingDependencies);
                 }
                 throw new RuntimeException("Circular relationships found for " + entities.valueForKey("name"));
             }
@@ -127,11 +127,12 @@ public abstract class ERXEntityOrder
             groupedEntities().addEntriesFromDictionary(groupDictionary);
         }
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("Entity groups in dependency order:");
+        if (log.isTraceEnabled()) {
+            log.trace("Entity groups in dependency order:");
             for (int i = 1; i < groupNum; i++) {
-                logger.trace("Group " + i + ": " + groupedEntities().allKeysForObject(Integer.valueOf(i)));
-                logger.trace("");
+                Integer iVal = Integer.valueOf(i);
+                log.trace("Group {}: {}", iVal, groupedEntities().allKeysForObject(iVal));
+                log.trace("");
             }
         }
      }

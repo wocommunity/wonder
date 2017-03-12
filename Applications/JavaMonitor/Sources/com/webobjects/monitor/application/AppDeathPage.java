@@ -30,8 +30,8 @@ public class AppDeathPage extends MonitorComponent {
     }
 
     public WOComponent clearDeathsClicked() {
-        handler().sendClearDeathsToWotaskds(new NSArray<MInstance>(myInstance()),
-                new NSArray<MHost>(myInstance().host()));
+        handler().sendClearDeathsToWotaskds(new NSArray<>(myInstance()),
+                new NSArray<>(myInstance().host()));
 
         return AppDetailPage.create(context(), myApplication());
     }

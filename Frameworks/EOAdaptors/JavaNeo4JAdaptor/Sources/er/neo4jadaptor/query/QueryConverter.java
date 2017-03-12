@@ -43,7 +43,7 @@ public abstract class QueryConverter <ClauseType> {
 			
 			return negate(query);
 		} else if (qualifier instanceof EOAndQualifier || qualifier instanceof EOOrQualifier) {
-			List<ClauseType> list = new ArrayList<ClauseType>();
+			List<ClauseType> list = new ArrayList<>();
 			Collection<EOQualifier> qualifiers = qualifier instanceof EOAndQualifier 
 				? ((EOAndQualifier) qualifier).qualifiers()
 				: ((EOOrQualifier) qualifier).qualifiers();
@@ -75,7 +75,7 @@ public abstract class QueryConverter <ClauseType> {
 		if (operator.equals(EOKeyValueQualifier.QualifierOperatorEqual)) {
 			if (qual instanceof ERXInQualifier) {
 				ERXInQualifier inQualifier = (ERXInQualifier) qual;
-				List<ClauseType> clauses = new ArrayList<ClauseType>();
+				List<ClauseType> clauses = new ArrayList<>();
 				
 				for (Object o : inQualifier.values()) {
 					clauses.add(comparison(entity, key, ComparisonOperator.EQUAL, o));

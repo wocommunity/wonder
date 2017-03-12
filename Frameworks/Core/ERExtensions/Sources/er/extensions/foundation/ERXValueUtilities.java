@@ -3,7 +3,6 @@ package er.extensions.foundation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
@@ -12,8 +11,6 @@ import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSet;
-
-import er.extensions.components.ERXComponentUtilities;
 
 /**
  * ERXValueUtilities has useful conversion methods for
@@ -757,7 +754,7 @@ public class ERXValueUtilities {
 	public static String[] stringsToStringArray(String ... anyStrings) {
 		int aryLen = anyStrings.length;
 		if(aryLen <= 0) return null;
-		ArrayList<String> strlist = new ArrayList<String>();
+		ArrayList<String> strlist = new ArrayList<>();
 		String wkStr = null;
 		for(int loop = 0; loop < aryLen; loop++){
 			wkStr = anyStrings[loop];
@@ -791,7 +788,7 @@ public class ERXValueUtilities {
 	public static Object[] objectsToObjectArray(Object ... anyObjects) {
 		int aryLen = anyObjects.length;
 		if(aryLen <= 0) return null;
-		ArrayList<Object> objlist = new ArrayList<Object>();
+		ArrayList<Object> objlist = new ArrayList<>();
 		Object wkObj = null;
 		for(int loop = 0; loop < aryLen; loop++){
 			wkObj = anyObjects[loop];

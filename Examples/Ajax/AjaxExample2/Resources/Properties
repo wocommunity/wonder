@@ -6,7 +6,7 @@ ognl.helperFunctions=true
 ognl.inlineBindings=true
 
 # EOF
-er.extensions.ERXApplication.useEditingContextUnlocker=true
+er.extensions.ERXEC.useUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=true
 er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=true

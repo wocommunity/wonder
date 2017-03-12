@@ -42,5 +42,6 @@
     <binding name="onfocus"/>
     <binding defaults="Boolean" name="activateOnFocus"/>
     <binding name="containerId"/>
+    <binding defaults="Boolean" name="escapeHTML"/>
     </wo>
 </wodefinitions>

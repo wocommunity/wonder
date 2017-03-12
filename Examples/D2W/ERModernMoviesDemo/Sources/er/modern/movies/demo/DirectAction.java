@@ -16,7 +16,7 @@ public class DirectAction extends ERD2WDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 	
     /**

@@ -10,7 +10,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -49,8 +50,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
 	}
     
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
+    private static final Logger log = LoggerFactory.getLogger(ERCStampedEnterpriseObject.class);
 
     public static String [] TimestampAttributeKeys = new String[] { Keys.CREATED, Keys.LAST_MODIFIED};
     
@@ -61,7 +61,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             NSTimestamp now=new NSTimestamp();
             EOEditingContext editingContext = (EOEditingContext)n.object();
 
-            if (log.isDebugEnabled())  log.debug("Timestamp for "+ editingContext + ": "+ now);
+            log.debug("Timestamp for {}: {}", editingContext, now);
 
             _datesPerEC.put(editingContext, now);
         }
@@ -154,7 +154,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
         if (editingContext != null) {
             date = _datesPerEC.get(editingContext);
         } else {
-            log.error("Null editingContext in touch() for: " + this);
+            log.error("Null editingContext in touch() for: {}", this);
             date = null;
         }
 

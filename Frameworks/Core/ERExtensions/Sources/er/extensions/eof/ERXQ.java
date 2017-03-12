@@ -3,6 +3,7 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
@@ -204,7 +205,7 @@ public class ERXQ {
 	 * @return and EOOrQualifier
 	 */
 	public static ERXOrQualifier or(EOQualifier... qualifiersArray) {
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		for (EOQualifier qualifier : qualifiersArray) {
 			if (qualifier != null) {
 				qualifiers.addObject(qualifier);
@@ -233,7 +234,7 @@ public class ERXQ {
 	 * @return and EOAndQualifier
 	 */
 	public static ERXAndQualifier and(EOQualifier... qualifiersArray) {
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		for (EOQualifier qualifier : qualifiersArray) {
 			if (qualifier != null) {
 				qualifiers.addObject(qualifier);
@@ -363,6 +364,42 @@ public class ERXQ {
 		return new ERXKeyComparisonQualifier(key.key(), ERXQ.EQ, value.key());
 	}
 	
+
+	/**
+	 * Return a OR qualifier of identity qualifiers using each value from the param array
+	 * 
+	 * @param valueArray
+	 *            the array of values
+	 * @return an EOQualifier 
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 16, 2016
+	 */
+	public static EOQualifier isIn(NSArray<? extends ERXGenericRecord> valueArray) {
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
+		for (ERXGenericRecord value : valueArray) {
+			qualifiers.add(is(value));
+		}
+		return new ERXOrQualifier(qualifiers);
+	}
+
+	/**
+	 * Return an identity qualifier to use with ERXExistsQualifier for example
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an EOQualifier 
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 16, 2016
+	 */
+	public static EOQualifier is(ERXGenericRecord value) {
+		EOEntity entity = value.entity();
+		NSDictionary<String, Object> primaryKeyDictionary = value.rawPrimaryKeyDictionary(false /* inTransaction */);
+		EOQualifier thatAreThis = entity.qualifierForPrimaryKey(primaryKeyDictionary);
+		return thatAreThis;
+	}
+
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
@@ -615,7 +652,7 @@ public class ERXQ {
 	 * @return an EOQualifier
 	 */
 	public static ERXOrQualifier inObjects(String key, Object... values) {
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		for (Object value : values) {
 			qualifiers.addObject(ERXQ.equals(key, value));
 		}
@@ -633,7 +670,7 @@ public class ERXQ {
 	 * @return an EOQualifier
 	 */
 	public static ERXAndQualifier notInObjects(String key, Object... values) {
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		for (Object value : values) {
 			qualifiers.addObject(ERXQ.notEquals(key, value));
 		}
@@ -652,9 +689,9 @@ public class ERXQ {
 	 */
 	public static ERXOrQualifier in(String key, NSArray<?> values) {
 		if(values.count() == 0) {
-			return new ERXOrQualifier(new NSArray<EOQualifier>(new ERXFalseQualifier()));
+			return new ERXOrQualifier(new NSArray<>(new ERXFalseQualifier()));
 		}
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			Object value = valuesEnum.nextElement();
@@ -674,7 +711,7 @@ public class ERXQ {
 	 * @return an EOQualifier
 	 */
 	public static ERXAndQualifier notIn(String key, NSArray values) {
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			Object value = valuesEnum.nextElement();
@@ -848,7 +885,7 @@ public class ERXQ {
 	 * @return an ERXOrQualifier
 	 */
 	public static ERXOrQualifier containsAny(NSArray<String> keys, String tokensWithWhitespace) {
-		NSMutableArray<ERXOrQualifier> qualifiers = new NSMutableArray<ERXOrQualifier>();
+		NSMutableArray<ERXOrQualifier> qualifiers = new NSMutableArray<>();
 		for (String key : keys) {
 			qualifiers.addObject(ERXQ.containsAny(key, tokensWithWhitespace));
 		}
@@ -893,7 +930,7 @@ public class ERXQ {
 			qualifier = null;
 		}
 		else {
-			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<EOQualifier>();
+			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<>();
 			for (String token : tokens) {
 				searchQualifiers.addObject(ERXQ.contains(key, token));
 			}
@@ -915,7 +952,7 @@ public class ERXQ {
 	 * @return an ERXOrQualifier
 	 */
 	public static ERXOrQualifier containsAll(NSArray<String> keys, String tokensWithWhitespace) {
-		NSMutableArray<ERXAndQualifier> qualifiers = new NSMutableArray<ERXAndQualifier>();
+		NSMutableArray<ERXAndQualifier> qualifiers = new NSMutableArray<>();
 		for (String key : keys) {
 			qualifiers.addObject(ERXQ.containsAll(key, tokensWithWhitespace));
 		}
@@ -960,7 +997,7 @@ public class ERXQ {
 			qualifier = null;
 		}
 		else {
-			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<EOQualifier>();
+			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<>();
 			for (String token : tokens) {
 				searchQualifiers.addObject(ERXQ.contains(key, token));
 			}
@@ -1012,9 +1049,9 @@ public class ERXQ {
 			qualifier = null;
 		}
 		else {
-			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<EOQualifier>();
+			NSMutableArray<EOQualifier> searchQualifiers = new NSMutableArray<>();
 			for (String token : tokens) {
-				NSMutableArray<EOQualifier> tokenQualifiers = new NSMutableArray<EOQualifier>();
+				NSMutableArray<EOQualifier> tokenQualifiers = new NSMutableArray<>();
 				for (String key : keys) {
 					tokenQualifiers.addObject(ERXQ.contains(key, token));
 				}
@@ -1043,7 +1080,7 @@ public class ERXQ {
 	 * @return elements with "." between them to form a keypath
 	 */
 	public static String keyPath(String... elements) {
-		return new NSArray<String>(elements).componentsJoinedByString(".");
+		return new NSArray<>(elements).componentsJoinedByString(".");
 	}
 	
 	/**
@@ -1058,7 +1095,7 @@ public class ERXQ {
 		if (qualifier == null) {
 			return NSArray.EmptyArray;
 		}
-  		NSMutableArray<EOKeyValueQualifier> array = new NSMutableArray<EOKeyValueQualifier>();
+  		NSMutableArray<EOKeyValueQualifier> array = new NSMutableArray<>();
   		_extractKeyValueQualifiers(array, qualifier);
   		return array;
   	}
@@ -1103,13 +1140,13 @@ public class ERXQ {
   		if (qualifier.equals(searchFor)) {
   			result = replaceWith;
   		} else if (qualifier instanceof EOAndQualifier) {
-  			NSMutableArray<EOQualifier> array = new NSMutableArray<EOQualifier>();
+  			NSMutableArray<EOQualifier> array = new NSMutableArray<>();
   			for (EOQualifier item : ((EOAndQualifier)qualifier).qualifiers()) {
   				array.add(replaceQualifierWithQualifier(item, searchFor, replaceWith));
   			}
   			result = new EOAndQualifier(array);
   		} else if (qualifier instanceof EOOrQualifier) {
-  			NSMutableArray<EOQualifier> array = new NSMutableArray<EOQualifier>();
+  			NSMutableArray<EOQualifier> array = new NSMutableArray<>();
   			for (EOQualifier item : ((EOOrQualifier)qualifier).qualifiers()) {
   				array.add(replaceQualifierWithQualifier(item, searchFor, replaceWith));
   			}
@@ -1127,7 +1164,7 @@ public class ERXQ {
 	 * values are added to the EOQualifier list as EOKeyValueQualifier objects. Values can be an EOQualifier, which just gets included
 	 * in the list of EOQualifiers. When String-Object pairs or ERXKey-Object pairs appear in the list, they are turned into an
 	 * EOKeyValueQualifier and added to the list.
-         * <p>
+	 * <p>
 	 * An IllegalArgumentException is thrown if objects are not of the right type or if a bad sequence is used, such as a sequence of
 	 * String-Object-Object or String-String-String.
 	 * <p>
@@ -1135,10 +1172,11 @@ public class ERXQ {
 	 * <p>
 	 * @param values a list of objects that can be used to create an EOQualifier. An NSDictionary or EOQualifier can stand alone in the
 	 *               list. A String or ERXKey must be followed by an Object.
+	 * @return an EOQualifier
 	 */
 	public static EOQualifier matchingValues(Object... values) {
 
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 
 		int idx = 0;
 		while (idx < values.length) {

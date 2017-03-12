@@ -24,7 +24,8 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -78,8 +79,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXSLTWrapper.class);
 
 	private long start, current;
 	/**
@@ -150,7 +150,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 				// FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
 				EntityResolver resolver = new EntityResolver() {
 					public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
-						log.info(arg0 + "::" + arg1);
+						log.info("{}::{}", arg0, arg1);
 						InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
 						source.setSystemId(arg1);
 						return source;
@@ -178,7 +178,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
 			if (log.isDebugEnabled()) {
 				String contentString = newResponse.contentString();
-				log.debug("Converting content string:\n" + contentString);
+				log.debug("Converting content string:\n{}", contentString);
 			}
 
 			try {
@@ -196,7 +196,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		} else {
 			super.appendToResponse(response, context);
 		}
-		log.debug("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
+		log.debug("Total: {}", System.currentTimeMillis() - start);  start = System.currentTimeMillis();
 	}
 
 	private static TemplatePool pool = new TemplatePool();
@@ -234,8 +234,8 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
 		//private static final WeakHashMap templates = new WeakHashMap();
 		private final Map   templates = new HashMap();
-		private static final Logger log       = Logger.getLogger(TemplatePool.class);
-		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
+		private static final Logger log = LoggerFactory.getLogger(TemplatePool.class);
+		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser();
 
 		protected TemplatePool() {}
 
@@ -259,7 +259,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
 					TransformerFactory fac = TransformerFactory.newInstance();
 
-					log.debug("creating template for file " + filename + " in framework " + framework);
+					log.debug("creating template for file {} in framework {}", filename, framework);
 					InputStream is = rm.inputStreamForResourceNamed(filename, framework, null);
 					if (is == null) {
 						log.debug("trying with framework = null");
@@ -281,13 +281,13 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 				} catch (IOException e1) {
 					throw NSForwardException._runtimeExceptionForThrowable(e1);
 				} catch (TransformerConfigurationException tce) {
-					log.error("could not create template " + tce.getLocationAsString(), tce);
+					log.error("could not create template {}", tce.getLocationAsString(), tce);
 					log.error("  cause", tce.getCause());
 					if (tce.getCause() != null && tce.getCause() instanceof org.xml.sax.SAXParseException) {
 						org.xml.sax.SAXParseException e = (org.xml.sax.SAXParseException) tce.getCause();
-						log.error("SAXParseException: line " + e.getLineNumber() + ", column " + e.getColumnNumber());
+						log.error("SAXParseException: line {}, column {}", e.getLineNumber(), e.getColumnNumber());
 					}
-					log.error("this is the incorrect xsl:>>>" + s + "<<<");
+					log.error("this is the incorrect xsl:>>>{}<<<", s);
 					return null;
 				}
 			}
@@ -295,7 +295,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 			try {
 				return t.newTransformer();
 			} catch (TransformerConfigurationException tce) {
-				log.error("could not create template " + tce.getLocationAsString(), tce);
+				log.error("could not create template {}", tce.getLocationAsString(), tce);
 				log.error("  cause", tce.getCause());
 				return null;
 			}

@@ -20,19 +20,16 @@ import er.neo4jadaptor.query.neo4j_eval.HasCost;
  * @param <T>
  */
 public final class BoolEvaluator <T extends PropertyContainer> implements Evaluator<T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BoolEvaluator.class);
-
 	private final List<Evaluator<T>> evals = new ArrayList<Evaluator<T>>();
 	
 	private final boolean interruptOn;
 	
 	public static <T extends PropertyContainer> Evaluator<T> and(Iterable<Evaluator<T>> evaluators) {
-		return new BoolEvaluator<T>(evaluators, false);
+		return new BoolEvaluator<>(evaluators, false);
 	}
 
 	public static <T extends PropertyContainer> Evaluator<T> or(Iterable<Evaluator<T>> evaluators) {
-		return new BoolEvaluator<T>(evaluators, true);
+		return new BoolEvaluator<>(evaluators, true);
 	}
 	
 	public Comparator<HasCost> COST_COMPARATOR = new Comparator<HasCost>() {

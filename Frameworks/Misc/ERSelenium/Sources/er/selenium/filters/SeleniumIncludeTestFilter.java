@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -16,7 +17,7 @@ import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumTestImporter;
 
 public class SeleniumIncludeTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
-	private static final Logger log = Logger.getLogger(SeleniumIncludeTestFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumIncludeTestFilter.class);
 
 	private static final int INCLUDE_LIMIT = 256;
 	private final NSArray<File> _searchPaths;
@@ -38,7 +39,7 @@ public class SeleniumIncludeTestFilter extends SeleniumTestFilterHelper implemen
 				try {
 					fileContents = ERXFileUtilities.stringFromFile(fio, CharEncoding.UTF_8);
 				} catch (IOException e) {
-					log.error("Can't read " + fio.getAbsolutePath() + " contents");
+					log.error("Can't read {} contents", fio.getAbsolutePath());
 					throw new RuntimeException(e);
 				}
 				SeleniumTest processedTest = importer.process(fileContents);

@@ -99,7 +99,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
             monthNameList = (NSArray<String>)ERXLocalizer.currentLocalizer().valueForKey("ERDDatePopup.monthList");
             if(monthNameList == null) {
                 if(defaultMonthNameList == null) {
-                    defaultMonthNameList = new NSArray<String>("Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+                    defaultMonthNameList = new NSArray<>("Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
                 }
                 monthNameList = defaultMonthNameList;
             }
@@ -109,7 +109,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
 
     public NSArray<String> monthList() {
         if (monthList == null) {
-            monthList = new NSArray<String>(
+            monthList = new NSArray<>(
                 "01","02","03","04","05","06",
                 "07","08","09","10","11","12"
             );
@@ -119,7 +119,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
 
     public NSArray<String> yearList() {
         if (yearList == null) {
-            yearList = new NSMutableArray<String>();
+            yearList = new NSMutableArray<>();
             int startYear = 1950, endYear = 2050;
             String yearRangeTop = null, yearRangeBottom = null;
             if ((valueForBinding("yearRangeTop") != null) && (valueForBinding("yearRangeBottom") != null)) {

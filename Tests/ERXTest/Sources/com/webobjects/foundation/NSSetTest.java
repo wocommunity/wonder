@@ -12,72 +12,72 @@ import er.erxtest.ERXTestCase;
 public class NSSetTest extends ERXTestCase {
 
 	public void testNSSet() {
-		NSSet<String> set = new NSSet<String>();
+		NSSet<String> set = new NSSet<>();
 		assertTrue(set.isEmpty());
 		assertEquals(0, set.size());
 	}
 
 	public void testNSSetCollectionOfQextendsE() {
-		Collection<String> list = new ArrayList<String>();
+		Collection<String> list = new ArrayList<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSSet<String> set = new NSSet<String>(list);
+		NSSet<String> set = new NSSet<>(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSSetE() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSSetEArray() {
 		String[] strings = new String[] {"abc", "abc"};
-		NSSet<String> set = new NSSet<String>(strings);
+		NSSet<String> set = new NSSet<>(strings);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSSetNSArrayOfQextendsE() {
-		NSMutableArray<String> list = new NSMutableArray<String>();
+		NSMutableArray<String> list = new NSMutableArray<>();
 		list.add("abc");
 		list.add("abc");
 		
-		NSSet<String> set = new NSSet<String>(list);
+		NSSet<String> set = new NSSet<>(list);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 	}
 
 	public void testNSSetNSSetOfQextendsE() {
-		NSSet<String> set = new NSSet<String>("abc");
-		NSSet<String> copy = new NSSet<String>(set);
+		NSSet<String> set = new NSSet<>("abc");
+		NSSet<String> copy = new NSSet<>(set);
 		assertEquals(1, copy.size());
 		assertTrue(copy.contains("abc"));
 	}
 
 	public void testNSSetSetOfQextendsEBoolean() {
-		Set<String> source = new HashSet<String>();
+		Set<String> source = new HashSet<>();
 		source.add("abc");
 		source.add(null);
 		
-		NSSet<String> set = new NSSet<String>(source, true);
+		NSSet<String> set = new NSSet<>(source, true);
 		assertEquals(1, set.size());
 		assertTrue(set.contains("abc"));
 		
 		try {
-			set = new NSSet<String>(source, false);
+			set = new NSSet<>(source, false);
 			fail("IllegalArgumentException expected");
 		} catch (IllegalArgumentException e) {
 		}
 		
-		source = new NSSet<String>(new String[] { "abc", "def" });
-		set = new NSSet<String>(source, false);
+		source = new NSSet<>(new String[] { "abc", "def" });
+		set = new NSSet<>(source, false);
 		assertEquals(source, set);
 	}
 
 	public void testAllObjects() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
 		NSArray<String> allObjects = set.allObjects();
 		assertEquals(2, allObjects.size());
 		assertTrue(allObjects.contains("abc"));
@@ -85,22 +85,22 @@ public class NSSetTest extends ERXTestCase {
 	}
 
 	public void testAnyObject() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		Object object = set.anyObject();
 		assertEquals("abc", object);
 	}
 
 	public void testContainsObject() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		assertTrue(set.containsObject("abc"));
 		assertFalse(set.containsObject("123"));
 	}
 
 	public void testCount() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		assertEquals(1, set.count());
 		
-		set = new NSSet<String>(new String[] { "abc", "123", "abc" });
+		set = new NSSet<>(new String[] { "abc", "123", "abc" });
 		assertEquals(2, set.count());
 	}
 
@@ -110,107 +110,107 @@ public class NSSetTest extends ERXTestCase {
 	}
 
 	public void testHashSet() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		HashSet<String> hashSet = set.hashSet();
 		assertEquals(1, hashSet.size());
 		assertTrue(hashSet.contains("abc"));
 	}
 
   public void testClone() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
 		NSSet<String> clone = (NSSet<String>) set.clone();
 		assertEquals(set, clone);
 	}
 
 	public void testImmutableClone() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
 		NSSet<String> clone = set.immutableClone();
 		assertEquals(set, clone);
 		assertEquals(NSSet.class, clone.getClass());
 	}
 
 	public void testMutableClone() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		NSMutableSet<String> clone = set.mutableClone();
 		assertEquals(1, clone.size());
 		assertTrue(clone.contains("abc"));
 	}
 
 	public void testIntersectsSet() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
-		NSSet<String> set2 = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
+		NSSet<String> set2 = new NSSet<>("abc");
 		assertTrue(set.intersectsSet(set2));
 		
-		NSSet<String> set3 = new NSSet<String>("def");
+		NSSet<String> set3 = new NSSet<>("def");
 		assertFalse(set.intersectsSet(set3));
 	}
 
 	public void testIsEqualToSet() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
-		NSSet<String> set2 = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
+		NSSet<String> set2 = new NSSet<>(new String[] { "abc", "123" });
 		assertTrue(set.isEqualToSet(set2));
 		
-		NSSet<String> set3 = new NSSet<String>("abc");
+		NSSet<String> set3 = new NSSet<>("abc");
 		assertFalse(set.isEqualToSet(set3));
 	}
 
 	public void testIsSubsetOfSet() {
-		NSSet<String> set = new NSSet<String>("abc");
-		NSSet<String> set2 = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>("abc");
+		NSSet<String> set2 = new NSSet<>(new String[] { "abc", "123" });
 		assertTrue(set.isSubsetOfSet(set2));
 		assertFalse(set2.isSubsetOfSet(set));
 		
-		NSSet<String> set3 = new NSSet<String>("def");
+		NSSet<String> set3 = new NSSet<>("def");
 		assertFalse(set.isSubsetOfSet(set3));
 	}
 
 	public void testMember() {
-		NSSet<String> set = new NSSet<String>("abc");
+		NSSet<String> set = new NSSet<>("abc");
 		assertTrue(set.member("abc").equals("abc"));
 		assertFalse(set.member("123") != null);
 	}
 
 	public void testSetByIntersectingSet() {
-		NSSet<String> set = new NSSet<String>("abc");
-		NSSet<String> set2 = new NSSet<String>(new String[] { "abc", "123" });
+		NSSet<String> set = new NSSet<>("abc");
+		NSSet<String> set2 = new NSSet<>(new String[] { "abc", "123" });
 		
 		NSSet<String> intersection = set.setByIntersectingSet(set2);
 		assertEquals(1, intersection.size());
 		assertTrue(intersection.contains("abc"));
 		
-		set2 = new NSSet<String>("123");
+		set2 = new NSSet<>("123");
 		intersection = set.setByIntersectingSet(set2);
 		assertTrue(intersection.isEmpty());
 	}
 
 	public void testSetBySubtractingSet() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
-		NSSet<String> set2 = new NSSet<String>("123");
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
+		NSSet<String> set2 = new NSSet<>("123");
 		
 		NSSet<String> difference = set.setBySubtractingSet(set2);
 		assertEquals(1, difference.size());
 		assertTrue(difference.contains("abc"));
 		
-		set2 = new NSSet<String>("def");
+		set2 = new NSSet<>("def");
 		difference = set.setBySubtractingSet(set2);
 		assertEquals(set, difference);
 	}
 
 	public void testSetByUnioningSet() {
-		NSSet<String> set = new NSSet<String>(new String[] { "abc", "123" });
-		NSSet<String> set2 = new NSSet<String>("def");
+		NSSet<String> set = new NSSet<>(new String[] { "abc", "123" });
+		NSSet<String> set2 = new NSSet<>("def");
 		
 		NSSet<String> union = set.setByUnioningSet(set2);
 		assertEquals(3, union.size());
 		
-		set2 = new NSSet<String>("abc");
+		set2 = new NSSet<>("abc");
 		union = set.setByUnioningSet(set2);
 		assertEquals(set.size(), union.size());
 	}
 
 	public void testClear() {
 		try {
-			new NSSet<String>("abc").clear();
+			new NSSet<>("abc").clear();
 			fail("Clear should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
 		}
@@ -226,7 +226,7 @@ public class NSSetTest extends ERXTestCase {
 
 	public void testAddAllCollection() {
 		try {
-			HashSet<String> set = new HashSet<String>();
+			HashSet<String> set = new HashSet<>();
 			set.add("abc");
 			set.add("123");
 			NSSet.emptySet().addAll(set);
@@ -237,7 +237,7 @@ public class NSSetTest extends ERXTestCase {
 
 	public void testRemove() {
 		try {
-		  NSSet<String> set = new NSSet<String>(new String[] { "abc" });
+		  NSSet<String> set = new NSSet<>(new String[] { "abc" });
 			set.remove("abc");
 			fail("Clear should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
@@ -246,10 +246,10 @@ public class NSSetTest extends ERXTestCase {
 
 	public void testRemoveAllCollection() {
 		try {
-			HashSet<String> hashset = new HashSet<String>();
+			HashSet<String> hashset = new HashSet<>();
 			hashset.add("abc");
 			hashset.add("123");
-			NSSet<String> set = new NSSet<String>(new String[] { "abc" });
+			NSSet<String> set = new NSSet<>(new String[] { "abc" });
 			set.removeAll(hashset);
 			fail("RemoveAll should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
@@ -258,10 +258,10 @@ public class NSSetTest extends ERXTestCase {
 
 	public void testRetainAllCollection() {
 		try {
-			HashSet<String> hashset = new HashSet<String>();
+			HashSet<String> hashset = new HashSet<>();
 			hashset.add("abc");
 			hashset.add("123");
-			NSSet<String> set = new NSSet<String>(new String[] { "abc", "def" });
+			NSSet<String> set = new NSSet<>(new String[] { "abc", "def" });
 			set.retainAll(hashset);
 			fail("RetainAll should throw UnsupportedOperationException");
 		} catch (UnsupportedOperationException e) {
@@ -269,7 +269,7 @@ public class NSSetTest extends ERXTestCase {
 	}
 	
 	public void testNSSetIterator() {
-		NSSet<String> set = new NSSet<String>("abc", "def");
+		NSSet<String> set = new NSSet<>("abc", "def");
 		NSMutableSet<String> check = set.mutableClone();
 		
 		Iterator<String> iterator = set.iterator();

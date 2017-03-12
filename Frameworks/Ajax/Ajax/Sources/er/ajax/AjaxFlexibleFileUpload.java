@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -23,6 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * this component to be used in or out of a form. The component is fully styleable (including the upload button) and
  * supports upload progress and canceling.
  * 
+ * @binding accept the attribute specifies the types of files that the server accepts (that can be submitted through a file upload) 
  * @binding cancelLabel the label for for the cancel button (defaults to "Cancel")
  * @binding startingText the text to display when the progress is starting (defaults "Upload Starting...");
  * @binding selectFileLabel the label for the select file button (defaults to "Select File...")
@@ -71,10 +73,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Logger
-	 */
-	private static final Logger log = Logger.getLogger(AjaxFlexibleFileUpload.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxFlexibleFileUpload.class);
 	
 	public static interface Keys {
 		public static final String name = "name";
@@ -102,7 +101,46 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
 		public static final String onClickBefore = "onClickBefore";
 	}
-	
+
+	/**
+	 * Wrapper class to expose only the methods we need to {@link AjaxProxy}.
+	 * 
+	 * @author paulh
+	 * @see <a href="https://github.com/wocommunity/wonder/issues/768">#768</a>
+	 */
+	public final class Proxy {
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public NSDictionary<String, ?> uploadState() {
+			return AjaxFlexibleFileUpload.this.uploadState();
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#cancelUpload()}.
+		 */
+		public void cancelUpload() {
+			AjaxFlexibleFileUpload.this.cancelUpload();
+			return;
+		}
+
+		/**
+		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
+		 * 
+		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
+		 */
+		public WOActionResults clearFileResults() {
+			return AjaxFlexibleFileUpload.this.clearFileResults();
+		}
+	}
+
+	/**
+	 * Proxy used for method access by {@link AjaxProxy}
+	 */
+	public final Proxy proxy = new Proxy();
+
 	private String _refreshTime;
 	private String _clearLabel;
 	private String _cancelLabel;
@@ -146,7 +184,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      */
 	public String ajaxUploadScript() {
 		String result = "AUP.add('" + id() + "', " + ajaxProxyName() +", {" + ajaxUploadLabels() + "}, {" + options() + "}, {" + ajaxUploadOptions() + "});";
-		if (log.isDebugEnabled()) log.debug("AFU Create Script: " + result);
+		log.debug("AFU Create Script: {}", result);
 		return result;
 	}
 	
@@ -156,7 +194,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 */
 	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>(WOApplication.application().sessionIdKey()
+		NSMutableArray<String> _data = new NSMutableArray<>(WOApplication.application().sessionIdKey()
 				+ ":'" + session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
@@ -179,9 +217,12 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return array of AjaxUpload options
 	 */
     protected NSArray<String> _ajaxUploadOptions() {
-    	NSMutableArray<String> _options = new NSMutableArray<String>("action:'" + uploadUrl() + "'");
+    	NSMutableArray<String> _options = new NSMutableArray<>("action:'" + uploadUrl() + "'");
     	
     	// add options
+    	if (canGetValueForBinding("accept")) {
+    		_options.addObject("accept:'"+ valueForBinding("accept") +"'");
+    	}
     	_options.addObject("data:{" + ajaxUploadData() + "}");
     	_options.addObject("name:'" + uploadName() + "'");
     	_options.add("iframeId:'"+ iframeId() +"'");
@@ -212,7 +253,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return array of label/text strings
      */
     protected NSArray<String> _ajaxUploadLabels() {
-    	NSMutableArray<String> _labels = new NSMutableArray<String>();
+    	NSMutableArray<String> _labels = new NSMutableArray<>();
     	_labels.addObject(String.format("upload_canceling:'%s'", cancelingText()));
     	_labels.addObject(String.format("upload_starting:'%s'", startingText()));
     	_labels.addObject(String.format("upload_failed:'%s'", localizedStringForBinding(Keys.failedText, "Upload Failed")));
@@ -233,7 +274,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return array of AFU options
      */
     protected NSArray<String> _options() {
-    	NSMutableArray<String> _options = new NSMutableArray<String>(String.format("refreshtime:%s", refreshTime()));
+    	NSMutableArray<String> _options = new NSMutableArray<>(String.format("refreshtime:%s", refreshTime()));
     	_options.addObject("autosubmit:" + autoSubmit());
     	_options.addObject("allowcancel:" + valueForBinding(Keys.allowCancel));
       _options.add("clearUploadProgressOnSuccess:" + clearUploadProgressOnSuccess());
@@ -295,7 +336,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return a dictionary containing the current state of the upload.
 	 */
 	public NSDictionary<String, ?> uploadState() {
-		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<>();
 		AjaxUploadProgress progress = uploadProgress();
 		if (progress != null) {
 			stateObj.takeValueForKey(progressAmount(), "progress");
@@ -306,7 +347,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		if (state == UploadState.CANCELED) {
 			stateObj.takeValueForKey(cancelUrl(), "cancelUrl");
 		}
-		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload2.uploadState: " + stateObj);
+		log.debug("AjaxFlexibleFileUpload2.uploadState: {}", stateObj);
 		return stateObj.immutableClone();
 	}
 	
@@ -345,7 +386,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 				}
 			}
 		}
-		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload.refreshState: " + state);
+		log.debug("AjaxFlexibleFileUpload.refreshState: {}", state);
 	}
 	
 	/**
@@ -360,7 +401,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the manual upload button
 	 * 
-	 * @return JS function bound to the manul upload button
+	 * @return JS function bound to the manual upload button
 	 */
 	public String manualSubmitUploadFunction() {
 		return String.format("AUP.submit('%s');", id());
@@ -369,7 +410,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * JS function bound to the clear button
 	 * 
-	 * @return JS function bound ot the clear button
+	 * @return JS function bound to the clear button
 	 */
 	public String clearUploadFunction() {
 		return String.format("AUP.clear('%s');", id());
@@ -517,12 +558,12 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Returns a closeHTTPSession DA action URL passed to the iframe to cancel the client-side upload
 	 * 
-	 * @return url sent to the iframe to cancel
+	 * @return URL sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String, Object> queryParams = new NSDictionary<String, Object>(Boolean.FALSE, WOApplication.application().sessionIdKey());
+		NSDictionary<String, Object> queryParams = new NSDictionary<>(Boolean.FALSE, WOApplication.application().sessionIdKey());
 		String url = context()._directActionURL("ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()), 0, false);
-		if (log.isDebugEnabled()) log.debug("URL: " + url);
+		log.debug("URL: {}", url);
 		return url;
 	}
 	

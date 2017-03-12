@@ -1,6 +1,7 @@
 package er.reporting;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -23,19 +24,19 @@ import er.grouping.DRReportModel;
  * Provides a quick way to set up a {@link WRReport}. Instead of binding all those keys,
  * you can simply set up the components via a dictionary.
  * There are several modes you can supply the data:
- * <li>Via a model dictionary, a path to a model dictionary or a string defining a model dictionary<br/>
- *     A model dictionary is defined by the keys <code>GroupDef</code> and <code>AttributeDef</code>.
- * <li>Via a report dictionary. <br />
- *     A report dictionary is a dictionary with the key <code>model</code> defining
+ * <dl>
+ * <dt>Via a model dictionary, a path to a model dictionary or a string defining a model dictionary</dt>
+ * <dd>A model dictionary is defined by the keys <code>GroupDef</code> and <code>AttributeDef</code>.</dd>
+ * <dt>Via a report dictionary.</dt>
+ * <dd>A report dictionary is a dictionary with the key <code>model</code> defining
  *     a model dictionary, and a key <code>settings</code>, defining the values normally bound
- *     to the report, like <code>shouldShowNavigation</code> and the like.
+ *     to the report, like <code>shouldShowNavigation</code> and the like.</dd>
+ * </dl>
  * Additionally, you can bind all values defining the report to the component itself, overriding
  * the values in the dictionary.
  */
-
 public class WRQuickReport extends WOComponent  {
-
-    private Logger log = Logger.getLogger(WRQuickReport.class);
+    private static final Logger log = LoggerFactory.getLogger(WRQuickReport.class);
     protected DRReportModel _model;
     protected NSDictionary _modelDictionary;
     protected NSDictionary _reportDictionary;
@@ -127,9 +128,9 @@ public class WRQuickReport extends WOComponent  {
         } else {
             if (hasBinding("pathString")) {
                 String p = (String)super.valueForBinding("pathString");
-                log.debug( "p:"+p);
+                log.debug("p: {}", p);
                 String plist = ERXStringUtilities.stringWithContentsOfFile(p);
-                log.debug( "plist:"+plist);
+                log.debug("plist: {}", plist);
                 return plist;
             }
         }
@@ -152,10 +153,8 @@ public class WRQuickReport extends WOComponent  {
                         _modelDictionary = NSDictionary.EmptyDictionary;
                     }
                 }
-                if(log.isDebugEnabled()) {
-                    log.debug("plistString:" + plistString);
-                    log.debug( "modelDict:" + _modelDictionary);
-                }
+                log.debug("plistString: {}", plistString);
+                log.debug( "modelDict: {}", _modelDictionary);
             }
         }
         return _modelDictionary;
@@ -220,13 +219,13 @@ public class WRQuickReport extends WOComponent  {
             }
             if(super.hasBinding("model")) {
                 if(super.canSetValueForBinding("model")) {
-                    log.info("setValueForBinding model: DRReportModel@" + _model.hashCode());
+                    log.info("setValueForBinding model: DRReportModel@{}", _model.hashCode());
                     super.setValueForBinding(_model, "model");
                 }
             }
             if(log.isDebugEnabled()) {
-                log.debug( "model(): DRReportModel@" + _model.hashCode());
-                log.debug( "model().records(): "+_model.records().count());
+                log.debug( "model(): DRReportModel@{}", _model.hashCode());
+                log.debug( "model().records(): {}", _model.records().count());
             }
         }
         return _model;
@@ -250,9 +249,7 @@ public class WRQuickReport extends WOComponent  {
     @Override
     public boolean hasBinding(String name) {
         boolean result = super.hasBinding(name) || settingsDictionary().objectForKey(name) != null;
-        if(log.isDebugEnabled()) {
-            log.debug("hasBinding: "+ name + " : " + result);
-        }
+        log.debug("hasBinding: {} : {}", name, result);
         return result;
     }
 
@@ -264,9 +261,7 @@ public class WRQuickReport extends WOComponent  {
         } else {
             result = settingsDictionary().objectForKey(name);
         }
-        if(log.isDebugEnabled()) {
-            log.debug("valueForBinding: "+ name + " : " + result);
-        }
+        log.debug("valueForBinding: {} : {}", name, result);
         return result;
     }
 

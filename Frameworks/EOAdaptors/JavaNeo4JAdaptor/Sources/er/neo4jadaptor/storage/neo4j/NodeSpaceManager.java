@@ -17,9 +17,6 @@ import er.extensions.foundation.ERXProperties;
  * @author Jedrzej Sobanski
  */
 public class NodeSpaceManager {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodeSpaceManager.class);
-	
 	private final GraphDatabaseService db;
 
 	public NodeSpaceManager(GraphDatabaseService db) {

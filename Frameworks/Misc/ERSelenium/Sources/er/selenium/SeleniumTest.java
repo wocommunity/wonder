@@ -25,7 +25,8 @@ package er.selenium;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -203,7 +204,7 @@ public class SeleniumTest implements Cloneable {
 		}
 	}
 	
-	private static final Logger log = Logger.getLogger(SeleniumTest.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTest.class);
 	protected NSMutableArray<SeleniumTest.Element> elements;
 	protected String name;
 	
@@ -246,10 +247,10 @@ public class SeleniumTest implements Cloneable {
 	}
 	
 	public void dump() {
-		log.debug("Test name: " + name);
+		log.debug("Test name: {}", name);
 		Iterator iter = elements.iterator();
 		while (iter.hasNext()) {
-			log.debug(iter.next().toString());
+			log.debug("{}", iter.next());
 		}
 	}
 }

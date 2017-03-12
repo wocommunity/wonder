@@ -2,6 +2,9 @@ package er.attachment.upload;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 
@@ -25,6 +28,7 @@ import er.extensions.foundation.ERXExceptionUtilities;
  */
 public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteAttachment> extends ERXAsyncQueue<ERAttachmentQueueEntry<T>> {
     protected final ERAttachmentProcessor<T> _processor;
+    private static final Logger log = LoggerFactory.getLogger(ERAttachmentProcessor.class);
 
     public ERAttachmentUploadQueue(String name, ERAttachmentProcessor<T> processor) {
         super(name);
@@ -45,7 +49,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
 
         try {
             EOGlobalID attachmentID = editingContext.globalIDForObject(attachment);
-            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<T>(attachment._pendingUploadFile(), attachmentID);
+            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<>(attachment._pendingUploadFile(), attachmentID);
 
             enqueue(entry);
         } finally {
@@ -81,7 +85,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
                     _processor.delegate().attachmentNotAvailable(_processor, attachment, ERXExceptionUtilities.toParagraph(t));
                 }
 
-                ERAttachmentProcessor.log.error("Failed to upload '" + uploadedFile + "' to the remote server.", t);
+                log.error("Failed to upload '{}' to the remote server.", uploadedFile, t);
             } finally {
                 if (attachment._isPendingDelete()) {
                     uploadedFile.delete();
@@ -92,7 +96,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
                 _processor.delegate().attachmentNotAvailable(_processor, attachment, "Missing attachment file '" + uploadedFile + "'.");
             }
 
-            ERAttachmentProcessor.log.error("Missing attachment file '" + uploadedFile + "'.");
+            log.error("Missing attachment file '{}'.", uploadedFile);
         }
     }
 

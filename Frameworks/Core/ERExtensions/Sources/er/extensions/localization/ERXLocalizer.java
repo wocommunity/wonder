@@ -17,12 +17,14 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -191,9 +193,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	public static final String KEY_LOCALIZER_EXCEPTIONS = "localizerExceptions";
 
-	protected static final Logger log = Logger.getLogger(ERXLocalizer.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXLocalizer.class);
 
-	protected static final Logger createdKeysLog = Logger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
+	private static final Logger createdKeysLog = LoggerFactory.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
 
 	private static boolean isLocalizationEnabled = true;
 
@@ -208,7 +210,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private static Observer observer = new Observer();
 
   /** <div class="ja">モニタ中のファイル・リスト</div> */
-	private static NSMutableArray<URL> monitoredFiles = new NSMutableArray<URL>();
+	private static List<URL> monitoredFiles = new NSMutableArray<>();
 	
 	private static final char _localizerMethodIndicatorCharacter = '@';
 
@@ -217,7 +219,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	static NSArray<String> availableLanguages;
 	static String defaultLanguage;
 
-	static NSMutableDictionary<String, ERXLocalizer> localizers = new NSMutableDictionary<String, ERXLocalizer>();
+	static NSMutableDictionary<String, ERXLocalizer> localizers = new NSMutableDictionary<>();
 
 	public static class Observer {
 		public void fileDidChange(NSNotification n) {
@@ -370,7 +372,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			}
 		}
 		else {
-			localizers = new NSMutableDictionary<String, ERXLocalizer>();
+			localizers = new NSMutableDictionary<>();
 		}
 	}
 
@@ -386,7 +388,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (key != null && value != null) {
 			createdKeys.takeValueForKey(value, key);
 			if (key.indexOf(" ") > 0) {
-				log.info("Value added: " + key + "->" + value + " in " + NSPropertyListSerialization.stringFromPropertyList(ERXWOContext.componentPath(ERXWOContext.currentContext())));
+				log.info("Value added: {}->{} in {}", key, value, NSPropertyListSerialization.stringFromPropertyList(ERXWOContext.componentPath(ERXWOContext.currentContext())));
 			}
 		}
 	}
@@ -435,7 +437,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		return localizerForLanguage(languages.objectAtIndex(0));
 	}
 
-	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<String>(new String[] { "Japanese" });
+	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<>(new String[] { "Japanese" });
 
 	/**
 	 * <div class="en">
@@ -532,9 +534,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    */
 	public static NSArray<String> fileNamesToWatch() {
 		if (fileNamesToWatch == null) {
-			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray<String>(new String[] { "Localizable.strings", "ValidationTemplate.strings" }));
+			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray<>(new String[] { "Localizable.strings", "ValidationTemplate.strings" }));
 			if (log.isDebugEnabled())
-        log.debug("FileNamesToWatch: " + fileNamesToWatch.componentsJoinedByString(" / "));
+        log.debug("FileNamesToWatch: {}", fileNamesToWatch.componentsJoinedByString(" / "));
 		}
 		return fileNamesToWatch;
 	}
@@ -562,7 +564,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (availableLanguages == null) {
 			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new String[] { "English", "German", "Japanese" }));
 			if (log.isDebugEnabled())
-        log.debug("AvailableLanguages: " + availableLanguages.componentsJoinedByString(" / "));
+        log.debug("AvailableLanguages: {}", availableLanguages.componentsJoinedByString(" / "));
 		}
 		return availableLanguages;
 	}
@@ -590,7 +592,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (frameworkSearchPath == null) {
 		  frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
 		  if(frameworkSearchPath == null) {
-		    NSMutableArray<String> defaultValue = new NSMutableArray<String>();
+		    NSMutableArray<String> defaultValue = new NSMutableArray<>();
 		    for (Enumeration<NSBundle> e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
 		      NSBundle bundle = e.nextElement();
 		      String name = bundle.name();
@@ -615,7 +617,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				frameworkSearchPath = defaultValue;
 			}
 			if (log.isDebugEnabled())
-				log.debug("FrameworkSearchPath: " + frameworkSearchPath.componentsJoinedByString(" / "));
+				log.debug("FrameworkSearchPath: {}", frameworkSearchPath.componentsJoinedByString(" / "));
 		}
 		return frameworkSearchPath;
 	}
@@ -670,7 +672,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			localizer = (ERXLocalizer) constructor.newInstance(new Object[] { language });
 		}
 		catch (Exception e) {
-			log.error("Unable to create localizer for language \"" + language + "\" class name: " + className + " exception: " + e.getMessage() + ", will use default classes", e);
+			log.error("Unable to create localizer for language '{}' class name: {} exception: {}, will use default classes.", language, className, e.getMessage(), e);
 		}
 		if (localizer == null) {
 			if (pluralForm)
@@ -696,8 +698,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	protected NSMutableDictionary<String, Object> cache;
 	private NSMutableDictionary<String, Object> createdKeys;
 	private String NOT_FOUND = "**NOT_FOUND**";
-	protected Hashtable<String, Format> _dateFormatters = new Hashtable<String, Format>();
-	protected Hashtable<String, Format> _numberFormatters = new Hashtable<String, Format>();
+	protected Map<String, Format> _dateFormatters = new Hashtable<>();
+	protected Map<String, Format> _numberFormatters = new Hashtable<>();
 	protected String language;
 	protected Locale locale;
 	
@@ -705,12 +707,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	private Map<Pattern, String> _singularifyRules;
 
 	public ERXLocalizer(String aLanguage) {
-		_plurifyRules = new HashMap<Pattern, String>();
-		_singularifyRules = new HashMap<Pattern, String>();
+		_plurifyRules = new HashMap<>();
+		_singularifyRules = new HashMap<>();
 		
 		language = aLanguage;
-		cache = new NSMutableDictionary<String, Object>();
-		createdKeys = new NSMutableDictionary<String, Object>();
+		cache = new NSMutableDictionary<>();
+		createdKeys = new NSMutableDictionary<>();
 
 		// We first check to see if we have a locale register for the language name
 		String shortLanguage = ERXProperties.stringForKey("er.extensions.ERXLocalizer." + aLanguage + ".locale");
@@ -723,7 +725,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				if (keys.count() > 0) {
 					shortLanguage = keys.objectAtIndex(0);
 					if (keys.count() > 1) {
-						log.info("Found multiple entries for language \"" + aLanguage + "\" in Language.plist file! Found keys: " + keys);
+						log.info("Found multiple entries for language '{}' in Language.plist file! Found keys: {}", aLanguage, keys);
 					}
 				}
 			}
@@ -735,7 +737,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			locale = new Locale(shortLanguage);
 		}
 		else {
-			log.info("Locale for " + aLanguage + " not found! Using default locale: " + Locale.getDefault());
+			log.info("Locale for {} not found! Using default locale: {}", aLanguage, Locale.getDefault());
 			locale = Locale.getDefault();
 		}
 		load();
@@ -758,9 +760,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		createdKeys.removeAllObjects();
 
 		if (log.isDebugEnabled())
-		  log.debug("Loading templates for language: " + language + " for files: " + fileNamesToWatch().componentsJoinedByString(" / ") + " with search path: " + frameworkSearchPath().componentsJoinedByString(" / "));
+		  log.debug("Loading templates for language: {} for files: {} with search path: {}", language, fileNamesToWatch().componentsJoinedByString(" / "), frameworkSearchPath().componentsJoinedByString(" / "));
 
-		NSArray<String> languages = new NSArray<String>(language);
+		NSArray<String> languages = new NSArray<>(language);
 		Enumeration<String> fn = fileNamesToWatch().objectEnumerator();
 		while (fn.hasMoreElements()) {
 			String fileName = fn.nextElement();
@@ -773,13 +775,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 					try {
 						framework = "app".equals(framework) ? null : framework;
 						if(log.isDebugEnabled())
-						  log.debug("Loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages.componentsJoinedByString(" / ") + " " + path);
+						  log.debug("Loading: {} - {} - {} {}", fileName, (framework == null ? "app" : framework), languages.componentsJoinedByString(" / "), path);
 						
 						NSDictionary<String, Object> dict = (NSDictionary<String, Object>) ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages);
 						// HACK: ak we have could have a collision between the search path for validation strings and
 						// the normal localized strings.
 						if (fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
-							NSMutableDictionary<String, Object> newDict = new NSMutableDictionary<String, Object>();
+							NSMutableDictionary<String, Object> newDict = new NSMutableDictionary<>();
 							for (Enumeration<String> keys = dict.keyEnumerator(); keys.hasMoreElements();) {
 								String key = keys.nextElement();
 								newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
@@ -789,20 +791,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 						addEntriesToCache(dict);
 						if (!WOApplication.application().isCachingEnabled()) {
 							synchronized (monitoredFiles) {
-								if (!monitoredFiles.containsObject(path)) {
+								if (!monitoredFiles.contains(path)) {
 									ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path.getFile());
-									monitoredFiles.addObject(path);
+									monitoredFiles.add(path);
 								}
 							}
 						}
 					}
 					catch (Exception ex) {
-            log.warn("Exception loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages.componentsJoinedByString(" / ") + ":" + ex, ex);
+            log.warn("Exception loading: {} - {} - {}.", fileName, (framework == null ? "app" : framework), languages.componentsJoinedByString(" / "), ex);
 					}
 				}
 				else {
 				  if(log.isDebugEnabled())
-				    log.debug("Unable to create path for resource named: " + fileName + " framework: " + (framework == null ? "app" : framework) + " languages: " + languages.componentsJoinedByString(" / "));
+				    log.debug("Unable to create path for resource named: {} framework: {} languages: {}", fileName, (framework == null ? "app" : framework), languages.componentsJoinedByString(" / "));
 				}
 			}
 		}
@@ -856,7 +858,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			plurifyRules = defaultPlurifyRules();
 		}
 		else {
-			plurifyRules = new LinkedHashMap<Pattern, String>();
+			plurifyRules = new LinkedHashMap<>();
 			String[] rulePairs = plurifyRulesStr.split(":");
 			for (int i = 0; i < rulePairs.length; i ++) {
 				String[] rulePair = rulePairs[i].split("=");
@@ -884,7 +886,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 *         <div class="ja">デフォルト複数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultPlurifyRules() {
-		Map<Pattern, String> defaultPlurifyRules = new LinkedHashMap<Pattern, String>();
+		Map<Pattern, String> defaultPlurifyRules = new LinkedHashMap<>();
 
 		defaultPlurifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
 		defaultPlurifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
@@ -967,7 +969,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			singularifyRules = defaultSingularifyRules();
 		}
 		else {
-			singularifyRules = new LinkedHashMap<Pattern, String>();
+			singularifyRules = new LinkedHashMap<>();
 			String[] rulePairs = plurifyRulesStr.split(":");
 			for (int i = 0; i < rulePairs.length; i ++) {
 				String[] rulePair = rulePairs[i].split("=");
@@ -995,7 +997,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 *         <div class="ja">デフォルト単数形ルールを戻します</div>
 	 */
 	protected Map<Pattern, String> defaultSingularifyRules() {
-		Map<Pattern, String> defaultSingularifyRules = new LinkedHashMap<Pattern, String>();
+		Map<Pattern, String> defaultSingularifyRules = new LinkedHashMap<>();
 
 		defaultSingularifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
 		defaultSingularifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
@@ -1046,19 +1048,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			NSDictionary<String, Object> currentLEs = (NSDictionary<String, Object>) cache.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
 			NSDictionary<String, Object> newLEs = (NSDictionary<String, Object>) dict.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
 			if (currentLEs != null && newLEs != null) {
-				if (log.isDebugEnabled())
-					log.debug("Merging localizerExceptions " + currentLEs + " with " + newLEs);
+				log.debug("Merging localizerExceptions {} with {}", currentLEs, newLEs);
 				NSMutableDictionary<String, Object> combinedLEs = currentLEs.mutableClone();
 				combinedLEs.addEntriesFromDictionary(newLEs);
 				NSMutableDictionary<String, Object> replacementDict = dict.mutableClone();
 				replacementDict.takeValueForKey(combinedLEs, KEY_LOCALIZER_EXCEPTIONS);
 				dict = replacementDict;
-				if (log.isDebugEnabled())
-					log.debug("Result of merge: " + combinedLEs);
+				log.debug("Result of merge: {}", combinedLEs);
 			}
 		}
 		catch (RuntimeException e) {
-			log.error("Error while adding enties to cache", e);
+			log.error("Error while adding enties to cache.", e);
 		}
 
 		cache.addEntriesFromDictionary(dict);
@@ -1093,9 +1093,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				String firstComponent = key.substring(0, indexOfDot);
 				String otherComponents = key.substring(indexOfDot + 1, key.length());
 				result = cache.objectForKey(firstComponent);
-				if (log.isDebugEnabled()) {
-					log.debug("Trying " + firstComponent + " . " + otherComponents);
-				}
+				log.debug("Trying {} . {}", firstComponent, otherComponents);
 				if (result != null) {
 					try {
 						result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
@@ -1173,9 +1171,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		}
 		Object result = localizedValueForKey(key);
 		if (result == null || NOT_FOUND.equals(result)) {
-			if (createdKeysLog.isDebugEnabled()) {
-				createdKeysLog.debug("Default key inserted: '" + key + "'/" + language);
-			}
+			createdKeysLog.debug("Default key inserted: '{}'/{}", key, language);
 			setCacheValueForKey(key, key);
 			addToCreatedKeys(key, key);
 			result = key;
@@ -1228,10 +1224,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (result != null)
 			return result;
 
-		if (createdKeysLog.isDebugEnabled()) {
-		  if(log.isDebugEnabled())
-		    log.debug("Key not found: '" + key + "'/" + language);
-		}
+		log.debug("Key not found: '{}'/{}", key, language);
 		if (fallbackToDefaultLanguage() && !defaultLanguage().equals(language)) {
 			Object valueInDefaultLanguage = defaultLocalizer().localizedValueForKey(key);
 			setCacheValueForKey(valueInDefaultLanguage == null ? NOT_FOUND : valueInDefaultLanguage, key);
@@ -1306,8 +1299,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			String localized = localizedStringForKey(result);
 			if (localized != null) {
 				result = localized;
-				if(log.isInfoEnabled())
-				  log.info("Found an old-style entry: " + localizerKey + "->" + result);
+				log.info("Found an old-style entry: {}->{}", localizerKey, result);
 			}
 			takeValueForKey(result, localizerKey);
 		}
@@ -1423,7 +1415,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	// name is already localized!
 	// subclasses can override for more sensible behaviour
 	public String plurifiedStringWithTemplateForKey(String key, String name, int count, Object helper) {
-		NSDictionary<String, Object> dict = new NSDictionary<String, Object>(new Object[] { plurifiedString(name, count), Integer.valueOf(count) }, 
+		NSDictionary<String, Object> dict = new NSDictionary<>(new Object[] { plurifiedString(name, count), Integer.valueOf(count) }, 
 				new String[] { "pluralString", "pluralCount" });
 		return localizedTemplateStringForKeyWithObjectOtherObject(key, dict, helper);
 	}

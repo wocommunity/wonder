@@ -17,9 +17,6 @@ public class LuceneTranslator implements Translator {
 		public Object decode(String encoded);
 	}
 	
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LuceneTranslator.class);
-
 	public static final LuceneTranslator instance = new LuceneTranslator();
 	
 	private static final String NULL_LITERAL = "";

@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -31,9 +29,6 @@ public class ERXUnreadMarker extends WOComponent {
     public ERXUnreadMarker(WOContext aContext) {
         super(aContext);
     }
-
-    /////////////////////////////////  log4j category  /////////////////////////////////
-    public static Logger log = Logger.getLogger(ERXUnreadMarker.class);
 
     @Override
     public boolean isStateless() { return true; }

@@ -25,13 +25,9 @@ package er.selenium.io;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import er.selenium.SeleniumTest;
 
 public class SeleniumSeleneseExporter implements SeleniumTestExporter {
-	private static final Logger log = Logger.getLogger(SeleniumSeleneseExporter.class);
-	
 	public String name() {
 		return "selenese";
 	}

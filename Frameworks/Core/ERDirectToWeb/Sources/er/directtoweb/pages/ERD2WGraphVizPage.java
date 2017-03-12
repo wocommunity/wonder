@@ -48,7 +48,7 @@ public class ERD2WGraphVizPage extends ERD2WPage {
     }
     
     public NSArray<String> attributes() {
-        NSMutableArray<String> result = new NSMutableArray<String>();
+        NSMutableArray<String> result = new NSMutableArray<>();
         EOEntity entity = entity();
         for (String key : (NSArray<String>)displayPropertyKeys()) {
             if(entity.classDescriptionForInstances().attributeKeys().containsObject(key) && entity.classPropertyNames().containsObject(key)) {
@@ -59,7 +59,7 @@ public class ERD2WGraphVizPage extends ERD2WPage {
     }
     
     public NSArray<String> toOneRelationships() {
-        NSMutableArray<String> result = new NSMutableArray<String>();
+        NSMutableArray<String> result = new NSMutableArray<>();
         EOEntity entity = entity();
         for (String key : (NSArray<String>)displayPropertyKeys()) {
             if(entity.classDescriptionForInstances().toOneRelationshipKeys().containsObject(key) && entity.classPropertyNames().containsObject(key)) {
@@ -78,7 +78,7 @@ public class ERD2WGraphVizPage extends ERD2WPage {
     }
     
     public NSArray<String> toManyRelationships() {
-        NSMutableArray<String> result = new NSMutableArray<String>();
+        NSMutableArray<String> result = new NSMutableArray<>();
         EOEntity entity = entity();
         for (String key : (NSArray<String>)displayPropertyKeys()) {
             if(entity.classDescriptionForInstances().toManyRelationshipKeys().containsObject(key) && entity.classPropertyNames().containsObject(key)) {

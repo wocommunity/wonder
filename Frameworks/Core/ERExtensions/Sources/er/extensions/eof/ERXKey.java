@@ -338,17 +338,14 @@ public class ERXKey<T> {
 	 * Creates a new ERXKey that appends ERXArrayUtilities'
 	 * {@code @flatten} operator to this key.
 	 * 
-	 * @param <U>
-	 *            the type of the next key
-	 * 
 	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@flatten}
 	 *         keypath
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
 	 *      FlattenOperator
 	 */
-	public <U> ERXKey<U> atFlatten() {
-		return (ERXKey<U>) append(ERXKey.flatten());
+	public ERXKey<T> atFlatten() {
+		return append(ERXKey.flatten());
 	}
 
 	/**
@@ -464,8 +461,6 @@ public class ERXKey<T> {
 	 *            the maximum number of objects allowed by the limit
 	 * @param <U>
 	 *            the type of the next key
-	 * @param key
-	 *            the key following the key to be limited
 	 * 
 	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
 	 *         {@code @limit.quantity} keypath
@@ -489,10 +484,6 @@ public class ERXKey<T> {
 	 * 
 	 * @param limit
 	 *            the maximum number of objects allowed by the limit
-	 * @param <U>
-	 *            the type of the next key
-	 * @param key
-	 *            the key following the key to be limited
 	 * 
 	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
 	 *         {@code thisKey.@limit.quantity} keypath
@@ -500,8 +491,8 @@ public class ERXKey<T> {
 	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
 	 *      LimitOperator
 	 */
-	public <U> ERXKey<U> atLimit(Integer limit) {
-		return (ERXKey<U>) append(ERXKey.limit(limit));
+	public ERXKey<T> atLimit(Integer limit) {
+		return append(ERXKey.limit(limit));
 	}
 	
 	/**
@@ -568,7 +559,7 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * objectAtIndex operator {@code @objectAtIndex}. For instance, if the index is 3 
 	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -584,7 +575,7 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * objectAtIndex operator {@code @objectAtIndex}. For instance, if the index is 3 
 	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -600,7 +591,7 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * objectAtIndex operator {@code @objectAtIndex}. For instance, if the index is 3 
 	 * then this will return a new ERXKey "@objectAtIndex.3".
 	 * 
 	 * @param <U> the type of the next key
@@ -615,22 +606,21 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
+	 * objectAtIndex operator {@code @objectAtIndex}. For instance, if the index is 3 
 	 * then this will return a new ERXKey "@objectAtIndex.3".
 	 * 
-	 * @param <U> the type of the next key
 	 * @param index The index of the object to return from the array
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
-	public <U> ERXKey<U> atObjectAtIndex(Integer index) {
-		return (ERXKey<U>) append(ERXKey.objectAtIndex(index));
+	public ERXKey<T> atObjectAtIndex(Integer index) {
+		return append(ERXKey.objectAtIndex(index));
 	}
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
+	 * RemoveNullValues operator {@code @removeNullValues}. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@removeNullValues.price".
 	 * @param key the key to use for this keypath
 	 * @param <U> the type of the next key
@@ -645,7 +635,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
+	 * RemoveNullValues operator {@code @removeNullValue}s. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@removeNullValues.price".
 	 * @param key the key to use for this keypath
 	 * @param <U> the type of the next key
@@ -659,7 +649,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Return a new ERXKey that uses ERXArrayUtilities' remove null values operator @removeNullValues.
+	 * Return a new ERXKey that uses ERXArrayUtilities' remove null values operator {@code @removeNullValues}.
 	 * 
 	 * @param <U> the type of the next key
 	 * 
@@ -673,16 +663,14 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * RemoveNullValues operator @removeNullValues.
-	 * 
-	 * @param <U> the type of the next key
+	 * RemoveNullValues operator {@code @removeNullValues}.
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
-	public <U> ERXKey<U> atRemoveNullValues() {
-		return (ERXKey<U>) append(ERXKey.removeNullValues());
+	public ERXKey<T> atRemoveNullValues() {
+		return append(ERXKey.removeNullValues());
 	}
 
 	/**
@@ -702,7 +690,7 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Reverse operator @reverse. For instance, if the key is "price"
+	 * Reverse operator {@code @reverse}. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@reverse.price".
 	 * @param key the key to use for this keypath
 	 * @param <U> the type of the next key
@@ -716,7 +704,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Return a new ERXKey that uses ERXArrayUtilities' reverse operator @reverse.
+	 * Return a new ERXKey that uses ERXArrayUtilities' reverse operator {@code @reverse}.
 	 * 
 	 * @param <U> the type of the next key
 	 * 
@@ -732,21 +720,19 @@ public class ERXKey<T> {
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
-	public <U> ERXKey<U> atReverse() {
-		return (ERXKey<U>) append(ERXKey.reverse());
+	public ERXKey<T> atReverse() {
+		return append(ERXKey.reverse());
 	}
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Sort operator @sort.  For instance,
+	 * Sort operator {@code @sort}. For instance,
 	 * <code>sort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sort.firstName,lastname
+	 * would return a key like {@code @sort.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
 	 * @param <U> the type of the next key
@@ -762,26 +748,25 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Sort operator @sort.  For instance,
+	 * Sort operator {@code @sort}. For instance,
 	 * <code>atSort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sort.firstName,lastname
+	 * would return a key like {@code @sort.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSort(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sort(sortKeys));
+	public ERXKey<T> atSort(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sort(sortKeys));
 	}
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortAscending operator @sortAsc.  For instance,
+	 * SortAscending operator {@code @sortAsc}. For instance,
 	 * <code>sortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortAsc.firstName,lastname
+	 * would return a key like {@code @sortAsc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
 	 * @param <U> the type of the next key
@@ -797,26 +782,25 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortAsc operator @sortAsc.  For instance,
+	 * SortAsc operator {@code @sortAsc}. For instance,
 	 * <code>atSortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortAsc.firstName,lastname
+	 * would return a key like {@code @sortAsc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortAsc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortAsc(sortKeys));
+	public ERXKey<T> atSortAsc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortAsc(sortKeys));
 	}
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortDescending operator @sortDesc.  For instance,
+	 * SortDescending operator {@code @sortDesc}. For instance,
 	 * <code>sortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortDesc.firstName,lastname
+	 * would return a key like {@code @sortDesc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
 	 * @param <U> the type of the next key
@@ -832,26 +816,25 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortDescending operator @sortDesc.  For instance,
+	 * SortDescending operator {@code @sortDesc}. For instance,
 	 * <code>atSortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortDesc.firstName,lastname
+	 * would return a key like {@code @sortDesc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortDesc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortDesc(sortKeys));
+	public ERXKey<T> atSortDesc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortDesc(sortKeys));
 	}
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
+	 * SortInsensitiveAscending operator {@code @sortInsensitiveAsc}. For instance,
 	 * <code>sortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortInsensitiveAsc.firstName,lastname
+	 * would return a key like {@code @sortInsensitiveAsc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
 	 * @param <U> the type of the next key
@@ -867,27 +850,26 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
+	 * SortInsensitiveAscending operator {@code @sortInsensitiveAsc}. For instance,
 	 * <code>atSortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortInsensitiveAsc.firstName,lastname
+	 * would return a key like {@code @sortInsensitiveAsc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortInsensitiveAsc(sortKeys));
+	public ERXKey<T> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortInsensitiveAsc(sortKeys));
 	}
 
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
+	 * SortInsensitiveDescending operator {@code @sortInsensitiveDesc}. For instance,
 	 * <code>sortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortInsensitiveDesc.firstName,lastname
+	 * would return a key like {@code @sortInsensitiveDesc.firstName,lastname}.
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
 	 * @param <U> the type of the next key
@@ -903,25 +885,25 @@ public class ERXKey<T> {
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
+	 * SortInsensitiveDescending operator {@code sortInsensitiveDesc}. For instance,
 	 * <code>atSortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
-	 * would return a key like @sortInsensitiveDesc.firstName,lastname
+	 * would return a key like {@code sortInsensitiveDesc.firstName,lastname}
 	 * 
 	 * @param sortKeys the ERXKeys to append for sorting
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
-	public <U> ERXKey<U> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
-		return (ERXKey<U>) append(ERXKey.sortInsensitiveDesc(sortKeys));
+	public ERXKey<T> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
+		return append(ERXKey.sortInsensitiveDesc(sortKeys));
 	}
 
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
-	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
+	 * SubarrayWithRange operator {@code subarrayWithRange}. For instance, if the key is "price"
+	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey {@code @subarrayWithRange.4-2.price}.
+	 * 
 	 * @param key the key to use for this keypath
 	 * @param range the range for the operator
 	 * @param <U> the type of the next key
@@ -936,8 +918,9 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
-	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
+	 * SubarrayWithRange operator {@code subarrayWithRange}. For instance, if the key is "price"
+	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey {@code subarrayWithRange.4-2.price}.
+	 * 
 	 * @param key the key to use for this keypath
 	 * @param range the range for the operator
 	 * @param <U> the type of the next key
@@ -952,9 +935,8 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
-	 * is <code>new NSRange(4,2)</code> this will return a new 
-	 * ERXKey "@subarrayWithRange.4-2.price".
+	 * SubarrayWithRange operator {@code subarrayWithRange}. For instance, if the range 
+	 * is <code>new NSRange(4,2)</code> this will return a new ERXKey {@code subarrayWithRange.4-2.price}.
 	 * 
 	 * @param range the range for the operator
 	 * @param <U> the type of the next key
@@ -969,19 +951,17 @@ public class ERXKey<T> {
 	
 	/**
 	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
-	 * is <code>new NSRange(4,2)</code> this will return a new 
-	 * ERXKey "@subarrayWithRange.4-2.price".
+	 * SubarrayWithRange operator {@code subarrayWithRange}. For instance, if the range 
+	 * is <code>new NSRange(4,2)</code> this will return a new ERXKey {@code subarrayWithRange.4-2.price}.
 	 * 
 	 * @param range the range for the operator
-	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
-	public <U> ERXKey<U> atSubarrayWithRange(NSRange range) {
-		return (ERXKey<U>) append(ERXKey.subarrayWithRange(range));
+	public ERXKey<T> atSubarrayWithRange(NSRange range) {
+		return append(ERXKey.subarrayWithRange(range));
 	}
 	
 	/**
@@ -1066,17 +1046,14 @@ public class ERXKey<T> {
 	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
 	 * {@code @unique} operator.
 	 * 
-	 * @param <U>
-	 *            the type of the next key
-	 * 
 	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@unique}
 	 *         keypath
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator
 	 *      UniqueOperator
 	 */
-	public <U> ERXKey<U> atUnique() {
-		return (ERXKey<U>) append(ERXKey.unique());
+	public ERXKey<T> atUnique() {
+		return append(ERXKey.unique());
 	}
 
 	/**
@@ -1574,13 +1551,13 @@ public class ERXKey<T> {
 	 * Replace the existing code that creates the ERXKeys declarations for the
 	 * Entity's attributes, to-one relationships and to-many relationships.
 	 * 
-	 * <pre>{@code
-	 *     public static final ERXKey<$attribute.javaClassName> ${attribute.uppercaseUnderscoreName} = new ERXKey<$attribute.javaClassName>("$attribute.name", ERXKey.Type.Attribute);
+	 * <pre><code>
+	 *     public static final ERXKey&lt;$attribute.javaClassName&gt; ${attribute.uppercaseUnderscoreName} = new ERXKey&lt;$attribute.javaClassName&gt;("$attribute.name", ERXKey.Type.Attribute);
 	 * 
-	 *     public static final ERXKey<$relationship.actualDestination.classNameWithDefault> ${relationship.uppercaseUnderscoreName} = new ERXKey<$relationship.actualDestination.classNameWithDefault>("$relationship.name", ERXKey.Type.ToOneRelationship);
+	 *     public static final ERXKey&lt;$relationship.actualDestination.classNameWithDefault&gt; ${relationship.uppercaseUnderscoreName} = new ERXKey&lt;$relationship.actualDestination.classNameWithDefault&gt;("$relationship.name", ERXKey.Type.ToOneRelationship);
 	 * 
-	 *     public static final ERXKey<$relationship.actualDestination.classNameWithDefault> ${relationship.uppercaseUnderscoreName} = new ERXKey<$relationship.actualDestination.classNameWithDefault>("$relationship.name", ERXKey.Type.ToManyRelationship);
-	 * }</pre>
+	 *     public static final ERXKey&lt;$relationship.actualDestination.classNameWithDefault&gt; ${relationship.uppercaseUnderscoreName} = new ERXKey&lt;$relationship.actualDestination.classNameWithDefault&gt;("$relationship.name", ERXKey.Type.ToManyRelationship);
+	 * </code></pre>
 	 * 
 	 * @param key
 	 *            the underlying key or keypath
@@ -2360,7 +2337,26 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
 	}
-		
+	
+	/**
+	 * Uses ERXExistsQualifier to build a qualifier that returns true if at least one the objects 
+	 * specified is found in the to many relationship represented by this key.
+	 * 
+	 * @param valueArray
+	 *            an array of {@link ERXGenericRecord} we want to have in this to many relationship. 
+	 * @return a qualifier that evaluates to true when at least one the the objects specified in 
+	 *         {@code valueArray} is found in the to many {@link EORelationship}
+	 *         represented by this ERXKey.
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 16, 2016
+	 */
+	public ERXExistsQualifier containsAnyOfTheseObjects(NSArray<? extends ERXGenericRecord> valueArray) {
+		ERXExistsQualifier existsQualifier = new ERXExistsQualifier(ERXQ.isIn(valueArray), _key);
+		existsQualifier.setUsesInQualInstead(true);
+		return existsQualifier;
+	}
+
 	/**
 	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
 	 * 
@@ -2403,6 +2399,44 @@ public class ERXKey<T> {
 		return new ERXNotQualifier(containsAnyObjectSatisfying(qualifier));
 	}
 
+	/**
+	 * Equivalent to containsAnyObjectSatisfying() but set the ERXExistsQualifier to uses IN instead of EXISTS.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 56, 2016
+	 */
+	public ERXExistsQualifier containsAnyObjectSatisfyingUsingIn(EOQualifier qualifier) {
+		ERXExistsQualifier existsQualifier = new ERXExistsQualifier(qualifier, _key);
+		existsQualifier.setUsesInQualInstead(true);
+		return existsQualifier;
+	}
+
+	/**
+	 * Equivalent to doesNotContainsAnyObjectSatisfying() but set the ERXExistsQualifier to uses IN instead of EXISTS.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey does not contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author Samuel Pelletier
+	 * @since May 56, 2016
+	 */
+	public ERXNotQualifier doesNotContainsAnyObjectSatisfyingUsingIn(EOQualifier qualifier) {
+		return new ERXNotQualifier(containsAnyObjectSatisfyingUsingIn(qualifier));
+	}
+	
 	/**
 	 * Determines if there are any objects in the to-one or to-many
 	 * {@link EORelationship} that this ERXKey represents.

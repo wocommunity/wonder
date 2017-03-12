@@ -11,8 +11,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
 
-import org.apache.log4j.Logger;
-
 import er.extensions.foundation.ERXPatcher;
 
 /**
@@ -20,10 +18,6 @@ import er.extensions.foundation.ERXPatcher;
  */
 
 public class ERXTestRunner extends BaseTestRunner {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXTestRunner.class);
-
         public ERXTestListener externalListener = null;
 
 	/**

@@ -1,7 +1,6 @@
 // ERCPreference.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -21,7 +20,6 @@ public class ERCPreference extends _ERCPreference {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ERCPreference.class);
     private final static String VALUE="_V";
 
     public ERCPreference() {

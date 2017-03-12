@@ -78,7 +78,7 @@ public class ERPDFWrapper extends ERXDynamicElement implements WOActionResults {
     boolean secure = booleanValueForBinding("secure", ERXRequest.isRequestSecure(context.request()), component);
     String resourceUrlPrefix = ERXResourceManager._completeURLForResource("", secure, context);
     
-    NSMutableDictionary<String, Object> config = new NSMutableDictionary<String, Object>();
+    NSMutableDictionary<String, Object> config = new NSMutableDictionary<>();
     for (Map.Entry<String, WOAssociation> entry : associations().entrySet()) {
       Object value = entry.getValue().valueInComponent(component);
       if (value != null) {
@@ -105,7 +105,7 @@ public class ERPDFWrapper extends ERXDynamicElement implements WOActionResults {
 	  NSArray<String> additionalPDFs = arrayValueForBinding("additionalPDFs", component);
 	  if (additionalPDFs != null) {
 	    try {
-	      List<InputStream> pdfs = new ArrayList<InputStream>();
+	      List<InputStream> pdfs = new ArrayList<>();
 	      pdfs.add(data.stream());
 	      Enumeration<String> e = additionalPDFs.objectEnumerator();
 	      while (e.hasMoreElements()) {

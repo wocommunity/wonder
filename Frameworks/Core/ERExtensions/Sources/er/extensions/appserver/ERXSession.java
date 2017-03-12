@@ -12,7 +12,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -20,6 +21,7 @@ import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver.WOCookie.SameSite;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -60,8 +62,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-  /** logging support */
-  public static final Logger log = Logger.getLogger(ERXSession.class);
+  private static final Logger log = LoggerFactory.getLogger(ERXSession.class);
 
   /**
    * Notification name that is posted when a session is about to sleep.
@@ -71,6 +72,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** cookie name that if set it means that the user has cookies enabled */
   // FIXME: This should be configurable
   public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
+
+  /** the SameSite to set for session and instance cookies */
+  private static SameSite _sameSite = ERXProperties.enumValueForKey(SameSite.class, "er.extensions.ERXSession.cookies.SameSite");
 
   /** holds a reference to the current localizer used for this session */
   transient private ERXLocalizer _localizer;
@@ -157,9 +161,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
       String currentLanguage = session._localizer.language();
       session._localizer = ERXLocalizer.localizerForLanguage(currentLanguage);
-      if (log.isDebugEnabled()) {
-        log.debug("Detected changes in the localizers. Reset reference to " + currentLanguage + " localizer for session " + session.sessionID());
-      }
+      log.debug("Detected changes in the localizers. Reset reference to {} localizer for session {}", currentLanguage, session.sessionID());
     }
 
     /** 
@@ -389,8 +391,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       // FIXME: Shouldn't be hardcoded form value.
       String js = request.stringFormValueForKey("javaScript");
       if (js != null) {
-        if (log.isDebugEnabled())
-          log.debug("Received javascript form value " + js);
+        log.debug("Received javascript form value {}", js);
       }
       else {
         try {
@@ -432,7 +433,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     WORequest request = context() != null ? context().request() : null;
     if (request != null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
       if ((request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
-        log.debug("Form values " + request.formValues());
+        log.debug("Form values {}", request.formValues());
       else
         log.debug("Multipart Form values found");
     }
@@ -586,9 +587,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       ERXBrowserFactory.factory().releaseBrowser(_browser);
       _browser = null;
     }
-    if (log.isDebugEnabled()) {
-      log.debug("Will terminate, sessionId is " + sessionID());
-    }
+    log.debug("Will terminate, sessionId is {}", sessionID());
     super.terminate();
   }
 
@@ -668,8 +667,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     stream.defaultReadObject();
     if (_serializableLanguageName != null)
       setLanguage(_serializableLanguageName);
-    if (log.isDebugEnabled())
-      log.debug("Session has been deserialized: " + toString());
+    log.debug("Session has been deserialized: {}", this);
   }
 
   @Override
@@ -747,17 +745,30 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.useHttpOnlySessionCookies", false);
   }
 
-  protected void _convertSessionCookiesToSecure(WOResponse response) {
-	    if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+  protected void _setCookieSameSite(WOResponse response) {
+		if (storesIDsInCookies() && _sameSite != null) {
 			for (WOCookie cookie : response.cookies()) {
 				String sessionIdKey = application().sessionIdKey();
 				String instanceIdKey = application().instanceIdKey();
 				String cookieName = cookie.name();
 				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
-					 cookie.setIsSecure(true);
+					 cookie.setSameSite(_sameSite);
 				}
 			}
 		}
+  }
+
+  protected void _convertSessionCookiesToSecure(WOResponse response) {
+	  if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+		  for (WOCookie cookie : response.cookies()) {
+			  String sessionIdKey = application().sessionIdKey();
+			  String instanceIdKey = application().instanceIdKey();
+			  String cookieName = cookie.name();
+			  if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
+				  cookie.setIsSecure(true);
+			  }
+		  }
+	  }
   }
   
   protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
@@ -781,7 +792,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 		}
         if (useHttpOnlySessionCookies()) {
             _convertSessionCookiesToHttpOnly(response);
-        }		
+        }
+        _setCookieSameSite(response);
 	}
   
   @Override

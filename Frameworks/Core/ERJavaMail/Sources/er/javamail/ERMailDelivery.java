@@ -20,7 +20,8 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -66,7 +67,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak fixes
  */
 public abstract class ERMailDelivery {
-	private static final Logger log = Logger.getLogger(ERMailDelivery.class);
+	private static final Logger log = LoggerFactory.getLogger(ERMailDelivery.class);
 
 	/** JavaMail session */
 	private javax.mail.Session _session;
@@ -240,7 +241,7 @@ public abstract class ERMailDelivery {
 
 	protected NSMutableArray<ERMailAttachment> _inlineAttachments() {
 		if (_inlineAttachments == null)
-			_inlineAttachments = new NSMutableArray<ERMailAttachment>();
+			_inlineAttachments = new NSMutableArray<>();
 		return _inlineAttachments;
 	}
 
@@ -250,7 +251,7 @@ public abstract class ERMailDelivery {
 
 	protected NSMutableArray<ERMailAttachment> _attachments() {
 		if (_attachments == null)
-			_attachments = new NSMutableArray<ERMailAttachment>();
+			_attachments = new NSMutableArray<>();
 		return _attachments;
 	}
 
@@ -345,7 +346,7 @@ public abstract class ERMailDelivery {
 	 */
 	public void setToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress address = internetAddressWithEmailAndPersonal(toAddress, personalName);
-		setInternetAddresses(new NSArray<InternetAddress>(address), Message.RecipientType.TO);
+		setInternetAddresses(new NSArray<>(address), Message.RecipientType.TO);
 	}
 
 	/** 
@@ -746,7 +747,7 @@ public abstract class ERMailDelivery {
 			// don't do anything.
 			return;
 		}
-		NSMutableDictionary<String, String> newDictionary = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> newDictionary = new NSMutableDictionary<>();
 		for (String key: mailAdresses) {
 			newDictionary.takeValueForKey(addressesDictionary.objectForKey(key), key);
 		}

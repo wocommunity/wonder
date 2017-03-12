@@ -1,6 +1,7 @@
 package er.persistentsessionstorage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
@@ -17,7 +18,7 @@ public class ERPersistentSessionStorage extends ERXFrameworkPrincipal {
 
 	protected static volatile ERPersistentSessionStorage sharedInstance;
 
-	private static final Logger log = Logger.getLogger(ERPersistentSessionStorage.class);
+	private static final Logger log = LoggerFactory.getLogger(ERPersistentSessionStorage.class);
 
 	// Registers the class as the framework principal
 	static {

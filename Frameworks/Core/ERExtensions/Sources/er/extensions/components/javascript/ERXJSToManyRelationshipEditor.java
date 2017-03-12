@@ -2,8 +2,6 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -36,8 +34,6 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    public static final Logger log = Logger.getLogger(ERXJSToManyRelationshipEditor.class);
 
     public static interface Keys {
         public static final String DisplayString = "displayString";

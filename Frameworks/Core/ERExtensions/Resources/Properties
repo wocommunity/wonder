@@ -210,8 +210,8 @@ er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
 #########################################################################
 # Navigation 
 #########################################################################
-er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
-er.extensions.ERXNavigationManager.localizeDisplayKeys = false
+# er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
+# er.extensions.ERXNavigationManager.localizeDisplayKeys = false
 
 #########################################################################
 # Shared EO loading patching 
@@ -254,6 +254,14 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## This is only used when the JDBCAdaptor is used in the first place
 # er.extensions.ERXJDBCAdaptor.switchReadWrite=false
 #
+
+## In servlet context, when not using JNDI to obtain the database channel, you will 
+## get annoying error messages like
+## javax.naming.NameNotFoundException: Name "comp/env/jdbc" not found in context
+## Disable the JNDI configuration to suppress these messages.
+# extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration=false
+#
+
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################
@@ -290,6 +298,17 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 # Set to true to have this delegate order the operations (e.g. or MS SQL Server)
 com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
+
+## Defines the DB class to use together with ERXDatabaseContext
+er.extensions.ERXDatabase.className = er.extensions.eof.ERXDatabase
+
+## Define the HashMap initialization parameters to use for the HashMap that ERXDatabase
+## uses for the snapshot cache. Usually the load factor is fine, but the capacity
+## could use increasing for applications handling many objects. You can use
+## ERXDatabase.snapshotCacheSize() to get the actual map size at runtime to
+## determine how to tune this.
+# er.extensions.ERXDatabase.snapshotCacheMapInitialCapacity = 1048576
+# er.extensions.ERXDatabase.snapshotCacheMapInitialLoadFactor = 0.75
 
 #########################################################################
 # ERXDatabaseContextDelegate 
@@ -433,12 +452,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 #########################################################################
 ## decides if locked editing contexts should be unlocked after the RR-loop.
 ## If you use D2W, it is *strongly* recommended to enable this feature!
-# er.extensions.ERXApplication.useEditingContextUnlocker=false
+# er.extensions.ERXEC.useUnlocker=false
 
 ## When true, ERXEC's will generate a stack trace when lock is called that
 ## can later be accessed via .openLockTrace() or the showOpenEditingContextLockTraces
 ## ERXDirectAction.  Defaults to false.
-# er.extensions.ERXApplication.traceOpenEditingContextLocks = true
+# er.extensions.ERXEC.traceOpenLocks = true
 
 ## decides if the session store deadlock detection (session can't get 
 ## checked out because it already was) should be enabled. This is useful 
@@ -502,6 +521,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 # If you are using SSL and want to use secure session cookies, set to true
 #
 # er.extensions.ERXSession.useSecureSessionCookies=false
+
+# If you want to set the SameSite policy for session and instance cookies
+# you can set this property to one of the following values:
+# LAX, NORMAL, STRICT
+#
+# er.extensions.ERXSession.cookies.SameSite=STRICT
 
 #########################################################################
 # ERXJDBCConnectionBroker 

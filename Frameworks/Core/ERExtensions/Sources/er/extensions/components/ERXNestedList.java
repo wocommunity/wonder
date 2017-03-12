@@ -20,8 +20,6 @@ public class ERXNestedList extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERXNestedList.class);
-
 	public ERXNestedList(WOContext context) {
 		super(context);
 	}

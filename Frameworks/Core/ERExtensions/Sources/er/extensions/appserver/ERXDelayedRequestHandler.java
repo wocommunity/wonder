@@ -1,5 +1,6 @@
 package er.extensions.appserver;
 
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -9,7 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -21,7 +23,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.foundation.ERXExpiringCache;
-import er.extensions.foundation.ERXRandomGUID;
 import er.extensions.foundation.ERXRuntimeUtilities;
 
 /**
@@ -42,8 +43,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * @author ak
  */
 public class ERXDelayedRequestHandler extends WORequestHandler {
-
-	protected static final Logger log = Logger.getLogger(ERXDelayedRequestHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXDelayedRequestHandler.class);
 
 	public static String KEY = "_edr_";
 
@@ -62,7 +62,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * 
 	 */
 	public class DelayedRequest implements Callable<WOResponse> {
-
 		protected WORequest _request;
 		protected Future<WOResponse> _future;
 		protected String _id;
@@ -74,7 +73,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			_request = WOApplication.application().createRequest(request.method(), request.uri(), request.httpVersion(), request.headers(), request.content(), request.userInfo());
 //			_request = (WORequest) request.clone();
 			_future = _executor.submit(this);
-			_id = ERXRandomGUID.newGid();
+			_id = UUID.randomUUID().toString();
 			_start = new NSTimestamp();
 		}
 
@@ -87,7 +86,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				WOResponse response = app.dispatchRequestImmediately(request());
 				// testing
 				// Thread.sleep(16000);
-				// log.info("Done: " + this);
+				// log.info("Done: {}", this);
 				return response;
 			}
 			finally {
@@ -131,10 +130,10 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 					// while(System.currentTimeMillis() - start < 5000 &&
 					// !isDone()) {
 					if (future().cancel(true)) {
-						log.info("Cancelled: " + _currentThread + ": " + isDone());
+						log.info("Cancelled: {}: {}", _currentThread, isDone());
 					}
 					// }
-					log.info("Thread done after cancel: " + isDone());
+					log.info("Thread done after cancel: {}", isDone());
 				}
 			}
 			return isDone();
@@ -171,17 +170,17 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				synchronized (request) {
 					if (!request.isDone()) {
 						if (!request.cancel()) {
-							log.error("Delayed was running, but couldn't be cancelled: " + request);
+							log.error("Delayed was running, but couldn't be cancelled: {}", request);
 						}
 						else {
-							log.info("Stopped delayed request that was still running: " + request);
+							log.info("Stopped delayed request that was still running: {}", request);
 						}
 					}
 				}
 				super.removeEntryForKey(entry, key);
 			}
 		};
-		_urls = new ERXExpiringCache<String, String>(refresh() * 50);
+		_urls = new ERXExpiringCache<>(refresh() * 50);
 	}
 
 	/**
@@ -227,7 +226,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			String uri = request.uri();
 			DelayedRequest delayedRequest;
 			String id;
-			log.debug("Handling: " + uri);
+			log.debug("Handling: {}", uri);
 
 			String key = request.requestHandlerKey();
 			if (KEY.equals(key)) {
@@ -312,7 +311,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 					else {
 						url = url.replaceAll("__time=(.*)", "__time=" + System.currentTimeMillis());
 					}
-					log.debug("Delaying: " + request.uri());
+					log.debug("Delaying: {}", request.uri());
 					response = createRefreshResponse(request, url);
 				}
 			}
@@ -330,11 +329,11 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
 		}
 		catch (CancellationException e) {
-			log.info("Cancelled, redirecting: " + request.uri());
+			log.info("Cancelled, redirecting: {}", request.uri());
 			response = createStoppedResponse(request);
 		}
 		catch (TimeoutException e) {
-			log.debug("Timed out, redirecting: " + request.uri());
+			log.debug("Timed out, redirecting: {}", request.uri());
 		}
 		return response;
 	}
@@ -436,7 +435,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @return array of delayed requests
 	 */
 	public NSArray<DelayedRequest> activeRequests() {
-		NSMutableArray<DelayedRequest> result = new NSMutableArray<DelayedRequest>();
+		NSMutableArray<DelayedRequest> result = new NSMutableArray<>();
 		for (String id : _futures.allKeys()) {
 			DelayedRequest request = _futures.objectForKey(id);
 			if (request != null) {

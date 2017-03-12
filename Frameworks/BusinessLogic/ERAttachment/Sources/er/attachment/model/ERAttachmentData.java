@@ -1,7 +1,5 @@
 package er.attachment.model;
 
-import org.apache.log4j.Logger;
-
 /**
  * <span class="en">
  * For a database attachment, ERAttachmentData contains the actual backing
@@ -22,7 +20,4 @@ public class ERAttachmentData extends _ERAttachmentData {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger( ERAttachmentData.class );
 }

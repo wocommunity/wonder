@@ -166,7 +166,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 *         toMany objects that have been persisted to the database
 	 */
 	public ERXFetchSpecification<D> fetchSpecificationForObjects() {
-		return new ERXFetchSpecification<D>(destinationEntityName, qualifierForObjects(), null, false, isDeep, null);
+		return new ERXFetchSpecification<>(destinationEntityName, qualifierForObjects(), null, false, isDeep, null);
 	}
 
 	public NSArray<D> objects(EOQualifier qualifier) {
@@ -186,7 +186,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 			if (qualifier == null) {
 				fullQualifier = inverseQualifier;
 			} else {
-				NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+				NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 				qualifiers.addObject(qualifier);
 				qualifiers.addObject(inverseQualifier);
 				fullQualifier = new EOAndQualifier(qualifiers);
@@ -273,7 +273,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 				_destinationEntityNames = entityHierarchyNamesForEntityNamed(sourceObject.editingContext(), destinationEntityName);
 				
 			} else {
-				_destinationEntityNames = new NSArray<String>(destinationEntityName);
+				_destinationEntityNames = new NSArray<>(destinationEntityName);
 			}
 		}
 		return _destinationEntityNames;

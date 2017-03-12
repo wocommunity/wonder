@@ -278,7 +278,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
     Object scaling = scaling(response, context);
     if (scaling instanceof Boolean && ((Boolean) scaling).booleanValue()) {
       if (data != null) {
-        NSMutableArray<String> scaleNumbers = new NSMutableArray<String>();
+        NSMutableArray<String> scaleNumbers = new NSMutableArray<>();
         for (List<Number> innerList : data) {
           Float minValue = Float.valueOf(GCEncoding.minValueInList(innerList));
           scaleNumbers.addObject(String.format("%1$.1f", minValue));
@@ -427,7 +427,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
         }
         axisLabelsStr.append(i + ":|");
         if (singleAxisLabels instanceof Object[]) {
-          axisLabelsStr.append(new NSArray<Object>((Object[]) singleAxisLabels).componentsJoinedByString("|"));
+          axisLabelsStr.append(new NSArray<>((Object[]) singleAxisLabels).componentsJoinedByString("|"));
         }
         else {
           axisLabelsStr.append(singleAxisLabels);

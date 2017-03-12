@@ -13,7 +13,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSDictionary;
@@ -43,12 +44,10 @@ import com.webobjects.foundation.NSNotificationCenter;
 // TODO subclass of NSNotification that custom-serialize itself to a sparser
 // format
 public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
-	
-	private static final Logger log = Logger.getLogger(ERXRemoteNotificationCenter.class);
-
 	private static ERXRemoteNotificationCenter _sharedInstance;
 
 	private static class SimpleCenter extends ERXRemoteNotificationCenter {
+		private static final Logger log = LoggerFactory.getLogger(ERXRemoteNotificationCenter.class);
 		public static final int IDENTIFIER_LENGTH = 6;
 		private static final int JOIN = 1;
 		private static final int LEAVE = 2;
@@ -107,39 +106,33 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 		public void join() throws IOException {
 			if (log.isInfoEnabled()) {
-				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
+				log.info("Multicast instance {} joining.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
 			_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
-			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(baos);
-			dos.write(_identifier);
-			dos.writeByte(JOIN);
-			dos.flush();
-			dos.close();
-			_multicastSocket.send(baos.createDatagramPacket());
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+				dos.write(_identifier);
+				dos.writeByte(JOIN);
+				_multicastSocket.send(baos.createDatagramPacket());
+			}
 			listen();
 		}
 
 		public void leave() throws IOException {
 			if (log.isInfoEnabled()) {
-				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
+				log.info("Multicast instance {} leaving.", ERXStringUtilities.byteArrayToHexString(_identifier));
 			}
-			MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-			DataOutputStream dos = new DataOutputStream(baos);
-			dos.write(_identifier);
-			dos.writeByte(LEAVE);
-			dos.flush();
-			dos.close();
-			_multicastSocket.send(baos.createDatagramPacket());
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
+				dos.write(_identifier);
+				dos.writeByte(LEAVE);
+				_multicastSocket.send(baos.createDatagramPacket());
+			}
 			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
 		}
 
 		@Override
 		protected void postRemoteNotification(NSNotification notification) {
-			try {
-				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
-				DataOutputStream dos = new DataOutputStream(baos);
+			try (MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
 				dos.write(_identifier);
 
 				dos.writeByte(POST);
@@ -147,9 +140,8 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 				writeNotification(notification, dos);
 				_multicastSocket.send(baos.createDatagramPacket());
 				if (log.isDebugEnabled()) {
-					log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + notification);
+					log.info("Multicast instance {}: Writing {}", ERXStringUtilities.byteArrayToHexString(_identifier), notification);
 				}
-				dos.close();
 				if (_postLocal) {
 					postLocalNotification(notification);
 				}
@@ -188,31 +180,25 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 					byte code = dis.readByte();
 					if (code == JOIN) {
-						if (log.isDebugEnabled()) {
-							log.info("Received JOIN from " + remote);
-						}
+						log.info("Received JOIN from {}", remote);
 					}
 					else if (code == LEAVE) {
-						if (log.isDebugEnabled()) {
-							log.info("Received LEAVE from " + remote);
-						}
+						log.info("Received LEAVE from {}", remote);
 					}
 					else if (code == POST) {
 						String self = ERXStringUtilities.byteArrayToHexString(_identifier);
 
+						log.info("Received POST from {}", remote);
 						if (log.isDebugEnabled()) {
-							log.info("Received POST from " + remote);
-						}
-						if (log.isDebugEnabled()) {
-							log.info("Received POST from " + ERXStringUtilities.byteArrayToHexString(identifier));
+							log.debug("Received POST from {}", ERXStringUtilities.byteArrayToHexString(identifier));
 						}
 						if(!self.equals(remote)) {
 							NSNotification notification = readNotification(dis);
 							if (log.isDebugEnabled()) {
-								log.debug("Received notification: " + notification);
+								log.debug("Received notification: {}", notification);
 							}
 							else if (log.isInfoEnabled()) {
-								log.info("Received " + notification.name() + " notification from " + remote);
+								log.info("Received {} notification from {}", notification.name(), remote);
 							}
 							postLocalNotification(notification);
 						}

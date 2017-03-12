@@ -2,8 +2,6 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSTimestamp;
@@ -17,8 +15,6 @@ public class ERCLogEntry extends _ERCLogEntry {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    static final Logger log = Logger.getLogger(ERCLogEntry.class);
 
     public ERCLogEntry() {
         super();

@@ -3,7 +3,8 @@ package er.extensions.components._private;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -40,7 +41,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding value the value to use for an item
  */
 public class ERXWOBrowser extends WOInput {
-	private static Logger log = Logger.getLogger(ERXWOBrowser.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXWOBrowser.class);
 	
 	WOAssociation _list;
 	WOAssociation _item;
@@ -82,7 +83,7 @@ public class ERXWOBrowser extends WOInput {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder('<').append(getClass().getSimpleName()).append(" list: ").append(_list)
+		return new StringBuilder().append('<').append(getClass().getSimpleName()).append(" list: ").append(_list)
 				.append(" item: ").append(_item).append(" string: ").append(_displayString)
 				.append(" selections: ").append(_selections).append(" selectedValues: ")
 				.append(_selectedValues).append(" multiple: ").append(_multiple)
@@ -137,7 +138,7 @@ public class ERXWOBrowser extends WOInput {
 						}
 					}
 					else {
-						log.debug(toString() + " 'value' evaluated to null in component " + wocomponent.toString() + ".\n" + "Unable to select item " + obj1);
+						log.debug("{} 'value' evaluated to null in component {}.\nUnable to select item {}", this, wocomponent, obj1);
 					}
 				}
 
@@ -212,7 +213,7 @@ public class ERXWOBrowser extends WOInput {
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		if (_value != null) {
 			if (!_loggedSlow) {
-				log.debug("<" + getClass().getName() + "> Warning: Avoid using the 'value' binding as it is much slower than omitting it, and it is just cosmetic.");
+				log.debug("<{}> Warning: Avoid using the 'value' binding as it is much slower than omitting it, and it is just cosmetic.", getClass().getName());
 				_loggedSlow = true;
 			}
 			_slowTakeValuesFromRequest(worequest, wocontext);

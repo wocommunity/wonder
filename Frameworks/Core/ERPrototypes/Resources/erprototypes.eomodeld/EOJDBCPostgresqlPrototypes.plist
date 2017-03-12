@@ -148,6 +148,54 @@
         }, 
         {
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = dateTime; 
+            columnName = ""; 
+            externalType = timestamp; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = javaDateTime; 
+            valueClassName = "java.time.OffsetDateTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = dateTime; 
+            valueType = T; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = localDate; 
+            columnName = ""; 
+            externalType = date; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = javaLocalDate; 
+            valueClassName = "java.time.LocalDate"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = localDate; 
+            valueType = D; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = localDateTime; 
+            columnName = ""; 
+            externalType = timestamp; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = javaLocalDateTime; 
+            valueClassName = "java.time.LocalDateTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = localDateTime; 
+            valueType = T; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = localTime; 
+            columnName = ""; 
+            externalType = time; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = javaLocalTime; 
+            valueClassName = "java.time.LocalTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = localTime; 
+            valueType = t; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaDateTime; 
             columnName = ""; 
             externalType = timestamp; 
@@ -359,6 +407,13 @@
             valueClassName = NSString; 
             valueType = S; 
             width = 10000000; 
+        }, 
+        {
+            columnName = uuid; 
+            externalType = bytea; 
+            name = uuid; 
+            valueClassName = NSData; 
+            width = 16; 
         }
     ); 
     attributesUsedForLocking = (boolean, id, jodaDateTime); 
@@ -382,6 +437,10 @@
         intNumber, 
         ipAddress, 
         javaEnum, 
+        javaDateTime, 
+        javaLocalDate, 
+        javaLocalDateTime, 
+        javaLocalTime, 
         jodaDateTime, 
         jodaLocalDate, 
         jodaLocalDateTime, 
@@ -419,6 +478,10 @@
             flag, 
             intBoolean, 
             intNumber, 
+            javaDateTime, 
+            javaLocalDate, 
+            javaLocalDateTime, 
+            javaLocalTime, 
             jodaLocalDate, 
             jodaLocalDateTime, 
             jodaLocalTime, 
@@ -441,5 +504,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCPostgresqlPrototypes; 
-    primaryKeyAttributes = (eofKey, id); 
+    primaryKeyAttributes = (eofKey, id, uuid); 
 }

@@ -8,8 +8,9 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
@@ -28,7 +29,7 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 public class ERXTcpIp {
 
-	protected static final Logger log = Logger.getLogger(ERXTcpIp.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXTcpIp.class);
 
 	//********************************************************************
 	//	プロパティー
@@ -215,7 +216,7 @@ public class ERXTcpIp {
 	 * </div>
 	 */
 	public static boolean isInet4IPAddressWithinRange( long ipStart, long ip, long ipEnd ){
-		if(!isInet4IPAddressRange(ipStart) || !isInet4IPAddressRange(ip) || !isInet4IPAddressRange(ip)) return false;
+		if(!isInet4IPAddressRange(ipStart) || !isInet4IPAddressRange(ip) || !isInet4IPAddressRange(ipEnd)) return false;
 		return ((ipStart <= ip) && (ip <= ipEnd));
 	}
 
@@ -260,8 +261,7 @@ public class ERXTcpIp {
 			try {
 				// プロパティーがなければ、自動設定を行う
 				if(ERXStringUtilities.stringIsNullOrEmpty(machineIp)){
-					if(log.isDebugEnabled())
-						log.debug("MachineIp Automatic Mode");
+					log.debug("MachineIp Automatic Mode");
 
 					// マシンIPを得る
 					if(ERXArrayUtilities.arrayIsNullOrEmpty(_machineIpList))
@@ -276,23 +276,23 @@ public class ERXTcpIp {
 							noIpAndNoNetwork = LOCAL_IP_ADDRESS;
 
 						// 使用する IP をセットします
-						_machineIpList = new NSArray<String>( new String[] {noIpAndNoNetwork});
+						_machineIpList = new NSArray<>( new String[] {noIpAndNoNetwork});
 
-						log.warn("No IpAddress --- no network! use Address : " + noIpAndNoNetwork);
+						log.warn("No IpAddress --- no network! use Address : {}", noIpAndNoNetwork);
 					}
 				} else {
 					// 使用する IP をセットします
-					_machineIpList = new NSArray<String>( new String[] {machineIp});
+					_machineIpList = new NSArray<>( new String[] {machineIp});
 				}
 			} catch (Exception e) {
 				// ここでの処理失敗は致命的
-				log.fatal( "getIpAddress error!!!" );
+				log.error( "getIpAddress error!!!" );
 
-				_machineIpList = new NSArray<String>( new String[] {LOCAL_IP_ADDRESS});
+				_machineIpList = new NSArray<>( new String[] {LOCAL_IP_ADDRESS});
 			}
 
 			if(log.isInfoEnabled())
-				log.info( "MachineIp " + ERXArrayUtilities.arrayToLogstring(_machineIpList) + " is in use.");
+				log.info( "MachineIp {} is in use.", ERXArrayUtilities.arrayToLogstring(_machineIpList));
 		}
 
 		return _machineIpList;
@@ -314,7 +314,7 @@ public class ERXTcpIp {
 	 */
 	private static NSArray<String> _machineIpList() throws Exception {
 		// ワーク用
-		NSMutableArray<String> workArray = new NSMutableArray<String>();
+		NSMutableArray<String> workArray = new NSMutableArray<>();
 
 		// 全ネットワーク・インタフェース
 		Enumeration<NetworkInterface> enNi = NetworkInterface.getNetworkInterfaces();
@@ -349,7 +349,7 @@ public class ERXTcpIp {
 		workArray.sortUsingComparator(NSComparator.AscendingStringComparator);
 
 		// 戻す配列の準備
-		NSMutableArray<String> resultArray = new NSMutableArray<String>(workArray.count());
+		NSMutableArray<String> resultArray = new NSMutableArray<>(workArray.count());
 
 		for(String obj : workArray) {
 			resultArray.addObject(obj.substring(5));
@@ -373,7 +373,7 @@ public class ERXTcpIp {
 	 * </div>
 	 */
 	public static NSArray<String> fullDomainIpList(NSArray<String> data) {
-		NSMutableArray<String> results = new NSMutableArray<String>(data.count());
+		NSMutableArray<String> results = new NSMutableArray<>(data.count());
 		for (String string : data) {
 			if(ERXStringUtilities.stringIsNullOrEmpty(string)) {
 				continue;

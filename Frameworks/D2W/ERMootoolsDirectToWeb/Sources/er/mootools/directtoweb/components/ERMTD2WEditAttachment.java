@@ -44,9 +44,7 @@ import er.directtoweb.components.ERDCustomEditComponent;
  * @d2wKey attachmentViewShowFileName
  * 
  * @author dleber
- *
  */
-
 public class ERMTD2WEditAttachment extends ERDCustomEditComponent {
 
 	public ERMTD2WEditAttachment(WOContext context) {

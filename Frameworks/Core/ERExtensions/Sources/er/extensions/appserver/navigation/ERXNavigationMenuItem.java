@@ -7,7 +7,8 @@
 package er.extensions.appserver.navigation;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -17,6 +18,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXRequest;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
@@ -33,8 +35,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXNavigationMenuItem.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXNavigationMenuItem.class);
     
     protected ERXNavigationItem _navigationItem;
     protected ERXNavigationState _navigationState;
@@ -94,8 +95,9 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         
         return page;
     }
-    
+        
     public String contextComponentActionURL() {
+    	String url = null;
         // If the navigation should be disabled return null
         if (navigationState().isDisabled() || meetsDisplayConditions() == false) {
             return null;
@@ -103,37 +105,39 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
         // hrefs take precedence over actions.
         if (navigationItem().href() != null && !"".equals(navigationItem().href().trim())) {
-        	return navigationItem().href();
+        	url =  navigationItem().href();
         }
         
         // If the user specified an action or pageName, return the source URL
-        if ((navigationItem().action() != null) || (navigationItem().pageName() != null)) {
+        if (url == null && (navigationItem().action() != null) || (navigationItem().pageName() != null)) {
             // Return the URL to the action or page placed in the context by invokeAction
-            return context().componentActionURL();
+            url = context().componentActionURL();
         }
-        if (navigationItem().directActionName() != null) {
+        if (url == null && navigationItem().directActionName() != null) {
         	if(_linkDirectlyToDirectActions) {
         		NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
         		bindings.setObjectForKey(context().contextID(), "__cid");
-        		return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
+        		url = context().directActionURLForActionNamed(navigationItem().directActionName(), bindings, ERXRequest.isRequestSecure(context().request()), false);
+        	} else {
+        		url = context().componentActionURL();
         	}
-        	return context().componentActionURL();
         }
 
         // If the user specified some javascript, put that into the HREF and return it
-        if (canGetValueForBinding("javascriptFunction")) {
-
+        if (url == null && canGetValueForBinding("javascriptFunction")) {
             // Make sure there are no extra quotations marks - replace them with apostrophes
             String theFunction = (String)valueForBinding("javascriptFunction");
-            return StringUtils.replace(theFunction, "\"", "'");
+            url = StringUtils.replace(theFunction, "\"", "'");
         }
-
-        return null;
+        // force parent hierarchy to be computed, required for full state to be computed
+        children();
+        // store navigation state for this item
+		ERXNavigationManager.manager().storeInNavigationMap(context().session(), navigationItem(), url);
+        return url;
     }
 
     public WOComponent menuItemSelected() {
         WOComponent anActionResult = null;
-
         if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().action())) {
             anActionResult = (WOComponent)valueForKeyPath(navigationItem().action());
         } else if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().pageName())) {
@@ -169,7 +173,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
                 if(name != null) {
                     _navigationItem = ERXNavigationManager.manager().navigationItemForName(name);
                 } else {
-                    log.warn("Navigation unset: " + name);
+                    log.warn("Navigation unset: {}", name);
                     _navigationItem = ERXNavigationManager.manager().newNavigationItem(new NSDictionary(name, "name"));
                 }
             }
@@ -237,13 +241,13 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public String displayName() {
     	String name = (String) resolveValue(navigationItem().displayName());
     	if(name != null) {
-    		if(ERXProperties.booleanForKey("er.extensions.ERXNavigationManager.localizeDisplayKeys")) {
+    		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.localizeDisplayKeys", false)) {
     			String localizerKey = "Nav." + name;
     			String localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
     			if(localizedValue == null) {
     				localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(name);
     				if(localizedValue != null) {
-    					log.info("Found old-style entry: " + localizerKey + "->" + localizedValue);
+    					log.info("Found old-style entry: {}->{}", localizerKey, localizedValue);
     					ERXLocalizer.currentLocalizer().takeValueForKey(localizedValue, localizerKey);
     					name = localizedValue;
     				}
@@ -262,4 +266,8 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 		return _omitLabelSpanTag;
 	}
     
+    public NSArray children() {
+        return navigationItem().childItemsInContext(this);
+    }
+
 }

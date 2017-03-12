@@ -20,9 +20,6 @@ import er.neo4jadaptor.utils.cursor.IteratorCursor;
  *
  */
 public class NodesRelatedTo implements Results<Node> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodesRelatedTo.class);
-
 	final Cursor<Relationship> relationshipsIterator;
 	
 	public NodesRelatedTo(Results<Node> relatedTo, EORelationship rel) {
@@ -39,7 +36,7 @@ public class NodesRelatedTo implements Results<Node> {
 				Node node = nodeCursor.next();
 				Iterable<Relationship> relationships = node.getRelationships(Direction.INCOMING, relationshipType);
 				
-				return new IteratorCursor<Relationship>(relationships.iterator());
+				return new IteratorCursor<>(relationships.iterator());
 			}
 			
 			public boolean hasNext() {
@@ -51,7 +48,7 @@ public class NodesRelatedTo implements Results<Node> {
 			}
 		};
 		
-		relationshipsIterator = new FlattenedCursor<Relationship>(twoLevelIt);
+		relationshipsIterator = new FlattenedCursor<>(twoLevelIt);
 	}
 	
 	public boolean hasNext() {

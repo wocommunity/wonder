@@ -5,7 +5,9 @@
 // Created by ak on Tue Apr 23 2002
 //
 package er.directtoweb.assignments.defaults;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
@@ -39,8 +41,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    static final Logger log = Logger.getLogger(ERDDefaultsEmbeddedAssignment.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey", "pageConfiguration"});
@@ -128,7 +129,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             // FIXME: Should try for the 'object' in the context and use the
             //		model group from the object's ec.
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
-            log.debug("embeddedEntityName = " + entityName);
+            log.debug("embeddedEntityName = {}", entityName);
             NSMutableArray classProperties = e.classPropertyNames().mutableClone();
             NSArray relationships = (NSArray)e.relationships().valueForKey("name");
             classProperties.removeObjectsInArray(relationships);
@@ -171,7 +172,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             }
             if (result==null) {
                 result=c.relationship();
-                log.warn(propertyKey + "-" + rawObject);
+                log.warn("{}-{}", propertyKey, rawObject);
             }
             if (result != null)
                 result = ((EORelationship)result).destinationEntity().name();

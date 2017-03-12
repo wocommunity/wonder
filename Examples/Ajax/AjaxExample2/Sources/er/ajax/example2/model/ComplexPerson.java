@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSMutableArray;
 public class ComplexPerson extends SimplePerson {
 
   private ComplexPerson _spouse;
-  private NSMutableArray<ComplexPerson> _children = new NSMutableArray<ComplexPerson>();
+  private NSMutableArray<ComplexPerson> _children = new NSMutableArray<>();
   private int _votes;
 
   public ComplexPerson(String name, int age) {

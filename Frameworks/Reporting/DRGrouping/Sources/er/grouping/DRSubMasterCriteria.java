@@ -3,7 +3,8 @@ package er.grouping;
 import java.text.Format;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -23,11 +24,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * values that can be grouped and how to group them
  * into a set of ranges, if required.
  */
- 
 public class DRSubMasterCriteria {
-
-    /** Logging support */
-    protected static final Logger log = Logger.getLogger(DRSubMasterCriteria.class);
+    private static final Logger log = LoggerFactory.getLogger(DRSubMasterCriteria.class);
 
     protected boolean _useMethod;
 
@@ -113,7 +111,7 @@ public class DRSubMasterCriteria {
         return possVals;
     }
 
-    /** Contructor that uses a {@link NSDictionary} which defines the properties. */
+    /** Constructor that uses a {@link NSDictionary} which defines the properties. */
     public DRSubMasterCriteria(NSDictionary smcdict, NSArray apossibleValues) {
         this(
              (String)smcdict.objectForKey("key"),
@@ -128,13 +126,13 @@ public class DRSubMasterCriteria {
     public DRSubMasterCriteria(String akey, boolean auseMethod, boolean auseTimeFormat, String aformat, String apossibleValuesUseType, boolean agroupEdges, NSArray apossibleValues) {
         
         if(log.isDebugEnabled()) {
-            log.debug("akey: "+akey);
-            log.debug("auseMethod: "+auseMethod);
-            log.debug("auseTimeFormat: "+auseTimeFormat);
-            log.debug("aformat: "+aformat);
-            log.debug("apossibleValuesUseType: "+apossibleValuesUseType);
-            log.debug("agroupEdges: "+agroupEdges);
-            log.debug("apossibleValues: "+apossibleValues);
+            log.debug("akey: {}", akey);
+            log.debug("auseMethod: {}", auseMethod);
+            log.debug("auseTimeFormat: {}", auseTimeFormat);
+            log.debug("aformat: {}", aformat);
+            log.debug("apossibleValuesUseType: {}", apossibleValuesUseType);
+            log.debug("agroupEdges: {}", agroupEdges);
+            log.debug("apossibleValues: {}", apossibleValues);
         }
         _label = null;
         
@@ -251,7 +249,7 @@ public class DRSubMasterCriteria {
      * When {@link #useTimeFormat()} is set, then date values
      * will be converted to a string before a comparison by using this format.
      * The string can be any valid {@link NSTimestampFormatter} string,
-     * which means that you can also use {@link java.util.DateFormatter}
+     * which means that you can also use {@link java.text.DateFormat}
      * patterns.
      */
     public String format() {
@@ -261,7 +259,7 @@ public class DRSubMasterCriteria {
     public void setFormat(String v) {
         if (_useTimeFormat && v == null) {
             _format = "";
-            log.error("Can't have empty format when useTimeFormat=true: " + this);
+            log.error("Can't have empty format when useTimeFormat=true: {}", this);
         }
         if(v != null)
             _format = v;
@@ -290,7 +288,7 @@ public class DRSubMasterCriteria {
         } else {
             if (!_possibleUseTypes.containsObject(v)) {
                 // invalid possibleValuesUseType
-                log.error("Invalid possibleValuesUseType: " + v + ". Allowed are only: " +_possibleUseTypes+ " " + this);
+                log.error("Invalid possibleValuesUseType: {}. Allowed are only: {} {}", v, _possibleUseTypes, this);
                 _possibleValuesUseType = null;
             } else {
                 _possibleValuesUseType = v;
@@ -307,7 +305,7 @@ public class DRSubMasterCriteria {
     }
     public void setRawPossibleValues(NSArray arr) {
         if (_possibleValuesUseType != null && (arr == null || arr.count() == 0)) {
-            log.warn("Should use possible values but got none: " + this);
+            log.warn("Should use possible values but got none: {}", this);
             _rawPossibleValues = NSArray.EmptyArray;
         } else {
             _rawPossibleValues = new NSArray(arr);
@@ -506,7 +504,7 @@ public class DRSubMasterCriteria {
             try {
                 s = formatter.format(ts);
             } catch(Exception ex) {
-                log.warn("Error lookup " + ex + ", value=" + aVal + ": " + this);
+                log.warn("Error lookup {}, value={}: {}", ex, aVal, this);
                 s = aVal.toString();
             }
         } else {

@@ -3,7 +3,6 @@ package er.extensions.foundation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +27,7 @@ public class ERXThreadStorageTest extends ERXTestCase {
 
 	synchronized public static void addException(String test, Throwable t) {
 		if (! exceptions.containsKey(test))
-			exceptions.setObjectForKey(new ArrayList<Throwable>(), test);
+			exceptions.setObjectForKey(new ArrayList<>(), test);
 		exceptions.objectForKey(test).add(t);
 	}
 

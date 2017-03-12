@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.ajax.AjaxOption;
 import er.ajax.AjaxOptions;
 import er.ajax.AjaxUtils;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * Generates a YUI panel (@see http://developer.yahoo.com/yui/container/panel/).
@@ -55,7 +56,7 @@ public class YUIPanel extends YUIDivContainer {
   }
 
   protected String divStyle(WOContext context) {
-    String style = AjaxUtils.stringValueForBinding("style", associations(), context.component());
+    String style = ERXComponentUtilities.stringValueForBinding("style", associations(), context.component());
     StringBuffer styleBuffer = new StringBuffer();
     styleBuffer.append("visibility: hidden; ");
     if (style != null) {

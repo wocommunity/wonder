@@ -3,6 +3,8 @@ package er.neo4jadaptor.storage.lucene;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.index.Index;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOQualifier;
@@ -26,7 +28,7 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @param <Type>
  */
 public class LuceneStore <Type extends PropertyContainer> implements Store<Neo4JErsatz, Neo4JErsatz> {
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LuceneStore.class);
+	private static final Logger log = LoggerFactory.getLogger(LuceneStore.class);
 
 	public static final String TYPE_PROPERTY_NAME = "#_type";
 	
@@ -40,7 +42,7 @@ public class LuceneStore <Type extends PropertyContainer> implements Store<Neo4J
 		this.index = (Index<Type>) IndexProvider.instance.getIndexForEntity(db, entity);
 		this.db = db;
 		this.entity = entity;
-		this.facetCreator = new LayeringFilter<Type>();
+		this.facetCreator = new LayeringFilter<>();
 	}
 
 	// this method is not defined in Store interface as lucene objects can't exist
@@ -76,9 +78,7 @@ public class LuceneStore <Type extends PropertyContainer> implements Store<Neo4J
 	public Cursor<Neo4JErsatz> query(EOQualifier q) {
 		Results<Type> result = facetCreator.doFilter(db, entity, q);
 		
-		if (log.isDebugEnabled()) {
-			log.debug("Fetching " + entity.name() + " where " + q);
-		}
+		log.debug("Fetching {} where {}.", entity.name(), q);
 		
 		return new LinkingCursor(result, entity);
 	}

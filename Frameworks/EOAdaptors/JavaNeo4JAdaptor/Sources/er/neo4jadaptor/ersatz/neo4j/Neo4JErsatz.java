@@ -23,7 +23,7 @@ public abstract class Neo4JErsatz extends Ersatz {
 	private final PropertyContainer pc;
 	
 	// source attribute name -> relationship
-	private final Map<String, EORelationship> foreignKeys = new HashMap<String, EORelationship>();
+	private final Map<String, EORelationship> foreignKeys = new HashMap<>();
 	
 	/**
 	 * Create ersatz using values stored in the given property container.

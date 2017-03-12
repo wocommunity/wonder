@@ -2,6 +2,9 @@ package er.extensions.migration;
 
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -23,6 +26,8 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @author mschrag
  */
 public class ERXMigrationColumn {
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
+
 	public static final String NULL_VALUE_TYPE = "___NULL_VALUE_TYPE___";
 
 	/**
@@ -393,7 +398,7 @@ public class ERXMigrationColumn {
 			_new = false;
 		}
 		else {
-			ERXMigrationDatabase.log.warn("You called .create() on the column '" + _name + "', but it was already created.");
+			log.warn("You called .create() on the column '{}', but it was already created.", _name);
 		}
 	}
 

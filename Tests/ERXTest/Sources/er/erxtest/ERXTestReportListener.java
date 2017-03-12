@@ -30,7 +30,7 @@ public class ERXTestReportListener extends RunListener {
 
     private ArrayList<String> listLoadedClasses(ClassLoader loader) {
 
-        ArrayList<String> loadedClasses = new ArrayList<String>();
+        ArrayList<String> loadedClasses = new ArrayList<>();
 
         Class klass = loader.getClass();
         while (klass != java.lang.ClassLoader.class) {
@@ -61,7 +61,7 @@ public class ERXTestReportListener extends RunListener {
 
         ArrayList<String> found = listLoadedClasses(loader);
 
-        ArrayList<String> fixed = new ArrayList<String>();
+        ArrayList<String> fixed = new ArrayList<>();
 
 
         java.security.MessageDigest md = null;
@@ -141,7 +141,7 @@ public class ERXTestReportListener extends RunListener {
 
         if (contact != null && ! contact.equals("") && ! contact.startsWith("$")) {
 
-            ArrayList<String> params = new ArrayList<String>();
+            ArrayList<String> params = new ArrayList<>();
 
             params.add("email="+contact);
 

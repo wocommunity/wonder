@@ -8,8 +8,6 @@
 
 package er.extensions.localization;
 
-import org.apache.log4j.Logger;
-
 /**
  * <div class="en">
  *  ERXItalianLocalizer is a subclass of {@link ERXLocalizer}.
@@ -25,8 +23,6 @@ import org.apache.log4j.Logger;
  * </div>
  */
 public class ERXItalianLocalizer extends ERXLocalizer {
-  
-    static final Logger log = Logger.getLogger(ERXItalianLocalizer.class);
     
     public ERXItalianLocalizer(String aLanguage) { 
         super(aLanguage);

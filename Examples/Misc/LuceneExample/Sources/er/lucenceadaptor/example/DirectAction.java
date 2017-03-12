@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -21,6 +20,8 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.NumericUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
@@ -84,7 +85,7 @@ public class DirectAction extends ERD2WDirectAction {
 		}
 	}
 
-	private final static Logger log = Logger.getLogger(DirectAction.class.getName());
+	private final static Logger log = LoggerFactory.getLogger(DirectAction.class);
 
 	public DirectAction(WORequest request) {
 		super(request);
@@ -92,7 +93,7 @@ public class DirectAction extends ERD2WDirectAction {
 
 	@Override
 	public WOActionResults defaultAction() {
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class DirectAction extends ERD2WDirectAction {
 			q.add(q2, BooleanClause.Occur.MUST);
 			query = q;
 		}
-		log.info(query);
+		log.info("{}", query);
 		if (true) {
 			TopDocs docs = searcher.search(query, Integer.MAX_VALUE);
 			int hits = docs.totalHits;
@@ -158,7 +159,7 @@ public class DirectAction extends ERD2WDirectAction {
 				String content = document.get("contents");
 				Number userCount = NumericUtils.prefixCodedToLong(fieldValue);
 				boolean contains = content.indexOf(key) >= 0;
-				log.info(i +"/" + docId + "->" + userCount + "-" + document);
+				log.info("{}/{}->{}-{}", i, docId, userCount, document);
 			}
 		} else {
 			Collector streamingHitCollector = new SimpleCollector(searcher);
@@ -183,9 +184,9 @@ public class DirectAction extends ERD2WDirectAction {
 			Query query = ERLuceneAdaptorChannel.queryForQualifier(new EOKeyValueQualifier("userCount", EOQualifier.QualifierOperatorLessThanOrEqualTo, 802), EOUtilities.entityNamed(ec, "LuceneAsset"));
 			fs.setHints(new NSDictionary(query, ERLuceneAdaptor.QUERY_HINTS));
 			NSArray<EOEnterpriseObject> result = ec.objectsWithFetchSpecification(fs);
-			log.info(result.count() + ": " + result.valueForKey("userCount"));
+			log.info("{}: {}", result.count(), result.valueForKey("userCount"));
 			for (EOEnterpriseObject eo : result) {
-				log.info(result.count() + ": " + eo);
+				log.info("{}: {}", result.count(), eo);
 			}
 		} finally {
 			ec.unlock();
@@ -209,6 +210,6 @@ public class DirectAction extends ERD2WDirectAction {
 		} finally {
 			ec.unlock();
 		}
-		return pageWithName(Main.class.getName());
+		return pageWithName(Main.class);
 	}
 }

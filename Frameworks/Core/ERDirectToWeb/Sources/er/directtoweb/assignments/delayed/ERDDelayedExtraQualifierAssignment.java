@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;
@@ -174,7 +172,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
     }
 
     protected EOQualifier extraQualifier(D2WContext c, NSDictionary<String, Object> dict) {
-        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
         EOQualifier result = null;
         for (String key : dict.allKeys()) {
             Object value = null;

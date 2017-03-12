@@ -26,7 +26,8 @@ package er.selenium;
 import java.net.URL;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -45,7 +46,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * Request hanlder for selenium tests. Returns the files to get parsed by the runner.
  */
 public class SeleniumTestRunnerProxy extends WORequestHandler {
-	private static final Logger log = Logger.getLogger(SeleniumTestRunnerProxy.class);
+	private static final Logger log = LoggerFactory.getLogger(SeleniumTestRunnerProxy.class);
 	
 	protected class CachedFile {
 		public NSData data;
@@ -74,7 +75,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     	}
     	
 		String filePath = builder.toString();
-		log.debug("Processing file '" + filePath + "'");
+		log.debug("Processing file '{}'.", filePath);
 		
 		/*
 		 * Synchronization mistakes are possible here, but not fatal at all.

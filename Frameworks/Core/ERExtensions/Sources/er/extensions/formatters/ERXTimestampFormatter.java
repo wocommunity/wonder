@@ -3,6 +3,7 @@ package er.extensions.formatters;
 import java.text.DateFormatSymbols;
 import java.text.Format;
 import java.util.Hashtable;
+import java.util.Map;
 
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
@@ -22,7 +23,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	private static final long serialVersionUID = 1L;
 
 	/** holds a reference to the repository */
-	private static final Hashtable _repository = new Hashtable();
+	private static final Map<String, NSTimestampFormatter> _repository = new Hashtable<>();
     
 	protected static final String DefaultKey = "ERXTimestampFormatter.DefaultKey";
     
@@ -58,7 +59,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 			formatter = (NSTimestampFormatter)localizer.localizedDateFormatForKey(pattern);
 		} else {
 			synchronized(_repository) {
-				formatter = (NSTimestampFormatter)_repository.get(pattern);
+				formatter = _repository.get(pattern);
 				if(formatter == null) {
 					formatter = new NSTimestampFormatter(pattern);
 					_repository.put(pattern, formatter);

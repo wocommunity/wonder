@@ -10,6 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
@@ -26,6 +29,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  */
 public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHandler {
+	private static final Logger log = LoggerFactory.getLogger(ERXDirectActionRequestHandler.class);
 
 	/**
 	 * Specifies if the request handler eats the action class from the URL
@@ -138,7 +142,7 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 	 * @return the dictionary of form values
 	 */
 	public static NSDictionary<String, String> formValuesFromRequest(WORequest request, boolean useActionClass, boolean useActionName) {
-		NSMutableDictionary params = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> params = new NSMutableDictionary<>();
 		boolean foundRequestHandler = false;
 		for (Enumeration<String> e = NSArray.componentsSeparatedByString(request.uri(), "/").objectEnumerator(); e.hasMoreElements();) {
 			String part = e.nextElement();

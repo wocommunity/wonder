@@ -6,11 +6,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
-import org.apache.log4j.Logger;
-
-import er.jasperreports.ERJRFoundationDataSource;
-import er.jasperreports.ERJRReportTaskFromEO;
-import er.jasperreports.ERJRUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -23,8 +20,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXAssert;
 
 public class ERJRReportTaskFromEO implements Callable<File> {
-
-	private static final Logger log = Logger.getLogger(ERJRReportTaskFromEO.class);
+	private static final Logger log = LoggerFactory.getLogger(ERJRReportTaskFromEO.class);
 
 	private File reportFile;
 	private final String frameworkName;
@@ -63,7 +59,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 		ERXAssert.PRE.notNull(theObjectGID);  // If the object is new, this will be null. test and throw.
 
 		if (this.parameters == null) {
-			this.parameters = new HashMap<String, Object>();
+			this.parameters = new HashMap<>();
 		}
 	}
 
@@ -98,8 +94,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 
 		reportFile = null;
 
-		if (log.isDebugEnabled())
-			log.debug("Starting JasperReportTask: " + this.toString());
+		log.debug("Starting JasperReportTask: {}", this);
 
 		/**
 		 * create a new editing context and work on the object there
@@ -112,7 +107,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 //			EOEnterpriseObject theObject = ec.faultForGlobalID( theObjectGID, ec);
 			
 			EOEnterpriseObject theObjectToPDF = EOUtilities.localInstanceOfObject(ec, myObject);
-			jrDataSource = new ERJRFoundationDataSource(new NSArray<EOEnterpriseObject>(theObjectToPDF));
+			jrDataSource = new ERJRFoundationDataSource(new NSArray<>(theObjectToPDF));
 
 			if (jasperCompiledReportFileName != null) {
 				reportFile = ERJRUtilities.runCompiledReportToPDFFile(jasperCompiledReportFileName, frameworkName, parameters, jrDataSource);

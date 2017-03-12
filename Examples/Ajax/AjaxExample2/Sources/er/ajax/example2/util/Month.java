@@ -128,7 +128,7 @@ public class Month {
       }
 
       for (int dayNum = 0; dayNum < maxDays;) {
-        NSMutableArray<Day> daysInWeek = new NSMutableArray<Day>();
+        NSMutableArray<Day> daysInWeek = new NSMutableArray<>();
         for (int dayOfWeekNum = 0; dayOfWeekNum < maxDaysInWeek; dayOfWeekNum++, dayNum++) {
           Day day = new Day(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
           daysInWeek.addObject(day);
@@ -144,7 +144,7 @@ public class Month {
   public NSArray<Week> weekObjects() {
     NSMutableArray<Week> weekObjects = _weekObjects;
     if (weekObjects == null) {
-      weekObjects = new NSMutableArray<Week>();
+      weekObjects = new NSMutableArray<>();
       weeks();
       for (int i = 0; i < _weeks.count(); i++) {
         NSArray<Day> week = _weeks.get(i);
@@ -206,7 +206,7 @@ public class Month {
     if (endingMonth._year < startingMonth._year || (endingMonth._year == startingMonth._year && endingMonth._month < startingMonth._month)) {
       throw new IllegalArgumentException("Ending month was before starting month.");
     }
-    NSMutableArray<Month> months = new NSMutableArray<Month>();
+    NSMutableArray<Month> months = new NSMutableArray<>();
     Calendar monthCalendar = startingMonth.monthCalendar();
     Month month = startingMonth;
     do {
@@ -218,7 +218,7 @@ public class Month {
   }
 
   public static NSArray<Month> months(Month startingMonth, int offset, int count) {
-    NSMutableArray<Month> months = new NSMutableArray<Month>();
+    NSMutableArray<Month> months = new NSMutableArray<>();
     Calendar monthCalendar = startingMonth.monthCalendar();
     monthCalendar.add(Calendar.MONTH, offset);
     for (int i = 0; i < count; i++) {

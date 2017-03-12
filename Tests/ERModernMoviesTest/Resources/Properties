@@ -21,7 +21,7 @@ er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 # Disable the ERMoviesLogic H2 file DB
 webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=false
 # Use H2 DB in memory
-dbConnectURLGLOBAL=jdbc:h2:mem:ModernMoviesTest
+dbConnectURLGLOBAL=jdbc:h2:mem:ERModernMoviesTest
 dbConnectDriverGLOBAL=org.h2.Driver
 dbConnectPluginGLOBAL=H2PlugIn
 dbEOPrototypesEntityGLOBAL=EOJDBCH2CustomPrototypes

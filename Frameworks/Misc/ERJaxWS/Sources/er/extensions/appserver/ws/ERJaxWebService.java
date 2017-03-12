@@ -13,7 +13,8 @@ import java.util.TreeMap;
 
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.istack.NotNull;
 import com.sun.xml.ws.api.BindingID;
@@ -49,11 +50,7 @@ import er.extensions.appserver.ERXResponse;
  */
 public class ERJaxWebService<T>
 {
-    /**
-     * 
-     */
-    public static final Logger webServiceLog =
-        Logger.getLogger("er.extensions.appserver.ws.ERJaxWebServiceRequestHandler.Logging");
+    private static final Logger log = LoggerFactory.getLogger(ERJaxWebService.class);
 
     /**
      * 
@@ -161,19 +158,17 @@ public class ERJaxWebService<T>
             catch(Exception e)
             {
                 packet = new Packet();
+                log.error("Could not decode packet.", e);
                 if(e instanceof ExceptionHasMessage)
                 {
-                    webServiceLog.error(e.getMessage(), e);
                     packet.setMessage(((ExceptionHasMessage)e).getFaultMessage());
                 }
                 else if(e instanceof UnsupportedMediaException)
                 {
-                    webServiceLog.error(e.getMessage(), e);
                     con.setStatus(415);
                 }
                 else
                 {
-                    webServiceLog.error(e.getMessage(), e);
                     con.setStatus(500);
                 }
             }
@@ -186,7 +181,7 @@ public class ERJaxWebService<T>
                 }
                 catch(Exception e)
                 {
-                    webServiceLog.error(e.getMessage(), e);
+                    log.error("Could not process packet.", e);
                     return null;
                 }
             }
@@ -196,7 +191,7 @@ public class ERJaxWebService<T>
             }
             catch(IOException e)
             {
-                webServiceLog.error(e.getMessage(), e);
+                log.error("Could not encode packet.", e);
             }
         }
         finally
@@ -241,7 +236,7 @@ public class ERJaxWebService<T>
     {
         if(soapAction != null && (!soapAction.startsWith("\"") || !soapAction.endsWith("\"")))
         {
-            webServiceLog.info("Received WS-I BP non-conformant Unquoted SoapAction HTTP header: " + soapAction);
+            log.info("Received WS-I BP non-conformant Unquoted SoapAction HTTP header: {}", soapAction);
             String fixedSoapAction = soapAction;
             if(!soapAction.startsWith("\""))
                 fixedSoapAction = (new StringBuilder()).append("\"").append(fixedSoapAction).toString();
@@ -335,11 +330,11 @@ public class ERJaxWebService<T>
         }
         else
         {
-            wsdls = new HashMap<String, SDDocument>();
+            wsdls = new HashMap<>();
             // wsdl=1 --> Doc
             // Sort WSDL, Schema documents based on SystemId so that the same
             // document gets wsdl=x mapping
-            Map<String, SDDocument> systemIds = new TreeMap<String, SDDocument>();
+            Map<String, SDDocument> systemIds = new TreeMap<>();
             for(SDDocument sdd : sdef)
             {
                 if(sdd == sdef.getPrimary())
@@ -369,7 +364,7 @@ public class ERJaxWebService<T>
                 }
             }
 
-            revWsdls = new HashMap<SDDocument, String>();    // Doc --> wsdl=1
+            revWsdls = new HashMap<>();    // Doc --> wsdl=1
             for(Entry<String, SDDocument> e : wsdls.entrySet())
             {
                 if(!e.getKey().equals("WSDL"))

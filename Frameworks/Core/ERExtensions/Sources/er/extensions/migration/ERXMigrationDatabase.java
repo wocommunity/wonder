@@ -1,6 +1,7 @@
 package er.extensions.migration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -17,7 +18,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
- * <p>
  * ERXMigrationDatabase, ERXMigrationTable, and ERXMigrationColumn exist to make
  * navigating the wonderous API of EOSynchronizationFactory not totally suck.
  * Additionally, these simple models provide a way to insulate yourself from a
@@ -27,8 +27,6 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * this API is only suitable for SQL migrations, which is why the terminology is
  * based on the relational model vs EOF's more generic concepts like Models,
  * Entities, and Attributes.
- * </p>
- * 
  * <p>
  * Prior to this API, and still fully supported (and required for more
  * complicated operations), all migrations had to be written with SQL. The
@@ -40,8 +38,6 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * of EOSynchronizationFactory that lets you perform common database-agnostic
  * operations like adding and deleting columns, creating and dropping tables,
  * adding primary keys, and adding foreign keys.
- * </p>
- * 
  * <p>
  * ERXMigrationDatabase is conceptually similar to an EOModel, ERXMigrationTable
  * to an EOEntity, and ERXMigrationColumn to an EOAttribute. The names were
@@ -51,20 +47,14 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * All of the API allows you to build an in-memory model of your structural
  * changes along with some "perform now" method calls that actual execute SQL
  * commands against the provided adaptor channel.
- * </p>
- * 
  * <p>
  * Let's take a look at some examples. Take the very common case of a migration
  * that just adds a new column to a table:
- * </p>
- * <code>
+ * <pre><code>
  * ERXMigrationDatabase.database(channel).existingTableNamed("Request").newStringColumn("requestedByEmailAddress", 255, true);
- * </code>
- * 
- * <p>
+ * </code></pre>
  * Another more complex case is that you are introducing an entirely new table
  * that has a foreign key to some existing table:
- * </p>
  * <pre><code>
  * ERXMigrationDatabase database = ERXMigrationDatabase.database(channel);
  * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson");
@@ -82,8 +72,6 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * table.create();
  * table.addForeignKey(table.existingColumnNamed("CompanyID"), database.existingTableNamed("Company").existingColumnNamed("companyID"));
  * </code></pre>
- * 
- * <p>
  * In the above examples, database.existingTableNamed and
  * table.existingColumnNamed are called. Calling table/database.existingXxx()
  * does not perform database reverse engineering. It only creates a stub entry
@@ -101,18 +89,15 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * .newColumn all the columns in it, followed by a table.create() to create the
  * entire block. For foreign keys, you must have .create()'d both tables (or use
  * existing tables) prior to calling the foreign key methods.
- * </p>
- * 
  * <p>
  * It's important to note that this API relies entirely on
  * EOSynchronizationFactory. If the sync factory for your plugin is wrong, the
  * SQL generation in the ERXMigrationDatabase API's will likewise be wrong.
- * </p>
  * 
  * @author mschrag
  */
 public class ERXMigrationDatabase {
-	public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXMigrationDatabase.class);
 
 	private EOModel _model;
 	private EOAdaptorChannel _adaptorChannel;
@@ -136,12 +121,12 @@ public class ERXMigrationDatabase {
 	 * @param adaptorChannel
 	 *            the adaptor channel to connect to
 	 * @param model the model being migrated (necessary for more reliable sql generation)
-	 * @param languages the langauges to use for localization
+	 * @param languages the languages to use for localization
 	 */
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
 		_adaptorChannel = adaptorChannel;
 		_model = model;
-		_tables = new NSMutableArray<ERXMigrationTable>();
+		_tables = new NSMutableArray<>();
 		_languages = languages;
 		if(_languages == null) { _languages = NSArray.EmptyArray; }
 	}
@@ -334,7 +319,7 @@ public class ERXMigrationDatabase {
 	 *            the adaptor channel to operate within
 	 * @param model
 	 *            the model that corresponds to this table
-	 * @param languages the langauges to use for localization
+	 * @param languages the languages to use for localization
 	 * @return an ERXMigrationDatabase
 	 */
 	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel, EOModel model, NSArray<String> languages) {
@@ -373,7 +358,7 @@ public class ERXMigrationDatabase {
 			if (required) {
 				throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support the required '" + operationName + "' operation.");
 			}
-			ERXMigrationDatabase.log.error("Your EOSynchronizationFactory does not support the '" + operationName + "' operation, so this migration will be skipped.");
+			log.error("Your EOSynchronizationFactory does not support the '{}' operation, so this migration will be skipped.", operationName);
 		}
 	}
 

@@ -4,7 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOApplication;
@@ -123,6 +124,11 @@ import er.rest.routes.jsr311.Paths;
  * @author mschrag
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
+	/**
+	 * Header used to override the method of a request. Useful when client code can use only GET and POST methods.
+	 */
+	private static final String X_HTTP_METHOD_OVERRIDE_HEADER_KEY = "x-http-method-override";
+
 	/**
 	 * A NameFormat that behaves like Rails -- plural entities, plural routes, lowercase underscore names
 	 * (names_like_this).
@@ -272,7 +278,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 	}
 
-	public static final Logger log = Logger.getLogger(ERXRouteRequestHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXRouteRequestHandler.class);
 
 	public static final String Key = "ra";
 	public static final String TypeKey = "ERXRouteRequestHandler.type";
@@ -300,7 +306,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 */
 	public ERXRouteRequestHandler(NameFormat entityNameFormat) {
 		_entityNameFormat = entityNameFormat;
-		_routes = new NSMutableArray<ERXRoute>();
+		_routes = new NSMutableArray<>();
 		_parseUnknownExtensions = ERXProperties.booleanForKeyWithDefault("ERXRest.parseUnknownExtensions", true);
 	}
 
@@ -322,9 +328,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to add
 	 */
 	public void addRoute(ERXRoute route) {
-		if (log.isDebugEnabled()) {
-			log.debug("adding route " + route);
-		}
+		log.debug("adding route {}", route);
 		verifyRoute(route);
 		_routes.addObject(route);
 	}
@@ -364,7 +368,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the routes for the given controller class
 	 */
 	public NSArray<ERXRoute> routesForControllerClass(Class<? extends ERXRouteController> routeController) {
-		NSMutableArray<ERXRoute> routes = new NSMutableArray<ERXRoute>();
+		NSMutableArray<ERXRoute> routes = new NSMutableArray<>();
 		for (ERXRoute route : _routes) {
 			if (route.controller() == routeController) {
 				routes.add(route);
@@ -496,7 +500,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (addDefaultRoutesIfNoDeclaredRoutesFound && !declaredRoutesFound) {
-			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '{}'. Registering default routes instead.", routeControllerClass.getSimpleName());
 			addDefaultRoutes(entityName, routeControllerClass);
 		}
 	}
@@ -715,6 +719,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	
 	/**
 	 * @param method
+	 *            the request method
 	 * @param urlPattern
 	 * @return the first route matching <code>method</code> and <code>pattern</code>.
 	 */
@@ -776,7 +781,6 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the matching route for this method and path
 	 */
 	public ERXRoute setupRequestWithRouteForMethodAndPath(WORequest request, String method, String path) {
-		@SuppressWarnings("unchecked")
 		NSDictionary<String, Object> userInfo = request.userInfo();
 		NSMutableDictionary<String, Object> mutableUserInfo;
 		if (userInfo instanceof NSMutableDictionary) {
@@ -786,7 +790,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			mutableUserInfo = userInfo.mutableClone();
 		}
 		else {
-			mutableUserInfo = new NSMutableDictionary<String, Object>();
+			mutableUserInfo = new NSMutableDictionary<>();
 		}
 
 		ERXRoute matchingRoute = routeForMethodAndPath(method, path, mutableUserInfo);
@@ -819,13 +823,14 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	@Override
-	public NSArray getRequestHandlerPathForRequest(WORequest request) {
-		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<Object>();
+	public NSArray<String> getRequestHandlerPathForRequest(WORequest request) {
+		NSMutableArray<String> requestHandlerPath = new NSMutableArray<>();
 
 		try {
 			String path = request._uriDecomposed().requestHandlerPath();
+			String method = request.headerForKey(X_HTTP_METHOD_OVERRIDE_HEADER_KEY, request.method());
 
-			ERXRoute matchingRoute = setupRequestWithRouteForMethodAndPath(request, request.method(), path);
+			ERXRoute matchingRoute = setupRequestWithRouteForMethodAndPath(request, method, path);
 			if (matchingRoute != null) {
 				@SuppressWarnings("unchecked")
 				NSDictionary<ERXRoute.Key, String> keys = (NSDictionary<ERXRoute.Key, String>) request.userInfo().objectForKey(ERXRouteRequestHandler.KeysKey);
@@ -856,7 +861,6 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
 		ERXRouteController controller = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
 		WORequest request = (WORequest) aobj[0];

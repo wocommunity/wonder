@@ -36,5 +36,8 @@
     <binding name="locale"/>
     <binding name="startDay"/>
     <binding defaults="Boolean" name="showYearControls"/>
+    <binding name="otherTagString"/>
+        <binding defaults="Boolean" name="readonly"/>
+    <binding defaults="Boolean" name="manualInput"/>
     </wo>
 </wodefinitions>

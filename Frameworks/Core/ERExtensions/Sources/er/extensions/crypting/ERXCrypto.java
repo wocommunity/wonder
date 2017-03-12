@@ -7,12 +7,10 @@
 package er.extensions.crypting;
 
 import java.io.IOException;
-import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -39,9 +37,6 @@ import er.extensions.foundation.ERXStringUtilities;
  *           er.extensions.ERXCrypto.crypter.DES)
  */
 public class ERXCrypto {
-	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
-
 	/**
 	 * The constant for the DES encryption algorithm.
 	 */
@@ -62,7 +57,7 @@ public class ERXCrypto {
 
 	private static synchronized NSMutableDictionary<String, ERXCrypterInterface> crypters() {
 		if (_crypters == null) {
-			_crypters = new NSMutableDictionary<String, ERXCrypterInterface>();
+			_crypters = new NSMutableDictionary<>();
 			_crypters.setObjectForKey(new ERXDESCrypter(), ERXCrypto.DES);
 			_crypters.setObjectForKey(new ERXBlowfishCrypter(), ERXCrypto.BLOWFISH);
 			_crypters.setObjectForKey(new ERXAESCrypter(), ERXCrypto.AES);
@@ -140,7 +135,7 @@ public class ERXCrypto {
 	 * @return a dictionary of decoded key-value pairs
 	 */
 	public static NSMutableDictionary<String, String> decodedFormValuesDictionary(NSDictionary<String, NSArray<String>> dict) {
-		NSMutableDictionary<String, String> result = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> result = new NSMutableDictionary<>();
 		for (String key: dict.allKeys()) {
 			NSArray<String> objects = dict.objectForKey(key);
 			String value = ERXCrypto.defaultCrypter().decrypt(objects.lastObject()).trim();

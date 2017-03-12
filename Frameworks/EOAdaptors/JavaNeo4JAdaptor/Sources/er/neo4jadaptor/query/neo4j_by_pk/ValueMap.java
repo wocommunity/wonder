@@ -17,9 +17,6 @@ import er.extensions.eof.qualifiers.ERXInQualifier;
 import er.neo4jadaptor.ersatz.webobjects.NSTranslator;
 
 public class ValueMap {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ValueMap.class);
-	
 	private final Map<EOAttribute, List<Object>> map = new HashMap<EOAttribute, List<Object>>();
 	
 	public ValueMap(EOEntity entity, EOQualifier q) {
@@ -69,7 +66,7 @@ public class ValueMap {
 		List<Object> list = map.get(att);
 		
 		if (list == null) {
-			list = new ArrayList<Object>();
+			list = new ArrayList<>();
 			map.put(att, list);
 		}
 		list.add(value);

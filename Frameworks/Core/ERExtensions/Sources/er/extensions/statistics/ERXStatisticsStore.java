@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -54,7 +55,7 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
-	protected static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXStatisticsStore.class);
 	private final StopWatchTimer _timer = new StopWatchTimer();
 	protected static Field initMemoryField;
 
@@ -63,7 +64,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			initMemoryField = WOStatisticsStore.class.getDeclaredField("_initializationMemory");
 			initMemoryField.setAccessible(true);
 		} catch (Exception e) {
-			log.warn("Could not access private field WOStatisticsStore._initializationMemory. ", e);
+			log.warn("Could not access private field WOStatisticsStore._initializationMemory.", e);
 		}
 	}
 
@@ -100,7 +101,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		long _maximumRequestFatalTime;
 		long _lastLog;
 
-		Map<Thread, Long> _requestThreads = new WeakHashMap<Thread, Long>();
+		Map<Thread, Long> _requestThreads = new WeakHashMap<>();
 		Map<Thread, Map<Thread, StackTraceElement[]>> _warnTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _errorTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _fatalTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
@@ -132,17 +133,27 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 				
 				Thread currentThread = Thread.currentThread();
-				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-				if (traces == null) {
-					traces = _errorTraces.remove(currentThread);
-					names = _errorTracesNames.remove(currentThread);
-				}
-				if (traces == null) {
-					traces = _warnTraces.remove(currentThread);
-					names = _warnTracesNames.remove(currentThread);
-				}
 				
+				// get the most severe trace for the current thread
+				Map<Thread, StackTraceElement[]> traces = _fatalTraces.get(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.get(currentThread);
+				if (traces == null) {
+					traces = _errorTraces.get(currentThread);
+					names = _errorTracesNames.get(currentThread);
+				}
+				if (traces == null) {
+					traces = _warnTraces.get(currentThread);
+					names = _warnTracesNames.get(currentThread);
+				}
+
+				// remove the current thread for _all_ traces
+				_fatalTraces.remove(currentThread);
+				_fatalTracesNames.remove(currentThread);
+				_errorTraces.remove(currentThread);
+				_errorTracesNames.remove(currentThread);
+				_warnTraces.remove(currentThread);
+				_warnTracesNames.remove(currentThread);
+
 				synchronized (_requestThreads) {
 					_requestThreads.remove(Thread.currentThread());
 				}
@@ -161,18 +172,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
                 IERXRequestDescription requestDescription = descriptionObjectForContext(aContext, aString);
                 listener.log(requestTime, requestDescription);
 				if (requestTime > _maximumRequestFatalTime) {
-					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.error("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 				else if (requestTime > _maximumRequestErrorTime) {
-					log.error("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.error("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 				else if (requestTime > _maximumRequestWarnTime) {
-					log.warn("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
+					log.warn("Request did take too long : {}ms request was: {}{}", requestTime, requestDescription, trace);
 				}
 			}
 			catch (Exception ex) {
 				// AK: pretty important we don't mess up here
-				log.error(ex, ex);
+				log.error("Error", ex);
 			}
 		}
 
@@ -254,7 +265,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
                     return new ERXNormalRequestDescription(componentName, requestHandler, additionalInfo);
                 }
                 catch (RuntimeException e) {
-                    log.error("Cannot get context description since received exception " + e, e);
+                    log.error("Cannot get context description since received exception.", e);
                 }
             }
             return new ERXEmptyRequestDescription(string);
@@ -275,7 +286,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 		
 		private void checkThreads() {
-			Map<Thread, Long> requestThreads = new HashMap<Thread, Long>();
+			Map<Thread, Long> requestThreads = new HashMap<>();
 			synchronized (_requestThreads) {
 	            requestThreads.putAll(_requestThreads);
 			}
@@ -318,7 +329,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							sb.append(ERXEC.outstandingLockDescription());
 							sb.append("OSC info:\n");
 							sb.append(ERXObjectStoreCoordinator.outstandingLockDescription());
-							log.fatal(sb.toString());
+							log.error(sb.toString());
                             deadlocksCount++;
 						}
 					}
@@ -328,7 +339,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private Map<Thread, String> getCurrentThreadNames(Set<Thread> keySet) {
-			Map<Thread, String> names = new HashMap<Thread, String>();
+			Map<Thread, String> names = new HashMap<>();
 			for (Thread thread : keySet) {
 				names.put(thread, thread.getName());
 			}
@@ -350,7 +361,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		return stats;
 	}
 
-	protected NSMutableArray<WOSession> sessions = new NSMutableArray<WOSession>();
+	protected NSMutableArray<WOSession> sessions = new NSMutableArray<>();
 
 	@Override
 	protected void _applicationCreatedSession(WOSession wosession) {
@@ -436,7 +447,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 	@Override
 	public HashMap getAverageSessionMemory() {
-		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<String, Long>();
+		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<>();
 		NSDictionary<String, Long> startMemory = null;
 		NSMutableDictionary<String, Long> currentMemory = memoryUsage();
 		try {

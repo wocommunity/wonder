@@ -1,7 +1,5 @@
 package er.taggable.model;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 
@@ -29,9 +27,6 @@ public class ERTag extends _ERTag {
   public static enum Inclusion {
     ANY, ALL
   }
-
-  @SuppressWarnings("unused")
-  private static Logger log = Logger.getLogger(ERTag.class);
 
   @Override
   public void willDelete() throws ValidationException {

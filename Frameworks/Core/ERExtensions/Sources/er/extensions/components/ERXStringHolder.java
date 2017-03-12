@@ -1,7 +1,5 @@
 package er.extensions.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 
 /**
@@ -19,9 +17,6 @@ public class ERXStringHolder extends ERXStatelessComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXStringHolder.class);
 
     protected String _value;
     protected Boolean _escapeHTML = Boolean.FALSE;

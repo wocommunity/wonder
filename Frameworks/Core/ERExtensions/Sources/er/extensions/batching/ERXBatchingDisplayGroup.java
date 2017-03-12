@@ -1,7 +1,5 @@
 package er.extensions.batching;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
@@ -43,9 +41,6 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/** Logging support */
-	private static final Logger log = Logger.getLogger(ERXBatchingDisplayGroup.class);
 
 	/** total number of batches */
 	protected int _batchCount;
@@ -296,7 +291,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * @param prefetchingRelationshipKeyPaths the prefetching key paths to override those in the underlying fetch spec
 	 */
 	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
-		NSMutableArray<String> keypaths = new NSMutableArray<String>();
+		NSMutableArray<String> keypaths = new NSMutableArray<>();
     	for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
     		keypaths.addObject(key.key());
     	}

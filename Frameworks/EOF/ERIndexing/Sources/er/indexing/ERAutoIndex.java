@@ -107,7 +107,7 @@ public class ERAutoIndex extends ERIndex {
 
     	// Holds the configuration
     	// Each entity has an entry where the key is the entity name and the object is a ConfigurationEntry for that entity
-        private final NSMutableDictionary<String, ConfigurationEntry> configuration = new NSMutableDictionary<String, ConfigurationEntry>();
+        private final NSMutableDictionary<String, ConfigurationEntry> configuration = new NSMutableDictionary<>();
 
         protected void initFromDictionary(NSDictionary indexDef) {
             String store = (String) indexDef.objectForKey("store");
@@ -236,8 +236,8 @@ public class ERAutoIndex extends ERIndex {
 
                     Transaction transaction = new Transaction(ec);
 
-                    NSMutableSet<EOEnterpriseObject> deletedHandledObjects = new NSMutableSet<EOEnterpriseObject>();
-                    NSMutableSet<EOEnterpriseObject> addedHandledObjects = new NSMutableSet<EOEnterpriseObject>();
+                    NSMutableSet<EOEnterpriseObject> deletedHandledObjects = new NSMutableSet<>();
+                    NSMutableSet<EOEnterpriseObject> addedHandledObjects = new NSMutableSet<>();
 
                     // first handle active objects
                     NSArray<EOEnterpriseObject> directObjects;
@@ -287,7 +287,7 @@ public class ERAutoIndex extends ERIndex {
         }
 
         private NSArray<EOEnterpriseObject> handledObjects(NSArray<EOEnterpriseObject> objects) {
-            NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<EOEnterpriseObject>(objects.count());
+            NSMutableArray<EOEnterpriseObject> result = new NSMutableArray<>(objects.count());
             for (EOEnterpriseObject eo : objects) {
                 if (handlesEntity(eo.entityName())) {
                     result.addObject(eo);

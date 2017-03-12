@@ -2,7 +2,8 @@ package er.plot;
 
 import jofc2.model.Chart;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -19,8 +20,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** logging support */
-	protected static final Logger log = Logger.getLogger(ERPOFCChart.class);
+	private static final Logger log = LoggerFactory.getLogger(ERPOFCChart.class);
 
 	private Chart _chart;
 
@@ -71,7 +71,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	public Integer height() {
 		if (_height == null) {
 			_height = intValueForBinding("height", Integer.valueOf(300));
-			log.debug("height = " + _height);
+			log.debug("height = {}", _height);
 		}
 		return _height;
 	}
@@ -79,7 +79,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	public String id() {
 		if (_id == null) {
 			_id = stringValueForBinding("id", safeElementID());
-			log.debug("id = " + _id);
+			log.debug("id = {}", _id);
 		}
 		return _id;
 	}
@@ -110,7 +110,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	public String safeElementID() {
 		if (_safeElementID == null) {
 			_safeElementID = ERXStringUtilities.safeIdentifierName(context().elementID());
-			log.debug("safeElementID = " + _safeElementID);
+			log.debug("safeElementID = {}", _safeElementID);
 		}
 		return _safeElementID;
 	}
@@ -118,7 +118,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	public Integer width() {
 		if (_width == null) {
 			_width = intValueForBinding("width", Integer.valueOf(500));
-			log.debug("width = " + _width);
+			log.debug("width = {}", _width);
 		}
 		return _width;
 	}

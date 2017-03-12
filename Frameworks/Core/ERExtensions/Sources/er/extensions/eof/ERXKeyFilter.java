@@ -55,10 +55,10 @@ public class ERXKeyFilter {
 	}
 
 	private ERXKeyFilter.Base _base;
-	private LinkedHashMap<ERXKey, ERXKeyFilter> _includes;
+	private Map<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet<ERXKey> _excludes;
 	private NSMutableSet<ERXKey> _lockedRelationships;
-	private NSMutableDictionary<ERXKey, ERXKey> _map;
+	private Map<ERXKey, ERXKey> _map;
 	private NSArray<EOSortOrdering> _sortOrderings;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
@@ -85,10 +85,10 @@ public class ERXKeyFilter {
 	public ERXKeyFilter(ERXKeyFilter.Base base, ERXKeyFilter.Base nextBase) {
 		_base = base;
 		_nextBase = nextBase;
-		_includes = new LinkedHashMap<ERXKey, ERXKeyFilter>();
-		_excludes = new NSMutableSet<ERXKey>();
-		_lockedRelationships = new NSMutableSet<ERXKey>();
-		_map = new NSMutableDictionary<ERXKey, ERXKey>();
+		_includes = new LinkedHashMap<>();
+		_excludes = new NSMutableSet<>();
+		_lockedRelationships = new NSMutableSet<>();
+		_map = new NSMutableDictionary<>();
 		_deduplicationEnabled = true;
 		_anonymousUpdateEnabled = false;
 	}
@@ -121,7 +121,7 @@ public class ERXKeyFilter {
 	 * @param toKey the key to map to
 	 */
 	public void addMap(ERXKey fromKey, ERXKey toKey) {
-		_map.setObjectForKey(toKey, fromKey);
+		_map.put(fromKey, toKey);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class ERXKeyFilter {
 	 * @return the key that maps to the given key
 	 */
 	public <T> ERXKey<T> keyMap(ERXKey<T> fromKey) {
-		@SuppressWarnings("cast") ERXKey<T> toKey = (ERXKey<T>) _map.objectForKey(fromKey);
+		ERXKey<T> toKey = _map.get(fromKey);
 		if (toKey == null) {
 			toKey = fromKey;
 		}
@@ -700,7 +700,7 @@ public class ERXKeyFilter {
      *
      * @param sortOrderings the sort orderings that will be applied by this key filter
      */
-    public void setSortOrderings(NSArray sortOrderings) {
+    public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
     	_sortOrderings = sortOrderings;
     }
 
@@ -709,7 +709,7 @@ public class ERXKeyFilter {
      *
      * @return the sort orderings that will be applied by this key filter
      */
-    public NSArray sortOrderings() {
+    public NSArray<EOSortOrdering> sortOrderings() {
     	return _sortOrderings;
     }
     

@@ -13,8 +13,6 @@ import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 
-import er.extensions.eof.ERXKey;
-import er.extensions.eof.ERXQ;
 
 public class ERXQTest extends TestCase {
 
@@ -158,7 +156,7 @@ public class ERXQTest extends TestCase {
 	}
 
 	private NSArray<EOGenericRecord> personArray() {
-		NSMutableArray<EOGenericRecord> persons = new NSMutableArray<EOGenericRecord>();
+		NSMutableArray<EOGenericRecord> persons = new NSMutableArray<>();
 		persons.add(createPerson("Bill", "Smith"));
 		persons.add(createPerson("Bob", "Anything"));
 		persons.add(createPerson("John", "Smith"));

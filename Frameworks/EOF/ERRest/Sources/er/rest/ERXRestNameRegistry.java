@@ -28,8 +28,8 @@ public class ERXRestNameRegistry {
 	}
 
 	protected ERXRestNameRegistry() {
-		_internalNameForExternalName = new HashMap<String, String>();
-		_externalNameForInternalName = new HashMap<String, String>();
+		_internalNameForExternalName = new HashMap<>();
+		_externalNameForInternalName = new HashMap<>();
 	}
 
 	/**

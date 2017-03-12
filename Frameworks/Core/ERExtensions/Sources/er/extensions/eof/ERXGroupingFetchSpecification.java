@@ -149,7 +149,7 @@ public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFe
 	}
 	
 	public NSArray<String> groupingKeyPaths() {
-		NSMutableArray<String> result = new NSMutableArray<String>();
+		NSMutableArray<String> result = new NSMutableArray<>();
 		result.addObjectsFromArray(rawRowKeyPaths());
 		for (Iterator<String> iterator = result.iterator(); iterator.hasNext();) {
 			String key = iterator.next();

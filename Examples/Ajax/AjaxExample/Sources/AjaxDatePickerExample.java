@@ -15,11 +15,11 @@ public class AjaxDatePickerExample extends WOComponent {
 	public Format formatter = new NSTimestampFormatter("%m/%d/%Y");
 
 	public Format frenchFormatter = new NSTimestampFormatter("%e %b %Y", new DateFormatSymbols(Locale.FRENCH));	
-	public NSArray<String> frenchMonths = new NSArray<String>(new String[]{
+	public NSArray<String> frenchMonths = new NSArray<>(new String[]{
 			"janvier", "février", "mars", "avril", "mai", "juin",
 			"juillet", "août", "septembre", "octobre", "novembre", "décembre"});
 
-	public NSArray<String> frenchDays = new NSArray<String>(new String[]{
+	public NSArray<String> frenchDays = new NSArray<>(new String[]{
 			"dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"});
 
 	public String customFormat = "dd MMM yyyy";

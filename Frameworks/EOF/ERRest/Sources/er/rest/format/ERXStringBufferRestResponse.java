@@ -13,7 +13,7 @@ public class ERXStringBufferRestResponse implements IERXRestResponse {
 	}
 
 	public ERXStringBufferRestResponse(StringBuffer buffer) {
-		_headers = new NSMutableDictionary<String, String>();
+		_headers = new NSMutableDictionary<>();
 		_buffer = buffer;
 	}
 
@@ -21,14 +21,17 @@ public class ERXStringBufferRestResponse implements IERXRestResponse {
 		return _headers;
 	}
 
+	@Override
 	public void setHeader(String value, String key) {
 		_headers.setObjectForKey(value, key);
 	}
 
+	@Override
 	public void appendContentCharacter(char ch) {
 		_buffer.append(ch);
 	}
 
+	@Override
 	public void appendContentString(String str) {
 		_buffer.append(str);
 	}
@@ -37,6 +40,7 @@ public class ERXStringBufferRestResponse implements IERXRestResponse {
 	 * Currently here for interface completeness only
 	 * If you have a need, suggest an implementation
 	 */
+	@Override
 	public void appendContentData(NSData d) {
 		throw new IllegalArgumentException("Attempting to append raw data content to a response object that only understands strings.");
 	}

@@ -1,13 +1,10 @@
 package er.jquerymobile.components;
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOCheckboxMatrix;
 
 @SuppressWarnings("serial")
 public class ERQMCheckboxList extends WOCheckboxMatrix {
-
-  protected static final Logger log = Logger.getLogger(ERQMCheckboxList.class);
 
   //********************************************************************
   //  Constructor

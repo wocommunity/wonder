@@ -7,7 +7,7 @@
 
 package com.webobjects.woextensions;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -20,8 +20,6 @@ public class JSValidatedField extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static Random _random = new Random();
-
 	public String uniqueID;
 
     public JSValidatedField(WOContext aContext)  {
@@ -33,7 +31,7 @@ public class JSValidatedField extends WOComponent {
         // We need to give each image a unique name, with considerations that there might be
         // more than ImageFlyover per page.
         if (uniqueID == null) {
-        	uniqueID = "Image"+_random.nextInt();
+        	uniqueID = "Image"+ThreadLocalRandom.current().nextInt();
         }
     }
 

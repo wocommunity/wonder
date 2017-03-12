@@ -10,10 +10,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 
 public class Neo4JUtils {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Neo4JUtils.class);
-	
-	private static final Map<EORelationship, RelationshipType> resultsCache = new HashMap<EORelationship, RelationshipType>();
+	private static final Map<EORelationship, RelationshipType> resultsCache = new HashMap<>();
 	
 	/**
 	 * Get Neo4J relationship type for the given EO relationship

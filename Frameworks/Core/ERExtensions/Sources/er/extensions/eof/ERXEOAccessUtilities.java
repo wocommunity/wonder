@@ -88,7 +88,7 @@ public class ERXEOAccessUtilities {
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
 
-    private static final AtomicReference<IERXEOExecutionListener> listener = new AtomicReference<IERXEOExecutionListener>(new ERXEOExecutionListenerDumbImpl());
+    private static final AtomicReference<IERXEOExecutionListener> listener = new AtomicReference<>(new ERXEOExecutionListenerDumbImpl());
 
     public static void setListener(IERXEOExecutionListener aListener) {
         listener.set(aListener);
@@ -110,7 +110,7 @@ public class ERXEOAccessUtilities {
             String lowerCaseName = string.toLowerCase();
             EOModelGroup group = modelGroup(ec);
             NSArray<String> entityNames = (NSArray<String>) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
-            NSMutableArray<String> possibleEntities = new NSMutableArray<String>();
+            NSMutableArray<String> possibleEntities = new NSMutableArray<>();
             for (String lowercaseEntityName : entityNames) {
                 if (lowerCaseName.indexOf(lowercaseEntityName) != -1) possibleEntities.addObject(lowercaseEntityName);
             }
@@ -1019,7 +1019,7 @@ public class ERXEOAccessUtilities {
      * @return array of EOProperties that make up the given key path
      */
     public static NSArray<EOProperty> attributePathForKeyPath(EOEntity entity, String keyPath) {
-        NSMutableArray<EOProperty> result = new NSMutableArray<EOProperty>();
+        NSMutableArray<EOProperty> result = new NSMutableArray<>();
         String[] parts = keyPath.split("\\.");
         String part;
         for (int i = 0; i < parts.length - 1; i++) {
@@ -1385,7 +1385,7 @@ public class ERXEOAccessUtilities {
     public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
         if (attributes != null && attributes.count() > 0) {
-        	NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        	NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
             for (EOAttribute key : attributes) {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
@@ -1406,7 +1406,7 @@ public class ERXEOAccessUtilities {
      *      the given attribute as the source attribute.
      */
     public static NSArray<EORelationship> relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
-        NSMutableArray<EORelationship> arr = new NSMutableArray<EORelationship>();
+        NSMutableArray<EORelationship> arr = new NSMutableArray<>();
         for (EORelationship rel : entity.relationships()) {
             NSArray<EOAttribute> attribs = rel.sourceAttributes();
             if (attribs.containsObject(attrib)) {
@@ -1839,7 +1839,7 @@ public class ERXEOAccessUtilities {
 
 		if (relationship.isToMany()) {
 	 		if (skipFaultedRelationships) {
- 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+ 				NSMutableArray<EOEnterpriseObject> objectsWithUnfaultedRelationships = new NSMutableArray<>();
  				String relationshipName = relationship.name();
  				Enumeration objectsEnum = objects.objectEnumerator();
  				while (objectsEnum.hasMoreElements()) {
@@ -1856,9 +1856,9 @@ public class ERXEOAccessUtilities {
 	 		}
 		}
 		else {
-			NSMutableSet<EOGlobalID> gids = new NSMutableSet<EOGlobalID>();
+			NSMutableSet<EOGlobalID> gids = new NSMutableSet<>();
 	 		
-			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+			NSMutableArray<EOEnterpriseObject> objectsWithUnfaultedRelationships = new NSMutableArray<>();
 			EOEntity destinationEntity = relationship.destinationEntity();
 			String relationshipName = relationship.name();
 			Enumeration objectsEnum = objects.objectEnumerator();
@@ -2342,7 +2342,7 @@ public class ERXEOAccessUtilities {
 	 *         concrete.
 	 */
 	public static NSArray<String> entityHierarchyNamesForEntityNamed(EOEditingContext ec, String rootEntityName) {
-		NSMutableArray<String> names = new NSMutableArray<String>();
+		NSMutableArray<String> names = new NSMutableArray<>();
 		EOEntity rootEntity = entityNamed(ec, rootEntityName);
 		NSArray<EOEntity> entities = entityHierarchyForEntity(ec, rootEntity);
 	
@@ -2362,7 +2362,7 @@ public class ERXEOAccessUtilities {
 	 *         including rootEntity itself if it is concrete.
 	 */
 	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
-		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
+		NSMutableArray<EOEntity> entities = new NSMutableArray<>();
 	
 		if (!rootEntity.isAbstractEntity()) {
 			entities.add(rootEntity);
@@ -2386,7 +2386,7 @@ public class ERXEOAccessUtilities {
 	 * @return all of the sub-entities for a given entity.
 	 */
 	public static NSArray<EOEntity> allSubEntitiesForEntity(EOEntity rootEntity, boolean includeAbstracts) {
-		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
+		NSMutableArray<EOEntity> entities = new NSMutableArray<>();
 		if (rootEntity != null) {
 			for (EOEntity subEntity : rootEntity.subEntities()) {
 				if (!subEntity.isAbstractEntity() || includeAbstracts) {

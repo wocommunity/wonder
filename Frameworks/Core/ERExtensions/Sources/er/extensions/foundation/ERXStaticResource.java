@@ -1,6 +1,7 @@
 package er.extensions.foundation;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -51,8 +52,7 @@ import com.webobjects.appserver.WOResourceManager;
  * </div>
  */
 public class ERXStaticResource {
-
-	protected static final Logger log = Logger.getLogger(ERXStaticResource.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXStaticResource.class);
 
 	//********************************************************************
 	//  Constructor
@@ -143,7 +143,7 @@ public class ERXStaticResource {
 				result = rm.urlForResourceNamed(fileName(), framework(), null, aWOContext.request());  
 			}
 			catch (Exception e) {
-				log.warn("The Resource Path is not correct : " + this);
+				log.warn("The Resource Path is not correct: {}", this);
 			}
 		}
 		return result;
@@ -232,7 +232,7 @@ public class ERXStaticResource {
 					return rm.urlForResourceNamed(fileName, framework, null, context.request());  
 				}
 				catch (Exception e) {
-					log.warn("The Resource Path is not correct : " + url);
+					log.warn("The Resource Path is not correct: {}", url);
 				}
 			}
 

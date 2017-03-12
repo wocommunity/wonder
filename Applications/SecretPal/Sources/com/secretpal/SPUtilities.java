@@ -1,6 +1,7 @@
 package com.secretpal;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.secretpal.components.person.SPGroupInvitationEmail;
 import com.secretpal.components.person.SPGroupInvitationTextEmail;
@@ -23,21 +24,21 @@ import er.javamail.ERMailDeliveryHTML;
 import er.javamail.ERMessage;
 
 public class SPUtilities {
-	public static Logger log = Logger.getLogger(SPUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(SPUtilities.class);
 
 	public static final String CONFIRMATION_CODE_KEY = "confirmationCode";
 	public static final String RESET_PASSWORD_CODE_KEY = "resetPasswordCode";
 	
 	public static String confirmationUrl(SPMembership membership, WOContext context) {
 		context.generateCompleteURLs();
-		String confirmationUrl = context.directActionURLForActionNamed("confirm", new NSDictionary<String, Object>(membership.confirmationCode(), SPUtilities.CONFIRMATION_CODE_KEY), true, false);
+		String confirmationUrl = context.directActionURLForActionNamed("confirm", new NSDictionary<>(membership.confirmationCode(), SPUtilities.CONFIRMATION_CODE_KEY), true, false);
 		context.generateRelativeURLs();
 		return confirmationUrl;
 	}
 
 	public static String resetPasswordUrl(SPPerson person, WOContext context) {
 		context.generateCompleteURLs();
-		String resetPasswordUrl = context.directActionURLForActionNamed("resetPassword", new NSDictionary<String, Object>(person.resetPasswordCode(), SPUtilities.RESET_PASSWORD_CODE_KEY), true, false);
+		String resetPasswordUrl = context.directActionURLForActionNamed("resetPassword", new NSDictionary<>(person.resetPasswordCode(), SPUtilities.RESET_PASSWORD_CODE_KEY), true, false);
 		context.generateRelativeURLs();
 		return resetPasswordUrl;
 	}
@@ -53,7 +54,7 @@ public class SPUtilities {
 			mail.setFromAddress("donotreply@secret-pal.com");
 			mail.setReplyToAddress("donotreply@secret-pal.com");
 			mail.setSubject(subject);
-			mail.setToAddresses(new NSArray<String>(person.emailAddress()));
+			mail.setToAddresses(new NSArray<>(person.emailAddress()));
 			mail.setDelegate(delegate);
 			mail.sendMail();
 			sentEmail = true;
@@ -66,7 +67,7 @@ public class SPUtilities {
 				editingContext.unlock();
 			}
 			editingContext.dispose();
-			SPUtilities.log.error("Failed to send email to '" + person.emailAddress() + "'.", e);
+			log.error("Failed to send email to '{}'.", person.emailAddress(), e);
 			errorNoticeList.addNotice("Failed to send email: " + e.getMessage());
 		}
 		return sentEmail;

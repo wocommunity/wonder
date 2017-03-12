@@ -11,8 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 
-import er.extensions.foundation.ERXStringUtilities;
-
 /**
  * <p>
  * Converts a string that has line breaks and tabs in it into a corresponding

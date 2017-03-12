@@ -1,6 +1,10 @@
 package er.rest.format;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -15,14 +19,14 @@ import er.rest.ERXRestUtils;
 /**
  *
  * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
+ * @property <code>ERXRest.includeNullValues</code> Boolean property to enable null values in return. Defaults
+ *           to true.
  */
-public class ERXXmlRestWriter implements IERXRestWriter {
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
-		response.setHeader("text/xml", "Content-Type");
-	}
-
+public class ERXXmlRestWriter extends ERXRestWriter {
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		appendHeadersToResponse(node, response, context);
+		response.setContentEncoding(contentEncoding());
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		appendNodeToResponse(node, response, 0, delegate, context);
 	}
@@ -50,16 +54,18 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		String name = node.name();
 		Object value = node.value();
 		String formattedValue = coerceValueToString(value, context);
+
 		if (formattedValue == null) {
-			indent(response, indent);
-			response.appendContentString("<");
-			response.appendContentString(name);
-			appendAttributesToResponse(node, response, context);
-			appendTypeToResponse(value, response);
-			response.appendContentString("/>");
-			response.appendContentString("\n");
-		}
-		else {
+			if(ERXProperties.booleanForKeyWithDefault("ERXRest.includeNullValues", true)) {
+				indent(response, indent);
+				response.appendContentString("<");
+				response.appendContentString(name);
+				appendAttributesToResponse(node, response, context);
+				appendTypeToResponse(value, response);
+				response.appendContentString("/>");
+				response.appendContentString("\n");
+			}
+		} else {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
@@ -133,6 +139,18 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 			else if (value instanceof Date) {
 				response.appendContentString(" type = \"datetime\"");
 			}
+			else if (value instanceof LocalDate) {
+				response.appendContentString(" type = \"date\"");
+			}
+			else if (value instanceof LocalDateTime) {
+				response.appendContentString(" type = \"datetime2\"");
+			}
+			else if (value instanceof LocalTime) {
+				response.appendContentString(" type = \"time\"");
+			}
+			else if (value instanceof OffsetDateTime) {
+				response.appendContentString(" type = \"datetime2\"");
+			}
 			else if (value instanceof Integer) {
 				response.appendContentString(" type = \"integer\"");
 			}
@@ -188,4 +206,8 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
+	@Override
+	public String contentType() {
+		return "text/xml";
+	}
 }

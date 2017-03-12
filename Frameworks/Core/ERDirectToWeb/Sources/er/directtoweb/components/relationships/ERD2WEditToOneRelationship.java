@@ -96,7 +96,7 @@ public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
     
     public EOQualifier extraQualifier() {
         if (_extraQualifier == null) {
-            _extraQualifier = (EOQualifier)valueForBinding(Keys.extraRestrictingQualifier);
+            _extraQualifier = (EOQualifier) d2wContext().valueForKey(Keys.extraRestrictingQualifier);
         }
         return _extraQualifier;
     }

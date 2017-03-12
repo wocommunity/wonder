@@ -23,15 +23,11 @@
 
 package er.selenium.filters;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSMutableArray;
 
 import er.selenium.SeleniumTest.Element;
 
 public class SeleniumPresentationFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
-	private static final Logger log = Logger.getLogger(SeleniumPresentationFilter.class);
-	
 	public SeleniumPresentationFilter() {
 	}
 

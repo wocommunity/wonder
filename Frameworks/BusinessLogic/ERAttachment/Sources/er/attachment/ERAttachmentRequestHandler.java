@@ -10,8 +10,6 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicURL;
@@ -39,7 +37,6 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERAttachmentRequestHandler extends WORequestHandler {
   public static final String REQUEST_HANDLER_KEY = "attachments";
-  public static final Logger log = Logger.getLogger(ERAttachmentRequestHandler.class);
 
   /**
    * The delegate definition for this request handler.

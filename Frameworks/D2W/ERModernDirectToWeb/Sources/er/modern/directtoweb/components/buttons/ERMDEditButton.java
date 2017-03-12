@@ -1,6 +1,7 @@
 package er.modern.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -28,8 +29,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author davidleber
  */
 public class ERMDEditButton extends ERMDActionButton {
-	
-	private static final Logger log = Logger.getLogger(ERMDEditButton.class);
+	private static final Logger log = LoggerFactory.getLogger(ERMDEditButton.class);
 	
 	public interface Keys extends ERMDActionButton.Keys {
 		public static final String editButtonLabel = "editButtonLabel";
@@ -104,9 +104,7 @@ public class ERMDEditButton extends ERMDActionButton {
     public WOComponent editObjectInPageAction() {
         EOEnterpriseObject localObject = localInstanceOfObject();
         String configuration = (String)valueForBinding(Keys.editConfigurationName);
-        if(log.isDebugEnabled()){
-           log.debug("configuration = "+configuration);
-        }
+        log.debug("configuration = {}", configuration);
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
         epi.setObject(localObject);
         epi.setNextPage(context().page());

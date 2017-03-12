@@ -33,13 +33,13 @@ public class PushExample extends WOComponent {
 		AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
 	}
 
-	private static Set<String> _pushSessionIDs = Collections.synchronizedSet(new HashSet<String>());
+	private static Set<String> _pushSessionIDs = Collections.synchronizedSet(new HashSet<>());
 
 	private static Thread _pushThread = new Thread(new Runnable() {
 		public void run() {
 			boolean running = true;
 			while (running) {
-				Set<String> pushSessionIDs = new HashSet<String>(_pushSessionIDs);
+				Set<String> pushSessionIDs = new HashSet<>(_pushSessionIDs);
 				for (String pushSessionID : pushSessionIDs) {
 					if (AjaxPushRequestHandler.isResponseOpen(pushSessionID, "test")) {
 						String str = "<br>push to '" + pushSessionID+ "': " + System.currentTimeMillis();

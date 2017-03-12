@@ -1,5 +1,6 @@
 package er.ajax;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.webobjects.foundation.NSDictionary;
@@ -15,28 +16,28 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public abstract class AjaxSocialNetwork {
-	private static NSMutableDictionary<String, AjaxSocialNetwork> _socialNetworks;
+	private static Map<String, AjaxSocialNetwork> _socialNetworks;
 	static {
-		_socialNetworks = new NSMutableDictionary<String, AjaxSocialNetwork>();
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Delicious(), "delicious");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Digg(), "digg");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Facebook(), "facebook");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Furl(), "furl");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Newsvine(), "newsvine");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Netscape(), "netscape");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Reddit(), "reddit");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.StumbleUpon(), "stumble");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Technorati(), "technorati");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Squidoo(), "squidoo");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.WindowsLive(), "live");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.YahooMyWeb(), "yahoo");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Ask(), "ask");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Google(), "google");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Magnolia(), "magnolia");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Ning(), "ning");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Rawsugar(), "rawsugar");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Spurl(), "spurl");
-		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Tagtooga(), "tagtooga");
+		_socialNetworks = new NSMutableDictionary<>();
+		_socialNetworks.put("delicious", new AjaxSocialNetwork.Delicious());
+		_socialNetworks.put("digg", new AjaxSocialNetwork.Digg());
+		_socialNetworks.put("facebook", new AjaxSocialNetwork.Facebook());
+		_socialNetworks.put("furl", new AjaxSocialNetwork.Furl());
+		_socialNetworks.put("newsvine", new AjaxSocialNetwork.Newsvine());
+		_socialNetworks.put("netscape", new AjaxSocialNetwork.Netscape());
+		_socialNetworks.put("reddit", new AjaxSocialNetwork.Reddit());
+		_socialNetworks.put("stumble", new AjaxSocialNetwork.StumbleUpon());
+		_socialNetworks.put("technorati", new AjaxSocialNetwork.Technorati());
+		_socialNetworks.put("squidoo", new AjaxSocialNetwork.Squidoo());
+		_socialNetworks.put("live", new AjaxSocialNetwork.WindowsLive());
+		_socialNetworks.put("yahoo", new AjaxSocialNetwork.YahooMyWeb());
+		_socialNetworks.put("ask", new AjaxSocialNetwork.Ask());
+		_socialNetworks.put("google", new AjaxSocialNetwork.Google());
+		_socialNetworks.put("magnolia", new AjaxSocialNetwork.Magnolia());
+		_socialNetworks.put("ning", new AjaxSocialNetwork.Ning());
+		_socialNetworks.put("rawsugar", new AjaxSocialNetwork.Rawsugar());
+		_socialNetworks.put("spurl", new AjaxSocialNetwork.Spurl());
+		_socialNetworks.put("tagtooga", new AjaxSocialNetwork.Tagtooga());
 	}
 
 	/**
@@ -49,7 +50,7 @@ public abstract class AjaxSocialNetwork {
 	 * @throws NoSuchElementException if there is no social network registered with that name
 	 */
 	public static AjaxSocialNetwork socialNetworkNamed(String name) {
-		AjaxSocialNetwork socialNetwork = AjaxSocialNetwork._socialNetworks.objectForKey(name);
+		AjaxSocialNetwork socialNetwork = _socialNetworks.get(name);
 		if (socialNetwork == null) {
 			throw new NoSuchElementException("There is no AjaxSocialNetwork named '" + name + "'.");
 		}
@@ -63,7 +64,7 @@ public abstract class AjaxSocialNetwork {
 	 * @param name the lookup name
 	 */
 	public static void registerSocialNetworkNamed(AjaxSocialNetwork socialNetwork, String name) {
-		AjaxSocialNetwork._socialNetworks.setObjectForKey(socialNetwork, name);
+		_socialNetworks.put(name, socialNetwork);
 	}
 	
 	protected String _submissionUrl(String baseUrl, String urlKey, String targetUrl, String titleKey, String title, NSDictionary<String, String> additionalParams) {
@@ -128,7 +129,7 @@ public abstract class AjaxSocialNetwork {
 	public static class Digg extends AjaxSocialNetwork {
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://digg.com/submit", "url", url, "title", title, new NSDictionary<String, String>("2", "phase"));
+			return _submissionUrl("http://digg.com/submit", "url", url, "title", title, new NSDictionary<>("2", "phase"));
 		}
 	}
 
@@ -140,7 +141,7 @@ public abstract class AjaxSocialNetwork {
 
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.furl.net/store", "u", url, "ti", title, new NSDictionary<String, String>(new String[] { "f", "0" }, new String[] { "s", "to" }));
+			return _submissionUrl("http://www.furl.net/store", "u", url, "ti", title, new NSDictionary<>(new String[] { "f", "0" }, new String[] { "s", "to" }));
 		}
 	}
 
@@ -215,7 +216,7 @@ public abstract class AjaxSocialNetwork {
 	public static class WindowsLive extends AjaxSocialNetwork {
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("https://favorites.live.com/quickadd.aspx", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "1", "en-us", "1" }, new String[] { "marklet", "mkt", "top" }));
+			return _submissionUrl("https://favorites.live.com/quickadd.aspx", "url", url, "title", title, new NSDictionary<>(new String[] { "1", "en-us", "1" }, new String[] { "marklet", "mkt", "top" }));
 		}
 
 	}
@@ -228,7 +229,7 @@ public abstract class AjaxSocialNetwork {
 
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://myweb.yahoo.com/myresults/bookmarklet", "u", url, "t", title, new NSDictionary<String, String>("UTF", "ei"));
+			return _submissionUrl("http://myweb.yahoo.com/myresults/bookmarklet", "u", url, "t", title, new NSDictionary<>("UTF", "ei"));
 		}
 
 	}
@@ -236,7 +237,7 @@ public abstract class AjaxSocialNetwork {
 	public static class Ask extends AjaxSocialNetwork {
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://myjeeves.ask.com/mysearch/BookmarkIt", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "1.2", "webpages" }, new String[] { "v", "t" }));
+			return _submissionUrl("http://myjeeves.ask.com/mysearch/BookmarkIt", "url", url, "title", title, new NSDictionary<>(new String[] { "1.2", "webpages" }, new String[] { "v", "t" }));
 		}
 
 	}
@@ -244,7 +245,7 @@ public abstract class AjaxSocialNetwork {
 	public static class Google extends AjaxSocialNetwork {
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.google.com/bookmarks/mark", "bkmk", url, "title", title, new NSDictionary<String, String>(new String[] { "edit", "popup" }, new String[] { "op", "output" }));
+			return _submissionUrl("http://www.google.com/bookmarks/mark", "bkmk", url, "title", title, new NSDictionary<>(new String[] { "edit", "popup" }, new String[] { "op", "output" }));
 		}
 
 	}
@@ -284,7 +285,7 @@ public abstract class AjaxSocialNetwork {
 	public static class Tagtooga extends AjaxSocialNetwork {
 		@Override
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.tagtooga.com/tapp/db.exe", "url", url, "title", title, new NSDictionary<String, String>(new String[] { "jsEntryForm", "fx" }, new String[] { "c", "b" }));
+			return _submissionUrl("http://www.tagtooga.com/tapp/db.exe", "url", url, "title", title, new NSDictionary<>(new String[] { "jsEntryForm", "fx" }, new String[] { "c", "b" }));
 		}
 	}
 }

@@ -17,9 +17,6 @@ import er.neo4jadaptor.utils.cursor.Cursor;
 import er.neo4jadaptor.utils.cursor.IteratorCursor;
 
 public class EOUtilities {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EOUtilities.class);
-	
 	private static final String INTEGER_CLASS_NAME = Integer.class.getCanonicalName();
 	
 	public static Number convertToAttributeType(EOAttribute att, Number value) {
@@ -34,7 +31,7 @@ public class EOUtilities {
 
 	public static String unflattenedKey(EOEntity entity, String keypath) {
 		EOEntity currentEntity = entity;
-		List<String> splits = new ArrayList<String>();
+		List<String> splits = new ArrayList<>();
 		StringBuilder b = new StringBuilder();
 		
 		Collections.addAll(splits, DOT_PATTERN.split(keypath));
@@ -99,7 +96,7 @@ public class EOUtilities {
 			}
 		}
 		
-		List<Ersatz> list = new ArrayList<Ersatz>();
+		List<Ersatz> list = new ArrayList<>();
 		
 		while (c.hasNext()) {
 			list.add(c.next());

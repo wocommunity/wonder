@@ -58,7 +58,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -130,7 +131,7 @@ public class FilesClient
  
     private HttpClient client = null;
 
-    private static Logger logger = Logger.getLogger(FilesClient.class); 
+    private static final Logger log = LoggerFactory.getLogger(FilesClient.class); 
 
     /**
      * @param client    The HttpClient to talk to Swift
@@ -158,11 +159,9 @@ public class FilesClient
 
         setUserAgent(FilesConstants.USER_AGENT);
 
-        if(logger.isDebugEnabled()) {
-            logger.debug("UserName: " + this.username);
-            logger.debug("AuthenticationURL: " + authenticationURL);
-            logger.debug("ConnectionTimeOut: " + this.connectionTimeOut);
-        }
+        log.debug("UserName: {}", username);
+        log.debug("AuthenticationURL: {}", authenticationURL);
+        log.debug("ConnectionTimeOut: {}", connectionTimeOut);
      }
 
     /**
@@ -219,7 +218,7 @@ public class FilesClient
     {
         this (username, apiAccessKey, null, null, FilesUtil.getIntProperty("connection_timeout"));
     	//lConnectionManagerogger.warn("LGV");
-        //logger.debug("LGV:" + client.getHttpConnectionManager()); 
+        //log.debug("LGV: {}", client.getHttpConnectionManager()); 
     }
 
     /**
@@ -293,10 +292,10 @@ public class FilesClient
             }
             cdnManagementURL = response.getCDNManagementURL();
             authToken = response.getAuthToken();
-            logger.debug("storageURL: " + storageURL);
-            logger.debug("authToken: " + authToken);
-            logger.debug("cdnManagementURL:" + cdnManagementURL);
-            logger.debug("ConnectionManager:" + client.getConnectionManager());
+            log.debug("storageURL: {}", storageURL);
+            log.debug("authToken: {}", authToken);
+            log.debug("cdnManagementURL: {}", cdnManagementURL);
+            log.debug("ConnectionManager: {}", client.getConnectionManager());
         }
         method.abort();
 
@@ -376,7 +375,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
        		if(limit > 0) {
     			parameters.add(new BasicNameValuePair("limit", String.valueOf(limit)));
     		}
@@ -412,10 +411,10 @@ public class FilesClient
     			NodeList nodes = document.getChildNodes();
     			Node accountNode = nodes.item(0);
     			if (! "account".equals(accountNode.getNodeName())) {
-    				logger.error("Got unexpected type of XML");
+    				log.error("Got unexpected type of XML node name '{}'.", accountNode.getNodeName());
     				return null;
     			}
-    			ArrayList <FilesContainerInfo> containerList = new ArrayList<FilesContainerInfo>();
+    			ArrayList <FilesContainerInfo> containerList = new ArrayList<>();
     			NodeList containerNodes = accountNode.getChildNodes();
     			for(int i=0; i < containerNodes.getLength(); ++i) {
     				Node containerNode = containerNodes.item(i);
@@ -436,7 +435,7 @@ public class FilesClient
     						count = Integer.parseInt(data.getTextContent());
     					}
     					else {
-    						logger.debug("Unexpected container-info tag:" + data.getNodeName());
+    						log.debug("Unexpected container-info tag: {}", data.getNodeName());
     					}
     				}
     				if (name != null) {
@@ -448,7 +447,7 @@ public class FilesClient
     		}		
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
-    			return new ArrayList<FilesContainerInfo>();
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -518,7 +517,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
     		
        		if(limit > 0) {
     			parameters.add(new BasicNameValuePair("limit", String.valueOf(limit)));
@@ -552,7 +551,7 @@ public class FilesClient
     			StrTokenizer tokenize = new StrTokenizer(response.getResponseBodyAsString());
     			tokenize.setDelimiterString("\n");
     			String [] containers = tokenize.getTokenArray();    			
-    			ArrayList <FilesContainer> containerList = new ArrayList<FilesContainer>();
+    			ArrayList <FilesContainer> containerList = new ArrayList<>();
     			for(String container : containers) { 
     				containerList.add(new FilesContainer(container, this));
     			}
@@ -560,7 +559,7 @@ public class FilesClient
     		}		
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
-    			return new ArrayList<FilesContainer>();
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -622,7 +621,7 @@ public class FilesClient
     	}
     	HttpGet method = null;
     	try {    		
-    		LinkedList<NameValuePair> parameters = new LinkedList<NameValuePair>();
+    		LinkedList<NameValuePair> parameters = new LinkedList<>();
     		parameters.add(new BasicNameValuePair ("format", "xml"));
     		if (startsWith != null) {
     			parameters.add(new BasicNameValuePair (FilesConstants.LIST_CONTAINER_NAME_QUERY, startsWith));    		}
@@ -667,10 +666,10 @@ public class FilesClient
     			NodeList nodes = document.getChildNodes();
     			Node containerList = nodes.item(0);
     			if (! "container".equals(containerList.getNodeName())) {
-    				logger.error("Got unexpected type of XML");
+    				log.error("Got unexpected type of XML node name '{}'.", containerList.getNodeName());
     				return null;
     			}
-       			ArrayList <FilesObject> objectList = new ArrayList<FilesObject>();
+       			ArrayList <FilesObject> objectList = new ArrayList<>();
     			NodeList objectNodes = containerList.getChildNodes();
     			for(int i=0; i < objectNodes.getLength(); ++i) {
     				Node objectNode = objectNodes.item(i);
@@ -705,7 +704,7 @@ public class FilesClient
        						lastModified = data.getTextContent();
     					}
     					else {
-    						logger.warn("Unexpected tag:" + data.getNodeName());
+    						log.warn("Unexpected tag: {}", data.getNodeName());
     					}
     				}
     				if (name != null) {
@@ -721,8 +720,8 @@ public class FilesClient
     		}		
     		else if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     		{	
-    			logger.debug ("Container "+container+" has no Objects");
-    			return new ArrayList<FilesObject>();
+    			log.debug("Container {} has no Objects", container);
+    			return new ArrayList<>();
     		}
     		else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     		{
@@ -736,7 +735,7 @@ public class FilesClient
     		throw fnfe;
     	}
     	catch (Exception ex) {
-    		logger.error("Error parsing xml", ex);
+    		log.error("Error parsing xml", ex);
     		throw new FilesException("Error parsing server resposne", ex);
     	}
     	finally {
@@ -1113,17 +1112,17 @@ public class FilesClient
 
     	       		if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
         			{
-        				logger.debug ("Container Deleted : "+name);
+        				log.debug("Container Deleted: {}", name);
         				return true;
         			}
         			else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
         			{
-        				logger.debug ("Container does not exist !");
+        				log.debug ("Container does not exist !");
            				throw new FilesNotFoundException("You can't delete an non-empty container", response.getResponseHeaders(), response.getStatusLine());
         			}
         			else if (response.getStatusCode() == HttpStatus.SC_CONFLICT)
         			{
-        				logger.debug ("Container is not empty, can not delete a none empty container !");
+        				log.debug ("Container is not empty, can not delete a none empty container !");
         				throw new FilesContainerNotEmptyException("You can't delete an non-empty container", response.getResponseHeaders(), response.getStatusLine());
         			}
     			}
@@ -1184,7 +1183,7 @@ public class FilesClient
     					returnValue = response.getCdnUrl();
     				}
     				else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    					logger.warn("Unauthorized access");
+    					log.warn("Unauthorized access");
     					throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     				}
     				else {
@@ -1288,7 +1287,7 @@ public class FilesClient
     					returnValue = response.getCdnUrl();
     				}
     				else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    					logger.warn("Unauthorized access");
+    					log.warn("Unauthorized access");
     					throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     				}
     				else {
@@ -1374,7 +1373,7 @@ public class FilesClient
     					return result;
     				}
     				else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    					logger.warn("Unauthorized access");
+    					log.warn("Unauthorized access");
     					throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     				}
        				else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
@@ -1447,7 +1446,7 @@ public class FilesClient
      					throw new FilesException("Server did not return X-CDN-Enabled header: ", response.getResponseHeaders(), response.getStatusLine());
     				}
     				else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    					logger.warn("Unauthorized access");
+    					log.warn("Unauthorized access");
     					throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     				}
        				else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
@@ -1491,7 +1490,7 @@ public class FilesClient
 		if (!isValidObjectName(path))
 			throw new FilesInvalidNameException(path);
 		storeObject(container, new byte[0], "application/directory", path,
-				new HashMap<String, String>());
+				new HashMap<>());
 	}
 
     /**
@@ -1566,7 +1565,7 @@ public class FilesClient
     	{
     		HttpGet method = null;
     		try {
-     			LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+     			LinkedList<NameValuePair> params = new LinkedList<>();
     			if (limit > 0) {
     				params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
     			}
@@ -1597,7 +1596,7 @@ public class FilesClient
     				StrTokenizer tokenize = new StrTokenizer(response.getResponseBodyAsString());
     				tokenize.setDelimiterString("\n");
     				String [] containers = tokenize.getTokenArray();
-    				List<String> returnValue = new ArrayList<String>();
+    				List<String> returnValue = new ArrayList<>();
     				for (String containerName: containers)
     				{
     					returnValue.add(containerName);
@@ -1605,7 +1604,7 @@ public class FilesClient
     				return returnValue;
     			}
     			else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    				logger.warn("Unauthorized access");
+    				log.warn("Unauthorized access");
     				throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     			}
     			else {
@@ -1793,7 +1792,7 @@ public class FilesClient
     	{
     		HttpGet method = null;
     		try {
-    			LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+    			LinkedList<NameValuePair> params = new LinkedList<>();
     			params.add(new BasicNameValuePair("format", "xml"));
     			if (limit > 0) {
     				params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
@@ -1831,10 +1830,10 @@ public class FilesClient
      	    		NodeList nodes = document.getChildNodes();
      	    		Node accountNode = nodes.item(0);
      	    		if (! "account".equals(accountNode.getNodeName())) {
-     	    			logger.error("Got unexpected type of XML");
+     	    			log.error("Got unexpected type of XML node name '{}'.", accountNode.getNodeName());
      	    			return null;
      	    		}
-     	    		ArrayList <FilesCDNContainer> containerList = new ArrayList<FilesCDNContainer>();
+     	    		ArrayList <FilesCDNContainer> containerList = new ArrayList<>();
      	    		NodeList containerNodes = accountNode.getChildNodes();
      	    		for(int i=0; i < containerNodes.getLength(); ++i) {
      	    			Node containerNode = containerNodes.item(i);
@@ -1881,7 +1880,7 @@ public class FilesClient
      	    		return containerList;
     			}	
     			else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-    				logger.warn("Unauthorized access");
+    				log.warn("Unauthorized access");
     				throw new FilesAuthorizationException("User not Authorized!",response.getResponseHeaders(), response.getStatusLine());
     			}
     			else {
@@ -1919,7 +1918,7 @@ public class FilesClient
      */
     public boolean createManifestObject(String container, String contentType, String name, String manifest, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	return createManifestObject(container, contentType, name, manifest, new HashMap<String, String>(), callback);
+    	return createManifestObject(container, contentType, name, manifest, new HashMap<>(), callback);
     }
     /**
      * Create a manifest on the server, including metadata
@@ -2049,7 +2048,7 @@ public class FilesClient
      */
     public String storeObjectAs (String container, File obj, String contentType, String name) throws IOException, HttpException, FilesException
     {
-    	return storeObjectAs(container, obj, contentType, name, new HashMap<String,String>(), null);
+    	return storeObjectAs(container, obj, contentType, name, new HashMap<>(), null);
     }	
     
     /**
@@ -2067,7 +2066,7 @@ public class FilesClient
      */
     public String storeObjectAs (String container, File obj, String contentType, String name, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	return storeObjectAs(container, obj, contentType, name, new HashMap<String,String>(), callback);
+    	return storeObjectAs(container, obj, contentType, name, new HashMap<>(), callback);
     }	
     
     /**
@@ -2366,7 +2365,7 @@ public class FilesClient
         				return response.getResponseHeader(FilesConstants.E_TAG).getValue();
         			}
         			else {
-        				logger.error(response.getStatusLine());
+        				log.error("Unexpected result: {}", response.getStatusLine());
         				throw new FilesException("Unexpected result", response.getResponseHeaders(), response.getStatusLine());
         			}
     			}
@@ -2443,7 +2442,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
         				return response.getResponseHeader(FilesConstants.E_TAG).getValue();
         			}
         			else {
-        				logger.debug(response.getStatusLine());
+        				log.debug("Unexpected result: {}", response.getStatusLine());
         				throw new FilesException("Unexpected result", response.getResponseHeaders(), response.getStatusLine());
         			}
     			}
@@ -2592,7 +2591,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 
     				if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT)
     				{
-    					logger.debug ("Object Deleted : "+objName);
+    					log.debug("Object Deleted: {}", objName);
     				}
     				else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
     				{
@@ -2657,7 +2656,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
            			if (response.getStatusCode() == HttpStatus.SC_NO_CONTENT ||
            			    response.getStatusCode() == HttpStatus.SC_OK)
     				{
-    					logger.debug ("Object metadata retreived  : "+objName);
+    					log.debug("Object metadata retreived: {}", objName);
     					String mimeType = response.getContentType();
     					String lastModified = response.getLastModified();
     					String eTag = response.getETag();
@@ -2666,7 +2665,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     					metaData = new FilesObjectMetaData(mimeType, contentLength, eTag, lastModified);
 
     					Header [] headers = response.getResponseHeaders();
-    					HashMap<String,String> headerMap = new HashMap<String,String>();
+    					HashMap<String,String> headerMap = new HashMap<>();
 
     					for (Header h: headers)
     					{
@@ -2737,7 +2736,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 
     				if (response.getStatusCode() == HttpStatus.SC_OK)
     				{	
-    					logger.debug ("Object data retreived  : "+objName);
+    					log.debug("Object data retreived: {}", objName);
     					return response.getResponseBody();
     				}	
     				else if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND)
@@ -2786,9 +2785,9 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     		{
     			if (objName.length() > FilesConstants.OBJECT_NAME_LENGTH)
     			{
-    				logger.warn ("Object Name supplied was truncated to Max allowed of " + FilesConstants.OBJECT_NAME_LENGTH + " characters !");
+    				log.warn("Object Name supplied was truncated to Max allowed of {} characters!", FilesConstants.OBJECT_NAME_LENGTH);
     				objName = objName.substring(0, FilesConstants.OBJECT_NAME_LENGTH);
-    				logger.warn ("Truncated Object Name is: " + objName);
+    				log.warn("Truncated Object Name is: {}", objName);
     			}
 
     			HttpGet method = new HttpGet(storageURL+"/"+sanitizeForURI(container)+"/"+sanitizeForURI(objName));
@@ -2807,7 +2806,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 
       			if (response.getStatusCode() == HttpStatus.SC_OK)
     			{
-    				logger.info ("Object data retreived  : "+objName);
+    				log.info("Object data retreived: {}", objName);
     				// DO NOT RELEASE THIS CONNECTION
     				return response.getResponseBodyAsStream();
     			}
@@ -2842,9 +2841,9 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     		{
     			if (objName.length() > FilesConstants.OBJECT_NAME_LENGTH)
     			{
-    				logger.warn ("Object Name supplied was truncated to Max allowed of " + FilesConstants.OBJECT_NAME_LENGTH + " characters !");
+    				log.warn("Object Name supplied was truncated to Max allowed of {} characters!", FilesConstants.OBJECT_NAME_LENGTH);
     				objName = objName.substring(0, FilesConstants.OBJECT_NAME_LENGTH);
-    				logger.warn ("Truncated Object Name is: " + objName);
+    				log.warn("Truncated Object Name is: {}", objName);
     			}
 
     			HttpGet method = new HttpGet(storageURL+"/"+sanitizeForURI(container)+"/"+sanitizeForURI(objName));
@@ -2864,7 +2863,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 
       			if (response.getStatusCode() == HttpStatus.SC_OK)
     			{
-    				logger.info ("Object data retreived  : "+objName);
+    				log.info("Object data retreived: {}", objName);
     				// DO NOT RELEASE THIS CONNECTION
     				return response.getResponseBodyAsStream();
     			}
@@ -2901,18 +2900,16 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     static void writeInputStreamToFile (InputStream is, File f) throws IOException
     {
-    	BufferedOutputStream bf = new BufferedOutputStream (new FileOutputStream (f));
-    	byte[] buffer = new byte [1024];
-    	int read = 0;
+    	try (BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(f))) {
+    		byte[] buffer = new byte [1024];
+    		int read = 0;
 
-    	while ((read = is.read(buffer)) > 0)
-    	{
-    		bf.write(buffer, 0, read);
+    		while ((read = is.read(buffer)) > 0) {
+    			bf.write(buffer, 0, read);
+    		}
+    	} finally {
+    		is.close();
     	}
-
-    	is.close();
-    	bf.flush();
-    	bf.close();
     }
     
     /**
@@ -2926,13 +2923,13 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     static String inputStreamToString(InputStream stream, String encoding) throws IOException {
     	char buffer[] = new char[4096];
     	StringBuilder sb = new StringBuilder();
-    	InputStreamReader isr = new InputStreamReader(stream, "utf-8"); // For now, assume utf-8 to work around server bug
+    	try (InputStreamReader isr = new InputStreamReader(stream, "utf-8")) { // For now, assume utf-8 to work around server bug
     	
-    	int nRead = 0;
-    	while((nRead = isr.read(buffer)) >= 0) {
-    		sb.append(buffer, 0, nRead);
+    		int nRead = 0;
+    		while((nRead = isr.read(buffer)) >= 0) {
+    			sb.append(buffer, 0, nRead);
+    		}
     	}
-    	isr.close();
     	
     	return sb.toString();
     }
@@ -2970,7 +2967,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 	    	}
 	    	return md5;
 		} catch (NoSuchAlgorithmException e) {
-			logger.fatal("The JRE is misconfigured on this computer", e);
+			log.error("The JRE is misconfigured on this computer", e);
 			return null;
 		}
     }
@@ -2997,7 +2994,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
         	return md5;
     	}
     	catch (NoSuchAlgorithmException nsae) {
-    		logger.fatal("Major problems with your Java configuration", nsae);
+    		log.error("Major problems with your Java configuration", nsae);
     		return null;
     	}
 
@@ -3015,7 +3012,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     		return codec.encode(str).replaceAll("\\+", "%20");
     	}
     	catch (EncoderException ee) {
-    		logger.warn("Error trying to encode string for URI", ee);
+    		log.warn("Error trying to encode string for URI", ee);
     		return str;
     	}
     }
@@ -3026,7 +3023,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     		return codec.encode(str).replaceAll("\\+", "%20").replaceAll("%2F", "/");
      	}
     	catch (EncoderException ee) {
-    		logger.warn("Error trying to encode string for URI", ee);
+    		log.warn("Error trying to encode string for URI", ee);
     		return str;
     	}
     }
@@ -3037,7 +3034,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     		return codec.decode(str);
     	}
     	catch (DecoderException ee) {
-    		logger.warn("Error trying to encode string for URI", ee);
+    		log.warn("Error trying to encode string for URI", ee);
     		return str;
     	}
    	
@@ -3218,7 +3215,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 	public boolean updateObjectManifest(String container, String object, String manifest) throws FilesAuthorizationException, 
 			HttpException, IOException, FilesInvalidNameException
 			{
-		      return updateObjectMetadataAndManifest(container, object, new HashMap<String, String>(), manifest);
+		      return updateObjectMetadataAndManifest(container, object, new HashMap<>(), manifest);
 			}
 
 	/**

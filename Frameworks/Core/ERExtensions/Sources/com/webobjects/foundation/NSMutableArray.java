@@ -483,7 +483,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
                 int otherCount = otherObjects.length;
                 if(count * otherCount > 100) {
                     if(count > 0) {
-                        NSMutableSet<Object> table = new NSMutableSet<Object>(otherCount);
+                        NSMutableSet<Object> table = new NSMutableSet<>(otherCount);
                         for (int i = 0; i < otherCount; i++) {
                             Object o = otherObjects[i];
                             if(o != null) {

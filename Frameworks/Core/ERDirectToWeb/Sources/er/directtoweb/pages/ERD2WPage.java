@@ -387,7 +387,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     protected NSMutableArray errorKeyOrder = new NSMutableArray();
 
-    protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
+    protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<>();
 
     protected String errorMessage = "";
 
@@ -437,6 +437,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * {@link ERXExceptionHolder} interface.
      */
     public void clearValidationFailed() {
+        errorMessage = null;
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
         keyPathsWithValidationExceptions.removeAllObjects();
@@ -454,7 +455,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** Used to hold a cleaned-up validation key and message. */
-    private NSMutableDictionary<String,String> _temp = new NSMutableDictionary<String,String>();
+    private NSMutableDictionary<String,String> _temp = new NSMutableDictionary<>();
 
     /** Handles validation errors. */
 	@Override
@@ -752,7 +753,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return result;
     }
 
-    protected static final NSMutableSet<String> _allConfigurations = new NSMutableSet<String>();
+    protected static final NSMutableSet<String> _allConfigurations = new NSMutableSet<>();
 
     /**
      * Collects the names of all page configurations as you walk through your

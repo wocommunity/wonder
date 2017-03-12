@@ -33,7 +33,7 @@ public class Pointer extends Tag<Pointer.PointerType> {
   }
 
   public static Pointer scanForAll(Token token, Options options) {
-    Map<Pattern, Pointer.PointerType> scanner = new HashMap<Pattern, Pointer.PointerType>();
+    Map<Pattern, Pointer.PointerType> scanner = new HashMap<>();
     scanner.put(Pointer.PAST_PATTERN, Pointer.PointerType.PAST);
     scanner.put(Pointer.FUTURE_PATTERN, Pointer.PointerType.FUTURE);
     scanner.put(Pointer.FOR_PATTERN, Pointer.PointerType.FUTURE);

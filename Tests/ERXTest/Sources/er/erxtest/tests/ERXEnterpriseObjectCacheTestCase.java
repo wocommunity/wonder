@@ -40,21 +40,21 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testFetchWithFetchInitialValues() {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
     cache.stop();
   }
 
   public void testFetchWithFetchInitialValuesAndTimeout() {
-      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
+      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
       Company c1Test = cache.objectForKey(editingContext, c1.name());
       assertSame(c1, c1Test);
       cache.stop();
   }
 
   public void testFetchNoFetchInitialValues() {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(false);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
@@ -63,7 +63,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
 
   public void testFetchNoFetchInitialValuesAndTimeout() {
 
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 100000);
     cache.setFetchInitialValues(false);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
@@ -71,7 +71,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testFetchWithQualifier() {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
     cache.setFetchInitialValues(false);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertNull(c1Test);
@@ -81,7 +81,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testUpdateWithQualifier() {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, Company.NAME.contains("Test"), 0);
     cache.setFetchInitialValues(false);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertNull(c1Test);
@@ -106,7 +106,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testInsert(boolean fetchInitialValues) {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     Company c1Test = cache.objectForKey(editingContext, c1.name());
     assertSame(c1, c1Test);
@@ -114,7 +114,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testDelete(boolean fetchInitialValues) {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     String name = c1.name();
     Company c1Test = cache.objectForKey(editingContext, name);
@@ -128,7 +128,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testUpdate(boolean fetchInitialValues) {
-    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+    ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
     cache.setFetchInitialValues(fetchInitialValues);
     String name1 = c1.name();
 
@@ -145,7 +145,7 @@ public class ERXEnterpriseObjectCacheTestCase extends ERXTestCase {
   }
 
   public void testAllObjects() {
-      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<Company>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
+      ERXEnterpriseObjectCache<Company> cache = new ERXEnterpriseObjectCache<>(Company.ENTITY_NAME, Company.NAME_KEY, null, 0);
       cache.setFetchInitialValues(true);
 
       NSArray allObjects = cache.allObjects(editingContext);

@@ -8,8 +8,13 @@
 /* WOOgnl.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ognl.ClassResolver;
 import ognl.Ognl;
@@ -18,8 +23,6 @@ import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLParser;
 import ognl.helperfunction.WOHelperFunctionParser;
 import ognl.helperfunction.WOHelperFunctionTagRegistry;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -64,23 +67,23 @@ import com.webobjects.foundation._NSUtilities;
  * 
  */
 public class WOOgnl {
-	public static Logger log = Logger.getLogger(WOOgnl.class);
+	private static final Logger log = LoggerFactory.getLogger(WOOgnl.class);
 
 	public static final String DefaultWOOgnlBindingFlag = "~";
 
-	protected static NSMutableArray _retainerArray = new NSMutableArray();
+	protected static Collection<Observer> _retainerArray = new NSMutableArray<>();
 	static {
 		try {
 			Observer o = new Observer();
-			_retainerArray.addObject(o);
+			_retainerArray.add(o);
 			NSNotificationCenter.defaultCenter().addObserver(o, new NSSelector("configureWOOgnl", new Class[] { com.webobjects.foundation.NSNotification.class }), WOApplication.ApplicationWillFinishLaunchingNotification, null);
 		}
 		catch (Exception e) {
-			WOOgnl.log.error("Failed to configure WOOgnl.", e);
+			log.error("Failed to configure WOOgnl.", e);
 		}
 	}
 
-	private static Hashtable associationMappings = new Hashtable();
+	private static Map<String, Class> associationMappings = new Hashtable<>();
 
 	public static void setAssociationClassForPrefix(Class clazz, String prefix) {
 		associationMappings.put(prefix, clazz);
@@ -94,7 +97,7 @@ public class WOOgnl {
 		public void configureWOOgnl(NSNotification n) {
 			WOOgnl.factory().configureWOForOgnl();
 			NSNotificationCenter.defaultCenter().removeObserver(this);
-			_retainerArray.removeObject(this);
+			_retainerArray.remove(this);
 		}
 	}
 
@@ -182,12 +185,12 @@ public class WOOgnl {
 				keyPath = "^" + b._parentBindingName;
 			}
 			if (keyPath != null) {
-				if (associationMappings.size() != 0) {
+				if (!associationMappings.isEmpty()) {
 					int index = name.indexOf(':');
 					if (index > 0) {
 						String prefix = name.substring(0, index);
 						if (prefix != null) {
-							Class c = (Class) associationMappings.get(prefix);
+							Class c = associationMappings.get(prefix);
 							if (c != null) {
 								String postfix = name.substring(index + 1);
 								WOAssociation newAssociation = createAssociationForClass(c, keyPath, isConstant);

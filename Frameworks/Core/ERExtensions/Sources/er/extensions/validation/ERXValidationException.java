@@ -8,8 +8,6 @@ package er.extensions.validation;
 
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -35,9 +33,6 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXValidationException.class);
 
     // Validation Exception Types
     /** corresponds to a model thrown 'null property' exception */

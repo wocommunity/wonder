@@ -86,7 +86,7 @@ public abstract class EREntityStore {
 			}
 		}
 
-		NSMutableArray<EORelationship> mergeRelationships = new NSMutableArray<EORelationship>();
+		NSMutableArray<EORelationship> mergeRelationships = new NSMutableArray<>();
 		if (qualifier != null && context != null) {
 			NSArray<EOKeyValueQualifier> keyValueQualifiers = ERXQ.extractKeyValueQualifiers(qualifier);
 			for (EOKeyValueQualifier keyValueQualifier : keyValueQualifiers) {
@@ -223,7 +223,7 @@ public abstract class EREntityStore {
 	}
 
   protected NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
-    NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
+    NSMutableDictionary<String, Object> row = new NSMutableDictionary<>(rawRow.count()); 
     for (EOAttribute attribute : entity.attributesToFetch()) {
       Object value = rawRow.objectForKey(attribute.columnName());
       if (attribute.isDerived()) {
@@ -253,7 +253,7 @@ public abstract class EREntityStore {
   
   public void insertRow(NSDictionary<String, Object> row, EOEntity entity) {
     try {
-      NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<String, Object>(row.size());
+      NSMutableDictionary<String, Object> mutableRow = new NSMutableDictionary<>(row.size());
       for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
         EOAttribute attribute = (EOAttribute) e.nextElement();
         Object value = row.objectForKey(attribute.name());

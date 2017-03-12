@@ -8,7 +8,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -17,7 +16,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.appserver.ERXResponseRewriter.TagMissingBehavior;
 import er.extensions.appserver.ajax.ERXAjaxContext;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
@@ -307,7 +305,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @return an array of component names
 	 */
 	public static NSArray<String> componentPath(WOContext context) {
-		NSMutableArray<String> result = new NSMutableArray<String>();
+		NSMutableArray<String> result = new NSMutableArray<>();
 		if (context != null) {
 			WOComponent component = context.component();
 			while (component != null) {
@@ -327,7 +325,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @return an array of components
 	 */
 	public static NSArray<WOComponent> _componentPath(WOContext context) {
-		NSMutableArray<WOComponent> result = new NSMutableArray<WOComponent>();
+		NSMutableArray<WOComponent> result = new NSMutableArray<>();
 		if (context != null) {
 			WOComponent component = context.component();
 			while (component != null) {
@@ -457,7 +455,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, String key, Object value, Boolean secure, boolean includeSessionID) {
 		NSDictionary<String, Object> queryParameters = null;
 		if (key != null && value != null) {
-			queryParameters = new NSDictionary<String, Object>(value, key);
+			queryParameters = new NSDictionary<>(value, key);
 		}
 		return ERXWOContext.directActionUrl(context, host, port, path, directActionName, queryParameters, secure, includeSessionID);
 	}

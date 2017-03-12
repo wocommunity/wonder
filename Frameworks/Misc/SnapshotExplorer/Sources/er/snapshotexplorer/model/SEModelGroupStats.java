@@ -29,7 +29,7 @@ public class SEModelGroupStats {
 
   public NSArray<SEModelStats> modelStats() {
     ensureModelsLoaded();
-    return new NSArray<SEModelStats>(_modelStats.values());
+    return new NSArray<>(_modelStats.values());
   }
 
   public int snapshotCount() {
@@ -43,7 +43,7 @@ public class SEModelGroupStats {
   @SuppressWarnings( { "unchecked" })
   protected void ensureModelsLoaded() {
     if (_modelStats == null) {
-      _modelStats = new NSMutableDictionary<String, SEModelStats>();
+      _modelStats = new NSMutableDictionary<>();
       for (EOModel model : _modelGroup.models()) {
         SEModelStats modelStats = new SEModelStats(model);
         _modelStats.setObjectForKey(modelStats, model.name());

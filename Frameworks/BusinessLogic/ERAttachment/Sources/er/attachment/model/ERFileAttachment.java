@@ -1,7 +1,5 @@
 package er.attachment.model;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.foundation.ERXProperties;
@@ -37,8 +35,6 @@ public class ERFileAttachment extends _ERFileAttachment {
 	private static final long serialVersionUID = 1L;
 
   public static final String STORAGE_TYPE = "file";
-  @SuppressWarnings("unused")
-  private static Logger log = Logger.getLogger(ERFileAttachment.class);
 
   @Override
   public void awakeFromInsertion(EOEditingContext editingContext) {

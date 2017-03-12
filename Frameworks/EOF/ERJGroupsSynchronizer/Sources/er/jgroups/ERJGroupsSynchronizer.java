@@ -11,6 +11,8 @@ import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -49,6 +51,8 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * @author mschrag
  */
 public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
+	private static final Logger log = LoggerFactory.getLogger(ERXRemoteSynchronizer.class);
+
 	private String _groupName;
 	private JChannel _channel;
 
@@ -103,15 +107,13 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 						_readCacheChange(remoteChange, dis);
 					}
 					addChange(remoteChange);
-					if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-						ERXRemoteSynchronizer.log.info("Received " + transactionCount + " changes from " + message.getSrc());
-					}
-					if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-						ERXRemoteSynchronizer.log.info("  Changes = " + remoteChange.remoteCacheChanges());
+					log.info("Received {} changes from {}", transactionCount, message.getSrc());
+					if (log.isDebugEnabled()) {
+						log.debug("  Changes = {}", remoteChange.remoteCacheChanges());
 					}
 				}
 				catch (IOException e) {
-					ERXRemoteSynchronizer.log.error("Failed to apply remote changes.  This is bad.", e);
+					log.error("Failed to apply remote changes.  This is bad.", e);
 				}
 			}
 
@@ -124,18 +126,12 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 	@Override
 	protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws Exception, IOException {
 		if (!_channel.isConnected()) {
-			if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-				ERXRemoteSynchronizer.log.info("Channel not connected: Not Sending " + cacheChanges.count() + " changes.");
-			}
-			if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-				ERXRemoteSynchronizer.log.info("Channel not connected: Changes = " + cacheChanges);
-			}
+			log.info("Channel not connected: Not Sending {} changes.", cacheChanges.count());
+			log.debug("Channel not connected: Changes = {}", cacheChanges);
 			return;
 		}
 		if (cacheChanges.count() == 0) {
-			if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-				ERXRemoteSynchronizer.log.info("No changes to send!");
-			}
+			log.info("No changes to send!");
 			return;
 		}
 		RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
@@ -147,12 +143,8 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 		}
 		dos.flush();
 		dos.close();
-		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
-			ERXRemoteSynchronizer.log.info("Sending " + cacheChanges.count() + " changes.");
-		}
-		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-			ERXRemoteSynchronizer.log.info("  Changes = " + cacheChanges);
-		}
+		log.info("Sending {} changes.", cacheChanges.count());
+		log.debug("  Changes = {}", cacheChanges);
 		Message message = new Message(null, null, baos.buffer(), 0, baos.size());
 		_channel.send(message);
 	}
@@ -182,7 +174,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 			channel.close();
 		}
 		catch (Throwable e) {
-			ERXRemoteSynchronizer.log.error("Error closing JChannel: " + channel, e);
+			log.error("Error closing JChannel: {}", channel, e);
 		}
 	}
 

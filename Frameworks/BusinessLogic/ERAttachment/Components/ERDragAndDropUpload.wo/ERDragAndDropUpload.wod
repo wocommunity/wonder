@@ -27,6 +27,10 @@ DropTargetID: WOString {
 	value = dropTargetID;
 }
 
+FileSelectorID: WOString {
+	value = fileSelectorID;
+}
+
 Enabled: WOConditional {
 	condition = ^disabled;
 	negate = true;
@@ -50,4 +54,15 @@ ExitFunction: WOString {
 OverFunction: WOString {
 	value = ^overFunction;
 	valueWhenEmpty = "false";
+}
+
+IncludeFileSelector : WOConditional {
+  condition = ^includeFileSelector;
+}
+
+Input1 : WOGenericContainer {
+  elementName = "input";
+  type = "file";
+  id = fileSelectorID;
+  multiple = "multiple";
 }

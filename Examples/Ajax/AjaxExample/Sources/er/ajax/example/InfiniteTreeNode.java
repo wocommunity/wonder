@@ -19,7 +19,7 @@ public class InfiniteTreeNode {
 
 	public synchronized NSArray childrenTreeNodes() {
 		if (_children == null && _depth < 2) {
-			_children = new NSMutableArray<InfiniteTreeNode>();
+			_children = new NSMutableArray<>();
 			for (int i = 0; i < 5; i++) {
 				_children.addObject(new InfiniteTreeNode(this, _name + " Child " + i, _depth + 1));
 			}

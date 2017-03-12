@@ -6,7 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -18,12 +19,12 @@ import com.webobjects.foundation.NSForwardException;
  * @author ak
  */
 public class ERXKeepAliveResponse extends ERXResponse {
-	protected static final Logger log = Logger.getLogger(ERXKeepAliveResponse.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXKeepAliveResponse.class);
 
 	/**
 	 * Queue to push the items into.
 	 */
-	protected Queue<byte[]> _queue = new ConcurrentLinkedQueue<byte[]>();
+	protected Queue<byte[]> _queue = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * Current data to write to client.
@@ -48,11 +49,11 @@ public class ERXKeepAliveResponse extends ERXResponse {
 					if (_current == null) {
 						try {
 							if (log.isDebugEnabled()) {
-								log.debug("waiting: " + _queue.hashCode());
+								log.debug("waiting: {}", _queue.hashCode());
 							}
 							_queue.wait();
 							if (log.isDebugEnabled()) {
-								log.debug("got data: " + _queue.hashCode());
+								log.debug("got data: {}", _queue.hashCode());
 							}
 						}
 						catch (InterruptedException e) {
@@ -63,9 +64,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 					if (_current == null) {
 						return -1;
 					}
-					if (log.isDebugEnabled()) {
-						log.debug("writing: " + _currentIndex);
-					}
+					log.debug("writing: {}", _currentIndex);
 					return _current[_currentIndex++];
 				}
 			}

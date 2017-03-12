@@ -2,8 +2,6 @@ package er.grouping;
 
 import java.text.Format;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -15,15 +13,14 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * a <code>category</code> key, it would contain "Drama", "Sci-Fi" and "Comedy".
  * It also assigns a {@link #score()} to objects to support header sorting.
  * Some DRCriteria have very high scores and so always end up on the bottom;
- * for example: "OTHER" and "TOTAL". <br />
+ * for example: "OTHER" and "TOTAL".
+ * <p>
  * For numeric DRCriteria, the value is a really huge number and
  * 1 + a really huge number ({@link #MAXNUMBER}), respectively.
  * For alpha DRCriteria. the value is a long word filled with z's ({@link #MAXSTRING})
  * and the same with one z concatenated, respectively.
  */
 public class DRCriteria {
-    private static final Logger log = Logger.getLogger(DRCriteria.class);
-
     protected NSDictionary _valueDict;
     
     // The keys in the dict are DRSubMasterCriteria in the masterCriteria

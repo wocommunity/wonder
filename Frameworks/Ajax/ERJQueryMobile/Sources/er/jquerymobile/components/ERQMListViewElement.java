@@ -1,7 +1,5 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.eof.ERXConstant;
@@ -20,8 +18,6 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 @SuppressWarnings("serial")
 public class ERQMListViewElement extends ERQMInputBaseComponent {
-
-  protected static final Logger log = Logger.getLogger(ERQMListViewElement.class);
 
   //********************************************************************
   //  Constructor

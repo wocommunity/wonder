@@ -6,13 +6,13 @@ package er.rest;
  * containing invalid credentials.
  * <p>
  * Usage:
- * <pre>
+ * <pre><code>
  * protected void checkAccess() throws SecurityException {
  *     if (invalidCredentials) {
  *         throw new ERXBasicAuthenticationException("Invalid credentials");
  *     }
  * }
- * </pre>
+ * </code></pre>
  */
 public class ERXBasicAuthenticationException extends SecurityException {
 	private static final String DEFAULT_REALM = "application";
@@ -70,7 +70,6 @@ public class ERXBasicAuthenticationException extends SecurityException {
      * @param cause the cause (which is saved for later retrieval by the
      *        {@link #getCause()} method).  (A <tt>null</tt> value is permitted,
      *        and indicates that the cause is nonexistent or unknown.)
-     * @param realm message about server authentication requested for user.
      * @param realm the realm for which the credentials are used
      */
 	public ERXBasicAuthenticationException(String message, Throwable cause, String realm) {

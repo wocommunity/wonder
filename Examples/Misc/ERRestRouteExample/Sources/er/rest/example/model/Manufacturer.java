@@ -19,7 +19,7 @@ public class Manufacturer {
 
 	public static NSArray<Manufacturer> manufacturers() {
 		if (_manufacturers == null) {
-			NSMutableArray<Manufacturer> manufacturers = new NSMutableArray<Manufacturer>();
+			NSMutableArray<Manufacturer> manufacturers = new NSMutableArray<>();
 			manufacturers.addObject(Manufacturer.MINI);
 			manufacturers.addObject(Manufacturer.PORSCHE);
 			manufacturers.addObject(Manufacturer.TOYOTA);

@@ -14,9 +14,6 @@ import er.neo4jadaptor.utils.cursor.Cursor;
  * @author Jedrzej Sobanski
  */
 public class LinkingCursor implements Cursor<Neo4JErsatz> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LinkingCursor.class);
-	
 	private final EOEntity entity;
 	
 	private Cursor<? extends PropertyContainer> cursor;

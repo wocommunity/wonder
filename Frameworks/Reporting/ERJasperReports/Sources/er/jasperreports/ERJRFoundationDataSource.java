@@ -2,11 +2,12 @@ package er.jasperreports;
 
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -27,7 +28,7 @@ public class ERJRFoundationDataSource implements JRDataSource {
 	public final static String REPORT_KEYPATH_SEPARATOR = ERXProperties.stringForKeyWithDefault("er.jasperreports.keyPathSeparator", "_");
 	private final static String WEBOBJECTS_KEYPATH_SEPARATOR = ".";
 	
-	private static final Logger log = Logger.getLogger(ERJRFoundationDataSource.class);
+	private static final Logger log = LoggerFactory.getLogger(ERJRFoundationDataSource.class);
 	
 	/** 
 	 * Sometimes we want might want a reference to the current row, perhaps to pass to a custom function in a scriptlet.
@@ -73,9 +74,9 @@ public class ERJRFoundationDataSource implements JRDataSource {
 			processedCount++;
 			if (log.isInfoEnabled()) {
 				if (debugRow != null) {
-					log.info("DetailRow: " + debugRow);
+					log.info("DetailRow: {}", debugRow);
 				} //~ if (debugRow != null)
-				debugRow = new NSMutableDictionary<String, Object>();
+				debugRow = new NSMutableDictionary<>();
 				if (currRow instanceof EOEnterpriseObject) {
 					EOEnterpriseObject eo = (EOEnterpriseObject) currRow;
 					debugRow.takeValueForKey(eo.editingContext().globalIDForObject(eo), "_globalID");
@@ -122,7 +123,7 @@ public class ERJRFoundationDataSource implements JRDataSource {
 		try {
 			fieldValue = (currRow).valueForKeyPath(jrField.getName().replaceAll(REPORT_KEYPATH_SEPARATOR, WEBOBJECTS_KEYPATH_SEPARATOR));
 			if (log.isDebugEnabled())
-				log.debug("value = " + fieldValue + "; jrField = " + (jrField == null ? "null" : ERJRUtilities.toString(jrField)));
+				log.debug("value = {}; jrField = {}", fieldValue, (jrField == null ? "null" : ERJRUtilities.toString(jrField)));
 			// Allow for implied toString methods
 			if (isStringValueClass) {
 				// At least let's do toString by default when JasperReports expects a String return

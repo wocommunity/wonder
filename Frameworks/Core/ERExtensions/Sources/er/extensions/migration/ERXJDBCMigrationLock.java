@@ -2,7 +2,8 @@ package er.extensions.migration;
 
 import java.sql.Types;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
@@ -42,7 +43,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
-	public static final Logger log = Logger.getLogger(ERXJDBCMigrationLock.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXJDBCMigrationLock.class);
 
 	private EOModel _lastUpdatedModel;
 	private EOModel _dbUpdaterModelCache;
@@ -85,7 +86,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			}
 			try {
 				EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-				NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 				row.setObjectForKey(Integer.valueOf(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
 				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
@@ -114,10 +115,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 							}
 							catch (EOGeneralAdaptorException e) {
 								// Assume this is the unique constraint on modelName that failed
-								if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-									ERXJDBCMigrationLock.log.info("Exception creating row for model '" + model.name() + 
-											", assuming another process has already added this and has the lock.", e);
-								}
+								log.info("Exception creating row for model '{}', assuming another process has already added this and has the lock.", model.name(), e);
 								return false;
 							}
 							count = 1;
@@ -126,9 +124,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 							throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".");
 						}
 					}
-					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-						ERXJDBCMigrationLock.log.info("Waiting on updateLock for model '" + model.name() + "' ...");
-					}
+					log.info("Waiting on updateLock for model '{}' ...", model.name());
 				}
 				channel.adaptorContext().commitTransaction();
 				channel.adaptorContext().beginTransaction();
@@ -171,7 +167,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 			row.setObjectForKey(Integer.valueOf(0), "updateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
@@ -244,7 +240,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		try {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<>();
 			row.setObjectForKey(Integer.valueOf(versionNumber), "version");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(migrationTableName(adaptor));
 			int count;
@@ -358,7 +354,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 
 	protected String dbUpdaterCreateStatement(EOModel model, JDBCAdaptor adaptor) {
 		EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-		NSMutableDictionary<String, String> flags = new NSMutableDictionary<String, String>();
+		NSMutableDictionary<String, String> flags = new NSMutableDictionary<>();
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		flags.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);

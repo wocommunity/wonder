@@ -21,7 +21,7 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	private Map<String, ?> _map;
 
 	public MapClassDescription() {
-		this(new HashMap<String, Object>());
+		this(new HashMap<>());
 	}
 	
 	public MapClassDescription(Map<String, ?> map) {
@@ -51,8 +51,8 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	}
 
 	@Override
-	public NSArray attributeKeys() {
-		NSMutableArray<String> attributes = new NSMutableArray<String>();
+	public NSArray<String> attributeKeys() {
+		NSMutableArray<String> attributes = new NSMutableArray<>();
 		for (Map.Entry<String, ?> entry : _map.entrySet()) {
 			Class type = entry.getValue().getClass();
 			if (isAttribute(type)) {
@@ -63,8 +63,8 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	}
 
 	@Override
-	public NSArray toOneRelationshipKeys() {
-		NSMutableArray<String> relationships = new NSMutableArray<String>();
+	public NSArray<String> toOneRelationshipKeys() {
+		NSMutableArray<String> relationships = new NSMutableArray<>();
 		for (Map.Entry<String, ?> entry : _map.entrySet()) {
 			Class type = entry.getValue().getClass();
 			if (!isAttribute(type) && !isToMany(type)) {
@@ -75,8 +75,8 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	}
 
 	@Override
-	public NSArray toManyRelationshipKeys() {
-		NSMutableArray<String> relationships = new NSMutableArray<String>();
+	public NSArray<String> toManyRelationshipKeys() {
+		NSMutableArray<String> relationships = new NSMutableArray<>();
 		for (Map.Entry<String, ?> entry : _map.entrySet()) {
 			Class type = entry.getValue().getClass();
 			if (isToMany(type)) {
@@ -103,6 +103,7 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 		}
 	}
 
+	@Override
 	public Object createInstance() {
 		return new HashMap<String, Object>(_map); // not much else we can do here ... fucking clone method.
 	}

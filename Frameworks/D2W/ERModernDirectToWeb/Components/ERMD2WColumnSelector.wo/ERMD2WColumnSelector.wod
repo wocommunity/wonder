@@ -1,0 +1,32 @@
+IsShowColumnSelector : WOConditional {
+	condition = isShowColumnSelector;
+}
+
+ColumnSelectorLabel : ERXLocalizedString {
+	value = "ERMD.columnSelectorTitle";
+}
+
+SectionRepetition: ERXWORepetition {
+	list = sectionsContents;
+	item = currentSection;
+}
+
+ColumnLabelRepetition: WORepetition {
+	_unroll = true;
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+Property : WOGenericContainer {
+	elementName = "li";
+	class = columnSelectorClass;
+}
+
+ToggleColumnVisibility : AjaxUpdateLink {
+	updateContainerID = ^updateContainerID;
+	action = toggleColumnVisibility;
+}
+
+PropertyName : WOString {
+	value = displayNameForProperty;
+}

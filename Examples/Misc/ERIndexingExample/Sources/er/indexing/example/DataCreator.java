@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -39,7 +40,7 @@ public class DataCreator {
 	
 	private EOEditingContext ec;
 
-	private static final Logger log = Logger.getLogger(DataCreator.class);
+	private static final Logger log = LoggerFactory.getLogger(DataCreator.class);
 
 	public static void main(String[] args) {
 		new DataCreator().createAll();
@@ -87,11 +88,11 @@ public class DataCreator {
 					createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
 
 					String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
-					log.info("Creating tables: " + eomodel.name());
+					log.info("Creating tables: {}", eomodel.name());
 					ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
 				}
 			} catch (SQLException ex) {
-				log.error("Can't update: " + ex, ex);
+				log.error("Can't update", ex);
 			} finally {
 				dbc.unlock();
 			}
@@ -99,10 +100,10 @@ public class DataCreator {
 
 	}
 
-	NSMutableArray<Asset> assets = new NSMutableArray<Asset>();
-	NSMutableArray<AssetGroup> groups = new NSMutableArray<AssetGroup>();
-	NSMutableArray<Tag> tags = new NSMutableArray<Tag>();
-	NSArray<String> words = new NSArray<String>();
+	NSMutableArray<Asset> assets = new NSMutableArray<>();
+	NSMutableArray<AssetGroup> groups = new NSMutableArray<>();
+	NSMutableArray<Tag> tags = new NSMutableArray<>();
+	NSArray<String> words = new NSArray<>();
 
 	public void createAll() {
 		createTables();
@@ -182,7 +183,7 @@ public class DataCreator {
 
 			String wordFile = ERXFileUtilities.stringFromFile(new File("/usr/share/dict/words"));
 			words = NSArray.componentsSeparatedByString(wordFile, "\n");
-			log.info("loaded words: " + words.count());
+			log.info("loaded words: {}", words.count());
 
 			int MAX = 100;
 			int MAX_ASSETS = MAX * 10;
@@ -192,14 +193,14 @@ public class DataCreator {
 				tag.setName(randomWord());
 				tags.addObject(tag);
 			}
-			log.info("created tags: " + tags.count());
+			log.info("created tags: {}", tags.count());
 
 			for (int i = 0; i < MAX; i++) {
 				AssetGroup group = AssetGroup.clazz.createAndInsertObject(ec);
 				group.setName(randomWord());
 				groups.addObject(group);
 			}
-			log.info("created groups: " + groups.count());
+			log.info("created groups: {}", groups.count());
 
 			for (int i = 0; i < MAX_ASSETS; i++) {
 				Asset asset = Asset.clazz.createAndInsertObject(ec);
@@ -218,10 +219,10 @@ public class DataCreator {
 
 				assets.addObject(asset);
 			}
-			log.info("created assets: " + assets.count());
+			log.info("created assets: {}", assets.count());
 
 			ec.saveChanges();
-			log.info("fin: " + words.count());
+			log.info("fin: {}", words.count());
 		} catch (IOException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}

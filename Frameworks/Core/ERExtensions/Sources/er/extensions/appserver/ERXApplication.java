@@ -52,6 +52,7 @@ import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
@@ -82,7 +83,6 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
@@ -106,6 +106,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
@@ -137,7 +138,6 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.StatisticsBaseLogPath
  * @property er.extensions.ERXApplication.StatisticsLogRotationFrequency
  * @property er.extensions.ERXApplication.developmentMode
- * @property er.extensions.ERXApplication.developmentMode
  * @property er.extensions.ERXApplication.enableERXShutdownHook
  * @property er.extensions.ERXApplication.fixCachingEnabled
  * @property er.extensions.ERXApplication.lowMemBufferSize
@@ -153,10 +153,6 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.ssl.enabled
  * @property er.extensions.ERXApplication.ssl.host
  * @property er.extensions.ERXApplication.ssl.port
- * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
- * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
- * @property er.extensions.ERXApplication.useEditingContextUnlocker
- * @property er.extensions.ERXApplication.useEditingContextUnlocker
  * @property er.extensions.ERXApplication.useSessionStoreDeadlockDetection
  * @property er.extensions.ERXComponentActionRedirector.enabled
  * @property er.extensions.ERXApplication.allowMultipleDevInstances
@@ -250,7 +246,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * defaults to an inheritable thread local, which would defeat the purpose
 	 * of this check.
 	 */
-	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<Boolean>();
+	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<>();
 
 	protected static NSDictionary propertiesFromArgv;
 
@@ -295,6 +291,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Tracks whether or not _addAdditionalAdaptors has been called yet.
 	 */
 	protected boolean _initializedAdaptors = false;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerRoute = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookieName = null;
+
+	/**
+	 * To support load balancing with mod_proxy
+	 */
+	private String _proxyBalancerCookiePath = null;
 
 	/**
 	 * Copies the props from the command line to the static dict
@@ -376,7 +387,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private Properties allBundleProps;
 		private Properties defaultProperties;
 		
-		private List<URL> allBundlePropURLs = new ArrayList<URL>();
+		private List<URL> allBundlePropURLs = new ArrayList<>();
 		
 		private Properties readProperties(File file) {
 			if (!file.exists()) {
@@ -425,9 +436,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				return bundle.properties();
 			}
 
-			InputStream inputStream = null;
-			try {
-				inputStream = bundle.inputStreamForResourcePath(name);
+			try (InputStream inputStream = bundle.inputStreamForResourcePath(name)) {
 				if(inputStream == null) {
 					return null;
 				}
@@ -442,10 +451,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			catch (IOException exception) {
 				return null;
-			} finally {
-				if (inputStream != null) {
-					try { inputStream.close(); } catch (IOException e) {}
-				}
 			}
 		}
 
@@ -458,7 +463,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
 			propertiesFromArgv = NSProperties.valuesFromArgv(argv);
 			defaultProperties = (Properties) NSProperties._getProperties().clone();
-			allFrameworks = new HashSet<String>();
+			allFrameworks = new HashSet<>();
 			_checker = new JarChecker();
 
 			for (int var = 0; var < cps.length; var++) {
@@ -705,7 +710,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		
 
-		private List<URL> urls = new ArrayList<URL>();
+		private List<URL> urls = new ArrayList<>();
 		private Properties mainProps;
 		private Properties mainUserProps;
 
@@ -898,25 +903,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return false;
 		}
 		
-		String adapterUrl;
-		if (application().host() != null) {
-			adapterUrl = application().cgiAdaptorURL();
-		} else {
-			adapterUrl = application().cgiAdaptorURL().replace("://null/", "://localhost/");
-		}
-		
-		String appUrl;
-		if (application().isDirectConnectEnabled()) {
-			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
-			appUrl += "/" + application().name() + application().applicationExtension();
-		} else {
-			appUrl = adapterUrl + "/" + application().name() + application().applicationExtension() + "/-" + application().port();
-		}
-		
-		URL url;
 		try {
-			appUrl = appUrl + "/" + application().directActionRequestHandlerKey() + "/stop";
-			url = new URL(appUrl);
+			ERXMutableURL adapterUrl = new ERXMutableURL(application().cgiAdaptorURL());
+			if (application().host() == null) {
+				adapterUrl.setHost("localhost");
+			}
+			adapterUrl.appendPath(application().name() + application().applicationExtension());
+			
+			if (application().isDirectConnectEnabled()) {
+				adapterUrl.setPort((Integer) application().port());
+			} else {
+				adapterUrl.appendPath("-" + application().port());
+			}
+		
+			adapterUrl.appendPath(application().directActionRequestHandlerKey() + "/stop");
+			URL url = adapterUrl.toURL();
 
 			log.debug("Stopping previously running instance of " + application().name());
 			
@@ -975,25 +976,23 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 
-		private NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
+		private NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<>();
 
-		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
+		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<>();
 
 		private void processJar(String jar) {
-
-			try {
-				File jarFile = new File(jar);
-				if (!jarFile.exists() || jarFile.isDirectory()) {
-					return;
-				}
-				JarFile f = new JarFile(jar);
-				for (Enumeration enumerator = f.entries(); enumerator.hasMoreElements();) {
-					JarEntry entry = (JarEntry) enumerator.nextElement();
+			File jarFile = new File(jar);
+			if (!jarFile.exists() || jarFile.isDirectory()) {
+				return;
+			}
+			try (JarFile f = new JarFile(jar)) {
+				for (Enumeration<JarEntry> enumerator = f.entries(); enumerator.hasMoreElements();) {
+					JarEntry entry = enumerator.nextElement();
 					String name = entry.getName();
 					if (entry.getName().endsWith("/") && !(name.matches("^\\w+/$") || name.startsWith("META-INF"))) {
 						NSMutableArray<String> bundles = packages.objectForKey(name);
 						if (bundles == null) {
-							bundles = new NSMutableArray<String>();
+							bundles = new NSMutableArray<>();
 							packages.setObjectForKey(bundles, name);
 						}
 						bundles.addObject(jar);
@@ -1002,7 +1001,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						Entry e = new Entry(entry.getSize(), jar);
 						NSMutableSet<Entry> set = classes.objectForKey(name);
 						if (set == null) {
-							set = new NSMutableSet<Entry>();
+							set = new NSMutableSet<>();
 							classes.setObjectForKey(set, name);
 						}
 						set.addObject(e);
@@ -1030,7 +1029,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				startupLog.debug("The following packages appear multiple times:\n" + message);
 			}
 			sb = new StringBuilder();
-			NSMutableSet<String> classPackages = new NSMutableSet<String>();
+			NSMutableSet<String> classPackages = new NSMutableSet<>();
 			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
 			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
 				String className = enumerator.nextElement();
@@ -1227,14 +1226,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 
-		Boolean useUnlocker = ERXEC.useUnlocker();
-		if (useUnlocker != null) {
-			ERXEC.setUseUnlocker(useUnlocker);
-		}
-		Boolean traceOpenLocks = ERXEC.traceOpenLocks();
-		if (traceOpenLocks != null) {
-			ERXEC.setTraceOpenLocks(traceOpenLocks);
-		}
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("addBalancerRouteCookieByNotification", new Class[] { NSNotification.class }), WORequestHandler.DidHandleRequestNotification, null);
 
 		// Signal handling support
 		if (ERXGracefulShutdown.isEnabled()) {
@@ -2199,7 +2191,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** improved streaming support */
-	protected NSMutableArray<String> _streamingRequestHandlerKeys = new NSMutableArray<String>(streamActionRequestHandlerKey());
+	protected NSMutableArray<String> _streamingRequestHandlerKeys = new NSMutableArray<>(streamActionRequestHandlerKey());
 
 	public void registerStreamingRequestHandlerKey(String s) {
 		if (!_streamingRequestHandlerKeys.containsObject(s)) {
@@ -2295,7 +2287,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** holds the info on checked-out sessions */
-	private Map<String, SessionInfo> _sessions = new HashMap<String, SessionInfo>();
+	private Map<String, SessionInfo> _sessions = new HashMap<>();
 
 	/** Holds info about where and who checked out */
 	private class SessionInfo {
@@ -2428,7 +2420,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public NSSet<String> responseCompressionTypes() {
 		if(_responseCompressionTypes == null) {
-			_responseCompressionTypes = new NSSet<String>(ERXProperties.arrayForKeyWithDefault("er.extensions.ERXApplication.responseCompressionTypes", new NSArray<String>("application/x-javascript")));
+			_responseCompressionTypes = new NSSet<>(ERXProperties.arrayForKeyWithDefault("er.extensions.ERXApplication.responseCompressionTypes", new NSArray<String>("application/x-javascript")));
 		}
 		return _responseCompressionTypes;
 	}
@@ -2660,7 +2652,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			ERXSecureDefaultAdaptor.checkSSLConfig();
 			if (!sslAdaptorConfigured) {
-				NSMutableDictionary<String, Object> sslAdaptor = new NSMutableDictionary<String, Object>();
+				NSMutableDictionary<String, Object> sslAdaptor = new NSMutableDictionary<>();
 				sslAdaptor.setObjectForKey(ERXSecureDefaultAdaptor.class.getName(), WOProperties._AdaptorKey);
 				String sslHost = sslHost();
 				if (sslHost != null) {
@@ -2752,7 +2744,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * The set of component names that have binding debug enabled
 	 */
-	private NSMutableSet<String> _debugComponents = new NSMutableSet<String>();
+	private NSMutableSet<String> _debugComponents = new NSMutableSet<>();
 
 	/**
 	 * Little bit better binding debug output than the original.
@@ -2838,4 +2830,30 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     public String[] adaptorExtensions() {
         return myAppExtensions;
     }
+	
+	public void addBalancerRouteCookieByNotification(NSNotification notification) {
+		if (notification.object() instanceof WOContext) {
+			addBalancerRouteCookie((WOContext) notification.object());
+		}
+	}
+
+	public void addBalancerRouteCookie(WOContext context) {
+		if (context != null && context.request() != null && context.response() != null) {
+			if (_proxyBalancerRoute == null) {
+				_proxyBalancerRoute = (name() + "_" + port().toString()).toLowerCase();
+				_proxyBalancerRoute = "." + _proxyBalancerRoute.replace('.', '_');
+			}
+			if (_proxyBalancerCookieName == null) {
+				_proxyBalancerCookieName = ("routeid_" + name()).toLowerCase();
+				_proxyBalancerCookieName = _proxyBalancerCookieName.replace('.', '_');
+			}
+			if (_proxyBalancerCookiePath == null) {
+				_proxyBalancerCookiePath = (System.getProperty("FixCookiePath") != null) ? System.getProperty("FixCookiePath") : "/";
+			}
+			WOCookie cookie = new WOCookie(_proxyBalancerCookieName, _proxyBalancerRoute, _proxyBalancerCookiePath, null, -1, context.request().isSecure(), true);
+			cookie.setExpires(null);
+			context.response().addCookie(cookie);
+		}
+	}
+  
 }

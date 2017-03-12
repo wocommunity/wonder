@@ -43,7 +43,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
 
-    suite.addTest(ERXStringUtilitiesTest.suite());
+    suite.addTestSuite(ERXStringUtilitiesTest.class);
 
     suite.addTestSuite(er.extensions.foundation.ERXThreadStorageTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXUtilitiesTest.class);

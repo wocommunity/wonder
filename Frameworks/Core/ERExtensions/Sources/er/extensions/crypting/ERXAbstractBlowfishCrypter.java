@@ -5,8 +5,6 @@ import java.security.Key;
 
 import javax.crypto.Cipher;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -21,8 +19,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface {
-	public static final Logger log = Logger.getLogger(ERXCrypto.class);
-
 	/** Block size of blowfish encrypted strings */
 	private int _blockSize;
 

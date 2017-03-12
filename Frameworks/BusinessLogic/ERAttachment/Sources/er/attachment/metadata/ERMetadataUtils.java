@@ -3,14 +3,14 @@ package er.attachment.metadata;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.drew.metadata.exif.ExifThumbnailDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 
 public class ERMetadataUtils {
-  private static Map<String, Integer> IPTC_NAME_TO_TYPE = new HashMap<String, Integer>();
-  private static Map<String, Integer> EXIF_NAME_TO_TYPE = new HashMap<String, Integer>();
+  private static Map<String, Integer> IPTC_NAME_TO_TYPE = new HashMap<>();
+  private static Map<String, Integer> EXIF_NAME_TO_TYPE = new HashMap<>();
   static {
 		ERMetadataUtils.IPTC_NAME_TO_TYPE.put("Caption/Abstract", Integer.valueOf(IptcDirectory.TAG_CAPTION));
 		ERMetadataUtils.IPTC_NAME_TO_TYPE.put("City", Integer.valueOf(IptcDirectory.TAG_CITY));
@@ -30,9 +30,9 @@ public class ERMetadataUtils {
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ColorSpace", Integer.valueOf(ExifSubIFDDirectory.TAG_COLOR_SPACE));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SceneCaptureType", Integer.valueOf(ExifSubIFDDirectory.TAG_SCENE_TYPE));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneYResolution",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_Y_RES));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_Y_RESOLUTION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneResolutionUnit",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_UNIT));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_RESOLUTION_UNIT));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalLength", Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ShutterSpeedValue", Integer.valueOf(ExifSubIFDDirectory.TAG_SHUTTER_SPEED));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FNumber", Integer.valueOf(ExifSubIFDDirectory.TAG_FNUMBER));
@@ -49,7 +49,7 @@ public class ERMetadataUtils {
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("ExposureMode", Integer.valueOf(ExifIFD0Directory.TAG_EXPO));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("ExposureBiasValue", Integer.valueOf(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("FocalPlaneXResolution",
-				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_X_RES));
+				Integer.valueOf(ExifSubIFDDirectory.TAG_FOCAL_PLANE_X_RESOLUTION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Orientation", Integer.valueOf(ExifIFD0Directory.TAG_ORIENTATION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Model", Integer.valueOf(ExifIFD0Directory.TAG_MODEL));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("YResolution", Integer.valueOf(ExifIFD0Directory.TAG_Y_RESOLUTION));
@@ -67,7 +67,7 @@ public class ERMetadataUtils {
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("GainControl", Integer.valueOf(ExifIFD0Directory.TAG_));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("DigitalZoomRatio", Integer.valueOf(ExifIFD0Directory.TAG_));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("MaxApertureValue", Integer.valueOf(ExifSubIFDDirectory.TAG_MAX_APERTURE));
-		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("LightSource", Integer.valueOf(ExifSubIFDDirectory.TAG_LIGHT_SOURCE));
+		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("LightSource", Integer.valueOf(ExifSubIFDDirectory.TAG_WHITE_BALANCE));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("CompressedBitsPerPixel", Integer.valueOf(ExifIFD0Directory.TAG_));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SensingMethod", Integer.valueOf(ExifSubIFDDirectory.TAG_SENSING_METHOD));
 		//MetadataUtils.EXIF_NAME_TO_TYPE.put("Sharpness", Integer.valueOf(ExifIFD0Directory.TAG_));
@@ -83,7 +83,7 @@ public class ERMetadataUtils {
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SubsecTime", Integer.valueOf(ExifSubIFDDirectory.TAG_SUBSECOND_TIME));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("PhotometricInterpretation",
 				Integer.valueOf(ExifSubIFDDirectory.TAG_PHOTOMETRIC_INTERPRETATION));
-		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Compression", Integer.valueOf(ExifThumbnailDirectory.TAG_THUMBNAIL_COMPRESSION));
+		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("Compression", Integer.valueOf(ExifDirectoryBase.TAG_COMPRESSION));
 		ERMetadataUtils.EXIF_NAME_TO_TYPE.put("SubjectDistance", Integer.valueOf(ExifSubIFDDirectory.TAG_SUBJECT_DISTANCE));
 	}
 

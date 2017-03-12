@@ -18,5 +18,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERSelenium"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Libraries/jdom-b7.jar"/>
+	<classpathentry kind="lib" path="Libraries/json-simple-1.1.1-2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,7 +2,8 @@ package com.webobjects.directtoweb;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -38,7 +39,7 @@ public class D2WPage extends D2WComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(D2WPage.class);
+	private static final Logger log = LoggerFactory.getLogger(D2WPage.class);
 
 	private String _pageWrapperName = null;
 	private WOComponent _nextPage;
@@ -105,7 +106,7 @@ public class D2WPage extends D2WComponent {
 	public NSMutableDictionary<String, Object> extraBindings() {
 		if (_extraBindings != null) {
 			NSMutableDictionary<String, Object> oldBindings = _extraBindings;
-			_extraBindings = new NSMutableDictionary<String, Object>(16);
+			_extraBindings = new NSMutableDictionary<>(16);
 
 			for (Enumeration<String> e = oldBindings.keyEnumerator(); e.hasMoreElements();) {
 				String key = e.nextElement();

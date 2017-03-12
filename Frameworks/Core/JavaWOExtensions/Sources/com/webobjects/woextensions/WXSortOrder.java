@@ -118,9 +118,9 @@ public class WXSortOrder extends WOComponent {
             orderingArray = (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
 
         if (null==orderingArray) {
-            orderingArray = new NSMutableArray<EOSortOrdering>();
+            orderingArray = new NSMutableArray<>();
         } else {
-            orderingArray = new NSMutableArray<EOSortOrdering>(orderingArray);
+            orderingArray = new NSMutableArray<>(orderingArray);
         }
 
         if (null!=displayGroup)

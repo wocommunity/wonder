@@ -49,7 +49,7 @@ public abstract class ERAttachmentMigration extends Migration {
   
   @Override
   public NSArray<ERXModelVersion> modelDependencies() {
-  	return new NSArray<ERXModelVersion>(new ERXModelVersion("ERAttachment", 1));
+  	return new NSArray<>(new ERXModelVersion("ERAttachment", 1));
   }
 
   @Override

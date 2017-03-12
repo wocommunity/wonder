@@ -14,7 +14,7 @@ public class ExpensiveUpdates extends AjaxWOWODCPage {
 
   public ExpensiveUpdates(WOContext context) {
     super(context);
-    _comments = new NSMutableArray<Comment>();
+    _comments = new NSMutableArray<>();
     for (int i = 0; i < 5; i++) {
       Comment c = new Comment();
       c.setText(ERXLoremIpsumGenerator.sentences(1));

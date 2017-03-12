@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -31,9 +29,6 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
     public ERXJSOpenWindowHyperlink(WOContext aContext) {
         super(aContext);
     }
-
-    ///** logging support *//
-    public static final Logger log = Logger.getLogger(ERXJSOpenWindowHyperlink.class);
 
     @Override
     public boolean isStateless() { return true; }

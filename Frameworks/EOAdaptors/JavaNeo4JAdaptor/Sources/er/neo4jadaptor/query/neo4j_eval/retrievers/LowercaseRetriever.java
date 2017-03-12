@@ -15,9 +15,6 @@ import er.neo4jadaptor.query.neo4j_eval.Cost;
  * @param <T>
  */
 public class LowercaseRetriever <T extends PropertyContainer> implements Retriever<T, String> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LowercaseRetriever.class);
-
 	private final Retriever<T, String> wrapped;
 	
 	public LowercaseRetriever(Retriever<T, String> wrapped) {

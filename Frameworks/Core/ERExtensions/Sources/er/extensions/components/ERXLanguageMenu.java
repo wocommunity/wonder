@@ -115,7 +115,7 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 	 */
 	private NSDictionary<String, String> displayStringForLanguages() {
 		if (displayStringForLanguages == null) {
-			NSMutableDictionary<String, String> displayStrings = new NSMutableDictionary<String, String>();
+			NSMutableDictionary<String, String> displayStrings = new NSMutableDictionary<>();
 			for (Object o : availableLanguages()) {
 				String languageKey = (String) o;
 				ERXLocalizer loc = ERXLocalizer.localizerForLanguage(languageKey);

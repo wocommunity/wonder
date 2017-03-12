@@ -116,6 +116,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	private NSSet(E[] objects, boolean checkForNull) {
+		if (objects == null) {
+			throw new IllegalArgumentException("Objects cannot be null.");
+		}
 		initFromObjects(objects, checkForNull);
 	}
 
@@ -303,7 +306,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	public HashSet<E> hashSet() {
 		E[] objects = (E[])objectsNoCopy();
-		HashSet<E> set = new HashSet<E>(objects.length);
+		HashSet<E> set = new HashSet<>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			set.add(objects[i]);
 		}
@@ -425,17 +428,17 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		throw new UnsupportedOperationException("retainAll is not a supported operation in com.webobjects.foundation.NSSet");
 	}
 	public NSSet<E> setByIntersectingSet(NSSet<?> otherSet) {
-		NSMutableSet<E> set = new NSMutableSet<E>(this);
+		NSMutableSet<E> set = new NSMutableSet<>(this);
 		set.intersectSet(otherSet);
 		return set;
 	}
 	public NSSet<E> setBySubtractingSet(NSSet<?> otherSet) {
-		NSMutableSet<E> set = new NSMutableSet<E>(this);
+		NSMutableSet<E> set = new NSMutableSet<>(this);
 		set.subtractSet(otherSet);
 		return set;
 	}
 	public NSSet<E> setByUnioningSet(NSSet<? extends E> otherSet) {
-		NSMutableSet<E> set = new NSMutableSet<E>(this);
+		NSMutableSet<E> set = new NSMutableSet<>(this);
 		set.unionSet(otherSet);
 		return set;
 	}

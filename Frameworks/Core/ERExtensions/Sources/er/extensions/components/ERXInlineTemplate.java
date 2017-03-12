@@ -2,7 +2,8 @@ package er.extensions.components;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -60,7 +61,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(ERXInlineTemplate.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXInlineTemplate.class);
 
 	private static final String ERROR_TEMPLATE_DEFAULT = "<div class=\"ERXInlineTemplateError\" style=\"background-color: #faa; border: 2px dotted red;\">@@message@@</div>";
 
@@ -123,31 +124,23 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 				if (keyPathComponents.count() > 0) {
 					Object o = valueForBinding(firstKey);
 					String remainingKeyPath = keyPathComponents.componentsJoinedByString(".");
-					if (log.isDebugEnabled()) {
-						log.debug("set binding using keypath " + firstKey + " / " + remainingKeyPath);
-					}
+					log.debug("set binding using keypath {} / {}", firstKey, remainingKeyPath);
 					NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(o, value, remainingKeyPath);
 				}
 				else {
-					if (log.isDebugEnabled()) {
-						log.debug("set binding value " + firstKey);
-					}
+					log.debug("set binding value {}", firstKey);
 					setValueForBinding(value, firstKey);
 				}
 			}
 			else if (proxyParent()) {
-				if (log.isDebugEnabled()) {
-					log.debug("set parent binding " + keyPath);
-				}
+				log.debug("set parent binding {}", keyPath);
 				parent().takeValueForKeyPath(value, keyPath);
 			}
 			else if (defaultToDynamicBindings()){
-				if (log.isDebugEnabled()) {
-					log.debug("set dynamic binding " + keyPath);
-				}
+				log.debug("set dynamic binding {}", keyPath);
 				dynamicBindings().takeValueForKeyPath(value, keyPath);
 			} else {
-				log.warn("Unknown keyPath: "+keyPath);
+				log.warn("Unknown keyPath: {}", keyPath);
 			}
 		}
 		catch (Throwable t) {
@@ -165,32 +158,24 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 				Object o = valueForBinding(firstKey);
 				if (keyPathComponents.count() > 0) {
 					String remainingKeyPath = keyPathComponents.componentsJoinedByString(".");
-					if (log.isDebugEnabled()) {
-						log.debug("get binding using keypath " + firstKey + " / " + remainingKeyPath);
-					}
+					log.debug("get binding using keypath {} / {}", firstKey, remainingKeyPath);
 					value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, remainingKeyPath);
 				}
 				else {
-					if (log.isDebugEnabled()) {
-						log.debug("get binding value " + firstKey);
-					}
+					log.debug("get binding value {}", firstKey);
 					value = o;
 				}
 			}
 			else if (proxyParent()) {
-				if (log.isDebugEnabled()) { 
-					log.debug("get parent binding " + keyPath);
-				}
+				log.debug("get parent binding {}", keyPath);
 				value = parent().valueForKeyPath(keyPath);
 			}
 			else if (defaultToDynamicBindings()) {
-				if (log.isDebugEnabled()) {
-					log.debug("get dynamic binding " + keyPath);
-				}
+				log.debug("get dynamic binding {}", keyPath);
 				value = dynamicBindings().valueForKeyPath(keyPath);
 			}
 			else {
-				log.warn("Unknown keyPath: " + keyPath);
+				log.warn("Unknown keyPath: {}", keyPath);
 			}
 
 			return value;
@@ -222,24 +207,18 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 				Object requestedVersion = valueForBinding(CACHE_VERSION_BINDING);
 				if (cacheEntry != null && (requestedVersion == null || requestedVersion.equals(cacheEntry.version()))) {
 					// requestedVersion matches or is null
-					if (log.isDebugEnabled()) {
-						log.debug("using cache: " + cacheKey + " / " + cacheEntry.version());
-					}
+					log.debug("using cache: {} / {}", cacheKey, cacheEntry.version());
 					element = cacheEntry.element();
 				}
 				else { // no matching cache entry
-					if (log.isDebugEnabled()) {
-						log.debug("updating cache: " + cacheKey + " / " + (cacheEntry == null ? null : cacheEntry.version()) + " -> " + requestedVersion);
-					}
+					log.debug("updating cache: {} / {} -> {}", cacheKey, (cacheEntry == null ? null : cacheEntry.version()), requestedVersion);
 					element = _template();
 					cacheEntry = new CacheEntry(requestedVersion, element);
 					_cache.takeValueForKey(cacheEntry, cacheKey);
 				}
 			}
 			else { // no caching
-				if (log.isDebugEnabled()) {
-					log.debug("caching disabled");
-				}
+				log.debug("caching disabled");
 				element = _template();
 			}
 
@@ -292,7 +271,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		private String _method;
 
 		public Error(String method, Throwable t) {
-			ERXInlineTemplate.log.error(method + ": " + t, t);
+			log.error("{}: {}", method, t, t);
 			_t = t;
 			_method = method;
 		}

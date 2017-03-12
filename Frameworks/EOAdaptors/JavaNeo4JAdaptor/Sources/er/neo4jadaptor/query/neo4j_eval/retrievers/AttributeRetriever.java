@@ -21,9 +21,6 @@ import er.neo4jadaptor.utils.iteration.Iterators;
  * @param <T>
  */
 public class AttributeRetriever <T> implements Retriever<PropertyContainer, T> {
-	@SuppressWarnings("unused")
-	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AttributeRetriever.class);
-	
 	private final String propertyName;
 	private final EOAttribute attribute;
 	
@@ -38,7 +35,7 @@ public class AttributeRetriever <T> implements Retriever<PropertyContainer, T> {
 				}
 			}
 		}
-		return new AttributeRetriever<Object>(attribute);
+		return new AttributeRetriever<>(attribute);
 	}
 	
 	private AttributeRetriever(EOAttribute attribute) {

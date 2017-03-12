@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -31,7 +32,7 @@ import er.extensions.eof.ERXConstant;
  */
 public class ERXKeyValueCodingUtilities {
     
-    private static Hashtable _classes = new Hashtable();
+    private static Map<String, Class> _classes = new Hashtable<>();
     
     /**
      * Registers the class in the KVC resolving system, so you can use 
@@ -145,7 +146,7 @@ public class ERXKeyValueCodingUtilities {
         public Object valueForKeyPath(String arg0) {
             String name = ERXStringUtilities.firstPropertyKeyInKeyPath(arg0);
             String rest = ERXStringUtilities.keyPathWithoutFirstProperty(arg0);
-            Class clazz = (Class) _classes.get(name);
+            Class clazz = _classes.get(name);
             if(clazz == null) {
                 throw new IllegalArgumentException("Class not found: " + arg0);
             }

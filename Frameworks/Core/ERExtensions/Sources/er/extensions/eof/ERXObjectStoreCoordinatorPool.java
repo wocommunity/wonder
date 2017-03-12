@@ -89,7 +89,7 @@ public class ERXObjectStoreCoordinatorPool {
             log.warn("Registering the pool with only one coordinator doesn't make a lot of sense.");
             _maxObjectStoreCoordinators = 1;
         }
-        _oscForSession = new HashMap<String, EOObjectStore>();
+        _oscForSession = new HashMap<>();
         
         NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidCreate", ERXConstant.NotificationClassArray), WOSession.SessionDidCreateNotification, null);
         NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidTimeout", ERXConstant.NotificationClassArray), WOSession.SessionDidTimeOutNotification, null);
@@ -268,8 +268,8 @@ public class ERXObjectStoreCoordinatorPool {
 
     private void _initObjectStores() {
         log.info("initializing Pool...");
-        _objectStores = new ArrayList<EOObjectStoreCoordinator>(_maxObjectStoreCoordinators);
-        _sharedEditingContexts = new ArrayList<EOSharedEditingContext>(_maxObjectStoreCoordinators);
+        _objectStores = new ArrayList<>(_maxObjectStoreCoordinators);
+        _sharedEditingContexts = new ArrayList<>(_maxObjectStoreCoordinators);
 
         String className = ERXProperties.stringForKeyWithDefault("EOSharedEditingContext.defaultSharedEditingContextClassName", EOSharedEditingContext.class.getName()); //should really be "...defaultDefault..."
         try {

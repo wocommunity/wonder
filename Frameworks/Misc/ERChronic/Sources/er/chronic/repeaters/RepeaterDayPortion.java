@@ -133,7 +133,7 @@ public abstract class RepeaterDayPortion<T> extends Repeater<T> {
   }
 
   public static EnumRepeaterDayPortion scan(Token token) {
-    Map<Pattern, RepeaterDayPortion.DayPortion> scanner = new HashMap<Pattern, RepeaterDayPortion.DayPortion>();
+    Map<Pattern, RepeaterDayPortion.DayPortion> scanner = new HashMap<>();
     scanner.put(RepeaterDayPortion.AM_PATTERN, RepeaterDayPortion.DayPortion.AM);
     scanner.put(RepeaterDayPortion.PM_PATTERN, RepeaterDayPortion.DayPortion.PM);
     scanner.put(RepeaterDayPortion.MORNING_PATTERN, RepeaterDayPortion.DayPortion.MORNING);

@@ -2,18 +2,12 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import org.apache.log4j.Logger;
-
 import er.extensions.eof.ERXConstant;
 
 /**
  * Mail state.
  */
 public class ERCMailState extends ERXConstant.StringConstant {
-
-	/** logging support */
-    public static final Logger log = Logger.getLogger(ERCMailState.class);
-
     public ERCMailState(String key, String name) {
         super(key, name);
     }

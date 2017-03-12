@@ -94,6 +94,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   /**
    * Returns the processor that corresponds to the given storage type ("s3", "db", "file", etc).
    * 
+   * @param <T> the attachment type
    * @param storageType the type of processor to lookup
    * @return the storage type's processor
    */
@@ -109,6 +110,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   /**
    * Returns the processor that corresponds to the given configuration name ("s3", "db", "file", etc).
    * 
+   * @param <T> the attachment type
    * @param configurationName the configuration name to use to lookup the default storage type
    * @return the storage type's processor
    */
@@ -137,6 +139,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param attachment the attachment being processed
    * @param templatePath the template path definition
    * @param recommendedFileName the original file name recommended by the uploading user
+   * @return compiled path
    */
   protected static String _parsePathTemplate(ERAttachment attachment, String templatePath, String recommendedFileName) {
     String parsedPath = templatePath;

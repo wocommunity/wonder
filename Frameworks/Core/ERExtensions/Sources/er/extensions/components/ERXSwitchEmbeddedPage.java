@@ -40,7 +40,7 @@ public class ERXSwitchEmbeddedPage extends WODynamicElement {
 		_componentAttributes = associations.mutableClone();
 		_componentAttributes.removeObjectForKey("initialComponentName");
 
-		_componentCache = new NSMutableDictionary<String, WOElement>();
+		_componentCache = new NSMutableDictionary<>();
 
 		_template = template;
 	}

@@ -330,7 +330,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		int akCount = attributeKeys.count();
 		int tokCount = toOneRelationshipKeys.count();
 		int tmkCount = toManyRelationshipKeys.count();
-		NSMutableDictionary<String, Object> snapshot = new NSMutableDictionary<String, Object>(akCount + tokCount + tmkCount);
+		NSMutableDictionary<String, Object> snapshot = new NSMutableDictionary<>(akCount + tokCount + tmkCount);
 
 		while (akCount-- > 0) {
 			String key = attributeKeys.objectAtIndex(akCount);
@@ -428,7 +428,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		int toOneCount = toOneRelationshipKeys.count();
 		int toManyCount = toManyRelationshipKeys.count();
 
-		NSMutableArray<String> result = new NSMutableArray<String>(attCount + toOneCount + toManyCount);
+		NSMutableArray<String> result = new NSMutableArray<>(attCount + toOneCount + toManyCount);
 
 		if (attCount > 0) {
 			result.addObjectsFromArray(attributeKeys);
@@ -905,7 +905,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 				} catch (NSValidation.ValidationException exception) {
 					if (firstException != null) {
 						if (additionalExceptions == null) {
-							additionalExceptions = new NSMutableArray<ValidationException>(firstException);
+							additionalExceptions = new NSMutableArray<>(firstException);
 						}
 						additionalExceptions.addObject(exception);
 					} else {

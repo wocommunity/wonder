@@ -88,7 +88,7 @@ public class Chronic {
     // get base tokens for each word
     List<Token> tokens = Chronic.baseTokenize(normalizedText);
 
-    List<Class> optionScannerClasses = new LinkedList<Class>();
+    List<Class> optionScannerClasses = new LinkedList<>();
     optionScannerClasses.add(Repeater.class);
     for (Class optionScannerClass : optionScannerClasses) {
       try {
@@ -99,7 +99,7 @@ public class Chronic {
       }
     }
 
-    List<Class> scannerClasses = new LinkedList<Class>();
+    List<Class> scannerClasses = new LinkedList<>();
     scannerClasses.add(Grabber.class);
     scannerClasses.add(Pointer.class);
     scannerClasses.add(Scalar.class);
@@ -115,7 +115,7 @@ public class Chronic {
       }
     }
 
-    List<Token> taggedTokens = new LinkedList<Token>();
+    List<Token> taggedTokens = new LinkedList<>();
     for (Token token : tokens) {
       if (token.isTagged()) {
         taggedTokens.add(token);
@@ -199,7 +199,7 @@ public class Chronic {
    */
   protected static List<Token> baseTokenize(String text) {
     String[] words = text.split(" ");
-    List<Token> tokens = new LinkedList<Token>();
+    List<Token> tokens = new LinkedList<>();
     for (String word : words) {
       tokens.add(new Token(word));
     }

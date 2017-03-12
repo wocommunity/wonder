@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxUtils;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -59,7 +60,7 @@ public class YUIUtils {
   }
 
   public static String id(String idBindingName, NSDictionary associations, WOContext context) {
-    String id = AjaxUtils.stringValueForBinding(idBindingName, associations, context.component());
+    String id = ERXComponentUtilities.stringValueForBinding(idBindingName, associations, context.component());
     if (id == null) {
       id = ERXStringUtilities.safeIdentifierName(context.elementID());
     }
@@ -67,7 +68,7 @@ public class YUIUtils {
   }
 
   public static String varName(String name, NSDictionary associations, WOContext context) {
-    String namespace = AjaxUtils.stringValueForBinding("namespace", associations, context.component());
+    String namespace = ERXComponentUtilities.stringValueForBinding("namespace", associations, context.component());
     return YUIUtils.varName(name, namespace);
   }
 
@@ -80,7 +81,7 @@ public class YUIUtils {
   }
 
   public static void appendAttributeValue(WOResponse response, WOContext context, NSDictionary associations, String name) {
-    String value = AjaxUtils.stringValueForBinding(name, associations, context.component());
+    String value = ERXComponentUtilities.stringValueForBinding(name, associations, context.component());
     YUIUtils.appendAttributeValue(response, context, name, value);
   }
 

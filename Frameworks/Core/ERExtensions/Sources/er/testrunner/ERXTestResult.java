@@ -10,8 +10,6 @@ import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestResult;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -20,10 +18,6 @@ import com.webobjects.foundation.NSMutableArray;
  */
 
 public class ERXTestResult extends TestResult {
-
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXTestResult.class);
-
     protected NSMutableArray _errors;
     protected NSMutableArray _failures;
 

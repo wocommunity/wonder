@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -161,8 +162,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	private WOComponent previousComponent;
 	private String ajaxComponentActionUrl;
 	
-	public static final Logger logger = Logger.getLogger(AjaxModalDialog.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(AjaxModalDialog.class);
 
 	public AjaxModalDialog(WOContext context) {
 		super(context);
@@ -238,7 +238,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 */
 	public static void update(WOContext context, String title) {
 		AjaxModalDialog currentDialog = currentDialog(context);
-		StringBuffer js = new StringBuffer(300);
+		StringBuilder js = new StringBuilder(300);
 		js.append("Modalbox.show('");
 		js.append(currentDialog.openDialogURL(context));
 		js.append("', ");
@@ -254,6 +254,19 @@ public class AjaxModalDialog extends AjaxComponent {
 		// Register the id of this component on the page in the request so that when 
 		// it comes time to cache the context, it knows that this area is an Ajax updating area
 		AjaxUtils.setPageReplacementCacheKey(context, currentDialog._containerID(context));
+	}
+
+	/**
+	 * Call this method to have a JavaScript response returned that updates the contents of the modal dialog.
+	 *
+	 * @param context the current WOContext
+	 * @param newContent the new content for the updated dialog
+	 * @param title optional new title for the updated dialog
+	 */
+	public static void update(WOContext context, WOComponent newContent, String title) {
+		AjaxModalDialog currentDialog = currentDialog(context);
+		currentDialog._actionResults = newContent;
+		update(context, title);
 	}
 
 	public void setCurrentDialogInPageIfNecessary(WOActionResults results, WORequest request, WOContext context) {
@@ -344,7 +357,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * Overridden to include result returned by action binding if bound.
 	 *
 	 * @see #close(WOContext)
-	 * @see #update(WOContext)
+	 * @see #update(WOContext, String)
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
 	@Override
@@ -491,11 +504,11 @@ public class AjaxModalDialog extends AjaxComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (context.isInForm()) {
-			logger.warn("The AjaxModalDialog should not be used inside of a WOForm (" + ERXWOForm.formName(context, "- not specified -") +
+			log.warn("The AjaxModalDialog should not be used inside of a WOForm ({}" +
 					") if it contains any form inputs or buttons.  Remove this AMD from this form, add a form of its own. Replace it with " +
-					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.");
-					logger.warn("    page: " + context.page());
-					logger.warn("    component: " + context.component());
+					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.", ERXWOForm.formName(context, "- not specified -"));
+					log.warn("    page: {}", context.page());
+					log.warn("    component: {}", context.component());
 		}
 		
 		if( ! booleanValueForBinding("enabled", true)) {
@@ -668,7 +681,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return binding values converted into Ajax options for ModalBox
 	 */
 	protected NSMutableDictionary createModalBoxOptions() {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("title", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("width", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("centerVertically", AjaxOption.BOOLEAN));
@@ -771,7 +784,7 @@ public class AjaxModalDialog extends AjaxComponent {
 			hasWarnedOnNesting = true;
 			if (! ERXComponentUtilities.booleanValueForBinding(this, "ignoreNesting", false))
 			{
-				logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+				log.warn("AjaxModalDialog {} is nested inside of {}. Are you sure you want to do this?", id(), outerDialog.id());
 			}
 		}		
 	}

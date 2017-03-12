@@ -12,6 +12,7 @@ public class ERXEmberFormatDelegate extends ERXRestFormatDelegate {
 		super(idKey, typeKey, nilKey, writeNilKey, pluralNames, underscoreNames, arrayTypes);
 	}
 
+	@Override
 	public void nodeWillWrite(ERXRestRequestNode node) {
 		// uncapitalize type wrapper
 		if (node.isRootNode() && node.name() != null && !node.isArray()) {

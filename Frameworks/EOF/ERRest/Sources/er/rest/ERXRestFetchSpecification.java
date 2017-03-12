@@ -195,6 +195,8 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective sort orderings.
 	 * 
+	 * @param editingContext
+	 *            the editing context
 	 * @param options
 	 *            the current options
 	 * @return the effective sort orderings
@@ -205,7 +207,7 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 			return _defaultSortOrderings;
 		}
 		EOEntity entity = EOUtilities.entityNamed(editingContext, _entityName);
-		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<EOSortOrdering>();
+		NSMutableArray<EOSortOrdering> sortOrderings = new NSMutableArray<>();
 		for (String sortKeyStr : sortKeysStr.split(",")) {
 			String[] sortAttributes = sortKeyStr.split("\\|");
 			String sortKey = sortAttributes[0];
@@ -237,6 +239,8 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective qualifier.
 	 * 
+	 * @param editingContext
+	 *            the editing context
 	 * @param options
 	 *            the current options
 	 * @return the effective qualifier
@@ -363,12 +367,12 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 		NSRange range = range(options);
 		if (range == null) {
 			objects = editingContext.objectsWithFetchSpecification(fetchSpec);
-			results = new Results<T>(objects, 0, -1, objects.count());
+			results = new Results<>(objects, 0, -1, objects.count());
 		}
 		else {
-			ERXFetchSpecificationBatchIterator<T> batchIterator = new ERXFetchSpecificationBatchIterator<T>(fetchSpec, editingContext, range.length());
+			ERXFetchSpecificationBatchIterator<T> batchIterator = new ERXFetchSpecificationBatchIterator<>(fetchSpec, editingContext, range.length());
 			objects = batchIterator.batchWithRange(range);
-			results = new Results<T>(objects, range.location(), range.length(), batchIterator.count());
+			results = new Results<>(objects, range.location(), range.length(), batchIterator.count());
 		}
 		return results;
 	}

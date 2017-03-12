@@ -15,12 +15,10 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -54,9 +52,9 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXAdaptorChannelDelegate;
 import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabase;
 import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXDatabaseContextMulticastingDelegate;
@@ -73,10 +71,8 @@ import er.extensions.eof.qualifiers.ERXFullTextQualifierSupport;
 import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 import er.extensions.eof.qualifiers.ERXRegExQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
-import er.extensions.formatters.ERXSimpleHTMLFormatter;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
-import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
@@ -286,12 +282,32 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
         if (ERXRemoteSynchronizer.remoteSynchronizerEnabled() || ERXProperties.booleanForKey("er.extensions.ERXDatabaseContext.activate")) {
-        	String className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContext.className", ERXDatabaseContext.class.getName());
-        	Class c = ERXPatcher.classForName(className);
-        	if(c == null) {
-        		throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + className);
+        	String dbCtxClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContext.className", ERXDatabaseContext.class.getName());
+        	Class dbCtxClass = ERXPatcher.classForName(dbCtxClassName);
+        	if(dbCtxClass == null) {
+        		throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + dbCtxClassName);
         	}
-        	EODatabaseContext.setContextClassToRegister(c);
+        	EODatabaseContext.setContextClassToRegister(dbCtxClass);
+
+        	String dbClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabase.className", ERXDatabase.class.getName());
+        	Class dbClass = ERXPatcher.classForName(dbClassName);
+        	if(dbClass == null) {
+        		throw new IllegalStateException("er.extensions.ERXDatabase.className not found: " + dbClassName);
+        	}
+        	if( ERXDatabase.class.isAssignableFrom( dbClass ) ) {
+        		ERXDatabaseContext.setDatabaseContextClass( dbClass );
+        	} else {
+        		throw new IllegalStateException("er.extensions.ERXDatabase.className is not a subclass of ERXDatabase: " + dbClassName);
+        	}
+        	
+        	int mapCapacity = ERXProperties.intForKey( "er.extensions.ERXDatabase.snapshotCacheMapInitialCapacity" );
+        	if( mapCapacity > 0 ) {
+        		ERXDatabase.setSnapshotCacheMapInitialCapacity( mapCapacity );
+        	}
+        	float mapLoadFactor = ERXProperties.floatForKey( "er.extensions.ERXDatabase.snapshotCacheMapInitialLoadFactor" );
+        	if( mapLoadFactor > 0.0f ) {
+        		ERXDatabase.setSnapshotCacheMapInitialLoadFactor( mapLoadFactor );
+        	}
         }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
@@ -306,7 +322,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     
     public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {
         if(_qualifierKeys == null) {
-            _qualifierKeys = new HashMap<String, Support>();
+            _qualifierKeys = new HashMap<>();
             EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
             EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
         }
@@ -721,10 +737,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
     }
 
-    /** Holds a reference to the random object */
-    // FIXME: Not a thread safe object, access should be synchronized.
-    private static Random _random=new Random();
-
     /**
      * This method can be used with Direct Action URLs to make sure
      * that the browser will reload the page. This is done by
@@ -735,11 +747,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static String randomizeDirectActionURL(String daURL) {
-	synchronized(_random) {
-	    int r=_random.nextInt();
+	    int r=ThreadLocalRandom.current().nextInt();
 	    char c=daURL.indexOf('?')==-1 ? '?' : '&';
 	    return  daURL+c+"r="+r;
-	}
     }
     /**
      * This method can be used with Direct Action URLs to make sure
@@ -750,8 +760,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static void addRandomizeDirectActionURL(StringBuffer daURL) {
-	synchronized(_random) {
-	    int r=_random.nextInt();
+	    int r=ThreadLocalRandom.current().nextInt();
 	    char c='?';
 	    for (int i=0; i<daURL.length(); i++) {
 		if (daURL.charAt(i)=='?') {
@@ -761,7 +770,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    daURL.append(c);
 	    daURL.append("r=");
 	    daURL.append(r);
-	}
     }
     
     /**
@@ -863,7 +871,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Frees all of the resources associated with a given
      * process and then destroys the process.
      * @param p process to destroy
+     * @deprecated use {@link ERXRuntimeUtilities#freeProcessResources(Process)} instead
      */
+    @Deprecated
     public static void freeProcessResources(Process p) {
         if (p!=null) {
             try {

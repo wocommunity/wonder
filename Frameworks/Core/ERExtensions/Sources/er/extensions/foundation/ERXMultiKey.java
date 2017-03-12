@@ -182,7 +182,7 @@ public class ERXMultiKey {
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder('(');
+        StringBuilder result = new StringBuilder("(");
         for (short i=0; i<_keys.length; i++) {
             Object o=_keys[i];
             result.append(o instanceof EOEntity ? ((EOEntity)o).name() : o != null ? o.toString() : "<NULL>");

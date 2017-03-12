@@ -2,7 +2,8 @@ package er.extensions.concurrency;
 
 import java.util.concurrent.ExecutorService;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -36,7 +37,7 @@ import er.extensions.foundation.ERXStopWatch;
  * @see ERXTaskThreadFactory
  */
 public class ERXTaskThread extends Thread {
-	private static final Logger log = Logger.getLogger(ERXTaskThread.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXTaskThread.class);
 	
 	public ERXTaskThread(Runnable target) {
 		super(target);
@@ -105,10 +106,10 @@ public class ERXTaskThread extends Thread {
 	@SuppressWarnings("unchecked")
 	public static <T> NSArray<T> taskForTaskClass(Class<T> clazz) {
 		NSArray<ERXTaskInfo> taskInfos = taskInfos();
-		NSMutableArray<T> tasks = new NSMutableArray<T>();
+		NSMutableArray<T> tasks = new NSMutableArray<>();
 		for (ERXTaskInfo taskInfo : taskInfos) {
 			Object r = taskInfo.task();
-			log.debug("ERXTaskThread.taskForTaskClass(): r = " + r.toString());
+			log.debug("ERXTaskThread.taskForTaskClass(): r = {}", r);
 			if (clazz.isInstance(r)) {
 				tasks.add((T)r);
 			}

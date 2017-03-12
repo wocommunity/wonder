@@ -2,7 +2,8 @@ package com.secretpal.model;
 
 import java.security.SecureRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -12,7 +13,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 
 public class SPEvent extends _SPEvent {
-	private static Logger log = Logger.getLogger(SPEvent.class);
+	private static Logger log = LoggerFactory.getLogger(SPEvent.class);
 
 	public boolean hasAssignedSecretPals() {
 		return secretPals().count() > 0;
@@ -29,9 +30,9 @@ public class SPEvent extends _SPEvent {
 
     NSArray<SPPerson> allPeople = SPMembership.PERSON.arrayValueInObject(group().memberships());
 		NSArray<SPPerson> eligibleGivers = _eligibleGivers(allPeople);
-		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<SPPerson>();
+		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<>();
 		
-		log.info(eligibleGivers.count() + " eligible givers out of " + allPeople.count() + " people");
+		log.info("{} eligible givers out of {} people", eligibleGivers.count(), allPeople.count());
 
     SecureRandom random = new SecureRandom();
 		long a = System.currentTimeMillis();
@@ -39,7 +40,7 @@ public class SPEvent extends _SPEvent {
 		int maxNumberOfAttempts = 100;
 		boolean doneWithSecretPals = false;
 		while (!doneWithSecretPals && numberOfAttempts < maxNumberOfAttempts) {
-			log.info("attempt #" + numberOfAttempts + " of " + maxNumberOfAttempts);
+			log.info("attempt #{} of {}", numberOfAttempts, maxNumberOfAttempts);
 			EOEditingContext nestedEditingContext = ERXEC.newEditingContext(editingContext());
 			nestedEditingContext.lock();
 			SPEvent localEvent = localInstanceIn(nestedEditingContext);
@@ -51,7 +52,7 @@ public class SPEvent extends _SPEvent {
 	        }
           int selectedReceiverNum = Math.abs(random.nextInt()) % eligibleReceivers.count();
           SPPerson selectedReceiver = eligibleReceivers.objectAtIndex(selectedReceiverNum);
-          log.info("   " + selectedGiver.name() + "=>" + selectedReceiver.name() + ", " +selectedGiver + "," + selectedReceiver);
+          log.info("   {}=>{}, {}, {}", selectedGiver.name(), selectedReceiver.name(), selectedGiver, selectedReceiver);
           SPSecretPal.createSPSecretPal(nestedEditingContext, localEvent, selectedGiver.localInstanceIn(nestedEditingContext), selectedReceiver.localInstanceIn(nestedEditingContext));
           consumedReceivers.addObject(selectedReceiver);
 			  }
@@ -66,7 +67,7 @@ public class SPEvent extends _SPEvent {
 				nestedEditingContext.dispose();
 			}
 		}
-		log.info("done in " + (System.currentTimeMillis() - a) + "ms");
+		log.info("done in {}ms", System.currentTimeMillis() - a);
 		if (!doneWithSecretPals) {
 			throw new IllegalStateException("Failed to assign secret pals after " + numberOfAttempts + " attempts.");
 		}
@@ -77,7 +78,7 @@ public class SPEvent extends _SPEvent {
 	}
 
 	public NSArray<SPPerson> _eligibleGivers(NSArray<SPPerson> allPeople) {
-    NSMutableArray<SPPerson> eligibleGivers = new NSMutableArray<SPPerson>();
+    NSMutableArray<SPPerson> eligibleGivers = new NSMutableArray<>();
     for (SPPerson possibleGiver : allPeople) {
       NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(possibleGiver));
       // If someone has NO possible receivers right at the start, just leave them out ... This is to support
@@ -90,7 +91,7 @@ public class SPEvent extends _SPEvent {
 	}
 	
 	public NSArray<SPPerson> _eligibleReceiversForPerson(SPPerson giver, NSArray<SPPerson> allPeople, NSArray<SPPerson> consumedReceivers) {
-	  NSMutableArray<SPPerson> eligibleReceivers = new NSMutableArray<SPPerson>();
+	  NSMutableArray<SPPerson> eligibleReceivers = new NSMutableArray<>();
     NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(giver));
 	  for (SPPerson possibleReceiver : allPeople) {
 	    if (!giver.equals(possibleReceiver) && !consumedReceivers.containsObject(possibleReceiver) && !noNoPeople.containsObject(possibleReceiver)) {
@@ -109,7 +110,7 @@ public class SPEvent extends _SPEvent {
   }
   
   public NSArray<SPPerson> noNoPersonPossibilitiesForPerson(SPPerson person) {
-    NSMutableArray<SPPerson> noNoPalPossibilities = new NSMutableArray<SPPerson>();
+    NSMutableArray<SPPerson> noNoPalPossibilities = new NSMutableArray<>();
     NSArray<SPPerson> noNoPals = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(person));
     for (SPMembership membership : group().memberships()) {
       if (!membership.person().equals(person) && !noNoPals.containsObject(membership.person())) {

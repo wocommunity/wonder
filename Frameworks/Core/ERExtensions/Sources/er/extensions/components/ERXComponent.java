@@ -449,10 +449,9 @@ public abstract class ERXComponent extends WOComponent {
    * 指定されているバインディングを NSArray 値に変換して戻します。
    * </div>
 	 * 
+	 * @param <T> type of array elements
 	 * @param binding <div class="en">name of the component binding.</div>
 	 *                <div class="ja">NSArray 値として戻すバインディング</div>
-	 * @param defaultValue <div class="en">value to be used if <code>valueForBinding</code> returns null.</div>
-	 *                     <div class="ja">バインディングが見つからない場合のデフォルト NSArray 値</div>
 	 * 
 	 * @return <div class="en">result of evaluating binding as an NSArray.</div>
 	 *         <div class="ja">バインディング結果の NSArray 値</div>
@@ -470,6 +469,7 @@ public abstract class ERXComponent extends WOComponent {
    * 指定されているバインディングを NSArray 値に変換して戻します。
    * </div>
 	 * 
+	 * @param <T> type of array elements
 	 * @param binding <div class="en">name of the component binding.</div>
 	 *                <div class="ja">NSArray 値として戻すバインディング</div>
 	 * @param defaultValue <div class="en">value to be used if <code>valueForBinding</code> returns null.</div>

@@ -2,7 +2,8 @@ package com.webobjects.appserver._private;
 
 import java.net.InetAddress;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -42,7 +43,7 @@ public class WOHostUtilities
 	private static final String LOCALHOST_IPS_PROPERTY_KEY = "er.extensions.WOHostUtilities.localhostips";
 	
 	static volatile NSArray _localHosts = null;
-	private static final Logger log = Logger.getLogger( WOHostUtilities.class );
+	private static final Logger log = LoggerFactory.getLogger(WOHostUtilities.class);
 	
 	@SuppressWarnings("unchecked")
 	static NSArray initLocalHosts()
@@ -78,9 +79,9 @@ public class WOHostUtilities
 				try {
 					InetAddress address = InetAddress.getByName( ip );
 					_addInetAddress( address, localNSMutableArray );
-					log.debug( "Added the address " + address + " as a local host." );
+					log.debug("Added the address {} as a local host.", address);
 				} catch (Exception e) {
-					log.error( "Could not add localhost IP " + ip );
+					log.error("Could not add localhost IP {}", ip);
 				}
 			}
 		}

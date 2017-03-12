@@ -1,6 +1,6 @@
 package er.extensions.eof;
 
-import org.apache.log4j.Logger;
+import java.lang.reflect.InvocationTargetException;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -14,18 +14,21 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
 
 public class ERXDatabaseContext extends EODatabaseContext {
-
-	/** general logging */
-	public static final Logger log = Logger.getLogger(ERXDatabaseContext.class);
-
 	private static ThreadLocal _fetching = new ThreadLocal();
-
-	public ERXDatabaseContext(EODatabase database) {
-		super(new ERXDatabase(database));
+	protected static Class<? extends ERXDatabase> _dbClass = null;
+	
+	public ERXDatabaseContext( EODatabase database ) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		super( _dbClass != null ? _dbClass.getConstructor( EODatabase.class ).newInstance( database ) : new ERXDatabase( database ) );
 	}
 
+	public static void setDatabaseContextClass( Class<? extends ERXDatabase> cls ) {
+		NSLog.out.appendln( "Setting ERXDatabase subclass to " + cls.getName() );
+		_dbClass = cls;
+	}
+	
 	public static boolean isFetching() {
 		Boolean fetching = (Boolean) _fetching.get();
 		// System.out.println("ERXDatabaseContext.isFetching: " +

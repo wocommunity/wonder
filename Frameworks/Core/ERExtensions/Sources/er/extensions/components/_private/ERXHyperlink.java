@@ -1,7 +1,5 @@
 package er.extensions.components._private;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -34,9 +32,6 @@ import er.extensions.foundation.ERXProperties;
  * @author ak WONoContentElement fix, senderID fix, double-quote fix
  */
 public class ERXHyperlink extends WOHyperlink {
-    
-    public static Logger log = Logger.getLogger(ERXHyperlink.class);
-    
     /**
      * Defines if the hyperlink adds a default <code>rel="nofollow"</code> if an action is bound.
      */

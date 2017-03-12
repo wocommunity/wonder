@@ -1,7 +1,5 @@
 package er.extensions.concurrency;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -31,9 +29,6 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
 	private static final long serialVersionUID = 1L;
 
     static String WOMetaRefreshSenderId = "WOMetaRefresh";
-
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXLongResponse.class);
 
     protected Number _refreshInterval;
     protected boolean _performingAction;

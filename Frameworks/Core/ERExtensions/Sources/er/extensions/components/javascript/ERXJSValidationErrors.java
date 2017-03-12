@@ -1,6 +1,7 @@
 package er.extensions.components.javascript;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -27,8 +28,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXJSValidationErrors.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXJSValidationErrors.class);
 
     public String _errors;
     public String _callback;
@@ -58,14 +58,14 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         
         Object newValue = value;
 
-        log.debug("validateKeyAndValueInEntityAction: key="+key+", value="+value+", entity="+entity + ", contextID "+contextID+ ", callback=" + _callback);
+        log.debug("validateKeyAndValueInEntityAction: key={}, value={}, entity={}, contextID {}, callback={}", key, value, entity, contextID, _callback);
 
         EOEnterpriseObject eo = null;
         WOComponent page = null;
         try {
             if(contextID != null)
                 page = session().restorePageForContextID(contextID);
-            log.debug("Page: " + (page != null ? "Yes" : "No"));
+            log.debug("Page: {}", (page != null ? "Yes" : "No"));
             if(page != null && true) {
                 eo = (EOEnterpriseObject)page.valueForKey("object");
                 eo.editingContext().lock();
@@ -85,7 +85,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
             }
         } catch (ERXValidationException ex) {
             try {
-                log.info(ex);
+                log.info("Something did not validate.", ex);
                 NSKeyValueCoding d2wContext = (NSKeyValueCoding)page.valueForKey("d2wContext");
                 d2wContext.takeValueForKey(key, "propertyKey");
                 ex.setContext(d2wContext);
