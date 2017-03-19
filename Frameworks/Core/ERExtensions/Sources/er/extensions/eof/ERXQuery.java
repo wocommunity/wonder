@@ -65,8 +65,9 @@ import org.slf4j.LoggerFactory;
  *  <p style="max-width:700px">
  *  The select() method is very flexible and powerful.  It accepts a variable number
  *  of objects of different types that specify the attributes to fetch.  These objects
- *  can be EOAttributes, ERXKeys, Strings.  You may also specify NSArray or List objects
- *  containing any combination of these (EOAttributes, ERXKeys, Strings).
+ *  can be EOAttributes, ERXKeys, Strings.  You may also specify any Iterable such as
+ *  NSArray, List, Collection, etc. containing any combination of these (EOAttributes,
+ *  ERXKeys, Strings).
  *  </p>
  *  <p style="max-width:700px">
  *  The ERXKeys and String objects correspond to keys and key paths to the attributes
@@ -260,9 +261,9 @@ import org.slf4j.LoggerFactory;
  *  
  *  <h2>Defaults for Behavior Properties</h2>
  *  <ol>
- *  <li>er.extensions.ERXQuery.useBindVariables=false</li>
- *  <li>er.extensions.ERXQuery.useEntityRestrictingQualifiers=true</li>
- *  <li>er.extensions.ERXQuery.removesForeignKeysFromRowValues=true</li>
+ *  <li>er.extensions.eof.ERXQuery.useBindVariables=false</li>
+ *  <li>er.extensions.eof.ERXQuery.useEntityRestrictingQualifiers=true</li>
+ *  <li>er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues=true</li>
  *  </ol>
  *  
  *  
@@ -326,7 +327,7 @@ public class ERXQuery {
 		
 		// Determine features to enable / disable
 		//
-		useBindVariables = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXQuery.useBindVariables", false);
+		useBindVariables = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.useBindVariables", false);
 	}
 	
 	//
@@ -496,7 +497,7 @@ public class ERXQuery {
 	
 	/**
 	 * Enables use of bind variables.  If this is not called then
-	 * ERXQuery looks at the er.extensions.ERXQuery.useBindVariables property
+	 * ERXQuery looks at the er.extensions.eof.ERXQuery.useBindVariables property
 	 * which defaults to false currently, thereby placing values in-line
 	 * with the SQL generated.
 	 */
@@ -693,7 +694,7 @@ public class ERXQuery {
 				// Fetch results 
 				try {
 					boolean hasInitValues = initValues.count() > 0;
-					boolean removesForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXQuery.removesForeignKeysFromRowValues", true);
+					boolean removesForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues", true);
 					NSMutableDictionary<String, Object> row = channel.fetchRow();
 					while (row != null) {
 						// Replace any foreign keys with their corresponding relationship keys
@@ -832,7 +833,7 @@ public class ERXQuery {
 		computeSelectAndGroupingAttributes();
 		
 		// Incorporate any entity restricting qualifiers (if any) into the mainSelectQualifier
-		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXQuery.useEntityRestrictingQualifiers", true)) {
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.useEntityRestrictingQualifiers", true)) {
 			// Get expression similar to what will be used to build the SQL
 			EOQualifier restrictingQualifierForReferencedEntities = restrictingQualifierForReferencedEntities();
 			if (restrictingQualifierForReferencedEntities != null) {
