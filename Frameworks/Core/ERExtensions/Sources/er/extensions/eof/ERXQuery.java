@@ -254,7 +254,7 @@ public class ERXQuery {
 	/** 
 	 * <a href="http://wiki.wocommunity.org/display/documentation/Wonder+Logging">new org.slf4j.Logger</a> 
 	 */
-	static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
+	private static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
 	
 	protected EOEditingContext editingContext;
 	protected EOEntity mainEntity;
@@ -744,10 +744,8 @@ public class ERXQuery {
 				queryEvaluationTime = (end - start) / 1000.0;
 				
 				// Log elapsed time
-				if (log.isDebugEnabled()) {
-					log.debug("Expression evaluation time = " 
-							+ queryEvaluationTime + " seconds.\n\n");
-				}
+				log.debug("Expression evaluation time = {} seconds.\n\n", queryEvaluationTime);
+				
 				// Use the names of the fetch attributes for the keys in the
 				// row dictionaries when fetching
 				setupAdaptorChannelEOAttributes(channel, fetchAttributes);
@@ -1787,9 +1785,7 @@ public class ERXQuery {
 			}
 		}
 		
-		if (log.isDebugEnabled()) {
-			log.debug(this.getClass().getSimpleName() + " formatted value " + value + " for inline use as " + formattedValue);
-		}
+		log.debug("{} formatted value {} for inline use as {}", this.getClass().getSimpleName(), value, formattedValue);
 		
 		return formattedValue;
 	}
