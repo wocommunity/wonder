@@ -1,30 +1,47 @@
 package er.extensions.eof;
 
-import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.JDBCAdaptor;
-import com.webobjects.jdbcadaptor.JDBCPlugIn;
-import com.webobjects.eocontrol.*;
-import com.ibm.icu.text.SimpleDateFormat;
-import com.webobjects.eoaccess.*;
-
-import er.extensions.eof.ERXEC;
-import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXKey;
-import er.extensions.eof.ERXModelGroup;
-import er.extensions.eof.ERXQ;
-import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
-import er.extensions.foundation.ERXProperties;
-import er.extensions.jdbc.ERXSQLHelper;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ibm.icu.text.SimpleDateFormat;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOProperty;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCPlugIn;
+
+import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * <h1>ERXQuery</h1>
