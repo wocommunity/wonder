@@ -287,20 +287,19 @@ public class ERXQuery {
 	
 	protected ERXQuery() {
 		// Set defaults
-		fetchKeys = new NSMutableArray<String>();
-		groupingKeys = new NSMutableArray<String>();
-		orderings = new NSMutableArray<EOSortOrdering>();
+		fetchKeys = new NSMutableArray<>();
+		groupingKeys = new NSMutableArray<>();
+		orderings = new NSMutableArray<>();
 		refreshRefetchedObjects = false;
 		usesDistinct = false;
 		isCountingStatement = false;
 		queryHint = null;
-		relationshipAliases = new NSMutableDictionary<String,String>();
-		
+		relationshipAliases = new NSMutableDictionary<>();
 		
 		// This will hold any ad hoc attributes to be selected
-		adHocAttributes = new NSMutableArray<EOAttribute>(2);
+		adHocAttributes = new NSMutableArray<>(2);
 		// This will hold any ad hoc attributes to use in the group by clause
-		adHocGroupings = new NSMutableArray<EOAttribute>(2);
+		adHocGroupings = new NSMutableArray<>(2);
 		
 		// Determine features to enable / disable
 		useBindVariables = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.useBindVariables", false);
@@ -730,7 +729,7 @@ public class ERXQuery {
 		)
 	{
 		// Array to hold fetched records
-		final NSMutableArray<T> records = new NSMutableArray<T>();
+		final NSMutableArray<T> records = new NSMutableArray<>();
 		
 		// Create channel action anonymous class for evaluating SQL and fetching records
 		ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
@@ -992,7 +991,7 @@ public class ERXQuery {
 			
 			// First determine which keys in the havingQualifier reference ad hoc attributes
 			NSSet<String> havingQualifierKeys = havingQualifier.allQualifierKeys();
-			NSMutableArray<EOAttribute> toBeAdded = new NSMutableArray<EOAttribute>();
+			NSMutableArray<EOAttribute> toBeAdded = new NSMutableArray<>();
 			for (String aKey : havingQualifierKeys) {
 				EOAttribute a = attributesByName.objectForKey(aKey);
 				if (a instanceof ERXQueryEOAttribute) {
@@ -1213,11 +1212,11 @@ public class ERXQuery {
 	protected void computeSelectAndGroupingAttributes() {
 		// Initialize arrays for storing the select attributes, 
 		// grouping attributes and sort orderings
-		selectAttributes = new NSMutableArray<EOAttribute>(20);
-		groupingAttributes = new NSMutableArray<EOAttribute>(20);
+		selectAttributes = new NSMutableArray<>(20);
+		groupingAttributes = new NSMutableArray<>(20);
 		
 		// This keeps track of EOAttribute objects used
-		attributesByName = new NSMutableDictionary<String,EOAttribute>();
+		attributesByName = new NSMutableDictionary<>();
 		
 		// This is a set of RelationshipKeyInfo objects that keeps track
 		// of fetch keys encountered that correspond to relationships,
@@ -1225,7 +1224,7 @@ public class ERXQuery {
 		// the relationship key path, i.e. "customer.shippingAddress" as the
 		// foreign key path, i.e. "customer.shippingAddressID" and the
 		// entity of the destination enterprise object.
-		relationshipKeysSet = new NSMutableSet<RelationshipKeyInfo>();
+		relationshipKeysSet = new NSMutableSet<>();
 		
 		// Add attributes to select
 		for (EOAttribute a : adHocAttributes) {
@@ -1288,7 +1287,7 @@ public class ERXQuery {
 		// at least one select attribute in order to build an EOSQLExpression otherwise the 
 		// EOSQLExpressionFactory method selectStatementForAttributes() throws an exception.
 		if (selectAttributes.count() == 0 && isCountingStatement) {
-			selectAttributes = new NSMutableArray<EOAttribute>(mainEntity.primaryKeyAttributes());
+			selectAttributes = new NSMutableArray<>(mainEntity.primaryKeyAttributes());
 		}
 	}
 	
@@ -1363,7 +1362,7 @@ public class ERXQuery {
 			throw unknownPropertyException(keyPath);
 		}
 		// Parse the keys in the key path
-		NSMutableArray<String> keys = new NSMutableArray<String>(keyPath.split("\\."));
+		NSMutableArray<String> keys = new NSMutableArray<>(keyPath.split("\\."));
 		
 		// If destination property is an EOAttribute
 		if (eoproperty instanceof EOAttribute) {
@@ -1527,7 +1526,7 @@ public class ERXQuery {
 		EOSQLExpression e = sqlExpressionFactory(mainEntity, editingContext).selectStatementForAttributes(selectAttributes, false, spec, mainEntity);
 		
 		// Array to hold the restricting qualifiers for each referenced entity 
-		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<>();
 		
 		// See what relationship paths are being traversed and check for
 		// destination entities having a restricting qualifier.  The
@@ -1542,7 +1541,7 @@ public class ERXQuery {
 			destinationEntity = ERXQuery.destinationEntity(mainEntity, relationshipPath);
 			EOQualifier restrictingQualifier = destinationEntity.restrictingQualifier();
 			if (restrictingQualifier != null) {
-				ERXKey<Object> relationshipPathKey = new ERXKey<Object> (relationshipPath);
+				ERXKey<Object> relationshipPathKey = new ERXKey<>(relationshipPath);
 				qualifiers.addObject(relationshipPathKey.prefix(restrictingQualifier));
 			}
 		}

@@ -631,7 +631,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	String definition = derivedAttribute.definition();
         	Pattern p = Pattern.compile("('[^']*')|[,]*+\\b([a-z]+[a-zA-Z0-9_\\.]*)");
         	Matcher m = p.matcher(definition);
-        	NSMutableArray<String> propertyKeys = new NSMutableArray<String>();
+        	NSMutableArray<String> propertyKeys = new NSMutableArray<>();
         	while (m.find()) {
         		// Please note that the regular expression has two groups separated
         		// with an or, i.e. |. The first group in the regular expression
