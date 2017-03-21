@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +41,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -46,9 +49,12 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.appserver.ERXApplication;
@@ -334,8 +340,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * that was registered and uses their support instead.
      * You'll use this mainly to bind queryOperators in display groups.
      * @author ak
+     * 
+     * Added SQL generation fix for EOKeyValueQualifiers in an edge case
+     * where the key is a key path (with two or more keys) and the last key
+     * is a derived attribute.  For example, "customer.fullName" where the
+     * last key fullName is defined as: 'firstName || ' ' || lastName.
+     * 
+     * @author Ricardo Parada
      */
     public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
+        
+        public static final String HANDLES_KEY_PATH_WITH_DERIVED_ATTRIBUTE_PROPERTY_NAME = "er.extensions.KeyValueQualifierSQLGenerationSupport.handlesKeyPathWithDerivedAttribute";
         
         private EOQualifierSQLGeneration.Support _old;
         
@@ -358,13 +373,287 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         
         @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+        	// Check to see if checking for edge case is enabled
+    		boolean handlesKeyPathWithDerivedAttribute = ERXProperties.booleanForKeyWithDefault(HANDLES_KEY_PATH_WITH_DERIVED_ATTRIBUTE_PROPERTY_NAME, true);
         	try {
+        		if (handlesKeyPathWithDerivedAttribute && isKeyPathWithDerivedAttributeCase(e.entity(), eoqualifier)) {
+        				return sqlStringForSQLExpressionWithKeyPathWithDerivedAttribute(eoqualifier, e);
+        		}
+        		
+        		// Otherwise handle normally
         		return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
         	}
         	catch (JDBCAdaptorException ex) {
         		ERXExtensions._log.error("Failed to generate sql string for qualifier " + eoqualifier + " on entity " + e.entity() + ".");
+        		if (handlesKeyPathWithDerivedAttribute == false && isKeyPathWithDerivedAttributeCase(e.entity(), eoqualifier)) {
+        			ERXExtensions._log.error("Consider setting " + HANDLES_KEY_PATH_WITH_DERIVED_ATTRIBUTE_PROPERTY_NAME + "=true");
+        		}
         		throw ex;
         	}
+        }
+        
+        /**
+         * This method handles an edge case where the key of the qualifier is a key path and
+         * the last key in the key path references a derived attribute.  For example, if the
+         * key is "order.customerAge" and customerAge were defined as:
+         * 
+         *   (TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0))
+         * 
+         * and the key value qualifier was something like "order.customerAge > 50" then this
+         * method would generate SQL like this:
+         * 
+         *   (TRUNC(MONTHS_BETWEEN(T1.ORDER_DATE,T2.BIRTH_DATE)/12,0)) > 50
+         * 
+         * Without this fix EOF ends up throwing an exception.
+         * 
+         * @param eoqualifier An EOKeyValueQualifier with a key that is a key path and the last
+         * component in the key path is a derived attribute.
+         * @param e The EOSQLExpression participating in the SQL generation.
+         * @return The SQL for the eoqualifier.
+         */
+        public String sqlStringForSQLExpressionWithKeyPathWithDerivedAttribute(EOQualifier eoqualifier, EOSQLExpression e) {
+    		// Using the example where the key-value qualifier's key is the key path 
+        	// 'order.customerAge' and its last key 'customerAge' is an attribute defined 
+        	// as '(TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0))'
+        	// then we get the destination attribute, i.e. 'customerAge'.  Then we parse
+        	// the properties referenced by its definition, i.e. 'orderDate'
+        	// and 'customer.birthDate'.
+        	
+        	EOKeyValueQualifier keyValueQualifier = (EOKeyValueQualifier) eoqualifier;
+        	String keyPath = keyValueQualifier.key();
+    		EOAttribute derivedAttribute = destinationAttribute(e.entity(), keyPath);
+    		NSArray<String> propertyKeys = parseDefinitionPropertyKeys(derivedAttribute);
+    		
+    		// Get the keys preceding the derived attribute, for example, if key
+    		// is 'order.customerAge' then the key preceding 'customerAge' would be
+    		// 'order' which will become the prefix.
+    		
+    		NSArray<String> allKeys = NSArray.componentsSeparatedByString(keyPath, ".");
+    		String lastKey = allKeys.lastObject();
+    		NSMutableArray<String> prefixKeys = allKeys.mutableClone();
+    		prefixKeys.removeObject(lastKey);
+    		String prefix = prefixKeys.componentsJoinedByString(".") + ".";
+    		
+    		// Now we prefix every key path referenced by the definition and then
+    		// generate SQL for them.  For example the orderDate property key will
+    		// become order.orderDate and customer.birthDate will become
+    		// order.customer.birthDate.  We then convert it to SQL, i.e. T2.ORDER_DATE
+    		// and replace it in the definition.  The end result is to have SQL that
+    		// looks like this:
+    		//
+    		// (TRUNC(MONTHS_BETWEEN(T1.ORDER_DATE,T2.BIRTH_DATE)/12,0)) > 60.0
+    		//
+    		String sqlDefinition = derivedAttribute.definition();
+    		for (String unPrefixedKey : propertyKeys) {
+    			String prefixedKey = prefix + unPrefixedKey;
+    			String sqlString = e.sqlStringForAttributeNamed(prefixedKey);
+    			sqlDefinition = sqlDefinition.replaceAll(unPrefixedKey, sqlString);
+    		}
+    		
+    		//
+    		// Up to this point we have generated the SQL for the key by replacing
+    		// it for the SQL for its definition and referenced properties.  Now
+    		// we need to add the SQL for the selector and value in the qualifier.
+    		
+    		//
+    		// Make sure that we have a value before we proceed.  If the value
+    		// turns out to be an EOQualifierValue which is a place holder for
+    		// a value then we don't have a value and we should throw an exception.
+    		//
+    		
+    		NSSelector qualifierSelector = keyValueQualifier.selector();
+    		Object qualifierValue = keyValueQualifier.value();
+    		if ((qualifierValue instanceof EOQualifierVariable)) {
+    			throw new IllegalStateException(
+    					"sqlStringForKeyValueQualifier: attempt to generate SQL for " 
+    						+ eoqualifier.getClass().getName() 
+    						+ " " + eoqualifier 
+    						+ " failed because the qualifier variable '$" 
+    						+ ((EOQualifierVariable)qualifierValue).key() 
+    						+ "' is unbound."
+    				);
+    		}
+    		
+    		String keyString = sqlDefinition;
+    		
+    		boolean isLike =
+    				qualifierSelector.equals(EOQualifier.QualifierOperatorLike)
+    					|| qualifierSelector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike);
+    		
+    		Object value;
+    		if (isLike) {
+    			// Convert the special literal used in like expressions, i.e. * and ?
+    			// into their SQL equivalent % and _
+    			value = e.sqlPatternFromShellPattern((String)qualifierValue);
+    		} else {
+    			value = qualifierValue;
+    		}
+
+    		String qualifierSQL;
+    		if (qualifierSelector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike)) {
+    			String valueString = sqlStringForAttributeValue(e, derivedAttribute, value);
+    			qualifierSQL = e.sqlStringForCaseInsensitiveLike(valueString, keyString);
+    		} else {
+    			String valueString = sqlStringForAttributeValue(e, derivedAttribute, value);
+    			String operatorString = e.sqlStringForSelector(qualifierSelector, value);
+    			qualifierSQL = _NSStringUtilities.concat(keyString, " ", operatorString, " ", valueString);
+    		}
+    		if (isLike) {
+    			char escapeChar = e.sqlEscapeChar();
+    			if (escapeChar != 0) {
+    				qualifierSQL = _NSStringUtilities.concat(qualifierSQL, " ESCAPE '" + escapeChar + "'");
+    			}
+    		}
+    		
+    		// If debug mode print something like this:
+    		//
+    		// KeyValueQualifierSQLGenerationSupport handled edge case for key-value qualifier with key referencing derived attribute: Order.customerAge
+    		//    Key value qualifier: (order.customerAge > 30)
+    		//    Key path: order.customerAge
+    		//    Attribute customerAge is defined as: TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0)
+    		//    SQL generated: TRUNC(MONTHS_BETWEEN(T1.ORDER_DATE,T2.BIRTH_DATE)/12,0) > ?
+    		// 
+    		if (ERXExtensions._log.isDebugEnabled()) {
+        		ERXExtensions._log.debug(getClass().getSimpleName() 
+        				+ " handled edge case for key-value qualifier with key path"
+        				+ " referencing a derived attribute: " 
+        				+ derivedAttribute.entity().name() 
+        				+ "." 
+        				+ derivedAttribute.name()
+        			);
+        		ERXExtensions._log.debug("   Key value qualifier: "+ keyValueQualifier);
+        		ERXExtensions._log.debug("   Key path: " + keyValueQualifier.key());
+        		ERXExtensions._log.debug("   Attribute " + derivedAttribute.name() + " is defined as: " + derivedAttribute.definition());
+        		ERXExtensions._log.debug("   SQL generated: " + qualifierSQL);
+    		}
+    		
+    		return qualifierSQL;
+    	}
+        
+        /**
+         * Uses the EOSQLExpression provided to get the SQL string for value and
+         * corresponding attribute.
+         * 
+         * @param e The EOSQLExpression to use to generate the SQL
+         * @param att The attribute corresponding to the value passed in
+         * @param value The value to convert to SQL
+         * @return The SQL string for the value
+         */
+        public String sqlStringForAttributeValue(EOSQLExpression e, EOAttribute att, Object value) {
+        	if (value != NSKeyValueCoding.NullValue 
+        			&& (((e.useBindVariables()) && (e.shouldUseBindVariableForAttribute(att))) || (e.mustUseBindVariableForAttribute(att)))) {
+        		
+        		NSMutableDictionary<String, Object> binding = e.bindVariableDictionaryForAttribute(att, value);
+        		e.addBindVariableDictionary(binding);
+        		return (String)binding.objectForKey("BindVariablePlaceholder");
+        	}
+        	return e.formatValueForAttribute(value, att);
+        }
+        
+        public static String formatValueForAttribute(EOSQLExpression e, Object value, EOAttribute attribute) {
+        	return e.formatValueForAttribute(value, attribute);
+        }
+
+        /**
+         * Normally EOF can handle key value qualifiers with a key corresponding to a
+         * derived attribute, i.e. fullName attribute defined as firstName || ' ' || lastName.
+         * However, if the key is a key path, i.e. customer.fullName then EOF throws an
+         * exception.  This method checks to see if the key in the eoqualifier is a key
+         * path and the last key in the key path corresponds to a derived attribute.
+         * 
+         * @param entity The entity where the eoqualifier is rooted
+         * @param eoqualifier A qualifier to test
+         * @return true if the eoqualifier is an EOKeyValueQualifier and its key is a
+         * key path (with two or more keys) and the last key references a derived
+         * attribute.
+         */
+        public static boolean isKeyPathWithDerivedAttributeCase(EOEntity entity, EOQualifier eoqualifier) {
+             // Make sure it's a EOKeyValueQualifier as we need to get a key
+            if (!(eoqualifier instanceof EOKeyValueQualifier)) {
+                return false;
+            }
+            
+            EOKeyValueQualifier keyValueQualifier = (EOKeyValueQualifier) eoqualifier;
+            String keyPath = keyValueQualifier.key();
+            
+            // If it's not a key path with at least two keys then it's not
+            // the edge case that we are looking for
+            if (keyPath.contains(".") == false) {
+                return false;
+            }
+            
+            // Traverse the key path to get to last attribute referenced
+            EOAttribute attr = destinationAttribute(entity, keyPath);
+            
+            // If the key path lead to an attribute that is derived then it is
+            // the special case that we checking for.
+            return attr != null && attr.isDerived();
+        }
+        
+        /**
+         * Returns the last attribute referenced by key path.
+         * 
+         * @param rootEntity The entity where the key path begins.
+         * @param keyPath The key path leading to an attribute.
+         * @return The attribute referenced by the last key in the key path.
+         * If the last key in the key path is not an attribute then it returns null.
+         */
+        public static EOAttribute destinationAttribute(EOEntity rootEntity, String keyPath) {
+            // Parse the keys in key path
+            String[] keys = keyPath.split("\\.");
+            
+            // Traverse the key path to get to last attribute referenced
+            EOAttribute attr = null;
+            EOEntity entity = rootEntity;
+            for (String key : keys) {
+                EORelationship relationship = entity.anyRelationshipNamed(key);
+                if (relationship != null) {
+                    entity = relationship.destinationEntity();
+                    attr = null;
+                } else {
+                    attr = entity.anyAttributeNamed(key);
+                }
+            }
+            return attr;
+        }
+
+        /**
+         * Given the definition of a derived attribute belonging to the entity provided
+         * this method parses the definition looking for key paths that represent properties.
+         * For example, a customerAge attribute in a hypothetical Order entity could have a
+         * definition of 'TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0)' and you
+         * can call this method to get an array containing orderDate and customer.birthDate
+         * which are the propertyKeys found in the definition.
+         * 
+         * @param derivedAttribute An EOAttribute with a definition
+         * @return An array with the key paths referenced by the definition of the derived
+         * attribute.
+         */
+        public static NSArray<String> parseDefinitionPropertyKeys(EOAttribute derivedAttribute) {
+        	EOEntity entity = derivedAttribute.entity();
+        	String definition = derivedAttribute.definition();
+        	Pattern p = Pattern.compile("('[^']*')|[,]*+\\b([a-z]+[a-zA-Z0-9_\\.]*)");
+        	Matcher m = p.matcher(definition);
+        	NSMutableArray<String> propertyKeys = new NSMutableArray<String>();
+        	while (m.find()) {
+        		// Please note that the regular expression has two groups separated
+        		// with an or, i.e. |. The first group in the regular expression
+        		// matches a single-quoted literal which are to be skipped because
+        		// the text within it are not to be considered properties.
+        		if (m.group(1) != null) {
+        			continue;
+        		}
+        		
+        		// The second group matches key paths preceded optionally with a comma
+        		// as in the customerAge definition example. So get the key path and if
+        		// consider it a property if it references an attribute when applied to
+        		// the entity.
+        		String keyPath = m.group(2);
+        		if (destinationAttribute(entity, keyPath) != null) {
+        			propertyKeys.add(keyPath);
+        		}
+        	}
+        	return propertyKeys.immutableClone();
         }
 
         @Override
