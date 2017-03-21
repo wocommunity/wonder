@@ -394,15 +394,15 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         
         /**
          * This method handles an edge case where the key of the qualifier is a key path and
-         * the last key in the key path references a derived attribute.  For example, if the
+         * the last key in the key path references a derived attribute. For example, if the
          * key is "order.customerAge" and customerAge were defined as:
          * 
-         *   (TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0))
+         * <pre><code>(TRUNC(MONTHS_BETWEEN(orderDate,customer.birthDate)/12,0))</code></pre>
          * 
          * and the key value qualifier was something like "order.customerAge > 50" then this
          * method would generate SQL like this:
          * 
-         *   (TRUNC(MONTHS_BETWEEN(T1.ORDER_DATE,T2.BIRTH_DATE)/12,0)) > 50
+         * <pre><code>(TRUNC(MONTHS_BETWEEN(T1.ORDER_DATE,T2.BIRTH_DATE)/12,0)) > 50</code></pre>
          * 
          * Without this fix EOF ends up throwing an exception.
          * 
@@ -450,16 +450,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     			sqlDefinition = sqlDefinition.replaceAll(unPrefixedKey, sqlString);
     		}
     		
-    		//
     		// Up to this point we have generated the SQL for the key by replacing
     		// it for the SQL for its definition and referenced properties.  Now
     		// we need to add the SQL for the selector and value in the qualifier.
     		
-    		//
     		// Make sure that we have a value before we proceed.  If the value
     		// turns out to be an EOQualifierValue which is a place holder for
     		// a value then we don't have a value and we should throw an exception.
-    		//
     		
     		NSSelector qualifierSelector = keyValueQualifier.selector();
     		Object qualifierValue = keyValueQualifier.value();

@@ -27,251 +27,228 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *  <h1>ERXQuery.java</code></h1>
- *  
- *  <h2>Overview</h2>
- *  
- *  <p>This class has a fluent API that mimics a select statement:</p>
- *  <pre>
- *  {@code
- *  NSArray<NSDictionary<String,Object>> records =
- *      ERXQuery.create()
- *          .select (keys)
- *          .from (entity)
- *          .where (qualifier)
- *          .groupBy (groupings)
- *          .having (havingQualifier)
- *          .orderBy (sortings)
- *          .fetch();
- *  }
- *  </pre>
- *  
- *  <p style="max-width:700px">
- *  It allows you to use EOF/Wonder higher-level constructs (qualifiers, attributes,
- *  orderings, key paths, ERXKeys, etc.) to create a query that looks like this:
- *  
- *  <pre>
- *  SELECT ...
- *  FROM ...
- *  WHERE ...
- *  GROUP BY ...
- *  HAVING ...
- *  ORDER BY ...
- *  </pre>
- *  </p>
- *  
- *  <h2>Specifying the Attributes to Fetch</h2>
- *  
- *  <p style="max-width:700px">
- *  The select() method is very flexible and powerful.  It accepts a variable number
- *  of objects of different types that specify the attributes to fetch.  These objects
- *  can be EOAttributes, ERXKeys, Strings.  You may also specify any Iterable such as
- *  NSArray, List, Collection, etc. containing any combination of these (EOAttributes,
- *  ERXKeys, Strings).
- *  </p>
- *  <p style="max-width:700px">
- *  The ERXKeys and String objects correspond to keys and key paths to the attributes
- *  to fetch, i.e. "customer.name".  The keys and key paths can also be relationships
- *  to objects, i.e. "customer" which translate into a fetch of foreign keys used to
- *  build object faults and return them in the results.
- *  </p>
- *  <p style="max-width:700px">
- *  You may call the select() method multiple times to keep adding to the list of
- *  attributes to fetch.
- *  </p>
- *  
- *  <h2>Using Ad Hoc Attributes</h2>
- *  
- *  <p style="max-width:700px">
- *  It is very common to aggregate attributes in these queries.  For this purpose, you may
- *  want to create what ERXQuery refers to as ad hoc attributes.  These attributes have a
- *  definition but are not physically attached to the entity. You can use the
- *  ERXQueryAttributes class to easily create multiple ad hoc attributes.  The definition
- *  of the attribute can reference relationships and attributes as shown below. If you
- *  just want to create a single ad hoc attribute you may use the ERXQueryEOAttribute class.
- *  </p>
- *  
- *  <pre>
- *  {@code
- *  // Using a single query against the order entity to count the number of
- *  // orders and line items that match an order qualifier.
- *  
- *  ERXQueryAttributes attributes = ERXQueryAttributes.create(orderEntity)
- *      .add("itemCount", "COUNT(DISTINCT lineItems.lineItemID)", "intNumber")
- *      .add("orderCount", "COUNT(DISTINCT orderID)", "intNumber");
- *  
- *  ERXQuery query =
- *      ERXQuery.create()
- *          .select (attributes)
- *          .from (orderEntity)
- *          .where (qualifier);
- *  
- *  // Fetch into a dictionary
- *  NSDictionary<String,Object> row = query.fetch().lastObject();
- *  
- *  int orderCount = ((Number) row.objectForKey("orderCount")).intValue();
- *  int itemCount = ((Number) row.objectForKey("itemCount")).intValue();
- *  }
- *  </pre>
- *  
- *  <h2>Fetching Results into a Custom Class</h2>
- *  <p style="max-width:700px">It is useful to fetch results into objects of a custom class.
- *  This allows you to have type checking on the getter methods and add methods for
- *  computed values on the data fetched. For the example above you could have fetched the
- *  results into a custom class as follows:</p>
- *  <pre>
- *  {@code
- *  // Fetch into object instances of the a custom Result class
- *  Result result = query.fetch(editingContext, Result.class).lastObject();
- *  int orderCount = result.orderCount();
- *  int itemCount = result.itemCount();
- *  }
- *  </pre>
- *  <p style="max-width:700px">The Result custom class would have to be defined as
- *  shown below. The constructor may keep the mutable dictionary passed in to the
- *  constructor or make an immutable copy from it as shown below.</p>
- *  <pre>
- *  {@code
- *  public static class Result {
- *      NSDictionary<String,Object> data;
- *      
- *      public Result(EOEditingContext ec, NSMutableDictionary<String,Object> row) {
- *          data = row.immutableClone();
- *      }
- *      
- *      public int itemCount() {
- *          return ((Number) data.objectForKey("itemCount")).intValue();
- *      }
- *      public int orderCount() {
- *          return ((Number) data.objectForKey("orderCount")).intValue();
- *      }
- *  }
- *  }
- *  </pre>
- *  In general, fetching into a custom class can be done in several ways:
- *  <pre>
- *  {@code
- *  // If your custom class has a constructor that takes an editing context and
- *  // a mutable dictionary then it is very simple:
- *  NSArray<Foo> objs = query.fetch(editingContext, Foo.class);
- *  
- *  // Using java 8 or later you may use a lambda expression:
- *  NSArray<Foo> objs = query.fetch(editingContext, (ec, row) -> new Foo(ec, row));
- *  
- *  
- *  // You may also create an implementation of the RecordConstructor
- *  // functional interface and pass it into the fetch method:
- *  ERXQuery.RecordConstructor<Foo> recordConstructor =
- *      new ERXQuery.RecordConstructor<Foo> {
- *          @Override
- *          public Foo constructRecord(EOEditingContext ec, NSMutableDictionary<String,Object> row) {
- *              return new Foo(ec, row);
- *          }
- *      };
- *  NSArray<Foo> objs = query.fetch(editingContext, recordConstructor)
- *  }
- *  </pre>
- *  
- *  <h2>Augmenting Row Values</h2>
- *  <p style="max-width:700px">You can have entries from a dictionary added in to the rows
- *  fetched from the database.  The mutable dictionary passed in to the record
- *  constructor will contain the data fetched along with the keys/values from
- *  this recordInitializationValues dictionary.</p>
- *  <pre>
- *  {@code
- *  NSDictionary<String,Object> recordInitializationValues = new NSDictionary<>((Object)2017, "preferredYear");
- *  NSArray<Foo> objs = query.fetch(editingContext, recordInitializationValues, Foo.class);
- *  Foo aFoo = objs.lastObject();
- *  int preferredYear = aFoo.preferredYear(); // i.e. 2017
-
- *  }
- *  </pre>
- *  <h2>Defining Ad Hoc Attributes in the Entity</h2>
- *  
- *  <p style="max-width:700px">
- *  An alternate way to define your ad hoc attributes is to define them in your entity
- *  and flagging them as non-class properties.  Unlike ERXQueryEOAttribute objects,
- *  these attributes will be instances of EOAttribute and reside in your entity.  They
- *  may be a bit distracting when looking at the entity if you have a lot but this
- *  method allows you to reuse all the existing attributes and relationships already
- *  defined in the entity and does not require code for creating the attributes.
- *  </p>
- *  <p style="max-width:700px">
- *  One incovenience is that eogeneration templates do not generate ERXKeys
- *  for non-class properties.  However, this problem could be overcome by enhancing
- *  the eogeneration templates to generate ERXKeys for <b>derived non-class property</b>
- *  attributes.</p>
- *  <pre>
- *  {@code
- *  // Fetch last year's customer order totals exceeding $1000 in descending order
- *  NSArray<OrderSummary> lastYearTopSales =
- *      ERXQuery.create()
- *          .select (Order.CUSTOMER)             // customer to-one
- *          .select (Order.SUM_TOTAL_AMOUNT)     // non-class property defined as SUM(totalAmount)
- *          .from (Order.ENTITY_NAME)
- *          .where (lastYearQualifier)
- *          .groupBy (Order.CUSTOMER)
- *          .having (Order.SUM_TOTAL_AMOUNT.greaterThan(1000.00))
- *          .orderBy (Order.SUM_TOTAL_AMOUNT.desc())
- *          .fetch(editingContext, OrderSummary.class);
- *  
- *  // Peek at top sale record
- *  OrderSummary topSale = ERXArrayUtilities.firstObject(lastYearTopSales);
- *  if (topSale != null) {
- *      System.out.println("Customer " + topSale.customer().fullName() 
- *          + " ordered " + moneyFormatter.format(topSale.sumTotalAmount()));
- *  }
- *  }
- *  </pre>
- *  
- *  <p style="max-width:700px">
- *  It would be nice to enhance the eogeneration templates to also create a custom
- *  class for fetching the results, i.e. WonderEntitySummary.java and _WonderEntitySummary.java
- *  with the getters for attributes/relationships in the entity including derived non-class
- *  properties.  These templates would be used when the entity has a user info key with
- *  ERXQuery.enabled=yes.
- *  </p>
- *  <h2>Limitations</h2>
- *  
- *  <p style="max-width:700px">
- *  Ad hoc attributes created with ERXQueryAttributes or ERXQueryEOAttribute are not
- *  physically attached to an entity.  When EOF generates SQL for a qualifier it calls
- *  sqlStringForSQLExpression(q,e) where q is an EOQualifier and e is an EOSQLExpression.
- *  Qualifiers then try to reach the attribute by following the qualifier's referenced
- *  keys starting with the entity of the EOSQLExpression, i.e. e.entity().
- *  </p>
- *  <p style="max-width:700px">
- *  The current workaround used by ERXQuery is to temporarily add to the entity any
- *  ad hoc attributes referenced by the qualifiers.  This typically happens with the
- *  havingQualifier which normally references the ad hoc attributes corresponding to
- *  aggregated attributes.  For example, {@code "sumTotalAmount"} defined as
- *  {@code "SUM(totalAmount)"} could be used in a having qualifier:
- *  <pre>
- *  {@code
- *  // When grouping orders by customer and fetching sumTotalAmount we may want to have
- *  // this having qualifier so that we only fetch the groups totaling more than 1000.
- *  EOQualifier havingQualifier = ERXQ.greaterThan("sumTotalAmount", new BigDecimal(1000.0));
- *  }
- *  </pre>
- *  <p style="max-width:700px">
- *  However, if you were to define your {@code "sumTotalAmount"} attribute in your entity
- *  as a derived non-class property with definition {@code "SUM(totalAmount)"} then ERXQuery
- *  doesn't have to add the attribute to the entity.
- *  </p>
- *  
- *  <h2>Defaults for Behavior Properties</h2>
- *  <ol>
- *  <li>er.extensions.eof.ERXQuery.useBindVariables=false</li>
- *  <li>er.extensions.eof.ERXQuery.useEntityRestrictingQualifiers=true</li>
- *  <li>er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues=true</li>
- *  </ol>
- *  
- *  
- *  @author Ricardo J. Parada
+ * <h1>ERXQuery</h1>
+ * 
+ * <h2>Overview</h2>
+ * 
+ * This class has a fluent API that mimics a select statement:
+ * <pre>
+ * {@code
+ * NSArray<NSDictionary<String,Object>> records =
+ *     ERXQuery.create()
+ *         .select(keys)
+ *         .from(entity)
+ *         .where(qualifier)
+ *         .groupBy(groupings)
+ *         .having(havingQualifier)
+ *         .orderBy(sortings)
+ *         .fetch();
+ * }
+ * </pre>
+ * 
+ * It allows you to use EOF/Wonder higher-level constructs (qualifiers, attributes,
+ * orderings, key paths, ERXKeys, etc.) to create a query that looks like this:
+ * 
+ * <pre>
+ * SELECT ...
+ * FROM ...
+ * WHERE ...
+ * GROUP BY ...
+ * HAVING ...
+ * ORDER BY ...
+ * </pre>
+ * 
+ * <h2>Specifying the Attributes to Fetch</h2>
+ * 
+ * The select() method is very flexible and powerful. It accepts a variable number
+ * of objects of different types that specify the attributes to fetch. These objects
+ * can be EOAttributes, ERXKeys, Strings. You may also specify any Iterable such as
+ * NSArray, List, Collection, etc. containing any combination of these (EOAttributes,
+ * ERXKeys, Strings).
+ * <p>
+ * The ERXKeys and String objects correspond to keys and key paths to the attributes
+ * to fetch, i.e. "customer.name". The keys and key paths can also be relationships
+ * to objects, i.e. "customer" which translate into a fetch of foreign keys used to
+ * build object faults and return them in the results.
+ * <p>
+ * You may call the select() method multiple times to keep adding to the list of
+ * attributes to fetch.
+ * 
+ * <h2>Using Ad Hoc Attributes</h2>
+ * 
+ * It is very common to aggregate attributes in these queries. For this purpose, you may
+ * want to create what ERXQuery refers to as ad hoc attributes. These attributes have a
+ * definition but are not physically attached to the entity. You can use the
+ * ERXQueryAttributes class to easily create multiple ad hoc attributes. The definition
+ * of the attribute can reference relationships and attributes as shown below. If you
+ * just want to create a single ad hoc attribute you may use the ERXQueryEOAttribute class.
+ * 
+ * <pre>
+ * {@code
+ * // Using a single query against the order entity to count the number of
+ * // orders and line items that match an order qualifier.
+ * 
+ * ERXQueryAttributes attributes = ERXQueryAttributes.create(orderEntity)
+ *     .add("itemCount", "COUNT(DISTINCT lineItems.lineItemID)", "intNumber")
+ *     .add("orderCount", "COUNT(DISTINCT orderID)", "intNumber");
+ * 
+ * ERXQuery query =
+ *     ERXQuery.create()
+ *         .select(attributes)
+ *         .from(orderEntity)
+ *         .where(qualifier);
+ * 
+ * // Fetch into a dictionary
+ * NSDictionary<String,Object> row = query.fetch().lastObject();
+ * 
+ * int orderCount = ((Number) row.objectForKey("orderCount")).intValue();
+ * int itemCount = ((Number) row.objectForKey("itemCount")).intValue();
+ * }
+ * </pre>
+ * 
+ * <h2>Fetching Results into a Custom Class</h2>
+ * 
+ * It is useful to fetch results into objects of a custom class.
+ * This allows you to have type checking on the getter methods and add methods for
+ * computed values on the data fetched. For the example above you could have fetched the
+ * results into a custom class as follows:
+ * <pre>
+ * {@code
+ * // Fetch into object instances of the a custom Result class
+ * Result result = query.fetch(editingContext, Result.class).lastObject();
+ * int orderCount = result.orderCount();
+ * int itemCount = result.itemCount();
+ * }
+ * </pre>
+ * 
+ * The Result custom class would have to be defined as
+ * shown below. The constructor may keep the mutable dictionary passed in to the
+ * constructor or make an immutable copy from it as shown below.
+ * <pre><code>
+ * public static class Result {
+ *     {@code NSDictionary<String,Object> data;}
+ *     
+ *     public Result(EOEditingContext ec, {@code NSMutableDictionary<String,Object>} row) {
+ *         data = row.immutableClone();
+ *     }
+ *     
+ *     public int itemCount() {
+ *         return ((Number) data.objectForKey("itemCount")).intValue();
+ *     }
+ *     public int orderCount() {
+ *         return ((Number) data.objectForKey("orderCount")).intValue();
+ *     }
+ * }
+ * </code></pre>
+ * In general, fetching into a custom class can be done in several ways:
+ * <pre><code>
+ * // If your custom class has a constructor that takes an editing context and
+ * // a mutable dictionary then it is very simple:
+ * {@code NSArray<Foo>} objs = query.fetch(editingContext, Foo.class);
+ * 
+ * // Using java 8 or later you may use a lambda expression:
+ * {@code NSArray<Foo>} objs = query.fetch(editingContext, (ec, row) -> new Foo(ec, row));
+ * 
+ * // You may also create an implementation of the RecordConstructor
+ * // functional interface and pass it into the fetch method:
+ * {@code ERXQuery.RecordConstructor<Foo>} recordConstructor =
+ *     new {@code ERXQuery.RecordConstructor<Foo>} {
+ *         {@literal @}Override
+ *         public Foo constructRecord(EOEditingContext ec, {@code NSMutableDictionary<String,Object>} row) {
+ *             return new Foo(ec, row);
+ *         }
+ *     };
+ * NSArray<Foo> objs = query.fetch(editingContext, recordConstructor);
+ * </code></pre>
+ * 
+ * <h2>Augmenting Row Values</h2>
+ * 
+ * You can have entries from a dictionary added in to the rows
+ * fetched from the database. The mutable dictionary passed in to the record
+ * constructor will contain the data fetched along with the keys/values from
+ * this recordInitializationValues dictionary.
+ * <pre>
+ * {@code
+ * NSDictionary<String,Object> recordInitializationValues = new NSDictionary<>((Object)2017, "preferredYear");
+ * NSArray<Foo> objs = query.fetch(editingContext, recordInitializationValues, Foo.class);
+ * Foo aFoo = objs.lastObject();
+ * int preferredYear = aFoo.preferredYear(); // i.e. 2017
+ * }
+ * </pre>
+ * 
+ * <h2>Defining Ad Hoc Attributes in the Entity</h2>
+ * 
+ * An alternate way to define your ad hoc attributes is to define them in your entity
+ * and flagging them as non-class properties. Unlike ERXQueryEOAttribute objects,
+ * these attributes will be instances of EOAttribute and reside in your entity. They
+ * may be a bit distracting when looking at the entity if you have a lot but this
+ * method allows you to reuse all the existing attributes and relationships already
+ * defined in the entity and does not require code for creating the attributes.
+ * <p>
+ * One incovenience is that eogeneration templates do not generate ERXKeys
+ * for non-class properties. However, this problem could be overcome by enhancing
+ * the eogeneration templates to generate ERXKeys for <b>derived non-class property</b>
+ * attributes.
+ * <pre><code>
+ * // Fetch last year's customer order totals exceeding $1000 in descending order
+ * {@code NSArray<OrderSummary>} lastYearTopSales =
+ *     ERXQuery.create()
+ *         .select(Order.CUSTOMER)             // customer to-one
+ *         .select(Order.SUM_TOTAL_AMOUNT)     // non-class property defined as SUM(totalAmount)
+ *         .from(Order.ENTITY_NAME)
+ *         .where(lastYearQualifier)
+ *         .groupBy(Order.CUSTOMER)
+ *         .having(Order.SUM_TOTAL_AMOUNT.greaterThan(1000.00))
+ *         .orderBy(Order.SUM_TOTAL_AMOUNT.desc())
+ *         .fetch(editingContext, OrderSummary.class);
+ * 
+ * // Peek at top sale record
+ * OrderSummary topSale = ERXArrayUtilities.firstObject(lastYearTopSales);
+ * if (topSale != null) {
+ *     System.out.println("Customer " + topSale.customer().fullName() 
+ *         + " ordered " + moneyFormatter.format(topSale.sumTotalAmount()));
+ * }
+ * </code></pre>
+ * 
+ * It would be nice to enhance the eogeneration templates to also create a custom
+ * class for fetching the results, i.e. WonderEntitySummary.java and _WonderEntitySummary.java
+ * with the getters for attributes/relationships in the entity including derived non-class
+ * properties. These templates would be used when the entity has a user info key with
+ * ERXQuery.enabled=yes.
+ * 
+ * <h2>Limitations</h2>
+ * 
+ * Ad hoc attributes created with ERXQueryAttributes or ERXQueryEOAttribute are not
+ * physically attached to an entity. When EOF generates SQL for a qualifier it calls
+ * sqlStringForSQLExpression(q,e) where q is an EOQualifier and e is an EOSQLExpression.
+ * Qualifiers then try to reach the attribute by following the qualifier's referenced
+ * keys starting with the entity of the EOSQLExpression, i.e. e.entity().
+ * <p>
+ * The current workaround used by ERXQuery is to temporarily add to the entity any
+ * ad hoc attributes referenced by the qualifiers. This typically happens with the
+ * havingQualifier which normally references the ad hoc attributes corresponding to
+ * aggregated attributes. For example, {@code "sumTotalAmount"} defined as
+ * {@code "SUM(totalAmount)"} could be used in a having qualifier:
+ * <pre>
+ * {@code
+ * // When grouping orders by customer and fetching sumTotalAmount we may want to have
+ * // this having qualifier so that we only fetch the groups totaling more than 1000.
+ * EOQualifier havingQualifier = ERXQ.greaterThan("sumTotalAmount", new BigDecimal(1000.0));
+ * }
+ * </pre>
+ * However, if you were to define your {@code "sumTotalAmount"} attribute in your entity
+ * as a derived non-class property with definition {@code "SUM(totalAmount)"} then ERXQuery
+ * doesn't have to add the attribute to the entity.
+ * 
+ * <h2>Defaults for Behavior Properties</h2>
+ * <ol>
+ * <li>er.extensions.eof.ERXQuery.useBindVariables=false</li>
+ * <li>er.extensions.eof.ERXQuery.useEntityRestrictingQualifiers=true</li>
+ * <li>er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues=true</li>
+ * </ol>
+ * 
+ * @author Ricardo J. Parada
  */
-
-@SuppressWarnings("javadoc")
-
 public class ERXQuery {
 	
 	/** 
@@ -326,7 +303,6 @@ public class ERXQuery {
 		adHocGroupings = new NSMutableArray<EOAttribute>(2);
 		
 		// Determine features to enable / disable
-		//
 		useBindVariables = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.useBindVariables", false);
 	}
 	
@@ -340,6 +316,8 @@ public class ERXQuery {
 	
 	/**
 	 * Specifies whether to select count(*)
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery selectCount() {
 		isCountingStatement = true;
@@ -352,8 +330,12 @@ public class ERXQuery {
 	 * objects such as NSArray, List, Collection containing EOAttributes, ERXKeys,
 	 * Strings or inclusive other Iterables. The String and ERXKey objects must
 	 * correspond to the names of the attributes to fetch or to the key paths to
-	 * leading to the attributes to fetch.  You may call the select() method
+	 * leading to the attributes to fetch. You may call the select() method
 	 * multiple times to keep adding to the list of attributes to fetch.
+	 * 
+	 * @param attributesOrKeys list of attributes to select in the fetch
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery select(Object... attributesOrKeys) {
 		for (Object obj : attributesOrKeys) {
@@ -381,6 +363,8 @@ public class ERXQuery {
 	
 	/**
 	 * Specifies whether or not to use DISTINCT.
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery usingDistinct() {
 		usesDistinct = true;
@@ -390,6 +374,8 @@ public class ERXQuery {
 	/**
 	 * Specifies whether to refresh refetched objects referenced
 	 * by relationship keys, i.e. "customer".
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery refreshingRefetchedObjects() {
 		refreshRefetchedObjects = true;
@@ -398,6 +384,10 @@ public class ERXQuery {
 
 	/**
 	 * Specifies the EOEntity object to select from.
+	 * 
+	 * @param entity the entity to fetch
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery from(EOEntity entity) {
 		mainEntity = entity;
@@ -406,6 +396,10 @@ public class ERXQuery {
 	
 	/**
 	 * Specifies the name of EOEntity object to select from.
+	 * 
+	 * @param entityName the entity to fetch
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery from(String entityName) {
 		return from(ERXModelGroup.defaultGroup().entityNamed(entityName));
@@ -413,6 +407,10 @@ public class ERXQuery {
 	
 	/**
 	 * Specifies the main qualifier used to build the where clause.
+	 * 
+	 * @param qual the qualifier for the fetch
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery where(EOQualifier qual) {
 		mainSelectQualifier = mainEntity.schemaBasedQualifier(qual);
@@ -420,11 +418,15 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Use this to specify the attributes to group by.  The objects can be EOAttributes,
+	 * Use this to specify the attributes to group by. The objects can be EOAttributes,
 	 * ERXKeys, Strings, or any Iterable such as NSArrays, Lists, Collections, etc. containing
 	 * EOAttributes, ERXKeys, Strings or inclusive other Iterables. The ERXKeys and String
-	 * objects must correspond to the keys or key paths to the attributes to group by.  You may
+	 * objects must correspond to the keys or key paths to the attributes to group by. You may
 	 * call this method multiple times to keep on adding to the list of attributes to group by.
+	 * 
+	 * @param attributesOrKeys list of attributes to use for the group by
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery groupBy(Object... attributesOrKeys) {
 		for (Object obj : attributesOrKeys) {
@@ -454,9 +456,13 @@ public class ERXQuery {
 	
 	
 	/**
-	 * Specifies the sort orderings used to build the order by clause.  The objects passed
+	 * Specifies the sort orderings used to build the order by clause. The objects passed
 	 * in can be EOSortOrderings or Iterables containing EOSortOrderings or other Iterables.
 	 * You may call this method multiple times to keep adding to the list of orderings.
+	 * 
+	 * @param orderingObjects sort orders
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery orderBy(Object... orderingObjects) {
 		for (Object obj : orderingObjects) {
@@ -479,6 +485,10 @@ public class ERXQuery {
 	
 	/**
 	 * Specifies the qualifier for the having clause.
+	 * 
+	 * @param qual qualifier for the having clause
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery having(EOQualifier qual) {
 		havingQualifier = mainEntity.schemaBasedQualifier(qual);
@@ -487,8 +497,12 @@ public class ERXQuery {
 	
 	/**
 	 * This string is inserted after the SELECT keyword in the generated SQL
-	 * padded with a space on both sides.  This allows you to send a hint
+	 * padded with a space on both sides. This allows you to send a hint
 	 * to the database server.
+	 * 
+	 * @param value query hint
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery usingQueryHint(String value) {
 		queryHint = value;
@@ -496,10 +510,12 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Enables use of bind variables.  If this is not called then
+	 * Enables use of bind variables. If this is not called then
 	 * ERXQuery looks at the er.extensions.eof.ERXQuery.useBindVariables property
 	 * which defaults to false currently, thereby placing values in-line
 	 * with the SQL generated.
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery usingBindVariables() {
 		useBindVariables = true;
@@ -510,7 +526,11 @@ public class ERXQuery {
 	 * If specified then the query will be wrapped with something like
 	 * this, depending on the database product:
 	 * 
-	 * SELECT * FROM ( query ) WHERE ROWNUM <= limit
+	 * <pre><code>SELECT * FROM ( query ) WHERE ROWNUM <= limit</code></pre>
+	 * 
+	 * @param limit max number of rows in result
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery serverFetchLimit(int limit) {
 		this.serverFetchLimit = limit;
@@ -520,7 +540,11 @@ public class ERXQuery {
 	/**
 	 * If specified then the fetch will be stopped/canceled after fetching
 	 * clientFetchLimit records. This does not affect the SQL generated unlike
-	 *  serverFetchLimit.
+	 * serverFetchLimit.
+	 * 
+	 * @param limit max number of rows in result
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery clientFetchLimit(int limit) {
 		this.clientFetchLimit = limit;
@@ -531,12 +555,24 @@ public class ERXQuery {
 	// Fetch methods
 	//
 	
+	/**
+	 * Does the fetch and returns the values.
+	 * 
+	 * @return list of fetched records
+	 */
 	public NSArray<NSDictionary<String,Object>> fetch() {
 		NSDictionary<String,Object> recordInitializationValues = NSDictionary.emptyDictionary();
 		EOEditingContext ec = ERXEC.newEditingContext();
 		return fetch(ec, recordInitializationValues);
 	}
 	
+	/**
+	 * Does the fetch and returns the values.
+	 * 
+	 * @param ec the editing context to use for the fetch
+	 * 
+	 * @return list of fetched records
+	 */
 	public NSArray<NSDictionary<String,Object>> fetch(EOEditingContext ec) {
 		NSDictionary<String,Object> recordInitializationValues = NSDictionary.emptyDictionary();
 		return fetch(ec, recordInitializationValues);
@@ -548,6 +584,11 @@ public class ERXQuery {
 	
 	/**
 	 * Returns fetch(ec, recordClass, NSDictionary.emptyDictionary())
+	 * 
+	 * @param ec the editing context to use for the fetch
+	 * @param recordClass class to use for record entries
+	 * 
+	 * @return list of fetched records
 	 */
 	public <T> NSArray<T> fetch(EOEditingContext ec, Class<T> recordClass) {
 		NSDictionary<String,Object> recordInitializationValues = NSDictionary.emptyDictionary();
@@ -555,10 +596,16 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Use this method to fetch results into objects of the specified class.  The class
+	 * Use this method to fetch results into objects of the specified class. The class
 	 * must have a constructor that takes an EOEditingContext and an NSMutableDictionary
-	 * as arguments.  The row passed into the constructor will contain data fetched for the
+	 * as arguments The row passed into the constructor will contain data fetched for the
 	 * row as well as the entries from recordInitializatonValues dictionary.
+	 * 
+	 * @param anEC the editing context to use for the fetch
+	 * @param recordInitializationValues values to add as record entries to result
+	 * @param recordClass class to use for record entries
+	 * 
+	 * @return list of fetched records
 	 */
 	public <T> NSArray<T> fetch(EOEditingContext anEC, final NSDictionary<String,Object> recordInitializationValues, Class<T> recordClass) {
 		// Get the constructor once here before we enter the fetch-loop
@@ -595,48 +642,50 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * <p style="max-width:700px">
 	 * Use this method to fetch either by using an implementation of the RecordConstructor
 	 * functional interface or by using a lambda expression as follows:
-	 * </p>
 	 * 
 	 * <h2>1. Define your custom record class</h2>
-	 * <pre>
-	 * {@code
+	 * <pre><code>
 	 * public class Foo {
-	 *    NSMutableDictionary<String,Object> data;
+	 *    {@code NSMutableDictionary<String,Object>} data;
 	 *    
 	 *    // Constructor
-	 *    public Foo(EOEditingContext ec, NSMutableDictionary<String,Object> row) {
+	 *    public Foo(EOEditingContext ec, {@code NSMutableDictionary<String,Object>} row) {
 	 *       data = row;
 	 *    }
 	 * }
-	 * }
-	 * </pre>
+	 * </code></pre>
 	 * 
 	 * <h2>2. Fetch the records</h2>
-	 * <pre>
-	 * {@code
+	 * 
+	 * <pre><code>
 	 * EOEditingContext editingContext = ERXEC.newEditingContext();
 	 * ERXQuery query = ...;
 	 * 
 	 * // This assumes Java <= 7
-	 * ERXQuery.RecordConstructor<Foo> recordConstructor =
-	 *    new ERXQuery.RecordConstructor<Foo>(){
+	 * {@code ERXQuery.RecordConstructor<Foo>} recordConstructor =
+	 *    new {@code ERXQuery.RecordConstructor<Foo>}(){
 	 *    
-	 *       @Override
-	 *       public Foo constructRecord(EOEditingContext ec, NSMutableDictionary<String,Object> row) {
+	 *       {@literal @}Override
+	 *       public Foo constructRecord(EOEditingContext ec, {@code NSMutableDictionary<String,Object>} row) {
 	 *          return new Foo(ec, row);
 	 *       }
 	 *       
 	 *    };
 	 * 
-	 * NSArray<Foo> foos = query.fetch(editingContext, recordConstructor);
+	 * {@code NSArray<Foo>} foos = query.fetch(editingContext, recordConstructor);
 	 * 
 	 * // This assumes Java >= 8
-	 * NSArray<Foo> foos = query.fetch(editingContext, (ec, row) -> new Foo(ec, row));
-	 * }
-	 * </pre>
+	 * {@code NSArray<Foo>} foos = query.fetch(editingContext, (ec, row) -> new Foo(ec, row));
+	 * </code></pre>
+	 * 
+	 * @param ec the editing context to use for the fetch
+	 * @param recordInitializationValues values to add as record entries to result
+	 * @param recordConstructor constructor for record entries
+	 * @param recordClass class to use for record entries
+	 * 
+	 * @return list of fetched records
 	 */
 	public <T> NSArray<T> fetch(EOEditingContext ec, NSDictionary<String,Object> recordInitializationValues, RecordConstructor<T> recordConstructor) {
 		EOSQLExpression sqlExpression = getExpression(ec);
@@ -645,6 +694,11 @@ public class ERXQuery {
 
 	/**
 	 * Convenience method to return fetch(ec, NSDictionary.emptyDictionary(), recordConstructor)
+	 * 
+	 * @param ec the editing context to use for the fetch
+	 * @param recordConstructor constructor for record entries
+	 * 
+	 * @return list of fetched records
 	 */
 	public <T> NSArray<T> fetch(EOEditingContext ec, RecordConstructor<T> recordConstructor) {
 		NSDictionary<String,Object> recordInitializationValues = NSDictionary.emptyDictionary();
@@ -653,11 +707,19 @@ public class ERXQuery {
 	
 	/**
 	 * Core fetch method. Given the EOSQLExpression built to fetch the selectAttributes
-	 * this method fetches the results.  As each row result is fetched this method calls
+	 * this method fetches the results. As each row result is fetched this method calls
 	 * the recordConstructor with the editing context and mutable dictionary containing
-	 * the row values and the entries from the initValues dictionary.  The record
-	 * constructor should return an instance of T.  The T instances are then placed
+	 * the row values and the entries from the initValues dictionary. The record
+	 * constructor should return an instance of T. The T instances are then placed
 	 * into an array that this method returns, i.e. {@code NSArray<T>}
+	 * 
+	 * @param expression the SQL expression for the fetch
+	 * @param fetchAttributes attributes to fetch
+	 * @param ec the editing context to use for the fetch
+	 * @param initValues values to add as record entries to result
+	 * @param recordConstructor constructor for record entries
+	 * 
+	 * @return list of fetched records
 	 */
 	protected <T> NSArray<T> fetch(
 			final EOSQLExpression expression,
@@ -770,13 +832,18 @@ public class ERXQuery {
 	
 	
 	/** 
-	 * Sets the table alias to use for a given relationship name.  For example, if
+	 * Sets the table alias to use for a given relationship name. For example, if
 	 * the query selects from CLAIM and the main query qualifier joins to other tables
-	 * including the LINE_ITEM table via the lineItems relationship.  If you don't
+	 * including the LINE_ITEM table via the lineItems relationship. If you don't
 	 * specify a table alias for the lineItems relationship then it would use whatever
-	 * EOF comes up with, for example T3.   If you wanted X1 to be used as the table
+	 * EOF comes up with, for example T3. If you wanted X1 to be used as the table
 	 * alias then simply call this method with "lineItems" as the relationship name
 	 * and "X1" as the table alias.
+	 * 
+	 * @param relationshipName name of relationship
+	 * @param alias alias name to use
+	 * 
+	 * @return this query
 	 */
 	public ERXQuery usingRelationshipAlias(String relationshipName, String alias) {
 		relationshipAliases.setObjectForKey(alias, relationshipName);
@@ -798,26 +865,23 @@ public class ERXQuery {
 	 *      HAVING ...
 	 *      ORDER BY ...
 	 * </pre>
-	 * <p style="max-width:700px">
+	 * 
 	 * The {@code WHERE} clause is constructed from the qualifier (if any) passed
 	 * into the {@code where()} method and any required joins necessary to access
 	 * any referenced properties.
-	 * </p>
-	 * 
-	 * <p style="max-width:700px">
+	 * <p>
 	 * The {@code GROUP BY} clause is constructed from the grouping attributes
 	 * specified by calling any of the {@code groupBy()} methods.
-	 * </p>
-	 * 
-	 * <p style="max-width:700px">
+	 * <p>
 	 * The {@code HAVING} clause is constructed if a qualifier is specified by
 	 * calling the {@code having()} method.
-	 * </p>
-	 * 
-	 * <p style="max-width:700px">
+	 * <p>
 	 * The {@code ORDER BY} clause is constructed from attributes passed in to
 	 * the {@code orderBy()} method.
-	 * </p>
+	 * 
+	 * @param ec the editing context to use for SQL construction
+	 * 
+	 * @return SQL expression
 	 */
 	public EOSQLExpression getExpression(EOEditingContext ec) {
 		// Establish the editing context.  This is important as some of the
@@ -1103,8 +1167,13 @@ public class ERXQuery {
 	/**
 	 * Turns the SQL statement into something like this:
 	 * 
-	 * "SELECT * FROM ( " + statement + " ) WHERE ROWNUM <= " + limit;
+	 * <pre><code>"SELECT * FROM ( " + statement + " ) WHERE ROWNUM <= " + limit;</code></pre>
 	 * 
+	 * @param entity entity on which to fetch
+	 * @param statement SQL statement
+	 * @param limit max number of rows in result
+	 * 
+	 * @return SQL string
 	 */
 	protected String addLimitClause(EOEntity entity, String statement, int limit) {
 		// This works for ORACLE and I think it is better for my needs that what ERXSQLHelper does. 
@@ -1123,18 +1192,19 @@ public class ERXQuery {
 		NSArray<String> lines = NSArray.componentsSeparatedByString(sql, "\n");
 		return leftHandSide + "\n   " + lines.componentsJoinedByString("\n   ") + "\n" + rightHandSide;
 	}
+
 	/**
 	 * Returns the array containing the EOAttributes that ERXQuery used to
-	 * fetch the results.  This must be called after the results have been
+	 * fetch the results. This must be called after the results have been
 	 * fetched or after calling the getExpression(editingContext) method.
 	 * These attributes normally includes attributes specified by the
 	 * select() or the groupBy() methods.
+	 * 
+	 * @return attributes that are fetched by this query
 	 */
 	public NSArray<EOAttribute> selectAttributes() {
 		return selectAttributes;
 	}
-
-
 
 	//
 	// HELPER PRIVATE METHODS
@@ -1223,7 +1293,7 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Inner class to keep track of relationship keys.  Relationships keys
+	 * Inner class to keep track of relationship keys. Relationships keys
 	 * are key paths where all the keys are relationships, i.e. order.customer.
 	 * ERXQuery fetches the foreign keys and then creates object faults that it
 	 * adds automatically to the row dictionary that it passes in to the record
@@ -1233,27 +1303,30 @@ public class ERXQuery {
 		private String _entityName;
 		private String _relationshipKeyPath;
 		private String _sourceAttributeKeyPath;
-		
+
 		public RelationshipKeyInfo(String relationshipKeyPath, String sourceAttributeKeyPath, EOEntity entity) {
 			this._relationshipKeyPath = relationshipKeyPath;
 			this._sourceAttributeKeyPath = sourceAttributeKeyPath;
 			this._entityName = entity.name();
 		}
-		
+
 		public String entityName() {
 			return _entityName;
 		}
+
 		public String relationshipKeyPath() {
 			return _relationshipKeyPath;
 		}
+
 		public String sourceAttributeKeyPath() {
 			return _sourceAttributeKeyPath;
 		}
+
 		@Override
 		public int hashCode() {
 			return (_entityName + _relationshipKeyPath + _sourceAttributeKeyPath).hashCode();
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof RelationshipKeyInfo) {
@@ -1270,10 +1343,14 @@ public class ERXQuery {
 	
 	/**
 	 * Called by getExpression() to get the attribute or create an
-	 * ad-hoc attribute for a key.  The keyPath can be relationship key path,
-	 * i.e. "customer.shippingAddress".  This method keeps track of ad hoc
+	 * ad-hoc attribute for a key. The keyPath can be relationship key path,
+	 * i.e. "customer.shippingAddress". This method keeps track of ad hoc
 	 * attributes created so that if it gets called with the same key path
 	 * it returns the previously created attribute.
+	 * 
+	 * @param keyPath a key path
+	 * 
+	 * @return corresponding attribute
 	 */
 	protected EOAttribute existingOrNewAttributeForKey(String keyPath) {
 		// ERXQuery.destinationProperty() below returns the property corresponding
@@ -1365,8 +1442,13 @@ public class ERXQuery {
 	}
 	
 	/** 
-	 * Returns the destination entity for this report attribute.  For example, if keyPath is
-	 * provider.specialtyCategory then this method would return the SpecialtyCategory entity. 
+	 * Returns the destination entity for this report attribute. For example, if keyPath is
+	 * provider.specialtyCategory then this method would return the SpecialtyCategory entity.
+	 * 
+	 * @param rootEntity starting entity
+	 * @param keyPath a key path
+	 * 
+	 * @return entity keyPath points to
 	 */
 	public static EOEntity destinationEntity(EOEntity rootEntity, String keyPath) {
 		EOEntity entity = rootEntity;
@@ -1386,6 +1468,11 @@ public class ERXQuery {
 	/**
 	 * Returns whether the property (either EOAttribute or EORelationship) referenced by
 	 * the last component in the key path.
+	 * 
+	 * @param rootEntity starting entity
+	 * @param keyPath a key path
+	 * 
+	 * @return property keyPath points to
 	 */
 	public static EOProperty destinationProperty(EOEntity rootEntity, String keyPath) {
 		EOEntity entity = rootEntity;
@@ -1414,6 +1501,11 @@ public class ERXQuery {
 	
 	/**
 	 * Returns a new EOSQLExpressionFactory for the entity and editing context specified.
+	 * 
+	 * @param anEntity an entity
+	 * @param ec an editing context
+	 * 
+	 * @return expression factory for given entity
 	 */
 	protected static EOSQLExpressionFactory sqlExpressionFactory(EOEntity anEntity, EOEditingContext ec) {
 		EOModel model = anEntity.model();
@@ -1426,6 +1518,8 @@ public class ERXQuery {
 	 * the entities referenced. The resulting qualifier is rooted at mainEntity.
 	 * When this method is called the editingContext, mainEntity, mainSelectQualifier
 	 * and selectAttributes i-vars must be set.
+	 * 
+	 * @return the restricting qualifier
 	 */
 	protected EOQualifier restrictingQualifierForReferencedEntities() {
 		// Get expression similar to what will be used to build the SQL
@@ -1463,9 +1557,14 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Returns the SQL string corresponding to attribute a.  The EOSQLExpression e
+	 * Returns the SQL string corresponding to attribute a. The EOSQLExpression e
 	 * must correspond to the expression being built to which must include attribute
 	 * a as one of the select the attributes.
+	 * 
+	 * @param e an SQL expression
+	 * @param a attribute for SQL string
+	 * 
+	 * @return SQL string
 	 */
 	protected String sqlStringForAttribute(EOSQLExpression e, EOAttribute a) {
 		String readFormat = a.readFormat();
@@ -1488,6 +1587,12 @@ public class ERXQuery {
 	 * Returns the SQL string for the ordering of attribute a using the specified selector.
 	 * The EOSQLExpression e must correspond to the expression being built which must include
 	 * attribute a as one of the select attributes.
+	 * 
+	 * @param e an SQL expression
+	 * @param orderingAttribute attribute to sort by
+	 * @param selector a sort ordering selector to use
+	 * 
+	 * @return SQL string
 	 */
 	public String sqlStringForOrderingAttribute(EOSQLExpression e, EOAttribute orderingAttribute, NSSelector selector) {
 		EOAttribute a = orderingAttribute;
@@ -1519,6 +1624,11 @@ public class ERXQuery {
 	 * Returns the SQL for the EOSQLExpression specified but with the place holder 
 	 * characters (?) replaced with their corresponding value from the bindings and
 	 * formatted for in-line use.
+	 * 
+	 * @param sql SQL string to convert
+	 * @param expression an SQL expression
+	 * 
+	 * @return SQL string
 	 */
 	protected String sqlWithBindingsInline(String sql, EOSQLExpression expression) {
 		Pattern p = Pattern.compile("('[^']*')|(([,]?+)([\\\\?]{1}+))");
@@ -1560,6 +1670,11 @@ public class ERXQuery {
 	 * Returns the SQL for the EOSQLExpression specified but with the place holder 
 	 * characters (?) replaced with their corresponding value from the bindings and
 	 * formatted for inline use.
+	 * 
+	 * @param sql SQL string to convert
+	 * @param expression an SQL expression
+	 * 
+	 * @return SQL string
 	 */
 	protected String sqlWithBindingsInline2(String sql, EOSQLExpression expression) {
 		StringBuilder newSql = new StringBuilder(sql.length() + 100);
@@ -1603,10 +1718,16 @@ public class ERXQuery {
 	
 	/**
 	 * Uses the EOSQLExpression provided to get the SQL string for value and
-	 * corresponding attribute.  This method is similar to EOSQLExpression's 
+	 * corresponding attribute. This method is similar to EOSQLExpression's 
 	 * sqlStringForValue(Object value, String keyPath) but this one does not
 	 * attempt to get to the attribute from the key path as we already have
 	 * the attribute.
+	 * 
+	 * @param e an SQL expression
+	 * @param att an attribute
+	 * @param value value to use with attribute
+	 * 
+	 * @return SQL string
 	 */
 	public String sqlStringForAttributeValue(EOSQLExpression e, EOAttribute att, Object value) {
 		if (value != NSKeyValueCoding.NullValue 
@@ -1620,11 +1741,17 @@ public class ERXQuery {
 	}
 	
 	/**
-	 * Formats the value for inline use.  For example, the string "I'm smart" would be formatted
-	 * as "'I''m smart'".  Similarly a NSTimestamp value would be converted to something like
-	 * this "TO_DATE('1967-12-03 00:15:00','YYYY-MM-DD HH24:MI:SS')".  Supported values are null,
-	 * String, NSTimestamp, Boolean, Integer, Number.  Other values are converted
+	 * Formats the value for inline use. For example, the string "I'm smart" would be formatted
+	 * as "'I''m smart'". Similarly a NSTimestamp value would be converted to something like
+	 * this "TO_DATE('1967-12-03 00:15:00','YYYY-MM-DD HH24:MI:SS')". Supported values are null,
+	 * String, NSTimestamp, Boolean, Integer, Number. Other values are converted
 	 * by calling toString().
+	 * 
+	 * @param sqlExpression an SQL expression
+	 * @param value value to use with attribute
+	 * @param attribute an attribute
+	 * 
+	 * @return SQL string
 	 */
 	protected String formatValueForAttributeForInlineUse(EOSQLExpression sqlExpression, Object value, EOAttribute attribute) {
 		String formattedValue;
@@ -1726,12 +1853,8 @@ public class ERXQuery {
 				);
 		}
 
-
 		return formattedValue;
 	}
-
-
-
 
 
 	//
@@ -1742,6 +1865,8 @@ public class ERXQuery {
 	/**
 	 * Functional interface for constructing a record from a dictionary
 	 * with the data fetched from the database.
+	 * 
+	 * @param <T> class type that is used to convert a fetched record into a Java object
 	 */
 	public static interface RecordConstructor<T> {
 		public abstract T constructRecord(EOEditingContext ec, NSMutableDictionary<String,Object> row);
@@ -1749,7 +1874,7 @@ public class ERXQuery {
 	
 	/**
 	 * This is the default constructor used by the fetch() and fetch(EOEditingContext)
-	 * methods.  It simply returns the row dictionary passed in.
+	 * methods. It simply returns the row dictionary passed in.
 	 */
 	public static class DefaultRecordConstructor implements RecordConstructor<NSDictionary<String,Object>> {
 		@Override
