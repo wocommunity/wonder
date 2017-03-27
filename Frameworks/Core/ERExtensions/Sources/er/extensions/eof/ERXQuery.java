@@ -261,7 +261,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * <ol>
  * <li>er.extensions.eof.ERXQuery.useBindVariables=false</li>
  * <li>er.extensions.eof.ERXQuery.useEntityRestrictingQualifiers=true</li>
- * <li>er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues=true</li>
+ * <li>er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues=true</li>
  * </ol>
  * 
  * @author Ricardo J. Parada
@@ -770,7 +770,7 @@ public class ERXQuery {
 				// Fetch results 
 				try {
 					boolean hasInitValues = initValues.count() > 0;
-					boolean removesForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removesForeignKeysFromRowValues", true);
+					boolean removeForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues", true);
 					NSMutableDictionary<String, Object> row = channel.fetchRow();
 					while (row != null) {
 						// Replace any foreign keys with their corresponding relationship keys
@@ -785,7 +785,7 @@ public class ERXQuery {
 								eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, null, refreshRefetchedObjects);
 								row.setObjectForKey(eo, relationshipKey);
 							}
-							if (removesForeignKeysFromRowValues) {
+							if (removeForeignKeysFromRowValues) {
 								row.removeObjectForKey(foreignKey);
 							}
 						}
