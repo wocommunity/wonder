@@ -166,6 +166,7 @@
                    use="true"
                    verbose="false"
                    maxmemory="512m"
+				   encoding="utf-8"
                    windowtitle="Project Wonder Reference Documentation"
                    stylesheetfile="${wonder.root}/Build/build/mystylesheet.css">
 
