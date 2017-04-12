@@ -1,0 +1,10 @@
+# Google key properties
+
+# Use if you only have one client id
+#er.google.Client_ID=myfancyid
+
+# If you are using multiple ids
+#er.google.Client_ID_Names=My, Fancy, Names
+#er.google.My_Client_ID=myclientid
+#er.google.Fancy_Client_ID=fancyclientid
+#er.google.Names_Client_ID=namesclientid

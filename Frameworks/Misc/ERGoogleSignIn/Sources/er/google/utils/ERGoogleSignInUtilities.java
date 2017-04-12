@@ -18,7 +18,7 @@ import er.extensions.foundation.ERXSystem;
 
 public class ERGoogleSignInUtilities {
 	public static String clientID() {
-		String id = ERXSystem.getProperty("ga.Client_ID");
+		String id = ERXSystem.getProperty("er.google.Client_ID");
 		if (ERXStringUtilities.stringIsNullOrEmpty(id)) {
 			throw new RuntimeException("Your client ID is not set. Set it in properties with \"ga.Client_ID\"");
 		}
@@ -30,15 +30,15 @@ public class ERGoogleSignInUtilities {
 			return clientID();
 		}
 		
-		String id = ERXSystem.getProperty("ga." + name + "_Client_ID");
+		String id = ERXSystem.getProperty("er.google." + name + "_Client_ID");
 		if (ERXStringUtilities.stringIsNullOrEmpty(id)) {
-			throw new RuntimeException("No client ID found with the name \"" + name + "\". Set it properties with \"ga." + name + "_Client_ID\".");
+			throw new RuntimeException("No client ID found with the name \"" + name + "\". Set it properties with \"er.google." + name + "_Client_ID\".");
 		}
 		return id;
 	}
 	
 	public static Collection<String> clientIDs() {
-		String clientNames = ERXSystem.getProperty("ga.Client_ID_Names");
+		String clientNames = ERXSystem.getProperty("er.google.Client_ID_Names");
 		
 		if (clientNames == null) {
 			return Collections.singletonList(clientID());
