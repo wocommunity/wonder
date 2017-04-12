@@ -1116,6 +1116,13 @@
        </antcall>
     </target>    
 	
+    <target name="ERGoogleSignIn.all">
+        <antcall target="global.framework.${build.action}">
+            <param name="project.dir" value="Frameworks/Misc/ERGoogleSignIn" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+        </antcall>
+    </target>
+
     <!--
         The targets here correspond to a top-level directory, split into frameworks, apps and examples
         to add your own, add a target definition above and choose the correct group below
