@@ -1,0 +1,12 @@
+<wo:WOConditional condition = "$includePlatformScript"><script src="https://apis.google.com/js/platform.js"></script></wo:WOConditional>
+<wo:WOConditional condition = "$includeInitializationScript">
+	<script>
+		var auth2;
+		gapi.load('auth2', function() {
+			auth2 = gapi.auth2.init({
+				client_id: '<wo:WOString value = "$clientID"/>'
+			});
+		});
+	</script>
+</wo:WOConditional>
+<webobject name = "Link"><webobject name = "Content"></webobject></webobject>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERGoogleLoginForm" wocomponentcontent="false">    <binding name="clientID"/>
+        <binding name="clientIDName"/>
+        <binding name="directActionClass"/>
+        <binding name="directActionName"/>
+        <binding name="error"/>
+        <validation message="'error' is a required binding.">
+            <unbound name="error"/>
+        </validation>
+        <binding name="formName"/>
+        <binding name="id"/>
+        <binding name="includePlatformScript"/>
+        <binding name="tokenFieldName"/>
+    </wo>
+</wodefinitions>
