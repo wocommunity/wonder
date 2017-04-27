@@ -1,0 +1,34 @@
+<webobject name = "GoogleContainer"></webobject>
+<webobject name = "GoogleForm">
+	<webobject name = "AuthenticationTokenField"></webobject>
+</webobject>
+
+<wo:WOConditional condition = "$includePlatformScript">
+	<script src="https://apis.google.com/js/platform.js"></script>
+</wo:WOConditional>
+<script>
+	var invalidUser = false;
+	<wo:WOConditional condition = "$^error">invalidUser = true;</wo:WOConditional>
+	
+	gapi.load('auth2', function() {
+		auth2 = gapi.auth2.init({
+			client_id: '<wo:WOString value = "$clientID"/>'
+		});
+	
+		auth2.currentUser.listen(function(user) {
+			if (invalidUser) {
+				auth2.signOut().then(function() { invalidUser = false; });
+			}
+			else {
+				let token = user.getAuthResponse().id_token;
+				if (token) {
+					var form = document.forms['<wo:WOString value = "$formName"/>'];
+					form.<wo:WOString value = "$tokenFieldName"/>.value = token;
+					form.submit();
+				}
+			}
+		});
+	});
+	
+	gapi.signin2.render('<wo:WOString value = "$id"/>');
+</script>
