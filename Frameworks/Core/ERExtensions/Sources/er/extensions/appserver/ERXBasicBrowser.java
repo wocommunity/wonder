@@ -133,6 +133,7 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     private final boolean         _isRobot;
     private final boolean         _isICab;
+    private final boolean         _isEdge;
     private final boolean         _isIE;
     private final boolean         _isNetscape;
     private final boolean         _isOmniWeb;
@@ -147,6 +148,10 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean         _isMozillaVersion45;
     private final boolean         _isMozillaVersion40;
 
+    private final boolean         _isVersion13;
+    private final boolean         _isVersion12;
+    private final boolean         _isVersion11;
+    private final boolean         _isVersion10;
     private final boolean         _isVersion9;
     private final boolean         _isVersion8;
     private final boolean         _isVersion7;
@@ -187,6 +192,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isRobot = _browserName.equals(ROBOT);
         _isICab = _browserName.equals(ICAB);
         _isIE = _browserName.equals(IE);
+        _isEdge = _browserName.equals(EDGE);
         _isNetscape = _browserName.equals(NETSCAPE);
         _isOmniWeb = _browserName.equals(OMNIWEB);
         _isOpera = _browserName.equals(OPERA);
@@ -205,6 +211,10 @@ public class ERXBasicBrowser extends ERXBrowser {
 
         
         String normalizedVersion = ERXStringUtilities.removeExtraDotsFromVersionString(_version);
+        _isVersion13 = normalizedVersion.startsWith("13.");
+        _isVersion12 = normalizedVersion.startsWith("12.");
+        _isVersion11 = normalizedVersion.startsWith("11.");
+        _isVersion10 = normalizedVersion.startsWith("10.");
         _isVersion9 = normalizedVersion.startsWith("9.");
         _isVersion8 = normalizedVersion.startsWith("8.");
         _isVersion7 = normalizedVersion.startsWith("7.");
@@ -304,6 +314,11 @@ public class ERXBasicBrowser extends ERXBrowser {
     @Override
     public boolean isICab() {
         return _isICab;
+    }
+
+    @Override
+    public boolean isEdge() {
+        return _isEdge;
     }
 
     @Override

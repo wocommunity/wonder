@@ -587,8 +587,9 @@ public class ERXBrowserFactory {
         String browserString = _browserString(userAgent);
         String browser  = ERXBrowser.UNKNOWN_BROWSER;
         if (isRobot(browserString)) 						browser  = ERXBrowser.ROBOT;
+        else if (browserString.indexOf("Edge") > -1) 		browser  = ERXBrowser.EDGE;
         else if (browserString.indexOf("Chrome") > -1) 		browser  = ERXBrowser.CHROME;
-        else if (browserString.indexOf("MSIE") > -1) 		browser  = ERXBrowser.IE;
+        else if (browserString.indexOf("MSIE") > -1 || browserString.indexOf("Trident") > -1)	browser  = ERXBrowser.IE;
         else if (browserString.indexOf("Safari") > -1) 		browser  = ERXBrowser.SAFARI;
         else if (browserString.indexOf("Firefox") > -1) 	browser  = ERXBrowser.FIREFOX;
         else if (browserString.indexOf("OmniWeb") > -1)		browser  = ERXBrowser.OMNIWEB;
@@ -919,7 +920,21 @@ public class ERXBrowserFactory {
         	if (startpos > -1)  {
         		versionString = userAgent.substring(startpos);
         	} else {
-        		versionString = _browserString(userAgent);
+        		startpos = userAgent.indexOf("rv:");
+            	if (startpos > -1)  {
+            		versionString = userAgent.substring(startpos);
+            		int endpos = versionString.indexOf(')');
+            		if (endpos > -1) {
+            			versionString = versionString.substring(0, endpos);
+            		}
+            	} else {
+            		startpos = userAgent.indexOf("Edge/");
+                	if (startpos > -1)  {
+                		versionString = userAgent.substring(startpos);
+                	} else {
+                		versionString = _browserString(userAgent);
+                	}
+            	}
         	}
     	}
 
