@@ -159,35 +159,36 @@
         </copy>
 
         <javadoc packagenames="er.*, com.gammastream.*, org.svgobjects.*, com.webobjects.*"
-                   defaultexcludes="yes"
+                   defaultexcludes="true"
                    destdir="${dist}/Documentation/api"
                    author="true"
                    version="true"
                    use="true"
                    verbose="false"
                    maxmemory="512m"
-				   encoding="utf-8"
+                   encoding="utf-8"
+                   additionalparam="-Xdoclint:none -Xmaxwarns 0 -Xmaxerrs 0"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
             <sourcepath>
-                    <dirset dir="${wonder.root}">
-                         <include name="**/Sources/" /> 
-                         <exclude name="**/*Example*/**" /> 
-                         <exclude name="**/Applications/**" /> 
-                         <exclude name="**/Tests/**" />
-                         <exclude name="**/Archives/**" />
-                    </dirset>
-                    <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
-                         <include name="**/Sources/" />
-                    </dirset>
+                <dirset dir="${wonder.root}">
+                     <include name="**/Sources/" /> 
+                     <exclude name="**/*Example*/**" /> 
+                     <exclude name="**/Applications/**" /> 
+                     <exclude name="**/Tests/**" />
+                     <exclude name="**/Archives/**" />
+                </dirset>
+                <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
+                     <include name="**/Sources/" />
+                </dirset>
             </sourcepath>
-            <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
+            <doctitle>Project Wonder Reference Documentation</doctitle>
             <header>Project Wonder ${project.version}</header>
             <bottom><![CDATA[Copyright &#169; 2002 &#8211; ${current.year} Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="https://docs.oracle.com/javase/8/docs/api/"/>
-            <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
+            <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/"/>
             <link href="https://commons.apache.org/proper/commons-lang/javadocs/api-release/"/>
             <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
@@ -216,7 +217,9 @@
                    author="true"
                    version="true"
                    verbose="false"
-                   maxmemory="512m">
+                   maxmemory="512m"
+                   encoding="utf-8"
+                   additionalparam="-Xdoclint:none -Xmaxwarns 0 -Xmaxerrs 0">
 
             <classpath refid="classpath"/>
             <sourcepath>
@@ -243,7 +246,9 @@
                    author="true"
                    version="true"
                    verbose="false"
-                   maxmemory="512m">
+                   maxmemory="512m"
+                   encoding="utf-8"
+                   additionalparam="-Xdoclint:none -Xmaxwarns 0 -Xmaxerrs 0">
 
             <classpath refid="classpath"/>
             <sourcepath>

@@ -87,24 +87,24 @@ public abstract class AbstractTaglet implements Taglet {
             return null;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
-        sb.append("<TR BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">");
-        sb.append("<TD COLSPAN=2><FONT SIZE=\"+2\">");
-        sb.append("<B>" + getHeader() + "</B></FONT></TD>");
-        sb.append("</TR>");
+        sb.append("<table class=\"memberSummary\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\" summary=\"" + getHeader() + "\">");
+        sb.append("<caption><span>" + getHeader() + "</span><span class=\"tabEnd\">&nbsp;</span></caption>");
+        sb.append("<thead><tr>");
+        sb.append("<th class=\"colFirst\" scope=\"col\">Name</th>");
+        sb.append("<th class=\"colLast\" scope=\"col\">Description</th>");
+        sb.append("</tr></thead>");
+        sb.append("<tbody>");
         for (int i = 0; i < tags.length; i++) {
-            sb.append("<TR BGCOLOR=\"white\" CLASS=\"TableRowColor\">");
-            sb.append("<TD ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><FONT SIZE=\"-1\">");
-            sb.append("<CODE>");
+            sb.append("<tr class=\"" + (i % 2 == 0 ? "altColor" : "rowColor") + "\">");
+            sb.append("<td class=\"colFirst\"><code>");
             sb.append(bindingName(tags[i]));
-            sb.append("</CODE></FONT></TD>");
-            sb.append("<TD>");
+            sb.append("</code></td>");
+            sb.append("<td class=\"colLast\">");
             sb.append(bindingDescription(tags[i]));
-            sb.append("<BR>");
-            sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
-            sb.append("</TR>");
+            sb.append("</td>");
+            sb.append("</tr>");
         }
-        sb.append("</TABLE>\n");
+        sb.append("</tbody></table>\n");
         return sb.toString();
     }
 }
