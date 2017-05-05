@@ -159,7 +159,7 @@
         </copy>
 
         <javadoc packagenames="er.*, com.gammastream.*, org.svgobjects.*, com.webobjects.*"
-                   defaultexcludes="true"
+                   defaultexcludes="yes"
                    destdir="${dist}/Documentation/api"
                    author="true"
                    version="true"
