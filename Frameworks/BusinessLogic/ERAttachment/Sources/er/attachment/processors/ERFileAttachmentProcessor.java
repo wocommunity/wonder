@@ -61,6 +61,12 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     if (!filesystemPath.contains("${")) {
       filesystemPath = filesystemPath + "/attachments/${hash}/${pk}${ext}";
     }
+    
+    String filesystemPathPrefix = ERXProperties.stringForKey("er.attachment.file.filesystemPathPrefix");
+    String fullFilesystemPath = filesystemPath;
+    if(filesystemPathPrefix!=null) {
+    	fullFilesystemPath = filesystemPathPrefix + filesystemPath;
+    }
 
     String webPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.webPath");
     if (webPath == null) {
@@ -82,9 +88,9 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     }
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
-      filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);
+      fullFilesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, fullFilesystemPath, recommendedFileName);
 
-      File desiredFilesystemPath = new File(filesystemPath);
+      File desiredFilesystemPath = new File(fullFilesystemPath);
       File actualFilesystemPath = ERXFileUtilities.reserveUniqueFile(desiredFilesystemPath, overwrite);
 
       ERXFileUtilities.copyFileToFile(uploadedFile, actualFilesystemPath, pendingDelete, true);
@@ -95,7 +101,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       webPath = webPath.replaceAll("\\Q" + desiredFileName + "\\E$", actualFileName);
 
       attachment.setWebPath(webPath);
-      attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath());
+      attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath().replaceAll(filesystemPathPrefix, ""));
 
       if (delegate() != null) {
         delegate().attachmentAvailable(this, attachment);
@@ -115,7 +121,16 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
 
   @Override
   public InputStream attachmentInputStream(ERFileAttachment attachment) throws IOException {
-    return new FileInputStream(new File(attachment.filesystemPath()));
+	String filesystemPathPrefix = ERXProperties.stringForKey("er.attachment.file.filesystemPathPrefix");
+	String filePath = attachment.filesystemPath();
+	String filesystemPath = filePath;
+	if(filesystemPathPrefix!=null) {
+		// we are not going to add the prefix if it is already in the path
+		if(!filePath.startsWith(filesystemPathPrefix)) {
+			filesystemPath = filesystemPathPrefix + filePath;
+		}
+	}
+    return new FileInputStream(new File(filesystemPath));
   }
   
   @Override

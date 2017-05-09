@@ -212,6 +212,10 @@ attachments from within your WebObjecst applications (see the section on securit
 	is true, then duplicates will be overwritten.  If false, then a unique name based on the template will be created using
 	a "filename-1.gif", "filename-2.gif" scheme. The default is false.</dd>
 	
+	<dt>er.attachment.file.filesystemPathPrefix</dt>
+	<dd>(optional) Global Prefix for filesystemPath. Useful if you want to change the hosting machine or storage path. Having a prefix
+	would cause to store in the database only the partial path (see below fileSystemPath).</dd>
+	
 	<dt>er.attachment.file.filesystemPath / er.attachment.[configurationName].file.filesystemPath</dt>
 	<dd>(required) The filesystem path specifies the full path of the destination of the uploaded attachment, including its filename.
 	This property is evaluated as a path template (see above).  An example might be 
