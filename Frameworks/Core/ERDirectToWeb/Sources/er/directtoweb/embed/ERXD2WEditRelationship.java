@@ -52,4 +52,13 @@ public class ERXD2WEditRelationship extends D2WEmbeddedComponent {
      */
     @Override
     public void awake() {}
+    
+    /**
+     * Prevent {@link com.webobjects.foundation.NSKeyValueCoding$UnknownKeyException}
+     */
+    @SuppressWarnings("unchecked")
+    public void handleTakeValueForUnboundKey(Object value, String key) {
+        // DO NOTHING
+    }
+ 
 }
