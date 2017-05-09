@@ -38,6 +38,8 @@ import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronization;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
@@ -1890,6 +1892,51 @@ public class ERXSQLHelper {
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
+		}
+		
+		/**
+		 * OpenBase can only apply a index to one column at a time
+		 * OpenBase does not have named indexes
+		 * OpenBase will not accept an ALTER TABLE command where the table name is in quotes
+		 */
+		
+		public String sqlForCreateIndex(String tableName, String columnName, boolean uniqueIndex) {
+			
+			StringBuilder _builder = new StringBuilder("create ");
+			if (uniqueIndex)
+				_builder.append("unique ");
+			_builder.append("index " + tableName + " " + columnName);
+			
+			return _builder.toString();
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			String _onlyColumnName = columnNames.objectAtIndex(0);
+			return sqlForCreateIndex(tableName, _onlyColumnName, true);
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			String _onlyColumnName = columnNames.objectAtIndex(0);
+			return sqlForCreateIndex(tableName, _onlyColumnName, false);
+		}
+		
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			
+			String _externalType = null;
+			switch (jdbcType) {
+			case Types.FLOAT:
+				_externalType = "float";
+				break;
+
+			default:
+				_externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+				break;
+			}
+			return _externalType;
 		}
 	}
 	
