@@ -123,11 +123,40 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
         public ToManyQualifierSQLGenerationSupport() {
             super();
         }
+        
+        /**
+         * EOF will generally put schema names and attribute pieces in surrounding quotes such as:
+         * "BigCompany"."Person"."ID"
+         * However this qualifier was not doing this so we take matters into our own hands and convert:
+         * BigCompany.Person.ID -> "BigCompany"."Person"."ID"
+         * @param sqlSnippet
+         * @return same string but with each piece wrapped in quotation marks
+         */
+        protected static String schemaSafe(String sqlSnippet) {
+        	if (sqlSnippet != null) {
+        		StringBuilder newString = new StringBuilder();
+        		NSArray<String> dividedByPeriod = NSArray.componentsSeparatedByString(sqlSnippet, ".");
+        		for (String partial : dividedByPeriod) {
+        			partial = partial.trim();
+        			if (partial.indexOf("\"") != 0) {
+        				partial = "\"" + partial + "\"";
+        			}
+        			
+        			if (newString.length() == 0) {
+        				newString.append(partial);
+        			} else {
+        				newString.append("." + partial);
+        			}
+        		}
+        		
+        		sqlSnippet = newString.toString();
+        	}
+        	
+        	return sqlSnippet;
+        }
 
         protected static void appendColumnForAttributeToStringBuilder(EOAttribute attribute, StringBuilder sb) {
-            sb.append(attribute.entity().externalName());
-            sb.append('.');
-            sb.append(attribute.columnName());
+        	sb.append(schemaSafe(attribute.entity().externalName() + "." + attribute.columnName()));
         }
 
 		@Override
@@ -168,19 +197,19 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                 result.append(e.sqlStringForAttributeNamed(firstHopRelationshipKeyPath));
                 result.append(" IN ( SELECT ");
 
-                result.append(lastStopEntity.externalName());
+                result.append(schemaSafe(lastStopEntity.externalName()));
                 result.append('.');
-                result.append(lastStopEntity.primaryKeyAttributes().objectAtIndex(0).columnName());
+                result.append(schemaSafe(lastStopEntity.primaryKeyAttributes().objectAtIndex(0).columnName()));
 
                 result.append(" FROM ");
 
-                result.append(lastStopEntity.externalName());
+                result.append(schemaSafe(lastStopEntity.externalName()));
                 result.append(',');
 
                 lastStopPKeyPath.removeLastObject();
                 String tableAliasForJoinTable=(String)e.aliasesByRelationshipPath().
                     objectForKey(lastStopPKeyPath.componentsJoinedByString("."));//"j"; //+random#
-                result.append(endOfFirstHopEntity.externalName());
+                result.append(schemaSafe(endOfFirstHopEntity.externalName()));
                 result.append(' ');
                 result.append(tableAliasForJoinTable);
 
@@ -194,9 +223,9 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                     NSArray pKeys=ERXEOAccessUtilities.primaryKeysForObjects(qualifier.elements());
                     result.append(" AND ");
                     
-                    result.append(tableAliasForJoinTable);
+                    result.append(schemaSafe(tableAliasForJoinTable));
                     result.append('.');
-                    result.append(secondHopSourceAttribute.columnName());
+                    result.append(schemaSafe(secondHopSourceAttribute.columnName()));
                     
                     result.append(" IN ("); 
                     EOAttribute pk = targetEntity.primaryKeyAttributes().lastObject();
