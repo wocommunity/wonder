@@ -1,93 +1,46 @@
 {
-	"contains" = "contient";
-	"CouldNotQuery" = "Ne peut exécuter la requête: @@message@@";
-	"CouldNotSave" = "Ne peut enregistrer vos modifications: @@message@@";
-	"CouldNotSavePleaseReapply" = "Ne peut enregistrer vos modifications. L'attribut @@displayNameForEntity@@ a été modifié dans la base de données avant que vous puissiez enregistrer vos modifications. Vos modifications sont perdues, veuillez les reprendre.";
-	"ends with" = "se termine par";
-	"ERD2W.addButtonLabel" = "Ajouter";
-	"ERD2W.advancedFindButtonLabel" = "Avancé...";
-	"ERD2W.cancelButtonLabel" = "Annuler";
+	"contains" = "contains";
+	"CouldNotSave" = "Could not save your changes: @@message@@";
+	"CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them.";
+	"ends with" = "ends with";
 	"ERD2W.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la cr\U00e9ation de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va \U00e9liminer vos changements et cliquer sur annulation retournera \U00e0 l'\U00e9dition de @@displayNameForEntity@@.";
-	"ERD2W.clearButtonLabel" = "Vider";
-	"ERD2W.createButtonLabel" = "Créer";
-	"ERD2W.deleteButtonLabel" = "Effacer";
-	"ERD2W.deleteSelectedButtonLabel" = "Effacer la sélection";
-	"ERD2W.editButtonLabel" = "Éditer";
-	"ERD2W.findButtonLabel" = "Recherche";
-	"ERD2W.nextButtonLabel" = "Prochain";
-	"ERD2W.noButtonLabel" = "Non";
-	"ERD2W.noSelectionString" = "- aucun -";
-	"ERD2W.okButtonLabel" = "OK";
-	"ERD2W.pickButtonLabel" = "Sélectionner";
-	"ERD2W.previousButtonLabel" = "Précédent";
-	"ERD2W.removeButtonLabel" = "Retirer";
-	"ERD2W.returnButtonLabel" = "Retour";
-	"ERD2W.saveButtonLabel" = "Enregistrer";
-	"ERD2W.tasks.confirm" = "Vraiment @@displayNameForEntity@@?";
-	"ERD2W.tasks.edit" = "Editer @@displayNameForEntity@@";
-	"ERD2W.tasks.edit.wizard" = "Créer @@displayNameForEntity@@";
-	"ERD2W.tasks.inspect" = "Inspecter @@displayNameForEntity@@";
-	"ERD2W.tasks.list" = "Lister @@displayNameForEntity@@";
-	"ERD2W.tasks.query" = "Rechercher @@displayNameForEntity@@";
-	"ERD2W.tasks.select" = "Sélectionner @@displayNameForEntity@@";
-	"ERD2W.yesButtonLabel" = "Oui";
-	"ERD2WBoolean.DontCare" = "Aucune importance";
-	"ERD2WBoolean.No" = "Non";
-	"ERD2WBoolean.Unset" = "Unset";
-	"ERD2WBoolean.Yes" = "Oui";
-	"ERD2WCreateWizard.cancel" = "Annuler";
-	"ERD2WCreateWizard.nextStep" = "Prochaine étape";
-	"ERD2WCreateWizard.previousStep" = "Étape précédente";
-	"ERD2WCreateWizard.save" = "Enregistrer";
+	"ERD2W.pickButtonLabel" = "Select";
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Aucune valeur disponible pour @@displayNameForEntity@@";
-	"ERD2WInspect.alreadyAborted" = "<b>Vous avez déjà abandonné cette transaction/b>. Veuillez cliquer sur Annuler et ré-essayer l'étape précédente.";
-	"ERD2WInspectPage.cancel" = "Annuler";
-	"ERD2WInspectPage.return" = "Retour";
-	"ERD2WInspectPage.saveChanges" = "Enregistrer";
-	"ERD2WList.confirmDeletionMessage" = "<b>Êtes-vous certain de vouloir effacer @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
+	"ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
+	"ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
 	"ERD2WQueryDateRange.format" = "Format";
-	"ERD2WQueryDateRange.from" = "de";
-	"ERD2WQueryDateRange.to" = "à";
-	"ERD2WQueryDateRangeJavaScript.and" = "et";
-	"ERD2WQueryDateRangeJavaScript.between" = "entre";
-	"ERD2WQueryNumberRange.from" = "de";
-	"ERD2WQueryNumberRange.number" = "Nombre";
-	"ERD2WQueryNumberRange.to" = "à";
-	"ERD2WQueryOperator.contains" = "contient";
-	"ERD2WQueryOperator.ends with" = "se termine";
-	"ERD2WQueryOperator.is" = "est";
-	"ERD2WQueryOperator.like" = "semblable";
-	"ERD2WQueryOperator.starts with" = "commence par";
+	"ERD2WQueryDateRange.from" = "from";
+	"ERD2WQueryDateRange.to" = "to";
+	"ERD2WQueryDateRangeJavaScript.and" = "and";
+	"ERD2WQueryDateRangeJavaScript.between" = "between";
+	"ERD2WQueryNumberRange.from" = "from";
+	"ERD2WQueryNumberRange.number" = "Number";
+	"ERD2WQueryNumberRange.to" = "to";
 	"ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
 	"ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
-	"ERD2WQueryToManyField.is" = "est";
-	"ERD2WQueryToManyField.where" = "où";
-	"ERD2WQueryToOneField.is" = "est";
-	"ERD2WQueryToOneField.where" = "où";
-	"ERD2WWizardCreationPage.stepsMessage" = "Étape @@currentStep@@ de @@tabSectionsContents.count@@";
+	"ERD2WQueryToManyField.is" = "is";
+	"ERD2WQueryToManyField.where" = "where";
+	"ERD2WQueryToOneField.is" = "is";
+	"ERD2WQueryToOneField.where" = "where";
+	"ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of \U00a0@@tabSectionsContents.count@@";
 	"ERDDatePopup.monthList" = (
 		"Jan",
-		"Fev",
+		"Feb",
 		"Mar",
-		"Avr",
-		"Mai",
+		"Apr",
+		"May",
 		"Jun",
 		"Jul",
-		"Aou",
+		"Aug",
 		"Sep",
 		"Oct",
 		"Nov",
 		"Dec"
 	);
 	"ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la cr\U00e9ation de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va \U00e9liminer vos changements et cliquer sur annulation retournera \U00e0 l'\U00e9dition de @@displayNameForEntity@@.";
-	"ERDDisplayImageIfExists.message" = "Aucune image disponible";
-	"ERDEditDatePopupOrNull.none" = "Aucun";
-	"ERDEditDatePopupOrNull.or" = "- ou -";
-	"ERDEditFile.deleteButton" = "Effacer fichier";
-	"ERDEditFile.selectButton" = "Sélectionner fichier";
-	"ERDEditFile.selectMessage" = "Choisir un fichier sur votre disque local:";
-	"ERDEditFile.uploadButton" = "Télécharger fichier";
-	"ERDEditFile.uploadMessage" = "Télécharger le fichier sur le serveur:";
+	"ERDDisplayImageIfExists.message" = "No Picture Available";
+	"ERDEditDatePopupOrNull.none" = "None";
+	"ERDEditDatePopupOrNull.or" = "- or -";
 	"ERDEditList.saveLabel" = "Enregistrer?";
 	"ERDEditListButton.editButtonName" = "Edition de la liste de @@displayNameForProperty@@";
 	"ERDEditPasswordConfirm" = {
@@ -95,40 +48,34 @@
 		"newPasswordLabel" = "Nouveau mot de passe";
 		"confirmLabel" = "Confirmation du mot de passe.";
 		"confirmNewLabel" = "Confirmation du nouveau mot de passe.";
-		"passwordLabel" = "Mot de passe";
+		"passwordLabel" = "Password";
 	};
-	"ERDEditStringWithChoices.noSelectionString" = "Aucun";
-	"ERDEditToManyRelationship.add" = "Ajouter";
-	"ERDEditToManyRelationship.delete" = "Effacer la sélection";
-	"ERDEditToManyRelationship.remove" = "Retirer";
-	"ERDEmptyListMessage.createObjectStringTemplate" = "Créer une nouvelle entrée";
-	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>Aucun enregistrement pour @@displayNameForDestinationEntity@@ trouvé.</b>";
+	"ERDEditStringWithChoices.noSelectionString" = "None";
+	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForDestinationEntity@@ records found.</b>";
 	"ERDEmptyListMessage.emptyListMessage" = "<b>Aucune valeurs trouv\U00e9e pour @@displayNameForEntity@@.</b>";
-	"ERDInspect.clear" = "Vider";
-	"ERDInspect.create" = "Créer";
-	"ERDInspect.objectUnsetMessage" = "Aucun @@displayNameForDestinationEntity@@ set.";
-	"ERDInspect.select" = "Sélectionner...";
-	"ERDList.create" = "Ajouter";
-	"ERDQueryAnyKey.matches" = "résultats";
-	"ERDQueryDateRangeJavaScript.and" = "et";
-	"ERDQueryDateRangeJavaScript.between" = "entre";
-	"ERDQueryTwoLevelRelationship.all" = "- tout -";
+	"ERDInspect.clear" = "Clear";
+	"ERDInspect.create" = "Create";
+	"ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
+	"ERDInspect.select" = "Select...";
+	"ERDList.create" = "Add";
+	"ERDQueryDateRangeJavaScript.and" = "and";
+	"ERDQueryDateRangeJavaScript.between" = "between";
+	"ERDQueryTwoLevelRelationship.all" = "- all -";
 	"ERDTrashcan.confirmDeletionMessage" = "<b>Etes-vous sur de vouloir \U00e9liminer ce @@displayNameForEntity@@?</b>";
-	"is" = "est";
-	"like" = "est semblable à";
-	"starts with" = "commence par";
-	"ERD2WQueryUnavailable.CanNotBeUsed" = "- ne peut être utilisé dans une requête -";
-	"Hint.SampleText" = "Information sur l'attribut";
+	"is" = "is";
+	"like" = "is like";
+	"starts with" = "starts with";
+	"Hint.SampleText" = "Attribute Information";
 	"ERD2WDebugFlags.LOG4J" = "Log4J";
 	"ERD2WDebugFlags.D2W" = "D2W";
 	"ERD2WDebugFlags.CSS" = "CSS";
-	"ERD2WDebugFlags.SQL" = "Basculer SQL";
-	"ERD2WDebugFlags.CLEAR" = "Vider la cache D2W";
-	"ERD2WDebugFlags.METRICS" = "Métriques sur la page";
-	"ERD2WDebugFlags.SHOW" = "Montrer les détails";
-	"ERD2WDebugFlags.HIDE" = "Cacher les détails";
-	"ERD2WDebugFlags.DUMP" = "Clés créées";
-	"ERD2WDebugFlags.LOCALIZE" = "Localisation";
+	"ERD2WDebugFlags.SQL" = "Toggle SQL";
+	"ERD2WDebugFlags.CLEAR" = "Clear D2W Cache";
+	"ERD2WDebugFlags.METRICS" = "Page Metrics";
+	"ERD2WDebugFlags.SHOW" = "Show Details";
+	"ERD2WDebugFlags.HIDE" = "Hide Details";
+	"ERD2WDebugFlags.DUMP" = "Created keys";
+	"ERD2WDebugFlags.LOCALIZE" = "Localization";
 	"ERD2WDebugFlags.STATS" = "WOStats";
-	"ERD2WDebugFlags.RUN" = "Lancer un test";	
+	"ERD2WDebugFlags.RUN" = "Run Test";	
 }
