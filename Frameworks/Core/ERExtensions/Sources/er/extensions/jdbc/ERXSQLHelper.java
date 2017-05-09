@@ -1891,6 +1891,50 @@ public class ERXSQLHelper {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
 		}
+		
+		/* OpenBase can only apply a index to one column at a time
+		 * OpenBase does not have named indexes
+		 * OpenBase will not accept an ALTER TABLE command where the table name is in quotes
+		 */
+		
+		public String sqlForCreateIndex(String tableName, String columnName, boolean uniqueIndex) {
+			
+			StringBuilder _builder = new StringBuilder("create ");
+			if (uniqueIndex)
+				_builder.append("unique ");
+			_builder.append("index " + tableName + " " + columnName);
+			
+			return _builder.toString();
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			String _onlyColumnName = columnNames.objectAtIndex(0);
+			return sqlForCreateIndex(tableName, _onlyColumnName, true);
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			String _onlyColumnName = columnNames.objectAtIndex(0);
+			return sqlForCreateIndex(tableName, _onlyColumnName, false);
+		}
+		
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			
+			String _externalType = null;
+			switch (jdbcType) {
+			case Types.FLOAT:
+				_externalType = "float";
+				break;
+
+			default:
+				_externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+				break;
+			}
+			return _externalType;
+		}
 	}
 	
 	public static class H2SQLHelper extends ERXSQLHelper {
