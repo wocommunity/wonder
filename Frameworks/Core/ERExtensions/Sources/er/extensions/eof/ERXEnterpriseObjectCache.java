@@ -312,7 +312,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void editingContextDidSaveChanges(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
-        if(_applicationDidFinishInitialization && ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
+        // Only look at changes from editing contexts in the same EOF stack; ignore changes from child editing contexts
+        if(_applicationDidFinishInitialization && ec.parentObjectStore().equals(editingContext().rootObjectStore())) {
         	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
