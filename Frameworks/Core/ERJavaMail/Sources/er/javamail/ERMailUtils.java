@@ -375,10 +375,7 @@ public class ERMailUtils {
 	public static NSArray<String> emailsFromBulkList(String str) {
 		if ( (str!=null) && (str.length() > 3) ) {
 			//str = str.toLowerCase();
-			str = str.replace("\"", "");
 			str = str.replace(";", "");
-			str = str.replace(":", "");
-			str = str.replace("'", "");
 			str = str.replace("\n", ",");
 			str = str.replace("\r", ",");
 			str = str.replace(" ", ",");
