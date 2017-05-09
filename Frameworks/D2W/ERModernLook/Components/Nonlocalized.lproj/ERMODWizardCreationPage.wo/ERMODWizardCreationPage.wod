@@ -88,6 +88,11 @@ RequiredWrapper : ERMODRequiredWrapper {
 	d2wContext = d2wContext;
 }
 
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 InnerWrapper : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForInnerWrapper;
