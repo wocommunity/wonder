@@ -637,17 +637,47 @@ public class ERXMigrationTable {
 	 * Returns a new double column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newDoubleColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.DOUBLE, 0, 0, 0, allowsNull, null);
+	}
+	
+	/**
+	 * Returns a new double column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newDoubleColumn(String name, boolean allowsNull, Double defaultValue) throws SQLException {
+		return newColumn(name, Types.DOUBLE, 0, 0, 0, allowsNull, null, defaultValue);
+	}
+	
+	/**
+	 * Deprecated: doubles do not support precision and scale.
+	 * 
+	 * Returns a new double column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
 	 * @param scale the scale of the double
 	 * @param precision the precision of the double
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
+	@Deprecated
 	public ERXMigrationColumn newDoubleColumn(String name, int precision, int scale, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.DOUBLE, 0, precision, scale, allowsNull, null);
 	}
 
 	/**
+	 * Deprecated: doubles do not support precision and scale.
+	 * 
 	 * Returns a new double column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
@@ -658,6 +688,7 @@ public class ERXMigrationTable {
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
+	@Deprecated
 	public ERXMigrationColumn newDoubleColumn(String name, int precision, int scale, boolean allowsNull, Double defaultValue) throws SQLException {
 		return newColumn(name, Types.DOUBLE, 0, precision, scale, allowsNull, null, defaultValue);
 	}
