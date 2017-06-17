@@ -9,6 +9,9 @@
 	<artifactId>wotaskd</artifactId>
 	<name>wotaskd</name>
 	<packaging>woapplication</packaging>
+	<properties>
+		<skip.apple.frameworks>false</skip.apple.frameworks>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
