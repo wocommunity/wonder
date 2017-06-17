@@ -16,6 +16,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 
-script: "mvn test -s .maven_settings.xml -Dmaven.javadoc.skip=true -B"
+script: "mvn verify -s .maven_settings.xml -Dmaven.javadoc.skip=true -B"
 
 after_success: "mvn deploy -s .maven_settings.xml -DskipTests=true -B"
