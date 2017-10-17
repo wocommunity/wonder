@@ -20,5 +20,11 @@
 	<classpathentry kind="con" path="WOFramework/ERMoviesLogic"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
+	<classpathentry kind="con" path="WOFramework/ERCoreBusinessLogic"/>
+	<classpathentry kind="con" path="WOFramework/ERDirectToWeb"/>
+	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
+	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
+	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
+	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
