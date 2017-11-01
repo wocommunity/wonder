@@ -16,6 +16,7 @@
 		<module>ERXTest</module>
 		<module>TestAdaptor</module>
 		<module>PluginTest</module>
-		<module>ERModernMoviesTest</module>
+		<!-- Disable the ERModernMoviesTest module temporarily -->
+		<!--<module>ERModernMoviesTest</module>-->
 	</modules>
 </project>
