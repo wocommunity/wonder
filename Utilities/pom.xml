@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder</groupId>
 		<artifactId>wonder</artifactId>
-		<version>7.0.0-SNAPSHOT</version>
+		<version>7.0</version>
 	</parent>
 	<groupId>wonder.utilities</groupId>
 	<artifactId>utilities</artifactId>
