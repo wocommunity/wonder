@@ -6,8 +6,21 @@ env:
   # set NEXT_ROOT, so apps will start
   - NEXT_ROOT=/home/travis/build
 
-script: "mvn verify"
+cache:
+  directories:
+  - $HOME/.m2
+
+install: "mvn install -s .maven_settings.xml -DskipTests=true -Dmaven.javadoc.skip=true -B"
 
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+
+script: "mvn verify -s .maven_settings.xml -Dmaven.javadoc.skip=true -B"
+
+deploy:
+  - provider: script
+    script: "mvn deploy -s .maven_settings.xml -DskipTests=true -B"
+    on:
+      branch: master
+      tags: false
