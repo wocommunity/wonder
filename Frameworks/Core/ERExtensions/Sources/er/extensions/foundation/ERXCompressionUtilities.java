@@ -60,6 +60,7 @@ public class ERXCompressionUtilities {
 			if (input != null) {
 				try (GZIPOutputStream out = new GZIPOutputStream(bos)) {
 					out.write(input, offset, length);
+					out.finish();
 				}
 			}
 			return bos.toNSData();
@@ -73,6 +74,7 @@ public class ERXCompressionUtilities {
 	public static byte[] gzipByteArray(byte[] input) {
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); GZIPOutputStream out = new GZIPOutputStream(bos)) {
 			out.write(input, 0, input.length);
+			out.finish();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
@@ -132,6 +134,7 @@ public class ERXCompressionUtilities {
 			out.putNextEntry(new ZipEntry(zipEntryName));
 			out.write(input, 0, input.length);
 			out.closeEntry();
+			out.finish();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
@@ -204,6 +207,7 @@ public class ERXCompressionUtilities {
 	public static byte[] deflateByteArray(byte[] input) {
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); DeflaterOutputStream out = new DeflaterOutputStream(bos)) {
 			out.write(input, 0, input.length);
+			out.finish();
 
 			byte[] compressedData = bos.toByteArray();
 			return compressedData;
