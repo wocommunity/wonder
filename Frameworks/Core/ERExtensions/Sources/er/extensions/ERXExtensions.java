@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -447,7 +448,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		for (String unPrefixedKey : propertyKeys) {
     			String prefixedKey = prefix + unPrefixedKey;
     			String sqlString = e.sqlStringForAttributeNamed(prefixedKey);
-    			sqlDefinition = sqlDefinition.replaceAll(unPrefixedKey, sqlString);
+    			if (StringUtils.isNotBlank(sqlString)) {
+    				sqlDefinition = sqlDefinition.replaceAll(unPrefixedKey, sqlString);
+    			}
     		}
     		
     		// Up to this point we have generated the SQL for the key by replacing
