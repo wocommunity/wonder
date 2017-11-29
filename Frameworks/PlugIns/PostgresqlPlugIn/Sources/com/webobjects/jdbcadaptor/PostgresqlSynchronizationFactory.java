@@ -82,7 +82,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                         NSArray<EOSQLExpression> statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
                         if (!generatedStatements.containsObject(statements.valueForKey("statement"))) {
                             result.addObjectsFromArray(statements);
-                            generatedStatements.addObject(statements.valueForKey("statement"));
+                            generatedStatements.add((String) statements.valueForKey("statement"));
                         }
                     }
                 }
