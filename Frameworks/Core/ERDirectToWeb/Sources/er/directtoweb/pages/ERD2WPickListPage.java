@@ -28,6 +28,7 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -191,7 +192,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
     
     public WOComponent selectAllOnPage() {
-        NSMutableArray selectedObjects = new NSMutableArray();
+        NSMutableArray selectedObjects = selectedObjects().mutableClone();
         NSArray list = displayGroup().displayedObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
@@ -205,6 +206,13 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         setSelectedObjects(selectedObjects);
         return context().page();
     }
+    
+    public WOComponent unselectAllOnPage() {
+        NSArray selectedObjects = ERXArrayUtilities.arrayMinusArray(selectedObjects(), displayGroup().displayedObjects());
+        setSelectedObjects(selectedObjects);
+        return context().page();
+    }
+
 
     public boolean singleSelection() {
         if (_singleSelection == null) {

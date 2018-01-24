@@ -49,10 +49,40 @@ HideReturnOnSelect: WOConditional {
 	negate = true;
 }
 
+ObservationWrapper : AjaxObserveField {
+	updateContainerID = idForRepetitionContainer;
+	fullSubmit = true;
+}
+
 ListPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
 	displayGroup = displayGroup;
+}
+
+ShowBottomBatchNavBar : WOConditional {
+  condition = d2wContext.showBottomBatchNavBar;
+}
+
+BottomNavBar : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomNavBar;
+}
+
+BottomNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomBatchSize;
+}
+
+BatchSizeControl : WOSwitchComponent {
+  WOComponentName = d2wContext.batchNavigationSizeComponentName;
+  displayGroup = displayGroup;
+  updateContainerID = idForRepetitionContainer;
+  d2wContext = d2wContext;
+}
+
+ShowBottomBatchCount : WOConditional {
+  condition = d2wContext.showBottomBatchCount;
 }
 
 NavigationBar: WOSwitchComponent {   
@@ -61,6 +91,15 @@ NavigationBar: WOSwitchComponent {
     d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+ShowTopBatchCount : WOConditional {
+  condition = d2wContext.showTopBatchCount;
+}
+
+TopNavBatchSize : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopBatchSize;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -141,6 +180,6 @@ TopActionBlock : WOGenericContainer {
 
 RepetitionUpdateContainer : AjaxUpdateContainer {
 	elementName = "div";
-	id = d2wContext.idForRepetitionContainer;
+	id = idForRepetitionContainer;
 	class = d2wContext.classForInnerWrapper;
 }
