@@ -1,5 +1,5 @@
 <wo:WOConditional condition = "$schedulerRunning">
-<link href='http://fonts.googleapis.com/css?family=Cabin&v1' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Cabin&v1' rel='stylesheet' type='text/css'>
 <style>
 .fontCustom
 {
@@ -161,11 +161,12 @@ a:hover.buttonCustom{
 
 
 </style>
-
-	<div class="link"><wo:hyperlink action = "$refresh" class="buttonCustom">Refresh content</wo:hyperlink></div><br/>
-	<div class="link"><wo:hyperlink action = "$displayDashboard" class="buttonCustom">Dashboard</wo:hyperlink></div>
-	<div class="link"><wo:hyperlink action = "$displayRunningJobs" class="buttonCustom">Running jobs</wo:hyperlink></div>
-	<div class="link"><wo:hyperlink action = "$displayScheduledJobs" class="buttonCustom">Scheduled jobs</wo:hyperlink></div>
+	<div class="linksContainer">
+		<div class="link" style = "margin-bottom: 18px;"><wo:hyperlink action = "$refresh" class="buttonCustom">Refresh content</wo:hyperlink></div>
+		<div class="link"><wo:hyperlink action = "$displayDashboard" class="buttonCustom">Dashboard</wo:hyperlink></div>
+		<div class="link"><wo:hyperlink action = "$displayRunningJobs" class="buttonCustom">Running jobs</wo:hyperlink></div>
+		<div class="link"><wo:hyperlink action = "$displayScheduledJobs" class="buttonCustom">Scheduled jobs</wo:hyperlink></div>
+	</div>
 	<br/><br/>
 	<wo:WOConditional condition = "$dispDashboard">
 		<table summary="Dashboard" class="custom" cellspacing="0">
