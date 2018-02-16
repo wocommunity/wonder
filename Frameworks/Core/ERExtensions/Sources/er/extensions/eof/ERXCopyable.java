@@ -468,7 +468,7 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 				if (relatedObjects.count() > 0) {
 					entity.relationshipNamed(relationshipName);
 					ERXCopyable.copyLogger.debug("Removing objects in to-many relationship " + relationshipName);
-					for (ERXEnterpriseObject relatedObject : relatedObjects) {
+					for (ERXEnterpriseObject relatedObject : relatedObjects.immutableClone()) {
 						destination.removeObjectFromBothSidesOfRelationshipWithKey(relatedObject, relationshipName);
 						if (relatedObject.isNewObject()) {
 							editingContext.deleteObject(relatedObject);
