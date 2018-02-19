@@ -179,7 +179,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			// look funny in the request, but still allow the context to use a relative url.
 			requestUrl = "";
 		}
-		return app.createContextForRequest(app.createRequest("GET", requestUrl, "HTTP/1.1", null, null, null));
+		WORequest dummyRequest = app.createRequest("GET", requestUrl, "HTTP/1.1", null, null, null);
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.publicHostIsSecure", false)) {
+			dummyRequest.setHeader("on", "https");
+		}
+		return (ERXWOContext) app.createContextForRequest(dummyRequest);
+	}
 	}
 
 	public NSMutableDictionary mutableUserInfo() {

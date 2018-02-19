@@ -512,6 +512,8 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 ## If your WOHost is not your public host name, specify the public host to use for complete URL 
 ## generated without a server request like background tasks that send emails.
 # er.extensions.ERXApplication.publicHost=www.yourPublicHost.com
+## Set to true to switch default request used in background tasks to https
+# er.extensions.ERXApplication.publicHostIsSecure=false
 
 #########################################################################
 # ERXSession
