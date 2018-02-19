@@ -122,7 +122,7 @@ public  class ERXRequest extends WORequest {
 					throw new NSForwardException(new WOURLFormatException("<" + super.getClass().getName() + ">: Unable to build complete url as no server name was provided in the headers of the request."));
 			}
 			else {
-				serverName = WOApplication.application().host();
+				serverName = ERXApplication.erxApplication().publicHost();
 			}
 		}
 		return serverName;

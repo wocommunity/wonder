@@ -308,6 +308,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private String _proxyBalancerCookiePath = null;
 
 	/**
+	 * The public host to use for complete url without request from a server (in background tasks)
+	 */
+	private String _publicHost;
+
+	/**
 	 * Copies the props from the command line to the static dict
 	 * propertiesFromArgv.
 	 * 
@@ -1255,6 +1260,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	        }
 	    }
 
+	    _publicHost = ERXProperties.stringForKeyWithDefault("er.extensions.ERXApplication.publicHost", host());
 	}
 
 	/**
@@ -2855,5 +2861,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			context.response().addCookie(cookie);
 		}
 	}
-  
+
+	public String publicHost() {
+		return _publicHost;
+	}  
 }
