@@ -122,7 +122,7 @@ public  class ERXRequest extends WORequest {
 					throw new NSForwardException(new WOURLFormatException("<" + super.getClass().getName() + ">: Unable to build complete url as no server name was provided in the headers of the request."));
 			}
 			else {
-				serverName = WOApplication.application().host();
+				serverName = ERXApplication.erxApplication().publicHost();
 			}
 		}
 		return serverName;
@@ -271,7 +271,24 @@ public  class ERXRequest extends WORequest {
     	return ERXRequest.isRequestSecure(this);
     }
     
-    @Override
+    /**
+     * Add the protocol, server and port parts of this request to a StringBuffer.
+     * @param stringbuffer 
+     * 
+     */
+	public void _completeURLPrefix(StringBuffer stringbuffer) {
+		_completeURLPrefix(stringbuffer, isSecure(), 0);
+	}
+	
+    /**
+     * Add the protocol, server and port parts to a StringBuffer to build an URL to this app.
+     * if port is set to 0, this request port will be used.
+     * @param stringbuffer 
+     * @param secure generate a https url
+     * @param port the port number to use, 0 this request port  
+     * 
+     */
+	@Override
 	public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
     	if (_secureDisabled) {
     		secure = false;

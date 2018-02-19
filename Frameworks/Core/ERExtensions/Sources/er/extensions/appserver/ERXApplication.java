@@ -308,6 +308,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private String _proxyBalancerCookiePath = null;
 
 	/**
+	 * The public host to use for complete url without request from a server (in background tasks)
+	 */
+	private String _publicHost;
+
+	/**
 	 * Copies the props from the command line to the static dict
 	 * propertiesFromArgv.
 	 * 
@@ -1255,6 +1260,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	        }
 	    }
 
+	    _publicHost = ERXProperties.stringForKeyWithDefault("er.extensions.ERXApplication.publicHost", host());
 	}
 
 	/**
@@ -1436,7 +1442,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	@Override
-	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData aContent, Map<String, Object> someInfo) {
+	public ERXRequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData aContent, Map<String, Object> someInfo) {
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to
 		// be created by an exception.
@@ -2855,5 +2861,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			context.response().addCookie(cookie);
 		}
 	}
-  
+
+	public String publicHost() {
+		return _publicHost;
+	}  
 }
