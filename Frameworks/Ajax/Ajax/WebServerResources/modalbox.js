@@ -74,6 +74,7 @@ Modalbox.Methods = {
 				)
 			)
 		);
+		new Draggable(this.MBwindow);
 		if ( ! this.options.locked) {
 			this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
 			this.MBheader.insert({'bottom':this.MBclose});

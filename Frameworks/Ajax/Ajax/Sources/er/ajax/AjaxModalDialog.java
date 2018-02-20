@@ -753,6 +753,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		addScriptResourceInHead(response, "wonder.js");
 		addScriptResourceInHead(response, "effects.js");
 		addScriptResourceInHead(response, "modalbox.js");
+		addScriptResourceInHead(response, "dragdrop.js");
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), cssFileFrameworkName(), cssFileName());
 	}
 	
