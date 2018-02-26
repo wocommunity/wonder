@@ -18,6 +18,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components._private.ERXWOForm;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * <p>AjaxModalDialog is a modal dialog window based on ModalBox (see below for link).  It differs from AjaxModalContainer
@@ -111,9 +112,10 @@ import er.extensions.components._private.ERXWOForm;
  * 
  * @binding overlayOpacity Overlay opacity. Must be between 0-1. Default is .65.
  * @binding overlayDuration Overlay fade in/out duration in seconds.
- * @binding slideDownDuration Modalbox appear slide down effect in seconds.
- * @binding slideUpDuration Modalbox hiding slide up effect in seconds.
- * @binding resizeDuration Modalbox resize duration in seconds.
+ * @binding slideDownDuration Modalbox appear slide down effect in seconds, default is value of property er.ajax.modaldialog.slideDownDuration=0.5
+ * @binding slideUpDuration Modalbox hiding slide up effect in seconds, default is value of property er.ajax.modaldialog.slideUpDuration=0.5
+ * @binding resizeDuration Modalbox resize duration in seconds, default is value of property er.ajax.modaldialog.resizeDuration=0.25
+ * @binding movable Modalbox is movable, default is value of property er.ajax.modaldialog.movable=false
  * @binding inactiveFade true | false, Toggles Modalbox window fade on inactive state.
  * @binding transitions true | false, Toggles transition effects. Transitions are enabled by default.
  * @binding autoFocusing true | false, Toggles auto-focusing for form elements. Disable it for long text pages.  Add the class MB_notFocusable to
@@ -657,7 +659,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	public String id() {
 		return hasBinding("id") ? (String) valueForBinding("id") : ERXWOContext.safeIdentifierName(context(), false);
 	}
-
+	
 	/**
 	 * Returns the ID of the AjaxUpdateContainer that wraps the in-line contents of this dialog.
 	 * 
@@ -680,7 +682,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * @return binding values converted into Ajax options for ModalBox
 	 */
-	protected NSMutableDictionary createModalBoxOptions() {
+	protected NSMutableDictionary<String, String> createModalBoxOptions() {
 		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("title", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("width", AjaxOption.NUMBER));
@@ -695,9 +697,10 @@ public class AjaxModalDialog extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("locked", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayOpacity", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("overlayDuration", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("slideDownDuration", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("slideUpDuration", AjaxOption.NUMBER));
-		ajaxOptionsArray.addObject(new AjaxOption("resizeDuration", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("slideDownDuration", ERXProperties.stringForKey("er.ajax.modaldialog.slideDownDuration"), AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("slideUpDuration", ERXProperties.stringForKey("er.ajax.modaldialog.slideUpDuration"), AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("resizeDuration", ERXProperties.stringForKey("er.ajax.modaldialog.resizeDuration"), AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("movable", ERXProperties.booleanForKey("er.ajax.modaldialog.movable"), AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("inactiveFade", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("transitions", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("autoFocusing", AjaxOption.BOOLEAN));
@@ -753,6 +756,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		addScriptResourceInHead(response, "wonder.js");
 		addScriptResourceInHead(response, "effects.js");
 		addScriptResourceInHead(response, "modalbox.js");
+		addScriptResourceInHead(response, "dragdrop.js");
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), cssFileFrameworkName(), cssFileName());
 	}
 	
