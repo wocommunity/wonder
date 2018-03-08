@@ -3,6 +3,7 @@ package er.modern.directtoweb.components.query;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
@@ -16,6 +17,7 @@ import er.directtoweb.components.ERDCustomQueryComponent;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate;
 import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate.ERMD2WQueryComponent;
@@ -113,13 +115,42 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
         if (displayGroup().dataSource() instanceof EODatabaseDataSource) {
             EODatabaseDataSource dbds = (EODatabaseDataSource) displayGroup().dataSource();
             dbds.setAuxiliaryQualifier(qualifier);
-            dbds.fetchSpecification().setUsesDistinct(true);
+            if (canUseDistinctClause(dbds)) {
+                dbds.fetchSpecification().setUsesDistinct(true);
+            }
         } else {
             displayGroup().setQualifier(qualifier);
         }
         displayGroup().fetch();
         displayGroup().setCurrentBatchIndex(1);
         return null;
+    }
+
+    /**
+     * @param dbds
+     * @return true if it's OK to use a distinct clause
+     */
+    private boolean canUseDistinctClause(EODatabaseDataSource dbds) {
+        boolean allowDistinct = true;
+        if ("Oracle".equals(ERXJDBCUtilities.databaseProductName(dbds.entity().model()))) {
+            // oracle chokes on BLOB and CLOB columns in a distinct query
+            for (EOAttribute anAttribute : dbds.entity().attributesToFetch()) {
+                String externalType = anAttribute.externalType();
+                if (anAttribute.prototype() != null) {
+                    String ptExternalType = anAttribute.prototype().externalType();
+                    if ("BLOB".equals(ptExternalType)
+                            || "CLOB".equals(ptExternalType)) {
+                        allowDistinct = false;
+                        break;
+                    }
+                } else if ("BLOB".equals(externalType)
+                        || "CLOB".equals(externalType)) {
+                    allowDistinct = false;
+                    break;
+                }
+            }
+        }
+        return allowDistinct;
     }
 
     public void appendToResponse(WOResponse response, WOContext context) {
