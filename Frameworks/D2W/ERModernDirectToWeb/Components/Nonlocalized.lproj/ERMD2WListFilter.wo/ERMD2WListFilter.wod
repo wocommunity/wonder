@@ -14,7 +14,21 @@ observeField : AjaxObserveField {
 	updateContainerID = d2wContext.idForMainContainer;
 	observeFieldFrequency = 1;
 	action = search;
-	class = "ListFilterSearch";
+	class = searchFieldCssClass;
+}
+
+hasMultipleFields : WOConditional {
+	condition = hasMultipleFields;
+}
+
+fieldList : WORepetition {
+	count = searchKeyGroupCount;
+	index = searchFieldIndex;
+}
+
+hasSingleField : WOConditional {
+	condition = hasMultipleFields;
+	negate = true;
 }
 
 showSearchField : WOConditional {
@@ -24,6 +38,7 @@ showSearchField : WOConditional {
 SearchField: WOTextField {
 	value = searchValue;
 	type = "search";
+	title = localizedSearchKey;
 }
 
 showRestrictedChoices : WOConditional {
