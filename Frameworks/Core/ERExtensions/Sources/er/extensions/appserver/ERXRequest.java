@@ -455,8 +455,21 @@ public  class ERXRequest extends WORequest {
         				//
         				// only parse one cookie at a time => get(0)
         				HttpCookie httpCookie = HttpCookie.parse(cookies[i]).get(0);
-        				log.debug("Cookie: '"+httpCookie.getName()+"' = '"+httpCookie.getValue()+"'");
-        				cookieDictionary.setObjectForKey(new NSArray<String>(httpCookie.getValue()), httpCookie.getName());
+        				//
+        				// Cookies with longer paths are listed before cookies with shorter paths:
+        				// see https://stackoverflow.com/a/24214538
+        				// Cookies with longer Patch are more specific than cookies with shorter path 
+        				// and should not be replaced by a less specific cookie 
+        				// If a cookie with Therfore we do not override cookies if there are already there!
+        				String cookieName  = httpCookie.getName();
+        				String cookieValue = httpCookie.getValue();
+        				log.debug("Cookie: '"+cookieName+"' = '"+cookieValue+"'");
+        				NSArray<String> cookieValueArray = cookieDictionary.get(cookieName);
+        				if ( cookieValueArray == null ){
+        					cookieValueArray = new NSArray<>();
+        				}
+        				cookieValueArray = cookieValueArray.arrayByAddingObject(cookieValue);
+        				cookieDictionary.put( cookieName, cookieValueArray );
         			} catch (Throwable t) {
         				log.warn("Unable to parse cookie '"+cookies[i]+"' : "+t.getMessage());
         			}
