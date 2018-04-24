@@ -17,6 +17,11 @@ er.extensions.ERExtensions.hasLocalization=true
 ## Retain default value
 # er.extensions.ERXProperties.RetainDefaultsEnabled = true
 
+## Enables support for custom properties file lookup. 
+## E.g., Properties.[Framework], Properties.[Framework].[Username], Properties.log4j, and so on. 
+## Disabling this option might reduce the application startup time considerably.
+# er.extensions.ERXProperties.loadOptionalProperties = true
+
 ## Allows you to specify more config files (good luck:)
 # er.extensions.ERXProperties.OptionalConfigurationFiles = (/more/files)
 
