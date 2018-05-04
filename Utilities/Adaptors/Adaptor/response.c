@@ -234,7 +234,7 @@ HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstan
          //                 int value = resp->content_length;
          //             can be found in the adaptor source code.  Therefore, we
          //             should better use INT_MAX!
-         resp->content_length = INT_MAX;
+         resp->content_length = LONG_MAX;
          WOLog(WO_WARN, "Response doesn't specify a content-length: assuming %lu bytes!",
                resp->content_length);
       }
