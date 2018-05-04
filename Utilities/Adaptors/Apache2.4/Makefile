@@ -16,7 +16,7 @@ ifeq "MACOS" "${OS}"
 # These are the default settings for OSX.
 CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
-LDFLAGS += ${OPENSSL_LIB_FLAGS} ${LDARCHS} -macosx_version_min 10.5 -lm -module
+LDFLAGS += ${OPENSSL_LIB_FLAGS} ${LDARCHS} -lm -module
 STRIP_FLAGS = -S
 endif
 # End MacOS X Specific Settings
