@@ -1620,8 +1620,18 @@ ReadKnownVMs(const char *jrepath, char * arch, jboolean speculative)
     
     jvmCfg = fopen(jvmCfgName, "r");
     if (jvmCfg == NULL) {
+    	// retry without arch
+	strcpy(jvmCfgName, jrepath);
+	strcat(jvmCfgName, FILESEP "lib");
+	strcat(jvmCfgName, FILESEP "jvm.cfg");
+
+	jvmCfg = fopen(jvmCfgName, "r");
+    }
+
+
+    if (jvmCfg == NULL) {
       if (!speculative) {
-        ReportErrorMessage2("Error: could not open `%s'", jvmCfgName,
+	ReportErrorMessage2("Error: could not open `%s'", jvmCfgName,
 			    JNI_TRUE);
 	exit(1);
       } else {
