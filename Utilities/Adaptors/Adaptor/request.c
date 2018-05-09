@@ -70,7 +70,7 @@ void req_free(HTTPRequest *req)
    WOFREE(req);
 }
 
-void req_allocateContent(HTTPRequest *req, unsigned content_length, int allowStreaming)
+void req_allocateContent(HTTPRequest *req, unsigned long content_length, int allowStreaming)
 {
    if (req) {
       req->content_buffer_size = content_length;

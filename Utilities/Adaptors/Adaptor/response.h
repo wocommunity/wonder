@@ -38,9 +38,9 @@ typedef struct _HTTPResponse {
         String *responseStrings;
         void *content;
         unsigned long content_length;
-        unsigned content_buffer_size;
+        unsigned long content_buffer_size;
         unsigned long content_read; /* total amount of data read from the instance */
-        unsigned content_valid; /* amount of valid data in content buffer */
+        unsigned long content_valid; /* amount of valid data in content buffer */
         int (*getMoreContent)(struct _HTTPResponse *resp, void *buffer, int bufferSize);
         
         WOConnection *instanceConnection;

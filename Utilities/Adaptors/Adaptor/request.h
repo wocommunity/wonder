@@ -53,7 +53,7 @@ typedef struct _HTTPRequest {
 	void *api_handle;			/* api specific pointer */
 	unsigned long content_length;
 	void *content;
-        unsigned content_buffer_size;
+        unsigned long content_buffer_size;
         req_getMoreContentCallback getMoreContent;
         int haveReadStreamedData;
         int shouldProcessUrl;
@@ -73,7 +73,7 @@ void req_free(HTTPRequest *req);
 /* If allowStreaming is 0, the buffer will be the size specified by content_length. */
 /* If allowStreaming is 1, the buffer may be smaller than content_length. */
 /* Sets content, and content_buffer_size. Either of these should be checked in case the allocation fails. */
-void req_allocateContent(HTTPRequest *req, unsigned content_length, int allowStreaming);
+void req_allocateContent(HTTPRequest *req, unsigned long content_length, int allowStreaming);
 
 /*
  *	convenience for all adaptors, returns error string or null
