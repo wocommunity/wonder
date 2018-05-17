@@ -70,7 +70,7 @@ void req_free(HTTPRequest *req)
    WOFREE(req);
 }
 
-void req_allocateContent(HTTPRequest *req, unsigned long content_length, int allowStreaming)
+void req_allocateContent(HTTPRequest *req, long long content_length, int allowStreaming)
 {
    if (req) {
       req->content_buffer_size = content_length;
@@ -168,7 +168,7 @@ const char *req_AddHeader_common(HTTPRequest *req,const char *key,const char *va
     */
    if ((req->content_length == 0) &&
        ((strcasecmp(key, CONTENT_LENGTH) == 0) || (strcasecmp(key, "content_length") == 0)))	/* get content-length */
-       req->content_length = atol(value);
+       req->content_length = atoll(value);
 
 #ifdef DEBUG
        WOLog(WO_DBG,"(req-hdr) %s: %s",key, value);
@@ -263,8 +263,8 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    /* Note that we reuse buffers, and the existing content-data buffer. */
    if (req->content_length > req->content_buffer_size)
    {
-      long total_sent = req->content_buffer_size;
-      long len_read, amount_to_read;
+      long long total_sent = req->content_buffer_size;
+      long long len_read, amount_to_read;
       req->haveReadStreamedData = 1;
       while (total_sent < req->content_length)
       {
@@ -362,8 +362,8 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    /* Note that we reuse buffers, and the existing content-data buffer. */
    if (req->content_length > req->content_buffer_size)
    {
-      long total_sent = req->content_buffer_size;
-      long len_read, amount_to_read;
+      long long total_sent = req->content_buffer_size;
+      long long len_read, amount_to_read;
       req->haveReadStreamedData = 1;
       while (total_sent < req->content_length && result == 0)
       {
