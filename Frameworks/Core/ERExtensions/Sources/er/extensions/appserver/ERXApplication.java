@@ -1679,11 +1679,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		System.exit(1);
 	}
 
-	/** cached name suffix */
-	private String _nameSuffix;
-	/** has the name suffix been cached? */
-	private boolean _nameSuffixLookedUp = false;
-
 	/**
 	 * The name suffix is appended to the current name of the application. This
 	 * adds the ability to add a useful suffix to differentiate between
@@ -1695,15 +1690,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * would set the ERApplicationNameSuffix to Training.
 	 * 
 	 * @return the System property <b>ERApplicationNameSuffix</b> or
-	 *         <code>null</code>
+	 *         <code>""</code>
 	 */
 	public String nameSuffix() {
-		if (!_nameSuffixLookedUp) {
-			_nameSuffix = System.getProperty("ERApplicationNameSuffix");
-			_nameSuffix = _nameSuffix == null ? "" : _nameSuffix;
-			_nameSuffixLookedUp = true;
-		}
-		return _nameSuffix;
+		return ERXProperties.stringForKeyWithDefault("ERApplicationNameSuffix", "");
 	}
 
 	/** cached computed name */
@@ -1719,13 +1709,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public String name() {
 		if (_userDefaultName == null) {
-			_userDefaultName = System.getProperty("ERApplicationName");
-			if (_userDefaultName == null)
-				_userDefaultName = super.name();
-			if (_userDefaultName != null) {
-				String suffix = nameSuffix();
-				if (suffix != null && suffix.length() > 0)
-					_userDefaultName += suffix;
+			synchronized (this) {
+				_userDefaultName = System.getProperty("ERApplicationName");
+				if (_userDefaultName == null)
+					_userDefaultName = super.name();
+				if (_userDefaultName != null) {
+					String suffix = nameSuffix();
+					if (suffix != null && suffix.length() > 0)
+						_userDefaultName += suffix;
+				}
 			}
 		}
 		return _userDefaultName;
