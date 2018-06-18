@@ -37,10 +37,10 @@ typedef struct _HTTPResponse {
         /* These Strings get freed along with the response. */
         String *responseStrings;
         void *content;
-        unsigned long content_length;
-        unsigned long content_buffer_size;
-        unsigned long content_read; /* total amount of data read from the instance */
-        unsigned long content_valid; /* amount of valid data in content buffer */
+        long long content_length;
+        long long content_buffer_size;
+        long long content_read; /* total amount of data read from the instance */
+        long long content_valid; /* amount of valid data in content buffer */
         int (*getMoreContent)(struct _HTTPResponse *resp, void *buffer, int bufferSize);
         
         WOConnection *instanceConnection;

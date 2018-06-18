@@ -200,7 +200,7 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
 
          /* resp->content_valid will be 0 for HEAD requests and empty responses */
          if (resp->content_valid) {
-            long count;
+            long long count;
             while (resp->content_read < resp->content_length &&
                    (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID &&
                    browserStatus == 0) {
@@ -567,7 +567,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
        length = (char *)WOMALLOC(32);
        if (length)
        {
-          sprintf(length,"%lu",req->content_length);
+          sprintf(length,"%llu",req->content_length);
           req_addHeader(req, CONTENT_LENGTH, length, STR_FREEVALUE);
        }
        if (p->lpszContentType != NULL)
