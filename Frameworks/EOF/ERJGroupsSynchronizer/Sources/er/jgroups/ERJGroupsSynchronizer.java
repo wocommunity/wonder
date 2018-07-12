@@ -71,7 +71,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 
 		URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
 		_channel = new JChannel(propertiesUrl);
-		_channel.setDiscardOwnMessages(Boolean.FALSE);
+		_channel.setDiscardOwnMessages(Boolean.TRUE);
 
 		_registerForCleanup();
 	}
