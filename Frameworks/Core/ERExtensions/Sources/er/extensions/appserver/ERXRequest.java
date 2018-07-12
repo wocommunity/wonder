@@ -331,7 +331,10 @@ public  class ERXRequest extends WORequest {
         	
 	        String serverPort = request.headerForKey("SERVER_PORT");
 	        if (serverPort == null) {
-	          serverPort = request.headerForKey("x-webobjects-server-port");
+	        	serverPort = request.headerForKey("x-webobjects-servlet-server-port");
+	        }
+	        if (serverPort == null) {
+	        	serverPort = request.headerForKey("x-webobjects-server-port");
 	        }
 	
 	        // Apache and some other web servers use this to indicate HTTPS mode.
