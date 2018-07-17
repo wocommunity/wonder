@@ -34,6 +34,7 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXDatabase.CacheChange;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**
@@ -395,6 +396,12 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 						finally {
 							editingContext.unlock();
 						}
+
+            if (ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.localNotifyOfRemoteUpdates", false)) {
+    				  NSMutableDictionary userInfo = new NSMutableDictionary(new NSArray(gid), EODatabaseContext.UpdatedKey);
+  					  userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
+	  				  NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification, dbc, userInfo);
+            }
 					}
 					finally {
 						ERXObjectStoreCoordinatorSynchronizer.setProcessingRemoteNotifications(false);
