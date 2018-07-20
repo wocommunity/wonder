@@ -23,7 +23,12 @@ import com.webobjects.foundation.NSSet;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ERXDatabase extends EODatabase {
+  private static final Logger log = LoggerFactory.getLogger(ERXDatabase.class);
+
 	public static final String SnapshotCacheChanged = "SnapshotCacheChanged";
 	public static final String CacheChangeKey = "CacheChange";
 	protected static int SnapshotCacheMapInitialCapacity = 1048576;
@@ -33,12 +38,12 @@ public class ERXDatabase extends EODatabase {
 	private boolean _decrementSnapshot;
 
 	public static void setSnapshotCacheMapInitialCapacity( int capacity ) {
-		NSLog.out.appendln( "Setting SnapshotCacheMapInitialCapacity = " + capacity );
+		log.debug( "Setting SnapshotCacheMapInitialCapacity = " + capacity );
 		SnapshotCacheMapInitialCapacity = capacity;
 	}
 	
 	public static void setSnapshotCacheMapInitialLoadFactor( float loadFactor ) {
-		NSLog.out.appendln( "Setting SnapshotCacheMapInitialLoadFactor = " + loadFactor );
+		log.debug( "Setting SnapshotCacheMapInitialLoadFactor = " + loadFactor );
 		SnapshotCacheMapInitialLoadFactor = loadFactor;
 	}
 	
@@ -47,8 +52,8 @@ public class ERXDatabase extends EODatabase {
 
 		// AK: huge performance optimization when you use badly distributed LONG keys
 
-		NSLog.out.appendln( "Using SnapshotCacheMapInitialCapacity = " + SnapshotCacheMapInitialCapacity );
-		NSLog.out.appendln( "Using SnapshotCacheMapInitialLoadFactor = " + SnapshotCacheMapInitialLoadFactor );
+		log.debug( "Using SnapshotCacheMapInitialCapacity = " + SnapshotCacheMapInitialCapacity );
+		log.debug( "Using SnapshotCacheMapInitialLoadFactor = " + SnapshotCacheMapInitialLoadFactor );
 		_snapshots = new NSMutableDictionary() {
 			/**
 			 * Do I need to update serialVersionUID?
