@@ -17,7 +17,7 @@ import er.extensions.components.ERXWOComponentContent;
  * Allows for multiple contents in a component. For every of one of these, when 
  * you have ERXWOComponentContent in your wrapper, then they will append in their stead.
  * Note that if you also have a plain WOComponentContent in your wrapper, it will get appended
- * a second time. See {@link ERXWOComponentContent} for a full explaination.
+ * a second time. See {@link ERXWOComponentContent} for a full explanation.
  * @author ak (Java port)
  * @author Charles Lloyd
  * @binding templateName

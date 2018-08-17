@@ -91,6 +91,15 @@ public class ERXXmlRestParser implements IERXRestParser {
 				if ("datetime".equals(type)) {
 					type = "NSTimestamp";
 				}
+				if ("date".equals(type)) {
+					type = "java.time.LocalDate";
+				}
+				if ("datetime2".equals(type)) {
+					type = "java.time.LocalDateTime";
+				}
+				if ("time".equals(type)) {
+					type = "java.time.LocalTime";
+				}
 				else if ("integer".equals(type)) {
 					type = "int";
 				}
@@ -109,7 +118,8 @@ public class ERXXmlRestParser implements IERXRestParser {
 		
 		return requestNode;
 	}
-	
+
+	@Override
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();

@@ -1,5 +1,7 @@
 package er.modern.look.pages;
 
+import java.util.UUID;
+
 import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.pages.templates.ERD2WPickListPageTemplate;
@@ -33,5 +35,23 @@ public class ERMODPickListPage extends ERD2WPickListPageTemplate {
 	public ERMODPickListPage(WOContext wocontext) {
 		super(wocontext);
 	}
+ 
+    private String _componentID;
+
+    private String componentID() {
+        if (_componentID == null)
+            _componentID = UUID.randomUUID().toString().replace("-", "_");
+        return _componentID;
+    }
+
+    /**
+     * @return a unique ID for the repetition container
+     */
+    public String idForRepetitionContainer() {
+        String repetitionContainerID = (String) d2wContext().valueForKey("idForRepetitionContainer");
+        repetitionContainerID = repetitionContainerID.concat("_" + componentID());
+        return repetitionContainerID;
+    }
+
 
 }

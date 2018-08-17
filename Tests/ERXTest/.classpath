@@ -20,5 +20,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
 	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
 	<classpathentry kind="con" path="WOFramework/ERChronic"/>
+	<classpathentry kind="lib" path="Libraries/hamcrest-all-1.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

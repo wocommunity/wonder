@@ -74,6 +74,10 @@ public class ERMD2WAttributeQueryDelegate {
     }
 
     public EOQualifier buildQualifier(ERMD2WQueryComponent sender) {
+        return buildQualifier(sender, 0);
+    }
+
+    public EOQualifier buildQualifier(ERMD2WQueryComponent sender, int searchFieldIndex) {
         EOQualifier qualifier = null;
         Integer typeAheadMinimumCharacterCount = ERXValueUtilities
                 .IntegerValueWithDefault(
@@ -83,7 +87,7 @@ public class ERMD2WAttributeQueryDelegate {
                 && sender.searchValue().length() >= typeAheadMinimumCharacterCount) {
 
             NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
-            for (String anAttributeName : searchKey(sender)) {
+            for (String anAttributeName : searchKey(sender, searchFieldIndex)) {
                 EOEntity entity = null;
                 if (sender.dataSource() != null) {
                     entity = EOUtilities.entityNamed(sender.dataSource().editingContext(),
@@ -133,7 +137,7 @@ public class ERMD2WAttributeQueryDelegate {
     private static final NSSelector<?> selector = EOQualifier.QualifierOperatorCaseInsensitiveLike;
 
     @SuppressWarnings("unchecked")
-    private NSArray<String> searchKey(ERMD2WQueryComponent sender) {
+    public NSArray<String> searchKey(ERMD2WQueryComponent sender, int searchFieldIndex) {
         NSArray<String> searchKey = null;
         if (sender.d2wContext().valueForKey("searchKey") == null
                 && sender.dataSource() != null
@@ -150,8 +154,13 @@ public class ERMD2WAttributeQueryDelegate {
         } else if (sender.d2wContext().valueForKey("searchKey") instanceof String) {
             searchKey = new NSArray<String>((String) sender.d2wContext().valueForKey(
                     "searchKey"));
-        } else {
-            searchKey = (NSArray<String>) sender.d2wContext().valueForKey("searchKey");
+        } else if ((sender.d2wContext().valueForKey("searchKey") instanceof NSArray<?>)) {
+            NSArray<?> rawValue = (NSArray<?>) sender.d2wContext().valueForKey("searchKey");
+            if (rawValue.objectAtIndex(0) instanceof NSArray<?>) {
+                searchKey = (NSArray<String>) rawValue.objectAtIndex(searchFieldIndex);
+            } else {
+                searchKey = (NSArray<String>) sender.d2wContext().valueForKey("searchKey");
+            }
         }
         return searchKey;
     }

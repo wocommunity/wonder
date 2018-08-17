@@ -51,17 +51,15 @@ typedef struct _HTTPRequest {
 	char *request_str;			/* the http request (includes CRLF) */
 	void *headers;				/* (strtbl *) but you don't need to know */
 	void *api_handle;			/* api specific pointer */
-	unsigned long content_length;
+	long long content_length;
 	void *content;
-        unsigned content_buffer_size;
-        req_getMoreContentCallback getMoreContent;
-        int haveReadStreamedData;
-        int shouldProcessUrl;
+    long long content_buffer_size;
+    req_getMoreContentCallback getMoreContent;
+    int haveReadStreamedData;
+    int shouldProcessUrl;
 #ifdef IIS
         /* for IIS we have to keep track of how much we have read */
-        // 2009/04/27: IIS is using DWORD in the API layer and a DWORD
-        //             is an "unsigned long" value:
-        unsigned long total_len_read;
+    long long total_len_read;
 #endif
 } HTTPRequest;
 
@@ -73,7 +71,7 @@ void req_free(HTTPRequest *req);
 /* If allowStreaming is 0, the buffer will be the size specified by content_length. */
 /* If allowStreaming is 1, the buffer may be smaller than content_length. */
 /* Sets content, and content_buffer_size. Either of these should be checked in case the allocation fails. */
-void req_allocateContent(HTTPRequest *req, unsigned content_length, int allowStreaming);
+void req_allocateContent(HTTPRequest *req, long long content_length, int allowStreaming);
 
 /*
  *	convenience for all adaptors, returns error string or null

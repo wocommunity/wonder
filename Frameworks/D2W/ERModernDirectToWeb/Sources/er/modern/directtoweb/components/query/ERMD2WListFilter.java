@@ -3,29 +3,36 @@ package er.modern.directtoweb.components.query;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxUtils;
 import er.directtoweb.components.ERDCustomQueryComponent;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate;
 import er.modern.directtoweb.delegates.ERMD2WAttributeQueryDelegate.ERMD2WQueryComponent;
 
 /**
- * Ajax-enabled ad-hoc filtering of lists. Similar to ERDAjaxSearchDisplayGroup, 
- * but enables filtering over multiple attributes and/or a pop-up list of choices.
+ * Ajax-enabled ad-hoc filtering of lists. Similar to ERDAjaxSearchDisplayGroup,
+ * but enables filtering over multiple attributes using either a single or
+ * multiple search fields and/or a pop-up list of choices.
  * 
- * Gets displayed when either or both of searchKey and restrictedChoiceKey D2W keys is not null.
+ * Gets displayed when either or both of searchKey and restrictedChoiceKey D2W
+ * keys is not null. If the search key is an array of arrays of keys, a separate
+ * search field will be rendered for each array of keys and the individual
+ * qualifiers generated for each field will be ANDed.
  * 
- * @d2wKey searchKey - either a single target key as a string or an array with multiple keys
+ * @d2wKey searchKey - either a single target key as a string, an array with multiple keys or an array of arrays with keys
  * @d2wKey restrictedChoiceKey - key path that will return a list of filter choices, note that no "object" will be available!
  * @d2wKey keyWhenRelationship - specifies the display key on the choice
  * @d2wKey noSelectionString - "no selection" string to show on the restricted choice pop-up
@@ -50,7 +57,12 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
     }
 
     private Object _filterChoice;
-    private String _searchValue;
+    
+    private NSMutableDictionary<String, String> _searchValues = new NSMutableDictionary<>();
+
+    private NSMutableDictionary<String, EOQualifier> _qualifiers = new NSMutableDictionary<>();
+
+    public Integer searchFieldIndex = 0;
 
     public Object filterChoiceItem;
 
@@ -73,8 +85,15 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
     // actions
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public WOActionResults search() {
-        EOQualifier _qualifier = ERMD2WAttributeQueryDelegate.instance
-                .buildQualifier(this);
+        // get the qualifier for the current search field
+        EOQualifier qualifier = ERMD2WAttributeQueryDelegate.instance
+                .buildQualifier(this, searchFieldIndex);
+
+        // store the qualifier for this search field
+        _qualifiers.takeValueForKey(qualifier, searchFieldIndex.toString());
+        
+        // "and" active qualifiers from all search fields
+        qualifier = ERXQ.and(_qualifiers.allValues());
         
         String filterChoicesKey = (String) d2wContext().valueForKey(Keys.restrictedChoiceTargetKey);
         if (!ERXStringUtilities.stringIsNullOrEmpty(filterChoicesKey)
@@ -85,9 +104,9 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
                 NSMutableArray deepChoices = new NSMutableArray(filterChoice());
                 deepChoices.addObjects(NSKeyValueCoding.Utility
                         .valueForKey(filterChoice(), recursionKey));
-                _qualifier = ERXQ.and(_qualifier, ERXQ.in(filterChoicesKey, ERXArrayUtilities.flatten(deepChoices)));
+                qualifier = ERXQ.and(qualifier, ERXQ.in(filterChoicesKey, ERXArrayUtilities.flatten(deepChoices)));
             } else {
-                _qualifier = ERXQ.and(_qualifier,
+                qualifier = ERXQ.and(qualifier,
                         ERXQ.equals(filterChoicesKey, filterChoice()));
             }
         }
@@ -95,28 +114,119 @@ public class ERMD2WListFilter extends ERDCustomQueryComponent implements
         // qualify on the data source if it's a DB data source
         if (displayGroup().dataSource() instanceof EODatabaseDataSource) {
             EODatabaseDataSource dbds = (EODatabaseDataSource) displayGroup().dataSource();
-            dbds.setAuxiliaryQualifier(_qualifier);
-            dbds.fetchSpecification().setUsesDistinct(true);
+            dbds.setAuxiliaryQualifier(qualifier);
+            if (canUseDistinctClause(dbds)) {
+                dbds.fetchSpecification().setUsesDistinct(true);
+            }
         } else {
-            displayGroup().setQualifier(_qualifier);
+            displayGroup().setQualifier(qualifier);
         }
         displayGroup().fetch();
         displayGroup().setCurrentBatchIndex(1);
         return null;
     }
 
+    /**
+     * @param dbds
+     * @return true if it's OK to use a distinct clause
+     */
+    private boolean canUseDistinctClause(EODatabaseDataSource dbds) {
+        boolean allowDistinct = true;
+        if ("Oracle".equals(ERXJDBCUtilities.databaseProductName(dbds.entity().model()))) {
+            // oracle chokes on BLOB and CLOB columns in a distinct query
+            for (EOAttribute anAttribute : dbds.entity().attributesToFetch()) {
+                String externalType = anAttribute.externalType();
+                if (anAttribute.prototype() != null) {
+                    String ptExternalType = anAttribute.prototype().externalType();
+                    if ("BLOB".equals(ptExternalType)
+                            || "CLOB".equals(ptExternalType)) {
+                        allowDistinct = false;
+                        break;
+                    }
+                } else if ("BLOB".equals(externalType)
+                        || "CLOB".equals(externalType)) {
+                    allowDistinct = false;
+                    break;
+                }
+            }
+        }
+        return allowDistinct;
+    }
+
     public void appendToResponse(WOResponse response, WOContext context) {
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
         super.appendToResponse(response, context);
     }
-
+    
+    /**
+     * @return true if multiple search fields have been defined
+     */
+    public boolean hasMultipleFields() {
+        boolean hasMultipleFields = false;
+        if (d2wContext().valueForKey("searchKey") instanceof NSArray<?>) {
+            NSArray<?> rawValue = (NSArray<?>) d2wContext().valueForKey("searchKey");
+            if (rawValue.objectAtIndex(0) instanceof NSArray<?>) {
+                hasMultipleFields = true;
+            }
+        }
+        return hasMultipleFields;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public NSArray<NSArray<String>> searchKeyGroups() {
+        NSArray<NSArray<String>> searchKeyGroups = null;
+        if ((d2wContext().valueForKey("searchKey") instanceof NSArray<?>)) {
+            NSArray<?> rawValue = (NSArray<?>) d2wContext().valueForKey("searchKey");
+            if (rawValue.objectAtIndex(0) instanceof NSArray<?>) {
+                searchKeyGroups = (NSArray<NSArray<String>>) d2wContext().valueForKey("searchKey");
+            } else {
+                NSArray<String> searchKey = (NSArray<String>) d2wContext()
+                        .valueForKey("searchKey");
+                searchKeyGroups = new NSArray<NSArray<String>>(searchKey);
+            }
+        }
+        return searchKeyGroups;
+    }
+    
+    public int searchKeyGroupCount() {
+        return searchKeyGroups().count();
+    }
+    
+    public NSArray<String> searchKey() {
+        return ERMD2WAttributeQueryDelegate.instance.searchKey(this, searchFieldIndex);
+    }
+    
+    public String localizedSearchKey() {
+        String searchKeyList = searchKey().componentsJoinedByString(",");
+        return ERXLocalizer.currentLocalizer()
+                .localizedStringForKeyWithDefault("ERMD2WListFilter.searchKey."
+                        + searchKeyList);
+    }
+    
+    /**
+     * @return a class list that allows targeting of individual search fields
+     */
+    public String searchFieldCssClass() {
+        String searchFieldCssClass = "ListFilterSearch";
+        if (hasMultipleFields()) {
+            searchFieldCssClass = searchFieldCssClass.concat(" ListFilterSearch_" + searchFieldIndex);
+        }
+        return searchFieldCssClass;
+    }
+    
     public void setSearchValue(String searchValue) {
-        _searchValue = searchValue;
+        // set the search value for the current field
+        if (searchValue == null) {
+            _searchValues.removeObjectForKey(searchFieldIndex.toString());
+        } else {
+            _searchValues.setObjectForKey(searchValue, searchFieldIndex.toString());
+        }
     }
 
     @Override
     public String searchValue() {
-        return _searchValue;
+        // retrieve the search value for the current field
+        return _searchValues.objectForKey(searchFieldIndex.toString());
     }
 
     public void setFilterChoice(Object filterChoice) {

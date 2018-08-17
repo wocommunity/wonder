@@ -195,6 +195,8 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective sort orderings.
 	 * 
+	 * @param editingContext
+	 *            the editing context
 	 * @param options
 	 *            the current options
 	 * @return the effective sort orderings
@@ -237,6 +239,8 @@ public class ERXRestFetchSpecification<T extends EOEnterpriseObject> {
 	/**
 	 * Returns the effective qualifier.
 	 * 
+	 * @param editingContext
+	 *            the editing context
 	 * @param options
 	 *            the current options
 	 * @return the effective qualifier

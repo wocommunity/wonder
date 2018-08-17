@@ -31,6 +31,7 @@ public class ERXJSONRestWriter extends ERXRestWriter {
 		return node;
 	}
 
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		node = processNode(node);
 		if (node != null) {

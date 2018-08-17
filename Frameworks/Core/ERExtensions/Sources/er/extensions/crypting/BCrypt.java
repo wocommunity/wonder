@@ -33,7 +33,7 @@ import java.security.SecureRandom;
  * call the hashpw method with a random salt, like this:
  * <p>
  * <code>
- * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.gensalt()); <br />
+ * String pw_hash = BCrypt.hashpw(plain_password, BCrypt.gensalt());
  * </code>
  * <p>
  * To check whether a plaintext password matches one that has been
@@ -43,10 +43,10 @@ import java.security.SecureRandom;
  * if (BCrypt.checkpw(candidate_password, stored_hash))<br />
  * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("It matches");<br />
  * else<br />
- * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("It does not match");<br />
+ * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("It does not match");
  * </code>
  * <p>
- * The gensalt() method takes an optional parameter (log_rounds)
+ * The {@link #gensalt()} method takes an optional parameter (log_rounds)
  * that determines the computational complexity of the hashing:
  * <p>
  * <code>
@@ -57,6 +57,12 @@ import java.security.SecureRandom;
  * The amount of work increases exponentially (2**log_rounds), so 
  * each increment is twice as much work. The default log_rounds is
  * 10, and the valid range is 4 to 30.
+ * <p>
+ * Limitation of BCrypt is that passwords have a maximum length of
+ * 72 bytes after which they will get truncated. Pay attention to
+ * the unit "bytes" which will mean your passwords can safely go
+ * up to 72 ASCII characters but e.g. only up to 18 when you have
+ * UTF-8 characters each taking 4 bytes.
  *
  * @author Damien Miller
  * @version 0.4

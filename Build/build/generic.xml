@@ -277,7 +277,7 @@ There are many ways to use this script:
 
         <path id="wo.exec.test.path">
             <pathelement location="${build.root}/ERJars.${fRJ}/junit.jar" />
-            <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang3-3.5.jar" />
+            <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang3-3.7.jar" />
             <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derby.jar" />
             <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/DerbyPlugIn.jar" />
             <pathelement location="${build.root}/DerbyPlugIn.${fRJ}/derbytools.jar" />
@@ -326,7 +326,7 @@ There are many ways to use this script:
         <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
 
         <path id="wo.exec.test.path">
-            <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang3-3.5.jar" />
+            <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang3-3.7.jar" />
             <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
             <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
             <pathelement location="${wo.system.frameworks}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />

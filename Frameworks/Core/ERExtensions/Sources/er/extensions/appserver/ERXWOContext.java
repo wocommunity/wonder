@@ -161,8 +161,8 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * Creates a WOContext using a dummy WORequest.
 	 * @return the new WOContext
 	 */
-	public static WOContext newContext() {
-		WOApplication app = WOApplication.application();
+	public static ERXWOContext newContext() {
+		ERXApplication app = ERXApplication.erxApplication();
 		// Try to create a URL with a relative path into the application to mimic a real request.
 		// We must create a request with a relative URL, as using an absolute URL makes the new 
 		// WOContext's URL absolute, and it is then unable to render relative paths. (Long story short.)
@@ -179,7 +179,15 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			// look funny in the request, but still allow the context to use a relative url.
 			requestUrl = "";
 		}
-		return app.createContextForRequest(app.createRequest("GET", requestUrl, "HTTP/1.1", null, null, null));
+		WORequest dummyRequest = app.createRequest("GET", requestUrl, "HTTP/1.1", null, null, null);
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.publicHostIsSecure", false)) {
+			dummyRequest.setHeader("on", "https");
+		}
+		return (ERXWOContext) app.createContextForRequest(dummyRequest);
+	}
+	
+	public <T extends ERXRequest> T erxRequest() {
+		return (T) request();
 	}
 
 	public NSMutableDictionary mutableUserInfo() {

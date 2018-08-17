@@ -10,7 +10,8 @@ import com.webobjects.eocontrol.EOClassDescription;
 public abstract class ERXAbstractRestDelegate implements IERXRestDelegate {
 	public ERXAbstractRestDelegate() {
 	}
-	
+
+	@Override
 	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription) {
 		return false;
 	}

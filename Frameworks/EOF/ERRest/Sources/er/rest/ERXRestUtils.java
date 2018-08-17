@@ -3,13 +3,15 @@ package er.rest;
 import java.math.BigDecimal;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQuery;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntityClassDescription;
@@ -36,6 +38,10 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author mschrag
  */
 public class ERXRestUtils {
+	protected final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE;
+	protected final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
+	protected final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ISO_TIME;
+
 	/**
 	 * Returns whether or not the given object represents a primitive in REST.
 	 * 
@@ -90,10 +96,10 @@ public class ERXRestUtils {
 		else if (Calendar.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
-		else if (LocalDateTime.class.isAssignableFrom(valueType)) {
+		else if (org.joda.time.LocalDateTime.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
-		else if (LocalDate.class.isAssignableFrom(valueType)) {
+		else if (org.joda.time.LocalDate.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
 		else if (Enum.class.isAssignableFrom(valueType)) {
@@ -105,6 +111,18 @@ public class ERXRestUtils {
 		else if (ERXCryptoString.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
+		else if (LocalDate.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (LocalDateTime.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (LocalTime.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (OffsetDateTime.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
 		return primitive;
 	}
 
@@ -112,6 +130,7 @@ public class ERXRestUtils {
 	 * Convert the given object to a String (using REST formats).
 	 * 
 	 * @param value the value to convert
+	 * @param context the REST context
 	 * @return the REST-formatted string
 	 */
 	public static String coerceValueToString(Object value, ERXRestContext context) {
@@ -132,11 +151,23 @@ public class ERXRestUtils {
 		else if (value instanceof Date) {
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
 		}
-		else if (value instanceof LocalDateTime) {
-			formattedValue = ERXRestUtils.jodaLocalDateTimeFormat(false, context).print((LocalDateTime)value);
+		else if (value instanceof org.joda.time.LocalDateTime) {
+			formattedValue = ERXRestUtils.jodaLocalDateTimeFormat(false, context).print((org.joda.time.LocalDateTime)value);
+		}
+		else if (value instanceof org.joda.time.LocalDate) {
+			formattedValue = ERXRestUtils.jodaLocalDateFormat(false, context).print((org.joda.time.LocalDate)value);
 		}
 		else if (value instanceof LocalDate) {
-			formattedValue = ERXRestUtils.jodaLocalDateFormat(false, context).print((LocalDate)value);
+			formattedValue = DATE_FORMATTER.format((TemporalAccessor)value);
+		}
+		else if (value instanceof LocalDateTime) {
+			formattedValue = DATE_TIME_FORMATTER.format((TemporalAccessor)value);
+		}
+		else if (value instanceof LocalTime) {
+			formattedValue = TIME_FORMATTER.format((TemporalAccessor)value);
+		}
+		else if (value instanceof OffsetDateTime) {
+			formattedValue = DATE_TIME_FORMATTER.format((TemporalAccessor)value);
 		}
 		else if (value instanceof NSData && ((NSData)value).length() == 24) {
 			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
@@ -189,8 +220,8 @@ public class ERXRestUtils {
 		return dateFormatter;
 	}
 	
-	protected static DateTimeFormatter jodaLocalDateFormat(boolean spaces, ERXRestContext context) {
-		DateTimeFormatter dateFormatter = (DateTimeFormatter)context.userInfoForKey("er.rest.jodaFormatter");
+	protected static org.joda.time.format.DateTimeFormatter jodaLocalDateFormat(boolean spaces, ERXRestContext context) {
+		org.joda.time.format.DateTimeFormatter dateFormatter = (org.joda.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.jodaFormatter");
 		if (dateFormatter == null) {
 			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormat");
 			if (dateFormat == null) {
@@ -204,13 +235,13 @@ public class ERXRestUtils {
 					}
 				}
 			}
-			dateFormatter = DateTimeFormat.forPattern(dateFormat);
+			dateFormatter = org.joda.time.format.DateTimeFormat.forPattern(dateFormat);
 		}
 		return dateFormatter;
 	}
 	
-	protected static DateTimeFormatter jodaLocalDateTimeFormat(boolean spaces, ERXRestContext context) {
-		DateTimeFormatter dateFormatter = (DateTimeFormatter)context.userInfoForKey("er.rest.jodaTimeFormatter");
+	protected static org.joda.time.format.DateTimeFormatter jodaLocalDateTimeFormat(boolean spaces, ERXRestContext context) {
+		org.joda.time.format.DateTimeFormatter dateFormatter = (org.joda.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.jodaTimeFormatter");
 		if (dateFormatter == null) {
 			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormatTime");
 			if (dateFormat == null) {
@@ -224,7 +255,7 @@ public class ERXRestUtils {
 					}
 				}
 			}
-			dateFormatter = DateTimeFormat.forPattern(dateFormat);
+			dateFormatter = org.joda.time.format.DateTimeFormat.forPattern(dateFormat);
 		}
 		return dateFormatter;
 	}
@@ -364,46 +395,75 @@ public class ERXRestUtils {
 				}
 			}
 		}
-		else if (valueType != null && LocalDateTime.class.isAssignableFrom(valueType)) {
+		else if (valueType != null && org.joda.time.LocalDateTime.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;
 			}
 			else {
 				String strValue = (String) value;
-				DateTimeFormatter formatter = null;
+				org.joda.time.format.DateTimeFormatter formatter = null;
 				try {
 					boolean spaces = strValue.indexOf(' ') != -1;
 					formatter = ERXRestUtils.jodaLocalDateTimeFormat(spaces, context);
-					parsedValue = new LocalDateTime(formatter.parseDateTime(strValue));
+					parsedValue = new org.joda.time.LocalDateTime(formatter.parseDateTime(strValue));
 				}
 				catch (Throwable t) {
 					String msg = "Failed to parse '" + strValue + "' as a timestamp";
 					if (formatter != null) {
-						msg += " (example: " + formatter.print(new LocalDateTime()) + ")";
+						msg += " (example: " + formatter.print(new org.joda.time.LocalDateTime()) + ")";
 					}
 					msg += ".";
 					throw new IllegalArgumentException(msg, t);
 				}
 			}
 		}
-		else if (valueType != null && LocalDate.class.isAssignableFrom(valueType)) {
+		else if (valueType != null && org.joda.time.LocalDate.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;
 			}
 			else {
 				String strValue = (String) value;
-				DateTimeFormatter formatter = null;
+				org.joda.time.format.DateTimeFormatter formatter = null;
 				try {
 					boolean spaces = strValue.indexOf(' ') != -1;
 					formatter = ERXRestUtils.jodaLocalDateFormat(spaces, context);
-					parsedValue = new LocalDate(formatter.parseDateTime(strValue));
+					parsedValue = new org.joda.time.LocalDate(formatter.parseDateTime(strValue));
 				}
 				catch (Throwable t) {
 					String msg = "Failed to parse '" + strValue + "' as a timestamp";
 					if (formatter != null) {
-						msg += " (example: " + formatter.print(new LocalDate()) + ")";
+						msg += " (example: " + formatter.print(new org.joda.time.LocalDate()) + ")";
 					}
 					msg += ".";
+					throw new IllegalArgumentException(msg, t);
+				}
+			}
+		}
+		else if (valueType != null && TemporalAccessor.class.isAssignableFrom(valueType)) {
+			if (value instanceof NSTimestamp) {
+				parsedValue = value;
+			}
+			else {
+				TemporalQuery<?> query = null;
+				Class<? extends Class> valueTypeClass = valueType.getClass();
+				if (valueTypeClass.equals(LocalDate.class)) {
+					query = LocalDate::from;
+				}
+				else if (valueTypeClass.equals(LocalDateTime.class)) {
+					query = LocalDateTime::from;
+				}
+				else if (valueTypeClass.equals(LocalTime.class)) {
+					query = LocalTime::from;
+				}
+				else if (valueTypeClass.equals(OffsetDateTime.class)) {
+					query = OffsetDateTime::from;
+				}
+				String strValue = (String) value;
+				try {
+					parsedValue = DATE_TIME_FORMATTER.parse(strValue, query);
+				}
+				catch (Throwable t) {
+					String msg = "Failed to parse '" + strValue + "' as a java time object " + valueTypeClass + ".";
 					throw new IllegalArgumentException(msg, t);
 				}
 			}
@@ -436,10 +496,12 @@ public class ERXRestUtils {
 	 *            the value of the attribute
 	 * @param parentEntity
 	 *            the entity
-	 * @param attributeName
-	 *            the name of the property
 	 * @param parentObject
 	 *            the parent object
+	 * @param attributeName
+	 *            the name of the property
+	 * @param context
+	 *            the REST context
 	 * @return a parsed version of the String
 	 */
 	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName, ERXRestContext context) {

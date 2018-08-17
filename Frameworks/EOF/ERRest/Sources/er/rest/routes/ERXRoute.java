@@ -14,12 +14,10 @@ import er.rest.ERXRestContext;
 import er.rest.ERXRestUtils;
 
 /**
- * <p>
  * ERXRoute encapsulates a URL path with matching values inside of it. For instance, the route
  * "/company/{company:Company}/employees/{Person}/name/{name:String}" would yield an objects(..) dictionary with a
  * Company EO mapped to the key "company," a Person EO mapped to the key "Person" and a String mapped to the key "name".
  * ERXRoutes do not enforce any security -- they simply represent a way to map URL patterns onto objects.
- * </p>
  * 
  * @author mschrag
  */
@@ -44,7 +42,9 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
+	 * @param method
+	 *            the request method
 	 */
 	public ERXRoute(String entityName, String urlPattern, ERXRoute.Method method) {
 		this(entityName, urlPattern, method, (Class<? extends ERXRouteController>) null, null);
@@ -56,7 +56,7 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
 	 */
 	public ERXRoute(String entityName, String urlPattern) {
 		this(entityName, urlPattern, ERXRoute.Method.All, (Class<? extends ERXRouteController>) null, null);
@@ -68,7 +68,7 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
 	 * @param controller
 	 *            the default controller class name
 	 */
@@ -83,7 +83,9 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
+	 * @param method
+	 *            the request method
 	 * @param controller
 	 *            the default controller class name
 	 */
@@ -98,7 +100,7 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
 	 * @param controller
 	 *            the default controller class
 	 */
@@ -112,7 +114,9 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
+	 * @param method
+	 *            the request method
 	 * @param controller
 	 *            the default controller class
 	 */
@@ -126,7 +130,7 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
 	 * @param controller
 	 *            the default controller class name
 	 * @param action
@@ -143,7 +147,9 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
+	 * @param method
+	 *            the request method
 	 * @param controller
 	 *            the default controller class name
 	 * @param action
@@ -160,7 +166,7 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
 	 * @param controller
 	 *            the default controller class
 	 * @param action
@@ -176,7 +182,9 @@ public class ERXRoute {
 	 * @param entityName
 	 *            the name of the entity this route points to
 	 * @param urlPattern
-	 *            the url pattern to use
+	 *            the URL pattern to use
+	 * @param method
+	 *            the request method
 	 * @param controller
 	 *            the default controller class
 	 * @param action
@@ -304,6 +312,8 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to parse
+	 * @param method
+	 *            the request method
 	 */
 	public NSDictionary<ERXRoute.Key, String> keys(String url, ERXRoute.Method method) {
 		NSMutableDictionary<ERXRoute.Key, String> keys = null;
@@ -338,6 +348,7 @@ public class ERXRoute {
 	 * @param url
 	 *            the URL to process
 	 * @param method
+	 *            the request method
 	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
@@ -351,6 +362,8 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to process
+	 * @param method
+	 *            the request method
 	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
@@ -438,7 +451,7 @@ public class ERXRoute {
 		}
 
 		protected Key() {
-			_routeParameterMethodCache = new ConcurrentHashMap<Class<?>, RouteParameterMethod>();
+			_routeParameterMethodCache = new ConcurrentHashMap<>();
 		}
 
 		public String key() {

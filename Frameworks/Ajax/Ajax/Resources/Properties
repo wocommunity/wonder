@@ -2,6 +2,12 @@
 er.extensions.load.Properties.framework.Ajax=load
 er.extensions.Ajax.hasLocalization=false
 
+##  Default values for AjaxModalDialog
+er.ajax.modaldialog.slideDownDuration=0.5
+er.ajax.modaldialog.slideUpDuration=0.5
+er.ajax.modaldialog.resizeDuration=0.25
+er.ajax.modaldialog.movable=false
+
 # Set ALL of the following properties to use a compressed version of the various scripts
 #er.extensions.ERXResponseRewriter.resource.Ajax.prototype.js=Ajax.wondaculous-min.js
 #er.extensions.ERXResponseRewriter.resource.Ajax.scriptaculous.js=Ajax.wondaculous-min.js

@@ -122,7 +122,7 @@ public  class ERXRequest extends WORequest {
 					throw new NSForwardException(new WOURLFormatException("<" + super.getClass().getName() + ">: Unable to build complete url as no server name was provided in the headers of the request."));
 			}
 			else {
-				serverName = WOApplication.application().host();
+				serverName = ERXApplication.erxApplication().publicHost();
 			}
 		}
 		return serverName;
@@ -271,7 +271,24 @@ public  class ERXRequest extends WORequest {
     	return ERXRequest.isRequestSecure(this);
     }
     
-    @Override
+    /**
+     * Add the protocol, server and port parts of this request to a StringBuffer.
+     * @param stringbuffer 
+     * 
+     */
+	public void _completeURLPrefix(StringBuffer stringbuffer) {
+		_completeURLPrefix(stringbuffer, isSecure(), 0);
+	}
+	
+    /**
+     * Add the protocol, server and port parts to a StringBuffer to build an URL to this app.
+     * if port is set to 0, this request port will be used.
+     * @param stringbuffer 
+     * @param secure generate a https url
+     * @param port the port number to use, 0 this request port  
+     * 
+     */
+	@Override
 	public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
     	if (_secureDisabled) {
     		secure = false;
@@ -314,7 +331,10 @@ public  class ERXRequest extends WORequest {
         	
 	        String serverPort = request.headerForKey("SERVER_PORT");
 	        if (serverPort == null) {
-	          serverPort = request.headerForKey("x-webobjects-server-port");
+	        	serverPort = request.headerForKey("x-webobjects-servlet-server-port");
+	        }
+	        if (serverPort == null) {
+	        	serverPort = request.headerForKey("x-webobjects-server-port");
 	        }
 	
 	        // Apache and some other web servers use this to indicate HTTPS mode.
@@ -438,8 +458,21 @@ public  class ERXRequest extends WORequest {
         				//
         				// only parse one cookie at a time => get(0)
         				HttpCookie httpCookie = HttpCookie.parse(cookies[i]).get(0);
-        				log.debug("Cookie: '"+httpCookie.getName()+"' = '"+httpCookie.getValue()+"'");
-        				cookieDictionary.setObjectForKey(new NSArray<String>(httpCookie.getValue()), httpCookie.getName());
+        				//
+        				// Cookies with longer paths are listed before cookies with shorter paths:
+        				// see https://stackoverflow.com/a/24214538
+        				// Cookies with longer Patch are more specific than cookies with shorter path 
+        				// and should not be replaced by a less specific cookie 
+        				// If a cookie with Therfore we do not override cookies if there are already there!
+        				String cookieName  = httpCookie.getName();
+        				String cookieValue = httpCookie.getValue();
+        				log.debug("Cookie: '"+cookieName+"' = '"+cookieValue+"'");
+        				NSArray<String> cookieValueArray = cookieDictionary.get(cookieName);
+        				if ( cookieValueArray == null ){
+        					cookieValueArray = new NSArray<>();
+        				}
+        				cookieValueArray = cookieValueArray.arrayByAddingObject(cookieValue);
+        				cookieDictionary.put( cookieName, cookieValueArray );
         			} catch (Throwable t) {
         				log.warn("Unable to parse cookie '"+cookies[i]+"' : "+t.getMessage());
         			}

@@ -102,6 +102,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	public static class Channel extends JDBCChannel {
 
 		public static final String COLUMN_CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.columnClassName";
+
 		
 		private static Class columnClass;
 
@@ -337,10 +338,28 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	 */
 	public static class Context extends JDBCContext {
 
+		public static final String IGNORE_JNDI_CONFIGURATION_KEY = "er.extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration";
+
 		public Context(EOAdaptor eoadaptor) {
 			super(eoadaptor);
 		}
 
+		/**
+		 * In servlet context, when not using JNDI to obtain the database channel, you will get annoying error messages like
+		 * <em>javax.naming.NameNotFoundException: Name "comp/env/jdbc" not found in context</em>.
+		 * 
+		 * Set the property <code>er.extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration</code> to true  in order to suppress 
+		 * this messages.
+		 * 
+		 * @throws JDBCAdaptorException
+		 */
+		@Override
+		public void setupJndiConfiguration() throws JDBCAdaptorException {
+			if(!ERXProperties.booleanForKeyWithDefault(IGNORE_JNDI_CONFIGURATION_KEY, false)) {
+				super.setupJndiConfiguration();
+			}
+		}
+		
 		private void freeConnection() {
 			if (useConnectionBroker()) {
 				if (_jdbcConnection != null) {

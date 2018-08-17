@@ -13,6 +13,7 @@ import org.quartz.UnableToInterruptJobException;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
@@ -25,6 +26,8 @@ public class ERQSJobInformations extends WOComponent
 	public String aKey, errorMessage = null;
 	public Trigger aTrigger;
 	public boolean dispDashboard = true, dispRunningJobs = false, dispScheduledJobs = false;
+	private List<JobExecutionContext> jobsRunning;
+	private List<JobDetail> allJobs;
 
 	public ERQSJobInformations(final WOContext context) 
 	{
@@ -41,27 +44,38 @@ public class ERQSJobInformations extends WOComponent
     	return errorMessage != null;
     }
     
-    public Collection<JobExecutionContext> getJobsRunning()
+    @Override
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    	allJobs = ERQSSchedulerServiceFrameworkPrincipal.getSharedInstance().getAllJobs();
+    	updateJobsRunning();
+    	super.appendToResponse(aResponse, aContext);
+    }
+    
+    public Collection<JobExecutionContext> getJobsRunning() {
+    	return jobsRunning;
+    }
+    
+    public void updateJobsRunning()
     {
     	if (getScheduler() != null) {
 			try {
-				return getScheduler().getCurrentlyExecutingJobs();
+				jobsRunning = getScheduler().getCurrentlyExecutingJobs();
 			} catch (SchedulerException e) 
 			{
 				e.printStackTrace();
 			}
 		}
-    	return NSArray.emptyArray();
+    	jobsRunning = NSArray.emptyArray();
     }
     
     public boolean isJobsRunningListEmpty()
     {
-    	return !ERQSSchedulerServiceFrameworkPrincipal.getSharedInstance().hasRunningJobs();
+    	return jobsRunning.isEmpty();
     }
     
     public List<JobDetail> getAllJobs()
     {
-    	return ERQSSchedulerServiceFrameworkPrincipal.getSharedInstance().getAllJobs();
+    	return allJobs;
     }
     
     public NSArray<Trigger> getTriggersOfJob() 

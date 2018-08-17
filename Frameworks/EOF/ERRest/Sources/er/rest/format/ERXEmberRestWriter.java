@@ -7,6 +7,7 @@ import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestRequestNode;
 
 public class ERXEmberRestWriter extends ERXJSONRestWriter {
+	@Override
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 		String rootObjectName;

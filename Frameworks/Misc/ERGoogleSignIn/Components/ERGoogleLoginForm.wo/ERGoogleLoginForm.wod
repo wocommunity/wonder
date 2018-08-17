@@ -1,0 +1,17 @@
+GoogleContainer : WOGenericContainer {
+	elementName = "div";
+	id = id;
+}
+
+GoogleForm : WOForm {
+	style = "display: none;";
+	multipleSubmit = false;
+	name = formName;
+	directActionName = directActionName;
+	actionClass = directActionClass;
+}
+
+AuthenticationTokenField : WOTextField {
+	value = token;
+	name = tokenFieldName;
+}

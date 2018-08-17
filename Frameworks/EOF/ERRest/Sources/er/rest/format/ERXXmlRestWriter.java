@@ -1,6 +1,10 @@
 package er.rest.format;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,6 +23,7 @@ import er.rest.ERXRestUtils;
  *           to true.
  */
 public class ERXXmlRestWriter extends ERXRestWriter {
+	@Override
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		appendHeadersToResponse(node, response, context);
 		response.setContentEncoding(contentEncoding());
@@ -133,6 +138,18 @@ public class ERXXmlRestWriter extends ERXRestWriter {
 			}
 			else if (value instanceof Date) {
 				response.appendContentString(" type = \"datetime\"");
+			}
+			else if (value instanceof LocalDate) {
+				response.appendContentString(" type = \"date\"");
+			}
+			else if (value instanceof LocalDateTime) {
+				response.appendContentString(" type = \"datetime2\"");
+			}
+			else if (value instanceof LocalTime) {
+				response.appendContentString(" type = \"time\"");
+			}
+			else if (value instanceof OffsetDateTime) {
+				response.appendContentString(" type = \"datetime2\"");
 			}
 			else if (value instanceof Integer) {
 				response.appendContentString(" type = \"integer\"");

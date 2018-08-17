@@ -431,7 +431,7 @@ public class ERXStringUtilities {
             char[] originalArray = lastHop.toCharArray();
             originalArray[0] = Character.toUpperCase(originalArray[0]);
             Character tempChar = null;
-            Character nextChar = null;
+            Character nextChar = Character.valueOf(originalArray[0]);
             for(int i=0;i<(originalArray.length-1);i++){
                 tempChar = Character.valueOf(originalArray[i]);
                 nextChar = Character.valueOf(originalArray[i+1]);

@@ -300,9 +300,53 @@
 			"isSearchable" = "T";
 			"precision" = "19";
 		};
+		"ENUM" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "2147483647";
+		};
+		"TIMESTAMP WITH TIME ZONE" = {
+			"defaultJDBCType" = (
+				"2014"
+			);
+			"createParams" = "0";
+			"maxScale" = "10";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "30";
+		};
+		"GEOMETRY" = {
+			"defaultJDBCType" = (
+				"OTHER"
+			);
+			"createParams" = "1";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "2147483647";
+		};
+		"SERIAL" = {
+			"defaultJDBCType" = (
+				"INTEGER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10";
+		};
 	};
 	"IDENTIFIER_QUOTE_STRING" = "\"";
 	"ANSI92_CONFORMANCE" = "ANSI92EntryLevel";
-	"DRIVER_VER" = "1.3.167 (2012-05-23)";
-	"STRING_FUNCTIONS" = "ASCII,BIT_LENGTH,LENGTH,OCTET_LENGTH,CHAR,CONCAT,DIFFERENCE,HEXTORAW,RAWTOHEX,INSTR,INSERT,LOWER,UPPER,LEFT,RIGHT,LOCATE,POSITION,LPAD,RPAD,LTRIM,RTRIM,TRIM,REGEXP_REPLACE,REPEAT,REPLACE,SOUNDEX,SPACE,STRINGDECODE,STRINGENCODE,STRINGTOUTF8,SUBSTRING,UTF8TOSTRING,XMLATTR,XMLNODE,XMLCOMMENT,XMLCDATA,XMLSTARTDOC,XMLTEXT";
+	"DRIVER_VER" = "1.4.195 (2017-04-23)";
+	"STRING_FUNCTIONS" = "ASCII,BIT_LENGTH,LENGTH,OCTET_LENGTH,CHAR,CONCAT,CONCAT_WS,DIFFERENCE,HEXTORAW,RAWTOHEX,INSTR,INSERT,LOWER,UPPER,LEFT,RIGHT,LOCATE,POSITION,LPAD,RPAD,LTRIM,RTRIM,TRIM,REGEXP_REPLACE,REGEXP_LIKE,REPEAT,REPLACE,SOUNDEX,SPACE,STRINGDECODE,STRINGENCODE,STRINGTOUTF8,SUBSTRING,UTF8TOSTRING,XMLATTR,XMLNODE,XMLCOMMENT,XMLCDATA,XMLSTARTDOC,XMLTEXT,TO_CHAR,TRANSLATE";
 }

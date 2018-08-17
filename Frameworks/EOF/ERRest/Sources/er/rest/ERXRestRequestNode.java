@@ -370,6 +370,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
  		}
  	}
 
+	@Override
 	public void takeValueForKey(Object value, String keyName) {
 		if (value instanceof ERXRestRequestNode) {
 			removeAttributeForKey(keyName);
@@ -403,6 +404,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 	}
 
+	@Override
 	public Object valueForKey(String keyName) {
 		Object value;
 		if (_attributes.containsKey(keyName)) {
@@ -439,10 +441,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		return value;
 	}
 
+	@Override
 	public Object valueForKeyPath(String keyPath) {
 		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
 	}
-	
+
+	@Override
 	public void takeValueForKeyPath(Object value, String keyPath) {
         if (keyPath == null) {
             throw new IllegalArgumentException("Key path cannot be null");
@@ -574,6 +578,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	/**
 	 * Returns the type of this node.
 	 * 
+	 * @param name
+	 *            the attribute or node name
 	 * @return the type of this node
 	 */
 	public Object attributeOrChildNodeValue(String name) {
@@ -770,7 +776,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (entityName == null) {
 			entityName = type();
 			if (entityName == null && value() == null) {
-				entityName = "NSDictionary";
+				if (isArray()) {
+					entityName = "NSMutableArray";
+				} else {
+					entityName = "NSDictionary";
+				}
 			}
 		}
 		return entityName;
@@ -793,7 +803,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
 	 * @param context
-	 *            the delegate to use
+	 *            the REST context
 	 * @return the object that this request node represents
 	 */
 	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -839,7 +849,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
 	 * @param context
-	 *            the delegate to use
+	 *            the REST context
 	 * @return a new instance of an object represented by this request node
 	 */
 	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -876,7 +886,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		toManyRelationshipNode.setArray(true);
 		toManyRelationshipNode.setType(destinationEntity.entityName());
 
-		List childrenObjects = (List) key.valueInObject(obj);
+		List<?> childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
 		if (childFilter.isDistinct()) {
 			if (childrenObjects instanceof NSArray) {
@@ -913,7 +923,6 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		// }
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void _addAttributesAndRelationshipsForObjectOfEntity(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, ERXRestContext context, Set<Object> visitedObjects) {
 		// just break out ... no key filter = nothing to do
 		if (keyFilter == null) {
@@ -1029,7 +1038,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				setAssociatedObject(null);
 			}
 			else {
-				if (_name == null) {
+				if (_name == null && classDescription != null) {
 					_name = classDescription.entityName();
 				}
 				setValue(obj);
@@ -1065,6 +1074,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @param format
 	 *            the format to use
+	 * @param context
+	 *            the REST context
 	 * @return a string representation of this request node using the given format
 	 */
 	public String toString(ERXRestFormat format, ERXRestContext context) {
@@ -1076,6 +1087,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @param writer
 	 *            the writer to use
+	 * @param context
+	 *            the REST context
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
 	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate, ERXRestContext context) {
@@ -1138,7 +1151,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @param keyFilter
 	 *            the filter to use to determine how to update
 	 * @param context
-	 *            the delegate
+	 *            the REST context
 	 */
 	public void updateObjectWithFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {
 		if (obj == null) {
@@ -1182,7 +1195,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					}
 				}
 
-				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
+				if (keyName == null && isArray()) {
+					Object value = ERXRestUtils.coerceValueToTypeNamed(childNode.value(), valueType.getCanonicalName(), context, true);
+					((List<Object>)obj).add(value);
+				}
+				else if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
 					EOClassDescription destinationClassDescription;
 					// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
 					// we fallback and lookup the class entity ...
@@ -1445,6 +1462,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the array to turn into request nodes
 	 * @param keyFilter
 	 *            the filter to use
+	 * @param context
+	 *            the REST context
 	 * @return the root ERXRestRequestNode
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, ERXRestContext context) {
@@ -1465,6 +1484,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the object to turn into request nodes
 	 * @param keyFilter
 	 *            the filter to use
+	 * @param context
+	 *            the REST context
 	 * @return the root ERXRestRequestNode
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {

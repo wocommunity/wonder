@@ -1,0 +1,9 @@
+Link : WOHyperlink {
+	action = ^action;
+	target = ^target;
+	onclick = "gapi.auth2.getAuthInstance().signOut(); return true;";
+}
+
+Content : WOComponentContent {
+	
+}

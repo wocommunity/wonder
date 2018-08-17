@@ -17,6 +17,11 @@ er.extensions.ERExtensions.hasLocalization=true
 ## Retain default value
 # er.extensions.ERXProperties.RetainDefaultsEnabled = true
 
+## Enables support for custom properties file lookup. 
+## E.g., Properties.[Framework], Properties.[Framework].[Username], Properties.log4j, and so on. 
+## Disabling this option might reduce the application startup time considerably.
+# er.extensions.ERXProperties.loadOptionalProperties = true
+
 ## Allows you to specify more config files (good luck:)
 # er.extensions.ERXProperties.OptionalConfigurationFiles = (/more/files)
 
@@ -254,6 +259,14 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## This is only used when the JDBCAdaptor is used in the first place
 # er.extensions.ERXJDBCAdaptor.switchReadWrite=false
 #
+
+## In servlet context, when not using JNDI to obtain the database channel, you will 
+## get annoying error messages like
+## javax.naming.NameNotFoundException: Name "comp/env/jdbc" not found in context
+## Disable the JNDI configuration to suppress these messages.
+# extensions.ERXJDBCAdaptor.ignoreJNDIConfiguration=false
+#
+
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################
@@ -500,6 +513,12 @@ er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
 ## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [P,L]
 # er.extensions.ERXApplication.replaceApplicationPath.pattern=/cgi-bin/WebObjects/YourApp.woa
 # er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
+
+## If your WOHost is not your public host name, specify the public host to use for complete URL 
+## generated without a server request like background tasks that send emails.
+# er.extensions.ERXApplication.publicHost=www.yourPublicHost.com
+## Set to true to switch default request used in background tasks to https
+# er.extensions.ERXApplication.publicHostIsSecure=false
 
 #########################################################################
 # ERXSession

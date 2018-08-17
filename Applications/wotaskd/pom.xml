@@ -2,13 +2,16 @@
 	<parent>
 		<groupId>wonder.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>7.0.0-SNAPSHOT</version>
+		<version>7.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.applications</groupId>
 	<artifactId>wotaskd</artifactId>
 	<name>wotaskd</name>
 	<packaging>woapplication</packaging>
+	<properties>
+		<skip.apple.frameworks>false</skip.apple.frameworks>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>

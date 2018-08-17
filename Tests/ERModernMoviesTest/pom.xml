@@ -13,7 +13,6 @@
 	<packaging>woapplication</packaging>
 
 	<properties>
-		<maven.test.skip>false</maven.test.skip>
 		<skip.apple.frameworks>false</skip.apple.frameworks>
 	</properties>
 
@@ -95,86 +94,116 @@
 
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
-		<plugins>
-			<plugin>
-			    <!-- friendly exec plugin taking care of starting and stopping our app  -->
-				<groupId>com.bazaarvoice.maven.plugins</groupId>
-				<artifactId>process-exec-maven-plugin</artifactId>
-				<version>0.7</version>
-				<executions>
-					<!-- Start ERModernMoviesTest app -->
-					<execution>
-						<id>ERModernMoviesTest</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-						<configuration>
-							<name>ERModernMoviesTest</name>
-							<workingDir>target</workingDir>
-							<waitForInterrupt>false</waitForInterrupt>
-							<healthcheckUrl>http://localhost:9876/</healthcheckUrl>
-							<arguments>
-								<argument>/bin/sh</argument>
-								<argument>${basedir}/target/ERModernMoviesTest-${project.version}.woa/ERModernMoviesTest</argument>
-								<argument>-DWOAppName=ERModernMoviesTest.woa</argument>
-							</arguments>
-						</configuration>
-					</execution>
-
-					<!--Stop all processes in reverse order -->
-					<execution>
-						<id>stop-all</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop-all</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- Failsafe plugin that takes care of running the integration tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.13</version>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<systemPropertyVariables>
-						<!-- Configure the path to the phantomjs binary -->
-						<phantomjs.binary.path>${phantomjs.binary}</phantomjs.binary.path>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-			<!-- The phantomjs-maven-plugin installs the phantomjs binary before running
-			the integration tests -->
-			<plugin>
-				<groupId>com.github.klieber</groupId>
-				<artifactId>phantomjs-maven-plugin</artifactId>
-				<version>0.7</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<version>1.9.7</version>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+				<id>slowTests</id>
+				<build>
+					<plugins>
+						<plugin>
+								<!-- friendly exec plugin taking care of starting and stopping our app  -->
+							<groupId>com.bazaarvoice.maven.plugins</groupId>
+							<artifactId>process-exec-maven-plugin</artifactId>
+							<version>0.7</version>
+							<executions>
+								<!-- Start ERModernMoviesTest app -->
+								<execution>
+									<id>ERModernMoviesTest</id>
+									<phase>pre-integration-test</phase>
+									<goals>
+										<goal>start</goal>
+									</goals>
+									<configuration>
+										<name>ERModernMoviesTest</name>
+										<workingDir>target</workingDir>
+										<waitForInterrupt>false</waitForInterrupt>
+										<healthcheckUrl>http://localhost:9876/</healthcheckUrl>
+										<arguments>
+											<argument>/bin/sh</argument>
+											<argument>${basedir}/target/ERModernMoviesTest-${project.version}.woa/ERModernMoviesTest</argument>
+											<argument>-DWOAppName=ERModernMoviesTest.woa</argument>
+										</arguments>
+									</configuration>
+								</execution>
+
+								<!--Stop all processes in reverse order -->
+								<execution>
+									<id>stop-all</id>
+									<phase>post-integration-test</phase>
+									<goals>
+										<goal>stop-all</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+						<!-- Failsafe plugin that takes care of running the integration tests -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<version>2.13</version>
+							<executions>
+								<execution>
+									<id>integration-test</id>
+									<goals>
+										<goal>integration-test</goal>
+									</goals>
+								</execution>
+								<execution>
+									<id>verify</id>
+									<goals>
+										<goal>verify</goal>
+									</goals>
+								</execution>
+							</executions>
+							<configuration>
+								<systemPropertyVariables>
+									<!-- Configure the path to the phantomjs binary -->
+									<phantomjs.binary.path>${phantomjs.binary}</phantomjs.binary.path>
+								</systemPropertyVariables>
+							</configuration>
+						</plugin>
+						<!-- The phantomjs-maven-plugin installs the phantomjs binary before running
+						the integration tests -->
+						<plugin>
+							<groupId>com.github.klieber</groupId>
+							<artifactId>phantomjs-maven-plugin</artifactId>
+							<version>0.7</version>
+							<executions>
+								<execution>
+									<goals>
+										<goal>install</goal>
+									</goals>
+								</execution>
+							</executions>
+							<configuration>
+								<version>1.9.7</version>
+							</configuration>
+						</plugin>
+						<!-- The NEXT_ROOT environment variable must be set otherwise the app won't start during the integration test phase -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-enforcer-plugin</artifactId>
+							<version>3.0.0-M1</version>
+							<executions>
+								<execution>
+									<id>enforce-environment-variable-is-set</id>
+									<goals>
+										<goal>enforce</goal>
+									</goals>
+									<configuration>
+										<rules>
+											<requireEnvironmentVariable>
+												<variableName>NEXT_ROOT</variableName>
+											</requireEnvironmentVariable>
+										</rules>
+										<fail>true</fail>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</build>
+		</profile>
+	</profiles>
 </project>

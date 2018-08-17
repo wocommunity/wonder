@@ -719,6 +719,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	
 	/**
 	 * @param method
+	 *            the request method
 	 * @param urlPattern
 	 * @return the first route matching <code>method</code> and <code>pattern</code>.
 	 */
@@ -780,7 +781,6 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the matching route for this method and path
 	 */
 	public ERXRoute setupRequestWithRouteForMethodAndPath(WORequest request, String method, String path) {
-		@SuppressWarnings("unchecked")
 		NSDictionary<String, Object> userInfo = request.userInfo();
 		NSMutableDictionary<String, Object> mutableUserInfo;
 		if (userInfo instanceof NSMutableDictionary) {
@@ -823,8 +823,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	@Override
-	public NSArray getRequestHandlerPathForRequest(WORequest request) {
-		NSMutableArray<Object> requestHandlerPath = new NSMutableArray<>();
+	public NSArray<String> getRequestHandlerPathForRequest(WORequest request) {
+		NSMutableArray<String> requestHandlerPath = new NSMutableArray<>();
 
 		try {
 			String path = request._uriDecomposed().requestHandlerPath();
@@ -861,7 +861,6 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public WOAction getActionInstance(Class class1, Class[] aclass, Object[] aobj) {
 		ERXRouteController controller = (ERXRouteController) super.getActionInstance(class1, aclass, aobj);
 		WORequest request = (WORequest) aobj[0];

@@ -33,6 +33,7 @@ Modalbox.Methods = {
 		slideDownDuration: 0.5, // Default Modalbox appear slide down effect in seconds
 		slideUpDuration: 0.5, // Default Modalbox hiding slide up effect in seconds
 		resizeDuration: 0.25, // Default resize duration seconds
+		movable: false, // Modal window is movable
 		inactiveFade: true, // Fades MB window on inactive state
 		transitions: true, // Toggles transition effects. Transitions are enabled by default
 		loadingString: "Please wait. Loading...", // Default loading string message
@@ -74,6 +75,9 @@ Modalbox.Methods = {
 				)
 			)
 		);
+		if (this.options.movable) {
+			new Draggable(this.MBwindow);			
+		}
 		if ( ! this.options.locked) {
 			this.MBclose = new Element("a", {id: "MB_close", title: this.options.closeString, href: "#"}).update("<span>" + this.options.closeValue + "</span>");
 			this.MBheader.insert({'bottom':this.MBclose});

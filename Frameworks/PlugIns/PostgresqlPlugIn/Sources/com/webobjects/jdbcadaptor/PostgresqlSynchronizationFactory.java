@@ -73,16 +73,17 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (entityGroup == null)
             return NSArray.EmptyArray;
         NSMutableArray<EOSQLExpression> result = new NSMutableArray<>();
-        NSMutableSet<String> generatedStatements = new NSMutableSet<>();
+        NSMutableSet<NSArray<String>> generatedStatements = new NSMutableSet<>();
         for (EOEntity currentEntity : entityGroup) {
             if (currentEntity.externalName() != null) {
                 NSArray<EORelationship> relationships = currentEntity.relationships();
                 for (EORelationship currentRelationship : relationships) {
                     if (_shouldGenerateForeignKeyConstraints(currentRelationship)) {
                         NSArray<EOSQLExpression> statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
-                        if (!generatedStatements.containsObject(statements.valueForKey("statement"))) {
+                        NSArray<String> listOfStatements = (NSArray<String>) statements.valueForKey("statement");
+                        if (!generatedStatements.contains(listOfStatements)) {
                             result.addObjectsFromArray(statements);
-                            generatedStatements.addObject(statements.valueForKey("statement"));
+                            generatedStatements.add(listOfStatements);
                         }
                     }
                 }

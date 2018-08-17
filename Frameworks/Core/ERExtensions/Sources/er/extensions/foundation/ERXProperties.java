@@ -76,6 +76,8 @@ import er.extensions.net.ERXTcpIp;
  * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  * @property NSProperties.useLoadtimeAppSpecifics Default is true.
+ * @property er.extensions.ERXProperties.loadOptionalProperties Default is true. When false loads only the standard properties. 
+ * 			 This will improve application startup  time due to not looking for all files repeatedly.
  * 
  * TODO - Neither of these property names are standard. Should be camel-case and proper prefix.
  * 
@@ -1494,7 +1496,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *                     <div class="ja">プロジェクト情報 {@link ERXProperties#pathsForUserAndBundleProperties}</div>
      */
     private static void optionalPropertiesLoader(String userName, NSMutableArray<String> propertiesPaths, NSMutableArray<String> projectsInfo) {
-
+    	if(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXProperties.loadOptionalProperties", true)){
+    		return;
+    	}
+    	
     	/** Properties.log4j.<userName> -- per-Application-per-User properties */
         String logPropertiesPath;
         logPropertiesPath = ERXProperties.variantPropertiesInBundle("log4j", "app");

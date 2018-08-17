@@ -245,7 +245,11 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
 #define DOTRELEASE6  "1.6"
 #define DOTRELEASE7  "1.7"
 #define DOTRELEASE8  "1.8"
-#define JRE_KEY	    "Software\\JavaSoft\\Java Runtime Environment"
+#define DOTRELEASE9  "9."
+#define DOTRELEASE10 "10."
+
+#define JRE_KEY_10     "Software\\JavaSoft\\JRE"
+#define JRE_KEY     "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
 GetStringFromRegistry(HKEY key, const char *name, char *buf, jint bufsize)
@@ -269,9 +273,11 @@ GetPublicJREHome(char *buf, jint bufsize)
     char version[MAXPATHLEN];
 
     /* Find the current version of the JRE */
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY, 0, KEY_READ, &key) != 0) {
-	fprintf(stderr, "Error opening registry key '" JRE_KEY "'\n");
-	return JNI_FALSE;
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY_10, 0, KEY_READ, &key) != 0) {
+            if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY, 0, KEY_READ, &key) != 0) {
+                fprintf(stderr, "Error opening registry key '" JRE_KEY "'\n");
+                return JNI_FALSE;
+            }
     }
 
     if (!GetStringFromRegistry(key, "CurrentVersion",
@@ -284,11 +290,12 @@ GetPublicJREHome(char *buf, jint bufsize)
 
     if (strcmp(version, DOTRELEASE5) != 0 &&
 		strcmp(version, DOTRELEASE6) != 0 &&
-		strcmp(version, DOTRELEASE7) != 0 &&
-		strcmp(version, DOTRELEASE8) != 0) 
+                strcmp(version, DOTRELEASE7) != 0 &&
+                strcmp(version, DOTRELEASE8) != 0 &&
+                strncmp(version, DOTRELEASE9, strlen(DOTRELEASE9)) != 0 &&
+		strncmp(version, DOTRELEASE10, strlen(DOTRELEASE10)) != 0) 
 	{
-	fprintf(stderr, "Registry key '" JRE_KEY "\\CurrentVersion'\nhas "
-		"value '%s', but '" DOTRELEASE5 "' upto '" DOTRELEASE8 "' is required.\n", version);
+	fprintf(stderr, "Registry key has value '%s', but '" DOTRELEASE5 "' upto '" DOTRELEASE10 "' is required.\n", version);
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
