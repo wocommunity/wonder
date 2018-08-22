@@ -40,7 +40,7 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * @property er.extensions.jgroupsSynchronizer.localBindAddress
  * @property er.extensions.jgroupsSynchronizer.multicastAddress the multicast address to use (defaults to 230.0.0.1,
      and only necessary if you are using multicast)
- * @property er.extensions.jgroupsSynchronizer.multicastPort the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
+ * @property er.extensions.jgroupsSynchronizer.multicastPort no longer used. Replaced by jgroups.udp.mcast_port
  * @property er.extensions.jgroupsSynchronizer.properties an XML JGroups configuration file (defaults to jgroups-default.xml in this framework)
  * @property er.extensions.jgroupsSynchronizer.useShutdownHook whether to register a JVM shutdown hook to clean up the JChannel (defaults to true)
  * @property er.extensions.remoteSynchronizer "er.jgroups.ERJGroupsSynchronizer" for this implementation
