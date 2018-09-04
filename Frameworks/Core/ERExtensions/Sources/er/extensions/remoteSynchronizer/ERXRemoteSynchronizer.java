@@ -90,19 +90,19 @@ public abstract class ERXRemoteSynchronizer {
 		if (messageType == ERXRemoteSynchronizer.INSERT) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotInserted change = new ERXDatabase.SnapshotInserted(gid, NSDictionary.EmptyDictionary);
-			log.info("Remote instance ({}) inserted {}", remoteChange.identifier(), change);
+			log.debug("Remote instance ({}) inserted {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.UPDATE) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotUpdated change = new ERXDatabase.SnapshotUpdated(gid, NSDictionary.EmptyDictionary);
-			log.info("Remote instance ({}) updated {}", remoteChange.identifier(), change);
+			log.debug("Remote instance ({}) updated {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.DELETE) {
 			EOGlobalID gid = readGID(dis);
 			ERXDatabase.SnapshotDeleted change = new ERXDatabase.SnapshotDeleted(gid, NSDictionary.EmptyDictionary);
-			log.info("Remote instance ({}) deleted {}", remoteChange.identifier(), change);
+			log.debug("Remote instance ({}) deleted {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (messageType == ERXRemoteSynchronizer.TO_MANY_UPDATE) {
@@ -112,7 +112,7 @@ public abstract class ERXRemoteSynchronizer {
 			NSArray<EOGlobalID> removedGIDs = readGIDs(dis);
 			boolean removeAll = dis.readBoolean();
 			ERXDatabase.ToManySnapshotUpdated change = new ERXDatabase.ToManySnapshotUpdated(sourceGID, name, addedGIDs, removedGIDs, removeAll);
-			log.info("Remote instance ({}) update to-many {}", remoteChange.identifier(), change);
+			log.debug("Remote instance ({}) update to-many {}", remoteChange.identifier(), change);
 			remoteChange.addRemoteCacheChange(change);
 		}
 		else if (!handleMessageType(messageType, remoteChange, dis)) {
