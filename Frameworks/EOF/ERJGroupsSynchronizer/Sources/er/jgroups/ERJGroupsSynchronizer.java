@@ -31,17 +31,20 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * A multicast synchronizer built on top of the JGroups library.  This is a much
  * more robust implementation than the default synchronizer used by ERXObjectStoreCoordinatorSynchronizer.
  * 
+ * See http://www.jgroups.org/manual/index.html#Transport for network transport configuration.
+ * By default in this repositors, jgroups is set up to use multicast with configurable local bind address,
+ * multicast address and multicast port via the jgroups-default.xml file.
+ * 
  * @property er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators you should set this property to at least "1" to trigger
  *   ERXObjectStoreCoordinatorSynchronizer to turn on
  * @property er.extensions.jgroupsSynchronizer.applicationWillTerminateNotificationName the name of the NSNotification that is sent when
  *   the application is terminating. Leave blank to disable this feature.
  * @property er.extensions.jgroupsSynchronizer.autoReconnect whether to auto reconnect when shunned (defaults to false)
  * @property er.extensions.jgroupsSynchronizer.groupName the JGroups group name to use (defaults to WOApplication.application.name)
- * @property er.extensions.jgroupsSynchronizer.localBindAddress
- * @property er.extensions.jgroupsSynchronizer.multicastAddress the multicast address to use (defaults to 230.0.0.1,
-     and only necessary if you are using multicast)
- * @property er.extensions.jgroupsSynchronizer.multicastPort the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
  * @property er.extensions.jgroupsSynchronizer.properties an XML JGroups configuration file (defaults to jgroups-default.xml in this framework)
+ * @property er.extensions.jgroupsSynchronizer.localBindAddress the local address to bind to when using the provided multicast configuration file (defaults to SITE_LOCAL)
+ * @property er.extensions.jgroupsSynchronizer.multicastAddress the multicast address to use when using the provided multicast configuration file  (defaults to 230.0.0.1)
+ * @property er.extensions.jgroupsSynchronizer.multicastPort the multicast port to use when using the provided multicast configuration file  (defaults to 9753)
  * @property er.extensions.jgroupsSynchronizer.useShutdownHook whether to register a JVM shutdown hook to clean up the JChannel (defaults to true)
  * @property er.extensions.remoteSynchronizer "er.jgroups.ERJGroupsSynchronizer" for this implementation
  * @property er.extensions.remoteSynchronizer.enabled if true, remote synchronization is enabled
@@ -66,18 +69,9 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 		}
 		_groupName = ERXProperties.stringForKeyWithDefault("er.extensions.jgroupsSynchronizer.groupName", WOApplication.application().name());
 
-		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.jgroupsSynchronizer.localBindAddress");
-		if (localBindAddressStr == null) {
-			System.setProperty("bind.address", WOApplication.application().hostAddress().getHostAddress());
-		}
-		else {
-			System.out.println("localBindAddressStr = " + localBindAddressStr);
-			System.setProperty("bind.address", localBindAddressStr);
-		}
-
 		URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
 		_channel = new JChannel(propertiesUrl);
-		_channel.setDiscardOwnMessages(Boolean.FALSE);
+		_channel.setDiscardOwnMessages(Boolean.TRUE);
 
 		_registerForCleanup();
 	}
