@@ -397,11 +397,10 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 							editingContext.unlock();
 						}
 
-            if (ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.localNotifyOfRemoteUpdates", false)) {
-    				  NSMutableDictionary userInfo = new NSMutableDictionary(new NSArray(gid), EODatabaseContext.UpdatedKey);
-  					  userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
-	  				  NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification, dbc, userInfo);
-            }
+						// local notify of remote updates. See https://github.com/wocommunity/wonder/issues/866
+						NSMutableDictionary userInfo = new NSMutableDictionary(new NSArray(gid), EODatabaseContext.UpdatedKey);
+						userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
+						NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification, dbc, userInfo);
 					}
 					finally {
 						ERXObjectStoreCoordinatorSynchronizer.setProcessingRemoteNotifications(false);
