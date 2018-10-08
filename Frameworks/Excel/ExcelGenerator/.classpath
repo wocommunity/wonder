@@ -7,7 +7,7 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.17.jar" sourcepath="/var/folders/9g/fbpw8rp13mv3bng8msrzs18w0000gn/T/.org.sf.feeling.decompiler1538989030348/source/poi-3.17-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-excelant-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-ooxml-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-ooxml-schemas-3.17.jar"/>
