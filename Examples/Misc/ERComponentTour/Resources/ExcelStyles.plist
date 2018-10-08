@@ -17,12 +17,12 @@ Fonts:
 Styles:
     id="foo"
     font="someFontID"
-    alignment="ALIGN_GENERAL|ALIGN_LEFT|ALIGN_CENTER|ALIGN_RIGHT"
-    verticalAlignment="VERTICAL_TOP|VERTICAL_CENTER|VERTICAL_BOTTOM|VERTICAL_JUSTIFY"
+    alignment="GENERAL|LEFT|CENTER|RIGHT"
+    verticalAlignment="TOP|CENTER|BOTTOM|JUSTIFY"
     borderLeft_borderRight_borderTop_borderBottom=
-            "BORDER_NONE|BORDER_THIN|BORDER_MEDIUM|BORDER_DASHED|BORDER_HAIR|BORDER_DOUBLE|BORDER_DOTTED|
-                    BORDER_MEDIUM_DASHED|BORDER_DASH_DOT|BORDER_MEDIUM_DASH_DOT|BORDER_DASH_DOT_DOT|
-                    BORDER_MEDIUM_DASH_DOT_DOT|BORDER_SLANTED_DASH_DOT"
+            "NONE|THIN|MEDIUM|DASHED|HAIR|DOUBLE|DOTTED|
+                    MEDIUM_DASHED|DASH_DOT|MEDIUM_DASH_DOT|DASH_DOT_DOT|
+                    MEDIUM_DASH_DOT_DOT|SLANTED_DASH_DOT"
     leftBorderColor_rightBorderColor_topBorderColor_bottomBorderColor="0-xx"
     fillPattern="NO_FILL|SOLID_FOREGROUND|FINE_DOTS|ALT_BARS|SPARSE_DOTS|THICK_HORZ_BANDS|THICK_VERT_BANDS|THICK_BACKWARD_DIAG|
             THICK_FORWARD_DIAG|BIG_SPOTS|BRICKS|THIN_HORZ_BANDS|THIN_VERT_BANDS|THIN_BACKWARD_DIAG|THIN_FORWARD_DIAG|SQUARES|DIAMONDS"
@@ -47,11 +47,17 @@ Styles:
     "Styles" = {
         "default" = {
             font="default";
-            alignment="ALIGN_RIGHT";
+            alignment="RIGHT";
         };
         "bold" = {
             font="bold";
-            alignment="ALIGN_LEFT";
+            alignment="LEFT";
+        };
+        "everythingElse" = {
+        	font = "default";
+        	alignment="RIGHT";
+        	fillPattern="SPARSE_DOTS";
+        	borderTop="DASHED";
         };
     };
 }
