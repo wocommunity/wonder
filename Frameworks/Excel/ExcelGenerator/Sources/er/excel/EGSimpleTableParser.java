@@ -18,13 +18,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +51,8 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 
 /**
- * Parses an input stream for tables and converts them into excel 
- * sheets. You must have a surrounding element as there is only one 
+ * Parses an input stream for tables and converts them into excel
+ * sheets. You must have a surrounding element as there is only one
  * root element in XML allowed.
  * <blockquote>
  * Eg:<code>&lt;div&gt;&lt;table 1&gt;&lt;table 2&gt;...&lt;/div&gt;</code>
@@ -59,7 +63,7 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * font and style dictionaries in the constructor or via &lt;style&gt; and &lt;font&gt; tags.
  * The tags are shown in the example, but mainly the attributes are named the same as the properties
  * of the {@link org.apache.poi.hssf.usermodel.HSSFCellStyle HSSFCellStyle} and {@link org.apache.poi.hssf.usermodel.HSSFFont HSSFFont}
- * objects. The symbolic names from theses classes (eg. <code>ALIGN_RIGHT</code>) are also supported.
+ * objects. The symbolic names from theses classes (eg. <code>HorizontalAlignment.RIGHT</code>) are also supported.
  * In addition, the tags <em>must</em> have an <code>id</code> attribute and can specify an
  * <code>extends</code> attribute that contains the ID of the style that is extended - all properties from this
  * style and it's predecessors are copied to the current style.
@@ -69,10 +73,10 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * The value is copied as text from the cell's content, so you better take care that it is parsable
  * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.
  * <p>
- * The parser also supports the <code>some-name</code> attribute names in addition to 
- * <code>someName</code> as using the <b>Reformat</b> command in WOBuilder messes up the case 
- * of the tags. When used in .wod files, the attributes must be enclosed in quotes 
- * (<code>"cell-type"=foo;</code>). Some care must be taken when the attributes in the current node override the ones 
+ * The parser also supports the <code>some-name</code> attribute names in addition to
+ * <code>someName</code> as using the <b>Reformat</b> command in WOBuilder messes up the case
+ * of the tags. When used in .wod files, the attributes must be enclosed in quotes
+ * (<code>"cell-type"=foo;</code>). Some care must be taken when the attributes in the current node override the ones
  * from the parent as this is not thoroughly tested.
  * <p>
  * A client would use this class like:
@@ -142,7 +146,7 @@ public class EGSimpleTableParser {
             if (result == null || result.length() == 0) {
                 result = defaultValue;
             }
-		}    
+		}
 		return result;
 	}
     
@@ -207,7 +211,7 @@ public class EGSimpleTableParser {
         }
 		if(result == null) {
 			result = defaultValue;
-		}    
+		}
 		return result;
 	}
     
@@ -225,18 +229,10 @@ public class EGSimpleTableParser {
     	}
     }
     
-    private void takeClassValueForKey(NSDictionary dict, String key, Object target, String defaultValue) {
-    	String value = dictValueForKey(dict, key, defaultValue);
-    	if(value != null) {
-   			Number number = (Number)ERXKeyValueCodingUtilities.classValueForKey(target.getClass(), value);
-			NSKeyValueCoding.Utility.takeValueForKey(target, number, key);
-    	}
-    }
-    
     private void takeClassValueForKey(NSDictionary dict, String key, Object target, Class source, String defaultValue) {
     	String value = dictValueForKey(dict, key, defaultValue);
     	if(value != null) {
-   			Number number = (Number)ERXKeyValueCodingUtilities.classValueForKey(source, value);
+   			Object number = ERXKeyValueCodingUtilities.classValueForKey(source, value);
 			NSKeyValueCoding.Utility.takeValueForKey(target, number, key);
     	}
     }
@@ -373,7 +369,7 @@ public class EGSimpleTableParser {
     						&& ("td".equals(cellNode.getLocalName().toLowerCase())
     								|| "th".equals(cellNode.getLocalName().toLowerCase()))) {
     					int currentColumnNumber = row.getPhysicalNumberOfCells();
-						Cell cell = row.createCell(currentColumnNumber); 
+						Cell cell = row.createCell(currentColumnNumber);
     					Object value = null;
     					if(cellNode.getFirstChild() != null) {
     	   					value = cellNode.getFirstChild().getNodeValue();
@@ -572,14 +568,14 @@ public class EGSimpleTableParser {
     		takeNumberValueForKey(dict, "indention", cellStyle, null);
     		takeNumberValueForKey(dict, "rotation", cellStyle, null);
     		
-    		takeClassValueForKey(dict, "borderLeft", cellStyle, CellStyle.class, null);
-    		takeClassValueForKey(dict, "borderRight", cellStyle, CellStyle.class, null);
-    		takeClassValueForKey(dict, "borderTop", cellStyle, CellStyle.class, null);
-    		takeClassValueForKey(dict, "borderBottom", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "borderLeft", cellStyle, BorderStyle.class, null);
+    		takeClassValueForKey(dict, "borderRight", cellStyle, BorderStyle.class, null);
+    		takeClassValueForKey(dict, "borderTop", cellStyle, BorderStyle.class, null);
+    		takeClassValueForKey(dict, "borderBottom", cellStyle, BorderStyle.class, null);
     		
-    		takeClassValueForKey(dict, "fillPattern", cellStyle, CellStyle.class, null);
-    		takeClassValueForKey(dict, "alignment", cellStyle, CellStyle.class, null);
-    		takeClassValueForKey(dict, "verticalAlignment", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "fillPattern", cellStyle, FillPatternType.class, null);
+    		takeClassValueForKey(dict, "alignment", cellStyle, HorizontalAlignment.class, null);
+    		takeClassValueForKey(dict, "verticalAlignment", cellStyle, VerticalAlignment.class, null);
     		
     		String formatString = dictValueForKey(dict, "format", null);
     		if(formatString != null) {
