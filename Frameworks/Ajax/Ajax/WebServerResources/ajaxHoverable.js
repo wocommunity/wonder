@@ -96,8 +96,10 @@ var erxToolTip=function(){
 		}
 	},
 	hide:function(){
-		clearInterval(tt.timer);
-		tt.timer = setInterval(function(){erxToolTip.fade(-1)},timer);
+		if(tt != null){
+			clearInterval(tt.timer);
+			tt.timer = setInterval(function(){erxToolTip.fade(-1)},timer);
+		}
 	}
 	};
 }();
