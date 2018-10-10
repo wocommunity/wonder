@@ -87,7 +87,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param attachment the attachment to lookup a processor for
    * @return the attachment's processor
    */
-  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForType(T attachment) {
+  public static <P extends ERAttachmentProcessor<T>, T extends ERAttachment> P processorForType(T attachment) {
     return ERAttachmentProcessor.processorForType(attachment == null ? null : attachment.storageType());
   }
 
@@ -99,8 +99,8 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @return the storage type's processor
    */
   @SuppressWarnings("unchecked")
-  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForType(String storageType) {
-    ERAttachmentProcessor<T> processor = (ERAttachmentProcessor<T>) ERAttachmentProcessor.processors().objectForKey(storageType);
+  public static <P extends ERAttachmentProcessor<T>, T extends ERAttachment> P processorForType(String storageType) {
+    P processor = (P) ERAttachmentProcessor.processors().objectForKey(storageType);
     if (processor == null) {
       throw new IllegalArgumentException("There is no attachment processor for the type '" + storageType + "'.");
     }
@@ -114,7 +114,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param configurationName the configuration name to use to lookup the default storage type
    * @return the storage type's processor
    */
-  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForConfigurationName(String configurationName) {
+  public static <P extends ERAttachmentProcessor<T>, T extends ERAttachment> P processorForConfigurationName(String configurationName) {
     String storageType = ERXProperties.stringForKey("er.attachment." + configurationName + ".storageType");
     if (storageType == null) {
       storageType = ERXProperties.stringForKeyWithDefault("er.attachment.storageType", ERDatabaseAttachment.STORAGE_TYPE);
