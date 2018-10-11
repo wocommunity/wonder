@@ -29,6 +29,19 @@ import er.extensions.foundation.ERXProperties;
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
   public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) throws IOException {
+	  try {
+		  NSData data = new NSData(uploadedFile.toURI().toURL());
+		  ERDatabaseAttachment attachment = _process(editingContext, data, recommendedFileName, mimeType, configurationName);
+		  return attachment;
+	  }
+	  finally {
+		  if (pendingDelete) {
+			  uploadedFile.delete();
+		  }
+	  }
+  }
+  
+  public ERDatabaseAttachment _process(EOEditingContext editingContext, NSData data, String recommendedFileName, String mimeType, String configurationName) {
     String webPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".db.webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
@@ -49,13 +62,12 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       smallData = Boolean.parseBoolean(smallDataStr);
     }
 
-    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.TRUE, data.length(), webPath);
     if (delegate() != null) {
       delegate().attachmentCreated(this, attachment);
     }
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
-      NSData data = new NSData(uploadedFile.toURI().toURL());
       if (smallData) {
         attachment.setSmallData(data);
       }
@@ -68,20 +80,10 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
         delegate().attachmentAvailable(this, attachment);
       }
     }
-    catch (IOException e) {
-      attachment.delete();
-      throw e;
-    }
     catch (RuntimeException e) {
       attachment.delete();
       throw e;
     }
-    finally {
-      if (pendingDelete) {
-        uploadedFile.delete();
-      }
-    }
-
     return attachment;
   }
 
