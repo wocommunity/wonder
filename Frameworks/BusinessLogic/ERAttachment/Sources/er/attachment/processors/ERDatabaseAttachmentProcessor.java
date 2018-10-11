@@ -29,13 +29,16 @@ import er.extensions.foundation.ERXProperties;
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
   public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) throws IOException {
-	  NSData data = new NSData(uploadedFile.toURI().toURL());
-	  ERDatabaseAttachment attachment = _process(editingContext, data, recommendedFileName, mimeType, configurationName);
-
-	  if (pendingDelete) {
-		  uploadedFile.delete();
+	  try {
+		  NSData data = new NSData(uploadedFile.toURI().toURL());
+		  ERDatabaseAttachment attachment = _process(editingContext, data, recommendedFileName, mimeType, configurationName);
+		  return attachment;
 	  }
-	  return attachment;
+	  finally {
+		  if (pendingDelete) {
+			  uploadedFile.delete();
+		  }
+	  }
   }
   
   public ERDatabaseAttachment _process(EOEditingContext editingContext, NSData data, String recommendedFileName, String mimeType, String configurationName) {
