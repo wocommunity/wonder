@@ -83,11 +83,6 @@ implements EOSQLExpression.SQLValue
 		return aCopy;
 	}
 
-	public String toString()
-	{
-		return super.toString();
-	}
-
 	public String valueForSQLExpression(EOSQLExpression context)
 	{
 		int count = count();
@@ -100,7 +95,7 @@ implements EOSQLExpression.SQLValue
 			return context.sqlStringForAttributePath(this);
 		}
 
-		StringBuffer aString = _prefix != null ? new StringBuffer(_prefix) : new StringBuffer(64);
+		StringBuilder aString = _prefix != null ? new StringBuilder(_prefix) : new StringBuilder(64);
 		int pieces;
 		for (int i = pieces = 0; i < count; i++) {
 			Object expression = objectAtIndex(i);
