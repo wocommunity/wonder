@@ -34,10 +34,10 @@ table はシートになります。後は各エレメントがセルになり�
 			sum(C1:C3)
 	
 alignment
-			alignment = "ALIGN_GENERAL"
-			alignment = "ALIGN_LEFT"
-			alignment = "ALIGN_CENTER"
-			alignment = "ALIGN_RIGHT"
+			alignment = "GENERAL"
+			alignment = "LEFT"
+			alignment = "CENTER"
+			alignment = "RIGHT"
 	
 borderLeft
 borderTop
@@ -83,11 +83,11 @@ fillPattern
 class="default"		
             name="Arial";
             fontHeightInPoints="10";
-            alignment="ALIGN_RIGHT";
+            alignment="RIGHT";
             
 class="bold"
             name="Arial Black";
-            alignment="ALIGN_LEFT";
+            alignment="LEFT";
 
 次には画面で確認が完了されているページを Excel に出力するには EGWrapper で囲みます。
 

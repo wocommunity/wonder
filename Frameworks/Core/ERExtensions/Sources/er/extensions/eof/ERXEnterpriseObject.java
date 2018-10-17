@@ -519,7 +519,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param ec editing context to local instance in
      * @return this EO in the supplied editing context.
      */
-	public EOEnterpriseObject localInstanceIn(EOEditingContext ec);
+	public <T extends EOEnterpriseObject> T localInstanceIn(EOEditingContext ec);
 
     /**
      * Returns an array of EOs in the same editing context as the caller.

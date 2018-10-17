@@ -30,76 +30,76 @@
     
     style = {
         alignment = (
-            ALIGN_GENERAL,
-            ALIGN_LEFT,
-            ALIGN_CENTER,
-            ALIGN_RIGHT
+            GENERAL,
+            LEFT,
+            CENTER,
+            RIGHT
         );
         verticalAligment = (
-            VERTICAL_TOP,
-            VERTICAL_CENTER,
-            VERTICAL_BOTTOM,
-            VERTICAL_JUSTIFY
+            TOP,
+            CENTER,
+            BOTTOM,
+            JUSTIFY
         );
         borderLeft = (
-            BORDER_NONE,
-            BORDER_THIN,
-            BORDER_MEDIUM,
-            BORDER_DASHED,
-            BORDER_HAIR,
-            BORDER_DOUBLE,
-            BORDER_DOTTED,
-            BORDER_MEDIUM_DASHED,
-            BORDER_DASH_DOT,
-            BORDER_MEDIUM_DASH_DOT,
-            BORDER_DASH_DOT_DOT,
-            BORDER_MEDIUM_DASH_DOT_DOT,
-            BORDER_SLANTED_DASH_DOT
+            NONE,
+            THIN,
+            MEDIUM,
+            DASHED,
+            HAIR,
+            DOUBLE,
+            DOTTED,
+            MEDIUM_DASHED,
+            DASH_DOT,
+            MEDIUM_DASH_DOT,
+            DASH_DOT_DOT,
+            MEDIUM_DASH_DOT_DOT,
+            SLANTED_DASH_DOT
         );
         borderTop = (
-            BORDER_NONE,
-            BORDER_THIN,
-            BORDER_MEDIUM,
-            BORDER_DASHED,
-            BORDER_HAIR,
-            BORDER_DOUBLE,
-            BORDER_DOTTED,
-            BORDER_MEDIUM_DASHED,
-            BORDER_DASH_DOT,
-            BORDER_MEDIUM_DASH_DOT,
-            BORDER_DASH_DOT_DOT,
-            BORDER_MEDIUM_DASH_DOT_DOT,
-            BORDER_SLANTED_DASH_DOT
+            NONE,
+            THIN,
+            MEDIUM,
+            DASHED,
+            HAIR,
+            DOUBLE,
+            DOTTED,
+            MEDIUM_DASHED,
+            DASH_DOT,
+            MEDIUM_DASH_DOT,
+            DASH_DOT_DOT,
+            MEDIUM_DASH_DOT_DOT,
+            SLANTED_DASH_DOT
         );
         borderRight = (
-            BORDER_NONE,
-            BORDER_THIN,
-            BORDER_MEDIUM,
-            BORDER_DASHED,
-            BORDER_HAIR,
-            BORDER_DOUBLE,
-            BORDER_DOTTED,
-            BORDER_MEDIUM_DASHED,
-            BORDER_DASH_DOT,
-            BORDER_MEDIUM_DASH_DOT,
-            BORDER_DASH_DOT_DOT,
-            BORDER_MEDIUM_DASH_DOT_DOT,
-            BORDER_SLANTED_DASH_DOT
+            NONE,
+            THIN,
+            MEDIUM,
+            DASHED,
+            HAIR,
+            DOUBLE,
+            DOTTED,
+            MEDIUM_DASHED,
+            DASH_DOT,
+            MEDIUM_DASH_DOT,
+            DASH_DOT_DOT,
+            MEDIUM_DASH_DOT_DOT,
+            SLANTED_DASH_DOT
         );
         borderBottom= (
-            BORDER_NONE,
-            BORDER_THIN,
-            BORDER_MEDIUM,
-            BORDER_DASHED,
-            BORDER_HAIR,
-            BORDER_DOUBLE,
-            BORDER_DOTTED,
-            BORDER_MEDIUM_DASHED,
-            BORDER_DASH_DOT,
-            BORDER_MEDIUM_DASH_DOT,
-            BORDER_DASH_DOT_DOT,
-            BORDER_MEDIUM_DASH_DOT_DOT,
-            BORDER_SLANTED_DASH_DOT
+            NONE,
+            THIN,
+            MEDIUM,
+            DASHED,
+            HAIR,
+            DOUBLE,
+            DOTTED,
+            MEDIUM_DASHED,
+            DASH_DOT,
+            MEDIUM_DASH_DOT,
+            DASH_DOT_DOT,
+            MEDIUM_DASH_DOT_DOT,
+            SLANTED_DASH_DOT
         );
         fillPattern = (
             NO_FILL,
