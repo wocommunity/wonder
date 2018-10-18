@@ -818,6 +818,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 
 	/**
+	 * Returns the committed snapshot value for given key.
+	 * 
+	 * @param key The key that you wish to get its value from the committed snapshot
+	 * @return the committed value
+	 */
+	public <T> T committedSnapshotValueForKey(ERXKey<T> key) {
+		return (T) committedSnapshotValueForKey(key.key());
+	}
+
+	/**
 	 * This method exists because
 	 * {@link com.webobjects.eocontrol.EOEditingContext#committedSnapshotForObject EOEditingContext.committedSnapshotForObject()}
 	 * gives unexpected results for newly inserted objects if
