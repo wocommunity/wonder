@@ -48,5 +48,6 @@
     </validation>
     <binding name="title"/>
     <binding name="tabindex"/>
+    <binding defaults="Boolean" name="useButtonTag"/>
     </wo>
 </wodefinitions>
