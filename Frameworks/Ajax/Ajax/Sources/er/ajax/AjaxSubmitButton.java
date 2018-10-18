@@ -36,6 +36,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding onLoading javascript to execute when loading
  * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
+ * @binding useButtonTag generate button tag even if the property er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag is false   (defaults to "false")
  * @binding formName if button is false, you must specify the name of the form to submit
  * @binding functionName if set, the link becomes a javascript function instead
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
@@ -142,6 +143,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     String formName = (String)valueForBinding("formName", component);
     boolean showUI = (functionName == null || booleanValueForBinding("showUI", false, component));
     boolean showButton = showUI && booleanValueForBinding("button", true, component);
+    boolean useButtonTagBinding = booleanValueForBinding("useButtonTag", false, component);
     String formReference;
     if ((!showButton || functionName != null) && formName == null) {
       formName = ERXWOForm.formName(context, null);
@@ -252,7 +254,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     if (showUI) {
     	boolean disabled = disabledInComponent(component);
     	String elementName = (String) valueForBinding("elementName", "a", component);
-    	boolean useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
+    	boolean useButtonTag = useButtonTagBinding || ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
     	
 	    if (showButton) {
 	      elementName = useButtonTag ? "button" : "input";
