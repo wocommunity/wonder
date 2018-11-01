@@ -157,6 +157,12 @@ public class ERXSubmitButton extends WOInput {
     	if (_id != null) {
     		woresponse._appendTagAttributeAndValue("id", (String) _id.valueInComponent(wocontext.component()), false);
     	}
+    	
+		String title = titleInContext(wocontext);
+		if (title.length() > 0) {
+			_appendTagAttributeAndValueToResponse(woresponse, "title", title, true);
+		}
+    	
     	boolean shouldSubmitForm = (_shouldSubmitForm != null ? _shouldSubmitForm.booleanValueInComponent(wocontext.component()) : true);
 
     	if(isDisabledInContext(wocontext)) {
