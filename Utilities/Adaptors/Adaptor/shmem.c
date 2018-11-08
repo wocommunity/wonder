@@ -582,18 +582,29 @@ void *sha_lock(ShmemArray *array, unsigned int elementNumber)
       /* block read lock requests */
       WA_lock(array->elements[elementNumber].writeLock);
       WA_lock(array->elements[elementNumber].lock);
-      while (array->elements[elementNumber].lockCount > 0)
+      int maxTry = 10000;
+      while (array->elements[elementNumber].lockCount > 0 && maxTry-- > 0)
       {
          WA_unlock(array->elements[elementNumber].lock);
          WA_yield();
          WA_lock(array->elements[elementNumber].lock);
       }
-      element = array->elements[elementNumber].element;
-      array->elements[elementNumber].lockHandle = WOShmem_lock(element, array->elementSize, 1);
-      WA_unlock(array->elements[elementNumber].lock);
+
+      if(array->elements[elementNumber].lockCount <= 0)
+      {
+         element = array->elements[elementNumber].element;
+         array->elements[elementNumber].lockHandle = WOShmem_lock(element, array->elementSize, 1);
+         WA_unlock(array->elements[elementNumber].lock);
 #ifdef EXTRA_DEBUGGING_LOGS
-      WOLog(WO_DBG, "sha_lock(): locked %s element %d", array->name, elementNumber);
+         WOLog(WO_DBG, "sha_lock(): locked %s element %d", array->name, elementNumber);
 #endif
+      } else
+      {
+         WA_unlock(array->elements[elementNumber].lock);
+         WA_unlock(array->elements[elementNumber].writeLock);
+         element = NULL;
+         WOLog(WO_ERR, "sha_lock(): element already locked: %s / %d", array->name, elementNumber);
+      }
    } else {
       element = NULL;
       WOLog(WO_ERR, "sha_lock(): failed to lock %s element %d", array->name, elementNumber);
