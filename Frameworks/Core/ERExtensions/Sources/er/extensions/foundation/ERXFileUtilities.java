@@ -1181,48 +1181,49 @@ public class ERXFileUtilities {
             destinationPath += File.separator;
         }
 
-        ZipFile zipFile = new ZipFile(f);
+        try (ZipFile zipFile = new ZipFile(f)) {
 
-        Enumeration en = zipFile.entries();
-        if (en.hasMoreElements()) {
-            ZipEntry firstEntry = (ZipEntry)en.nextElement();
-            if (firstEntry.isDirectory() || en.hasMoreElements()) {
-                String dir = destinationPath + f.getName();
-                if (dir.endsWith(".zip")) {
-                    dir = dir.substring(0, dir.length() - 4);
+            Enumeration en = zipFile.entries();
+            if (en.hasMoreElements()) {
+                ZipEntry firstEntry = (ZipEntry)en.nextElement();
+                if (firstEntry.isDirectory() || en.hasMoreElements()) {
+                    String dir = destinationPath + f.getName();
+                    if (dir.endsWith(".zip")) {
+                        dir = dir.substring(0, dir.length() - 4);
+                    }
+                    if (new File(dir).mkdirs())
+                        destinationPath = dir + File.separator;
+                    else
+                        throw new IOException("Cannot create directory: \""+dir+"\"");
                 }
-                if (new File(dir).mkdirs())
-                    destinationPath = dir + File.separator;
-                else
-                    throw new IOException("Cannot create directory: \""+dir+"\"");
-            }
-        } else {
-            return null;
-        }
-
-        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
-            ZipEntry ze = (ZipEntry)e.nextElement();
-            String name = ze.getName();
-            File d = new File(destinationPath, name);
-            String canonicalPath = d.getCanonicalPath();
-            if (!canonicalPath.startsWith(destinationPath + File.separator)) {
-                throw new ZipException("ZIP entry is outside of destination directory: " + name);
-            }
-            if (ze.isDirectory()) {
-                if (! d.mkdirs())
-                    throw new IOException("Cannot create directory: \"" + d + "\"");
-                log.debug("created directory {}", d);
             } else {
-                try (InputStream is = zipFile.getInputStream(ze)){
-	                writeInputStreamToFile(is, d);
-	                if (log.isDebugEnabled()) {
-	                    log.debug("unzipped file {} into {}", name, destinationPath + name);
-	                }
+                return null;
+            }
+
+            for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+                ZipEntry ze = (ZipEntry)e.nextElement();
+                String name = ze.getName();
+                File d = new File(destinationPath, name);
+                String canonicalPath = d.getCanonicalPath();
+                if (!canonicalPath.startsWith(destinationPath + File.separator)) {
+                    throw new ZipException("ZIP entry is outside of destination directory: " + name);
+                }
+                if (ze.isDirectory()) {
+                    if (! d.mkdirs())
+                        throw new IOException("Cannot create directory: \"" + d + "\"");
+                    log.debug("created directory {}", d);
+                } else {
+                    try (InputStream is = zipFile.getInputStream(ze)){
+                        writeInputStreamToFile(is, d);
+                        if (log.isDebugEnabled()) {
+                            log.debug("unzipped file {} into {}", name, destinationPath + name);
+                        }
+                    }
                 }
             }
-        }
 
-        return new File(destinationPath);
+            return new File(destinationPath);
+        }
     }
 
     /**
