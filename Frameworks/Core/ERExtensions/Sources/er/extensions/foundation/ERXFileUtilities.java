@@ -1143,34 +1143,33 @@ public class ERXFileUtilities {
 
     /**
      * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
-     * structure is created as a subdirectory with the name if the zip file minus the .zip extension
+     * structure is created as a subdirectory with the name of the zip file minus the .zip extension
      * from destination. All intermittent directories are also created. If destination is <code>null</code>
      * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
      * uncompressed file(s).
-     *
      *
      * @param f The file to unzip
      * @param destination the destination directory. If directory is <code>null</code> then the file will be unzipped in
      * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
      * then the destination is set to the directory in which the file is located.
      *
-     *
      * @return the file or directory in which the zipfile was unzipped
      *
-     * @exception IOException if something goes wrong
+     * @exception IOException if something goes wrong like not able to create a directory
+     * @exception ZipException if an extracted file would be placed outside of the destination directory
      */
     public static File unzipFile(File f, File destination) throws IOException {
 
         if (!f.exists()) {
-            throw new FileNotFoundException("file "+f+" does not exist");
+            throw new FileNotFoundException("file " + f + " does not exist");
         }
 
         String destinationPath;
         if (destination != null) {
             destinationPath = destination.getCanonicalPath();
             if (!destination.exists()) {
-                if (! destination.mkdirs())
-                    throw new RuntimeException("Cannot create destination directory: \""+destination.getPath()+"\"");
+                if (!destination.mkdirs())
+                    throw new IOException("Cannot create destination directory: \"" + destination + "\"");
             } else if (!destination.isDirectory()) {
                 destinationPath = destinationPath.substring(0, destinationPath.lastIndexOf(File.separator));
             }
@@ -1194,7 +1193,7 @@ public class ERXFileUtilities {
                     if (new File(dir).mkdirs())
                         destinationPath = dir + File.separator;
                     else
-                        throw new IOException("Cannot create directory: \""+dir+"\"");
+                        throw new IOException("Cannot create directory: \"" + dir + "\"");
                 }
             } else {
                 return null;
@@ -1209,7 +1208,7 @@ public class ERXFileUtilities {
                     throw new ZipException("ZIP entry is outside of destination directory: " + name);
                 }
                 if (ze.isDirectory()) {
-                    if (! d.mkdirs())
+                    if (!d.mkdirs())
                         throw new IOException("Cannot create directory: \"" + d + "\"");
                     log.debug("created directory {}", d);
                 } else {
