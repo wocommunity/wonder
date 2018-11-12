@@ -36,6 +36,7 @@ import java.util.Enumeration;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
@@ -1164,20 +1165,20 @@ public class ERXFileUtilities {
             throw new FileNotFoundException("file "+f+" does not exist");
         }
 
-        String absolutePath;
+        String destinationPath;
         if (destination != null) {
-            absolutePath = destination.getAbsolutePath();
+            destinationPath = destination.getCanonicalPath();
             if (!destination.exists()) {
                 if (! destination.mkdirs())
                     throw new RuntimeException("Cannot create destination directory: \""+destination.getPath()+"\"");
             } else if (!destination.isDirectory()) {
-                absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
+                destinationPath = destinationPath.substring(0, destinationPath.lastIndexOf(File.separator));
             }
         } else {
-            absolutePath = System.getProperty("java.io.tmpdir");
+            destinationPath = System.getProperty("java.io.tmpdir");
         }
-        if (!absolutePath.endsWith(File.separator)) {
-            absolutePath += File.separator;
+        if (!destinationPath.endsWith(File.separator)) {
+            destinationPath += File.separator;
         }
 
         ZipFile zipFile = new ZipFile(f);
@@ -1186,12 +1187,12 @@ public class ERXFileUtilities {
         if (en.hasMoreElements()) {
             ZipEntry firstEntry = (ZipEntry)en.nextElement();
             if (firstEntry.isDirectory() || en.hasMoreElements()) {
-                String dir = absolutePath + f.getName();
+                String dir = destinationPath + f.getName();
                 if (dir.endsWith(".zip")) {
                     dir = dir.substring(0, dir.length() - 4);
                 }
                 if (new File(dir).mkdirs())
-                    absolutePath = dir + File.separator;
+                    destinationPath = dir + File.separator;
                 else
                     throw new IOException("Cannot create directory: \""+dir+"\"");
             }
@@ -1202,22 +1203,26 @@ public class ERXFileUtilities {
         for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
             ZipEntry ze = (ZipEntry)e.nextElement();
             String name = ze.getName();
+            File d = new File(destinationPath, name);
+            String canonicalPath = d.getCanonicalPath();
+            if (!canonicalPath.startsWith(destinationPath + File.separator)) {
+                throw new ZipException("ZIP entry is outside of destination directory: " + name);
+            }
             if (ze.isDirectory()) {
-                File d = new File(absolutePath + name);
                 if (! d.mkdirs())
-                    throw new IOException("Cannot create directory: \""+d.getPath()+"\"");
+                    throw new IOException("Cannot create directory: \"" + d + "\"");
                 log.debug("created directory {}", d);
             } else {
                 try (InputStream is = zipFile.getInputStream(ze)){
-	                writeInputStreamToFile(is, new File(absolutePath, name));
+	                writeInputStreamToFile(is, d);
 	                if (log.isDebugEnabled()) {
-	                    log.debug("unzipped file {} into {}", ze.getName(), absolutePath + name);
+	                    log.debug("unzipped file {} into {}", name, destinationPath + name);
 	                }
                 }
             }
         }
 
-        return new File(absolutePath);
+        return new File(destinationPath);
     }
 
     /**
