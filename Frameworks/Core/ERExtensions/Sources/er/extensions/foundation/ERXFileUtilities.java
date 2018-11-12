@@ -1183,9 +1183,9 @@ public class ERXFileUtilities {
 
         try (ZipFile zipFile = new ZipFile(f)) {
 
-            Enumeration en = zipFile.entries();
+            Enumeration<? extends ZipEntry> en = zipFile.entries();
             if (en.hasMoreElements()) {
-                ZipEntry firstEntry = (ZipEntry)en.nextElement();
+                ZipEntry firstEntry = en.nextElement();
                 if (firstEntry.isDirectory() || en.hasMoreElements()) {
                     String dir = destinationPath + f.getName();
                     if (dir.endsWith(".zip")) {
@@ -1200,8 +1200,8 @@ public class ERXFileUtilities {
                 return null;
             }
 
-            for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
-                ZipEntry ze = (ZipEntry)e.nextElement();
+            for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements(); ) {
+                ZipEntry ze = e.nextElement();
                 String name = ze.getName();
                 File d = new File(destinationPath, name);
                 String canonicalPath = d.getCanonicalPath();
