@@ -36,7 +36,7 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	 * ではセッションが新しく、必要な情報がないことになります。
 	 * </div>
 	 */
-	protected NSDictionary _sessionDictionary = NSDictionary.EmptyDictionary;
+	protected NSDictionary<String, Object> _sessionDictionary = NSDictionary.emptyDictionary();
 
 	/** 
 	 * <div class="en">
@@ -73,12 +73,12 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	}
 
 	/** Accessor for the sessionDictionary property */
-	public NSDictionary sessionDictionary() {
+	public NSDictionary<String, Object> sessionDictionary() {
 		return _sessionDictionary;
 	}
 
 	/** Accessor for the sessionDictionary property */
-	public void setSessionDictionary(NSDictionary dict) {
+	public void setSessionDictionary(NSDictionary<String, Object> dict) {
 		_sessionDictionary = dict;
 	}
 
