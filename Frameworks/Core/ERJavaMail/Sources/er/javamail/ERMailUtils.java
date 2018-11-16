@@ -37,16 +37,12 @@ import er.extensions.appserver.ERXApplication;
 public class ERMailUtils {
 	private static final Logger log = LoggerFactory.getLogger(ERMailUtils.class);
 
-	/** 
-	 * <div class="en">
-	 * The shared mail deliverer
-	 * </div>
-	 * 
-	 * <div class="ja">
-	 * メール配信の共有インスタンス 
-	 * </div>
+	/*
+	 * Lazy initialisation, see Effective Java, Item 71
 	 */
-	private static ERMailDeliveryHTML sharedDeliverer;
+	private static class ERMailDeliveryHTMLHolder {
+		private static final ERMailDeliveryHTML sharedDeliverer = ERMailDeliveryHTML.newMailDelivery();
+	}
 
 	/**
 	 * <div class="en">
@@ -61,11 +57,7 @@ public class ERMailUtils {
 	 *         <div class="ja"><code>ERMailDeliveryHTML</code> シングルトン</div>
 	 */
 	public static ERMailDeliveryHTML sharedDeliverer() {
-		if (sharedDeliverer == null) {
-			sharedDeliverer = ERMailDeliveryHTML.newMailDelivery();
-		}
-
-		return sharedDeliverer;
+		return ERMailDeliveryHTMLHolder.sharedDeliverer;
 	}
 
 	/**
