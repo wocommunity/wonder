@@ -53,12 +53,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		setUpFrameworkPrincipalClass(ERJavaMail.class);
 	}
 
-	/**
-	 * <span class="en"> ERJavaMail class singleton. </span>
-	 * 
-	 * <span class="ja"> シングルトン・クラス </span>
+	/*
+	 * Lazy initialisation, see Effective Java, Item 71
 	 */
-	protected static ERJavaMail sharedInstance;
+	private static class SharedInstanceHolder {
+		private static final ERJavaMail singelton = ERXFrameworkPrincipal.sharedInstance(ERJavaMail.class);
+	}
 
 	/**
 	 * <span class="en"> Accessor to the ERJavaMail singleton.
@@ -69,11 +69,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return <code>ERJavaMail</code> インスタンス </span>
 	 */
-	public static synchronized ERJavaMail sharedInstance() {
-		if (sharedInstance == null) {
-			sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERJavaMail.class);
-		}
-		return sharedInstance;
+	public static ERJavaMail sharedInstance() {
+		return SharedInstanceHolder.singelton;
 	}
 
 	/**
