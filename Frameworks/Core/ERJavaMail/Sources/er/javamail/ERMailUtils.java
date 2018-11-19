@@ -37,16 +37,12 @@ import er.extensions.appserver.ERXApplication;
 public class ERMailUtils {
 	private static final Logger log = LoggerFactory.getLogger(ERMailUtils.class);
 
-	/** 
-	 * <div class="en">
-	 * The shared mail deliverer
-	 * </div>
-	 * 
-	 * <div class="ja">
-	 * メール配信の共有インスタンス 
-	 * </div>
+	/*
+	 * Lazy initialisation, see Effective Java, Item 71
 	 */
-	private static ERMailDeliveryHTML sharedDeliverer;
+	private static class ERMailDeliveryHTMLHolder {
+		private static final ERMailDeliveryHTML sharedDeliverer = ERMailDeliveryHTML.newMailDelivery();
+	}
 
 	/**
 	 * <div class="en">
@@ -61,11 +57,7 @@ public class ERMailUtils {
 	 *         <div class="ja"><code>ERMailDeliveryHTML</code> シングルトン</div>
 	 */
 	public static ERMailDeliveryHTML sharedDeliverer() {
-		if (sharedDeliverer == null) {
-			sharedDeliverer = ERMailDeliveryHTML.newMailDelivery();
-		}
-
-		return sharedDeliverer;
+		return ERMailDeliveryHTMLHolder.sharedDeliverer;
 	}
 
 	/**
@@ -87,7 +79,7 @@ public class ERMailUtils {
 	 * @return <div class="en">a newly instantiated <code>WOComponent</code>.</div>
 	 *         <div class="ja">新規のインスタンス済み <code>WOComponent</code></div>
 	 */
-	public static WOComponent instantiatePage(String pageName, NSDictionary sessionDict) {
+	public static WOComponent instantiatePage(String pageName, NSDictionary<String, Object> sessionDict) {
 		WOComponent component = ERXApplication.instantiatePage(pageName);
 		if (sessionDict != null) {
 			setDictionaryValuesInSession(sessionDict, component.session());
@@ -205,14 +197,14 @@ public class ERMailUtils {
 	 * @param session <div class="en">a <code>WOSession</code> value that will receive the values contained in the dict parameter.</div>
 	 *                <div class="ja">ディクショナリー内に設定されている値をセットする <code>WOSession</code></div>
 	 */
-	public static void setDictionaryValuesInSession(NSDictionary dict, WOSession session) {
+	public static void setDictionaryValuesInSession(NSDictionary<String, Object> dict, WOSession session) {
 		if ((dict == null) || (session == null)) {
 			return;
 		}
 
-		Enumeration en = dict.keyEnumerator();
+		Enumeration<String> en = dict.keyEnumerator();
 		while (en.hasMoreElements()) {
-			String key = (String) en.nextElement();
+			String key = en.nextElement();
 			Object object = dict.objectForKey(key);
 			if (object != null) {
 				log.debug("Setting in session dict value '{}' for key '{}'", object, key);
@@ -253,14 +245,14 @@ public class ERMailUtils {
 	 * @exception AddressException <div class="en">if an error occurs</div>
 	 *                             <div class="ja">エラー発生した場合</div>
 	 */
-	public static InternetAddress[] convertNSArrayToInternetAddresses(NSArray addrs) throws AddressException {
+	public static InternetAddress[] convertNSArrayToInternetAddresses(NSArray<String> addrs) throws AddressException {
 		if (addrs == null)
 			return new InternetAddress[0];
 		InternetAddress[] addrArray = new InternetAddress[addrs.count()];
 
-		Enumeration en = addrs.objectEnumerator();
+		Enumeration<String> en = addrs.objectEnumerator();
 		for (int i = 0; en.hasMoreElements(); i++) {
-			String anAddress = (String) en.nextElement();
+			String anAddress = en.nextElement();
 			addrArray[i] = new InternetAddress(anAddress);
 		}
 

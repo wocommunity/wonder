@@ -48,6 +48,11 @@ import com.webobjects.foundation.NSArray;
  */
 
 public class ERWOMailDelivery {
+	
+	private static class ERWOMailDeliveryHolder {
+		private static final ERWOMailDelivery sharedInstance = new ERWOMailDelivery();
+	}
+
 	/** 
 	 * <div class="en">
 	 * @return The shared instance. 
@@ -58,9 +63,7 @@ public class ERWOMailDelivery {
 	 * </div>
 	 */
 	public static ERWOMailDelivery sharedInstance() {
-		if (_sharedInstance == null)
-			_sharedInstance = new ERWOMailDelivery();
-		return _sharedInstance;
+		return ERWOMailDeliveryHolder.sharedInstance;
 	}
 
 	/** 
@@ -213,7 +216,6 @@ public class ERWOMailDelivery {
 
 	// Private Implementation.
 	private static final Logger log = LoggerFactory.getLogger(ERWOMailDelivery.class);
-	private static ERWOMailDelivery _sharedInstance = null;
 
 	private MimeMessage newMimeMessage(String fromEmailAddress, NSArray<String> toEmailAddresses, NSArray<String> bccEmailAddresses, String subject, String message, String contentType, boolean sendNow) {
 		// /JAssert.notEmpty( fromEmailAddress );

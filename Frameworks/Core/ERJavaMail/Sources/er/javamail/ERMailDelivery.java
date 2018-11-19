@@ -4,6 +4,7 @@
 
 package er.javamail;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import javax.activation.DataHandler;
@@ -19,7 +20,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +111,7 @@ public abstract class ERMailDelivery {
 	private NSDictionary<String, Object> _userInfo;
 	private String _contextString;
 
-	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding", CharEncoding.UTF_8);
+	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding", StandardCharsets.UTF_8.name());
 	public String _charset = DefaultCharset;
 
 	/** Designated constructor */

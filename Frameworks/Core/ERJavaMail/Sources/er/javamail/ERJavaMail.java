@@ -6,6 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -42,6 +45,8 @@ import er.extensions.validation.ERXValidationFactory;
  * @property er.javamail.emailPattern
  * @property er.javamail.WhiteListEmailAddressPatterns
  * @property er.javamail.BlackListEmailAddressPatterns
+ * @property er.javamail.sessionConfigViaJNDI
+ * @property er.javamail.jndiSessionContext
  * 
  * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
  * @author <a href="mailto:maxmuller@mac.com">Max Muller</a>
@@ -53,12 +58,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		setUpFrameworkPrincipalClass(ERJavaMail.class);
 	}
 
-	/**
-	 * <span class="en"> ERJavaMail class singleton. </span>
-	 * 
-	 * <span class="ja"> シングルトン・クラス </span>
+	/*
+	 * Lazy initialisation, see Effective Java, Item 71
 	 */
-	protected static ERJavaMail sharedInstance;
+	private static class SharedInstanceHolder {
+		private static final ERJavaMail singelton = ERXFrameworkPrincipal.sharedInstance(ERJavaMail.class);
+	}
 
 	/**
 	 * <span class="en"> Accessor to the ERJavaMail singleton.
@@ -69,11 +74,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return <code>ERJavaMail</code> インスタンス </span>
 	 */
-	public static synchronized ERJavaMail sharedInstance() {
-		if (sharedInstance == null) {
-			sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERJavaMail.class);
-		}
-		return sharedInstance;
+	public static ERJavaMail sharedInstance() {
+		return SharedInstanceHolder.singelton;
 	}
 
 	/**
@@ -318,7 +320,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return <code>javax.mail.Session</code> 値 </span>
 	 */
 	public javax.mail.Session newSession() {
-		return newSession(System.getProperties());
+		return newSessionForContext(null);
 	}
 
 	/**
@@ -344,24 +346,46 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * Returns a new Session object that is appropriate for the given context.
 	 * 
+	 * If the property <code>er.javamail.sessionConfigViaJNDI</code> is set to <code>true</code> the JNDI is used to lookup the session informations. 
+	 * You may change the default JNDI context with the property <code>er.javamail.jndiSessionContext</code>
+	 * 
 	 * @param contextString
 	 *            the message context
 	 * @return a new <code>javax.mail.Session</code> value
 	 */
 	protected javax.mail.Session newSessionForContext(String contextString) {
-		javax.mail.Session session;
-		if (contextString == null || contextString.length() == 0) {
-			session = newSessionForContext(System.getProperties(), contextString);
+		javax.mail.Session session = null;
+		
+		boolean jndiLookup = ERXProperties.booleanForKeyWithDefault("er.javamail.sessionConfigViaJNDI", false);
+		if(jndiLookup) {
+			String jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext", "java:comp/env/mail");
+			if(contextString != null) {
+				jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext."+contextString, jndiContextString);
+			}
+			
+			try {
+				if(log.isDebugEnabled()) log.debug("try to get javax.mail.Session for JNDI context " + jndiContextString);
+				InitialContext ic = new InitialContext();
+				session = (javax.mail.Session)ic.lookup(jndiContextString);
+			} catch (NamingException e) {
+				log.error("Failed to initialize JavaMail Session: " + e.getMessage());
+			}
+	
 		}
 		else {
-			Properties sessionProperties = new Properties();
-			sessionProperties.putAll(System.getProperties());
-			setupSmtpProperties(sessionProperties, contextString);
-			session = newSessionForContext(sessionProperties, contextString);
+			if (contextString == null || contextString.length() == 0) {
+				session = newSessionForContext(System.getProperties(), contextString);
+			}
+			else {
+				Properties sessionProperties = new Properties();
+				sessionProperties.putAll(System.getProperties());
+				setupSmtpProperties(sessionProperties, contextString);
+				session = newSessionForContext(sessionProperties, contextString);
+			}
 		}
 		return session;
 	}
-
+	
 	/**
 	 * Returns a newly allocated Session object from the given Properties
 	 * 
