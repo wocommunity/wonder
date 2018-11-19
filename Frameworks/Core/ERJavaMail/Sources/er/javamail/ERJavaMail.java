@@ -357,14 +357,14 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		javax.mail.Session session = null;
 		
 		boolean jndiLookup = ERXProperties.booleanForKeyWithDefault("er.javamail.sessionConfigViaJNDI", false);
-		String jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext", "java:comp/env/mail");
 		if(jndiLookup) {
+			String jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext", "java:comp/env/mail");
 			if(contextString != null) {
 				jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext."+contextString, jndiContextString);
 			}
 			
 			try {
-				log.info("try to get javax.mail.Session for " + jndiContextString);
+				if(log.isDebugEnabled()) log.debug("try to get javax.mail.Session for JNDI context " + jndiContextString);
 				InitialContext ic = new InitialContext();
 				session = (javax.mail.Session)ic.lookup(jndiContextString);
 			} catch (NamingException e) {
