@@ -1204,7 +1204,7 @@ public class ERXFileUtilities {
                 String name = ze.getName();
                 File d = new File(destinationPath, name);
                 String canonicalPath = d.getCanonicalPath();
-                if (!canonicalPath.startsWith(destinationPath + File.separator)) {
+                if (!canonicalPath.startsWith(destinationPath)) {
                     throw new ZipException("ZIP entry is outside of destination directory: " + name);
                 }
                 if (ze.isDirectory()) {
