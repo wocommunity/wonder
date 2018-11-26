@@ -36,6 +36,7 @@ import java.util.Enumeration;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
@@ -1142,82 +1143,86 @@ public class ERXFileUtilities {
 
     /**
      * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
-     * structure is created as a subdirectory with the name if the zip file minus the .zip extension
+     * structure is created as a subdirectory with the name of the zip file minus the .zip extension
      * from destination. All intermittent directories are also created. If destination is <code>null</code>
      * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
      * uncompressed file(s).
-     *
      *
      * @param f The file to unzip
      * @param destination the destination directory. If directory is <code>null</code> then the file will be unzipped in
      * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
      * then the destination is set to the directory in which the file is located.
      *
-     *
      * @return the file or directory in which the zipfile was unzipped
      *
-     * @exception IOException if something goes wrong
+     * @exception IOException if something goes wrong like not able to create a directory
+     * @exception ZipException if an extracted file would be placed outside of the destination directory
      */
     public static File unzipFile(File f, File destination) throws IOException {
 
         if (!f.exists()) {
-            throw new FileNotFoundException("file "+f+" does not exist");
+            throw new FileNotFoundException("file " + f + " does not exist");
         }
 
-        String absolutePath;
+        String destinationPath;
         if (destination != null) {
-            absolutePath = destination.getAbsolutePath();
+            destinationPath = destination.getCanonicalPath();
             if (!destination.exists()) {
-                if (! destination.mkdirs())
-                    throw new RuntimeException("Cannot create destination directory: \""+destination.getPath()+"\"");
+                if (!destination.mkdirs())
+                    throw new IOException("Cannot create destination directory: \"" + destination + "\"");
             } else if (!destination.isDirectory()) {
-                absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
+                destinationPath = destinationPath.substring(0, destinationPath.lastIndexOf(File.separator));
             }
         } else {
-            absolutePath = System.getProperty("java.io.tmpdir");
+            destinationPath = System.getProperty("java.io.tmpdir");
         }
-        if (!absolutePath.endsWith(File.separator)) {
-            absolutePath += File.separator;
+        if (!destinationPath.endsWith(File.separator)) {
+            destinationPath += File.separator;
         }
 
-        ZipFile zipFile = new ZipFile(f);
+        try (ZipFile zipFile = new ZipFile(f)) {
 
-        Enumeration en = zipFile.entries();
-        if (en.hasMoreElements()) {
-            ZipEntry firstEntry = (ZipEntry)en.nextElement();
-            if (firstEntry.isDirectory() || en.hasMoreElements()) {
-                String dir = absolutePath + f.getName();
-                if (dir.endsWith(".zip")) {
-                    dir = dir.substring(0, dir.length() - 4);
+            Enumeration<? extends ZipEntry> en = zipFile.entries();
+            if (en.hasMoreElements()) {
+                ZipEntry firstEntry = en.nextElement();
+                if (firstEntry.isDirectory() || en.hasMoreElements()) {
+                    String dir = destinationPath + f.getName();
+                    if (dir.endsWith(".zip")) {
+                        dir = dir.substring(0, dir.length() - 4);
+                    }
+                    if (new File(dir).mkdirs())
+                        destinationPath = dir + File.separator;
+                    else
+                        throw new IOException("Cannot create directory: \"" + dir + "\"");
                 }
-                if (new File(dir).mkdirs())
-                    absolutePath = dir + File.separator;
-                else
-                    throw new IOException("Cannot create directory: \""+dir+"\"");
-            }
-        } else {
-            return null;
-        }
-
-        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
-            ZipEntry ze = (ZipEntry)e.nextElement();
-            String name = ze.getName();
-            if (ze.isDirectory()) {
-                File d = new File(absolutePath + name);
-                if (! d.mkdirs())
-                    throw new IOException("Cannot create directory: \""+d.getPath()+"\"");
-                log.debug("created directory {}", d);
             } else {
-                try (InputStream is = zipFile.getInputStream(ze)){
-	                writeInputStreamToFile(is, new File(absolutePath, name));
-	                if (log.isDebugEnabled()) {
-	                    log.debug("unzipped file {} into {}", ze.getName(), absolutePath + name);
-	                }
+                return null;
+            }
+
+            for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements(); ) {
+                ZipEntry ze = e.nextElement();
+                String name = ze.getName();
+                File d = new File(destinationPath, name);
+                String canonicalPath = d.getCanonicalPath();
+                if (!canonicalPath.startsWith(destinationPath)) {
+                    throw new ZipException("ZIP entry is outside of destination directory: " + name);
+                }
+                if (ze.isDirectory()) {
+                    if (!d.mkdirs())
+                        throw new IOException("Cannot create directory: \"" + d + "\"");
+                    log.debug("created directory {}", d);
+                } else {
+                    try (InputStream is = zipFile.getInputStream(ze)){
+                        writeInputStreamToFile(is, d);
+                        if (log.isDebugEnabled()) {
+                            log.debug("unzipped file {} into {}", name, destinationPath + name);
+                        }
+                    }
                 }
             }
-        }
 
-        return new File(absolutePath);
+            return new File(destinationPath);
+        }
     }
 
     /**
