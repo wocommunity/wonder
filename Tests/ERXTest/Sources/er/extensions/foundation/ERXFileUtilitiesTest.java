@@ -3,8 +3,13 @@ package er.extensions.foundation;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipException;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.junit.Assert;
@@ -414,8 +419,30 @@ public class ERXFileUtilitiesTest extends ERXTestCase {
     public void xxxtestStringToGZippedFile() {
     }
 
-    public void xxxtestUnzipFile() {
-        fail("Not Yet Implemented");
+    public void testUnzipFile() throws URISyntaxException, IOException {
+        Path tmpDir = Files.createTempDirectory("ERXTest");
+        try {
+            File zipFile = new File(ERXFileUtilities.pathURLForResourceNamed("zip/test_ok.zip", null, null).toURI());
+
+            ERXFileUtilities.unzipFile(zipFile, tmpDir.toFile());
+        }
+        finally {
+            Files.walk(tmpDir).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
+
+        tmpDir = Files.createTempDirectory("ERXTest");
+        try {
+            File zipFile = new File(ERXFileUtilities.pathURLForResourceNamed("zip/zip-slip.zip", null, null).toURI());
+
+            ERXFileUtilities.unzipFile(zipFile, tmpDir.toFile());
+            fail("Expected ZipException to be thrown");
+        }
+        catch(ZipException e) {
+            // exception expected
+        }
+        finally {
+            Files.walk(tmpDir).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
     }
 
     public void xxxtestURLFromFile() {
