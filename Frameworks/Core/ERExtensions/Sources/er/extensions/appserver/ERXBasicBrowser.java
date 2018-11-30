@@ -117,6 +117,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * <p><strong>IE WIndows 6.02: </strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0));
+ * 
+ * <p><strong>Chrome Android: </strong><br>
+ * user-agent = Mozilla/5.0 (Linux; Android 8.0.0; moto g(6)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36
  * </div>
  */
 public class ERXBasicBrowser extends ERXBrowser {
@@ -170,6 +173,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean         _isMacOS;
     private final boolean         _isWindows;
     private final boolean         _isLinux;
+    private final boolean         _isAndroid;
     private final boolean         _isIPhone;
     private final boolean         _isIPad;
     private final boolean         _isUnknownPlatform;
@@ -234,6 +238,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isMacOS = _platform.equals(MACOS);
         _isWindows = _platform.equals(WINDOWS);
         _isLinux = _platform.equals(LINUX);
+        _isAndroid = _platform.equals(ANDROID);
         _isIPhone = _platform.equals(IPHONE);
         _isIPad = _platform.equals(IPAD);
         _isUnknownPlatform = _platform.equals(UNKNOWN_PLATFORM);
@@ -467,7 +472,12 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     @Override
     public boolean isLinux() {
-        return _isLinux;
+        return _isLinux || _isAndroid;
+    }
+    
+    @Override
+    public boolean isAndroid() {
+    	return _isAndroid;
     }
 
     @Override

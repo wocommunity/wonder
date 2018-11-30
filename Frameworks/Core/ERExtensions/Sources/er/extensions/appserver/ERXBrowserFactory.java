@@ -90,6 +90,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * OmniWeb 5.11.1   Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_7_3; en-US) AppleWebKit/533.21.1+(KHTML, like Gecko, Safari/533.19.4) Version/5.11.1 OmniWeb/622.18.0
  * Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
  * iPhone 1.0       Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
+ * iPhone 7.0		Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1
  * 
  * Windows 2000
  * ----------------------------------------------------------------------------------
@@ -98,6 +99,11 @@ import er.extensions.foundation.ERXStringUtilities;
  * Netscape 6.2.3   Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
  * Netscape 4.79    Mozilla/4.79 [en] (Windows NT 5.0; U)
  * Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
+ * 
+ * Android
+ * ----------------------------------------------------------------------------------
+ * Chrome 70		Mozilla/5.0 (Linux; Android 8.0.0; moto g(6)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36
+ * 
  * </pre>
  * </div>
  *
@@ -737,6 +743,7 @@ public class ERXBrowserFactory {
         else if ((userAgent.indexOf("iPhone") > -1) || (userAgent.indexOf("iPod") > -1)) 	platform = ERXBrowser.IPHONE;
         else if (userAgent.indexOf("iPad") > -1) platform = ERXBrowser.IPAD;
         else if (userAgent.indexOf("Mac") > -1) 	platform = ERXBrowser.MACOS;
+        else if (userAgent.indexOf("Android") > -1) platform = ERXBrowser.ANDROID;
         else if (userAgent.indexOf("Linux") > -1) 	platform = ERXBrowser.LINUX;
         return platform;
     }
