@@ -106,6 +106,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String MACOS	= "MacOS";
     public static final String WINDOWS 	= "Windows";
     public static final String LINUX	= "Linux";
+    public static final String ANDROID	= "Android";
     public static final String IPHONE	= "iPhone";
     public static final String IPAD     = "iPad";
 
@@ -393,6 +394,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isMacOS();
     public abstract boolean isWindows();
     public abstract boolean isLinux();
+    public abstract boolean isAndroid();
     public abstract boolean isIPhone();
     public abstract boolean isIPad();
     
