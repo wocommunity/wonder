@@ -18,6 +18,10 @@ import com.webobjects.appserver.WOContext;
  * @binding enctype
  * @binding directActionName
  * @binding actionClass
+ * @binding autocomplete
+ * @binding style
+ * @binding class
+ * 
  */
 public class ERXOptionalForm extends ERXStatelessComponent {
 	/**

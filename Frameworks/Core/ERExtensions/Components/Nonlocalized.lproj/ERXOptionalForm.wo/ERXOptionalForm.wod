@@ -2,7 +2,7 @@ HasDirectAction: ERXNonNullConditional {
 	condition = ^directActionName;
 }
 
-HasDirectAction2: ERXNonNullConditional {
+HasNoDirectAction: ERXNonNullConditional {
 	condition = ^directActionName;
 	negate = true;
 }
@@ -12,7 +12,7 @@ UseForm: WOConditional {
         negate = false;
 }
 
-UseForm2: WOConditional {
+DontUseForm: WOConditional {
         condition = showForm;
         negate = true;
 }
@@ -35,6 +35,7 @@ form: WOForm {
 	style = ^style;
 	class = ^class;
 	fragmentIdentifier = ^fragmentIdentifier;
+	autocomplete = ^autocomplete;
 }
 
 form2: WOForm {
@@ -45,4 +46,5 @@ form2: WOForm {
 	style = ^style;
 	class = ^class;
 	fragmentIdentifier = ^fragmentIdentifier;
+	autocomplete = ^autocomplete;
 }
