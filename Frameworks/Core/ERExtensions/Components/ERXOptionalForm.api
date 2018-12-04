@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="ERXOptionalForm" wocomponentcontent="true">
 
@@ -10,5 +10,6 @@
 		<binding name="multipleSubmit"/>
     	<binding name="style"/>
     <binding defaults="Boolean" name="showForm"/>
+    <binding name="autocomplete"/>
     </wo>
 </wodefinitions>

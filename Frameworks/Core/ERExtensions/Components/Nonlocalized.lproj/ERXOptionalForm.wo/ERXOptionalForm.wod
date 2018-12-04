@@ -35,6 +35,7 @@ form: WOForm {
 	style = ^style;
 	class = ^class;
 	fragmentIdentifier = ^fragmentIdentifier;
+	autocomplete = ^autocomplete;
 }
 
 form2: WOForm {
@@ -45,4 +46,5 @@ form2: WOForm {
 	style = ^style;
 	class = ^class;
 	fragmentIdentifier = ^fragmentIdentifier;
+	autocomplete = ^autocomplete;
 }
