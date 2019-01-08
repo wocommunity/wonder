@@ -226,9 +226,6 @@ public class ERXRedirect extends WOComponent {
 	 */
 	public void setComponent(WOComponent component) {
 		_component = component;
-		// Make sure appendToResponse is called before the page is accessed with the generated URL that trigger an invokeAction.
-		// This fix problems when the page need to initialize or refresh internal state, especially for arrays in repetition. 
-		component.generateResponse();
 	}
 
 	/**
