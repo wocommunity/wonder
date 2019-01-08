@@ -1,7 +1,6 @@
 package er.extensions.net;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Ignore;
 
 import er.erxtest.ERXTestCase;

@@ -1,6 +1,7 @@
 package er.ajax.example2.util;
 
-import com.ibm.icu.util.Calendar;
+import java.util.Calendar;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 

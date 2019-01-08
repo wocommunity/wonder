@@ -4,7 +4,8 @@ import java.text.DateFormatSymbols;
 import java.util.Enumeration;
 import java.util.Locale;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+
 import er.erxtest.ERXTestCase;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXValueUtilities;

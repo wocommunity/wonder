@@ -1,8 +1,8 @@
 package com.webobjects.appserver;
 
-import er.erxtest.ERXTestCase;
+import org.junit.Assert;
 
-import junit.framework.Assert;
+import er.erxtest.ERXTestCase;
 
 public class WOTimerTest extends ERXTestCase {
 

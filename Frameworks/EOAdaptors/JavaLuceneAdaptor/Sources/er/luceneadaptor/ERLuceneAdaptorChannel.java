@@ -1,6 +1,7 @@
 package er.luceneadaptor;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.Format;
 import java.text.ParseException;
@@ -34,7 +35,6 @@ import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
 
-import com.ibm.icu.math.BigDecimal;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;

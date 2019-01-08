@@ -1,6 +1,7 @@
 package er.uber.components;
 
-import junit.framework.Assert;
+
+import org.junit.Assert;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
