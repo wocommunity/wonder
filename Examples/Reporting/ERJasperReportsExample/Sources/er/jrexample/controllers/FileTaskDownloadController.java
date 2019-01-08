@@ -2,8 +2,6 @@ package er.jrexample.controllers;
 
 import java.io.File;
 
-import org.apache.commons.lang.exception.NestableRuntimeException;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 
@@ -58,7 +56,7 @@ public class FileTaskDownloadController extends ERXNextPageForResultWOAction {
 			return nextPage;
 
 		} else {
-			throw new NestableRuntimeException("Unknown result type: " + (_result == null ? "null" : _result.toString()));
+			throw new RuntimeException("Unknown result type: " + (_result == null ? "null" : _result.toString()));
 		}
 	}
 	

@@ -8,7 +8,6 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang.exception.NestableRuntimeException;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -274,7 +273,7 @@ public abstract class _TaskInfo extends er.extensions.eof.ERXGenericRecord {
 				b.append("Source Entity",anEntity);
 				b.append("Source Relationship",key);
 
-				throw new NestableRuntimeException(b.toString(), e);
+				throw new RuntimeException(b.toString(), e);
 			}
         }
     }

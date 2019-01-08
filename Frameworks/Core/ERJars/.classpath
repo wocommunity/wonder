@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="Libraries/ERFoundation.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ERWebObjects.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.9.9.jar" sourcepath="LibrarySources/joda-time-2.9.9-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/joda-time-2.9.9-javadoc.jar!/"/>

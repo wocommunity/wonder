@@ -2,8 +2,8 @@ package er.plugintest.tests;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 import com.webobjects.foundation.NSArray;
 
@@ -125,7 +125,7 @@ public class MultithreadedTest extends PluginTest {
 					City city = City.fetchCity(ec, City.NAME.eq("Amsterdam"));
 					
 					if (city != null) {
-						city.setPopulation(RandomUtils.nextInt(3));
+						city.setPopulation(RandomUtils.nextInt(0, 3));
 					}
 					
 					ec.saveChanges();
