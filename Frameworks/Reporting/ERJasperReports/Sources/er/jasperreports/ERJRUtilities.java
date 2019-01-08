@@ -10,7 +10,6 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperRunManager;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang.exception.NestableRuntimeException;
 
 import er.extensions.foundation.ERXFileUtilities;
 
@@ -47,9 +46,9 @@ public class ERJRUtilities {
 			return destFile;
 			
 		} catch (IOException e) {
-			throw new NestableRuntimeException("Failed to generate report " + compiledReportName, e);
+			throw new RuntimeException("Failed to generate report " + compiledReportName, e);
 		} catch (JRException e) {
-			throw new NestableRuntimeException("Failed to generate report " + compiledReportName, e);
+			throw new RuntimeException("Failed to generate report " + compiledReportName, e);
 		}
 	}
 

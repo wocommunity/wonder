@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +128,7 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPer
 			
 			
 		} catch (Exception e) {
-			throw new NestableRuntimeException(e);
+			throw new RuntimeException(e);
 		} finally {
 			ec.unlock();
 		}

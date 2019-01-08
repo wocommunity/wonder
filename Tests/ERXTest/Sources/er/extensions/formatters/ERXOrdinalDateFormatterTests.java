@@ -2,12 +2,13 @@ package er.extensions.formatters;
 
 import java.text.Format;
 import java.text.ParseException;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+
 import junit.framework.TestCase;
 
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
 import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 

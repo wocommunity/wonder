@@ -1,7 +1,7 @@
 
 package er.extensions.foundation;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 

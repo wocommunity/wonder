@@ -2,6 +2,8 @@ package er.plugintest.tests;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import com.webobjects.foundation.NSData;
 
 import er.extensions.eof.ERXEC;
@@ -51,7 +53,7 @@ public class CUDTest extends PluginTest{
 				NSData flag = new NSData(ERXFileUtilities.inputStreamForResourceNamed("us.png", null, null), 1024);
 				country.setFlag(flag);
 			} catch (IOException e) {
-				log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
+				log.error(ExceptionUtils.getStackTrace(e), e);
 				throw new RuntimeException(e.getMessage(), e);
 			}
 			ec.saveChanges();

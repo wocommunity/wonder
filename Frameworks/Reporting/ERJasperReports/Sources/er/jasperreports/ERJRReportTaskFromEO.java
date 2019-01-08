@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +113,7 @@ public class ERJRReportTaskFromEO implements Callable<File> {
 			}
 
 		} catch (Exception e) {
-			throw new NestableRuntimeException(e);
+			throw new RuntimeException(e);
 		} finally {
 			ec.unlock();
 		}

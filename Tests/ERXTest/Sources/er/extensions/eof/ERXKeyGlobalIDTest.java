@@ -1,7 +1,7 @@
 
 package er.extensions.eof;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;

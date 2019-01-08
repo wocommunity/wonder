@@ -1,6 +1,7 @@
 package er.extensions.formatters;
 
-import junit.framework.Assert;
+import org.junit.Assert;
+
 import er.erxtest.ERXTestCase;
 
 

@@ -3,6 +3,7 @@ package er.plugintest.tests;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -55,10 +56,10 @@ public class PluginTest extends ERXTestCase {
 					ERXJDBCUtilities.executeUpdateScript(channel, sql);
 				}
 				catch (SQLException e) {
-					log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
+					log.error(ExceptionUtils.getStackTrace(e), e);
 					throw new NSForwardException(e);
 				} catch (IOException e) {
-					log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
+					log.error(ExceptionUtils.getStackTrace(e), e);
 					throw new NSForwardException(e);
 				}
 				return 0;
