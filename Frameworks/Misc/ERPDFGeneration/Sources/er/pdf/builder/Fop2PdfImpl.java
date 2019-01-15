@@ -37,10 +37,13 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
 
 /**
+ * 
  *  @property er.pdf.builder.fop.resolution Resolution of the pdf. Defaults to 300.
  *  @property er.pdf.builder.fop.author Name of the author. Defaults to 'ERPDFGeneration'.
  *  @property er.pdf.builder.fop.generator Name of the generator. Defaults to 'ERPDFGeneration'.
- *  @property er.pdf.builder.fop.config Set to the name of the fop configuration file. Defaults to 'fop.xconf'.
+ *  
+ *  @property er.pdf.builder.fop.config.filename Set to the name of the fop configuration file. Defaults to 'fop.xconf'.
+ *  @property er.pdf.builder.fop.config.framework Name of the framework the config file exists within. Defaults to 'ERPDFGeneration'.
  */
 public class Fop2PdfImpl implements FOPBuilder {
 
@@ -55,13 +58,14 @@ public class Fop2PdfImpl implements FOPBuilder {
 	
 	public static final String FOP_CONF_FILENAME_KEY = "FOP_CONF_FILENAME";
 	public static final String FOP_CONF_FILENAME = "fop.xconf";
+	public static final String FOP_CONF_FRAMEWORK_KEY = "FOP_CONF_FRAMEWORK";
+	public static final String FOP_CONF_FRAMEWORK = "ERPDFGeneration";
 	
 	private String _fopxslLocation;
 	private String _xmlToTransform;
 	private NSMutableDictionary<String, Object> _config;
 
-	public Fop2PdfImpl() {
-	}
+	public Fop2PdfImpl() {}
 
 	public void setXSL(String fopxslLocation) {
 		_fopxslLocation = fopxslLocation;
@@ -91,7 +95,10 @@ public class Fop2PdfImpl implements FOPBuilder {
 		
 		FopFactoryBuilder fopBuilder = null;
 		try {
-			URL path = ERXApplication.erxApplication().resourceManager().pathURLForResourceNamed((String) configuration().get(FOP_CONF_FILENAME_KEY), "app", NSArray.emptyArray());
+			URL path = ERXApplication.erxApplication().resourceManager().pathURLForResourceNamed(
+					(String) configuration().get(FOP_CONF_FILENAME_KEY), 
+					(String) configuration().get(FOP_CONF_FRAMEWORK_KEY), 
+					NSArray.emptyArray());
 			if (path != null) {
 				fopBuilder = new FopConfParser(new File(path.toURI())).getFopFactoryBuilder();
 			}
@@ -165,7 +172,8 @@ public class Fop2PdfImpl implements FOPBuilder {
 	
 	public NSDictionary<String, Object> configurationDefaults() {
 		NSMutableDictionary<String, Object> c = new NSMutableDictionary<>();
-		c.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.config", FOP_CONF_FILENAME), FOP_CONF_FILENAME_KEY);
+		c.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.config.filename", FOP_CONF_FILENAME), FOP_CONF_FILENAME_KEY);
+		c.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.config.framework", FOP_CONF_FRAMEWORK), FOP_CONF_FRAMEWORK_KEY);
 		return c;
 	}
 	
