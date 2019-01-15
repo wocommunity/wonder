@@ -4,27 +4,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
+import java.nio.charset.StandardCharsets;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.xmlgraphics.util.MimeConstants;
-import org.xml.sax.InputSource;
+
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.pdf.builder.FOPBuilder;
+import er.pdf.builder.FOPBuilderFactory;
+import er.pdf.builder.Fop2PdfImpl;
 
 /**
  * This is just a stub class that can be called directly (outside the context of
@@ -44,58 +35,30 @@ public class TestFOP {
 	//private String _fopxslLocation = "er/pdfexamples/xsl/xhtml2xslfo.xsl";
 	private String _fopxslLocation = "er/pdfexamples/xsl/testxml2fo.xsl";
 	private String _xmlToTransform = "er/pdfexamples/xsl/test/xml4test.xml";
-	public static final String GENERATOR_NAME = "FOP Test Renderator";
-	protected static FopFactory fopFactory;
 
 	public TestFOP() {
-		fopFactory = FopFactory.newInstance();
 	}
 
-	public void generatePdf(OutputStream os) {
-
-		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-		foUserAgent.setCreator(GENERATOR_NAME);
-		foUserAgent.setAuthor("Testy McTesterton");
-		foUserAgent.setCreationDate(new Date());
-		foUserAgent.setTargetResolution(300);
-
-		foUserAgent.setTitle("FOP Referral Package Test");
-		foUserAgent.setKeywords("Referral Package Vasc-Alert");
+	public void generatePdf(OutputStream os) 
+	{
+		FOPBuilder fopBuilder = FOPBuilderFactory.newBuilder();
+		
+		NSMutableDictionary<String, Object> agentAttributes = new NSMutableDictionary<>();
+		agentAttributes.setObjectForKey("Testy McTesterton", Fop2PdfImpl.AUTHOR_KEY);
+		agentAttributes.setObjectForKey("FOP Test Renderator", Fop2PdfImpl.GENERATOR_NAME_KEY);
+		agentAttributes.setObjectForKey(300, Fop2PdfImpl.TARGET_RESOLUTION_KEY);
+		
 		try {
-			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, os);
+			fopBuilder.setXSL(_fopxslLocation);
 
-			logger.debug("xml to transform: " + _xmlToTransform);
 			InputStream xmlStream = TestFOP.class.getClassLoader().getResourceAsStream(_xmlToTransform);
-			// logger.debug("xml as stream: " + xmlStream);
-			// logger.debug(new Scanner(xmlStream).useDelimiter("\\A").next());
-			logger.debug("xsl doing the transforming: " + _fopxslLocation);
-			InputStream xslStream = TestFOP.class.getClassLoader().getResourceAsStream(_fopxslLocation);
-			// logger.debug("xsl as stream " + xslStream);
-			// logger.debug(new Scanner(xslStream).useDelimiter("\\A").next());
-
-			TransformerFactory txfac = TransformerFactory.newInstance();
-			Transformer tx;
-
-			tx = txfac.newTransformer(new SAXSource(new InputSource(xslStream)));
-
-			Source src = new StreamSource(xmlStream);
-			logger.debug("source systemid: " + src.getSystemId());
-			Result res = new SAXResult(fop.getDefaultHandler());
-			logger.debug("result systemid: " + res.getSystemId());
-
-			tx.transform(src, res);
-
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FOPException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
+			fopBuilder.setXML(IOUtils.toString(xmlStream, StandardCharsets.UTF_8));
+			
+			fopBuilder.createDocument(os, agentAttributes);
+		} 
+		catch (Throwable e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

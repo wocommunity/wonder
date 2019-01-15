@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSForwardException;
 
 public class UJACImpl implements PDFBuilder {
   private DocumentPrinter documentPrinter;
-  private Map<String, String> documentProperties = new HashMap<>();
+  private Map<String, Object> documentProperties = new HashMap<>();
   
   public void createDocument(OutputStream os) {
     try {

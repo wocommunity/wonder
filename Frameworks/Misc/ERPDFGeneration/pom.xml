@@ -31,22 +31,27 @@
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-core</artifactId>
-			<version>9.1.0</version>
+			<version>9.1.16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-pdf</artifactId>
-			<version>9.1.0</version>
+			<artifactId>flying-saucer-pdf-openpdf</artifactId>
+			<version>9.1.16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-swt</artifactId>
-			<version>9.1.0</version>
+			<version>9.1.16</version>
 		</dependency>
 		<dependency>
-			<groupId>com.lowagie</groupId>
-			<artifactId>itext</artifactId>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-fop</artifactId>
+			<version>9.1.16</version>
 		</dependency>
+		<dependency>
+	        <groupId>com.github.librepdf</groupId>
+	        <artifactId>openpdf</artifactId>
+	    </dependency>
 		<dependency>
 			<groupId>net.sourceforge.ujac</groupId>
 			<artifactId>ujac</artifactId>
