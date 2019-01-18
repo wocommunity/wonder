@@ -1,6 +1,6 @@
 package er.pdf.builder;
 
-import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URI;
@@ -95,12 +95,23 @@ public class Fop2PdfImpl implements FOPBuilder {
 		
 		FopFactoryBuilder fopBuilder = null;
 		try {
-			URL path = ERXApplication.erxApplication().resourceManager().pathURLForResourceNamed(
+			ERXApplication app = ERXApplication.erxApplication();
+			URL path = app.resourceManager().pathURLForResourceNamed(
 					(String) configuration().get(FOP_CONF_FILENAME_KEY), 
 					(String) configuration().get(FOP_CONF_FRAMEWORK_KEY), 
 					NSArray.emptyArray());
 			if (path != null) {
-				fopBuilder = new FopConfParser(new File(path.toURI())).getFopFactoryBuilder();
+				URI baseURI;
+				if (!app.wasMainInvoked()) {
+					baseURI = URI.create(app.servletConnectURL());
+				} else if (app.isDirectConnectEnabled()) {
+					baseURI = URI.create(app.directConnectURL());
+				} else {
+					baseURI = URI.create(app.webserverConnectURL());
+				}
+				try (InputStream is = path.openStream()) {
+					fopBuilder = new FopConfParser(is, baseURI).getFopFactoryBuilder();
+				}
 			}
 		} 
 		catch (NullPointerException ex) {
