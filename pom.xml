@@ -654,11 +654,6 @@
                 <artifactId>core-renderer</artifactId>
                 <version>R8-final</version>
             </dependency>
-			<dependency>
-		        <groupId>com.github.librepdf</groupId>
-		        <artifactId>openpdf</artifactId>
-		        <version>1.2.8</version>
-		    </dependency>
             <dependency>
                 <groupId>net.sourceforge.ujac</groupId>
                 <artifactId>ujac</artifactId>

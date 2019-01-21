@@ -44,15 +44,6 @@
 			<version>9.1.16</version>
 		</dependency>
 		<dependency>
-			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-fop</artifactId>
-			<version>9.1.16</version>
-		</dependency>
-		<dependency>
-	        <groupId>com.github.librepdf</groupId>
-	        <artifactId>openpdf</artifactId>
-	    </dependency>
-		<dependency>
 			<groupId>net.sourceforge.ujac</groupId>
 			<artifactId>ujac</artifactId>
 		</dependency>
