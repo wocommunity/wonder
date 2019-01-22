@@ -98,7 +98,7 @@ var dragAndDropUpload = function(targetID, fileSelectorID, actionURL, enterFunct
 
 	
 	dropTarget.addEventListener("dragenter", enterFunction?enterFunction:noopHandler, false);
-	dropTarget.addEventListener("dragexit", exitFunction?exitFunction:noopHandler, false);
+	dropTarget.addEventListener("dragleave", exitFunction?exitFunction:noopHandler, false);
 	dropTarget.addEventListener("dragover", overFunction?overFunction:noopHandler, false);
 	
 	dropTarget.addEventListener("drop", dropHandler, false);
