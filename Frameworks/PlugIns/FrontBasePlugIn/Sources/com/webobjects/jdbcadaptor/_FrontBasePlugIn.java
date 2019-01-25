@@ -1427,6 +1427,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			String fieldString;
 			if (_alreadyJoined.count() > 0) {
 				fieldString = joinClauseString();
+				joinClause = null;
 			}
 			else {
 				fieldString = tableList;
