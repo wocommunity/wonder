@@ -154,6 +154,10 @@ public class ERXSubmitButton extends WOInput {
     	if(css.length() > 0) {
     		woresponse._appendTagAttributeAndValue("class", css, false);
     	}
+   		if (_style != null) {
+   			String style = (String) _style.valueInComponent(wocontext.component());
+    		woresponse._appendTagAttributeAndValue("style", style, false);
+		}
     	if (_id != null) {
     		woresponse._appendTagAttributeAndValue("id", (String) _id.valueInComponent(wocontext.component()), false);
     	}
