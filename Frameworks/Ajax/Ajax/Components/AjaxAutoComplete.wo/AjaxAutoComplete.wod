@@ -29,6 +29,9 @@ TextField: WOTextField {
 	onblur = ^onblur;
 	onchange = ^onchange;
 	onfocus = ^onfocus;
+	onmouseup = ^onmouseup;
+	onmousedown = ^onmousedown;
+	onclick = ^onclick;
 	accesskey = ^accesskey;
 	tabindex = ^tabindex;
 	default = ^default;

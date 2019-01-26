@@ -43,5 +43,8 @@
     <binding defaults="Boolean" name="activateOnFocus"/>
     <binding name="containerId"/>
     <binding defaults="Boolean" name="escapeHTML"/>
+    <binding name="onmouseup"/>
+        <binding name="onmousedown"/>
+        <binding name="onclick"/>
     </wo>
 </wodefinitions>

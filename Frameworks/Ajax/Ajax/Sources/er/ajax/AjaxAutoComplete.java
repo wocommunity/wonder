@@ -94,6 +94,9 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding onblur onblur attribute of the text field
  * @binding onfocus onfocus attribute of the text field
  * @binding onchange onchange attribute of the text field
+ * @binding onmouseup onmouseup attribute of the text field
+ * @binding onmousedown onmousedown attribute of the text field
+ * @binding onclick onclick attribute of the text field
  * @binding activateOnFocus activate when text field gets focus
  * @binding containerId tag id for the container of the popup div (default is body)
  * @author ak
