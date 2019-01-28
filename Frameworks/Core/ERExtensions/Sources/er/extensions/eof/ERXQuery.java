@@ -746,7 +746,7 @@ public class ERXQuery {
 		)
 	{
 		// Array to hold fetched records
-		final NSMutableArray<T> records = new NSMutableArray<>();
+		final NSMutableArray<NSMutableDictionary<String, Object>> rows = new NSMutableArray<>();
 		
 		// Create channel action anonymous class for evaluating SQL and fetching records
 		ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
@@ -770,33 +770,16 @@ public class ERXQuery {
 				// Fetch results 
 				try {
 					boolean hasInitValues = initValues.count() > 0;
-					boolean removeForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues", true);
 					NSMutableDictionary<String, Object> row = channel.fetchRow();
 					while (row != null) {
-						// Replace any foreign keys with their corresponding relationship keys
-						// and the enterprise object as the value.
-						for (RelationshipKeyInfo relKeyInfo : relationshipKeysSet.allObjects()) {
-							Object eo = null;
-							String entityName = relKeyInfo.entityName();
-							String relationshipKey = relKeyInfo.relationshipKeyPath();
-							String foreignKey = relKeyInfo.sourceAttributeKeyPath();
-							Object primaryKeyValue = row.objectForKey(foreignKey);
-							if (primaryKeyValue != NSKeyValueCoding.NullValue) {
-								eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, null, refreshRefetchedObjects);
-								row.setObjectForKey(eo, relationshipKey);
-							}
-							if (removeForeignKeysFromRowValues) {
-								row.removeObjectForKey(foreignKey);
-							}
-						}
 						if (hasInitValues) {
 							row.addEntriesFromDictionary(initValues);
 						}
-						T obj = recordConstructor.constructRecord(ec, row); 
-						records.addObject(obj);
+						rows.add(row);
+						
 						// If a fetch limit was specified then exit fetch-loop as soon 
 						// as the limit is reached
-						if (clientFetchLimit > 0 && records.count() >= clientFetchLimit) {
+						if (clientFetchLimit > 0 && rows.count() >= clientFetchLimit) {
 							break;
 						}
 						row = channel.fetchRow();
@@ -807,12 +790,37 @@ public class ERXQuery {
 				} finally {
 					channel.cancelFetch();
 				}
-				return records.count();
+				return rows.count();
 			}
 		};
 		
 		// Perform the action to evaluate the SQL and fetch the records
 		action.perform(ec, expression.entity().model().name());
+		
+		// Array to hold fetched records
+		final NSMutableArray<T> records = new NSMutableArray<>();
+		boolean removeForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues", true);
+		for (NSMutableDictionary<String, Object> row : rows) {
+			// Replace any foreign keys with their corresponding relationship keys
+			// and the enterprise object as the value.
+			for (RelationshipKeyInfo relKeyInfo : relationshipKeysSet.allObjects()) {
+				Object eo = null;
+				String entityName = relKeyInfo.entityName();
+				String relationshipKey = relKeyInfo.relationshipKeyPath();
+				String foreignKey = relKeyInfo.sourceAttributeKeyPath();
+				Object primaryKeyValue = row.objectForKey(foreignKey);
+				if (primaryKeyValue != NSKeyValueCoding.NullValue) {
+					eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, null, refreshRefetchedObjects);
+					row.setObjectForKey(eo, relationshipKey);
+				}
+				if (removeForeignKeysFromRowValues) {
+					row.removeObjectForKey(foreignKey);
+				}
+			}
+			T obj = recordConstructor.constructRecord(ec, row); 
+			records.addObject(obj);
+		}
+
 		return records;
 	}
 	
