@@ -929,55 +929,39 @@ public class ERXQuery {
 		EOSQLExpression e = factory.selectStatementForAttributes(selectAttributes, false, spec, mainEntity);
 
 		// Start building the SELECT... FROM ... 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT ");
+		StringBuilder columnList = new StringBuilder();
 		if (queryHint != null) {
-			sql.append(" " + queryHint + " ");
+			columnList.append(" " + queryHint + " ");
 		}
 		if (usesDistinct && !isCountingStatement) {
-			sql.append("DISTINCT ");
+			columnList.append("DISTINCT ");
 		}
 
 		if (isCountingStatement) {
 			NSArray<String> pKeyNames = mainEntity.primaryKeyAttributeNames();
 			if (usesDistinct && pKeyNames.count() == 1) {
 				EOAttribute attribute = mainEntity.attributeNamed(pKeyNames.lastObject());
-				sql.append("COUNT(DISTINCT t0." + attribute.columnName() + " )");
+				columnList.append("COUNT(DISTINCT t0." + attribute.columnName() + " )");
 			} else {
-				sql.append("COUNT(*)");
+				columnList.append("COUNT(*)");
 			}
 			
 		} else {
-			sql.append(e.listString());
-		} 
-		sql.append("\n");
-		sql.append("FROM ");
-		sql.append(e.tableListWithRootEntity(mainEntity));
-		sql.append("\n");
+			columnList.append(e.listString());
+		}
+		
+		// Add table list
+		String tableList = e.tableListWithRootEntity(mainEntity);
 		
 		// Add WHERE clause if necessary
 		String joinClauseString = e.joinClauseString();
+		
 		String qualClauseString = e.whereClauseString();
-		boolean hasJoinClause = (joinClauseString != null && joinClauseString.length() > 0);
-		boolean hasQualClause = (qualClauseString != null && qualClauseString.length() > 0);
-		boolean hasWhereClause = (hasJoinClause || hasQualClause);
 		
-		if (hasWhereClause) {
-			sql.append("WHERE \n\t");
-		}
-		
-		if (hasJoinClause) {
-			sql.append(joinClauseString);
-		}
-		
-		if (hasQualClause) {
-			if (hasJoinClause) {
-				sql.append("\n\tAND ");
-			}
-			sql.append(qualClauseString);
-		}
-		
-		// Append GROUP BY clause
+		// Initial code assembled the SQL but was not compatible with FrontBase uses of sqj92 join statements. 
+		// This code uses the database plugin EOSQLExpression to assemble the first parts of the statement.
+		StringBuilder sql = new StringBuilder();
+		sql.append(e.assembleSelectStatementWithAttributes(selectAttributes, false, spec.qualifier(), spec.sortOrderings(), "SELECT ", columnList.toString(), tableList, qualClauseString, joinClauseString, "", null));
 		
 		if (groupingAttributes.count() > 0) {
 			sql.append("\n");
