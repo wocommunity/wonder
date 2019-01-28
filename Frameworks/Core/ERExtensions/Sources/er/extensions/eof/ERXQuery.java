@@ -461,10 +461,11 @@ public class ERXQuery {
 				for (Object e : iterable) {
 					groupBy(e);
 				}
-			} else {
+			} else if (obj != null) {
 				throw new RuntimeException(getClass().getSimpleName() 
 						+ "'s groupBy() does not accept instances of " 
-						+ obj.getClass().getName());
+						+ obj.getClass().getName() + ". Only String, ERXKey, EOAttribute "
+								+ "or collection of them are valid.");
 			}
 		}
 		return this;
@@ -490,10 +491,11 @@ public class ERXQuery {
 				for (Object o : iterable) {
 					orderBy(o);
 				}
-			} else {
+			} else if (obj != null) {
 				throw new RuntimeException(getClass().getSimpleName() 
 						+ "'s orderBy() does not accept instances of " 
-						+ obj.getClass().getName());
+						+ obj.getClass().getName() + ". Only String, ERXKey, EOAttribute "
+						+ "or collection of them are valid.");
 			}
 		}
 		return this;
