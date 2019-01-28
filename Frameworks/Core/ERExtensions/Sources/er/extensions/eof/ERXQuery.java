@@ -271,7 +271,7 @@ public class ERXQuery {
 	/** 
 	 * <a href="http://wiki.wocommunity.org/display/documentation/Wonder+Logging">new org.slf4j.Logger</a> 
 	 */
-	private static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
+	static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
 	
 	protected EOEditingContext editingContext;
 	protected EOEntity mainEntity;
