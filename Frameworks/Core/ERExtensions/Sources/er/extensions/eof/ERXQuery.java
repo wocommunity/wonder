@@ -271,7 +271,7 @@ public class ERXQuery {
 	/** 
 	 * <a href="http://wiki.wocommunity.org/display/documentation/Wonder+Logging">new org.slf4j.Logger</a> 
 	 */
-	private static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
+	static final Logger log = LoggerFactory.getLogger(ERXQuery.class);
 	
 	protected EOEditingContext editingContext;
 	protected EOEntity mainEntity;
@@ -461,10 +461,11 @@ public class ERXQuery {
 				for (Object e : iterable) {
 					groupBy(e);
 				}
-			} else {
+			} else if (obj != null) {
 				throw new RuntimeException(getClass().getSimpleName() 
 						+ "'s groupBy() does not accept instances of " 
-						+ obj.getClass().getName());
+						+ obj.getClass().getName() + ". Only String, ERXKey, EOAttribute "
+								+ "or collection of them are valid.");
 			}
 		}
 		return this;
@@ -490,10 +491,11 @@ public class ERXQuery {
 				for (Object o : iterable) {
 					orderBy(o);
 				}
-			} else {
+			} else if (obj != null) {
 				throw new RuntimeException(getClass().getSimpleName() 
 						+ "'s orderBy() does not accept instances of " 
-						+ obj.getClass().getName());
+						+ obj.getClass().getName() + ". Only String, ERXKey, EOAttribute "
+						+ "or collection of them are valid.");
 			}
 		}
 		return this;
@@ -746,7 +748,7 @@ public class ERXQuery {
 		)
 	{
 		// Array to hold fetched records
-		final NSMutableArray<T> records = new NSMutableArray<>();
+		final NSMutableArray<NSMutableDictionary<String, Object>> rows = new NSMutableArray<>();
 		
 		// Create channel action anonymous class for evaluating SQL and fetching records
 		ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
@@ -770,33 +772,16 @@ public class ERXQuery {
 				// Fetch results 
 				try {
 					boolean hasInitValues = initValues.count() > 0;
-					boolean removeForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues", true);
 					NSMutableDictionary<String, Object> row = channel.fetchRow();
 					while (row != null) {
-						// Replace any foreign keys with their corresponding relationship keys
-						// and the enterprise object as the value.
-						for (RelationshipKeyInfo relKeyInfo : relationshipKeysSet.allObjects()) {
-							Object eo = null;
-							String entityName = relKeyInfo.entityName();
-							String relationshipKey = relKeyInfo.relationshipKeyPath();
-							String foreignKey = relKeyInfo.sourceAttributeKeyPath();
-							Object primaryKeyValue = row.objectForKey(foreignKey);
-							if (primaryKeyValue != NSKeyValueCoding.NullValue) {
-								eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, null, refreshRefetchedObjects);
-								row.setObjectForKey(eo, relationshipKey);
-							}
-							if (removeForeignKeysFromRowValues) {
-								row.removeObjectForKey(foreignKey);
-							}
-						}
 						if (hasInitValues) {
 							row.addEntriesFromDictionary(initValues);
 						}
-						T obj = recordConstructor.constructRecord(ec, row); 
-						records.addObject(obj);
+						rows.add(row);
+						
 						// If a fetch limit was specified then exit fetch-loop as soon 
 						// as the limit is reached
-						if (clientFetchLimit > 0 && records.count() >= clientFetchLimit) {
+						if (clientFetchLimit > 0 && rows.count() >= clientFetchLimit) {
 							break;
 						}
 						row = channel.fetchRow();
@@ -807,12 +792,37 @@ public class ERXQuery {
 				} finally {
 					channel.cancelFetch();
 				}
-				return records.count();
+				return rows.count();
 			}
 		};
 		
 		// Perform the action to evaluate the SQL and fetch the records
 		action.perform(ec, expression.entity().model().name());
+		
+		// Array to hold fetched records
+		final NSMutableArray<T> records = new NSMutableArray<>();
+		boolean removeForeignKeysFromRowValues = ERXProperties.booleanForKeyWithDefault("er.extensions.eof.ERXQuery.removeForeignKeysFromRowValues", true);
+		for (NSMutableDictionary<String, Object> row : rows) {
+			// Replace any foreign keys with their corresponding relationship keys
+			// and the enterprise object as the value.
+			for (RelationshipKeyInfo relKeyInfo : relationshipKeysSet.allObjects()) {
+				Object eo = null;
+				String entityName = relKeyInfo.entityName();
+				String relationshipKey = relKeyInfo.relationshipKeyPath();
+				String foreignKey = relKeyInfo.sourceAttributeKeyPath();
+				Object primaryKeyValue = row.objectForKey(foreignKey);
+				if (primaryKeyValue != NSKeyValueCoding.NullValue) {
+					eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, null, refreshRefetchedObjects);
+					row.setObjectForKey(eo, relationshipKey);
+				}
+				if (removeForeignKeysFromRowValues) {
+					row.removeObjectForKey(foreignKey);
+				}
+			}
+			T obj = recordConstructor.constructRecord(ec, row); 
+			records.addObject(obj);
+		}
+
 		return records;
 	}
 	
@@ -929,55 +939,39 @@ public class ERXQuery {
 		EOSQLExpression e = factory.selectStatementForAttributes(selectAttributes, false, spec, mainEntity);
 
 		// Start building the SELECT... FROM ... 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT ");
+		StringBuilder columnList = new StringBuilder();
 		if (queryHint != null) {
-			sql.append(" " + queryHint + " ");
+			columnList.append(" " + queryHint + " ");
 		}
 		if (usesDistinct && !isCountingStatement) {
-			sql.append("DISTINCT ");
+			columnList.append("DISTINCT ");
 		}
 
 		if (isCountingStatement) {
 			NSArray<String> pKeyNames = mainEntity.primaryKeyAttributeNames();
 			if (usesDistinct && pKeyNames.count() == 1) {
 				EOAttribute attribute = mainEntity.attributeNamed(pKeyNames.lastObject());
-				sql.append("COUNT(DISTINCT t0." + attribute.columnName() + " )");
+				columnList.append("COUNT(DISTINCT t0." + attribute.columnName() + " )");
 			} else {
-				sql.append("COUNT(*)");
+				columnList.append("COUNT(*)");
 			}
 			
 		} else {
-			sql.append(e.listString());
-		} 
-		sql.append("\n");
-		sql.append("FROM ");
-		sql.append(e.tableListWithRootEntity(mainEntity));
-		sql.append("\n");
+			columnList.append(e.listString());
+		}
+		
+		// Add table list
+		String tableList = e.tableListWithRootEntity(mainEntity);
 		
 		// Add WHERE clause if necessary
 		String joinClauseString = e.joinClauseString();
+		
 		String qualClauseString = e.whereClauseString();
-		boolean hasJoinClause = (joinClauseString != null && joinClauseString.length() > 0);
-		boolean hasQualClause = (qualClauseString != null && qualClauseString.length() > 0);
-		boolean hasWhereClause = (hasJoinClause || hasQualClause);
 		
-		if (hasWhereClause) {
-			sql.append("WHERE \n\t");
-		}
-		
-		if (hasJoinClause) {
-			sql.append(joinClauseString);
-		}
-		
-		if (hasQualClause) {
-			if (hasJoinClause) {
-				sql.append("\n\tAND ");
-			}
-			sql.append(qualClauseString);
-		}
-		
-		// Append GROUP BY clause
+		// Initial code assembled the SQL but was not compatible with FrontBase uses of sqj92 join statements. 
+		// This code uses the database plugin EOSQLExpression to assemble the first parts of the statement.
+		StringBuilder sql = new StringBuilder();
+		sql.append(e.assembleSelectStatementWithAttributes(selectAttributes, false, spec.qualifier(), spec.sortOrderings(), "SELECT ", columnList.toString(), tableList, qualClauseString, joinClauseString, "", null));
 		
 		if (groupingAttributes.count() > 0) {
 			sql.append("\n");
