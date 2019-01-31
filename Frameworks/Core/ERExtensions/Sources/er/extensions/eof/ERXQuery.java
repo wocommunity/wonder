@@ -3,6 +3,7 @@ package er.extensions.eof;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -30,6 +31,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -854,6 +856,42 @@ public class ERXQuery {
 		}
 	}
 	
+	/**
+	 * Convenience method for fetching a single attribute from a query resulting in zero
+	 * or one record. For example:
+	 * 
+	 * Number count = (Number) ERXQuery.create().selectCount().from(entity).where(qual).fetchValue();
+	 * 
+	 * @return The value or null when the query returns zero records or an NSKeyValueCoding.NullValue.
+	 */
+	public Object fetchValue() {
+		NSArray<NSDictionary<String, Object>> records = fetch();
+		int count = records.count();
+		
+		if (count == 0) {
+			return null;
+		}
+		
+		if (count > 1) {
+			throw new RuntimeException(getClass().getSimpleName() 
+					+ " fetchValue() must be used with a query that returns one or zero records." 
+					+ " This query returned " + count + " records.");
+		}
+		
+		NSDictionary<String, Object> rec = records.lastObject();
+		NSArray<Object> values = rec.allValues();
+		count = values.count();
+		if (count != 1) {
+			throw new RuntimeException(getClass().getSimpleName() 
+					+ " fetchValue() must be used with a query that fetches a single attribute." 
+					+ " This query fetched " + count + " attributes.");
+		}
+		Object value = values.lastObject();
+		if (value == NSKeyValueCoding.NullValue) {
+			return null;
+		}
+		return value;
+	}
 	
 	/** 
 	 * Sets the table alias to use for a given relationship name. For example, if
@@ -1889,6 +1927,144 @@ public class ERXQuery {
 		}
 	}
 
+
+
+	/**
+	 * Convenience class for fetching data into records conforming to key value coding.  What is
+	 * special about this record is its handling of key-value-coding.  For example, when fetching
+	 * keys that represent a key path to another object, i.e. "a.b.c", then the records fetched
+	 * end up with C objects as values for the key named "a.b.c".  If you use regular dictionaries
+	 * to fetch these records then you would have to use valueForKey() or objectForKey() to retrieve
+	 * the C object stored under the key "a.b.c".  You would then be able to apply a key path to C.
+	 * For example, instead of this boilerplate:
+	 * 
+	 * <pre>
+	 * String name = "";
+	 * C c = null;
+	 * Object value = rec.objectForKey("a.b.c");
+	 * if (value != NSKeyValueCoding.NullValue) {
+	 *     c = (C) value;
+	 *     name = (String) c.valueForKeyPath("x.y.name");
+	 * }
+	 * </pre>
+	 * 
+	 * you can use regular valueForKeyPath() like this:
+	 * 
+	 * <pre>
+	 * String name = (String) rec.valueForKeyPath("a.b.c.x.y.name");
+	 * </pre>
+	 * 
+	 * Values of NSKeyValueCoding.NullValue are automatically translated to null and you can use
+	 * the valueForKeyPathWithDefault() method to translate null to a default value and get rid of
+	 * casting the value like this:
+	 * 
+	 * <pre>
+	 * String name = rec.valueForKeyPathWithDefault("a.b.c.x.y.name", "");
+	 * </pre>
+	 */
+	public static class Record implements NSKeyValueCoding, NSKeyValueCodingAdditions {
+		private NSMutableDictionary<String,Object> data;
+		private String[] _sortedKeys;
+		
+		public Record(EOEditingContext context, NSMutableDictionary<String,Object> row) {
+			data = row;
+		}
+		
+		private String[] sortedKeys() {
+			if (_sortedKeys == null) {
+				Object[] objs = data.allKeys().toArray();
+				String[] keys = new String[objs.length];
+				for (int i = 0; i < objs.length; i++) {
+					keys[i] = objs[i].toString();
+				}
+				// Sort by key length with longer keys first, i.e. "a.b.c.d", "x.y", etc.
+				// This is necessary for the smart algorithm in valueForKeyPath() where
+				// multiple keys in the key path are a single key in the data dictionary
+				// and the value returned from the dictionary gets applied the remaining
+				// key path using valueForKeyPath. 
+				Arrays.sort(keys, (a,b) -> b.length() - a.length());
+				
+				_sortedKeys = keys;
+			}
+			return _sortedKeys;
+		}
+		
+		//
+		// NSKeyValueCoding
+		//
+		
+		@Override
+		public void takeValueForKey(Object value, String key) {
+			if (value == null) {
+				data.setObjectForKey(NSKeyValueCoding.NullValue, key);
+			} else {
+				data.setObjectForKey(value, key);
+			}
+		}
+
+		@Override
+		public Object valueForKey(String key) {
+			Object value = data.objectForKey(key);
+			
+			// Translate NullValue placeholder to java null
+			if (value == NSKeyValueCoding.NullValue) {
+				return null;
+			}
+			
+			return value;
+		}
+		
+		//
+		// NSKeyValueCodingAdditions
+		//
+		
+		@Override
+		public void takeValueForKeyPath(Object value, String keyPath) {
+			for (String aKey : sortedKeys()) {
+				if (aKey.length() < keyPath.length() && keyPath.startsWith(aKey)) {
+					Object obj = valueForKey(aKey);
+					String remainingKeyPath = keyPath.substring(aKey.length() + 1);
+					NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, value, remainingKeyPath);
+					return;
+				}
+			}
+			String key = keyPath;
+			takeValueForKey(value, key);
+		}
+		
+		@Override
+		public Object valueForKeyPath(String keyPath) {
+			for (String aKey : sortedKeys()) {
+				if (aKey.length() < keyPath.length() && keyPath.startsWith(aKey)) {
+					Object obj = valueForKey(aKey);
+					String remainingKeyPath = keyPath.substring(aKey.length() + 1);
+					Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, remainingKeyPath);
+					if (value == NSKeyValueCodingAdditions.NullValue) {
+						value = null;
+					}
+					return value;
+				}
+			}
+			return valueForKey(keyPath);
+		}
+		
+		// Convenience method
+		
+		@SuppressWarnings("unchecked")
+		public <V> V valueForKeyPathWithDefault(String keyPath, V defaultValue) {
+			Object v = valueForKeyPath(keyPath);
+			if (v == null) {
+				return defaultValue;
+			}
+			return (V) v;
+		}
+		
+		@Override
+		public String toString() {
+			return "<" + ERXQuery.class.getSimpleName() + "." + getClass().getSimpleName() 
+					+ ": " + data + ">";
+		}
+	}
 
 	//
 	// The EntityModificationAction class
