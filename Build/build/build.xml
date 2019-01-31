@@ -22,6 +22,7 @@
     <property name="framework.erjars.commons.codec" value="commons-codec-1.11.jar" />
     <property name="framework.erjars.commons.io" value="commons-io-2.6.jar" />
     <property name="framework.erjars.commons.lang3" value="commons-lang3-3.8.1.jar" />
+    <property name="framework.erjars.commons.text" value="commons-text-1.6.jar" />
     <property name="framework.erjars.fluent-hc" value="fluent-hc-4.5.6.jar" />
     <property name="framework.erjars.httpclient" value="httpclient-4.5.6.jar" />
     <property name="framework.erjars.httpclient-cache" value="httpclient-cache-4.5.6.jar" />
@@ -45,6 +46,7 @@
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.codec}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.io}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.lang3}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.commons.text}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.fluent-hc}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.httpclient-cache}" />
@@ -1268,8 +1270,8 @@
                 <pathelement location="${build.root}/ERXTest.woa/Contents/Resources/Java/ERXTest.jar" />
                 <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
                 <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.lang3}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.commons.text}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERFoundation.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERJars.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ERWebObjects.jar" />
