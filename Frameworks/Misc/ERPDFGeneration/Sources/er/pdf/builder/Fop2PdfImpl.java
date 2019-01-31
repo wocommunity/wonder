@@ -1,7 +1,10 @@
 package er.pdf.builder;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 
 import javax.xml.transform.Result;
@@ -17,17 +20,34 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopConfParser;
 import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FopFactoryBuilder;
 import org.apache.fop.apps.MimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXProperties;
+
+/**
+ * 
+ *  @property er.pdf.builder.fop.resolution Resolution of the pdf. Defaults to 300.
+ *  @property er.pdf.builder.fop.author Name of the author. Defaults to 'ERPDFGeneration'.
+ *  @property er.pdf.builder.fop.generator Name of the generator. Defaults to 'ERPDFGeneration'.
+ *  
+ *  @property er.pdf.builder.fop.config.filename Set to the name of the fop configuration file. Defaults to 'fop.xconf'.
+ *  @property er.pdf.builder.fop.config.framework Name of the framework the config file exists within. Defaults to 'ERPDFGeneration'.
+ */
 public class Fop2PdfImpl implements FOPBuilder {
+
+	private static final Logger log = LoggerFactory.getLogger(Fop2PdfImpl.class);
 
 	public static final String GENERATOR_NAME_KEY = "GENERATOR_NAME";
 	public static final String GENERATOR_NAME = "ERPDFGeneration";
@@ -35,18 +55,17 @@ public class Fop2PdfImpl implements FOPBuilder {
 	public static final String DEFAULT_AUTHOR = "ERPDFGeneration";
 	public static final String TARGET_RESOLUTION_KEY = "TARGET_RESOLUTION";
 	public static final int DEFAULT_RESOLUTION = 300;
+	
+	public static final String FOP_CONF_FILENAME_KEY = "FOP_CONF_FILENAME";
+	public static final String FOP_CONF_FILENAME = "fop.xconf";
+	public static final String FOP_CONF_FRAMEWORK_KEY = "FOP_CONF_FRAMEWORK";
+	public static final String FOP_CONF_FRAMEWORK = "ERPDFGeneration";
+	
 	private String _fopxslLocation;
 	private String _xmlToTransform;
-	private String _outputType = MimeConstants.MIME_PDF;
 	private NSMutableDictionary<String, Object> _config;
 
-	private static final Logger log = LoggerFactory.getLogger(Fop2PdfImpl.class);
-
-	protected static FopFactory fopFactory;
-
-	public Fop2PdfImpl() {
-
-	}
+	public Fop2PdfImpl() {}
 
 	public void setXSL(String fopxslLocation) {
 		_fopxslLocation = fopxslLocation;
@@ -54,20 +73,16 @@ public class Fop2PdfImpl implements FOPBuilder {
 
 	public void setXML(String xmlToTransform) {
 		_xmlToTransform = xmlToTransform;
-
 	}
 
 	/**
-	 * some basic defaults for configuring the fop agent. This should be
-	 * property driven, but I'll do that later (yeah... right)
-	 * 
-	 * @return a configuration dictionary
+	 * @return a configuration dictionary for the user agent
 	 */
 	public NSDictionary<String, Object> agentDefaults() {
 		NSMutableDictionary<String, Object> d = new NSMutableDictionary<>();
-		d.setObjectForKey(DEFAULT_RESOLUTION, TARGET_RESOLUTION_KEY);
-		d.setObjectForKey(DEFAULT_AUTHOR, AUTHOR_KEY);
-		d.setObjectForKey(GENERATOR_NAME, GENERATOR_NAME_KEY);
+		d.setObjectForKey(ERXProperties.intForKeyWithDefault("er.pdf.builder.fop.resolution", DEFAULT_RESOLUTION), TARGET_RESOLUTION_KEY);
+		d.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.author", DEFAULT_AUTHOR), AUTHOR_KEY);
+		d.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.generator", GENERATOR_NAME), GENERATOR_NAME_KEY);
 		return d.immutableClone();
 	}
 
@@ -76,9 +91,37 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void createDocument(OutputStream os, NSDictionary<String, Object> agentAttributes) throws Throwable {
-		log.debug("createDocument(OutputStream os={}, NSDictionary<String,Object> agentAttributes={}) - start", os, agentAttributes);
-
-		fopFactory = FopFactory.newInstance();
+		log.debug("createDocument(OutputStream os={}, NSDictionary<String,Object> agentAttributes={}, NSDictionary<String,Object> configuration={}) - start", os, agentAttributes, configuration());
+		
+		FopFactoryBuilder fopBuilder = null;
+		try {
+			ERXApplication app = ERXApplication.erxApplication();
+			URL path = app.resourceManager().pathURLForResourceNamed(
+					(String) configuration().get(FOP_CONF_FILENAME_KEY), 
+					(String) configuration().get(FOP_CONF_FRAMEWORK_KEY), 
+					NSArray.emptyArray());
+			if (path != null) {
+				URI baseURI;
+				if (!app.wasMainInvoked()) {
+					baseURI = URI.create(app.servletConnectURL());
+				} else if (app.isDirectConnectEnabled()) {
+					baseURI = URI.create(app.directConnectURL());
+				} else {
+					baseURI = URI.create(app.webserverConnectURL());
+				}
+				try (InputStream is = path.openStream()) {
+					fopBuilder = new FopConfParser(is, baseURI).getFopFactoryBuilder();
+				}
+			}
+		} 
+		catch (NullPointerException ex) {
+			log.warn("Can't find 'fop.xconf' in application resources", ex);
+		}
+		
+		if (fopBuilder == null) {
+			fopBuilder = new FopFactoryBuilder(URI.create("/"));
+		}
+		FopFactory fopFactory = fopBuilder.build();
 
 		log.debug("createDocument(OutputStream) - initializing FOUserAgent");
 		// get the defaults, but immediately override them with whatever was
@@ -136,6 +179,22 @@ public class Fop2PdfImpl implements FOPBuilder {
 		if (log.isDebugEnabled()) {
 			log.debug("createDocument(OutputStream, NSDictionary<String,Object>) - end");
 		}
+	}
+	
+	public NSDictionary<String, Object> configurationDefaults() {
+		NSMutableDictionary<String, Object> c = new NSMutableDictionary<>();
+		c.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.config.filename", FOP_CONF_FILENAME), FOP_CONF_FILENAME_KEY);
+		c.setObjectForKey(ERXProperties.stringForKeyWithDefault("er.pdf.builder.fop.config.framework", FOP_CONF_FRAMEWORK), FOP_CONF_FRAMEWORK_KEY);
+		return c;
+	}
+	
+	public NSDictionary<String, Object> configuration() {
+		if (_config == null) {
+			_config = new NSMutableDictionary<>();
+		}
+		NSMutableDictionary<String, Object> config = configurationDefaults().mutableClone();
+		config.addEntriesFromDictionary(_config);
+		return config;
 	}
 
 	public void setConfiguration(NSMutableDictionary<String, Object> config) {
