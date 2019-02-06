@@ -1861,6 +1861,7 @@ public class ERXQuery {
 		case "oracle":
 			// See http://docs.oracle.com/cd/B19306_01/server.102/b14200/functions183.htm
 			formattedValue = "TO_DATE('" + formattedValue + "', 'YYYY-MM-DD HH24:MI:SS')";
+			break;
 		case "postgresql":
 			// See https://www.postgresql.org/docs/7.4/static/functions-formatting.html
 			formattedValue = "TO_DATE('" + formattedValue + "', 'YYYY-MM-DD HH24:MI:SS')";
