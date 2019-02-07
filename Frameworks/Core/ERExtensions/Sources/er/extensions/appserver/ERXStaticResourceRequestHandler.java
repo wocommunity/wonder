@@ -158,15 +158,25 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 					path = URLDecoder.decode(path, CharEncoding.UTF_8);
 				}
 
-				URLConnection uc = new URL(path).openConnection();
-				if(uc instanceof JarURLConnection)
+				file = new File(path);
+
+				if(path.startsWith("jar:"))
 				{
-					length = (int)uc.getContentLengthLong();
+					URLConnection uc = new URL(path).openConnection();
+					if(uc instanceof JarURLConnection)
+					{
+						length = (int)uc.getContentLengthLong();
+					} else
+					{
+						length = -1;						
+					}
+					is = uc.getInputStream();
+					
 				} else
 				{
-					length = -1;						
+					length = (int) file.length();
+					is = new FileInputStream(file);
 				}
-				is = uc.getInputStream();
 				
 				contentType = rm.contentTypeForResourceNamed(path);
 				log.debug("Reading file '{}' for uri: {}", file, uri);
