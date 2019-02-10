@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLConnection;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -99,7 +102,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOResponse response = null;
-		FileInputStream is = null;
+		InputStream is = null;
 		long length = 0;
 		String contentType = null;
 		String uri = request.uri();
@@ -154,9 +157,26 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 					path = path.replace('+', ' ');
 					path = URLDecoder.decode(path, CharEncoding.UTF_8);
 				}
+
 				file = new File(path);
-				length = file.length();
-				is = new FileInputStream(file);
+
+				if(path.startsWith("jar:"))
+				{
+					URLConnection uc = new URL(path).openConnection();
+					if(uc instanceof JarURLConnection)
+					{
+						length = (int)uc.getContentLengthLong();
+					} else
+					{
+						length = -1;						
+					}
+					is = uc.getInputStream();
+					
+				} else
+				{
+					length = (int) file.length();
+					is = new FileInputStream(file);
+				}
 				
 				contentType = rm.contentTypeForResourceNamed(path);
 				log.debug("Reading file '{}' for uri: {}", file, uri);
