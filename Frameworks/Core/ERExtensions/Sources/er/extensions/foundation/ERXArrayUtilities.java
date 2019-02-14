@@ -1,6 +1,7 @@
 package er.extensions.foundation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1536,7 +1537,7 @@ public class ERXArrayUtilities {
             if(count == 0) {
                 return null;
             }
-            return sum.divide(BigDecimal.valueOf(count), sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
+            return sum.divide(BigDecimal.valueOf(count), sum.scale() + 4, RoundingMode.HALF_EVEN);
         }
     }
 
@@ -1731,7 +1732,7 @@ public class ERXArrayUtilities {
             	tmp = noKeypath?obj:NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, keypath);
             	BigDecimal b = ERXValueUtilities.bigDecimalValue(tmp);
             	BigDecimal sum = a.add(b);
-            	value = sum.divide(BigDecimal.valueOf(2), sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
+            	value = sum.divide(BigDecimal.valueOf(2), sum.scale() + 4, RoundingMode.HALF_EVEN);
             	
             } else {
             	tmp = noKeypath?obj:NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, keypath);
@@ -1773,7 +1774,7 @@ public class ERXArrayUtilities {
     		sum = sum.add(diff);
     	}
     	
-    	sum = sum.divide(divisor, sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
+    	sum = sum.divide(divisor, sum.scale() + 4, RoundingMode.HALF_EVEN);
     	return BigDecimal.valueOf(Math.sqrt(sum.doubleValue()));
     }
         
