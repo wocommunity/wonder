@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -1771,7 +1772,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FrontBaseTypes.FB_Integer:
 				case FrontBaseTypes.FB_Decimal: {
 					if (obj instanceof BigDecimal) {
-						return ((BigDecimal) obj).setScale(eoattribute.scale(), BigDecimal.ROUND_HALF_UP).toString();
+						return ((BigDecimal) obj).setScale(eoattribute.scale(), RoundingMode.HALF_UP).toString();
 					}
 					else if (obj instanceof Number) {
 						String valueType = eoattribute.valueType();

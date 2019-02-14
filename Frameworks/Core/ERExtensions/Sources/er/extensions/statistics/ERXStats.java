@@ -2,6 +2,7 @@ package er.extensions.statistics;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -478,7 +479,7 @@ public class ERXStats {
 		
 		@Override
 		public String toString() {
-			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + new BigDecimal(avg(), MathContext.DECIMAL32).setScale(2, BigDecimal.ROUND_HALF_EVEN) + "|" + _traces.size() + "->" + _key;
+			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + new BigDecimal(avg(), MathContext.DECIMAL32).setScale(2, RoundingMode.HALF_EVEN) + "|" + _traces.size() + "->" + _key;
 			// + "\n" + traces.iterator().next();
 		}
 	}

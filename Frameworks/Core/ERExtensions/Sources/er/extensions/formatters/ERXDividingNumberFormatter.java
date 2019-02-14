@@ -2,6 +2,7 @@ package er.extensions.formatters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.FieldPosition;
 
 import com.webobjects.foundation.NSNumberFormatter;
@@ -84,7 +85,7 @@ public class ERXDividingNumberFormatter extends NSNumberFormatter {
         Number n = (Number)arg0;
         if (arg0 instanceof BigDecimal) {
             BigDecimal b = (BigDecimal)arg0;
-            b = b.divide(new BigDecimal(factor), BigDecimal.ROUND_HALF_UP);
+            b = b.divide(new BigDecimal(factor), RoundingMode.HALF_UP);
             return super.format(b, arg1, arg2);
         } else if (arg0 instanceof BigInteger) {
             BigInteger b = (BigInteger)arg0;

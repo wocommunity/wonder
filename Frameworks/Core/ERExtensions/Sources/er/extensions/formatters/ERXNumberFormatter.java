@@ -8,6 +8,7 @@ package er.extensions.formatters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.util.Hashtable;
@@ -180,7 +181,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 			value = value.multiply(_factor);
 		} else if("/".equals(_operator)) {
 		    int scale = _scale == null ? value.scale() : _scale.intValue();
-			value = value.divide(_factor, scale, BigDecimal.ROUND_HALF_EVEN);
+			value = value.divide(_factor, scale, RoundingMode.HALF_EVEN);
 		}
 		return value;
 	}
@@ -192,7 +193,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	protected BigDecimal performParse(BigDecimal value) {
 		if("*".equals(_operator)) {
 		    int scale = _scale == null ? value.scale() : _scale.intValue();
-			value = value.divide(_factor, scale, BigDecimal.ROUND_HALF_EVEN);
+			value = value.divide(_factor, scale, RoundingMode.HALF_EVEN);
 		} else if("/".equals(_operator)) {
 			value = value.multiply(_factor);
 		}
