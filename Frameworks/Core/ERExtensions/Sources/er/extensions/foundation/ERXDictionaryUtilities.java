@@ -22,6 +22,8 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.extensions.eof.ERXKey;
+
 
 /**
  * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.
@@ -167,6 +169,16 @@ public class ERXDictionaryUtilities {
      */
     public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, String... keys) {
         return ERXDictionaryUtilities.dictionaryFromObjectWithKeys(object, new NSArray<>(keys));
+    }
+    
+    /**
+     * Creates a dictionary from an objects and an array of key paths
+     * @param object object to pull the values from
+     * @param keys list of keys
+     * @return Returns a {@code NSDictionary} containing all of the object-key pairs.
+     */
+    public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, ERXKey... keys) {
+    	return dictionaryFromObjectWithKeys(object, (NSArray<String>) new NSArray<ERXKey>(keys).valueForKey("key"));
     }
 
     // if you're keys are not all strings, this method will throw.
