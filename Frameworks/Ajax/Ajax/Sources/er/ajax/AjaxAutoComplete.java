@@ -77,7 +77,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding minChars Look at the scriptaculous documentation.
  * @binding indicator Look at the scriptaculous documentation.
  * @binding updateElement Look at the scriptaculous documentation.
- * @binding afterUpdateElement Look at the scriptaculous documentation.
+ * @binding afterUpdateElement Look at the scriptaculous documentation. Also, a value of <code>"observe"</code> will generate javascript to submit change to server when item selected from list. Provided because {@link AjaxObserveField} doesn't work on {@link AjaxAutoComplete} fields.
  * @binding select Look at the scriptaculous documentation.
  * @binding onShow Look at the scriptaculous documentation.
  * @binding fullSearch Look at the scriptaculous documentation.
@@ -183,6 +183,17 @@ public class AjaxAutoComplete extends AjaxComponent {
         super.appendToResponse(res, ctx);
 		boolean isDisabled = booleanValueForBinding("disabled", false);
 		if ( !isDisabled ) {
+			String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
+			NSMutableDictionary<String, String> options = createAjaxOptions().mutableClone();
+			if ("observe".equalsIgnoreCase(options.get("afterUpdateElement"))) {
+				// Javascript to simulate AjaxObserveField on this AjaxAutocomplete when an item has been selected from the list
+				String afterUpdateElement = "function (text, li) { " +
+						"var options = new Array();" +
+						"options.parameters = encodeURIComponent('"+fieldName+"') + '=' + encodeURIComponent(text.value);" +
+						"new Ajax.Request('"+actionUrl+"', options);" +
+					"}";
+				options.put("afterUpdateElement", afterUpdateElement);
+			}
 			boolean isLocal = booleanValueForBinding("isLocal", false);
 			if (isLocal) {
 				StringBuilder str = new StringBuilder();
@@ -208,14 +219,13 @@ public class AjaxAutoComplete extends AjaxComponent {
 				str.append("',");
 				str.append(listJS);
 				str.append(',');
-				AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
+				AjaxOptions.appendToBuffer(options, str, ctx);
 				str.append(");\n// ]]>\n</script>\n");
 				res.appendContentString(String.valueOf(str));
 			} else {
-				String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
 				AjaxUtils.appendScriptHeader(res);
 				res.appendContentString("new Ajax.Autocompleter('" + fieldName + "', '" + divName + "', '" + actionUrl + "', ");
-				AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
+				AjaxOptions.appendToResponse(options, res, ctx);
 				res.appendContentString(");");
 				AjaxUtils.appendScriptFooter(res);
 			}
