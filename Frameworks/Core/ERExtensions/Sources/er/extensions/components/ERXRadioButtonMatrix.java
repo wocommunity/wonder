@@ -40,6 +40,10 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 
     private static final Integer DEFAULT_PADDING = ERXConstant.ZeroInteger;
     private static final Integer DEFAULT_SPACING = ERXConstant.ZeroInteger;
+    
+    private static final String CSS_CLASS_FOR_TABLE_ALONE = "ERXMatrixTable";
+    private static final String CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT = "Checked";
+
 
     public ERXRadioButtonMatrix(WOContext aContext) {
         super(aContext);
@@ -55,6 +59,7 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         invalidateCaches();
     }
 
+    
     public Object currentItem() {
         return currentItem;
     }
@@ -159,4 +164,24 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         }
         return DEFAULT_SPACING;
     }
+    
+    
+    /**
+     * If the iterated radio button is checked, set the css class of the table that wraps
+     * the radio button to include the css class CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT.
+     * This allows css to target the checked radio button, and therefore to be able to render it
+     * differently.
+     * If the iterated radio button is not checked, the css class will be set to CSS_CLASS_FOR_TABLE_ALONE
+     * 
+     * @return cssClass - whose value is dependent on whether the radio button is checked
+     */
+    public String cssClassForTableForRadioButton() {
+    	String cssClass = CSS_CLASS_FOR_TABLE_ALONE; 
+    	boolean isChecked = !ERXStringUtilities.stringIsNullOrEmpty(isCurrentItemSelected());
+    	if (isChecked) {
+    		cssClass += " " + CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT;
+    	}
+    	return cssClass;
+    }
+    
 }
