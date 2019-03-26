@@ -25,8 +25,8 @@ public abstract class WebObjectsInstaller {
   
   static {
     try {
-      WO533_URI = new URI("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-2998.20070215.33woU/WebObjects5.3.3Update.dmg");
-      WO543_URI = new URI("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-4634.20080915.3ijd0/WebObjects543.dmg");
+      WO533_URI = new URI("https://download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-2998.20070215.33woU/WebObjects5.3.3Update.dmg");
+      WO543_URI = new URI("https://download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-4634.20080915.3ijd0/WebObjects543.dmg");
       WO533DEV_URI = new File("WebObjects533.dmg").toURI();
       WO543DEV_URI = new File("WebObjects543.dmg").toURI();
     } catch (URISyntaxException e) {
