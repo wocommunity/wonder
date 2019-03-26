@@ -13,14 +13,10 @@
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
-    	<jar basedir="bin" jarfile="WOInstaller.jar">
-    		<manifest>
-				<attribute name="Main-Class" value="er.woinstaller.Main"/>
-    		</manifest>
-    	</jar>
     </target>
     <target name="clean">
-        <delete dir="bin"/>
+        <delete dir="bin" quiet="true"/>
+        <delete file="WOInstaller.jar" quiet="true"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-project" name="build"/>
@@ -31,5 +27,10 @@
             <src path="Sources"/>
             <classpath refid="WOInstall.classpath"/>
         </javac>
+        <jar basedir="bin" destfile="WOInstaller.jar">
+            <manifest>
+                <attribute name="Main-Class" value="er.woinstaller.Main"/>
+            </manifest>
+        </jar>
     </target>
 </project>
