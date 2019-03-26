@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="WOInstall">
     <property environment="env"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <path id="WOInstall.classpath">
         <pathelement location="bin"/>
     </path>
@@ -27,7 +27,7 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+        <javac destdir="bin" source="${source}" target="${target}" includeantruntime="false">
             <src path="Sources"/>
             <classpath refid="WOInstall.classpath"/>
         </javac>
