@@ -12,5 +12,6 @@
     	<validation message="'selection' is a required binding.">
             <unbound name="selection"/>
         </validation>
-        </wo>
+        <binding name="uiMode"/>
+    </wo>
 </wodefinitions>

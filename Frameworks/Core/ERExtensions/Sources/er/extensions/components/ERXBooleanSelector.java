@@ -17,6 +17,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding noString the string to show for the "No" option
  * @binding noSelectionString the string to show for the "All" option
  * @binding selection the selected value
+ * @binding uiMode the desired UI "popup" [default], "checkbox" or "radio"
  */
 public class ERXBooleanSelector extends ERXStatelessComponent {
 	/**
