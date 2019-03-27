@@ -38,6 +38,7 @@ TextField: WOTextField {
 	style = ^style;
 	type = ^type;
 	results = ^results;
+	placeholder = ^placeholder;
 }
 
 HasIndicator : WOConditional {
