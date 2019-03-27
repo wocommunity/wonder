@@ -28,5 +28,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERRest/LibraryJavadocs/json-lib-2.4-jdk15-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
