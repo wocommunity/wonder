@@ -55,6 +55,9 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     private static final Integer DEFAULT_PADDING = Integer.valueOf(0);
     private static final Integer DEFAULT_SPACING = Integer.valueOf(0);
 
+    private static final String CSS_CLASS_FOR_TABLE_ALONE = "ERXMatrixTable";
+    private static final String CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT = "Checked";
+
     public ERXCheckboxMatrix(WOContext aContext) {
         super(aContext);
     }
@@ -170,9 +173,14 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         }
     }
     
+    private boolean checked() {
+    	boolean checked = selections() != null && selections().containsObject(currentItem);
+    	return checked;
+    }
+    
 	public String otherTagStringForCheckBox() {
     	boolean isDisabled = disabled();
-    	boolean isChecked = selections() != null && selections().containsObject(currentItem);
+    	boolean isChecked = checked();
     	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
 	}
 
@@ -232,4 +240,21 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         return DEFAULT_SPACING;
     }
 
+    /**
+     * If the iterated checkbox is checked, set the css class of the table that wraps
+     * the checkbox to include the css class CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT.
+     * This allows css to target the checked checkbox, and therefore to be able to render it
+     * differently.
+     * If the iterated checkbox is not checked, the css class will be set to CSS_CLASS_FOR_TABLE_ALONE
+     * 
+     * @return cssClass - whose value is dependent on whether the checkbox is checked
+     */
+    public String cssClassForTableForCheckbox() {
+    	String cssClass = CSS_CLASS_FOR_TABLE_ALONE; 
+    	if (checked()) {
+    		cssClass += " " + CSS_CLASS_FOR_TABLE_CHECKED_DEFAULT;
+    	}
+    	return cssClass;
+    }
+    
 }
