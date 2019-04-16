@@ -63,7 +63,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * @binding onCreate Takes a JavaScript function which is called after the form has been serialized, 
  * 			but before the Ajax request is sent to the server. Useful e.g. if you want to disable the 
  * 			form while the ajax request is running. 
- * @binding actOnKeyUp When true, keyup events in text input fields lead to an immediate action
+ * @binding actOnInput When true, input events in text input fields lead to an immediate action
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
@@ -103,7 +103,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		NSMutableDictionary<String, String> options = createAjaxOptions(component);
 		boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
-		boolean actOnKeyUp = booleanValueForBinding("actOnKeyUp", false, component);
+		boolean actOnInput = booleanValueForBinding("actOnInput", false, component);
 		boolean observeFieldDescendents;
 		if (observeFieldID != null) {
 			observeFieldDescendents = false;
@@ -127,14 +127,14 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			response.appendContentString("</" + elementName + ">");
 		}
 		AjaxUtils.appendScriptHeader(response);
-		AjaxObserveField.appendToResponse(response, context, this, observeFieldID, observeFieldDescendents, updateContainerID, fullSubmit, options, actOnKeyUp);
+		AjaxObserveField.appendToResponse(response, context, this, observeFieldID, observeFieldDescendents, updateContainerID, fullSubmit, options, actOnInput);
 		AjaxUtils.appendScriptFooter(response);
 	}
 
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
 		appendToResponse(response, context, element, observeFieldID, observeDescendentFields, updateContainerID, fullSubmit, options, false);
 	}
-	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options, boolean actOnKeyUp) {
+	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options, boolean actOnInput) {
 		WOComponent component = context.component();
 		String submitButtonName = nameInContext(context, component, element);
 		NSMutableDictionary<String, String> observerOptions = new NSMutableDictionary<>();
@@ -163,7 +163,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		response.appendContentString(observeDelay);
 		response.appendContentString(", ");
 		AjaxOptions.appendToResponse(observerOptions, response, context);
-		response.appendContentString(", " + actOnKeyUp +");");
+		response.appendContentString(", " + actOnInput +");");
 	}
 
 	public static String nameInContext(WOContext context, WOComponent component, AjaxDynamicElement element) {

@@ -484,15 +484,15 @@ var AjaxSubmitButton = {
 		new Ajax.Request(finalUrl, finalOptions);
 	},
 	
-	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp) {
+	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options, actOnInput) {
     $(containerID).descendants().find(function(element) {
       if (element.type != 'hidden' && ['input', 'select', 'textarea'].include(element.tagName.toLowerCase())) {
-      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp);
+      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options, actOnInput);
       }
     });
 	},
 	
-	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp) {
+	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options, actOnInput) {
 		var submitFunction;
 		if (partial) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
@@ -531,7 +531,7 @@ var AjaxSubmitButton = {
 	    	new Form.Element.RadioButtonObserver($(formFieldID), submitFunction);
 			}
 			else {
-	    	new Form.Element.ExtendedEventObserver($(formFieldID), submitFunction, actOnKeyUp);
+	    	new Form.Element.ExtendedEventObserver($(formFieldID), submitFunction, actOnInput);
 			}
 		}
 		else {
@@ -1000,8 +1000,8 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 });
 
 Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
-  initialize: function($super, element, callback, actOnKeyUp) {
-    this.actOnKeyUp = actOnKeyUp;
+  initialize: function($super, element, callback, actOnInput) {
+    this.actOnInput = actOnInput;
     $super(element, callback);
   },
 
@@ -1015,9 +1015,9 @@ Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
         case 'text':
         case 'number':
           Event.observe(element, 'change', this.onElementEvent.bind(this));
-          if (this.actOnKeyUp)
+          if (this.actOnInput)
           {
-	          Event.observe(element, 'keyup', this.onElementEvent.bind(this));
+	          Event.observe(element, 'input', this.onElementEvent.bind(this));
 	          Event.observe(element, 'blur', this.onElementEvent.bind(this));
           }
           break;
