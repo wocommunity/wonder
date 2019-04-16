@@ -18,5 +18,6 @@
 		<binding name="onSuccess"/>
 		<binding name="onFailure"/>
 		<binding name="onException"/>
+        <binding name="actOnKeyUp"/>
 	</wo>
 </wodefinitions>
