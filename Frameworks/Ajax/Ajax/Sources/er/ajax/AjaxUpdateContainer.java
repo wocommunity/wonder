@@ -323,22 +323,24 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
 		if (updateContainerID != null) {
+			NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
+
 			if(updateContainerID.indexOf(",") >= 0)
-				AjaxUtils.mutableUserInfo(request).setObjectForKey(Arrays.asList(updateContainerID.split(",")), CONTAINER_LIST_KEY);
+				userInfo.setObjectForKey(Arrays.asList(updateContainerID.split(",")), CONTAINER_LIST_KEY);
 			else
-				AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
+				userInfo.setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		}
 	}
 	
 	public static List<String> updateContainerIDList(WORequest request)
 	{
-		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 		return (List<String>) userInfo.objectForKey(CONTAINER_LIST_KEY);
 	}
 	
 	public static void setRangeForContainerID(WORequest request, String updateContainerID, NSRange range)
 	{
-		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 		NSMutableDictionary<String, NSRange> rangeDict = (NSMutableDictionary<String, NSRange>) userInfo.objectForKey(CONTAINER_RANGEDICT_KEY);
 		if(rangeDict == null)
 		{
@@ -351,7 +353,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	
 	public static NSRange rangeForContainerID(WORequest request, String updateContainerID)
 	{
-		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 		NSMutableDictionary<String, NSRange> rangeDict = (NSMutableDictionary<String, NSRange>) userInfo.objectForKey(CONTAINER_RANGEDICT_KEY);
 		if(rangeDict != null)
 			return rangeDict.objectForKey(updateContainerID);
