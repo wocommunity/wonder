@@ -338,14 +338,21 @@ var AjaxUpdateLink = {
 	},
 	
 	update: function(id, options, elementID, queryParams) {
-		var updateElement = $(id);
+        var firstId = id;
+        var updateElementList = id.split(",");
+        if(updateElementList.length > 1)
+        {
+          firstId = updateElementList[0];
+        }
+        
+        var updateElement = $(firstId);
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink._update(id, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, firstId, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
 	},
 	
-	_update: function(id, actionUrl, options, elementID, queryParams) {
+	_update: function(id, firstId, actionUrl, options, elementID, queryParams) {
 		if (elementID) {
 			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
@@ -354,10 +361,17 @@ var AjaxUpdateLink = {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
 		else {
-			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+			if(id.indexOf(",") >= 0)
+			{
+				actionUrl = actionUrl.addQueryParameters('_ul='+ id);
+			}
+			else
+			{
+				actionUrl = actionUrl.addQueryParameters('_u='+ id);
+			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
-		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
+		new Ajax.Updater(firstId, actionUrl, AjaxOptions.defaultOptions(options));
 	},
 	
 	request: function(actionUrl, options, elementID, queryParams) {
