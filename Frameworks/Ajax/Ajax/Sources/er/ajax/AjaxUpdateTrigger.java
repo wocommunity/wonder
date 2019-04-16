@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.components.ERXComponentUtilities;
@@ -23,7 +24,7 @@ import er.extensions.components.ERXComponentUtilities;
  * edit mode and trigger all of the other update containers to update, 
  * reflecting their new non-editable status.
  * 
- * @binding updateContainerIDs an array of update container IDs to update
+ * @binding updateContainerIDs an array of update container IDs to update / or a comma separated string of container IDs
  * @binding resetAfterUpdate if true, the array of IDs will be cleared after appendToResponse
  * 
  * @author mschrag
@@ -44,7 +45,7 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		WOComponent component = context.component();
-		List<String> updateContainerIDs = (List<String>) _updateContainerIDs.valueInComponent(component);
+		List<String> updateContainerIDs = getUpdateContainerIds(component);
 		if (updateContainerIDs != null && updateContainerIDs.size() > 0) {
 			AjaxUtils.appendScriptHeader(response);
 			Iterator<String> updateContainerIDEnum = updateContainerIDs.iterator();
@@ -62,6 +63,24 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 				updateContainerIDs.clear();
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getUpdateContainerIds(WOComponent component)
+	{
+		Object value = _updateContainerIDs.valueInComponent(component);
+
+		if(value instanceof List)
+		{
+			return (List<String>) value;
+		}
+
+		if(value instanceof String)
+		{
+			return new NSArray<String>(((String)value).split(","));
+		}
+
+		throw new IllegalArgumentException("Invalid argument for 'updateContainerIDs' given");
 	}
 
 }
