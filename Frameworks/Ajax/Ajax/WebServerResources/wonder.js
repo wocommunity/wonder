@@ -1013,6 +1013,7 @@ Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
           Event.observe(element, 'click', this.onElementEvent.bind(this));
           break;
         case 'text':
+        case 'number':
           Event.observe(element, 'change', this.onElementEvent.bind(this));
           if (this.actOnKeyUp)
           {
