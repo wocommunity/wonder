@@ -3,6 +3,7 @@ package er.ajax;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +15,12 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSRange;
+
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
+import er.extensions.appserver.ajax.ERXAjaxSession;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
@@ -95,6 +98,8 @@ public class AjaxResponse extends ERXResponse {
 
 			if(updateContainerIDList != null)
 			{
+				_context.request().setHeader(StringUtils.join(updateContainerIDList, ','), ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+
 				WOApplication.application().appendToResponse(this, _context);
 
 				StringBuilder c2 = new StringBuilder();
