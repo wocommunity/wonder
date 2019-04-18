@@ -142,6 +142,8 @@ public class AjaxResponse extends ERXResponse {
 		return _content.length();
 	}
 
+	// Some older Browsers do have problems with leading white space characters in Ajax Responses
+	// so we remove them on HTML responses
 	private void fixLeadingWhiteSpaces(StringBuilder sb)
 	{
 		while(sb.length() > 0 && Character.isWhitespace(sb.charAt(0)))
