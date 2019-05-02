@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -171,6 +172,9 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof NSData && ((NSData)value).length() == 24) {
 			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
+		}
+		else if (value instanceof NSData) {
+			formattedValue = Base64.getEncoder().encodeToString(((NSData) value).bytes());
 		}
 		else {
 			formattedValue = value.toString();
@@ -445,7 +449,7 @@ public class ERXRestUtils {
 			}
 			else {
 				TemporalQuery<?> query = null;
-				Class<? extends Class> valueTypeClass = valueType.getClass();
+				Class<?> valueTypeClass = valueType;
 				if (valueTypeClass.equals(LocalDate.class)) {
 					query = LocalDate::from;
 				}
