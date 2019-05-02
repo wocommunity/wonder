@@ -1871,15 +1871,16 @@ public class ERXEOControlUtilities {
      * @param eos the NSArray of EOEnterpriseObjects
      * @return a NSArray of EOGlobalIDs
      */
-    public static NSArray globalIDsForObjects(NSArray eos) {
-        int c = eos != null ? eos.count() : 0;
-        NSMutableArray ids = new NSMutableArray(c);
-        for (int i = 0; i < c; i++) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)eos.objectAtIndex(i);
+    public static NSArray<EOGlobalID> globalIDsForObjects(NSArray<? extends EOEnterpriseObject> eos) {
+    	if (eos == null) {
+    		return new NSArray<>();
+    	}
+        NSMutableArray<EOGlobalID> ids = new NSMutableArray(eos.count());
+        for (EOEnterpriseObject eo : eos) {
             EOEditingContext ec = eo.editingContext();
             EOGlobalID gid = ec.globalIDForObject(eo);
             ids.addObject(gid);
-        }
+		}
         return ids;
     }
     
@@ -1887,18 +1888,21 @@ public class ERXEOControlUtilities {
      * Aggregate method for <code>EOEditingContext.objectForGlobalID()</code>.
      * <b>NOTE:</b> this only returns objects that are already registered, if you
      * need all objects from the GIDs, use {@link #faultsForGlobalIDs(EOEditingContext, NSArray)}.
+     * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
+     * @param globalIDs the EOGlobalIDs
+     * @return a NSArray of EOEnterpriseObjects
      * @see com.webobjects.eocontrol.EOEditingContext#objectForGlobalID(EOGlobalID)
      */
-    public static NSArray objectsForGlobalIDs(final EOEditingContext ec, final NSArray globalIDs) {
-        NSArray result = null;
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsForGlobalIDs(final EOEditingContext ec, final NSArray<EOGlobalID> globalIDs) {
+        NSArray<T> result = null;
         
         if ( globalIDs != null && globalIDs.count() > 0 ) {
-            final NSMutableArray a = new NSMutableArray();
-            final Enumeration e = globalIDs.objectEnumerator();
+            final NSMutableArray<T> a = new NSMutableArray<>();
+            final Enumeration<EOGlobalID>  e = globalIDs.objectEnumerator();
             
             while ( e.hasMoreElements() ) {
-                final EOGlobalID theGID = (EOGlobalID)e.nextElement();
-                final EOEnterpriseObject theObject = ec.faultForGlobalID(theGID, ec);
+                final EOGlobalID theGID = e.nextElement();
+                final T theObject = (T) ec.faultForGlobalID(theGID, ec);
                 
                 if ( theObject != null )
                     a.addObject(theObject);
@@ -1915,23 +1919,23 @@ public class ERXEOControlUtilities {
      * @param gids the EOGlobalIDs
      * @return a NSArray of EOEnterpriseObjects
      */
-    public static NSArray faultsForGlobalIDs(EOEditingContext ec, NSArray gids) {
+    public static <T extends EOEnterpriseObject> NSArray<T> faultsForGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> gids) {
         int c = gids.count();
-        NSMutableArray a = new NSMutableArray(c);
+        NSMutableArray<T> a = new NSMutableArray<>(c);
         for (int i = 0; i < c; i++) {
-            EOGlobalID gid = (EOGlobalID)gids.objectAtIndex(i);
-            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+            EOGlobalID gid = gids.objectAtIndex(i);
+            T eo = (T) ec.faultForGlobalID(gid, ec);
             a.addObject(eo);
         }
         return a;
     }  
 
-    public static NSArray faultsForRawRowsFromEntity(EOEditingContext ec, NSArray primKeys, String entityName) {
+    public static <T extends EOEnterpriseObject> NSArray<T> faultsForRawRowsFromEntity(EOEditingContext ec, NSArray primKeys, String entityName) {
         int c = primKeys.count();
-        NSMutableArray a = new NSMutableArray(c);
+        NSMutableArray<T> a = new NSMutableArray<>(c);
         for (int i = 0; i < c; i++) {
             NSDictionary pkDict = (NSDictionary)primKeys.objectAtIndex(i);
-            EOEnterpriseObject eo = ec.faultForRawRow(pkDict, entityName);
+            T eo = (T) ec.faultForRawRow(pkDict, entityName);
             a.addObject(eo);
         }
         return a;
