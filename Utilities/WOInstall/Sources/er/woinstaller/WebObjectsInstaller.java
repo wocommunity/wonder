@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -113,13 +116,16 @@ public abstract class WebObjectsInstaller {
 
   protected InputStream getInputStream(IWOInstallerProgressMonitor progressMonitor) throws IOException {
     File woDmgFile = null;
+    InputStream woDmgIs = null;
     if ("file".equals(woDmgUri.getScheme())) {
       woDmgFile = new File(woDmgUri);
       if (!woDmgFile.exists()) {
         throw new IllegalStateException("The file " + woDmgFile.getName() + " was not found");
       }
+      woDmgIs = new BufferedInputStream(new FileInputStream(woDmgFile));
+    } else {
+      woDmgIs = new BufferedInputStream(urlToInputStream(woDmgUri.toURL()));
     }
-    InputStream woDmgIs = new BufferedInputStream(woDmgFile == null ? woDmgUri.toURL().openStream() : new FileInputStream(woDmgFile));
 
     InputStream woPaxGZIs;
     if (woVersion == 53) {
@@ -132,7 +138,32 @@ public abstract class WebObjectsInstaller {
     }
     return new GZIPInputStream(woPaxGZIs);
   }
-  
+
+  private InputStream urlToInputStream(URL url) {
+    HttpURLConnection connection = null;
+    try {
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(15000);
+        connection.connect();
+        int responseCode = connection.getResponseCode();
+        if (responseCode < 400 && responseCode > 299) {
+            String redirectUrl = connection.getHeaderField("Location");
+            try {
+                URL newUrl = new URL(redirectUrl);
+                return urlToInputStream(newUrl);
+            } catch (MalformedURLException e) {
+                URL newUrl = new URL(url.getProtocol() + "://" + url.getHost() + redirectUrl);
+                return urlToInputStream(newUrl);
+            }
+        }
+
+        return connection.getInputStream();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+
   protected long getLength() {
     return rawLength;
   }
