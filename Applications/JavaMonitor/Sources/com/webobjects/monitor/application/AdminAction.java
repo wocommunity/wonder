@@ -478,6 +478,12 @@ public class AdminAction extends WODirectAction {
         		applicationsPage().weeklyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(weekDay));
     }
 
+    public void setAdditionalArgsAction() {
+        String arguments = (String) context().request().formValueForKey("args");
+        if (arguments != null)
+                applicationsPage().setAdditionalArgs(instances, arguments);
+    }
+
     public void turnScheduledOnAction() {
         applicationsPage().turnScheduledOn(instances);
     }
