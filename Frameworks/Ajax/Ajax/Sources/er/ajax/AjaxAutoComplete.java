@@ -159,7 +159,7 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
       ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
-      ajaxOptionsArray.addObject(new AjaxOption("indicator", indicator(), AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("indicator", indicator(), AjaxOption.STRING));
       ajaxOptionsArray.addObject(new AjaxOption("updateElement", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("onShow", AjaxOption.SCRIPT));
