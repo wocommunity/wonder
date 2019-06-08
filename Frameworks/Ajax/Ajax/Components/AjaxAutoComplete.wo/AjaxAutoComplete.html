@@ -1,1 +1,16 @@
-<webobject name = "Disabled"><webobject name = "TextField" /></webobject><webobject name = "NotDisabled">  <webobject name = "ShowItem">    <webobject name = "TextField" />    <webobject name="HasIndicator"><webobject name="Indicator"/></webobject>    <webobject name = "ZIndexContainer"> <webobject name = "AutoCompleteContainer"/> </webobject>    <script>      Event.observe(window, 'load', function() {        	    var div = $('<webobject name = "ZIndexContainerName"/>');        	    <webobject name="hasContainerId">        	      document.getElementById('<webobject name="containerId"/>').appendChild(div);        	    </webobject>        	    <webobject name="else">           	      document.getElementsByTagName('body')[0].appendChild(div);           	    </webobject>      });    </script>  </webobject>  <webobject name = "ShowList"><webobject name = "Content" /></webobject></webobject>
+<webobject name = "Disabled"><webobject name = "TextField" /></webobject>
+<webobject name = "NotDisabled">
+	<webobject name = "ShowItem">
+		<webobject name = "TextField" />
+		<webobject name = "HasIndicator"><webobject name = "Indicator" /></webobject>
+		<webobject name = "AutoCompleteContainer"><webobject name = "ZIndexContainer" /></webobject>
+		<script>
+			Event.observe(window, 'load', function() {
+				var div = $('<webobject name = "ZIndexContainerName" />');
+				<webobject name = "hasContainerId">document.getElementById('<webobject name = "containerId" />').appendChild(div);</webobject>
+				<webobject name = "else">document.getElementsByTagName('body')[0].appendChild(div);</webobject>
+			});    
+		</script>
+	</webobject>
+	<webobject name = "ShowList"><webobject name = "Content" /></webobject>
+</webobject>
