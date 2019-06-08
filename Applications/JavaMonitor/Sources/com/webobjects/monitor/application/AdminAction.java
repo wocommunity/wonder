@@ -117,6 +117,12 @@ import er.extensions.appserver.ERXResponse;
  * <td>bounces the application (starts a few instances per hosts, set the rest to refusing sessions and auto-recover)</td>
  * </tr>
  * <tr>
+ * <td>setAdditionalArgs</td>
+ * <td>'OK' or <br>
+ * error message</td>
+ * <td>updates the instances' additional command line arguments</td>
+ * </tr>
+ * <tr>
  * <td>info</td>
  * <td>JSON or<br>
  * error message</td>
@@ -187,6 +193,21 @@ import er.extensions.appserver.ERXResponse;
  * <td><i>secs</i></td>
  * <td>number of seconds to wait for applications to shut down themselves before force quitting the instances.<br />
  * The default is 30 seconds.</td>
+ * </tr>
+ * </table>
+ * </p>
+ * <p>
+ * The direct action <code>setAdditionalArgs</code> must be invoked with the following argument:
+ * <table cellspacing="0" cellpadding="5" border="1">
+ * <tr>
+ * <th>Argument</th>
+ * <th>Value</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td><code>args</code></td>
+ * <td><i>string</i></td>
+ * <td>the additional arguments to be passed to the instance on startup</td>
  * </tr>
  * </table>
  * </p>
@@ -476,6 +497,12 @@ public class AdminAction extends WODirectAction {
         String weekDay = (String) context().request().formValueForKey("weekDay");
         if (beginScheduleWindow != null && endScheduleWindow != null && weekDay != null)
         		applicationsPage().weeklyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(weekDay));
+    }
+
+    public void setAdditionalArgsAction() {
+        String arguments = (String) context().request().formValueForKey("args");
+        if (arguments != null)
+                applicationsPage().setAdditionalArgs(instances, arguments);
     }
 
     public void turnScheduledOnAction() {

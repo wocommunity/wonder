@@ -168,6 +168,18 @@ public class AdminApplicationsPage extends ApplicationsPage {
         sendUpdateInstancesToWotaskds();
     }
 
+    public void setAdditionalArgs(NSArray instances, String arguments) {
+        for(Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
+            MInstance instance = (MInstance) enumeration.nextElement();
+            String instArgs = instance.additionalArgs();
+            if (instArgs == null || !arguments.equals(instArgs)) {
+                instance.setAdditionalArgs(arguments);
+                processedInstance(instance);
+            }
+        }
+        sendUpdateInstancesToWotaskds();
+    }
+
     public void turnRefuseNewSessionsOn(NSArray nsarray) {
         for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
