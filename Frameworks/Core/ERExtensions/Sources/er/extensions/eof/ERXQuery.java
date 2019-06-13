@@ -851,6 +851,18 @@ public class ERXQuery {
 				if (externalType != null) adaptorSelectAttribute.setExternalType(externalType);
 				if (className != null) adaptorSelectAttribute.setClassName(className);
 				if (valueType != null) adaptorSelectAttribute.setValueType(valueType);
+				
+				adaptorSelectAttribute.setAdaptorValueConversionClassName(selectAttribute.adaptorValueConversionClassName());
+				adaptorSelectAttribute.setAdaptorValueConversionMethodName(selectAttribute.adaptorValueConversionMethodName());
+				adaptorSelectAttribute.setFactoryMethodArgumentType(selectAttribute.factoryMethodArgumentType());
+				adaptorSelectAttribute.setValueFactoryMethodName(selectAttribute.valueFactoryMethodName());
+				// Defined in the ERXAttributeExtension EOAttribute but not visible by the compiler we use a runtime trick...
+				// adaptorSelectAttribute.setValueFactoryClassName(selectAttribute.valueFactoryClassName());
+				try {
+					String valueFactoryClassName = (String) NSKeyValueCoding.DefaultImplementation.valueForKey(selectAttribute, "valueFactoryClassName");
+					NSKeyValueCoding.DefaultImplementation.takeValueForKey(adaptorSelectAttribute, valueFactoryClassName, "valueFactoryClassName");
+				}
+				catch (Exception e) {} // Fail if ERXAttributeExtension is not loaded but you cannot use factory class anyway
 			}
 			adaptorChannel.setAttributesToFetch(adaptorSelectAttributes);
 		}
