@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -28,6 +29,7 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -43,6 +45,7 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXEOAccessUtilities.ChannelAction;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 
 /**
@@ -1824,24 +1827,19 @@ public class ERXQuery {
 			// If the formattedValue is "NULL" then the formatValueForAttribute() did not
 			// do its job and we'll do the best we can here
 			if (formattedValue == null || formattedValue.equals("NULL")) {
-				if (value instanceof String) {
-					formattedValue = sqlExpression.formatStringValue((String)value);
-				} else if (value instanceof NSTimestamp) {
-					NSTimestamp timestamp = (NSTimestamp) value;
-					formattedValue = formattedTimestampForInlineUse(sqlExpression, timestamp, attribute);
-				} else if (value instanceof Boolean) {
-					boolean boolValue = (Boolean) value;
-					// If stored in the database as a string then format as string
-					// otherwise format as a number 1 or 0.
-					if (attribute.externalType().toLowerCase().contains("char")) {
-						formattedValue = "'" + boolValue +"'";
-					} else if (boolValue) {
-						formattedValue = EOSQLExpression.sqlStringForNumber(1);
-					} else {
-						formattedValue = EOSQLExpression.sqlStringForNumber(0);
-					}
+				// Ask the attribute to convert the value to adaptor type, this reduce the number of cases.
+				// Possible value type are now String, Date, Number or NSData
+				Object attributeValue = attribute.adaptorValueByConvertingAttributeValue(value);
+				if (attributeValue instanceof String) {
+					formattedValue = sqlExpression.formatStringValue((String)attributeValue);
+				} else if (attributeValue instanceof Date) {
+					Date date = (Date) attributeValue;
+					formattedValue = formattedTimestampForInlineUse(sqlExpression, date, attribute);
+				} else if (value instanceof NSData) {
+					NSData data = (NSData) value;
+					formattedValue = "X'" + ERXStringUtilities.byteArrayToHexString(data._bytesNoCopy()) + "'";
 				} else {
-					formattedValue = value.toString();
+					formattedValue = attributeValue.toString();
 				}
 			}
 		}
@@ -1857,7 +1855,7 @@ public class ERXQuery {
 		return plugin.databaseProductName().toLowerCase();
 	}
 	
-	protected String formattedTimestampForInlineUse(EOSQLExpression sqlExpression, NSTimestamp timestamp, EOAttribute attribute) {
+	protected String formattedTimestampForInlineUse(EOSQLExpression sqlExpression, Date timestamp, EOAttribute attribute) {
 		EOEntity entity = attribute.entity();
 		String databaseProductName = databaseProductName(entity);
 		//NSTimestampFormatter formatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
