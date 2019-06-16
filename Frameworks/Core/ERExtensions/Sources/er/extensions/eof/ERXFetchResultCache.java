@@ -117,7 +117,7 @@ public class ERXFetchResultCache {
 	 * @param eos
 	 * @param fs
 	 */
-	public void setObjectsForFetchSpecification(EODatabaseContext dbc, EOEditingContext ec, NSArray<?> eos, EOFetchSpecification fs) {
+	public void setObjectsForFetchSpecification(EODatabaseContext dbc, EOEditingContext ec, NSArray<? extends EOEnterpriseObject> eos, EOFetchSpecification fs) {
 		String identifier = ERXFetchSpecification.identifierForFetchSpec(fs);
 		synchronized (cache) {
 			currentDatabase = dbc.database();
