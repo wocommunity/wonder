@@ -3,12 +3,12 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-public class UpdateTriggerExample extends WOComponent {
+public class MultiUpdateExample extends WOComponent {
 
-	private NSMutableArray<String> _updateContainerIDs = new NSMutableArray<>();
+	private NSMutableArray<String> _updateContainerIDs = new NSMutableArray<>("container1");
 	private long now;
-
-	public UpdateTriggerExample(WOContext context) {
+	
+	public MultiUpdateExample(WOContext context) {
 		super(context);
 	}
 
@@ -23,7 +23,7 @@ public class UpdateTriggerExample extends WOComponent {
 	    return now;
 	}
 
-	public NSArray otherIDsToUpdate() {
+	public NSArray containerIdsToUpdate() {
 		return _updateContainerIDs;
 	}
 
