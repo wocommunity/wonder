@@ -1919,7 +1919,7 @@ public class ERXEOControlUtilities {
      * @param gids the EOGlobalIDs
      * @return a NSArray of EOEnterpriseObjects
      */
-    public static <T extends EOEnterpriseObject> NSArray<T> faultsForGlobalIDs(EOEditingContext ec, NSArray<EOGlobalID> gids) {
+    public static <T extends EOEnterpriseObject> NSArray<T> faultsForGlobalIDs(EOEditingContext ec, NSArray<? extends EOGlobalID> gids) {
         int c = gids.count();
         NSMutableArray<T> a = new NSMutableArray<>(c);
         for (int i = 0; i < c; i++) {
