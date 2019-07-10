@@ -392,3 +392,23 @@ SelectAllLink : WOHyperlink {
 SelectNoneLink : WOHyperlink {
   action = selectNoneAction;
 }
+
+
+FilterByInstanceName: WOTextField {
+	value = instanceNameFilterValue;
+	placeholder = "regular expression";
+}
+
+FilterButton: WOSubmitButton {
+	action = selectInstanceNamesMatchingFilter; 
+	value = "Select";
+}
+
+FormToFilter: WOForm {
+	multipleSubmit = true;
+}
+
+FilterByInstanceNameError: WOString {
+	value = filterErrorMessage;
+}
+

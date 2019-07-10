@@ -13,6 +13,8 @@ package com.webobjects.monitor.application;
  SUCH DAMAGE.
  */
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -53,6 +55,9 @@ public class AppDetailPage extends MonitorComponent {
     public boolean showDetailStatistics = false;
 
     public WODisplayGroup displayGroup;
+    
+    public String filterErrorMessage = null;
+    
 
     public WOComponent showStatisticsClicked() {
         showDetailStatistics = !showDetailStatistics;
@@ -733,6 +738,8 @@ public class AppDetailPage extends MonitorComponent {
 
     public int numberToAdd = 1;
 
+	private String _instanceNameFilterValue;
+
     public WOComponent hostsPageClicked() {
         return HostsPage.create(context());
     }
@@ -799,5 +806,45 @@ public class AppDetailPage extends MonitorComponent {
         NSArray selected = (context.page() instanceof AppDetailPage ? ((AppDetailPage) context.page()).selectedInstances() : null);
         return create(context, currentApplication, selected);
     }
+
+	/**
+	 * @return the _instanceNameFilterValue
+	 */
+	public String instanceNameFilterValue() {
+		return _instanceNameFilterValue;
+	}
+
+	/**
+	 * @param instanceNameFilterValue the instanceNameFilterValue to set
+	 */
+	public void setInstanceNameFilterValue(String instanceNameFilterValue) {
+		_instanceNameFilterValue = instanceNameFilterValue;
+	}
+
+	public WOActionResults selectInstanceNamesMatchingFilter() {
+		filterErrorMessage = null;
+        NSMutableArray<MInstance> selected = new NSMutableArray<>();
+        String instanceNameFilterValue = instanceNameFilterValue();
+        if (instanceNameFilterValue != null) {
+        	try {
+            	Pattern p = Pattern.compile(instanceNameFilterValue);
+                for (Enumeration enumerator = displayGroup.allObjects().objectEnumerator(); enumerator.hasMoreElements();) {
+                    MInstance instance = (MInstance) enumerator.nextElement();
+                    Matcher matcherForInstanceName = p.matcher(instance.displayName());
+                    if (matcherForInstanceName.matches()){
+                    	selected.addObject(instance);
+                    }
+                }
+        	} catch (java.util.regex.PatternSyntaxException pse){
+        		if (pse.getMessage() != null){
+        			filterErrorMessage = pse.getMessage();
+        		} else {
+        			filterErrorMessage = "PatternSyntaxException";
+        		}
+        	}
+            displayGroup.setSelectedObjects(selected);
+        } 
+		return null;
+	}
 
 }
