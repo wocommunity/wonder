@@ -35,6 +35,19 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     super(context);
     _fetchIndex = -1;
   }
+  
+  // HP: Even though this method is deprecated in the superclass {@code EOAdaptorChannel}, it's still referenced
+  // across the WebObjects and Wonder frameworks. For instance, the following methods depend on its implementation:
+  // 
+  // - AdaptorChannel.primaryKeysForNewRowsWithEntity
+  // - ERXEOControlUtilities.newPrimaryKeyDictionaryForEntityNamed
+  // 
+  // It might be tempting to remove a deprecated method, but is this case, please, don't. :) 
+  @Override
+  @Deprecated
+  public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
+    return adaptorContext()._newPrimaryKey(null, entity);
+  }
 
   @Override
   public ERMemoryAdaptorContext adaptorContext() {
