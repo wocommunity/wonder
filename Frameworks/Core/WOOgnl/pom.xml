@@ -39,8 +39,8 @@
         <sourceDirectory>${basedir}/Sources</sourceDirectory>
         <plugins>
             <plugin>
-                <groupId>org.objectstyle.woproject.maven2</groupId>
-                <artifactId>maven-wolifecycle-plugin</artifactId>
+                <groupId>org.wocommunity</groupId>
+                <artifactId>wolifecycle-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
                     <skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>

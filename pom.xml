@@ -28,9 +28,9 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.objectstyle.woproject.maven2</groupId>
-                    <artifactId>maven-wolifecycle-plugin</artifactId>
-                    <version>2.2.1</version>
+                    <groupId>org.wocommunity</groupId>
+                    <artifactId>wolifecycle-maven-plugin</artifactId>
+                    <version>2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -81,8 +81,8 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.objectstyle.woproject.maven2</groupId>
-                <artifactId>maven-wolifecycle-plugin</artifactId>
+                <groupId>org.wocommunity</groupId>
+                <artifactId>wolifecycle-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
                     <skipAppleProvidedFrameworks>${skip.apple.frameworks}</skipAppleProvidedFrameworks>
