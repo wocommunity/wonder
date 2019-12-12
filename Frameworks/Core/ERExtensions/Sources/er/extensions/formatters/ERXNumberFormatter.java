@@ -218,6 +218,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         }
         String filteredString = new String(filteredChars, 0, count);
         Object result = super.parseObject(filteredString);
+        if (result instanceof BigDecimal && ((BigDecimal) result).signum() == 0) {
+        	result = BigDecimal.ZERO;
+        }
         if(result instanceof Number && _operator != null) {
         	BigDecimal newValue = null;
         	if(result instanceof BigDecimal) {
