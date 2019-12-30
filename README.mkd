@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wocommunity/wonder.svg?branch=master)](https://travis-ci.org/wocommunity/wonder)
+![](https://github.com/wocommunity/wonder/workflows/Wonder%20Master%20Build/badge.svg)
 
 About Project Wonder
 --------------------
