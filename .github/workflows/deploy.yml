@@ -1,4 +1,4 @@
-name: Wonder Pull Request Build
+name: Wonder Master Build
 on: 
   push:
     branches:
