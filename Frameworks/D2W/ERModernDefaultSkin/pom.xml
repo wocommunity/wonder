@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>d2w</artifactId>
-		<version>7.1</version>
+		<version>7.2-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
