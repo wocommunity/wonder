@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 import java.math.BigDecimal;
+import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -2140,7 +2141,7 @@ public class ERXKey<T> {
 	 *            the date to compare with
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier before(NSTimestamp when) {
+	public ERXKeyValueQualifier before(T when) {
 		return ERXQ.lessThan(_key, when);
 	}
 
@@ -2152,9 +2153,8 @@ public class ERXKey<T> {
 	 *            the date to compare with
 	 * @return an ERXKeyComparisonQualifier
 	 */
-	@SuppressWarnings("unchecked")
-	public ERXKeyComparisonQualifier before(ERXKey<? extends NSTimestamp> when) {
-		return ERXQ.lessThan((ERXKey)this, when);
+	public ERXKeyComparisonQualifier before(ERXKey<T> when) {
+		return ERXQ.lessThan(this, when);
 	}
 	
 	/**
@@ -2165,7 +2165,7 @@ public class ERXKey<T> {
 	 *            the date to compare with
 	 * @return an ERXKeyValueQualifier
 	 */
-	public ERXKeyValueQualifier after(NSTimestamp when) {
+	public ERXKeyValueQualifier after(T when) {
 		return ERXQ.greaterThan(_key, when);
 	}
 
@@ -2177,11 +2177,9 @@ public class ERXKey<T> {
 	 *            the date to compare with
 	 * @return an ERXKeyComparisonQualifier
 	 */
-	@SuppressWarnings("unchecked")
-	public ERXKeyComparisonQualifier after(ERXKey<? extends NSTimestamp> when) {
-		return ERXQ.greaterThan((ERXKey)this, when);
+	public ERXKeyComparisonQualifier after(ERXKey<T> when) {
+		return ERXQ.greaterThan(this, when);
 	}
-
 	
 	/**
 	 * Equivalent to key &gt; lowerBound and key &lt; upperBound (exclusive). Note
