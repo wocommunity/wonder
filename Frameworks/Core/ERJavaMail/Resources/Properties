@@ -45,14 +45,14 @@ er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
 # Used to set a default X-Mailer
 #er.javamail.mailer.XMailerHeader = 
 
-# White and black email address patterns
+# Allow and deny email address patterns
 # This can be useful in testing when say
 # you only want to allow emails to be sent to *@mycompany.com
 # In this case you would add:
-# er.javamail.WhiteListEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
+# er.javamail.AllowEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
 
-# To prevent sending mail to certain addresses you can use the black list
-# er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+# To prevent sending mail to certain addresses you can use the deny list
+# er.javamail.DenyEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
 
 
 # * The port to use with the smtp server, if not set, defaults to 25
