@@ -370,4 +370,180 @@ public class NSDictionaryTest extends ERXTestCase {
 		  fail("Unable to throw unknown key exception");
 		}
 	}
+	
+	public void testCreateNSDictionaryOfZeroEntries() {
+		NSDictionary<?, ?> dict = NSDictionary.of();
+		
+		assertTrue(dict.isEmpty());
+		assertTrue(NSDictionary.EmptyDictionary == dict);
+	}
+	
+	public void testCreateNSDictionaryOfOneEntry() {
+		NSDictionary<String, String> dict = NSDictionary.of("k1", "v1");
+		
+		assertEquals(1, dict.size());
+		assertEquals("v1", dict.get("k1"));
+	}
+	
+	public void testCreateNSDictionaryOfTwoEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1",
+				"k2", "v2");
+		
+		assertEquals(2, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+	}
+	
+	public void testCreateNSDictionaryOfThreeEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3");
+		
+		assertEquals(3, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+	}
+	
+	public void testCreateNSDictionaryOfFourEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4");
+		
+		assertEquals(4, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+	}
+	
+	public void testCreateNSDictionaryOfFiveEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5");
+		
+		assertEquals(5, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+	}
+	
+	public void testCreateNSDictionaryOfSixEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5", 
+				"k6", "v6");
+		
+		assertEquals(6, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+		assertEquals("v6", dict.get("k6"));
+	}
+	
+	public void testCreateNSDictionaryOfSevenEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5", 
+				"k6", "v6", 
+				"k7", "v7");
+		
+		assertEquals(7, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+		assertEquals("v6", dict.get("k6"));
+		assertEquals("v7", dict.get("k7"));
+	}
+	
+	public void testCreateNSDictionaryOfEightEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5", 
+				"k6", "v6", 
+				"k7", "v7", 
+				"k8", "v8");
+		
+		assertEquals(8, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+		assertEquals("v6", dict.get("k6"));
+		assertEquals("v7", dict.get("k7"));
+		assertEquals("v8", dict.get("k8"));
+	}
+	
+	public void testCreateNSDictionaryOfNineEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5", 
+				"k6", "v6", 
+				"k7", "v7", 
+				"k8", "v8", 
+				"k9", "v9");
+		
+		assertEquals(9, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+		assertEquals("v6", dict.get("k6"));
+		assertEquals("v7", dict.get("k7"));
+		assertEquals("v8", dict.get("k8"));
+		assertEquals("v9", dict.get("k9"));
+	}
+	
+	public void testCreateNSDictionaryOfTenEntries() {
+		NSDictionary<String, String> dict = NSDictionary.of(
+				"k1", "v1", 
+				"k2", "v2", 
+				"k3", "v3", 
+				"k4", "v4", 
+				"k5", "v5", 
+				"k6", "v6", 
+				"k7", "v7", 
+				"k8", "v8", 
+				"k9", "v9",
+				"k10", "v10");
+		
+		assertEquals(10, dict.size());
+		assertEquals("v1", dict.get("k1"));
+		assertEquals("v2", dict.get("k2"));
+		assertEquals("v3", dict.get("k3"));
+		assertEquals("v4", dict.get("k4"));
+		assertEquals("v5", dict.get("k5"));
+		assertEquals("v6", dict.get("k6"));
+		assertEquals("v7", dict.get("k7"));
+		assertEquals("v8", dict.get("k8"));
+		assertEquals("v9", dict.get("k9"));
+		assertEquals("v10", dict.get("k10"));
+	}
 }

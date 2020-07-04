@@ -1405,5 +1405,40 @@ public class NSArrayTest extends ERXTestCase {
     } catch (NullPointerException e) {
     }
   }
-
+  
+  public void testCreateNSArrayOfZeroElements() {
+	 NSArray<?> array = NSArray.of();
+	 
+	 assertTrue(array.isEmpty());
+	 assertTrue(NSArray.EmptyArray == array);
+  }
+  
+  public void testCreateNSArrayOfOneElement() {
+	 NSArray<String> array = NSArray.of("e1");
+	 
+	 assertEquals(1, array.size());
+	 assertEquals("e1", array.get(0));
+  }
+  
+  public void testCreateNSArrayOfTwoElements() {
+	 NSArray<String> array = NSArray.of("e1", "e2");
+	 
+	 assertEquals(2, array.size());
+	 assertEquals("e1", array.get(0));
+	 assertEquals("e2", array.get(1));
+  }
+  
+  public void testCreateNSArrayFromEmptyArray() {
+	 NSArray<String> array = NSArray.of(new String[] {});
+	 
+	 assertTrue(array.isEmpty());
+	 assertTrue(NSArray.EmptyArray == array);
+  }
+  
+  public void testCreateNSArrayFromArrayWithOneElement() {
+	 NSArray<String> array = NSArray.of(new String[] { "e1" });
+	 
+	 assertEquals(1, array.size());
+	 assertEquals("e1", array.get(0));
+  }
 }
