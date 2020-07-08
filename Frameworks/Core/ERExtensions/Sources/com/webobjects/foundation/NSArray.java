@@ -1059,48 +1059,48 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 	
 	/**
-     * Returns an immutable empty {@code NSArray}.
-     *
-     * @param <E>
-     *            the {@code NSArray}'s element type
-     * @return an empty {@code NSArray}
-     */
-    public static <E> NSArray<E> of() {
-        return EmptyArray;
-    }
-    
-    /**
-     * Returns an immutable {@code NSArray} containing one element.
-     *
-     * @param <E>
-     *            the {@code NSArray}'s element type
-     * @param element
-     *            the element to be contained in the array
-     * @return a {@code NSArray} containing the specified element
-     */
-    public static <E> NSArray<E> of(E element) {
-        return new NSArray<>(element);
-    }
-    
-    /**
-     * Returns an immutable {@code NSArray} containing an arbitrary number of elements.
-     *
-     * @param <E>
-     *            the {@code NSArray}'s element type
-     * @param elements
-     *            the elements to be contained in the array
-     * @return a {@code NSArray} containing the specified elements
-     */
-    @SafeVarargs
-    public static <E> NSArray<E> of(E... elements) {
-        if (elements.length == 0) {
-            return EmptyArray;
-        } else if(elements.length == 1) {
-        	return new NSArray(elements[0]);
-        }
+	 * Returns an immutable empty {@code NSArray}.
+	 *
+	 * @param <E>
+	 *            the {@code NSArray}'s element type
+	 * @return an empty {@code NSArray}
+	 */
+	public static <E> NSArray<E> of() {
+		return EmptyArray;
+	}
+	
+	/**
+	 * Returns an immutable {@code NSArray} containing one element.
+	 *
+	 * @param <E>
+	 *            the {@code NSArray}'s element type
+	 * @param element
+	 *            the element to be contained in the array
+	 * @return a {@code NSArray} containing the specified element
+	 */
+	public static <E> NSArray<E> of(E element) {
+		return new NSArray<>(element);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSArray} containing an arbitrary number of elements.
+	 *
+	 * @param <E>
+	 *            the {@code NSArray}'s element type
+	 * @param elements
+	 *            the elements to be contained in the array
+	 * @return a {@code NSArray} containing the specified elements
+	 */
+	@SafeVarargs
+	public static <E> NSArray<E> of(E... elements) {
+		if (elements.length == 0) {
+			return EmptyArray;
+		} else if(elements.length == 1) {
+			return new NSArray(elements[0]);
+		}
 
-        return new NSArray<>(elements);
-    }
+		return new NSArray<>(elements);
+	}
 	
 	static {
 		try {
