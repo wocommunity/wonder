@@ -286,6 +286,50 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public static <T> NSSet<T> emptySet() {
 		return (NSSet<T>) EmptySet;
 	}
+	
+	/**
+	 * Returns an immutable empty {@code NSSet}.
+	 *
+	 * @param <E>
+	 *            the {@code NSSet}'s element type
+	 * @return an empty {@code NSSet}
+	 */
+	public static <E> NSSet<E> of() {
+		return EmptySet;
+	}
+	
+	/**
+	 * Returns an immutable {@code NSSet} containing one element.
+	 *
+	 * @param <E>
+	 *            the {@code NSSet}'s element type
+	 * @param element
+	 *            the element to be contained in the array
+	 * @return a {@code NSSet} containing the specified element
+	 */
+	public static <E> NSSet<E> of(E element) {
+		return new NSSet<>(element);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSSet} containing an arbitrary number of elements.
+	 *
+	 * @param <E>
+	 *            the {@code NSSet}'s element type
+	 * @param elements
+	 *            the elements to be contained in the array
+	 * @return a {@code NSSet} containing the specified elements
+	 */
+	@SafeVarargs
+	public static <E> NSSet<E> of(E... elements) {
+		if (elements.length == 0) {
+			return EmptySet;
+		} else if(elements.length == 1) {
+			return new NSSet(elements[0]);
+		}
+
+		return new NSSet<>(elements);
+	}
 
 	@Override
 	public boolean equals(Object object) {

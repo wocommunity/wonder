@@ -505,6 +505,167 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return NSDictionary.EmptyDictionary;
 	}
 	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing zero entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return an empty {@code NSDictionary}
+	 */
+	public static <K, V> NSDictionary<K, V> of() {
+		return EmptyDictionary;
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing a single entry.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1) {
+		return dictionaryOfImpl(k1, v1);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing two entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2) {
+		return dictionaryOfImpl(k1, v1, k2, v2);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing three entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing four entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing five entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing six entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing seven entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing eight entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing nine entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9);
+	}
+	
+	/**
+	 * Returns an immutable {@code NSDictionary} containing ten entries.
+	 *
+	 * @param <K>the
+	 *            {@code NSDictionary}'s key type
+	 * @param <V>the
+	 *            {@code NSDictionary}'s value type
+	 * @return a {@code NSDictionary} containing the specified mapping
+	 */
+	public static <K, V> NSDictionary<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+		return dictionaryOfImpl(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9, k10, v10);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <K, V> NSDictionary<K, V> dictionaryOfImpl(Object... input) {
+		if(input.length == 2) {
+			return new NSDictionary<>((V) input[1], (K) input[0]);
+		}
+		
+		int capacity = input.length / 2;
+		Object[] keys = new Object[capacity];
+		Object[] values = new Object[capacity];
+		
+		for (int i = 0, j = 0; i < input.length; i += 2, j++) {
+			keys[j] = input[i];
+			values[j] = input[i + 1];
+		}
+
+		return new NSDictionary<>((V[])values, (K[]) keys);
+	}
+	
 	public static Object decodeObject(NSCoder coder) {
 		int count = coder.decodeInt();
 		Object[] keys = new Object[count];

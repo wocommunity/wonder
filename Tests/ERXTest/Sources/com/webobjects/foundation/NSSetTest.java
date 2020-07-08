@@ -294,4 +294,40 @@ public class NSSetTest extends ERXTestCase {
 			// test passed
 		}
 	}
+	
+	public void testCreateNSSetOfZeroElements() {
+		NSSet<?> set = NSSet.of();
+		 
+		 assertTrue(set.isEmpty());
+		 assertTrue(NSSet.EmptySet == set);
+	  }
+	  
+	  public void testCreateNSSetOfOneElement() {
+		  NSSet<String> set = NSSet.of("e1");
+		 
+		 assertEquals(1, set.size());
+		 assertTrue(set.contains("e1"));
+	  }
+	  
+	  public void testCreateNSSetOfTwoElements() {
+		  NSSet<String> set = NSSet.of("e1", "e2");
+		 
+		 assertEquals(2, set.size());
+		 assertTrue(set.contains("e1"));
+		 assertTrue(set.contains("e2"));
+	  }
+	  
+	  public void testCreateNSSetFromEmptyArray() {
+		  NSSet<String> set = NSSet.of(new String[] {});
+		 
+		 assertTrue(set.isEmpty());
+		 assertTrue(NSSet.EmptySet == set);
+	  }
+	  
+	  public void testCreateNSSetFromArrayWithOneElement() {
+		  NSSet<String> set = NSSet.of(new String[] { "e1" });
+		 
+		 assertEquals(1, set.size());
+		 assertTrue(set.contains("e1"));
+	  }
 }
