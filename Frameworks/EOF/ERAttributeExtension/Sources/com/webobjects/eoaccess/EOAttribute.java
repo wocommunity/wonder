@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +57,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 	public synchronized Map overwrittenCharacteristics() {
 		if (_overwrittenCharacteristics == null) {
-			Map list = new HashMap();
+			Map list = new EnumMap<>(Characteristic.class);
 			for (Characteristic c : Characteristic.values()) {
 				list.put(c, Boolean.FALSE);
 			}
