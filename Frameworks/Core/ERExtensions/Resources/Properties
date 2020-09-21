@@ -718,3 +718,10 @@ er.extensions.ERXLocalizationEditor.endoding=UTF-16BE
 ## you probably want to set this.  If the port number is 0, the SSL port will be automatically assigned (using the same
 ## mechanism that WO uses to set the regular port) 
 #er.extensions.ERXApplication.ssl.port=0
+
+#########################################################################
+# ERXPropertyListSerialization
+#########################################################################
+## in stringFromPropertyList all non ascii characters are quoted as unicode digits (e.g "\U00e4" for 'ä') 
+## you may change this behavior, if you set the following property to false (default is true)
+#er.extensions.foundation.ERXPropertyListSerialization.quoteNonAsciiCharacters=true

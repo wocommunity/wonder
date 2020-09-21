@@ -159,6 +159,10 @@ public class ERXPropertyListSerialization {
 	
 	protected static final double kCFAbsoluteTimeIntervalSince1970 = 978307200L;
 
+	protected static boolean _quoteNonAsciiCharacters() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPropertyListSerialization.quoteNonAsciiCharacters", true);
+	}
+
 	/**
 	 * Types of property lists (as specified in CoreFoundation)
 	 */
@@ -1515,7 +1519,22 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
+				if (_quoteNonAsciiCharacters() && ac[j] >= '\200') {
+					char c = ac[j];
+					byte byte0 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte1 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte2 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte3 = (byte) (c & 0xf);
+					c >>= '\004';
+					stringbuffer.append("\\u");
+					stringbuffer.append(_hexDigitForNibble(byte3));
+					stringbuffer.append(_hexDigitForNibble(byte2));
+					stringbuffer.append(_hexDigitForNibble(byte1));
+					stringbuffer.append(_hexDigitForNibble(byte0));
+				} else {
 					if (ac[j] == '\n') {
 						stringbuffer.append("\\n");
 						continue;
@@ -1546,21 +1565,6 @@ public class ERXPropertyListSerialization {
 					} else {
 						stringbuffer.append(ac[j]);
 					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\u");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
 				}
 			}
 			stringbuffer.append('"');
@@ -2488,7 +2492,22 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
+				if (_quoteNonAsciiCharacters() && ac[j] >= '\200') {
+					char c = ac[j];
+					byte byte0 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte1 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte2 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte3 = (byte) (c & 0xf);
+					c >>= '\004';
+					stringbuffer.append("\\U");
+					stringbuffer.append(_hexDigitForNibble(byte3));
+					stringbuffer.append(_hexDigitForNibble(byte2));
+					stringbuffer.append(_hexDigitForNibble(byte1));
+					stringbuffer.append(_hexDigitForNibble(byte0));
+				} else {
 					if (ac[j] == '\n') {
 						stringbuffer.append("\\n");
 						continue;
@@ -2519,21 +2538,6 @@ public class ERXPropertyListSerialization {
 					} else {
 						stringbuffer.append(ac[j]);
 					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\U");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
 				}
 			}
 			stringbuffer.append('"');
