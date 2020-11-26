@@ -226,53 +226,61 @@ public class ERXPropertyListSerialization {
 			stringbuffer.append('"');
 			char ac[] = s.toCharArray();
 			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
-					if (ac[j] == '\n') {
+				char c = ac[j];
+				switch (c) {
+			
+				case '\n':
 						stringbuffer.append("\\n");
 						continue;
-					} else if (ac[j] == '\r') {
+				case '\r':
 						stringbuffer.append("\\r");
 						continue;
-					} else if (ac[j] == '\t') {
+				case '\t':
 						stringbuffer.append("\\t");
 						continue;
-					} else if (ac[j] == '"') {
+				case '"':
 						stringbuffer.append('\\');
 						stringbuffer.append('"');
 						continue;
-					} else if (ac[j] == '\\') {
+				case '\\':
 						stringbuffer.append("\\\\");
 						continue;
-					} else if (ac[j] == '\f') {
+				case '\f':
 						stringbuffer.append("\\f");
 						continue;
-					} else if (ac[j] == '\b') {
+				case '\b':
 						stringbuffer.append("\\b");
 						continue;
-					} else if (ac[j] == '\007') {
+				case '\007':
 						stringbuffer.append("\\a");
 						continue;
-					} else if (ac[j] == '\013') {
+				case '\013':
 						stringbuffer.append("\\v");
-					} else {
-						stringbuffer.append(ac[j]);
+						continue;
+					
+				default:
+					// Control Characters will be quoted
+	                // Reference: http://www.unicode.org/versions/Unicode5.1.0/
+					if((c>='\u0000' && c<='\u001F') || (c>='\u007F' && c<='\u009F') || (c>='\u2000' && c<='\u20FF')) {
+
+						byte byte0 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte1 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte2 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte3 = (byte) (c & 0xf);
+						c >>= '\004';
+						stringbuffer.append("\\U");
+						stringbuffer.append(_hexDigitForNibble(byte3));
+						stringbuffer.append(_hexDigitForNibble(byte2));
+						stringbuffer.append(_hexDigitForNibble(byte1));
+						stringbuffer.append(_hexDigitForNibble(byte0));
 					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\U");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
-				}
+					else {
+						stringbuffer.append(c);
+					}
+				}	
 			}
 			stringbuffer.append('"');
 		}
