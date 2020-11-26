@@ -222,6 +222,71 @@ public class ERXPropertyListSerialization {
 		 */
 		public abstract Object parseStringIntoPlist(String string);
 
+		protected void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
+			stringbuffer.append('"');
+			char ac[] = s.toCharArray();
+			for (int j = 0; j < ac.length; j++) {
+				if (ac[j] < '\200') {
+					if (ac[j] == '\n') {
+						stringbuffer.append("\\n");
+						continue;
+					} else if (ac[j] == '\r') {
+						stringbuffer.append("\\r");
+						continue;
+					} else if (ac[j] == '\t') {
+						stringbuffer.append("\\t");
+						continue;
+					} else if (ac[j] == '"') {
+						stringbuffer.append('\\');
+						stringbuffer.append('"');
+						continue;
+					} else if (ac[j] == '\\') {
+						stringbuffer.append("\\\\");
+						continue;
+					} else if (ac[j] == '\f') {
+						stringbuffer.append("\\f");
+						continue;
+					} else if (ac[j] == '\b') {
+						stringbuffer.append("\\b");
+						continue;
+					} else if (ac[j] == '\007') {
+						stringbuffer.append("\\a");
+						continue;
+					} else if (ac[j] == '\013') {
+						stringbuffer.append("\\v");
+					} else {
+						stringbuffer.append(ac[j]);
+					}
+				} else {
+					char c = ac[j];
+					byte byte0 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte1 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte2 = (byte) (c & 0xf);
+					c >>= '\004';
+					byte byte3 = (byte) (c & 0xf);
+					c >>= '\004';
+					stringbuffer.append("\\U");
+					stringbuffer.append(_hexDigitForNibble(byte3));
+					stringbuffer.append(_hexDigitForNibble(byte2));
+					stringbuffer.append(_hexDigitForNibble(byte1));
+					stringbuffer.append(_hexDigitForNibble(byte0));
+				}
+			}
+			stringbuffer.append('"');
+		}
+
+		protected final char _hexDigitForNibble(byte nibble) {
+			char c = '\0';
+			if (nibble >= 0 && nibble <= 9) {
+				c = (char) (48 + (char) nibble);
+			} else if (nibble >= 10 && nibble <= 15) {
+				c = (char) (97 + (char) (nibble - 10));
+			}
+			return c;
+		}
+
 	}
 
 	/**
@@ -1000,7 +1065,8 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
+		@Override
+		protected void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.STRING.openTag());
 			stringbuffer.append(escapeString(s));
@@ -1511,61 +1577,6 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
-			stringbuffer.append('"');
-			char ac[] = s.toCharArray();
-			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
-					if (ac[j] == '\n') {
-						stringbuffer.append("\\n");
-						continue;
-					} else if (ac[j] == '\r') {
-						stringbuffer.append("\\r");
-						continue;
-					} else if (ac[j] == '\t') {
-						stringbuffer.append("\\t");
-						continue;
-					} else if (ac[j] == '"') {
-						stringbuffer.append('\\');
-						stringbuffer.append('"');
-						continue;
-					} else if (ac[j] == '\\') {
-						stringbuffer.append("\\\\");
-						continue;
-					} else if (ac[j] == '\f') {
-						stringbuffer.append("\\f");
-						continue;
-					} else if (ac[j] == '\b') {
-						stringbuffer.append("\\b");
-						continue;
-					} else if (ac[j] == '\007') {
-						stringbuffer.append("\\a");
-						continue;
-					} else if (ac[j] == '\013') {
-						stringbuffer.append("\\v");
-					} else {
-						stringbuffer.append(ac[j]);
-					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\u");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
-				}
-			}
-			stringbuffer.append('"');
-		}
-
 		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			stringbuffer.append('<');
@@ -1698,16 +1709,6 @@ public class ERXPropertyListSerialization {
 
             stringbuffer.append('}');
         }
-
-		private final char _hexDigitForNibble(byte nibble) {
-			char c = '\0';
-			if (nibble >= 0 && nibble <= 9) {
-				c = (char) (48 + (char) nibble);
-			} else if (nibble >= 10 && nibble <= 15) {
-				c = (char) (97 + (char) (nibble - 10));
-			}
-			return c;
-		}
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
@@ -2484,61 +2485,6 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
-			stringbuffer.append('"');
-			char ac[] = s.toCharArray();
-			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
-					if (ac[j] == '\n') {
-						stringbuffer.append("\\n");
-						continue;
-					} else if (ac[j] == '\r') {
-						stringbuffer.append("\\r");
-						continue;
-					} else if (ac[j] == '\t') {
-						stringbuffer.append("\\t");
-						continue;
-					} else if (ac[j] == '"') {
-						stringbuffer.append('\\');
-						stringbuffer.append('"');
-						continue;
-					} else if (ac[j] == '\\') {
-						stringbuffer.append("\\\\");
-						continue;
-					} else if (ac[j] == '\f') {
-						stringbuffer.append("\\f");
-						continue;
-					} else if (ac[j] == '\b') {
-						stringbuffer.append("\\b");
-						continue;
-					} else if (ac[j] == '\007') {
-						stringbuffer.append("\\a");
-						continue;
-					} else if (ac[j] == '\013') {
-						stringbuffer.append("\\v");
-					} else {
-						stringbuffer.append(ac[j]);
-					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\U");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
-				}
-			}
-			stringbuffer.append('"');
-		}
-
 		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
@@ -2633,16 +2579,6 @@ public class ERXPropertyListSerialization {
             }
             stringbuffer.append('}');
         }
-
-		private final char _hexDigitForNibble(byte nibble) {
-			char c = '\0';
-			if (nibble >= 0 && nibble <= 9) {
-				c = (char) (48 + (char) nibble);
-			} else if (nibble >= 10 && nibble <= 15) {
-				c = (char) (97 + (char) (nibble - 10));
-			}
-			return c;
-		}
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
