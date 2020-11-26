@@ -17,6 +17,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.slf4j.Logger;
@@ -914,7 +914,7 @@ public class ERXPropertyListSerialization {
 									if (!Character.isWhitespace(_curChars.charAt(i)))
 										stringbuffer.append(_curChars.charAt(i));
 
-								byte abyte0[] = stringbuffer.toString().getBytes(CharEncoding.US_ASCII);
+								byte abyte0[] = stringbuffer.toString().getBytes(StandardCharsets.US_ASCII.name());
 								byte abyte64[] = _NSBase64.decode(abyte0);
 								if (abyte64 != null && abyte64.length > 0) {
 									lastNode.setValue(new NSData(abyte64));
@@ -4661,9 +4661,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseAsciiString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = CharEncoding.UTF_8;
+			String encoding = StandardCharsets.UTF_8.name();
 			if (Charset.isSupported("ASCII")) { // CHECKME isn't ASCII mandatory for any JVM?
-				encoding = CharEncoding.US_ASCII;
+				encoding = StandardCharsets.US_ASCII.name();
 			}
 			objectTable.add(new String(bytes, index, count, encoding));
 		}
@@ -4784,9 +4784,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseUnicodeString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = CharEncoding.UTF_8;
+			String encoding = StandardCharsets.UTF_8.name();
 			if (Charset.isSupported("UTF-16BE")) { // CHECKME isn't UTF-16BE mandatory for any JVM?
-				encoding = CharEncoding.UTF_16BE;
+				encoding = StandardCharsets.UTF_16BE.name();
 			}
 			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
 			objectTable.add(new String(bytes, index, count * 2, encoding));
@@ -4980,7 +4980,7 @@ public class ERXPropertyListSerialization {
 		private byte[] encodeString(String value) {
 			try {
 				NSMutableData data = new NSMutableData(value.length() * 2);
-				String encoding = CharEncoding.UTF_8;
+				String encoding = StandardCharsets.UTF_8.name();
 				// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
 				// This is true if UTF-8 encoding yield the same length as the char count.
 				byte[] theBytes = value.getBytes(encoding);
@@ -4989,7 +4989,7 @@ public class ERXPropertyListSerialization {
 					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
 				} else {
 					if (Charset.isSupported("UTF-16BE")) {
-						encoding = CharEncoding.UTF_16BE;
+						encoding = StandardCharsets.UTF_16BE.name();
 					}
 					theBytes = value.getBytes(encoding);
 					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
