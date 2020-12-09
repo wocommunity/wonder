@@ -132,7 +132,14 @@ public class ERXXmlRestParser implements IERXRestParser {
 
 			Document document;
 			try {
-				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentString)));
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				dbf.setExpandEntityReferences(false);
+				dbf.setXIncludeAware(false);
+				dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+				dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+				dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+				document = dbf.newDocumentBuilder().parse(new InputSource(new StringReader(contentString)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
 				rootRequestNode = createRequestNodeForElement(rootElement, true, delegate, context);
