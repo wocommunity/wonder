@@ -788,7 +788,7 @@
         <repository>
             <id>wocommunity</id>
             <name>WOCommunity Maven 2 Releases Repository</name>
-            <url>http://maven.wocommunity.org/content/groups/public</url>
+            <url>https://maven.wocommunity.org/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -802,7 +802,7 @@
         <pluginRepository>
             <id>wocommunity</id>
             <name>WOCommunity Maven 2 Releases Repository</name>
-            <url>http://maven.wocommunity.org/content/groups/public</url>
+            <url>https://maven.wocommunity.org/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -816,13 +816,13 @@
         <repository>
             <id>wocommunity.deployment</id>
             <name>WOCommunity Maven2 Releases Repository</name>
-            <url>http://maven.wocommunity.org/content/repositories/releases</url>
+            <url>https://maven.wocommunity.org/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>wocommunity.deployment</id>
             <uniqueVersion>false</uniqueVersion>
             <name>WOCommunity Maven2 Snapshots Repository</name>
-            <url>http://maven.wocommunity.org/content/repositories/snapshots/</url>
+            <url>https://maven.wocommunity.org/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
