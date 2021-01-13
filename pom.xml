@@ -21,6 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <webobjects.version>5.4.3</webobjects.version>
+        <project.scm.id>github</project.scm.id>
     </properties>
 
     <build>
@@ -827,9 +828,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:wocommunity/wonder.git</connection>
-        <url>scm:git:git@github.com:wocommunity/wonder.git</url>
-        <developerConnection>scm:git:git@github.com:wocommunity/wonder.git</developerConnection>
-      <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/wocommunity/wonder.git</connection>
+        <url>scm:git:https://github.com/wocommunity/wonder.git</url>
+        <developerConnection>scm:git:https://github.com/wocommunity/wonder.git</developerConnection>
   </scm>
 </project>
