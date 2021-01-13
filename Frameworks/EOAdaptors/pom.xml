@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>7.2</version>
+		<version>7.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>eoadaptors</artifactId>
 	<packaging>pom</packaging>
