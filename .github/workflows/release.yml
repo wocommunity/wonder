@@ -2,6 +2,10 @@ name: Wonder Release
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: "The branch to checkout when cutting the release."
+        required: true
+        default: "master"
       releaseVersion:
         description: "Default version to use when preparing a release."
         required: true
@@ -18,6 +22,8 @@ jobs:
     steps:
       - name: Checkout Wonder Source Code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Cache local Maven repository
         uses: actions/cache@v2
@@ -38,7 +44,7 @@ jobs:
           git config user.name "GitHub Actions"
 
       - name: Cut Wonder Release
-        run: mvn release:prepare release:perform -B -s .maven_settings.xml -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }} -DdryRun=true
+        run: mvn release:prepare release:perform -B -s .maven_settings.xml -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
