@@ -69,6 +69,10 @@ import er.extensions.foundation.ERXStringUtilities;
  *         // Initialized shared data
  *     }
  * }</code></pre>
+ * Finally, you also need to add an entry to your framework build.properties file to set the principal class:
+ * <pre><code>
+ * principalClass = com.sample.ExampleFrameworkPrincipal
+ * </code></pre>
  */
 public abstract class ERXFrameworkPrincipal {
 
