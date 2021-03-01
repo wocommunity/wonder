@@ -1,5 +1,7 @@
 package er.attachment.processors;
 
+import static java.util.regex.Pattern.quote;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -91,8 +93,9 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       
       String desiredFileName = escapeCurrencyOf(desiredFilesystemPath.getName());
       String actualFileName = escapeCurrencyOf(actualFilesystemPath.getName());
+
       // in case the name was not unique and changed, we need to update webPath ...
-      webPath = webPath.replaceAll("\\Q" + desiredFileName + "\\E$", actualFileName);
+      webPath = webPath.replaceAll(quote(desiredFileName), actualFileName);
 
       attachment.setWebPath(webPath);
       attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath());
