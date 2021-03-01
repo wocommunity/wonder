@@ -88,9 +88,9 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       File actualFilesystemPath = ERXFileUtilities.reserveUniqueFile(desiredFilesystemPath, overwrite);
 
       ERXFileUtilities.copyFileToFile(uploadedFile, actualFilesystemPath, pendingDelete, true);
-
-      String desiredFileName = desiredFilesystemPath.getName();
-      String actualFileName = actualFilesystemPath.getName();
+      
+      String desiredFileName = escapeCurrencyOf(desiredFilesystemPath.getName());
+      String actualFileName = escapeCurrencyOf(actualFilesystemPath.getName());
       // in case the name was not unique and changed, we need to update webPath ...
       webPath = webPath.replaceAll("\\Q" + desiredFileName + "\\E$", actualFileName);
 
