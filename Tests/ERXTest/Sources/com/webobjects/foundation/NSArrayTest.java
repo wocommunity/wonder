@@ -1400,7 +1400,7 @@ public class NSArrayTest extends ERXTestCase {
     String[] str = new String[] { "abc", "def", "ghi" };
     NSArray<String> array = new NSArray<>(str);
     try {
-      array.toArray(null);
+      array.toArray((Object[])null);
       fail("NullPointerException expected");
     } catch (NullPointerException e) {
     }
