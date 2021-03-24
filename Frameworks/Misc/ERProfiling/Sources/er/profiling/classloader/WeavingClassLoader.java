@@ -5,8 +5,8 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import sun.misc.Resource;
-import sun.misc.URLClassPath;
+import jdk.internal.loader.Resource;
+import jdk.internal.loader.URLClassPath;
 
 /**
  * The WeavingClassLoader is a custom URLClassLoader that implements the 
@@ -84,7 +84,7 @@ public class WeavingClassLoader extends URLClassLoader {
 		}
 
 		String path = name.replace('.', '/').concat(".class");
-		Resource res = new URLClassPath(getURLs()).getResource(path, false);
+		Resource res = new URLClassPath(getURLs(),null).getResource(path, false);
 		if (res != null) {
 			try {
 				byte[] b = res.getBytes();
