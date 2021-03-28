@@ -32,6 +32,26 @@ public class AjaxValue {
 		escapedValue = "'" + escapedValue + "'";
 		return escapedValue;
 	}
+
+    public static String replaceCRLF(Object obj) {
+    	String escapedValue = String.valueOf(obj);
+    	escapedValue = escapedValue.replaceAll("\r", "\\\\r");
+    	escapedValue = escapedValue.replaceAll("\n", "\\\\n");
+    	return escapedValue;
+    }
+    
+    public static String javaScriptAndHTMLEscaped(Object obj)
+    {
+    	String escapedValue = String.valueOf(obj);
+    	escapedValue = escapedValue.replaceAll("\\\\", "\\\\\\\\");
+    	escapedValue = escapedValue.replaceAll("<", "\\\\x3C");
+    	escapedValue = escapedValue.replaceAll(">", "\\\\x3E");
+    	escapedValue = escapedValue.replaceAll("\r", "\\\\r");
+    	escapedValue = escapedValue.replaceAll("\n", "\\\\n");
+    	escapedValue = escapedValue.replaceAll("'", "\\\\'");
+    	escapedValue = "'" + escapedValue + "'";
+    	return escapedValue;
+    }
 	
 	/**
 	 * Creates AjaxValue for value with the type guessed at.

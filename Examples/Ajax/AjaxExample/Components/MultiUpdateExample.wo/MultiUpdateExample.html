@@ -1,8 +1,8 @@
 <webobject name = "AjaxExampleComponent">
 	<p>
-	AjaxTrigger gives you multiple container updates in one series. This exmaple shows, how you can
-	achieve the same result in one RR cycle by supplying a NSArray of container ids (alternatively a 
-	comma separate string with multiple container ids). You see from the timestamps that all updates are generated at exactly the same time.
+	This example demonstrates the AjaxTrigger component, which allows you to enqueue a series of updates to
+	occur.  Note that these happen in series as multiple requests, not as a single request, so you will want
+	to limit the number of updates you do in a single pass.
 	</p>
 	
 	<webobject name = "AjaxUpdateContainer">
@@ -18,8 +18,6 @@
 			<webobject name = "WOCheckBox1"></webobject> Container 3
 			</p>
 		</webobject>
-		
-		<webobject name = "AjaxUpdateTrigger"></webobject>
 	</webobject>
 	
 	<webobject name = "AjaxUpdateContainer1">

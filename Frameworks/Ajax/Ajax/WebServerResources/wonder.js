@@ -338,14 +338,21 @@ var AjaxUpdateLink = {
 	},
 	
 	update: function(id, options, elementID, queryParams) {
-		var updateElement = $(id);
+        var firstId = id;
+        var updateElementList = id.split(",");
+        if(updateElementList.length > 1)
+        {
+          firstId = updateElementList[0];
+        }
+        
+        var updateElement = $(firstId);
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink._update(id, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, firstId, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
 	},
 	
-	_update: function(id, actionUrl, options, elementID, queryParams) {
+	_update: function(id, firstId, actionUrl, options, elementID, queryParams) {
 		if (elementID) {
 			actionUrl = actionUrl.sub(/[^\/]+$/, elementID);
 		}
@@ -354,10 +361,17 @@ var AjaxUpdateLink = {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
 		else {
-			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+			if(id.indexOf(",") >= 0)
+			{
+				actionUrl = actionUrl.addQueryParameters('_ul='+ id);
+			}
+			else
+			{
+				actionUrl = actionUrl.addQueryParameters('_u='+ id);
+			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
-		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
+		new Ajax.Updater(firstId, actionUrl, AjaxOptions.defaultOptions(options));
 	},
 	
 	request: function(actionUrl, options, elementID, queryParams) {
@@ -392,7 +406,10 @@ var AjaxSubmitButton = {
 				actionUrl = actionUrl.addQueryParameters('_r=' + id);
 			}
 			else {
-				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+				if(id.indexOf(",") >= 0)
+					actionUrl = actionUrl.addQueryParameters('_ul=' + id);
+				else
+					actionUrl = actionUrl.addQueryParameters('_u=' + id);
 			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
@@ -448,13 +465,17 @@ var AjaxSubmitButton = {
 	},
 	
 	update: function(id, form, queryParams, options) {
-		var updateElement = $(id);
+	    var firstId = id;
+	    var updateElementlist = id.split(",");
+		if(updateElementlist.length > 1)
+			firstId = updateElementlist[0];   
+		var updateElement = $(firstId);
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
-		new Ajax.Updater(id, finalUrl, finalOptions);
+		new Ajax.Updater(firstId, finalUrl, finalOptions);
 	},
 	
 	request: function(form, queryParams, options) {
@@ -463,15 +484,15 @@ var AjaxSubmitButton = {
 		new Ajax.Request(finalUrl, finalOptions);
 	},
 	
-	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options) {
+	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options, actOnInput) {
     $(containerID).descendants().find(function(element) {
       if (element.type != 'hidden' && ['input', 'select', 'textarea'].include(element.tagName.toLowerCase())) {
-      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options);
+      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options, actOnInput);
       }
     });
 	},
 	
-	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options) {
+	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options, actOnInput) {
 		var submitFunction;
 		if (partial) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
@@ -510,7 +531,7 @@ var AjaxSubmitButton = {
 	    	new Form.Element.RadioButtonObserver($(formFieldID), submitFunction);
 			}
 			else {
-	    	new Form.Element.EventObserver($(formFieldID), submitFunction);
+	    	new Form.Element.ExtendedEventObserver($(formFieldID), submitFunction, actOnInput);
 			}
 		}
 		else {
@@ -976,6 +997,37 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 	  this.callback(this.element, value);
   	this.lastValue = value;
   }
+});
+
+Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
+  initialize: function($super, element, callback, actOnInput) {
+    this.actOnInput = actOnInput;
+    $super(element, callback);
+  },
+
+  registerCallback: function(element) {
+    if (element.type) {
+      switch (element.type.toLowerCase()) {
+        case 'checkbox':
+        case 'radio':
+          Event.observe(element, 'click', this.onElementEvent.bind(this));
+          break;
+        case 'text':
+        case 'number':
+          Event.observe(element, 'change', this.onElementEvent.bind(this));
+          if (this.actOnInput)
+          {
+	          Event.observe(element, 'input', this.onElementEvent.bind(this));
+	          Event.observe(element, 'blur', this.onElementEvent.bind(this));
+          }
+          break;
+        default:
+          Event.observe(element, 'change', this.onElementEvent.bind(this));
+          break;
+      }
+    }
+  }
+
 });
 
 var AjaxBusy = {

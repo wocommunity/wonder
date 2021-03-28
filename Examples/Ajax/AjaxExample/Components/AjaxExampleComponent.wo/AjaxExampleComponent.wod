@@ -14,6 +14,10 @@ UpdateTriggerLink : WOHyperlink {
 	pageName = "UpdateTriggerExample";
 }
 
+MultiUpdateExample : WOHyperlink {
+	pageName = "MultiUpdateExample";
+}
+
 AutocompletionLink : WOHyperlink {
 	pageName = "AutoCompleteExample";
 }
