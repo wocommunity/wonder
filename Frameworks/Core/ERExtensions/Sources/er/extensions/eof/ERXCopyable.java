@@ -1283,7 +1283,11 @@ public interface ERXCopyable<T extends ERXCopyable<T>> extends ERXEnterpriseObje
 				Utility.deepCopyRelationship(copiedObjects, source, destination, relationship);
 				break;
 			case NULLIFY:
-				destination.takeStoredValueForKey(null, relationshipName);
+				if (relationship.isToMany()) {
+					destination.takeStoredValueForKey(new NSMutableArray<>(), relationshipName);
+				} else {
+					destination.takeStoredValueForKey(null, relationshipName);
+				}
 				break;
 			default:
 				handleMissingOrInvalidCopyType(relationship, copyType);
