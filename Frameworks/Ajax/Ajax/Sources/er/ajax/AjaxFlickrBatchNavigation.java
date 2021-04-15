@@ -1,5 +1,6 @@
 package er.ajax;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.batching.ERXFlickrBatchNavigation;
@@ -46,5 +47,16 @@ public class AjaxFlickrBatchNavigation extends ERXFlickrBatchNavigation {
 			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
 		}
 		return updateContainerID;
+	}
+
+	/**
+	 * Sets display group batch size from user selection.
+	 * 
+	 * @return {@code null} (Ajax action)
+	 */
+	@Override
+	public WOActionResults selectBatchSize() {
+		displayGroup().setNumberOfObjectsPerBatch(currentBatchSize);
+		return null;
 	}
 }
