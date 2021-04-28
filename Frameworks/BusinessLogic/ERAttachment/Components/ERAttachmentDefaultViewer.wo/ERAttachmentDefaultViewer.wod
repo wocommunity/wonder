@@ -8,4 +8,5 @@ Image : ERAttachmentIcon {
 	title = ^title;
 	width = ^width;
 	height = ^height;
+	target = ^target;
 }

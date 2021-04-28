@@ -13,6 +13,8 @@ import com.webobjects.appserver.WOContext;
  * @binding style (optional) the embedded css style
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
+ * @binding target (optional) specifies where to open the linked attachment
+
  */
 public class ERAttachmentDefaultViewer extends AbstractERAttachmentViewer {
 	/**
