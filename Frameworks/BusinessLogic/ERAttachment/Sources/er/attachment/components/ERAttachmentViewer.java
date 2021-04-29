@@ -32,6 +32,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding style (optional) the embedded css style
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
+ * @binding target (optional) specifies where to open the linked attachment
  *
  * @property er.attachment.mimeType.[mimeType].viewer the class name of the viewer component for the given mime type
  * @property er.attachment.mimeType.[globMimeType].viewer
