@@ -472,6 +472,10 @@ var AjaxSubmitButton = {
 	},
 	
 	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options) {
+		if ($(formFieldID) == null) {
+			console.log("observeField can't find '" + formFieldID + "'");
+			return;
+		}
 		var submitFunction;
 		if (partial) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
