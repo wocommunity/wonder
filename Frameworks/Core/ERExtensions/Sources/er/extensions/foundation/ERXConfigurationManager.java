@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -391,16 +392,31 @@ public class ERXConfigurationManager {
     }    
     
     /**
-     * Checks if the application <del>is</del> may be deployed as a servlet.
-     * <p>
-     * The current implementation only checks if the application 
-     * is linked against <code>JavaWOJSPServlet.framework</code>.
+     * Checks if the application is  be deployed as a servlet.
      * 
+	 * This heuristic to determine if an application is deployed as servlet relays on the fact, 
+	 * that contextClassName() is set WOServletContext or ERXWOServletContext
+	 *  
      * @return true if the application is deployed as a servlet
      */
     public boolean isDeployedAsServlet() {
-        NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
-        return frameworkNames.containsObject("JavaWOJSPServlet");
+		return contextClassName().contains("Servlet"); // i.e one of WOServletContext or ERXWOServletContext
     }
-        
+    
+	public void setContextClassName(String name) {
+		if (name != null) {
+			WOProperties.TheContextClassName = name;
+		}
+
+	}
+
+	public String contextClassName() {
+		if (WOProperties.TheContextClassName == null) {
+			String contextClassName = NSProperties.getProperty(WOProperties._ContextClassNameKey);
+			this.setContextClassName(contextClassName);
+		}
+
+		return WOProperties.TheContextClassName;
+	}
+
 }
