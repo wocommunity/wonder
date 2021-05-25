@@ -266,7 +266,6 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
              * 
              * @see #destroy(int)
              */
-            @Override
             public void destroy() {
                 try {
                     ERXJDBCConnectionBroker.this.destroy(10000);

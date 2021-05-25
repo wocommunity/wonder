@@ -68,7 +68,7 @@ public class WOExceptionParser {
                 }
             }
         }
-        System.out.println("_ignoredPackages:: "+ignored);
+
         return ignored;
     }
 

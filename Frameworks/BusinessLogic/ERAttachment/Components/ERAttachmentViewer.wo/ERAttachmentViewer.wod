@@ -8,4 +8,5 @@ ViewerSwitch : WOSwitchComponent {
 	width = ^width;
 	height = ^height;
 	title = ^title;
+	target = ^target;
 }
