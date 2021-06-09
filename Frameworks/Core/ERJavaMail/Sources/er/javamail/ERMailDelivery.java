@@ -599,7 +599,8 @@ public abstract class ERMailDelivery {
 				mimeMessage().setRecipients(Message.RecipientType.CC, new InternetAddress[0]);
 				mimeMessage().setRecipients(Message.RecipientType.BCC, new InternetAddress[0]);
 			}
-			if (mimeMessage().getAllRecipients().length == 0) {
+			if (mimeMessage().getAllRecipients() == null || mimeMessage().getAllRecipients().length == 0) {
+				log.debug("No recipients, not sending.");
 				return;
 			}
 
