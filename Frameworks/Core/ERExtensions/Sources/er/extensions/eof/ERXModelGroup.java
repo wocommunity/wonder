@@ -202,7 +202,7 @@ public class ERXModelGroup extends EOModelGroup {
 				String modelPath = NSPathUtilities.stringByDeletingLastPathComponent(indexPath);
 				String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities.lastPathComponent(modelPath)));
 				EOModel eomodel = modelNamed(modelName);
-				if (eomodel == null) {
+				if (!modelNames.contains(modelName) && eomodel == null) {
 					URL url = nsbundle.pathURLForResourcePath(modelPath);
 					modelNameURLDictionary.setObjectForKey(url, modelName);
 					modelNames.addObject(modelName);
