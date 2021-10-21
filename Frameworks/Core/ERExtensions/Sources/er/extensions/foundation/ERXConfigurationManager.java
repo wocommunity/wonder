@@ -400,7 +400,7 @@ public class ERXConfigurationManager {
      * @return true if the application is deployed as a servlet
      */
     public boolean isDeployedAsServlet() {
-		return contextClassName().contains("Servlet"); // i.e one of WOServletContext or ERXWOServletContext
+		return contextClassName()!= null && contextClassName().contains("Servlet"); // i.e one of WOServletContext or ERXWOServletContext
     }
     
 	public void setContextClassName(String name) {
