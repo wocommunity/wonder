@@ -9,6 +9,7 @@ package er.extensions.foundation;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.Map.Entry;
 
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.eocontrol.EOKeyValueCoding;
@@ -179,6 +180,43 @@ public class ERXDictionaryUtilities {
      */
     public static NSDictionary<String, Object> dictionaryFromObjectWithKeys(Object object, ERXKey... keys) {
     	return dictionaryFromObjectWithKeys(object, (NSArray<String>) new NSArray<ERXKey>(keys).valueForKey("key"));
+    }
+    
+    /**
+     * Creates a dictionary from an object according to the given key mappings, skipping null values.
+     * <p>
+     * Usage:
+     *
+     * <pre>
+     * NSDictionary&lt;String, Object&gt; data = dictionaryFromObjectWithKeyMappings(eo, NSDictionary.of("key1", EO.ATTRIBUTE1, "key2", EO.ATTRIBUTE2);
+     * </pre>
+     *
+     * Result:
+     *
+     * <pre>
+     * {"key1" = "valueForAttribute1"; "key2" = "valueForAttribute2"}
+     * </pre>
+     *
+     * @param object
+     *            object to pull the values from
+     * @param keyMappings
+     *            keypath mapping for keys
+     * @return Returns a {@code NSDictionary} containing all of the object-key pairs.
+     */
+    public static NSMutableDictionary<String, Object> dictionaryFromObjectWithKeyMappings(Object object, NSDictionary<String, ERXKey<?>> keyMappings) {
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<>();
+
+        for (Entry<String, ? extends ERXKey<?>> entry : keyMappings.entrySet()) {
+            String key = entry.getKey();
+            ERXKey<?> keypath = entry.getValue();
+            Object value = keypath.valueInObject(object);
+
+            if (value != null) {
+                result.setObjectForKey(value, key);
+            }
+        }
+
+        return result;
     }
 
     // if you're keys are not all strings, this method will throw.
