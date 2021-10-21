@@ -161,11 +161,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		// Smtp host
 		setupSmtpHostSafely();
 
-		setDefaultSession(newSession());
-
-		if (defaultSession() == null)
-			log.warn("Unable to create default mail session!");
-
 		// Default X-Mailer header
 		setDefaultXMailerHeader(System.getProperty("er.javamail.XMailerHeader"));
 		log.debug("er.javamail.XMailHeader: " + defaultXMailerHeader());
@@ -257,7 +252,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * <span class="ja"> JavaMail のデフォルト・セッションです。 即時配信処理より共有されています。 延期配信は独自の JavaMail セッションを使用しています。 </span>
 	 */
-	protected javax.mail.Session _defaultSession;
+	protected volatile javax.mail.Session _defaultSession;
 	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<>();
 
 	/**
@@ -289,6 +284,15 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return デフォルト <code>javax.mail.Session</code> インスタンス </span>
 	 */
 	public javax.mail.Session defaultSession() {
+
+		if(_defaultSession == null) {
+			synchronized (this) {
+				if(_defaultSession == null) {
+					setDefaultSession(newSession());					
+				}
+			}
+		}
+
 		return _defaultSession;
 	}
 
@@ -356,6 +360,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	protected javax.mail.Session newSessionForContext(String contextString) {
 		javax.mail.Session session = null;
 		
+		if(log.isDebugEnabled()) log.debug("Create new mail session for context " + contextString);
 		boolean jndiLookup = ERXProperties.booleanForKeyWithDefault("er.javamail.sessionConfigViaJNDI", false);
 		if(jndiLookup) {
 			String jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext", "java:comp/env/mail");
@@ -370,9 +375,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 			} catch (NamingException e) {
 				log.error("Failed to initialize JavaMail Session: " + e.getMessage());
 			}
-	
 		}
-		else {
+		if(session == null) {
+			if(jndiLookup) {
+				log.info("as the jndiLookup failed, we will try the normal way...");
+			}
 			if (contextString == null || contextString.length() == 0) {
 				session = newSessionForContext(System.getProperties(), contextString);
 			}
