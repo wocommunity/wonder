@@ -351,7 +351,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * Returns a new Session object that is appropriate for the given context.
 	 * 
 	 * If the property <code>er.javamail.sessionConfigViaJNDI</code> is set to <code>true</code> the JNDI is used to lookup the session informations. 
-	 * You may change the default JNDI context with the property <code>er.javamail.jndiSessionContext</code>
+	 * You may change the default JNDI context with the property <code>er.javamail.jndiSessionContext</code> (defaults to <code>java:comp/env/mail</code>).
+	 * If you need a different session configuration depending of the message context, you may overwrite the default jndi context with the
+	 * property <code>er.javamail.jndiSessionContext._content_of_param_contextString_</code>
+	 * 
 	 * 
 	 * @param contextString
 	 *            the message context
