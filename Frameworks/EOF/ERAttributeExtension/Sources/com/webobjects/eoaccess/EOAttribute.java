@@ -1190,6 +1190,8 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			_adaptorValueType = AdaptorDateType;
 		else if (_argumentType == FactoryMethodArgumentIsBytes)
 			_adaptorValueType = AdaptorBytesType;
+		else if (_argumentType == FactoryMethodArgumentIsNumber)
+			_adaptorValueType = AdaptorNumberType;
 		if (_adaptorValueType == -1)
 			_adaptorValueType = AdaptorBytesType;
 		return _adaptorValueType;
@@ -1551,6 +1553,8 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return FactoryMethodArgumentIsString;
 		if (aString.equals(FactoryMethodArgumentIsDateString.toLowerCase()))
 			return FactoryMethodArgumentIsDate;
+		if (aString.equals(FactoryMethodArgumentIsNumberString.toLowerCase()))
+			return FactoryMethodArgumentIsNumber;
 		return !aString.equals("EOFactoryMethodArgumentIsNSString".toLowerCase()) ? FactoryMethodArgumentIsData : FactoryMethodArgumentIsString;
 	}
 
@@ -1567,6 +1571,9 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsDate:
 			return FactoryMethodArgumentIsDateString;
+
+		case FactoryMethodArgumentIsNumber:
+			return FactoryMethodArgumentIsNumberString;
 		}
 		return FactoryMethodArgumentIsDataString;
 	}
@@ -1777,6 +1784,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public static final int FactoryMethodArgumentIsString = 1;
 	public static final int FactoryMethodArgumentIsBytes = 2;
 	public static final int FactoryMethodArgumentIsDate = 3;
+	public static final int FactoryMethodArgumentIsNumber = 4;
 	public static final int AdaptorNumberType = 0;
 	public static final int AdaptorCharactersType = 1;
 	public static final int AdaptorBytesType = 2;
@@ -1856,6 +1864,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public static final String FactoryMethodArgumentIsStringString = "EOFactoryMethodArgumentIsString";
 	public static final String FactoryMethodArgumentIsDataString = "EOFactoryMethodArgumentIsData";
 	public static final String FactoryMethodArgumentIsDateString = "EOFactoryMethodArgumentIsDate";
+	public static final String FactoryMethodArgumentIsNumberString = "EOFactoryMethodArgumentIsNumber";
 	private Map _overwrittenCharacteristics;
 	private static Class valueClasses[];
 	private static String valueTypeNames[] = { "Number", "Characters", "Bytes", "Date" };
