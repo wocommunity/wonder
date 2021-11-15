@@ -35,14 +35,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @property er.rest.dateFormat
  * @property er.rest.timestampFormat
  * @property er.rest.rfcDateFormat (default "rfc822")
+ * @property er.rest.javaFormatDate
+ * @property er.rest.javaFormatDateTime
+ * @property er.rest.javaFormatTime
  *
  * @author mschrag
  */
 public class ERXRestUtils {
-	protected final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE;
-	protected final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
-	protected final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ISO_TIME;
-
 	/**
 	 * Returns whether or not the given object represents a primitive in REST.
 	 * 
@@ -159,16 +158,16 @@ public class ERXRestUtils {
 			formattedValue = ERXRestUtils.jodaLocalDateFormat(false, context).print((org.joda.time.LocalDate)value);
 		}
 		else if (value instanceof LocalDate) {
-			formattedValue = DATE_FORMATTER.format((TemporalAccessor)value);
+			formattedValue = ERXRestUtils.javaDateFormat(context).format((TemporalAccessor)value);
 		}
 		else if (value instanceof LocalDateTime) {
-			formattedValue = DATE_TIME_FORMATTER.format((TemporalAccessor)value);
+			formattedValue = ERXRestUtils.javaDateTimeFormat(context).format((TemporalAccessor)value);
 		}
 		else if (value instanceof LocalTime) {
-			formattedValue = TIME_FORMATTER.format((TemporalAccessor)value);
+			formattedValue = ERXRestUtils.javaTimeFormat(context).format((TemporalAccessor)value);
 		}
 		else if (value instanceof OffsetDateTime) {
-			formattedValue = DATE_TIME_FORMATTER.format((TemporalAccessor)value);
+			formattedValue = ERXRestUtils.javaDateTimeFormat(context).format((TemporalAccessor)value);
 		}
 		else if (value instanceof NSData && ((NSData)value).length() == 24) {
 			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
@@ -262,6 +261,54 @@ public class ERXRestUtils {
 			dateFormatter = org.joda.time.format.DateTimeFormat.forPattern(dateFormat);
 		}
 		return dateFormatter;
+	}
+
+	protected static java.time.format.DateTimeFormatter javaDateFormat(ERXRestContext context) {
+		java.time.format.DateTimeFormatter dateFormatter = (java.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.javaDateFormatter");
+		if (dateFormatter == null) {
+			String dateFormat = (String)context.userInfoForKey("er.rest.javaFormatDate");
+			if (dateFormat == null) {
+				dateFormat = ERXProperties.stringForKey("er.rest.javaFormatDate");
+			}
+			if (dateFormat != null) {
+				dateFormatter = java.time.format.DateTimeFormatter.ofPattern(dateFormat);
+			} else {
+				dateFormatter = DateTimeFormatter.ISO_DATE;
+			}
+		}
+		return dateFormatter;
+	}
+
+	protected static java.time.format.DateTimeFormatter javaDateTimeFormat(ERXRestContext context) {
+		java.time.format.DateTimeFormatter dateTimeFormatter = (java.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.javaDateTimeFormatter");
+		if (dateTimeFormatter == null) {
+			String dateTimeFormat = (String)context.userInfoForKey("er.rest.javaFormatDateTime");
+			if (dateTimeFormat == null) {
+				dateTimeFormat = ERXProperties.stringForKey("er.rest.javaFormatDateTime");
+			}
+			if (dateTimeFormat != null) {
+				dateTimeFormatter = java.time.format.DateTimeFormatter.ofPattern(dateTimeFormat);
+			} else {
+				dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+			}
+		}
+		return dateTimeFormatter;
+	}
+
+	protected static java.time.format.DateTimeFormatter javaTimeFormat(ERXRestContext context) {
+		java.time.format.DateTimeFormatter timeFormatter = (java.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.javaTimeFormatter");
+		if (timeFormatter == null) {
+			String timeFormat = (String)context.userInfoForKey("er.rest.javaFormatTime");
+			if (timeFormat == null) {
+				timeFormat = ERXProperties.stringForKey("er.rest.javaFormatTime");
+			}
+			if (timeFormat != null) {
+				timeFormatter = java.time.format.DateTimeFormatter.ofPattern(timeFormat);
+			} else {
+				timeFormatter = DateTimeFormatter.ISO_TIME;
+			}
+		}
+		return timeFormatter;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -464,7 +511,7 @@ public class ERXRestUtils {
 				}
 				String strValue = (String) value;
 				try {
-					parsedValue = DATE_TIME_FORMATTER.parse(strValue, query);
+					parsedValue = ERXRestUtils.javaDateTimeFormat(context).parse(strValue, query);
 				}
 				catch (Throwable t) {
 					String msg = "Failed to parse '" + strValue + "' as a java time object " + valueTypeClass + ".";
