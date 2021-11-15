@@ -38,6 +38,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @property er.rest.javaFormatDate
  * @property er.rest.javaFormatDateTime
  * @property er.rest.javaFormatTime
+ * @property er.rest.jodaFormat
+ * @property er.rest.jodaFormatTime
  *
  * @author mschrag
  */
