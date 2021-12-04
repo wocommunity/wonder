@@ -1,3 +1,6 @@
 ##  Properies Info
 er.extensions.load.Properties.framework.ERRest=load
 er.extensions.ERRest.hasLocalization=false
+
+er.rest.rfcDateFormat=rfc822
+er.rest.format16BytesDataAsUUID=true
