@@ -992,6 +992,31 @@ public class ERXEOControlUtilities {
      * @param qualifier to restrict data set
      * @return aggregate result of the fuction call
      */
+    public static String aggregateStringWithQualifier(EOEditingContext ec,
+            String entityName,
+            String attributeName,
+            String function,
+            EOQualifier qualifier) {
+    	String string = null;
+    	Object obj = _aggregateFunctionWithQualifier(ec, entityName, attributeName, function, String.class, null, qualifier);
+    	if (obj instanceof String) {
+    		string = (String)obj;
+    	}
+    	return string;
+    }
+
+    /**
+     * Computes an aggregate function for a given attribute
+     * restricted by a given qualifier. For instance
+     * select MAX(AGE) from User where name like 'M*'
+     * 
+     * @param ec editing context used for the fetch
+     * @param entityName name of the entity
+     * @param attributeName attribute for the function to be performed on
+     * @param function name, ie MAX, MIN, AVG, etc.
+     * @param qualifier to restrict data set
+     * @return aggregate result of the fuction call
+     */
     public static NSTimestamp aggregateTimestampWithQualifier(EOEditingContext ec,
             String entityName,
             String attributeName,
