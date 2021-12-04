@@ -20,6 +20,7 @@ ShowList : WOConditional {
 
 TextField: WOTextField {
 	autocomplete = "off";
+	autocorrect = "off";
 	class = ^class;
 	id = fieldName;
 	disabled = ^disabled;

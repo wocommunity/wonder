@@ -254,8 +254,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      */
     protected NSArray<String> _ajaxUploadLabels() {
     	NSMutableArray<String> _labels = new NSMutableArray<>();
-    	_labels.addObject(String.format("upload_canceling:'%s'", cancelingText()));
-    	_labels.addObject(String.format("upload_starting:'%s'", startingText()));
+    	_labels.addObject(String.format("upload_canceling:'%s'", localizedStringForBinding(Keys.cancelingText, "Canceling Upload ...")));
+    	_labels.addObject(String.format("upload_starting:'%s'", localizedStringForBinding(Keys.startingText, "Upload Starting ...")));
     	_labels.addObject(String.format("upload_failed:'%s'", localizedStringForBinding(Keys.failedText, "Upload Failed")));
     	return _labels;
     }

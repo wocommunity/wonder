@@ -12,4 +12,5 @@ DateInput : WOTextField {
   onfocus = onFocusScript;
   onclick = onClickScript;
   otherTagString = otherTagString;
+  autocomplete = "off";
 }
