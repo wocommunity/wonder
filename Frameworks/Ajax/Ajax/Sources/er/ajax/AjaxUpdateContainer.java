@@ -31,6 +31,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * @binding frequency the frequency (in seconds) of a periodic update
  * @binding decay a multiplier (default is one) applied to the frequency if the response of the update is unchanged
+ * @binding observeDescendentFields observe descendent fields 
  * @binding stopped determines whether a periodic update container loads as stopped.
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
@@ -91,7 +92,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return results;
 	}
 
-	public NSDictionary createAjaxOptions(WOComponent component) {
+	public NSDictionary<String, String> createAjaxOptions(WOComponent component) {
 		// PROTOTYPE OPTIONS
 		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
@@ -141,9 +142,9 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return expandedInsertion;
 	}
 
-	public static NSDictionary removeDefaultOptions(NSDictionary options) {
+	public static NSDictionary<String, String> removeDefaultOptions(NSDictionary<String, String> options) {
 		// PROTOTYPE OPTIONS
-		NSMutableDictionary mutableOptions = options.mutableClone();
+		NSMutableDictionary<String, String> mutableOptions = options.mutableClone();
 		if ("'get'".equals(mutableOptions.objectForKey("method"))) {
 			mutableOptions.removeObjectForKey("method");
 		}
@@ -156,10 +157,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return mutableOptions;
 	}
 
-	public NSMutableDictionary createObserveFieldOptions(WOComponent component) {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+	public NSMutableDictionary<String, String> createObserveFieldOptions(WOComponent component) {
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<>();
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		return options;
 	}
 
@@ -192,12 +193,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 				super.appendToResponse(response, context);
 
-				NSDictionary options = createAjaxOptions(component);
+				NSDictionary<String, String> options = createAjaxOptions(component);
 
 				Object frequency = valueForBinding("frequency", component);
 				String observeFieldID = (String) valueForBinding("observeFieldID", component);
+				boolean observeDescendentFields = booleanValueForBinding("observeDescendentFields", false, component);
 
-				boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
+				boolean skipFunction = frequency == null && observeFieldID == null && observeDescendentFields == false && booleanValueForBinding("skipFunction", false, component);
 				if (!skipFunction) {
 					AjaxUtils.appendScriptHeader(response);
 
@@ -232,9 +234,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 						boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
 						AjaxObserveField.appendToResponse(response, context, this, observeFieldID, false, id, fullSubmit, createObserveFieldOptions(component));
 					}
+					else if (observeDescendentFields) {
+						boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
+						AjaxObserveField.appendToResponse(response, context, this, id, true, id, fullSubmit, createObserveFieldOptions(component));
+					}
 
 					response.appendContentString("AUC.register('" + id + "'");
-					NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+					NSDictionary<String, String> nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
 					if (nonDefaultOptions.count() > 0) {
 						response.appendContentString(", ");
 						AjaxOptions.appendToResponse(nonDefaultOptions, response, context);
@@ -277,6 +283,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			response.appendContentString("AMD.contentUpdated();");
 			AjaxUtils.appendScriptFooter(response);
 		}
+		boolean observeDescendentFields = booleanValueForBinding("observeDescendentFields", false, component);
+		if (observeDescendentFields) {
+			AjaxUtils.appendScriptHeader(response);
+			boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
+			AjaxObserveField.appendToResponse(response, context, this, id, true, id, fullSubmit, createObserveFieldOptions(component));
+			AjaxUtils.appendScriptFooter(response);
+		}
 		return null;
 	}
 
@@ -295,7 +308,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
 		if (updateContainerID != null) {
-			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
+			ERXWOContext.contextDictionary().takeValueForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		}
 	}
 
@@ -312,7 +325,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			ERXWOContext.contextDictionary().removeObjectForKey(AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
 		}
 		else {
-			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
+			ERXWOContext.contextDictionary().takeValueForKey(updateContainerID, AjaxUpdateContainer.CURRENT_UPDATE_CONTAINER_ID_KEY);
 		}
 	}
 
