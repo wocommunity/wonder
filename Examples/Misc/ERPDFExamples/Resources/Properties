@@ -4,6 +4,8 @@ ognl.inlineBindings=true
 
 # Misc
 er.extensions.stackTrace.cleanup=true
+# PDF Generation for languages other than englisch! Otherwise PDF Generation will fail if you use i.e. german "Umlaute".
+er.extensions.ERXApplication.DefaultEncoding=UTF-8
 
 # EOF
 er.extensions.ERXEC.safeLocking=true
