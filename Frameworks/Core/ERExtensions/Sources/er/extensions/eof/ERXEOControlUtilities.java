@@ -956,9 +956,9 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Computes an aggregate function for a given attribute
+     * Computes an aggregate function for a given string attribute
      * restricted by a given qualifier. For instance
-     * select MAX(AGE) from User where name like 'M*'
+     * select MAX(invoiceNumber) from Invoice where invoiceNumber like 'INV22*'
      * 
      * @param ec editing context used for the fetch
      * @param entityName name of the entity
