@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -389,18 +390,44 @@ public class ERXConfigurationManager {
         }
         return _hostName;
     }    
-    
-    /**
-     * Checks if the application <del>is</del> may be deployed as a servlet.
-     * <p>
-     * The current implementation only checks if the application 
-     * is linked against <code>JavaWOJSPServlet.framework</code>.
-     * 
-     * @return true if the application is deployed as a servlet
-     */
-    public boolean isDeployedAsServlet() {
-        NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
-        return frameworkNames.containsObject("JavaWOJSPServlet");
-    }
-        
+
+	/**
+	 * Is the application deployed as a servlet? The heuristic used here is
+	 * whether {@link #contextClassName()} is set to {@code WOServletContext} or
+	 * {@code ERXWOServletContext} (or some other name containing "Servlet").
+	 * 
+	 * @return {@code true} if the application is deployed as a servlet,
+	 *         otherwise {@code false}
+	 */
+	public boolean isDeployedAsServlet() {
+		// i.e. one of WOServletContext or ERXWOServletContext
+		return contextClassName() != null && contextClassName().contains("Servlet");
+	}
+
+	/**
+	 * Sets {@code WOProperties.TheContextClassName}.
+	 * 
+	 * @param name
+	 *            context class name
+	 */
+	private void setContextClassName(String name) {
+		if (name != null) {
+			WOProperties.TheContextClassName = name;
+		}
+		return;
+	}
+
+	/**
+	 * Returns {@code WOProperties.TheContextClassName} (after lazily setting it
+	 * if required).
+	 * 
+	 * @return context class name
+	 */
+	private String contextClassName() {
+		if (WOProperties.TheContextClassName == null) {
+			String contextClassName = NSProperties.getProperty(WOProperties._ContextClassNameKey);
+			setContextClassName(contextClassName);
+		}
+		return WOProperties.TheContextClassName;
+	}
 }
