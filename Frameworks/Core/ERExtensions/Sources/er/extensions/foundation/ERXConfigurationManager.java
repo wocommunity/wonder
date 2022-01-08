@@ -390,33 +390,44 @@ public class ERXConfigurationManager {
         }
         return _hostName;
     }    
-    
-    /**
-     * Checks if the application is  be deployed as a servlet.
-     * 
-	 * This heuristic to determine if an application is deployed as servlet relays on the fact, 
-	 * that contextClassName() is set WOServletContext or ERXWOServletContext
-	 *  
-     * @return true if the application is deployed as a servlet
-     */
-    public boolean isDeployedAsServlet() {
-		return contextClassName()!= null && contextClassName().contains("Servlet"); // i.e one of WOServletContext or ERXWOServletContext
-    }
-    
-	public void setContextClassName(String name) {
+
+	/**
+	 * Is the application deployed as a servlet? The heuristic used here is
+	 * whether {@link #contextClassName()} is set to {@code WOServletContext} or
+	 * {@code ERXWOServletContext} (or some other name containing "Servlet").
+	 * 
+	 * @return {@code true} if the application is deployed as a servlet,
+	 *         otherwise {@code false}
+	 */
+	public boolean isDeployedAsServlet() {
+		// i.e. one of WOServletContext or ERXWOServletContext
+		return contextClassName() != null && contextClassName().contains("Servlet");
+	}
+
+	/**
+	 * Sets {@code WOProperties.TheContextClassName}.
+	 * 
+	 * @param name
+	 *            context class name
+	 */
+	private void setContextClassName(String name) {
 		if (name != null) {
 			WOProperties.TheContextClassName = name;
 		}
-
+		return;
 	}
 
-	public String contextClassName() {
+	/**
+	 * Returns {@code WOProperties.TheContextClassName} (after lazily setting it
+	 * if required).
+	 * 
+	 * @return context class name
+	 */
+	private String contextClassName() {
 		if (WOProperties.TheContextClassName == null) {
 			String contextClassName = NSProperties.getProperty(WOProperties._ContextClassNameKey);
-			this.setContextClassName(contextClassName);
+			setContextClassName(contextClassName);
 		}
-
 		return WOProperties.TheContextClassName;
 	}
-
 }
