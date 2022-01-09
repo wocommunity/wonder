@@ -1021,6 +1021,34 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		}
 	}
 
+	public Object newValueForNumber(Object value) {
+		if (valueFactoryMethod() != null) {
+			if(!(value instanceof Number)) {
+				throw new JDBCAdaptorException(new StringBuilder().append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Number type.").toString(), null);
+			}
+			Number number = (Number)value;
+			//Call the custom factory method
+			try {
+				if(valueFactoryClass() != null) {
+					Class<?> factoryClass = valueFactoryClass();
+					return valueFactoryMethod().invoke(factoryClass, number);
+				}
+				Class<?> c = _NSUtilities.classWithName(className());
+				return valueFactoryMethod().invoke(c, number);
+			} catch(IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} catch(IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} catch(NoSuchMethodException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} catch(InvocationTargetException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+
+		return value;
+	}
+
 	public Object newValueForString(String str) {
 		Class stringClass = String.class;
 		Object value = null;
@@ -1337,6 +1365,26 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return (new Class[] { Date.class });
 		if (_argumentType == FactoryMethodArgumentIsBytes)
 			return (new Class[] { byte[].class });
+		if (_argumentType == FactoryMethodArgumentIsNumber) {
+			switch (_valueTypeChar()) {
+				case _VTShort:
+					return new Class[] { Short.class };
+				case _VTInteger:
+					return new Class[] { Integer.class };
+				case _VTLong:
+					return new Class[] { Long.class };
+				case _VTFloat:
+					return new Class[] { Float.class };
+				case _VTDouble:
+					return new Class[] { Double.class };
+				case _VTBigDecimal:
+					return new Class[] { BigDecimal.class };
+				case _VTByte:
+					return new Class[] { Byte.class };
+				default:
+					return new Class[] { Number.class };
+			}
+		}
 
 		return null;
 	}

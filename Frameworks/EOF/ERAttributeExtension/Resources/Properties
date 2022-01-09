@@ -3,4 +3,4 @@ er.extensions.load.Properties.framework.ERAttributeExtension=load
 er.extensions.ERAttributeExtension.hasLocalization=false
 
 er.extensions.ERXJDBCAdaptor.className=er.extensions.jdbc.ERXJDBCAdaptor
-er.extensions.ERXJDBCAdaptor.columnClassName=com.webobjects.jdbcadaptor.DateJDBCColumn
+er.extensions.ERXJDBCAdaptor.columnClassName=com.webobjects.jdbcadaptor.ERXEnhancedJDBCColumn
