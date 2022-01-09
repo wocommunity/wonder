@@ -1,30 +1,26 @@
 package com.webobjects.jdbcadaptor;
 
 
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
+import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
-
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
-
-import er.extensions.jdbc.ERXJDBCAdaptor.Channel;
-
 /**
- * @deprecated This class was renamed and may be removed in the future. Use {@link ERXEnhancedJDBCColumn} instead.
+ * This class extends the {@code ERXJDBCColumn} to add support for custom types.
  */
-@Deprecated
-public class DateJDBCColumn extends ERXJDBCColumn {
-	private static final Logger log = Logger.getLogger(DateJDBCColumn.class);
+public class ERXEnhancedJDBCColumn extends ERXJDBCColumn {
+	private static final Logger log = Logger.getLogger(ERXEnhancedJDBCColumn.class);
 
-	public DateJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
+	public ERXEnhancedJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
 		super(attribute, channel, column, rs);
 	}
 
-	public DateJDBCColumn(Channel aChannel) {
+	public ERXEnhancedJDBCColumn(Channel aChannel) {
 		super(aChannel);
 	}
 
@@ -62,6 +58,16 @@ public class DateJDBCColumn extends ERXJDBCColumn {
 			}
 			
 			return _attribute.newValueForDate(obj);
+		}
+		/*
+		 * Add support for custom number types
+		 */
+		if (_adaptorValueType == EOAttribute.AdaptorNumberType && _customType) {
+			Object value = super._fetchValue(flag);
+			if (value == NSKeyValueCoding.NullValue || value == null) {
+				return value;
+			}
+			return _attribute.newValueForNumber(value);
 		}
 		try {
 			return super._fetchValue(flag);
