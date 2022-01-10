@@ -3,6 +3,7 @@ package com.webobjects.eoaccess;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -1027,19 +1028,22 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			}
 			Number number = (Number)value;
 			//Call the custom factory method
+            Class<?> factoryClass = null;
 			try {
-				if(valueFactoryClass() != null) {
-					Class<?> factoryClass = valueFactoryClass();
+                factoryClass = valueFactoryClass();
+				if(factoryClass != null) {
 					return valueFactoryMethod().invoke(factoryClass, number);
 				}
-				Class<?> c = _NSUtilities.classWithName(className());
-				return valueFactoryMethod().invoke(c, number);
+                factoryClass = _NSUtilities.classWithName(className());
+				return valueFactoryMethod().invoke(factoryClass, number);
 			} catch(IllegalAccessException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			} catch(IllegalArgumentException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			} catch(NoSuchMethodException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
+				NoSuchMethodException enhancedNsme = new NoSuchMethodException(e.getMessage() + " with parameters " + Arrays.toString(valueFactoryMethod().parameterTypes()));
+				enhancedNsme.setStackTrace(e.getStackTrace());
+				throw NSForwardException._runtimeExceptionForThrowable(enhancedNsme);
 			} catch(InvocationTargetException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
