@@ -1,7 +1,6 @@
 package er.modern.movies.test;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
@@ -81,6 +80,20 @@ public class MovieIT extends AbstractSelenideIT {
         $(".TitleLine").find("input").setValue("Snatch");
         $(".CategoryLine").find("input").setValue("Comedy");
         $(".DateReleasedLine").find("input").setValue("2000-09-01");
+        // test basic tag editing
+        $(".TagsLine").find("input").setValue("comedy");
+        $(".TagsLine").find("input").append(" ");
+        $(".TagsLine").find("input").setValue("britain");
+        $(".TagsLine").find("input").append(" ");
+        $(".TagsLine").find("input").setValue("gangster");
+        $(".TagsLine").find("input").append(" ");
+        $$(".nsg-tag").findBy(text("comedy")).shouldBe(present);
+        $$(".nsg-tag").findBy(text("britain")).shouldBe(present);
+        $$(".nsg-tag").findBy(text("gangster")).shouldBe(present);
+        $$(".nsg-tag").findBy(text("gangster")).find(".nsg-tag-remove").click();
+        $$(".nsg-tag").findBy(text("gangster")).shouldNot(exist);
+        // TODO test tag persistence
+        // TODO test tag auto-completion
         $(By.linkText("Next")).click();
         // edit to one relation, fill a few characters
         $(".StudioLine").find("input").setValue("Colum");
