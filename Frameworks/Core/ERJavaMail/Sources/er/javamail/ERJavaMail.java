@@ -736,7 +736,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * <span class="en"> Determines if a list of allowed email address patterns has been specified
 	 * 
-	 * @deprecated hasWhiteList() will be removed in future versions. Pleae use {@link hasAllowList()} instead
+	 * @deprecated hasWhiteList() will be removed in future versions. Pleae use {@link ERJavaMail#hasAllowList()} instead
 	 * @return if the allow list has any elements in it </span>
 	 * 
 	 *         <span class="ja"> ホワイト・リストがあるかどうかを戻します。
@@ -764,7 +764,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * <span class="en"> Determines if a list of email patterns to deny has been specified
 	 * 
-	 * @deprecated hasBlackList() will be removed from future versions. Please use {@link hasDenyList()} instead
+	 * @deprecated hasBlackList() will be removed from future versions. Please use {@link ERJavaMail#hasDenyList()} instead
 	 * @return if the deny list has any elements in it </span>
 	 * 
 	 *         <span class="ja"> ブラック・リストがあるかどうかを戻します。
@@ -792,7 +792,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * <span class="en"> Gets the array of allowed email address patterns.
 	 * 
-	 * @deprecated This method will be removed in future versions. Please use {@link allowEmailAddressPatterns()}
+	 * @deprecated This method will be removed in future versions. Please use {@link ERJavaMail#allowEmailAddressPatterns()}
 	 * @return array of allowed email address patterns </span>
 	 * 
 	 *         <span class="ja"> ホワイト・リスト・メールアドレス配列パターンを戻します。
@@ -834,7 +834,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * <span class="en"> Gets the array of denied email address patterns.
 	 * 
-	 * @deprecated This will be removed from future versions. Please use {@link denyEmailAddressPatterns}
+	 * @deprecated This will be removed from future versions. Please use {@link ERJavaMail#denyEmailAddressPatterns}
 	 * @return array of denied email address patterns </span>
 	 * 
 	 *         <span class="ja"> TODO: update Japanese documentation ブラック・リスト・メールアドレス配列パターンを戻します。
@@ -874,7 +874,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * <span class="en"> {@link EOOrQualifier} qualifier to match any of the patterns in the allow list.
 	 * 
-	 * @deprecated whiteListQualifier() will be removed in future versions. Please use {@link allowListQualifier()}
+	 * @deprecated whiteListQualifier() will be removed in future versions. Please use {@link ERJavaMail#allowQualifier()}
 	 *             instead.
 	 * @return Or qualifier for the allow list </span> <span class="ja"> ホワイト・リスト内でマッチするパタンのホワイト・リスト Or qualifier
 	 * 
