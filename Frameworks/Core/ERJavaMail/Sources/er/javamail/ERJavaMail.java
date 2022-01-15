@@ -841,15 +841,14 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return ブラック・リスト・メールアドレス配列パターン </span>
 	 */
-	@SuppressWarnings("unchecked")
 	public NSArray<String> blackListEmailAddressPatterns() {
 		if (denyEmailAddressPatterns == null) {
 			if (ERXProperties.hasKey("er.javamail.BlackListEmailAddressPatterns") && !ERXProperties.hasKey("er.javamail.DenyEmailAddressPatterns")) {
 				log.warn("Please update your properties settings to use \"er.javamail.DenyEmailAddressPatterns\" instead of \"er.javamail.BlackListEmailAddressPatterns\". blackListEmailAddressPatterns() and associated properties will be removed from future versions.");
-				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
+				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.emptyArray());
 			}
 			else {
-				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.EmptyArray);
+				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.emptyArray());
 			}
 		}
 		return denyEmailAddressPatterns;
@@ -863,10 +862,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *         <span class="ja"> TODO: update Japanese documentation ブラック・リスト・メールアドレス配列パターンを戻します。
 	 * @return ブラック・リスト・メールアドレス配列パターン </span>
 	 */
-	@SuppressWarnings("unchecked")
 	public NSArray<String> denyEmailAddressPatterns() {
 		if (denyEmailAddressPatterns == null) {
-			denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.EmptyArray);
+			denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.emptyArray());
 		}
 		return denyEmailAddressPatterns;
 	}
