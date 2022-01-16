@@ -17,6 +17,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.slf4j.Logger;
@@ -221,6 +221,79 @@ public class ERXPropertyListSerialization {
 		 * @return Object
 		 */
 		public abstract Object parseStringIntoPlist(String string);
+
+		protected void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
+			stringbuffer.append('"');
+			char ac[] = s.toCharArray();
+			for (int j = 0; j < ac.length; j++) {
+				char c = ac[j];
+				switch (c) {
+			
+				case '\n':
+						stringbuffer.append("\\n");
+						continue;
+				case '\r':
+						stringbuffer.append("\\r");
+						continue;
+				case '\t':
+						stringbuffer.append("\\t");
+						continue;
+				case '"':
+						stringbuffer.append('\\');
+						stringbuffer.append('"');
+						continue;
+				case '\\':
+						stringbuffer.append("\\\\");
+						continue;
+				case '\f':
+						stringbuffer.append("\\f");
+						continue;
+				case '\b':
+						stringbuffer.append("\\b");
+						continue;
+				case '\007':
+						stringbuffer.append("\\a");
+						continue;
+				case '\013':
+						stringbuffer.append("\\v");
+						continue;
+					
+				default:
+					// Control Characters will be quoted
+	                // Reference: http://www.unicode.org/versions/Unicode5.1.0/
+					if((c>='\u0000' && c<='\u001F') || (c>='\u007F' && c<='\u009F') || (c>='\u2000' && c<='\u20FF')) {
+
+						byte byte0 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte1 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte2 = (byte) (c & 0xf);
+						c >>= '\004';
+						byte byte3 = (byte) (c & 0xf);
+						c >>= '\004';
+						stringbuffer.append("\\U");
+						stringbuffer.append(_hexDigitForNibble(byte3));
+						stringbuffer.append(_hexDigitForNibble(byte2));
+						stringbuffer.append(_hexDigitForNibble(byte1));
+						stringbuffer.append(_hexDigitForNibble(byte0));
+					}
+					else {
+						stringbuffer.append(c);
+					}
+				}	
+			}
+			stringbuffer.append('"');
+		}
+
+		protected final char _hexDigitForNibble(byte nibble) {
+			char c = '\0';
+			if (nibble >= 0 && nibble <= 9) {
+				c = (char) (48 + (char) nibble);
+			} else if (nibble >= 10 && nibble <= 15) {
+				c = (char) (97 + (char) (nibble - 10));
+			}
+			return c;
+		}
 
 	}
 
@@ -849,7 +922,7 @@ public class ERXPropertyListSerialization {
 									if (!Character.isWhitespace(_curChars.charAt(i)))
 										stringbuffer.append(_curChars.charAt(i));
 
-								byte abyte0[] = stringbuffer.toString().getBytes(CharEncoding.US_ASCII);
+								byte abyte0[] = stringbuffer.toString().getBytes(StandardCharsets.US_ASCII.name());
 								byte abyte64[] = _NSBase64.decode(abyte0);
 								if (abyte64 != null && abyte64.length > 0) {
 									lastNode.setValue(new NSData(abyte64));
@@ -1000,7 +1073,8 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
+		@Override
+		protected void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
 			_appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.STRING.openTag());
 			stringbuffer.append(escapeString(s));
@@ -1511,61 +1585,6 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
-			stringbuffer.append('"');
-			char ac[] = s.toCharArray();
-			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
-					if (ac[j] == '\n') {
-						stringbuffer.append("\\n");
-						continue;
-					} else if (ac[j] == '\r') {
-						stringbuffer.append("\\r");
-						continue;
-					} else if (ac[j] == '\t') {
-						stringbuffer.append("\\t");
-						continue;
-					} else if (ac[j] == '"') {
-						stringbuffer.append('\\');
-						stringbuffer.append('"');
-						continue;
-					} else if (ac[j] == '\\') {
-						stringbuffer.append("\\\\");
-						continue;
-					} else if (ac[j] == '\f') {
-						stringbuffer.append("\\f");
-						continue;
-					} else if (ac[j] == '\b') {
-						stringbuffer.append("\\b");
-						continue;
-					} else if (ac[j] == '\007') {
-						stringbuffer.append("\\a");
-						continue;
-					} else if (ac[j] == '\013') {
-						stringbuffer.append("\\v");
-					} else {
-						stringbuffer.append(ac[j]);
-					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\u");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
-				}
-			}
-			stringbuffer.append('"');
-		}
-
 		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('"');
 			stringbuffer.append('<');
@@ -1698,16 +1717,6 @@ public class ERXPropertyListSerialization {
 
             stringbuffer.append('}');
         }
-
-		private final char _hexDigitForNibble(byte nibble) {
-			char c = '\0';
-			if (nibble >= 0 && nibble <= 9) {
-				c = (char) (48 + (char) nibble);
-			} else if (nibble >= 10 && nibble <= 15) {
-				c = (char) (97 + (char) (nibble - 10));
-			}
-			return c;
-		}
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
@@ -2484,61 +2493,6 @@ public class ERXPropertyListSerialization {
 			}
 		}
 
-		private void _appendStringToStringBuffer(String s, StringBuffer stringbuffer, int i) {
-			stringbuffer.append('"');
-			char ac[] = s.toCharArray();
-			for (int j = 0; j < ac.length; j++) {
-				if (ac[j] < '\200') {
-					if (ac[j] == '\n') {
-						stringbuffer.append("\\n");
-						continue;
-					} else if (ac[j] == '\r') {
-						stringbuffer.append("\\r");
-						continue;
-					} else if (ac[j] == '\t') {
-						stringbuffer.append("\\t");
-						continue;
-					} else if (ac[j] == '"') {
-						stringbuffer.append('\\');
-						stringbuffer.append('"');
-						continue;
-					} else if (ac[j] == '\\') {
-						stringbuffer.append("\\\\");
-						continue;
-					} else if (ac[j] == '\f') {
-						stringbuffer.append("\\f");
-						continue;
-					} else if (ac[j] == '\b') {
-						stringbuffer.append("\\b");
-						continue;
-					} else if (ac[j] == '\007') {
-						stringbuffer.append("\\a");
-						continue;
-					} else if (ac[j] == '\013') {
-						stringbuffer.append("\\v");
-					} else {
-						stringbuffer.append(ac[j]);
-					}
-				} else {
-					char c = ac[j];
-					byte byte0 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte1 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte2 = (byte) (c & 0xf);
-					c >>= '\004';
-					byte byte3 = (byte) (c & 0xf);
-					c >>= '\004';
-					stringbuffer.append("\\U");
-					stringbuffer.append(_hexDigitForNibble(byte3));
-					stringbuffer.append(_hexDigitForNibble(byte2));
-					stringbuffer.append(_hexDigitForNibble(byte1));
-					stringbuffer.append(_hexDigitForNibble(byte0));
-				}
-			}
-			stringbuffer.append('"');
-		}
-
 		private void _appendDataToStringBuffer(NSData nsdata, StringBuffer stringbuffer, int i) {
 			stringbuffer.append('<');
 			byte abyte0[] = nsdata.bytes();
@@ -2633,16 +2587,6 @@ public class ERXPropertyListSerialization {
             }
             stringbuffer.append('}');
         }
-
-		private final char _hexDigitForNibble(byte nibble) {
-			char c = '\0';
-			if (nibble >= 0 && nibble <= 9) {
-				c = (char) (48 + (char) nibble);
-			} else if (nibble >= 10 && nibble <= 15) {
-				c = (char) (97 + (char) (nibble - 10));
-			}
-			return c;
-		}
 
 		private int _readObjectIntoObjectReference(char ac[], int index, Object aobj[]) {
 			int aBufferIndex = index;
@@ -4725,9 +4669,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseAsciiString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = CharEncoding.UTF_8;
+			String encoding = StandardCharsets.UTF_8.name();
 			if (Charset.isSupported("ASCII")) { // CHECKME isn't ASCII mandatory for any JVM?
-				encoding = CharEncoding.US_ASCII;
+				encoding = StandardCharsets.US_ASCII.name();
 			}
 			objectTable.add(new String(bytes, index, count, encoding));
 		}
@@ -4848,9 +4792,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseUnicodeString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = CharEncoding.UTF_8;
+			String encoding = StandardCharsets.UTF_8.name();
 			if (Charset.isSupported("UTF-16BE")) { // CHECKME isn't UTF-16BE mandatory for any JVM?
-				encoding = CharEncoding.UTF_16BE;
+				encoding = StandardCharsets.UTF_16BE.name();
 			}
 			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
 			objectTable.add(new String(bytes, index, count * 2, encoding));
@@ -5044,7 +4988,7 @@ public class ERXPropertyListSerialization {
 		private byte[] encodeString(String value) {
 			try {
 				NSMutableData data = new NSMutableData(value.length() * 2);
-				String encoding = CharEncoding.UTF_8;
+				String encoding = StandardCharsets.UTF_8.name();
 				// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
 				// This is true if UTF-8 encoding yield the same length as the char count.
 				byte[] theBytes = value.getBytes(encoding);
@@ -5053,7 +4997,7 @@ public class ERXPropertyListSerialization {
 					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
 				} else {
 					if (Charset.isSupported("UTF-16BE")) {
-						encoding = CharEncoding.UTF_16BE;
+						encoding = StandardCharsets.UTF_16BE.name();
 					}
 					theBytes = value.getBytes(encoding);
 					data.appendBytes(encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
