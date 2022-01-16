@@ -28,6 +28,7 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.crypting.ERXCryptoString;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.foundation.UUIDUtilities;
 
 /**
  * Miscellaneous rest-related utility methods.
@@ -175,13 +176,18 @@ public class ERXRestUtils {
 			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
 		}
 		else if (value instanceof NSData) {
-			formattedValue = Base64.getEncoder().encodeToString(((NSData) value).bytes());
+			NSData valueData = (NSData) value;
+			if (valueData.length() == 16 && ERXProperties.booleanForKeyWithDefault("er.rest.format16BytesDataAsUUID", false)) {
+				formattedValue = UUIDUtilities.encodeAsPrettyString(valueData);
+			}
+			else {
+				formattedValue = Base64.getEncoder().encodeToString(((NSData) value).bytes());
+			}
 		}
 		else {
 			formattedValue = value.toString();
 		}
 		return formattedValue;
-
 	}
 
 	// this "spaces" attribute is stupid, i know ... this whole api is stupid.  it's a quick hack for now to accommodate someone very near and dear to my heart ... yes i'm talking to you.
