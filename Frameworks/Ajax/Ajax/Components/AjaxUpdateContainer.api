@@ -5,6 +5,7 @@
 		<binding name="elementName"/>
 		<binding name="observeFieldID"/>
 		<binding name="observeFieldFrequency"/>
+		<binding defaults="Boolean" name="observeDescendentFields"/>
 		<binding name="action"/>
 		<binding name="fullSubmit"/>
 		<binding name="skipFunction"/>
@@ -23,12 +24,11 @@
 		<binding name="insertionDuration"/>
 		<binding name="beforeInsertionDuration"/>
 		<binding name="afterInsertionDuration"/>
-
     
-	<binding name="id"/>
-        <binding name="asynchronous"/>
-    <binding defaults="Boolean" name="stopped"/>
-    <binding name="class"/>
-    <binding name="style"/>
+		<binding name="id"/>
+		<binding name="asynchronous"/>
+		<binding defaults="Boolean" name="stopped"/>
+	    <binding name="class"/>
+	    <binding name="style"/>
     </wo>
 </wodefinitions>
