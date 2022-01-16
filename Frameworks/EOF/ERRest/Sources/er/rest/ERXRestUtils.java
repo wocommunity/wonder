@@ -176,7 +176,7 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof NSData) {
 			NSData valueData = (NSData) value;
-			if (valueData.length() == 16 && ERXProperties.booleanForKeyWithDefault("er.rest.format16BytesDataAsUUID", true)) {
+			if (valueData.length() == 16 && ERXProperties.booleanForKeyWithDefault("er.rest.format16BytesDataAsUUID", false)) {
 				formattedValue = UUIDUtilities.encodeAsPrettyString(valueData);
 			}
 			else {
