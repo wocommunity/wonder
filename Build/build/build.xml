@@ -32,10 +32,11 @@
     <property name="framework.erjars.icu4j" value="icu4j-63.1.jar" />
     <property name="framework.erjars.joda" value="joda-time-2.10.1.jar" />
     <property name="framework.erjars.junit" value="junit-4.12.jar" />
-    <property name="framework.erjars.log4j" value="log4j-1.2.17.jar" />
     <property name="framework.erjars.ognl" value="ognl-3.2.10.jar" />
-    <property name="framework.erjars.slf4j.api" value="slf4j-api-1.7.25.jar" />
-    <property name="framework.erjars.slf4j.log4j12" value="slf4j-log4j12-1.7.25.jar" />
+    <property name="framework.erjars.slf4j-api" value="slf4j-api-1.7.32.jar" />
+    <property name="framework.erjars.log4j-api" value="log4j-api-2.17.1.jar" />
+    <property name="framework.erjars.log4j-core" value="log4j-core-2.17.1.jar" />
+    <property name="framework.erjars.log4j-slf4j-impl" value="log4j-slf4j-impl-2.17.1.jar" />
 
     <target name="ERJars.all">
         <fail message="Please check versions of jar files included in ERJars project. See properties in Build/build//build.xml.">
@@ -56,10 +57,11 @@
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.icu4j}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.joda}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.junit}" />
-                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.log4j}" />
                         <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.ognl}" />
-                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.slf4j.api}" />
-                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.slf4j.log4j12}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.slf4j-api}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.log4j-api}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.log4j-core}" />
+                        <available file="Frameworks/Core/ERJars/Libraries/${framework.erjars.log4j-slf4j-impl}" />
                     </and>
                 </not>
             </condition>
@@ -1279,10 +1281,11 @@
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.icu4j}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.joda}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.junit}" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.log4j}" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.ognl}" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.slf4j.api}" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/i${framework.erjars.slf4j.log4j12}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.log4j-api}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.log4j-core}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.log4j-slf4j-impl}" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/${framework.erjars.ognl}" />
                 <pathelement location="${build.root}/ERPrototypes.${fRJ}/ERPrototypes.jar" />
                 <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
                 <pathelement location="${build.root}/JavaWOExtensions.${fRJ}/JavaWOExtensions.jar" />
