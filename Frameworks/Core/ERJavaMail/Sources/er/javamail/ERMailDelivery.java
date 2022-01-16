@@ -708,7 +708,7 @@ public abstract class ERMailDelivery {
 	/**
 	 * <div class="en">
 	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
-	 * based on the white and black lists.
+	 * based on the allow and deny lists.
 	 * </div>
 	 * 
 	 * <div class="ja">
@@ -731,7 +731,7 @@ public abstract class ERMailDelivery {
 	/**
 	 * <div class="en">
 	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
-	 * based on the white and black lists.
+	 * based on the allow and deny lists.
 	 * </div>
 	 * 
 	 * <div class="ja">

@@ -51,14 +51,14 @@ er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
 ## セットされている場合にはホワイト・リストに含まれるメールしか送信されません。
 ## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
 ## この場合には次の様に追加します：
-# er.javamail.WhiteListEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
+# er.javamail.AllowEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
 
 ## 送信したくないアドレスがある場合にはブラック・リストを使用できます。
 ## コンマ区切りされているメールアドレス・パタンのブラック・リスト
 ## セットされているアドレスへはメール送信されません。
 ## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
 ## ブラック・リスト・パタンは最後に処理されるので、ホワイト・リストよりも優先です。
-# er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+# er.javamail.DenyEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
 
 ## SMTP 送信ポート
 ## セットされていない場合には 25 が使用されます。

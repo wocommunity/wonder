@@ -78,14 +78,14 @@ The X-Mailer header to put into all outgoing mail messages. Defaults to nothing.
 er.javamail.defaultEncoding = UTF-8
 The default character encoding to use for message content.  Defaults to ???.
 
-er.javamail.WhiteListEmailAddressPatterns = 
-A comma-separated list of whitelisted email address patterns.  If set, then only addresses that match one of the whitelisted 
+er.javamail.AllowEmailAddressPatterns = 
+A comma-separated list of allowed email address patterns.  If set, then only addresses that match one of the allowed 
 patterns will delivered to.  Pattern syntax is the same as EOQualifier's caseInsensitiveLike.
 
-er.javamail.BlackListEmailAddressPatterns =
-A comma-separated list of blacklisted email address patterns.  If set, then any email addresses that match a blacklist pattern 
-will not be delivered to.  Pattern syntax is the same as EOQualifier's caseInsensitiveLike. The blacklist filter is processed 
-last, so a blacklist pattern beats a whitelist pattern.
+er.javamail.DenyEmailAddressPatterns =
+A comma-separated list of disallowed email address patterns.  If set, then any email addresses that match a disallowed pattern 
+will not be delivered to.  Pattern syntax is the same as EOQualifier's caseInsensitiveLike. The disallowed filter is processed 
+last, so a disallowed pattern beats a allowed pattern.
 
 CODE SAMPLE
 - - - - - - 
@@ -212,14 +212,14 @@ Don't hesitate to send {postcards, feedback, love letters} to Camille Troillard 
 ## セットされている場合にはホワイト・リストに含まれるメールしか送信されません。
 ## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
 ## この場合には次の様に追加します：
-@property # er.javamail.WhiteListEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
+@property # er.javamail.AllowEmailAddressPatterns=("*@mycompany.com", "somebody@mac.com")
 
 ## 送信したくないアドレスがある場合にはブラック・リストを使用できます。
 ## コンマ区切りされているメールアドレス・パタンのブラック・リスト
 ## セットされているアドレスへはメール送信されません。
 ## パタン・シンタクスは EOQualifier caseInsensitiveLike 同様
 ## ブラック・リスト・パタンは最後に処理されるので、ホワイト・リストよりも優先です。
-@property # er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+@property # er.javamail.DenyEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
 
 ## SMTP 又は SMTPS を使用するかどうか
 ## 基本的にはここで指定する必要がありません。 

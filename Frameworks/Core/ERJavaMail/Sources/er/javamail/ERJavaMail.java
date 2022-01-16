@@ -43,8 +43,8 @@ import er.extensions.validation.ERXValidationFactory;
  * @property mail.[smtpProtocol].password
  * @property mail.smtps.socketFactory.fallback
  * @property er.javamail.emailPattern
- * @property er.javamail.WhiteListEmailAddressPatterns
- * @property er.javamail.BlackListEmailAddressPatterns
+ * @property er.javamail.AllowEmailAddressPatterns
+ * @property er.javamail.DenyEmailAddressPatterns
  * @property er.javamail.sessionConfigViaJNDI
  * @property er.javamail.jndiSessionContext
  * 
@@ -79,8 +79,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
-	 * <span class="en"> <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that is used to validate emails.
-	 * </span>
+	 * <span class="en"> <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that is used to validate
+	 * emails. </span>
 	 * 
 	 * <span class="ja"> <code>EMAIL_VALIDATION_PATTERN</code> はメールアドレスの検証のための Regex パタン </span>
 	 */
@@ -346,8 +346,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * Returns a new Session object that is appropriate for the given context.
 	 * 
-	 * If the property <code>er.javamail.sessionConfigViaJNDI</code> is set to <code>true</code> the JNDI is used to lookup the session informations. 
-	 * You may change the default JNDI context with the property <code>er.javamail.jndiSessionContext</code>
+	 * If the property <code>er.javamail.sessionConfigViaJNDI</code> is set to <code>true</code> the JNDI is used to
+	 * lookup the session informations. You may change the default JNDI context with the property
+	 * <code>er.javamail.jndiSessionContext</code>
 	 * 
 	 * @param contextString
 	 *            the message context
@@ -355,22 +356,24 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	protected javax.mail.Session newSessionForContext(String contextString) {
 		javax.mail.Session session = null;
-		
+
 		boolean jndiLookup = ERXProperties.booleanForKeyWithDefault("er.javamail.sessionConfigViaJNDI", false);
-		if(jndiLookup) {
+		if (jndiLookup) {
 			String jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext", "java:comp/env/mail");
-			if(contextString != null) {
-				jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext."+contextString, jndiContextString);
+			if (contextString != null) {
+				jndiContextString = ERXProperties.stringForKeyWithDefault("er.javamail.jndiSessionContext." + contextString, jndiContextString);
 			}
-			
+
 			try {
-				if(log.isDebugEnabled()) log.debug("try to get javax.mail.Session for JNDI context " + jndiContextString);
+				if (log.isDebugEnabled())
+					log.debug("try to get javax.mail.Session for JNDI context " + jndiContextString);
 				InitialContext ic = new InitialContext();
-				session = (javax.mail.Session)ic.lookup(jndiContextString);
-			} catch (NamingException e) {
+				session = (javax.mail.Session) ic.lookup(jndiContextString);
+			}
+			catch (NamingException e) {
 				log.error("Failed to initialize JavaMail Session: " + e.getMessage());
 			}
-	
+
 		}
 		else {
 			if (contextString == null || contextString.length() == 0) {
@@ -385,7 +388,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		}
 		return session;
 	}
-	
+
 	/**
 	 * Returns a newly allocated Session object from the given Properties
 	 * 
@@ -698,114 +701,219 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	// ===========================================================================
-	// Black and White list email address filtering support
-	// メール・フィルター：　ホワイト＆ブラック・リスト
+	// Deny and Allow email address filtering support
+	// メール・フィルター： ホワイト＆ブラック・リスト
 	// ---------------------------------------------------------------------------
 
 	/**
-	 * <span class="en"> holds the array of white list email addresses </span>
+	 * <span class="en"> holds the array of allowed email addresses </span>
 	 * 
 	 * <span class="ja"> ホワイト・リスト・メールアドレス配列を保持 </span>
 	 */
-	protected NSArray<String> whiteListEmailAddressPatterns;
+	protected NSArray<String> allowEmailAddressPatterns;
 
 	/**
-	 * <span class="en"> holds the array of black list email addresses </span>
+	 * <span class="en"> holds the array of denied email addresses </span>
 	 * 
 	 * <span class="ja"> ブラック・リスト・メールアドレス配列を保持 </span>
 	 */
-	protected NSArray<String> blakListEmailAddressPatterns;
+	protected NSArray<String> denyEmailAddressPatterns;
 
 	/**
-	 * <span class="en"> holds the white list qualifier </span>
+	 * <span class="en"> holds the allow list qualifier </span>
 	 * 
 	 * <span class="ja"> ホワイト・リスト qualifier を保持 </span>
 	 */
-	protected EOOrQualifier whiteListQualifier;
+	protected EOOrQualifier allowQualifier;
 
 	/**
-	 * <span class="en"> holds the black list qualifier </span>
+	 * <span class="en"> holds the deny list qualifier </span>
 	 * 
 	 * <span class="ja"> ブラック・リスト qualifier を保持 </span>
 	 */
-	protected EOOrQualifier blackListQualifier;
+	protected EOOrQualifier denyQualifier;
 
 	/**
-	 * <span class="en"> Determines if a white list has been specified
+	 * <span class="en"> Determines if a list of allowed email address patterns has been specified
 	 * 
-	 * @return if the white list has any elements in it </span>
+	 * @deprecated hasWhiteList() will be removed in future versions. Pleae use {@link ERJavaMail#hasAllowList()} instead
+	 * @return if the allow list has any elements in it </span>
 	 * 
 	 *         <span class="ja"> ホワイト・リストがあるかどうかを戻します。
 	 * 
 	 * @return ホワイト・リストがある場合には true が戻ります。 </span>
 	 */
+	@Deprecated
 	public boolean hasWhiteList() {
-		return whiteListEmailAddressPatterns().count() > 0;
+		return hasAllowList();
 	}
 
 	/**
-	 * <span class="en"> Determines if a black list has been specified
+	 * <span class="en"> Determines if a list of allowed email address patterns has been specified
 	 * 
-	 * @return if the black list has any elements in it </span>
+	 * @return if the allow list has any elements in it </span>
+	 * 
+	 *         <span class="ja"> ホワイト・リストがあるかどうかを戻します。
+	 * 
+	 * @return ホワイト・リストがある場合には true が戻ります。 </span>
+	 */
+	public boolean hasAllowList() {
+		return allowEmailAddressPatterns().count() > 0;
+	}
+
+	/**
+	 * <span class="en"> Determines if a list of email patterns to deny has been specified
+	 * 
+	 * @deprecated hasBlackList() will be removed from future versions. Please use {@link ERJavaMail#hasDenyList()} instead
+	 * @return if the deny list has any elements in it </span>
 	 * 
 	 *         <span class="ja"> ブラック・リストがあるかどうかを戻します。
 	 * 
 	 * @return ブラック・リストがある場合には true が戻ります。 </span>
 	 */
+	@Deprecated
 	public boolean hasBlackList() {
-		return blackListEmailAddressPatterns().count() > 0;
+		return hasDenyList();
 	}
 
 	/**
-	 * <span class="en"> Gets the array of white list email address patterns.
+	 * <span class="en"> Determines if a list of email patterns to deny has been specified
 	 * 
-	 * @return array of white list email address patterns </span>
+	 * @return if the deny list has any elements in it </span>
+	 * 
+	 *         <span class="ja"> ブラック・リストがあるかどうかを戻します。
+	 * 
+	 * @return ブラック・リストがある場合には true が戻ります。 </span>
+	 */
+	public boolean hasDenyList() {
+		return denyEmailAddressPatterns().count() > 0;
+	}
+
+	/**
+	 * <span class="en"> Gets the array of allowed email address patterns.
+	 * 
+	 * @deprecated This method will be removed in future versions. Please use {@link ERJavaMail#allowEmailAddressPatterns()}
+	 * @return array of allowed email address patterns </span>
 	 * 
 	 *         <span class="ja"> ホワイト・リスト・メールアドレス配列パターンを戻します。
 	 * 
 	 * @return ホワイト・リスト・メールアドレス配列パターン </span>
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public NSArray<String> whiteListEmailAddressPatterns() {
-		if (whiteListEmailAddressPatterns == null) {
-			whiteListEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
+		if (allowEmailAddressPatterns == null) {
+			if (ERXProperties.hasKey("er.javamail.WhiteListEmailAddressPatterns") && !ERXProperties.hasKey("er.javamail.AllowEmailAddressPatterns")) {
+				log.warn("Please update your properties settings to use \"er.javamail.AllowEmailAddressPatterns\" instead of \"er.javamail.WhiteListEmailAddressPatterns\". whiteListEmailAddressPatterns() and associated properties will be removed from future versions.");
+				allowEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
+			}
+			else {
+				allowEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.AllowEmailAddressPatterns", NSArray.EmptyArray);
+			}
 		}
-		return whiteListEmailAddressPatterns;
+		return allowEmailAddressPatterns;
 	}
 
 	/**
-	 * <span class="en"> Gets the array of black list email address patterns.
+	 * <span class="en"> Gets the array of allowed email address patterns.
 	 * 
-	 * @return array of black list email address patterns </span>
+	 * @return array of allowed email address patterns </span>
 	 * 
-	 *         <span class="ja"> ブラック・リスト・メールアドレス配列パターンを戻します。
+	 *         <span class="ja"> TODO: update the japanese documentation ホワイト・リスト・メールアドレス配列パターンを戻します。
+	 * 
+	 * @return ホワイト・リスト・メールアドレス配列パターン </span>
+	 */
+	@SuppressWarnings("unchecked")
+	public NSArray<String> allowEmailAddressPatterns() {
+		if (allowEmailAddressPatterns == null) {
+			allowEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.AllowEmailAddressPatterns", NSArray.EmptyArray);
+		}
+		return allowEmailAddressPatterns;
+	}
+
+	/**
+	 * <span class="en"> Gets the array of denied email address patterns.
+	 * 
+	 * @deprecated This will be removed from future versions. Please use {@link ERJavaMail#denyEmailAddressPatterns}
+	 * @return array of denied email address patterns </span>
+	 * 
+	 *         <span class="ja"> TODO: update Japanese documentation ブラック・リスト・メールアドレス配列パターンを戻します。
 	 * 
 	 * @return ブラック・リスト・メールアドレス配列パターン </span>
 	 */
-	@SuppressWarnings("unchecked")
 	public NSArray<String> blackListEmailAddressPatterns() {
-		if (blakListEmailAddressPatterns == null) {
-			blakListEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
+		if (denyEmailAddressPatterns == null) {
+			if (ERXProperties.hasKey("er.javamail.BlackListEmailAddressPatterns") && !ERXProperties.hasKey("er.javamail.DenyEmailAddressPatterns")) {
+				log.warn("Please update your properties settings to use \"er.javamail.DenyEmailAddressPatterns\" instead of \"er.javamail.BlackListEmailAddressPatterns\". blackListEmailAddressPatterns() and associated properties will be removed from future versions.");
+				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.emptyArray());
+			}
+			else {
+				denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.emptyArray());
+			}
 		}
-		return blakListEmailAddressPatterns;
+		return denyEmailAddressPatterns;
 	}
 
 	/**
-	 * <span class="en"> Whilte list Or qualifier to match any of the patterns in the white list.
+	 * <span class="en"> Gets the array of denied email address patterns.
 	 * 
-	 * @return Or qualifier for the white list </span> <span class="ja"> ホワイト・リスト内でマッチするパタンのホワイト・リスト Or qualifier
+	 * @return array of denied email address patterns </span>
+	 * 
+	 *         <span class="ja"> TODO: update Japanese documentation ブラック・リスト・メールアドレス配列パターンを戻します。
+	 * @return ブラック・リスト・メールアドレス配列パターン </span>
+	 */
+	public NSArray<String> denyEmailAddressPatterns() {
+		if (denyEmailAddressPatterns == null) {
+			denyEmailAddressPatterns = ERXProperties.arrayForKeyWithDefault("er.javamail.DenyEmailAddressPatterns", NSArray.emptyArray());
+		}
+		return denyEmailAddressPatterns;
+	}
+
+	/**
+	 * <span class="en"> {@link EOOrQualifier} qualifier to match any of the patterns in the allow list.
+	 * 
+	 * @deprecated whiteListQualifier() will be removed in future versions. Please use {@link ERJavaMail#allowQualifier()}
+	 *             instead.
+	 * @return Or qualifier for the allow list </span> <span class="ja"> ホワイト・リスト内でマッチするパタンのホワイト・リスト Or qualifier
 	 * 
 	 * @return ホワイト・リスト Or qualifier </span>
 	 */
+	@Deprecated
 	public EOOrQualifier whiteListQualifier() {
-		if (whiteListQualifier == null) {
-			whiteListQualifier = qualifierArrayForEmailPatterns(whiteListEmailAddressPatterns());
-		}
-		return whiteListQualifier;
+		return allowQualifier();
 	}
 
 	/**
-	 * <span class="en"> Gets the Or qualifier to match any of the patterns in the black list.
+	 * <span class="en"> {@link EOOrQualifier} qualifier to match any of the patterns in the allow list.
+	 * 
+	 * @return {@link EOOrQualifier} for the allow list </span> <span class="ja"> ホワイト・リスト内でマッチするパタンのホワイト・リスト Or qualifier
+	 * 
+	 * @return ホワイト・リスト Or qualifier </span>
+	 */
+	public EOOrQualifier allowQualifier() {
+		if (allowQualifier == null) {
+			allowQualifier = qualifierArrayForEmailPatterns(allowEmailAddressPatterns());
+		}
+		return allowQualifier;
+	}
+
+	/**
+	 * <span class="en"> Gets the Or qualifier to match any of the patterns in the deny list.
+	 * 
+	 * @deprecated blackListQualifier() will be removed in future versions. Please use {@denyQualifier()}
+	 * @return or qualifier </span>
+	 * 
+	 *         <span class="ja"> ブラック・リスト内でマッチするパタンのブラック・リスト Or qualifier
+	 * 
+	 * @return ブラック・リスト Or qualifier </span>
+	 */
+	@Deprecated
+	public EOOrQualifier blackListQualifier() {
+		return denyQualifier();
+	}
+
+	/**
+	 * <span class="en"> Gets the {@link EOOrQualifier} qualifier to match any of the patterns in the deny list.
 	 * 
 	 * @return or qualifier </span>
 	 * 
@@ -813,11 +921,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return ブラック・リスト Or qualifier </span>
 	 */
-	public EOOrQualifier blackListQualifier() {
-		if (blackListQualifier == null) {
-			blackListQualifier = qualifierArrayForEmailPatterns(blackListEmailAddressPatterns());
+	public EOOrQualifier denyQualifier() {
+		if (denyQualifier == null) {
+			denyQualifier = qualifierArrayForEmailPatterns(denyEmailAddressPatterns());
 		}
-		return blackListQualifier;
+		return denyQualifier;
 	}
 
 	/**
@@ -844,7 +952,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
-	 * <span class="en"> Filters an array of email addresses by the black and white lists.
+	 * <span class="en"> Filters an array of email addresses by the deny and allow lists.
 	 * 
 	 * @param emailAddresses
 	 *            array of email addresses to be filtered
@@ -859,26 +967,26 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public NSArray<String> filterEmailAddresses(NSArray<String> emailAddresses) {
 		NSMutableArray<String> filteredAddresses = null;
-		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (hasWhiteList() || hasBlackList())) {
+		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (hasAllowList() || hasDenyList())) {
 			filteredAddresses = new NSMutableArray<>(emailAddresses);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Filtering email addresses: " + filteredAddresses);
 			}
 
-			if (hasWhiteList()) {
-				EOQualifier.filterArrayWithQualifier(filteredAddresses, whiteListQualifier());
+			if (hasAllowList()) {
+				EOQualifier.filterArrayWithQualifier(filteredAddresses, allowQualifier());
 				if (log.isDebugEnabled()) {
-					log.debug("White list qualifier: " + whiteListQualifier() + " after filtering: " + filteredAddresses);
+					log.debug("Allow qualifier: " + allowQualifier() + " after filtering: " + filteredAddresses);
 				}
 			}
 
-			if (hasBlackList()) {
-				NSArray<String> filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, blackListQualifier());
+			if (hasDenyList()) {
+				NSArray<String> filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, denyQualifier());
 				if (filteredOutAddresses.count() > 0)
 					filteredAddresses.removeObjectsInArray(filteredOutAddresses);
 				if (log.isDebugEnabled()) {
-					log.debug("Black list qualifier: " + blackListQualifier() + " filtering: " + filteredAddresses);
+					log.debug("Deny qualifier: " + denyQualifier() + " filtering: " + filteredAddresses);
 				}
 			}
 		}
