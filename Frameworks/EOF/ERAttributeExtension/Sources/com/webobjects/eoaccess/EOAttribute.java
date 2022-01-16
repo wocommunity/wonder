@@ -3,10 +3,10 @@ package com.webobjects.eoaccess;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
@@ -1021,6 +1021,37 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		}
 	}
 
+	public Object newValueForNumber(Object value) {
+		if (valueFactoryMethod() != null) {
+			if(!(value instanceof Number)) {
+				throw new JDBCAdaptorException(new StringBuilder().append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Number type.").toString(), null);
+			}
+			Number number = (Number)value;
+			//Call the custom factory method
+            Class<?> factoryClass = null;
+			try {
+                factoryClass = valueFactoryClass();
+				if(factoryClass != null) {
+					return valueFactoryMethod().invoke(factoryClass, number);
+				}
+                factoryClass = _NSUtilities.classWithName(className());
+				return valueFactoryMethod().invoke(factoryClass, number);
+			} catch(IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} catch(IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} catch(NoSuchMethodException e) {
+				NoSuchMethodException enhancedNsme = new NoSuchMethodException(e.getMessage() + " with parameters " + Arrays.toString(valueFactoryMethod().parameterTypes()));
+				enhancedNsme.setStackTrace(e.getStackTrace());
+				throw NSForwardException._runtimeExceptionForThrowable(enhancedNsme);
+			} catch(InvocationTargetException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+
+		return value;
+	}
+
 	public Object newValueForString(String str) {
 		Class stringClass = String.class;
 		Object value = null;
@@ -1190,6 +1221,8 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			_adaptorValueType = AdaptorDateType;
 		else if (_argumentType == FactoryMethodArgumentIsBytes)
 			_adaptorValueType = AdaptorBytesType;
+		else if (_argumentType == FactoryMethodArgumentIsNumber)
+			_adaptorValueType = AdaptorNumberType;
 		if (_adaptorValueType == -1)
 			_adaptorValueType = AdaptorBytesType;
 		return _adaptorValueType;
@@ -1335,6 +1368,26 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return (new Class[] { Date.class });
 		if (_argumentType == FactoryMethodArgumentIsBytes)
 			return (new Class[] { byte[].class });
+		if (_argumentType == FactoryMethodArgumentIsNumber) {
+			switch (_valueTypeChar()) {
+				case _VTShort:
+					return new Class[] { Short.class };
+				case _VTInteger:
+					return new Class[] { Integer.class };
+				case _VTLong:
+					return new Class[] { Long.class };
+				case _VTFloat:
+					return new Class[] { Float.class };
+				case _VTDouble:
+					return new Class[] { Double.class };
+				case _VTBigDecimal:
+					return new Class[] { BigDecimal.class };
+				case _VTByte:
+					return new Class[] { Byte.class };
+				default:
+					return new Class[] { Number.class };
+			}
+		}
 
 		return null;
 	}
@@ -1551,6 +1604,8 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return FactoryMethodArgumentIsString;
 		if (aString.equals(FactoryMethodArgumentIsDateString.toLowerCase()))
 			return FactoryMethodArgumentIsDate;
+		if (aString.equals(FactoryMethodArgumentIsNumberString.toLowerCase()))
+			return FactoryMethodArgumentIsNumber;
 		return !aString.equals("EOFactoryMethodArgumentIsNSString".toLowerCase()) ? FactoryMethodArgumentIsData : FactoryMethodArgumentIsString;
 	}
 
@@ -1567,6 +1622,9 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsDate:
 			return FactoryMethodArgumentIsDateString;
+
+		case FactoryMethodArgumentIsNumber:
+			return FactoryMethodArgumentIsNumberString;
 		}
 		return FactoryMethodArgumentIsDataString;
 	}
@@ -1777,6 +1835,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public static final int FactoryMethodArgumentIsString = 1;
 	public static final int FactoryMethodArgumentIsBytes = 2;
 	public static final int FactoryMethodArgumentIsDate = 3;
+	public static final int FactoryMethodArgumentIsNumber = 4;
 	public static final int AdaptorNumberType = 0;
 	public static final int AdaptorCharactersType = 1;
 	public static final int AdaptorBytesType = 2;
@@ -1856,6 +1915,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public static final String FactoryMethodArgumentIsStringString = "EOFactoryMethodArgumentIsString";
 	public static final String FactoryMethodArgumentIsDataString = "EOFactoryMethodArgumentIsData";
 	public static final String FactoryMethodArgumentIsDateString = "EOFactoryMethodArgumentIsDate";
+	public static final String FactoryMethodArgumentIsNumberString = "EOFactoryMethodArgumentIsNumber";
 	private Map _overwrittenCharacteristics;
 	private static Class valueClasses[];
 	private static String valueTypeNames[] = { "Number", "Characters", "Bytes", "Date" };
