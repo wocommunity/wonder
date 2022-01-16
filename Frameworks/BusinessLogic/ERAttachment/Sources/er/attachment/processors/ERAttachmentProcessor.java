@@ -161,13 +161,14 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     hashPathBuffer.append(filenameHash.charAt(1));
     hashPathBuffer.append('/');
     hashPathBuffer.append(filenameHash.charAt(2));
-    //hashPathBuffer.append('/');
-    //hashPathBuffer.append(filenameHash.substring(3));
+//    hashPathBuffer.append('/');
+//    hashPathBuffer.append(filenameHash.substring(3));
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.HASH_VARIABLE, hashPathBuffer.toString());
 
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.UUID_VARIABLE, UUID.randomUUID().toString());
 
-    parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.FILE_NAME_VARIABLE, recommendedFileName);
+    parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.FILE_NAME_VARIABLE, escapeCurrencyOf(recommendedFileName));
+    
     parsedPath = parsedPath.replaceAll(ERAttachmentProcessor.PK_VARIABLE, attachment.primaryKeyInTransaction());
     return parsedPath;
   }
@@ -462,4 +463,8 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       return _recommendedFileName;
     }
   }
+  
+  static String escapeCurrencyOf(String text) {
+	  return text.replaceAll("\\$", "\\\\\\$");
+  }  
 }
