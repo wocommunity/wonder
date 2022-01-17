@@ -795,6 +795,14 @@ a.date-picker-control {
 	color: #d60000;
 }
 
+/* with EditList the lable is in the table header */
+.EditListObjTableHd .Label abbr {
+	position: relative;
+	left: auto;
+	border-bottom: none;
+	color: #d60000;
+}
+
 label.ErrorLabel,
 span.ErrorLabel {
 	/*color: #d60000;*/

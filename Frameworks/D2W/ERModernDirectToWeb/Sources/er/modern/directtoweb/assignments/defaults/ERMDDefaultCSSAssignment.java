@@ -335,6 +335,8 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 			_type = "ConfirmCancel";
 		} else if (pageConfig.contains("EditWizard")) {
 			_type = "EditWizard";
+		} else if (pageConfig.contains("EditList")) {
+		    _type = "EditList";
 		} else if (pageConfig.contains("InspectWizard")) {
 			_type = "InspectWizard";
 		} else if (pageConfig.contains("Create")) {
