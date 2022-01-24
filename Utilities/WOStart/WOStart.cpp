@@ -399,6 +399,7 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 				(arg[1] == 'x') ||                      // jvm "special" arguments
 				(arg[1] == 'X') ||                      // jvm "special" arguments
 				(strncmp(arg, "-agentlib", 9) == 0) ||  // jvm debug options
+				(strncmp(arg, "-javaagent", 10) == 0) ||  // jvm agent option
 				(arg[1] == 'D' && strchr(arg + 2, '=')) // property definitions
 			))
 		{
