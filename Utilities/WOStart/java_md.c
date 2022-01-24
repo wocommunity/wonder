@@ -241,7 +241,8 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
  * Helpers to look in the registry for a public JRE.
  */
 
-#define JDK_KEY_10     "Software\\JavaSoft\\JDK"
+#define JRE_KEY_10x     "Software\\JavaSoft\\JRE"
+#define JDK_KEY_10x     "Software\\JavaSoft\\JDK"
 #define JRE_KEY     "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
