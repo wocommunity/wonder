@@ -240,15 +240,8 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
 /*
  * Helpers to look in the registry for a public JRE.
  */
-		    /* Same for 1.5.0, 1.5.1, 1.5.2 etc. */
-#define DOTRELEASE5  "1.5"
-#define DOTRELEASE6  "1.6"
-#define DOTRELEASE7  "1.7"
-#define DOTRELEASE8  "1.8"
-#define DOTRELEASE9  "9."
-#define DOTRELEASE10 "10."
 
-#define JRE_KEY_10     "Software\\JavaSoft\\JRE"
+#define JDK_KEY_10     "Software\\JavaSoft\\JDK"
 #define JRE_KEY     "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
@@ -273,11 +266,13 @@ GetPublicJREHome(char *buf, jint bufsize)
     char version[MAXPATHLEN];
 
     /* Find the current version of the JRE */
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY_10, 0, KEY_READ, &key) != 0) {
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JDK_KEY_10x, 0, KEY_READ, &key) != 0) {
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY_10x, 0, KEY_READ, &key) != 0) {
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY, 0, KEY_READ, &key) != 0) {
                 fprintf(stderr, "Error opening registry key '" JRE_KEY "'\n");
                 return JNI_FALSE;
             }
+        }
     }
 
     if (!GetStringFromRegistry(key, "CurrentVersion",
@@ -288,6 +283,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	return JNI_FALSE;
     }
 
+/* no longer check for specific version
     if (strcmp(version, DOTRELEASE5) != 0 &&
 		strcmp(version, DOTRELEASE6) != 0 &&
                 strcmp(version, DOTRELEASE7) != 0 &&
@@ -299,6 +295,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
+*/
 
     /* Find directory where the current version is installed. */
     if (RegOpenKeyEx(key, version, 0, KEY_READ, &subkey) != 0) {
@@ -307,7 +304,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
-
+    
     if (!GetStringFromRegistry(subkey, "JavaHome", buf, bufsize)) {
 	fprintf(stderr, "Failed reading value of registry key:\n\t"
 		JRE_KEY "\\%s\\JavaHome\n", version);
