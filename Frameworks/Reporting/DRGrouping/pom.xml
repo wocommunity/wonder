@@ -22,10 +22,6 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
