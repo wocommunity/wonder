@@ -8,7 +8,8 @@ package er.directtoweb.assignments.delayed;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -49,7 +50,7 @@ public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
     //	---------------------------------------------------------------------------
     
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERDDelayedObjectCreationAssignment.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDDelayedObjectCreationAssignment.class);
 
     //	===========================================================================
     //	Class method(s)

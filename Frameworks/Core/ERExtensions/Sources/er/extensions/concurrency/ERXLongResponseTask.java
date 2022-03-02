@@ -3,7 +3,8 @@
  */
 package er.extensions.concurrency;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -94,7 +95,7 @@ public interface ERXLongResponseTask extends Runnable {
 
 		
 		/** logging support */
-		public Logger log = Logger.getLogger(ERXUtilities.class);
+		public Logger log = LoggerFactory.getLogger(ERXUtilities.class);
 		
 		/** Refresh page that controls this task */
 		protected ERXLongResponse _longResponse;
@@ -122,7 +123,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 */
 		public DefaultImplementation() {
 			_finishInitialization();
-			log = Logger.getLogger(getClass().getName());
+			log = LoggerFactory.getLogger(getClass().getName());
 			_thread = null;
 		}
 		

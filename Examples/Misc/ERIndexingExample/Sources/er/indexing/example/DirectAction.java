@@ -45,15 +45,15 @@ public class DirectAction extends ERD2WDirectAction {
         _EOMutableKnownKeyDictionary vals;
         _EOMutableKnownKeyDictionary.Initializer initializer = new _EOMutableKnownKeyDictionary.Initializer(keys);
         vals = new _EOMutableKnownKeyDictionary(initializer);
-        log.info(vals);
+        log.info(vals.toString());
         vals.setObjectForKey("t1", "test1");
-        log.info(vals);
+        log.info(vals.toString());
         vals.setObjectForKey("t2", "test2");
-        log.info(vals);
+        log.info(vals.toString());
         vals.setObjectForKey("t3", "test3");
-        log.info(vals);
+        log.info(vals.toString());
         vals = new _EOMutableKnownKeyDictionary(initializer, new Object[]{"1", "2"});
-        log.info(vals);
+        log.info(vals.toString());
 //        ERXRemoteNotificationCenter.defaultCenter().postNotification("All", null, dict);
         return pageWithName(Main.class);
     }

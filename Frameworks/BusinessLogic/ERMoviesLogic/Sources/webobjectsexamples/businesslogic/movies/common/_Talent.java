@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -31,7 +32,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   public static final String PHOTO_KEY = PHOTO.key();
   public static final String ROLES_KEY = ROLES.key();
 
-  private static Logger LOG = Logger.getLogger(_Talent.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Talent.class);
 
   public Talent localInstanceIn(EOEditingContext editingContext) {
     Talent localInstance = (Talent)EOUtilities.localInstanceOfObject(editingContext, this);

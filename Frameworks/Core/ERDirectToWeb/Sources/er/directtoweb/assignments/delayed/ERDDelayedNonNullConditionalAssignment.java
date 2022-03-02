@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -75,7 +76,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	private static final ERXKey<String> LOCALIZE = new ERXKey<>("localize");
 
 	/** logging support */
-	public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
+	public final static Logger log = LoggerFactory.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
 
 	/**
 	 * Static constructor required by the EOKeyValueUnarchiver interface. If

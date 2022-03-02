@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -32,7 +33,7 @@ public abstract class _ERSessionInfo extends  ERXGenericRecord {
     /* more clazz methods here */
   }
 
-  private static final Logger LOG = Logger.getLogger(_ERSessionInfo.class);
+  private static final Logger LOG = LoggerFactory.getLogger(_ERSessionInfo.class);
 
   public er.persistentsessionstorage.model.ERSessionInfo.ERSessionInfoClazz clazz() {
     return er.persistentsessionstorage.model.ERSessionInfo.clazz;

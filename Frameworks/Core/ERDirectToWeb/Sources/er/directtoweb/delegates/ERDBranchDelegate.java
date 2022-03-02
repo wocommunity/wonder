@@ -16,7 +16,8 @@ import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.D2WContext;
@@ -73,7 +74,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 	}
 	
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERDBranchDelegate.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDBranchDelegate.class);
 
     /** holds the WOComponent class array used to lookup branch delegate methods */
     // MOVEME: Should belong in a WO constants class

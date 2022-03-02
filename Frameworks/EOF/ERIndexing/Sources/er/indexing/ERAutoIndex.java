@@ -128,7 +128,7 @@ public class ERAutoIndex extends ERIndex {
                 ConfigurationEntry config = configureEntity(entityName, attributeNames());
                 config.active = true;
             }
-            log.info(configuration);
+            log.info(configuration.toString());
         }
 
         /**

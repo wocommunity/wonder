@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -38,7 +39,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * @author David Teran, Frank Caputo @ cluster9
  */
 public class ERXObjectStoreCoordinatorPool {
-    private static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
+    private static final Logger log = LoggerFactory.getLogger(ERXObjectStoreCoordinatorPool.class);
     
     private static final String THREAD_OSC_KEY = "er.extensions.ERXObjectStoreCoordinatorPool.threadOSC";
     private Map<String, EOObjectStore> _oscForSession;

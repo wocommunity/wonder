@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -51,7 +52,7 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   public static final String CHILDREN_ATTACHMENTS_KEY = CHILDREN_ATTACHMENTS.key();
   public static final String PARENT_ATTACHMENT_KEY = PARENT_ATTACHMENT.key();
 
-  private static Logger LOG = Logger.getLogger(_ERAttachment.class);
+  private static Logger LOG = LoggerFactory.getLogger(_ERAttachment.class);
 
   public ERAttachment localInstanceIn(EOEditingContext editingContext) {
     ERAttachment localInstance = (ERAttachment)EOUtilities.localInstanceOfObject(editingContext, this);

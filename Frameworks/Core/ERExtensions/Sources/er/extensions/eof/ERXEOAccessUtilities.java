@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -83,8 +83,8 @@ import er.extensions.statistics.ERXStats.Group;
  */
 public class ERXEOAccessUtilities {
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERXEOAccessUtilities.class);
-    
+    public static final Logger log = LoggerFactory.getLogger(ERXEOAccessUtilities.class);
+
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
 
@@ -170,8 +170,8 @@ public class ERXEOAccessUtilities {
             if (possibleEntities.count() > 0) {
                 result = (EOEntity) possibleEntities.lastObject();
             }
-            
-            if (log.isEnabledFor(Level.WARN) && possibleEntities.count() > 1) 
+
+            if (log.isWarnEnabled() && possibleEntities.count() > 1)
                 log.warn("Found multiple entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName);
 
             if (log.isDebugEnabled())
@@ -1248,7 +1248,7 @@ public class ERXEOAccessUtilities {
 
     public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
         if (sqlLoggingLogger == null) {
-            sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
+            sqlLoggingLogger = LoggerFactory.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
         }
         // sqlLoggingLogger.setLevel(Level.DEBUG);
         String entityMatchPattern = ERXProperties.stringForKeyWithDefault(
@@ -2056,7 +2056,7 @@ public class ERXEOAccessUtilities {
               e.removeSharedObjectFetchSpecificationByName((String)fetchSpecNameObjectEnumerator.nextElement());
           } 
       } else if (e == null) {
-          log.warn("makeEditableSharedEntityNamed: unable to find entity named: " + entityName);            
+          log.warn("makeEditableSharedEntityNamed: unable to find entity named: " + entityName);
       } else {
           log.warn("makeEditableSharedEntityNamed: entity already editable: " + entityName);
       }
@@ -2110,7 +2110,7 @@ public class ERXEOAccessUtilities {
 			sourceEntity.setClassProperties(classProperties);
 		}
 		if(log.isDebugEnabled())
-			log.debug(relationship);
+			log.debug(relationship.toString());
 
 		return relationship;
 	}

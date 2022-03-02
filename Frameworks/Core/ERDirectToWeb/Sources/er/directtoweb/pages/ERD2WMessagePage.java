@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -35,7 +36,7 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERD2WMessagePage.class);
+    public final static Logger log = LoggerFactory.getLogger(ERD2WMessagePage.class);
     
     protected String _message;
     protected String _title;

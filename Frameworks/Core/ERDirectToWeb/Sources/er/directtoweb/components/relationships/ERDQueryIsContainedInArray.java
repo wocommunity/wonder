@@ -1,6 +1,7 @@
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOUtilities;
@@ -35,7 +36,7 @@ public class ERDQueryIsContainedInArray extends ERDCustomQueryComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDQueryIsContainedInArray.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDQueryIsContainedInArray.class);
 	
     /**
      * Public constructor

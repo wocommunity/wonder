@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -26,7 +27,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 
-	public static final Logger log = Logger.getLogger(ERXObjectStoreCoordinator.class);
+	public static final Logger log = LoggerFactory.getLogger(ERXObjectStoreCoordinator.class);
 
 	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces;
 
@@ -130,16 +131,16 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	public void unlock() {
 		boolean tracing = ERXEC.markOpenLocks();
 		if (lockingThread != null && lockingThread != Thread.currentThread()) {
-			log.fatal("Unlocking thread is not locking thread: LOCKING " + lockingThread + " vs UNLOCKING " + Thread.currentThread(), new RuntimeException("UnlockingTrace"));
+			log.error("Unlocking thread is not locking thread: LOCKING " + lockingThread + " vs UNLOCKING " + Thread.currentThread(), new RuntimeException("UnlockingTrace"));
 			if (tracing) {
 				NSMutableArray<Exception> traces = openLockTraces.objectForKey(lockingThread);
 				if (traces != null) {
 					for (Exception trace : traces) {
-						log.fatal("Currenty locking threads: " + lockingThread, trace);
+						log.error("Currenty locking threads: " + lockingThread, trace);
 					}
 				}
 				else {
-					log.fatal("Trace for locking thread is MISSING");
+					log.error("Trace for locking thread is MISSING");
 				}
 			}
 		}

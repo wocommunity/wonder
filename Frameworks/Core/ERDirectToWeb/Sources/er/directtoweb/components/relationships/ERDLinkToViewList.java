@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -41,7 +42,7 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }
     
-    public static final Logger log = Logger.getLogger(ERDLinkToViewList.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDLinkToViewList.class);
 
     @Override
     public boolean isStateless() { return true; }

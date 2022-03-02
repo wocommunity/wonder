@@ -8,7 +8,7 @@ import com.webobjects.eocontrol.*;
 public class <$classNameWithoutPackage$> extends _<$classNameWithoutPackage$><$if userInfo.interfaces$> 
     implements <$userInfo.interfaces$><$endif$> {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(<$classNameWithoutPackage$>.class);
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(<$classNameWithoutPackage$>.class);
 
     public static final <$classNameWithoutPackage$>Clazz clazz = new <$classNameWithoutPackage$>Clazz();
     public static class <$classNameWithoutPackage$>Clazz extends _<$classNameWithoutPackage$>._<$classNameWithoutPackage$>Clazz {/* more clazz methods here */}

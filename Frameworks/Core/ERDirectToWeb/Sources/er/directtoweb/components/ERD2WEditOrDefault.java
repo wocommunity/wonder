@@ -8,7 +8,8 @@ package er.directtoweb.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -33,7 +34,7 @@ public class ERD2WEditOrDefault extends D2WComponent {
     public ERD2WEditOrDefault(WOContext context) {super(context);}
     
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WEditOrDefault.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WEditOrDefault.class);
     
     public String radioButtonGroupName() { return name() +"_"+d2wContext().propertyKey(); }
     

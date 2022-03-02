@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -419,7 +420,7 @@ public class ERIndex {
     private String _store;
     
     protected ERIndex(String name) {
-        log = Logger.getLogger(ERIndex.class.getName() + "." + name);
+        log = LoggerFactory.getLogger(ERIndex.class.getName() + "." + name);
        _name = name;
         indices.setObjectForKey(this, name);
     }

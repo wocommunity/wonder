@@ -2,7 +2,8 @@ package er.distribution.client;
 
 import java.lang.reflect.Field;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eodistribution.client.EODistributedObjectStore;
@@ -19,7 +20,7 @@ import er.distribution.common.ERReferenceRecordingCoder;
  */
 public class ERDistributedObjectStore extends EODistributedObjectStore {
 
-	private static final Logger log = Logger.getLogger(ERDistributedObjectStore.class);
+	private static final Logger log = LoggerFactory.getLogger(ERDistributedObjectStore.class);
 
 	public ERDistributedObjectStore(EODistributionChannel channel) {
 		super(channel);

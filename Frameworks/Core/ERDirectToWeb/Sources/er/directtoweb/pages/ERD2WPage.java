@@ -16,7 +16,8 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.log4j.NDC;
 
 import com.webobjects.appserver.WOActionResults;
@@ -175,9 +176,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERD2WPage.class);
+    public final static Logger log = LoggerFactory.getLogger(ERD2WPage.class);
 
-    public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WPage");
+    public static final Logger validationLog = LoggerFactory.getLogger("er.directtoweb.validation.ERD2WPage");
 
     private String _statsKeyPrefix;
 

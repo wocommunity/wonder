@@ -2,7 +2,8 @@ package er.distribution;
 
 import java.lang.reflect.Field;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -23,7 +24,7 @@ import er.distribution.common.ERReferenceRecordingCoder;
 @SuppressWarnings("deprecation")
 public class ERDistributionContext extends EODistributionContext {
 
-	public static final Logger log = Logger.getLogger(ERDistributionContext.class);
+	public static final Logger log = LoggerFactory.getLogger(ERDistributionContext.class);
 
 	public ERDistributionContext(WOSession session) {
 		super(session);

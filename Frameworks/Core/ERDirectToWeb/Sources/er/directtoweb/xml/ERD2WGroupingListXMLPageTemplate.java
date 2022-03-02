@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.xml;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -43,7 +44,7 @@ public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
     public ERD2WGroupingListXMLPageTemplate(WOContext context) {super(context);}
     
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERD2WGroupingListXMLPageTemplate.class);
+    public final static Logger log = LoggerFactory.getLogger(ERD2WGroupingListXMLPageTemplate.class);
 
     private final static String NULL="N/A";
     

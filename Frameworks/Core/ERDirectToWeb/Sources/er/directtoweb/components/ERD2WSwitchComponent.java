@@ -8,7 +8,8 @@ package er.directtoweb.components;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
@@ -47,7 +48,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WSwitchComponent.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WSwitchComponent.class);
     
     protected transient NSMutableDictionary<String, Object> extraBindings = new NSMutableDictionary<>(16);
 

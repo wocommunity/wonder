@@ -3,7 +3,8 @@ package er.distribution.client;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eodistribution.client.EODistributionChannel;
@@ -21,7 +22,7 @@ import er.extensions.logging.ERXLogger;
 
 public abstract class ERClientApplication {
 
-	private static final Logger log = Logger.getLogger(ERClientApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(ERClientApplication.class);
 
 	private Preferences userDefaults;
 	private ERDistributedObjectStore remoteObjectStore;
