@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
-import org.apache.log4j.Level;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
@@ -19,7 +17,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.ERD2WContextDictionary;
-import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.components.ERXDebugMarker;
@@ -120,9 +117,6 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     }
     
     public void toggleRuleTracing() {
-        boolean off = ERD2WModel.ruleTraceEnabledLog.isDebugEnabled();
-        ERDirectToWeb.trace.setLevel(off ? Level.INFO : Level.DEBUG);
-        ERD2WModel.ruleTraceEnabledLog.setLevel(off ? Level.INFO : Level.DEBUG);
         ERDirectToWeb.configureTraceRuleFiring();
     }
     
