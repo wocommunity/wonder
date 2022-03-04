@@ -38,8 +38,6 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -114,6 +112,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLoggingUtilities;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
 
@@ -1178,15 +1177,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
 		}
-		// ak: telling Log4J to re-init the Console appenders so we get logging
-		// into WOOutputPath again
-		for (Enumeration e = org.apache.log4j.Logger.getRootLogger().getAllAppenders(); e.hasMoreElements();) {
-			Appender appender = (Appender) e.nextElement();
-			if (appender instanceof ConsoleAppender) {
-				ConsoleAppender app = (ConsoleAppender) appender;
-				app.activateOptions();
-			}
-		}
+		
+        ERXLoggingUtilities.resetLoggingAdapter();
+        
 		if(_loader != null) {
 			_loader._checker.reportErrors();
 			_loader._checker = null;

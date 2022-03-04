@@ -9,6 +9,7 @@ package er.extensions.foundation;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import er.extensions.logging.ERXLoggingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -289,7 +290,7 @@ public class ERXConfigurationManager {
     		ERXSystem.updateProperties();
     	}
 
-    	ERXLogger.configureLoggingWithSystemProperties();
+    	ERXLoggingUtilities.configureLoggingWithSystemProperties();
     }
     
     /**
@@ -303,8 +304,8 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link er.extensions.logging.ERXLogger#configureLoggingWithSystemProperties()} to reconfigure 
-     * the logging system. 
+     * calls {@link er.extensions.logging.ERXLoggingUtilities#configureLoggingWithSystemProperties()}
+     * to reconfigure the logging system.
      * <p>
      * The configuration files: Properties and WebObjects.properties 
      * files are reloaded to the Java system properties by the same 

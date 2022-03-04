@@ -1,20 +1,11 @@
 package er.extensions.logging;
 
-import java.util.Properties;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
-import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSNotificationCenter;
-
-import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+
+import java.util.Properties;
 
 /**
  * Custom subclass of Logger. The main reason for this class is to isolate the
@@ -22,213 +13,404 @@ import er.extensions.foundation.ERXSystem;
  * to switch logging systems and this should be the only effected class .. in
  * theory.
  */
-public class ERXLogger extends org.apache.log4j.Logger {
+public class ERXLogger implements org.slf4j.Logger {
 
-	public static final String CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES = "configureLoggingWithSystemProperties";
+    public static final String CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES = "configureLoggingWithSystemProperties";
 
-	/** logging supprt */
-	public static Logger log;
-	public static Factory factory = null;
-	static {
-		String factoryClassName = System.getProperty("log4j.loggerFactory");
-		if (factoryClassName == null) {
-			factoryClassName = ERXLogger.Factory.class.getName();
-		}
-		if (factoryClassName.indexOf("ERXLogger$Factory") >= 0) {
-			System.getProperties().remove("log4j.loggerFactory");
-			factoryClassName = null;
-		}
-		if (factoryClassName != null) {
-			try {
-				ERXLogger.factory = (Factory) Class.forName(factoryClassName).newInstance();
-			}
-			catch (Exception ex) {
-				System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
-			}
-		} else {
-			ERXLogger.factory = new Factory();
-		}
-	}
+    /**
+     * Main entry point for getting a Logger for a given name. Calls getLogger
+     * to return the instance of Logger.
+     *
+     * @param name to create the logger for
+     * @return Logger for the given name.
+     */
+    public static ERXLogger getERXLogger(String name) {
+        ERXLogger logger = new ERXLogger(name);
+        ERXLoggingUtilities.configureLoggingWithSystemProperties();
 
-	/**
-	 * LoggerFactory subclass that creates ERXLogger objects instead of the
-	 * default Logger classes.
-	 */
-	public static class Factory implements org.apache.log4j.spi.LoggerFactory {
+        return logger;
+    }
 
-		/**
-		 * Overriden method used to create new Logger classes.
-		 * 
-		 * @param name
-		 *            to create the new Logger instance for
-		 * @return new Logger object for the given name
-		 */
-		public Logger makeNewLoggerInstance(String name) {
-			if (ERXLogger.log != null && ERXLogger.log.isDebugEnabled()) {
-				ERXLogger.log.debug("makeNewLoggerInstance: " + name);
-			}
-			return new ERXLogger(name);
-		}
+    /**
+     * Overrides method of superclass to return a logger using the {@code org.slf4j.LoggerFactory} class.
+     * This works identical to {@link org.slf4j.LoggerFactory#getLogger(String)}
+     *
+     * @param name to create the logger for
+     * @return Logger for the given name.
+     */
+    public static Logger getLogger(String name) {
+        return ERXLogger.getERXLogger(name);
+    }
 
-		/**
-		 * Override this in your own subclass to do somthing after the logging
-		 * config did change.
-		 * 
-		 */
-		public void loggingConfigurationDidChange() {
-			// default is to do nothing
-		}
-	}
+    /**
+     * Creates a logger for a given class object. Gets a logger for the fully
+     * qualified class name of the given class.
+     *
+     * @param clazz Class object to create the logger for
+     * @return logger for the given class name
+     */
+    public static ERXLogger getERXLogger(Class clazz) {
+        return ERXLogger.getERXLogger(clazz.getName());
+    }
 
-	/**
-	 * Main entry point for getting an Logger for a given name. Calls getLogger
-	 * to return the instance of Logger from our custom Factory.
-	 * 
-	 * Note that if the log4j system has not been setup correctly, meaning the
-	 * LoggerFactory subclass has not been correctly put in place, then
-	 * RuntimeException will be thrown.
-	 * 
-	 * @param name
-	 *            to create the logger for
-	 * @return Logger for the given name.
-	 */
-	public static ERXLogger getERXLogger(String name) {
-		Logger logger = ERXLogger.getLogger(name);
-		if (logger != null && !(logger instanceof ERXLogger)) {
-			ERXLogger.configureLoggingWithSystemProperties();
-			logger = ERXLogger.getLogger(name);
-		}
-		if (logger != null && !(logger instanceof ERXLogger)) {
-			throw new RuntimeException("Can't load Logger for \"" + name + "\" because it is not of class ERXLogger but \"" + logger.getClass().getName() + "\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.Logger$Factory\" line in your properties.");
-		}
-		return (ERXLogger) logger;
-	}
+    public static Logger getLogger(Class clazz) {
+        return ERXLogger.getERXLogger(clazz);
+    }
 
-	/**
-	 * Overrides method of superclass to return a logger using our custom
-	 * Logger$Factory class. This works identical to
-	 * {@link org.apache.log4j.Logger#getLogger log4.Logger.getLogger}
-	 * 
-	 * @param name
-	 *            to create the logger for
-	 * @return Logger for the given name.
-	 */
-	public static Logger getLogger(String name) {
-		return Logger.getLogger(name, ERXLogger.factory);
-	}
+    /**
+     * Creates a logger for the given class object plus a restricting subtopic.
+     * For instance if you had the class <code>a.b.Foo</code> and you wanted to
+     * create a logger for the subtopic 'utilities' for the class Foo then the
+     * created logging logger would have the path:
+     * <code>a.b.Foo.utilities</code>.
+     *
+     * @param clazz    Class object to create the logger for
+     * @param subTopic to restrict the current logger to
+     * @return logger for the given class and subtopic
+     */
+    // ENHANCEME: We could do something more useful here...
+    public static ERXLogger getERXLogger(Class clazz, String subTopic) {
+        return ERXLogger.getERXLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "." + subTopic : null));
+    }
 
-	/**
-	 * Creates a logger for a given class object. Gets a logger for the fully
-	 * qualified class name of the given class.
-	 * 
-	 * @param clazz
-	 *            Class object to create the logger for
-	 * @return logger for the given class name
-	 */
-	public static ERXLogger getERXLogger(Class clazz) {
-		return ERXLogger.getERXLogger(clazz.getName());
-	}
+    public static void configureLoggingWithSystemProperties() {
+        ERXLoggingUtilities.configureLogging(ERXSystem.getProperties());
+    }
 
-	public static Logger getLogger(Class clazz) {
-		return ERXLogger.getERXLogger(clazz);
-	}
+    /**
+     * Sets up the logging system with the given configuration in
+     * {@link java.util.Properties} format.
+     *
+     * @param properties with the logging configuration
+     */
+    public static void configureLogging(Properties properties) {
+        ERXLoggingUtilities.configureLogging(properties);
+    }
 
-	/**
-	 * Creates a logger for the given class object plus a restricting subtopic.
-	 * For instance if you had the class <code>a.b.Foo</code> and you wanted to
-	 * create a logger for the subtopic 'utilities' for the class Foo then the
-	 * created logging logger would have the path:
-	 * <code>a.b.Foo.utilities</code>.
-	 * 
-	 * @param clazz
-	 *            Class object to create the logger for
-	 * @param subTopic
-	 *            to restrict the current logger to
-	 * @return logger for the given class and subtopic
-	 */
-	// ENHANCEME: We could do something more useful here...
-	public static ERXLogger getERXLogger(Class clazz, String subTopic) {
-		return ERXLogger.getERXLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "." + subTopic : null));
-	}
+    private final Logger logger;
 
-	/**
-	 * Default constructor. Constructs a logger for the given name.
-	 * 
-	 * @param name
-	 *            of the logging logger
-	 */
-	public ERXLogger(String name) {
-		super(name);
-	}
+    /**
+     * Default constructor. Constructs a logger for the given name.
+     *
+     * @param name of the logging logger
+     */
+    public ERXLogger(String name) {
+        logger = LoggerFactory.getLogger(name);
+    }
 
-	public static synchronized void configureLoggingWithSystemProperties() {
-		ERXLogger.configureLogging(ERXSystem.getProperties());
-	}
+    @Override
+    public String getName() {
+        return logger.getName();
+    }
 
-	/**
-	 * Sets up the logging system with the given configuration in
-	 * {@link java.util.Properties} format.
-	 * 
-	 * @param properties
-	 *            with the logging configuration
-	 */
-	public static synchronized void configureLogging(Properties properties) {
-		LogManager.resetConfiguration();
-		BasicConfigurator.configure();
-		// AK: we re-configure the logging a few lines later from the
-		// properties, but in case
-		// no config is set, we set the root level to info, install the brigde
-		// which sets it's own logging level to DEBUG
-		// and the output should be pretty much the same as with plain WO
-		Logger.getRootLogger().setLevel(Level.INFO);
-		int allowedLevel = NSLog.debug.allowedDebugLevel();
-		if (!(NSLog.debug instanceof ERXNSLogLog4jBridge)) {
-			NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-			NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-			NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-		}
-		NSLog.debug.setAllowedDebugLevel(allowedLevel);
-		PropertyConfigurator.configure(properties);
-		// AK: if the root logger has no appenders, something is really broken
-		// most likely the properties didn't read correctly.
-		if (!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
-			Appender appender = new ConsoleAppender(new ERXPatternLayout("%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n"), "System.out");
-			Logger.getRootLogger().addAppender(appender);
-			Logger.getRootLogger().setLevel(Level.DEBUG);
-			Logger.getRootLogger().error("Logging prefs couldn't get read from properties, using defaults");
-		}
-		if (ERXLogger.log == null) {
-			ERXLogger.log = Logger.getLogger(Logger.class);
-		}
-		ERXLogger.log.info("Updated the logging configuration with the current system properties.");
-		if (ERXLogger.log.isDebugEnabled()) {
-			ERXLogger.log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
-			ERXLogger.log.debug("Factory: " + ERXLogger.factory);
-			// MS: This just trips everyone up, and it really seems to only be
-			// used by PW developers, so I say we just turn it on when we need it.
-			// log.debug("", new RuntimeException(
-			// "This is not a real exception. It is just to show you where logging was initialized."
-			// ));
-		}
-		// PropertyPrinter printer = new PropertyPrinter(new
-		// PrintWriter(System.out));
-		// printer.print(new PrintWriter(System.out));
-		if (ERXLogger.factory != null) {
-			ERXLogger.factory.loggingConfigurationDidChange();
-		}
+    @Override
+    public boolean isTraceEnabled() {
+        return logger.isTraceEnabled();
+    }
 
-		NSNotificationCenter.defaultCenter().postNotification(ERXConfigurationManager.ConfigurationDidChangeNotification, null);
-	}
+    @Override
+    public void trace(String msg) {
+        logger.trace(msg);
+    }
 
-	/**
-	 * Dumps an Throwable's Stack trace on the appender if debugging is enabled.
-	 * 
-	 * @param throwable
-	 *            throwable to dump
-	 */
-	public void debugStackTrace(Throwable throwable) {
-		if (isDebugEnabled()) {
-			throwable.printStackTrace();
-		}
-	}
+    @Override
+    public void trace(String format, Object arg) {
+        logger.trace(format, arg);
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2) {
+        logger.trace(format, arg1, arg2);
+    }
+
+    @Override
+    public void trace(String format, Object... arguments) {
+        logger.trace(format, arguments);
+    }
+
+    @Override
+    public void trace(String msg, Throwable t) {
+        logger.trace(msg, t);
+    }
+
+    @Override
+    public boolean isTraceEnabled(Marker marker) {
+        return logger.isTraceEnabled(marker);
+    }
+
+    @Override
+    public void trace(Marker marker, String msg) {
+        logger.trace(marker, msg);
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object arg) {
+        logger.trace(marker, format, arg);
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object arg1, Object arg2) {
+        logger.trace(marker, format, arg1, arg2);
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object... argArray) {
+        logger.trace(marker, format, argArray);
+    }
+
+    @Override
+    public void trace(Marker marker, String msg, Throwable t) {
+        logger.trace(marker, msg, t);
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return logger.isDebugEnabled();
+    }
+
+    @Override
+    public void debug(String msg) {
+        logger.debug(msg);
+    }
+
+    @Override
+    public void debug(String format, Object arg) {
+        logger.debug(format, arg);
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2) {
+        logger.debug(format, arg1, arg2);
+    }
+
+    @Override
+    public void debug(String format, Object... arguments) {
+        logger.debug(format, arguments);
+    }
+
+    @Override
+    public void debug(String msg, Throwable t) {
+        logger.debug(msg, t);
+    }
+
+    @Override
+    public boolean isDebugEnabled(Marker marker) {
+        return logger.isDebugEnabled(marker);
+    }
+
+    @Override
+    public void debug(Marker marker, String msg) {
+        logger.debug(marker, msg);
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object arg) {
+        logger.debug(marker, format, arg);
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object arg1, Object arg2) {
+        logger.debug(marker, format, arg1, arg2);
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object... arguments) {
+        logger.debug(marker, format, arguments);
+    }
+
+    @Override
+    public void debug(Marker marker, String msg, Throwable t) {
+        logger.debug(marker, msg, t);
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return logger.isInfoEnabled();
+    }
+
+    @Override
+    public void info(String msg) {
+        logger.info(msg);
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+        logger.info(format, arg);
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+        logger.info(format, arg1, arg2);
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+        logger.info(format, arguments);
+    }
+
+    @Override
+    public void info(String msg, Throwable t) {
+        logger.info(msg, t);
+    }
+
+    @Override
+    public boolean isInfoEnabled(Marker marker) {
+        return logger.isInfoEnabled(marker);
+    }
+
+    @Override
+    public void info(Marker marker, String msg) {
+        logger.info(marker, msg);
+    }
+
+    @Override
+    public void info(Marker marker, String format, Object arg) {
+        logger.info(marker, format, arg);
+    }
+
+    @Override
+    public void info(Marker marker, String format, Object arg1, Object arg2) {
+        logger.info(marker, format, arg1, arg2);
+    }
+
+    @Override
+    public void info(Marker marker, String format, Object... arguments) {
+        logger.info(marker, format, arguments);
+    }
+
+    @Override
+    public void info(Marker marker, String msg, Throwable t) {
+        logger.info(marker, msg, t);
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return logger.isWarnEnabled();
+    }
+
+    @Override
+    public void warn(String msg) {
+        logger.warn(msg);
+    }
+
+    @Override
+    public void warn(String format, Object arg) {
+        logger.warn(format, arg);
+    }
+
+    @Override
+    public void warn(String format, Object... arguments) {
+        logger.warn(format, arguments);
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2) {
+        logger.warn(format, arg1, arg2);
+    }
+
+    @Override
+    public void warn(String msg, Throwable t) {
+        logger.warn(msg, t);
+    }
+
+    @Override
+    public boolean isWarnEnabled(Marker marker) {
+        return logger.isWarnEnabled(marker);
+    }
+
+    @Override
+    public void warn(Marker marker, String msg) {
+        logger.warn(marker, msg);
+    }
+
+    @Override
+    public void warn(Marker marker, String format, Object arg) {
+        logger.warn(marker, format, arg);
+    }
+
+    @Override
+    public void warn(Marker marker, String format, Object arg1, Object arg2) {
+        logger.warn(marker, format, arg1, arg2);
+    }
+
+    @Override
+    public void warn(Marker marker, String format, Object... arguments) {
+        logger.warn(marker, format, arguments);
+    }
+
+    @Override
+    public void warn(Marker marker, String msg, Throwable t) {
+        logger.warn(marker, msg, t);
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return logger.isErrorEnabled();
+    }
+
+    @Override
+    public void error(String msg) {
+        logger.error(msg);
+    }
+
+    @Override
+    public void error(String format, Object arg) {
+        logger.error(format, arg);
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2) {
+        logger.error(format, arg1, arg2);
+    }
+
+    @Override
+    public void error(String format, Object... arguments) {
+        logger.error(format, arguments);
+    }
+
+    @Override
+    public void error(String msg, Throwable t) {
+        logger.error(msg, t);
+    }
+
+    @Override
+    public boolean isErrorEnabled(Marker marker) {
+        return logger.isErrorEnabled(marker);
+    }
+
+    @Override
+    public void error(Marker marker, String msg) {
+        logger.error(marker, msg);
+    }
+
+    @Override
+    public void error(Marker marker, String format, Object arg) {
+        logger.error(marker, format, arg);
+    }
+
+    @Override
+    public void error(Marker marker, String format, Object arg1, Object arg2) {
+        logger.error(marker, format, arg1, arg2);
+    }
+
+    @Override
+    public void error(Marker marker, String format, Object... arguments) {
+        logger.error(marker, format, arguments);
+    }
+
+    @Override
+    public void error(Marker marker, String msg, Throwable t) {
+        logger.error(marker, msg, t);
+    }
+
+    /**
+     * Dumps a Throwable's Stack trace on the appender if debugging is enabled.
+     *
+     * @param throwable throwable to dump
+     */
+    public void debugStackTrace(Throwable throwable) {
+        if (isDebugEnabled()) {
+            logger.debug("", throwable);
+        }
+    }
 }

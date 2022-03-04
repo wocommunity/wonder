@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import er.extensions.logging.ERXLoggingUtilities;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,12 +204,12 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	String className = ERXProperties.stringForKey("er.extensions.erxloggerclass"); 
         	if (className != null) {
 	        	Class loggerClass = Class.forName(className);
-	        	Method method = loggerClass.getDeclaredMethod(ERXLogger.CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES, (Class[]) null);
+	        	Method method = loggerClass.getDeclaredMethod(ERXLoggingUtilities.CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES, (Class[]) null);
 	        	method.invoke(loggerClass, (Object[]) null);
         	}
         	else {
         		// default behaviour:
-        		ERXLogger.configureLoggingWithSystemProperties();
+        		ERXLoggingUtilities.configureLoggingWithSystemProperties();
         	}
         	
             ERXArrayUtilities.initialize();

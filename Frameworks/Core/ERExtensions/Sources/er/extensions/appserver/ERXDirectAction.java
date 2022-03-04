@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import er.extensions.logging.ERXLoggingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -436,7 +437,7 @@ public class ERXDirectAction extends WODirectAction {
     			java.util.Properties p = System.getProperties();
     			p.put(key, value);
     			System.setProperties(p);
-                ERXLogger.configureLoggingWithSystemProperties();
+                ERXLoggingUtilities.configureLoggingWithSystemProperties();
     			for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
     				Object k = e.nextElement();
     				if (k.equals(key)) {
