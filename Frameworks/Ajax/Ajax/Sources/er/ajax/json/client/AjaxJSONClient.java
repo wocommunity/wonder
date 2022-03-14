@@ -36,6 +36,11 @@ public class AjaxJSONClient extends AjaxStatelessJSONClient {
 	public boolean isStateless() {
 		return false;
 	}
+	
+	@Override
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
 	@Override
 	public boolean global() {
