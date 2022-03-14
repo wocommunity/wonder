@@ -13,9 +13,6 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/fop.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/serializer-2.7.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xalan-2.7.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/xercesImpl-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-1.3.04.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-ext-1.3.04.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xmlgraphics-commons-2.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/flying-saucer-core-9.1.16.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/flying-saucer-pdf-9.1.16.jar"/>

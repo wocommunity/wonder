@@ -6,7 +6,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaFoundation"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>

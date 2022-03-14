@@ -98,5 +98,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERJars/LibraryJavadocs/javassist-3.24.1-GA-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="Libraries/javax.servlet-api-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/xercesImpl-2.9.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-1.3.04.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-ext-1.3.04.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
