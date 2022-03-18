@@ -5,3 +5,5 @@ bin
 ant.*
 dist
 .DS_Store
+.idea
+.flattened-pom.xml

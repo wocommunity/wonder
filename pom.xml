@@ -14,6 +14,7 @@
         <module>Frameworks</module>
         <module>Tests</module>
         <module>Utilities</module>
+        <module>bom</module>
     </modules>
 
     <properties>
