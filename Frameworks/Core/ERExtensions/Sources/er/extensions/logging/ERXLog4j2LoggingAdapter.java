@@ -9,7 +9,7 @@ import java.util.Properties;
 class ERXLog4j2LoggingAdapter implements ERXLoggingAdapter {
     @Override
     public void setLevel(org.slf4j.Logger aLogger, org.slf4j.event.Level level) {
-        Logger log4j2Logger = ERXLoggingUtilities.toUnderlingLoggerOfType(aLogger, Logger.class);
+        Logger log4j2Logger = ERXLoggingUtilities.toUnderlyingLoggerOfType(aLogger, Logger.class);
         Level log4j2Level = toLog4j2Level(level);
 
         Configurator.setLevel(log4j2Logger.getName(), log4j2Level);

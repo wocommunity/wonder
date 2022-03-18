@@ -82,7 +82,7 @@ public class ERXLoggingUtilities {
         loggingAdapter.reset();
     }
 
-    static <T> T toUnderlingLoggerOfType(Logger logger, Class<T> loggerClass) {
+    static <T> T toUnderlyingLoggerOfType(Logger logger, Class<T> loggerClass) {
         try {
             Class<? extends Logger> loggerType = logger.getClass();
             Field fields[] = loggerType.getDeclaredFields();

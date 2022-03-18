@@ -11,7 +11,7 @@ class ERXLog4j1LoggingAdapter implements ERXLoggingAdapter {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ERXLogger.class);
 
     public void setLevel(org.slf4j.Logger aLogger, org.slf4j.event.Level level) {
-        Logger log4jLogger = ERXLoggingUtilities.toUnderlingLoggerOfType(aLogger, Logger.class);
+        Logger log4jLogger = ERXLoggingUtilities.toUnderlyingLoggerOfType(aLogger, Logger.class);
         Level log4jLevel = toLog4j1Level(level);
 
         log4jLogger.setLevel(log4jLevel);
