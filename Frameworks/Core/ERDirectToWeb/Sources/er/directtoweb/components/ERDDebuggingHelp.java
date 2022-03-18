@@ -17,10 +17,13 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.ERD2WContextDictionary;
+import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.components.ERXDebugMarker;
 import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLoggingUtilities;
+import org.slf4j.event.Level;
 
 /**
  * Little help component useful for debugging.
@@ -117,6 +120,10 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     }
     
     public void toggleRuleTracing() {
+        boolean off = ERD2WModel.ruleTraceEnabledLog.isDebugEnabled();
+        Level level = off ? Level.INFO : Level.DEBUG;
+        ERXLoggingUtilities.setLevel(ERDirectToWeb.trace, level);
+        ERXLoggingUtilities.setLevel(ERD2WModel.ruleTraceEnabledLog, level);
         ERDirectToWeb.configureTraceRuleFiring();
     }
     
