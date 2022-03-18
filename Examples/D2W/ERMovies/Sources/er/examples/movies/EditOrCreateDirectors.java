@@ -1,5 +1,8 @@
 package er.examples.movies;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
@@ -13,7 +16,6 @@ import er.directtoweb.interfaces.ERDEditPageInterface;
 import er.directtoweb.interfaces.ERDObjectSaverInterface;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.logging.ERXLogger;
 
 public class EditOrCreateDirectors extends WOComponent {
 
@@ -44,8 +46,8 @@ public class EditOrCreateDirectors extends WOComponent {
 
     public static class CreateDirectorDelegate implements NextPageDelegate {
 
-        public static final ERXLogger log = ERXLogger.getERXLogger(CreateDirectorDelegate.class);
-        
+        public static final Logger log = LoggerFactory.getLogger(CreateDirectorDelegate.class);
+
         protected EOEnterpriseObject movie;
         protected WOComponent nextPage;
 
