@@ -402,7 +402,7 @@ HTTPResponse *tr_handleRequest(HTTPRequest *req, const char *url, WOURLComponent
    } else {
       if (ac_authorizeAppListing(wc))
          resp = WOAdaptorInfo(req, wc);
-      else
+      else if (app.error != err_noInstance)
          app.error = err_notFound;
    }
 
