@@ -30,43 +30,24 @@ public class ERAttachmentIcon extends ERXStatelessComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-  public ERAttachmentIcon(WOContext context) {
-    super(context);
-  }
+	public ERAttachmentIcon(WOContext context) {
+		super(context);
+	}
 
-  public ERAttachment attachment() {
-    return (ERAttachment) valueForBinding("attachment");
-  }
+	public ERAttachment attachment() {
+		return (ERAttachment) valueForBinding("attachment");
+	}
 
-  public String attachmentUrl() {
-    WOContext context = context();
-    ERAttachment attachment = attachment();
-    return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
-  }
+	public String attachmentUrl() {
+		WOContext context = context();
+		ERAttachment attachment = attachment();
+		return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
+	}
 
-  public String iconPath() {
-    return ERAttachmentIcon.iconPath(attachment(), valueForBinding("size"));
-  }
+	public String iconPath() {
+		return ERAttachmentIcon.iconPath(attachment(), valueForBinding("size"));
+	}
 
-  public static String iconPath(ERAttachment attachment, Object size) {
-    String sizeStr = "16";
-    if (size != null) {
-      sizeStr = size.toString();
-    }
-    ERMimeType erMimeType = null;
-    if (attachment != null) {
-      erMimeType = attachment.erMimeType();
-    }
-    String mimeType;
-    if (erMimeType == null) {
-      mimeType = "application/x-octet-stream";
-    }
-    else {
-      mimeType = erMimeType.mimeType();
-    }
-    String iconPath = "icons/" + sizeStr + "/" + mimeType + ".png";
-    return iconPath;
-  }
 	public String iconUrl() {
 		String framework = "ERAttachment";
 		String iconPath = ERAttachmentIcon.iconPath(attachment(), valueForBinding("size"));
@@ -80,8 +61,23 @@ public class ERAttachmentIcon extends ERXStatelessComponent {
 		return anImageURL;
 	}
 
-  @Override
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
+	public static String iconPath(ERAttachment attachment, Object size) {
+		String sizeStr = "16";
+		if (size != null) {
+			sizeStr = size.toString();
+		}
+		ERMimeType erMimeType = null;
+		if (attachment != null) {
+			erMimeType = attachment.erMimeType();
+		}
+		String mimeType;
+		if (erMimeType == null) {
+			mimeType = "application/x-octet-stream";
+		}
+		else {
+			mimeType = erMimeType.mimeType();
+		}
+		String iconPath = "icons/" + sizeStr + "/" + mimeType + ".png";
+		return iconPath;
+	}
 }
