@@ -195,7 +195,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		HttpURLConnection request = makeRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key), headers, object);
+				+ Utils.urlencodePath(key), headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(
@@ -230,7 +230,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		HttpURLConnection request = makeStreamRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key), headers, object);
+				+ Utils.urlencodePath(key), headers, object);
 
 		request.setDoOutput(true);
 		if (object.length != 0) {
@@ -274,7 +274,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetStreamResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -330,7 +330,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key) + "?torrent", headers));
+				+ Utils.urlencodePath(key) + "?torrent", headers));
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		return new Response(makeRequest("DELETE", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key) + "?acl", headers));
+				+ Utils.urlencodePath(key) + "?acl", headers));
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		HttpURLConnection request = makeRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key) + "?acl", headers, object);
+				+ Utils.urlencodePath(key) + "?acl", headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(

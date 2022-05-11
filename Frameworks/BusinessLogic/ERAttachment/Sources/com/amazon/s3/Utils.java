@@ -9,8 +9,8 @@
 
 package com.amazon.s3;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
@@ -23,7 +23,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.CharEncoding;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -184,13 +183,15 @@ public class Utils {
         return path.toString();
     }
 
-    static String urlencode(String unencoded) {
-        try {
-            return URLEncoder.encode(unencoded, CharEncoding.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            // should never happen
-            throw new RuntimeException("Could not url encode to UTF-8", e);
-        }
+    public static String urlencode(String unencoded) {
+		String encoded = URLEncoder.encode(unencoded, StandardCharsets.UTF_8);
+		return encoded;
+    }
+
+    public static String urlencodePath(String path) {
+		String encodedPath = URLEncoder.encode(path, StandardCharsets.UTF_8);
+		encodedPath = encodedPath.replace("+", "%20");
+		return encodedPath;
     }
 
     static XMLReader createXMLReader() {

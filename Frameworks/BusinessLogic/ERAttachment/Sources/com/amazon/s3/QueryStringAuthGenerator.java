@@ -97,17 +97,17 @@ public class QueryStringAuthGenerator {
             metadata = object.metadata;
         }
 
-        return generateURL("PUT", bucket + "/" + Utils.urlencode(key), mergeMeta(headers, metadata));
+        return generateURL("PUT", bucket + "/" + Utils.urlencodePath(key), mergeMeta(headers, metadata));
     }
 
     public String get(String bucket, String key, Map headers)
     {
-        return generateURL("GET", bucket + "/" + Utils.urlencode(key), headers);
+        return generateURL("GET", bucket + "/" + Utils.urlencodePath(key), headers);
     }
 
     public String delete(String bucket, String key, Map headers)
     {
-        return generateURL("DELETE", bucket + "/" + Utils.urlencode(key), headers);
+        return generateURL("DELETE", bucket + "/" + Utils.urlencodePath(key), headers);
     }
 
     public String getBucketACL(String bucket, Map headers) {
@@ -116,7 +116,7 @@ public class QueryStringAuthGenerator {
 
     public String getACL(String bucket, String key, Map headers)
     {
-        return generateURL("GET", bucket + "/" + Utils.urlencode(key) + "?acl", headers);
+        return generateURL("GET", bucket + "/" + Utils.urlencodePath(key) + "?acl", headers);
     }
 
     public String putBucketACL(String bucket, String aclXMLDoc, Map headers) {
@@ -125,7 +125,7 @@ public class QueryStringAuthGenerator {
 
     public String putACL(String bucket, String key, String aclXMLDoc, Map headers)
     {
-        return generateURL("PUT", bucket + "/" + Utils.urlencode(key) + "?acl", headers);
+        return generateURL("PUT", bucket + "/" + Utils.urlencodePath(key) + "?acl", headers);
     }
 
     public String listAllMyBuckets(Map headers)
@@ -141,7 +141,7 @@ public class QueryStringAuthGenerator {
             buffer.append("http://");
         }
         buffer.append(server).append(':').append(port).append('/').append(bucket);
-        buffer.append('/').append(Utils.urlencode(key));
+        buffer.append('/').append(Utils.urlencodePath(key));
 
         return buffer.toString();
     }
