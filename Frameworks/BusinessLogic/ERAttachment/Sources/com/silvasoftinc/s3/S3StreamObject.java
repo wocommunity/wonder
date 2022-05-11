@@ -26,6 +26,7 @@
 package com.silvasoftinc.s3;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,9 +41,9 @@ public class S3StreamObject {
 	/**
 	 * A Map from String to List of Strings representing the object's metadata
 	 */
-	public Map metadata;
+	public Map<String, List<String>> metadata;
 
-	public S3StreamObject(InputStream stream, Map metadata) {
+	public S3StreamObject(InputStream stream, Map<String, List<String>> metadata) {
 		this.stream = stream;
 		this.metadata = metadata;
 	}

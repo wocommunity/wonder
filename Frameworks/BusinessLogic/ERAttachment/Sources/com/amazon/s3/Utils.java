@@ -13,7 +13,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -41,7 +40,7 @@ public class Utils {
      */
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-    static String makeCanonicalString(String method, String resource, Map headers) {
+    static String makeCanonicalString(String method, String resource, Map<String, List<String>> headers) {
         return makeCanonicalString(method, resource, headers, null);
     }
 
@@ -55,17 +54,16 @@ public class Utils {
      * @return canoncical string
      */
     static String makeCanonicalString(String method, String resource,
-                                             Map headers, String expires)
+                                             Map<String, List<String>> headers, String expires)
     {
     	StringBuilder buf = new StringBuilder();
         buf.append(method + "\n");
 
         // Add all interesting headers to a list, then sort them.  "Interesting"
         // is defined as Content-MD5, Content-Type, Date, and x-amz-
-        SortedMap interestingHeaders = new TreeMap();
+        SortedMap<String, String> interestingHeaders = new TreeMap<String, String>();
         if (headers != null) {
-            for (Iterator i = headers.keySet().iterator(); i.hasNext(); ) {
-                String key = (String)i.next();
+            for (String key : headers.keySet()) {
                 if (key == null) continue;
                 String lk = key.toLowerCase();
 
@@ -73,7 +71,7 @@ public class Utils {
                 if (lk.equals("content-type") || lk.equals("content-md5") || lk.equals("date") ||
                     lk.startsWith(AMAZON_HEADER_PREFIX))
                 {
-                    List s = (List)headers.get(key);
+                    List<String> s = headers.get(key);
                     interestingHeaders.put(lk, concatenateList(s));
                 }
             }
@@ -99,8 +97,7 @@ public class Utils {
         }
 
         // Finally, add all the interesting headers (i.e.: all that startwith x-amz- ;-))
-        for (Iterator i = interestingHeaders.keySet().iterator(); i.hasNext(); ) {
-            String key = (String)i.next();
+        for (String key : interestingHeaders.keySet()) {
             if (key.startsWith(AMAZON_HEADER_PREFIX)) {
                 buf.append(key).append(':').append(interestingHeaders.get(key));
             } else {
@@ -214,7 +211,7 @@ public class Utils {
      * @param values List of header values.
      * @return String of all headers, with commas.
      */
-    private static String concatenateList(List values) {
+    private static String concatenateList(List<String> values) {
     	StringBuilder buf = new StringBuilder();
         for (int i = 0, size = values.size(); i < size; ++ i) {
             buf.append(((String)values.get(i)).replaceAll("\n", "").trim());

@@ -9,7 +9,6 @@
 
 package com.amazon.s3;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -74,25 +73,25 @@ public class QueryStringAuthGenerator {
         expires = null;
     }
 
-    public String createBucket(String bucket, Map headers)
+    public String createBucket(String bucket, Map<String, List<String>> headers)
     {
         return generateURL("PUT", bucket, headers);
     }
 
     public String listBucket(String bucket, String prefix, String marker,
-                                         Integer maxKeys, Map headers)
+                                         Integer maxKeys, Map<String, List<String>> headers)
     {
         String path = Utils.pathForListOptions(bucket, prefix, marker, maxKeys);
         return generateURL("GET", path, headers);
     }
 
-    public String deleteBucket(String bucket, Map headers)
+    public String deleteBucket(String bucket, Map<String, List<String>> headers)
     {
         return generateURL("DELETE", bucket, headers);
     }
 
-    public String put(String bucket, String key, S3Object object, Map headers) {
-        Map metadata = null;
+    public String put(String bucket, String key, S3Object object, Map<String, List<String>> headers) {
+    	Map<String, List<String>> metadata = null;
         if (object != null) {
             metadata = object.metadata;
         }
@@ -100,35 +99,35 @@ public class QueryStringAuthGenerator {
         return generateURL("PUT", bucket + "/" + Utils.urlencodePath(key), mergeMeta(headers, metadata));
     }
 
-    public String get(String bucket, String key, Map headers)
+    public String get(String bucket, String key, Map<String, List<String>> headers)
     {
         return generateURL("GET", bucket + "/" + Utils.urlencodePath(key), headers);
     }
 
-    public String delete(String bucket, String key, Map headers)
+    public String delete(String bucket, String key, Map<String, List<String>> headers)
     {
         return generateURL("DELETE", bucket + "/" + Utils.urlencodePath(key), headers);
     }
 
-    public String getBucketACL(String bucket, Map headers) {
+    public String getBucketACL(String bucket, Map<String, List<String>> headers) {
         return getACL(bucket, "", headers);
     }
 
-    public String getACL(String bucket, String key, Map headers)
+    public String getACL(String bucket, String key, Map<String, List<String>> headers)
     {
         return generateURL("GET", bucket + "/" + Utils.urlencodePath(key) + "?acl", headers);
     }
 
-    public String putBucketACL(String bucket, String aclXMLDoc, Map headers) {
+    public String putBucketACL(String bucket, String aclXMLDoc, Map<String, List<String>> headers) {
         return putACL(bucket, "", aclXMLDoc, headers);
     }
 
-    public String putACL(String bucket, String key, String aclXMLDoc, Map headers)
+    public String putACL(String bucket, String key, String aclXMLDoc, Map<String, List<String>> headers)
     {
         return generateURL("PUT", bucket + "/" + Utils.urlencodePath(key) + "?acl", headers);
     }
 
-    public String listAllMyBuckets(Map headers)
+    public String listAllMyBuckets(Map<String, List<String>> headers)
     {
         return generateURL("GET", "", headers);
     }
@@ -146,7 +145,7 @@ public class QueryStringAuthGenerator {
         return buffer.toString();
     }
 
-    private String generateURL(String method, String path, Map headers) {
+    private String generateURL(String method, String path, Map<String, List<String>> headers) {
         long expires = 0L;
         if (expiresIn != null) {
             expires = System.currentTimeMillis() + expiresIn.longValue();
@@ -186,20 +185,18 @@ public class QueryStringAuthGenerator {
         return buffer.toString();
     }
 
-    private Map mergeMeta(Map headers, Map metadata) {
-        Map merged = new TreeMap();
+    private Map<String, List<String>> mergeMeta(Map<String, List<String>> headers, Map<String, List<String>> metadata) {
+    	Map<String, List<String>> merged = new TreeMap<String, List<String>>();
         if (headers != null) {
-            for (Iterator i = headers.keySet().iterator(); i.hasNext(); ) {
-                String key = (String)i.next();
+            for (String key : headers.keySet()) {
                 merged.put(key, headers.get(key));
             }
         }
         if (metadata != null) {
-            for (Iterator i = metadata.keySet().iterator(); i.hasNext(); ) {
-                String key = (String)i.next();
+            for (String key : metadata.keySet()) {
                 String metadataKey = Utils.METADATA_PREFIX + key;
                 if (merged.containsKey(metadataKey)) {
-                    ((List)merged.get(metadataKey)).addAll((List)metadata.get(key));
+                    merged.get(metadataKey).addAll(metadata.get(key));
                 } else {
                     merged.put(metadataKey, metadata.get(key));
                 }
