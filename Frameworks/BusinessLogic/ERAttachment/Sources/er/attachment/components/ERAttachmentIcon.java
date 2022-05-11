@@ -6,10 +6,15 @@ import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
 import er.extensions.components.ERXStatelessComponent;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERAttachmentIcon displays a linked icon image that represents the file
- * type of the attachment.
+ * type of the attachment. Icon files path is generated using this pattern:  "icons/" + size + "/" + mimeType + ".png
+ * To provide a custom icon file add a property named using this pattern : "er.attachment.icons/" + size + "/" + mimeType + ".png"
+ * with a value defined as frameworkName + "." + imagePath like this for an image stored in the app bundle :
+ * er.attachment.icons/64/image/jpeg.png=app.images/icons/jpg64.png
+ * 
  *  
  * @author mschrag
  * @binding size the icon size - 16, 32, or 64
@@ -62,6 +67,18 @@ public class ERAttachmentIcon extends ERXStatelessComponent {
     String iconPath = "icons/" + sizeStr + "/" + mimeType + ".png";
     return iconPath;
   }
+	public String iconUrl() {
+		String framework = "ERAttachment";
+		String iconPath = ERAttachmentIcon.iconPath(attachment(), valueForBinding("size"));
+		String replacementIconPath = ERXProperties.stringForKey("er.attachment."+iconPath);
+		if (replacementIconPath != null) {
+			int dotIndex = replacementIconPath.indexOf('.');
+			framework = replacementIconPath.substring(0, dotIndex);
+			iconPath = replacementIconPath.substring(dotIndex + 1);
+		}  
+		String anImageURL = context()._urlForResourceNamed(iconPath, framework, true);
+		return anImageURL;
+	}
 
   @Override
   public boolean synchronizesVariablesWithBindings() {
