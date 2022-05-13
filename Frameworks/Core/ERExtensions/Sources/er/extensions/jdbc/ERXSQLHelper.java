@@ -2580,7 +2580,7 @@ public class ERXSQLHelper {
 
 			if( indexOfOrderByClause > 0)
 			{
-				orderBy = originalSql.substring( indexOfOrderByClause + 1, originalSql.length() );
+				orderBy = originalSql.substring(indexOfOrderByClause + 1);
 
 				originalSql = originalSql.substring( 0, indexOfOrderByClause );
 			}
