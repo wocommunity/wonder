@@ -12,6 +12,7 @@
 	<modules>
 		<module>DB2PlugIn</module>
 		<module>DerbyPlugIn</module>
+		<module>ERMicrosoftPlugIn</module>
 		<module>EROraclePlugIn</module>
 		<module>FrontBasePlugIn</module>
 		<module>H2PlugIn</module>

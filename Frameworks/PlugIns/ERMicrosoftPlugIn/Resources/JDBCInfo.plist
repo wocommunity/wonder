@@ -1,0 +1,283 @@
+{
+	"NON_NULLABLE_COLUMNS" = "T";
+	"DRIVER_NAME" = "Microsoft JDBC Driver 10.2 for SQL Server";
+	"DBMS_NAME" = "Microsoft SQL Server";
+	"typeInfo" = {
+		"money" = {
+			"defaultJDBCType" = (
+				"DECIMAL"
+			);
+			"createParams" = "0";
+			"maxScale" = "4";
+			"minScale" = "4";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "19";
+		};
+		"binary" = {
+			"createParams" = "1";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "8000";
+			"defaultJDBCType" = (
+				"BINARY"
+			);
+		};
+		"smalldatetime" = {
+			"defaultJDBCType" = (
+				"TIMESTAMP"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "16";
+		};
+		"smallint" = {
+			"defaultJDBCType" = (
+				"SMALLINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "5";
+		};
+		"int" = {
+			"defaultJDBCType" = (
+				"INTEGER"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10";
+		};
+		"bit" = {
+			"defaultJDBCType" = (
+				"BIT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "1";
+		};
+		"datetimeoffset" = {
+			"defaultJDBCType" = (
+				"-155"
+			);
+			"createParams" = "1";
+			"maxScale" = "7";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "34";
+		};
+		"decimal" = {
+			"defaultJDBCType" = (
+				"DECIMAL"
+			);
+			"createParams" = "2";
+			"maxScale" = "38";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "38";
+		};
+		"numeric" = {
+			"defaultJDBCType" = (
+				"NUMERIC"
+			);
+			"createParams" = "2";
+			"maxScale" = "38";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "38";
+		};
+		"char" = {
+			"createParams" = "1";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "8000";
+			"defaultJDBCType" = (
+				"CHAR"
+			);
+		};
+		"xml" = {
+			"createParams" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "F";
+			"precision" = "0";
+			"defaultJDBCType" = (
+				"-16"
+			);
+		};
+		"sysname" = {
+			"createParams" = "0";
+			"defaultJDBCType" = (
+				"-9"
+			);
+			"isNullable" = "F";
+			"isSearchable" = "T";
+			"precision" = "128";
+		};
+		"smallmoney" = {
+			"defaultJDBCType" = (
+				"DECIMAL"
+			);
+			"createParams" = "2";
+			"maxScale" = "4";
+			"minScale" = "4";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10";
+		};
+		"image" = {
+			"createParams" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "F";
+			"precision" = "2147483647";
+			"defaultJDBCType" = (
+				"LONG VARBINARY"
+			);
+		};
+		"float" = {
+			"createParams" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "53";
+			"defaultJDBCType" = (
+				"DOUBLE"
+			);
+		};
+		"real" = {
+			"createParams" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "24";
+			"defaultJDBCType" = (
+				"REAL"
+			);
+		};
+		"timestamp" = {
+			"createParams" = "0";
+			"isNullable" = "F";
+			"isSearchable" = "T";
+			"precision" = "8";
+			"defaultJDBCType" = (
+				"BINARY"
+			);
+		};
+		"datetime2" = {
+			"defaultJDBCType" = (
+				"TIMESTAMP"
+			);
+			"createParams" = "1";
+			"maxScale" = "7";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "27";
+		};
+		"tinyint" = {
+			"defaultJDBCType" = (
+				"TINYINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "3";
+		};
+		"varbinary" = {
+			"createParams" = "1";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "8000";
+			"defaultJDBCType" = (
+				"VARBINARY"
+			);
+		};
+		"text" = {
+			"createParams" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "F";
+			"precision" = "2147483647";
+			"defaultJDBCType" = (
+				"LONG VARCHAR"
+			);
+		};
+		"date" = {
+			"defaultJDBCType" = (
+				"DATE"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "10";
+		};
+		"bigint" = {
+			"defaultJDBCType" = (
+				"BIGINT"
+			);
+			"createParams" = "0";
+			"maxScale" = "0";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "19";
+		};
+		"time" = {
+			"defaultJDBCType" = (
+				"TIME"
+			);
+			"createParams" = "1";
+			"maxScale" = "7";
+			"minScale" = "0";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "16";
+		};
+		"uniqueidentifier" = {
+			"createParams" = "1";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "36";
+			"defaultJDBCType" = (
+				"CHAR"
+			);
+		};
+		"datetime" = {
+			"defaultJDBCType" = (
+				"TIMESTAMP"
+			);
+			"createParams" = "0";
+			"maxScale" = "3";
+			"minScale" = "3";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "23";
+		};
+		"varchar" = {
+			"createParams" = "1";
+			"isNullable" = "T";
+			"isSearchable" = "T";
+			"precision" = "8000";
+			"defaultJDBCType" = (
+				"VARCHAR"
+			);
+		};
+	};
+	"IDENTIFIER_QUOTE_STRING" = "\"";
+	"ANSI92_CONFORMANCE" = "ANSI92EntryLevel";
+	"DRIVER_VER" = "10.2.0.0";
+	"STRING_FUNCTIONS" = "ASCII,CHAR,CONCAT,DIFFERENCE,INSERT,LCASE,LEFT,LENGTH,LOCATE,LTRIM,REPEAT,REPLACE,RIGHT,RTRIM,SOUNDEX,SPACE,SUBSTRING,UCASE";
+}
