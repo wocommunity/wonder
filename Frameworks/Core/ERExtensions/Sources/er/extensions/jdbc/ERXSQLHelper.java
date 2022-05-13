@@ -2586,7 +2586,7 @@ public class ERXSQLHelper {
 			}
 			else
 			{
-				String columns = originalSql.substring( originalSql.indexOf(  "select " ) + 7, originalSql.indexOf( " from " ) );
+				String columns = expression.listString();
 
 				orderBy = "order by " + columns.split( "," )[0];
 			}
