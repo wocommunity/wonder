@@ -36,6 +36,21 @@ public class ERMicrosoftPlugIn extends MicrosoftPlugIn {
     }
 
     /**
+     * The original implementation of the {@code MicrosoftPlugIn} forcibly adds the {@code SelectMethod=cursor}
+     * parameter to the connection URL. Even though this option may be useful in some scenarios, it may also cause
+     * undesirable side effects. Each application may have different requirements regarding how and when to use adaptive
+     * buffering. For this reason, the {@code ERMicrosoftPlugin} lets the user decide how to configure adaptive
+     * buffering if needed.
+     * <p>
+     * See Microsoft documentation for more information about
+     * <a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/using-adaptive-buffering">adaptive buffering</a>
+     */
+    @Override
+    public String connectionURL() {
+        return adaptor().connectionDictionaryURL();
+    }
+
+    /**
      * The SQL Server driver name has changed over time. This method returns the fully qualified name of the
      * newest JDBC driver class that this plugin prefers to use.
      */
