@@ -2626,6 +2626,10 @@ public class ERXSQLHelper {
 			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "SELECT NEXT VALUE FOR " + sequenceName;
+		}
 	}
 
 	public static class NoSQLHelper extends ERXSQLHelper {
