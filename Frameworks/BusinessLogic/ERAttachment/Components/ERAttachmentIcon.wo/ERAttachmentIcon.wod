@@ -1,6 +1,5 @@
 Icon : WOImage {
-	filename = iconPath;
-	framework = "ERAttachment";
+	src = iconUrl;
 	alt = ^alt;
 	id = ^id;
 	class = ^class;
