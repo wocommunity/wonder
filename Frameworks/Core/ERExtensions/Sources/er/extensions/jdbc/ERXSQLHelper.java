@@ -2580,13 +2580,13 @@ public class ERXSQLHelper {
 
 			if( indexOfOrderByClause > 0)
 			{
-				orderBy = originalSql.substring( indexOfOrderByClause + 1, originalSql.length() );
+				orderBy = originalSql.substring(indexOfOrderByClause + 1);
 
 				originalSql = originalSql.substring( 0, indexOfOrderByClause );
 			}
 			else
 			{
-				String columns = originalSql.substring( originalSql.indexOf(  "select " ) + 7, originalSql.indexOf( " from " ) );
+				String columns = expression.listString();
 
 				orderBy = "order by " + columns.split( "," )[0];
 			}
