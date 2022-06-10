@@ -39,6 +39,14 @@
 			<artifactId>ERRest</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xmlParserAPIs</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 		</dependency>
