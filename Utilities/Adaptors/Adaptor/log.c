@@ -213,6 +213,7 @@ void WOLog(int level, const char *format, ...)
       strftime(timestamp, sizeof(timestamp), "%d-%b-%Y %T - ", t);
       WA_unlock(logMutex);
 #endif
+      errno = 0;
       log = fopen(logPath, "a+");
       if (log != NULL) {
 #if defined(TIMESTAMP_LOG_MESSAGES)
@@ -227,7 +228,7 @@ void WOLog(int level, const char *format, ...)
       }else{
 // TODO - figure out how to report this for other web servers
 #if defined(APACHE)
-         ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "Failed to append to log file '%s'.  This can occur when the file is not writable by the child httpd process.  A workaround is to change the ownership of the file to match the child httpd process.", logPath);
+         ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "Failed to append to log file '%s': %s. This can occur when the file is not writable by the child httpd process.  A workaround is to change the ownership of the file to match the child httpd process.", logPath, strerror(errno));
 #endif
       }
    }
