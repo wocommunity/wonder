@@ -1,0 +1,32 @@
+<html>
+<head><title>Microsoft SQL Server JDBC Plugin for WebObjects</title></head>
+<body>
+
+<h1>Microsoft SQL Server JDBC Plugin for WebObjects</h1>
+<hr/>
+
+<P>This framework is a plugin for WebObjects' JDBCAdaptor so that it is able to communicate with a Microsoft SQL Server database. You need to make sure that both this framework and the JDBC driver for Microsoft SQL Server are in your project's classpath.  In your connection dictionary you might use values such as;</P>
+
+<table>
+<tr>
+	<td align="right"><i>URL</i> = </td>
+	<td><tt>jdbc:sqlserver://localhost:1433;databaseName=db_name;</tt></td>
+</tr>
+<tr>
+	<td align="right"><i>driver</i> = </td>
+	<td><tt>com.microsoft.sqlserver.jdbc.SQLServerDriver</tt></td>
+</tr>
+<tr>
+	<td align="right"><i>plugin</i> = </td>
+	<td><tt>ERMicrosoftPlugIn</tt></td>
+</tr>
+<tr>
+	<td align="right"><i>username</i> = </td>
+	<td><tt>foo</tt></td>
+</tr>
+</table>
+
+<P>When the SQL is being generated for your model to populate your database server's schema, EOF will typically connect to the database server to check information about various types that the database server will support.  Sometimes this is very inconvenient when you are away from direct access to the database server. For this reason, the plugin contains a hard-coded set of SQL Server types and you can specify that you want to use those by adding the <tt>?useBundledJdbcInfo=true</tt> to the end of the connection URL.</P>
+
+</body>
+</html>
