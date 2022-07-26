@@ -60,6 +60,14 @@ public class ERMicrosoftPlugIn extends MicrosoftPlugIn {
     }
 
     /**
+     * Uses the enhanced {@code ERMicrosoftExpression} as the expression class.
+     */
+    @Override
+    public Class defaultExpressionClass() {
+        return ERMicrosoftExpression.class;
+    }
+
+    /**
      * Generates a batch of new primary keys for the given entity. Overrides the default implementation to provide a
      * more efficient mechanism for generating primary keys using database sequences.
      *
