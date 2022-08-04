@@ -224,9 +224,13 @@ int WebObjectsNameTrans(pblock *pb, Session *sn, Request *rq)
                       /*
                        *	make sure this is a valid WebObjects(tm) URL
                        */
+                      if (WOValidateInitialURL( uripath ) != WOURLOK )
+                         return REQ_NOACTION;
+
                       wc = WOURLComponents_Initializer;
                       if (WOParseApplicationName(&wc, uripath) != WOURLOK) /* bail now if something wierd */
                          return REQ_NOACTION;
+
                       pblock_nvinsert(OBJECTNAME,(char *)objName,rq->vars);
 
                       approot = pblock_findval(APPROOT,pb);

@@ -668,6 +668,7 @@ int WebObjects_translate(request_rec *r) {
     WebObjects_config *wc;
     WOURLComponents url;
     WOURLError urlerr;
+    WOURLError charcheck;
 
     // get the module configuration (this is the structure created by WebObjects_create_config())
     wc = ap_get_module_config(r->server->module_config, &WebObjects_module);
@@ -679,6 +680,14 @@ int WebObjects_translate(request_rec *r) {
 #else
 		memset(&url,0,sizeof(WOURLComponents));
 #endif
+
+        // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
+        charcheck = WOValidateInitialURL( r->uri );
+        if ( charcheck != WOURLOK ) {
+            WOLog(WO_DBG, "WebObjects_translate(): declining request due to forbidden URL characters");
+            return DECLINED;
+        }
+
         urlerr = WOParseApplicationName(&url, r->uri);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
             WOLog(WO_DBG, "<WebObjects Apache Module> translate - DECLINED: %s", r->uri);

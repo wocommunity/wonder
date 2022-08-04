@@ -595,6 +595,7 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
    char *server_protocol;
    char *uri;
    WOURLError urlerr;
+   WOURLError charcheck;
 
    if (!adaptorEnabled)
    {
@@ -627,8 +628,16 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
    WOLog(WO_INFO,"<WebObjects ISAPI> new request: %s", uri);
    WOFREE(script_name);
 
-   urlerr = WOParseApplicationName(&wc, uri);
+   // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
+   charcheck = WOValidateInitialURL( uri );
+   if ( charcheck != WOURLOK ) {
+      WOLog(WO_INFO, "<WebObjects ISAPI> Declining request due to forbidden URL characters.");
+      const char* _urlerr;
+      _urlerr = WOURLstrerror( charcheck );
+      return die( p, _urlerr, HTTP_BAD_REQUEST );
+   }
 
+   urlerr = WOParseApplicationName(&wc, uri);
    if (urlerr != WOURLOK) {
       const char *_urlerr;
       _urlerr = WOURLstrerror(urlerr);

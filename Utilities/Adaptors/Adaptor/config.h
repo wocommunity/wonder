@@ -57,7 +57,7 @@ typedef int  intptr_t;
 #define CURRENT_WOF_VERSION_MAJOR	4
 #define CURRENT_WOF_VERSION_MINOR	6
 
-#define ADAPTOR_VERSION			"4.6.6"
+#define ADAPTOR_VERSION			"4.6.7"
 
 /* Used to turn the value of a macro into a string literal */
 #define _Str(x) #x
@@ -67,7 +67,7 @@ typedef int  intptr_t;
 #define WA_MAX_CONFIG_SERVERS		16
 
 #define WA_MAX_APP_NAME_LENGTH 		64	/* maximum length of a WOApplication's name, including a terminating null */
-#define WA_MAX_APP_COUNT		256	/* maximum number of applications the adaptor can keep track of */
+#define WA_MAX_APP_COUNT		512	/* maximum number of applications the adaptor can keep track of */
 #define WA_MAX_APP_INSTANCE_COUNT	128	/* maximum number of instances of a single application the adaptor can keep track of */
 #define WA_MAX_URL_LENGTH		256	/* maximum length of a redirect url in the config, including the null */
 #define WA_MAX_ADDITIONAL_ARGS_LENGTH	0	/* maximum length of the additional args, including the null */
