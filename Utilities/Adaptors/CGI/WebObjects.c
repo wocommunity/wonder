@@ -316,6 +316,7 @@ int doit(int argc, char *argv[], char **envp) {
       strcat(url, path_info);
       WOLog(WO_INFO,"<CGI> new request: %s",url);
 
+#ifndef __PRESERVE_UNSAFE_URLS
       // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
       charcheck = WOValidateInitialURL( url );
       if ( charcheck != WOURLOK ) {
@@ -324,6 +325,7 @@ int doit(int argc, char *argv[], char **envp) {
          _urlerr = WOURLstrerror( charcheck );
          die( _urlerr, HTTP_BAD_REQUEST );
       }
+#endif
 
       urlerr = WOParseApplicationName(&wc, url);
       if (urlerr != WOURLOK) {

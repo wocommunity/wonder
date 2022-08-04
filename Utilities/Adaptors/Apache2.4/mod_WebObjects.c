@@ -681,12 +681,14 @@ int WebObjects_translate(request_rec *r) {
 		memset(&url,0,sizeof(WOURLComponents));
 #endif
 
+#ifndef __PRESERVE_UNSAFE_URLS
         // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
         charcheck = WOValidateInitialURL( r->uri );
         if ( charcheck != WOURLOK ) {
-            WOLog(WO_DBG, "WebObjects_translate(): declining request due to forbidden URL characters");
+            WOLog(WO_ERR, "WebObjects_translate(): declining request due to forbidden URL characters");
             return DECLINED;
         }
+#endif
 
         urlerr = WOParseApplicationName(&url, r->uri);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {

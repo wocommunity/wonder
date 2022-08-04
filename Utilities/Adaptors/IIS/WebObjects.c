@@ -628,6 +628,7 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
    WOLog(WO_INFO,"<WebObjects ISAPI> new request: %s", uri);
    WOFREE(script_name);
 
+#ifndef __PRESERVE_UNSAFE_URLS
    // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
    charcheck = WOValidateInitialURL( uri );
    if ( charcheck != WOURLOK ) {
@@ -636,6 +637,7 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
       _urlerr = WOURLstrerror( charcheck );
       return die( p, _urlerr, HTTP_BAD_REQUEST );
    }
+#endif
 
    urlerr = WOParseApplicationName(&wc, uri);
    if (urlerr != WOURLOK) {

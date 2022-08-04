@@ -331,6 +331,7 @@ int main() {
       strcat(url, path_info);
       WOLog(WO_INFO,"<FastCGI> new request: %s",url);
 
+#ifndef __PRESERVE_UNSAFE_URLS
       // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
       charcheck = WOValidateInitialURL( url );
       if ( charcheck != WOURLOK ) {
@@ -341,6 +342,7 @@ int main() {
          WOFREE(url);
          break;
       }
+#endif
 
       urlerr = WOParseApplicationName(&wc, url);
       if (urlerr != WOURLOK) {

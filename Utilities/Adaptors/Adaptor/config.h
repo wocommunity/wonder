@@ -81,7 +81,10 @@ typedef int  intptr_t;
 #define WA_MAX_HOST_NAME_LENGTH		64	/* maximum length of a host name, including the null */
 #define WA_MAX_INSTANCE_NUMBER_LENGTH	8	/* maximum length of an instance number, including the null */
 
-   
+// 2022-08-04: Uncomment this option to explicitly DISABLE URL invalid character rejections.
+// Please do not change this unless you are certain about doing so!
+//#define __PRESERVE_UNSAFE_URLS 1
+
 /*
  *	default values for some feature settings
  */
