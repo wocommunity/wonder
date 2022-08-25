@@ -290,6 +290,7 @@ int main() {
       const char *script_name, *path_info;
       const char *reqerr;
       WOURLError urlerr;
+      WOURLError charcheck;
       FCGX_ParamArray hdrp_org;
      
       exit_status = FCGX_Accept(&in, &out, &err, &hdrp );
@@ -329,7 +330,20 @@ int main() {
       strcpy(url, script_name);
       strcat(url, path_info);
       WOLog(WO_INFO,"<FastCGI> new request: %s",url);
-      
+
+#ifndef __PRESERVE_UNSAFE_URLS
+      // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
+      charcheck = WOValidateInitialURL( url );
+      if ( charcheck != WOURLOK ) {
+         WOLog(WO_INFO, "<FastCGI> Declining request due to forbidden URL characters.");
+         const char* _urlerr;
+         _urlerr = WOURLstrerror( charcheck );
+         prepareAndSendErrorResponse( _urlerr, HTTP_BAD_REQUEST );
+         WOFREE(url);
+         break;
+      }
+#endif
+
       urlerr = WOParseApplicationName(&wc, url);
       if (urlerr != WOURLOK) {
          const char *_urlerr;
