@@ -44,7 +44,7 @@ public class ERFOPWrapper extends ERPDFWrapper {
 			data = ERPDFUtilities.xml2Fop2Pdf(response.contentString(), xml2fopxsl, config);
 			data = appendPDFs(data, context);
 		} catch (Throwable e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		
 		return data;

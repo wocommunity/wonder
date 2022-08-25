@@ -1,7 +1,5 @@
 package er.directtoweb.components;
 
-import org.apache.log4j.Level;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOStatsPage;
@@ -13,6 +11,8 @@ import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLoggingUtilities;
+import org.slf4j.event.Level;
 
 /**
  * This component can be used in the wrapper of a D2W app to provide convenient development time 
@@ -45,8 +45,8 @@ public class ERD2WDebugFlags extends WOComponent {
     public WOComponent toggleD2WInfo() {    
         boolean currentState = ERDirectToWeb.d2wDebuggingEnabled(session());
         Level level = currentState ? Level.INFO : Level.DEBUG;
-        ERDirectToWeb.debugLog.setLevel(level);
-        ERD2WModel.ruleTraceEnabledLog.setLevel(level);
+        ERXLoggingUtilities.setLevel(ERDirectToWeb.debugLog, level);
+        ERXLoggingUtilities.setLevel(ERD2WModel.ruleTraceEnabledLog, level);
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
         ERDirectToWeb.setD2wComponentNameDebuggingEnabled(session(), !currentState);
         ERDirectToWeb.setD2wPropertyKeyDebuggingEnabled(session(), !currentState);

@@ -1,6 +1,7 @@
 package er.directtoweb.components.repetitions;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -32,7 +33,7 @@ public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
 	private static final long serialVersionUID = 1L;
 
 	/** logging support */
-	private static final Logger log = Logger.getLogger(ERDGroupingListPageRepetition.class);
+	private static final Logger log = LoggerFactory.getLogger(ERDGroupingListPageRepetition.class);
 	
 	/**
 	 * Public constructor

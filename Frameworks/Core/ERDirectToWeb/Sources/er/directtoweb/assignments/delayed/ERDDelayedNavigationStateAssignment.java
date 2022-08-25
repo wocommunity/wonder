@@ -1,6 +1,7 @@
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
@@ -42,7 +43,7 @@ public class ERDDelayedNavigationStateAssignment extends ERDDelayedAssignment {
     private static final long serialVersionUID = 1L;
 
     /** logging support */
-    static final Logger log = Logger.getLogger(ERDDelayedNavigationStateAssignment.class);
+    static final Logger log = LoggerFactory.getLogger(ERDDelayedNavigationStateAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver interface. If

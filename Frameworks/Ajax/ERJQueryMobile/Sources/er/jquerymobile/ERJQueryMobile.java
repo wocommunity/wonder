@@ -1,6 +1,7 @@
 package er.jquerymobile;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
@@ -40,7 +41,7 @@ public class ERJQueryMobile extends ERXFrameworkPrincipal {
   @Override
   public void finishInitialization() {
     // ログ・サポート
-    _log = Logger.getLogger(ERXExtensions.class);
+    _log = LoggerFactory.getLogger(ERXExtensions.class);
     if(_log.isDebugEnabled())
       _log.debug("doing now " + frameworkName() + ".finishInitialization() for setup the Framework.");
 

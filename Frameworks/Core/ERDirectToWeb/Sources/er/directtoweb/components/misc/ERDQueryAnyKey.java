@@ -1,6 +1,7 @@
 package er.directtoweb.components.misc;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOQualifier;
@@ -27,7 +28,7 @@ public class ERDQueryAnyKey extends ERDCustomQueryComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDQueryAnyKey.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDQueryAnyKey.class);
     private Object _value; 
     
     /**

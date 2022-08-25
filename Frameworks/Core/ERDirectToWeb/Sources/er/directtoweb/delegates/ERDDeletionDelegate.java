@@ -7,7 +7,8 @@
  */
 package er.directtoweb.delegates;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.D2W;
@@ -39,7 +40,7 @@ import er.extensions.validation.ERXValidationFactory;
 public class ERDDeletionDelegate implements NextPageDelegate {
 
     /** logging support */
-    public final static Logger log = Logger.getLogger("er.directtoweb.delegates.ERDDeletionDelegate");
+    public final static Logger log = LoggerFactory.getLogger("er.directtoweb.delegates.ERDDeletionDelegate");
 
     private EOEnterpriseObject    _object;
     private EODataSource          _dataSource;

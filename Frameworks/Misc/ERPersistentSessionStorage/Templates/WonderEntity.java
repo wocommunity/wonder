@@ -2,13 +2,14 @@
 package $entity.packageName;
 
 #end
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
 public#if (${entity.abstractEntity}) abstract#end class ${entity.classNameWithoutPackage} extends ${entity.prefixClassNameWithOptionalPackage} {
 	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(${entity.classNameWithoutPackage}.class);
+	private static final Logger log = LoggerFactory.getLogger(${entity.classNameWithoutPackage}.class);
 
     public static final ${entity.classNameWithoutPackage}Clazz<${entity.classNameWithoutPackage}> clazz = new ${entity.classNameWithoutPackage}Clazz<${entity.classNameWithoutPackage}>();
     public static class ${entity.classNameWithoutPackage}Clazz<T extends ${entity.classNameWithoutPackage}> extends ${entity.prefixClassNameWithOptionalPackage}.${entity.prefixClassNameWithoutPackage}Clazz<T> {

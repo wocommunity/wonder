@@ -9,7 +9,8 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAccessArrayFaultHandler;
 import com.webobjects.eoaccess.EOAdaptor;
@@ -95,13 +96,13 @@ public class ERXDatabaseContextDelegate {
     }
 	
     /** Basic logging support */
-    public final static Logger log = Logger.getLogger(ERXDatabaseContextDelegate.class);
+    public final static Logger log = LoggerFactory.getLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
-    public final static Logger dbLog = Logger.getLogger("er.transaction.adaptor.FaultFiring");
+    public final static Logger dbLog = LoggerFactory.getLogger("er.transaction.adaptor.FaultFiring");
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.Exceptions</b> */
-    public final static Logger exLog = Logger.getLogger("er.transaction.adaptor.Exceptions");
+    public final static Logger exLog = LoggerFactory.getLogger("er.transaction.adaptor.Exceptions");
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.Batching</b> */
-    public final static Logger batchLog = Logger.getLogger("er.transaction.adaptor.Batching");
+    public final static Logger batchLog = LoggerFactory.getLogger("er.transaction.adaptor.Batching");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
@@ -252,9 +253,9 @@ public class ERXDatabaseContextDelegate {
     		EOAdaptor adaptor=dbc.adaptorContext().adaptor();
     		boolean shouldHandleConnection = false;
     		if(e instanceof EOGeneralAdaptorException)
-    			log.error(((EOGeneralAdaptorException)e).userInfo());
+    			log.error(((EOGeneralAdaptorException)e).userInfo().toString());
     		else
-    			log.error(e);
+    			log.error(e.getMessage(), e);
     		if (adaptor.isDroppedConnectionException(e))
     			shouldHandleConnection = true;
     		// FIXME: Should provide api to extend the list of bad exceptions.
@@ -265,7 +266,7 @@ public class ERXDatabaseContextDelegate {
     			shouldHandleConnection = false;
     		} else {
     			if(e instanceof EOGeneralAdaptorException)
-    				log.info(((EOGeneralAdaptorException)e).userInfo());
+    				log.info(((EOGeneralAdaptorException)e).userInfo().toString());
     			throw e;
     		}
         	return shouldHandleConnection;

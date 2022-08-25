@@ -1,6 +1,7 @@
 package er.quartzscheduler.foundation;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -13,7 +14,7 @@ import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
 
 public class ERQSAbstractJob implements Job
 {
-	protected static final Logger log = Logger.getLogger(ERQSJobSupervisor.class);
+	protected static final Logger log = LoggerFactory.getLogger(ERQSJobSupervisor.class);
 	private EOEditingContext editingContext = null;
 	private ERQSSchedulerServiceFrameworkPrincipal schedulerFPInstance;
 	private JobExecutionContext jobContext;

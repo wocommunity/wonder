@@ -4,8 +4,8 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
@@ -18,17 +18,13 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSStringUtilities;
 
 public class WOHelperFunctionDeclarationParser {
-	public static Logger log = Logger.getLogger(WOHelperFunctionDeclarationParser.class);
+	public static Logger log = LoggerFactory.getLogger(WOHelperFunctionDeclarationParser.class);
 
 	private NSMutableDictionary _quotedStrings;
 	private static final int STATE_OUTSIDE = 0;
 	private static final int STATE_INSIDE_COMMENT = 2;
 	private static final String ESCAPED_QUOTE_STRING = "_WO_ESCAPED_QUOTE_";
 	private static final String QUOTED_STRING_KEY = "_WODP_";
-
-	static {
-		WOHelperFunctionDeclarationParser.log.setLevel(Level.WARN);
-	}
 
 	public WOHelperFunctionDeclarationParser() {
 		_quotedStrings = new NSMutableDictionary();

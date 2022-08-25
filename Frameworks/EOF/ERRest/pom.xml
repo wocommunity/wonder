@@ -28,10 +28,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>

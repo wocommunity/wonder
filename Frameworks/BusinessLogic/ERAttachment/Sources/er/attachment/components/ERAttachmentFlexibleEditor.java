@@ -1,6 +1,7 @@
 package er.attachment.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -83,7 +84,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected final Logger log = Logger.getLogger(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	public static interface Keys {
 		public static final String masterObject = "masterObject";

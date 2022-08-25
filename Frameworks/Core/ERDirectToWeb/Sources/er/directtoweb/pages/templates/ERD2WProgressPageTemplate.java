@@ -1,6 +1,7 @@
 package er.directtoweb.pages.templates;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 
@@ -25,7 +26,7 @@ public class ERD2WProgressPageTemplate extends ERD2WProgressPage {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WProgressPageTemplate.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WProgressPageTemplate.class);
 	
     /**
      * Public constructor

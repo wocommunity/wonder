@@ -10,14 +10,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(KeyValueCodingProtectedAccessor.class);
+    public static final Logger log = LoggerFactory.getLogger(KeyValueCodingProtectedAccessor.class);
 
     public KeyValueCodingProtectedAccessor() { super(); }
 

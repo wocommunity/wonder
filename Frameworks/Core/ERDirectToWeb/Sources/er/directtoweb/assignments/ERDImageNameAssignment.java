@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -25,7 +26,7 @@ public class ERDImageNameAssignment extends ERDAssignment implements ERDLocaliza
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final Logger log = Logger.getLogger("er.directtoweb.rules.ERDImageNameAssignment");
+    public static final Logger log = LoggerFactory.getLogger("er.directtoweb.rules.ERDImageNameAssignment");
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "baseImageDirectory", "sectionKey", "tabKey"});

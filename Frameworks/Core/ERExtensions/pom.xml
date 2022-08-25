@@ -51,10 +51,6 @@
         </dependency>
         <dependency>
             <groupId>com.webobjects</groupId>
-            <artifactId>JavaXML</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
             <artifactId>JavaEOAccess</artifactId>
         </dependency>
         <dependency>
@@ -83,12 +79,28 @@
             <artifactId>icu4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>

@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -25,7 +26,7 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
   // Relationships
   public static final String MOVIE_KEY = MOVIE.key();
 
-  private static Logger LOG = Logger.getLogger(_PlotSummary.class);
+  private static Logger LOG = LoggerFactory.getLogger(_PlotSummary.class);
 
   public PlotSummary localInstanceIn(EOEditingContext editingContext) {
     PlotSummary localInstance = (PlotSummary)EOUtilities.localInstanceOfObject(editingContext, this);

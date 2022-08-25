@@ -143,7 +143,7 @@ public class ERS3AttachmentProcessor extends
 						ERAttachmentRequestHandler.REQUEST_HANDLER_KEY,
 						attachmentUrl, null);
 			} catch (MalformedURLException e) {
-				log.fatal(
+				log.error(
 						"attachment.s3Path() is returning something that isn't a valid URl. This is a bt strange. I'm going to reutrn it in it's raw format which will result in either a 'url cannot be found' error or may result in a 403 from s3.",
 						e);
 			}

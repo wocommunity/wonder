@@ -71,12 +71,3 @@ er.wotaskd.sshd.port=6022
 
 # Enable or disable the built-in SSH/SCP server
 er.wotaskd.sshd.enabled=false
-
-log4j.rootCategory=INFO, A1
-
-# A1 is set to be a FileAppender which outputs to System.out.
-log4j.appender.A1=org.apache.log4j.ConsoleAppender
-
-# A1 uses PatternLayout.
-log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
-log4j.appender.A1.layout.ConversionPattern=%d %-5p %V{u/f} [%t] %C{2} (%F:%L) - %m%n

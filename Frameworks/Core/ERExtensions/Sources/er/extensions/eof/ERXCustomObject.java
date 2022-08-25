@@ -8,7 +8,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
@@ -108,7 +109,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         Logger classLog = classLogs.objectForKey(getClass());
         if ( classLog == null) {
             synchronized(classLogs) {
-                classLog = Logger.getLogger(getClass());
+                classLog = LoggerFactory.getLogger(getClass());
                 classLogs.setObjectForKey(classLog, getClass());
             }
         }

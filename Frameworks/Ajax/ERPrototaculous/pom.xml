@@ -33,9 +33,5 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
 	</dependencies>
 </project>

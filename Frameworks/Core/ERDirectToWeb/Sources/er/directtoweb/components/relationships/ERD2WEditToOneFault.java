@@ -7,7 +7,8 @@
 
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -29,7 +30,7 @@ public class ERD2WEditToOneFault extends D2WEditToOneFault {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WEditToOneFault.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WEditToOneFault.class);
     
     
     public ERD2WEditToOneFault(WOContext context) {

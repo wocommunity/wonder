@@ -8,6 +8,9 @@ package er.javamail.mailer;
 
 import java.util.Timer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
@@ -18,13 +21,12 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
-import er.extensions.logging.ERXLogger;
 import er.javamail.ERJavaMail;
 
 public class Application extends ERXApplication {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(Application.class);
+    public static final Logger log = LoggerFactory.getLogger(Application.class);
 
     /**
      * Main initialization function.

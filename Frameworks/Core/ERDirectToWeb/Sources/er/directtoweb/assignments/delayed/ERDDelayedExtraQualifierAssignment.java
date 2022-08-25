@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOAndQualifier;
@@ -98,7 +99,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERDDelayedExtraQualifierAssignment.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDDelayedExtraQualifierAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

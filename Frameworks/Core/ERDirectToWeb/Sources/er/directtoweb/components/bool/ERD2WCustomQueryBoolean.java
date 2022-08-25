@@ -1,6 +1,7 @@
 package er.directtoweb.components.bool;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryBoolean;
@@ -38,7 +39,7 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WCustomQueryBoolean.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WCustomQueryBoolean.class);
     protected NSArray<String> _choicesNames;
 	
     /**
@@ -77,7 +78,7 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         } else {
             displayGroup().queryMatch().takeValueForKey(obj, propertyKey());
             if(log.isDebugEnabled())
-              log.debug(obj);
+              log.debug(obj.toString());
         }
     }
 

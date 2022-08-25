@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -41,7 +42,7 @@ public abstract class _Customer extends er.extensions.eof.ERXGenericRecord {
   public static final String CREDIT_CARD_KEY = CREDIT_CARD.key();
   public static final String RENTALS_KEY = RENTALS.key();
 
-  private static Logger LOG = Logger.getLogger(_Customer.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Customer.class);
 
   public Customer localInstanceIn(EOEditingContext editingContext) {
     Customer localInstance = (Customer)EOUtilities.localInstanceOfObject(editingContext, this);

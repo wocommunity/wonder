@@ -36,7 +36,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *  then Main could be implemented something like this:
  * <pre><code>
  *  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
- *      static Logger log = Logger.getLogger(Main.class);
+ *      static Logger log = LoggerFactory.getLogger(Main.class);
  * 
  *      public Integer someValue = Integer.valueOf(10);
  * 

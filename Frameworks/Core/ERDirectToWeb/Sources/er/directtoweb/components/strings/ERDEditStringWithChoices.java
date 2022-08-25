@@ -8,7 +8,8 @@ package er.directtoweb.components.strings;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -40,7 +41,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDEditStringWithChoices.class);
     
     public String entityForReportName;
     public ERXKeyValuePair currentElement;

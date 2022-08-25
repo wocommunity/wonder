@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -52,7 +53,7 @@ import er.extensions.validation.ERXValidationException;
  * @author mschrag
  */
 public abstract class ERAttachmentProcessor<T extends ERAttachment> {
-  public static final Logger log = Logger.getLogger(ERAttachmentProcessor.class);
+  public static final Logger log = LoggerFactory.getLogger(ERAttachmentProcessor.class);
 
   private static final String EXT_VARIABLE = "\\$\\{ext\\}";
   private static final String HASH_VARIABLE = "\\$\\{hash\\}";

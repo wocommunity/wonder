@@ -4,7 +4,8 @@
 
 package er.directtoweb.assignments.delayed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
@@ -74,7 +75,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
 
     public static class DefaultImplementation {
 
-        private static final Logger _log = Logger.getLogger(ERDDelayedSelectorInvocationAssignment.class);
+        private static final Logger _log = LoggerFactory.getLogger(ERDDelayedSelectorInvocationAssignment.class);
 
         // we cache 0 - 5 arguments
         private static Class[][] _parameterTypesArrays = new Class[5 + 1][];

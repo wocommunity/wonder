@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.directtoweb.Assignment;
@@ -78,13 +79,13 @@ import er.extensions.localization.ERXLocalizer;
 public class ERD2WModel extends D2WModel {
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WModel.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WModel.class);
 
     /** logs rules being decoded */
-    public static final Logger ruleDecodeLog = Logger.getLogger("er.directtoweb.rules.decode");
+    public static final Logger ruleDecodeLog = LoggerFactory.getLogger("er.directtoweb.rules.decode");
 
     /** main category for enabling or disabling tracing of rules */
-    public static final Logger ruleTraceEnabledLog = Logger.getLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
+    public static final Logger ruleTraceEnabledLog = LoggerFactory.getLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
 
     //	===========================================================================
     //	Notification Title(s)
@@ -306,8 +307,8 @@ public class ERD2WModel extends D2WModel {
             boolean resetTraceRuleFiring = false;
             Logger ruleFireLog=null;
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                Logger ruleCandidatesLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".candidates");
-                ruleFireLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".fire");
+                Logger ruleCandidatesLog = LoggerFactory.getLogger("er.directtoweb.rules." + keyPath + ".candidates");
+                ruleFireLog = LoggerFactory.getLogger("er.directtoweb.rules." + keyPath + ".fire");
                 if (ruleFireLog.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
                     //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
@@ -340,7 +341,7 @@ public class ERD2WModel extends D2WModel {
             }
         } else {
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                Logger ruleLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".cache");
+                Logger ruleLog = LoggerFactory.getLogger("er.directtoweb.rules." + keyPath + ".cache");
                 if (ruleLog.isDebugEnabled())
                 	ruleLog.debug("CACHE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: "  + new NSArray(significantKeys) + " = " + k
                                   + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
@@ -361,7 +362,7 @@ public class ERD2WModel extends D2WModel {
             try {
                 ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(cacheToBytes(_cache)), new File(fileName));
             } catch(IOException ex) {
-                log.error(ex);
+                log.error(ex.getMessage(), ex);
             }
         }
     }
@@ -373,7 +374,7 @@ public class ERD2WModel extends D2WModel {
             try {
                 _cache = cacheFromBytes(ERXFileUtilities.bytesFromFile(new File(fileName)));
             } catch(IOException ex) {
-                log.error(ex);
+                log.error(ex.getMessage(), ex);
             }
         }
     }
@@ -750,7 +751,7 @@ public class ERD2WModel extends D2WModel {
             flushUniqueCache();
             if (uniquedQualifiers > 0)
                 ERXExtensions.forceGC(0);
-            if (log.isDebugEnabled()) 
+            if (log.isDebugEnabled())
               log.debug("Finished Qualifier uniquing, for: " + totalQualifiers
                                                 + " got rid of " + uniquedQualifiers + " duplicate qualifiers, replaced: " + replacedQualifiers);
         }
@@ -1085,7 +1086,7 @@ public class ERD2WModel extends D2WModel {
             ostream.close();
             return ostream.toByteArray();
         } catch(Exception ex) {
-            log.error(ex,ex);
+            log.error(ex.getMessage(),ex);
         }
         return null;
     }
@@ -1109,7 +1110,7 @@ public class ERD2WModel extends D2WModel {
             istream.close();
             return newCache;
         } catch(Exception ex) {
-            log.error(ex,ex);
+            log.error(ex.getMessage(),ex);
         }
         return null;
     }

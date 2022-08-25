@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -29,7 +30,7 @@ public abstract class _RentalTerms extends er.extensions.eof.ERXGenericRecord {
   public static final String NAME_KEY = NAME.key();
   // Relationships
 
-  private static Logger LOG = Logger.getLogger(_RentalTerms.class);
+  private static Logger LOG = LoggerFactory.getLogger(_RentalTerms.class);
 
   public RentalTerms localInstanceIn(EOEditingContext editingContext) {
     RentalTerms localInstance = (RentalTerms)EOUtilities.localInstanceOfObject(editingContext, this);
