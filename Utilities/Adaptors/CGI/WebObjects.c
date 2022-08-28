@@ -240,6 +240,7 @@ int doit(int argc, char *argv[], char **envp) {
       const char *script_name, *path_info, *config_url, *username, *password, *config_options;
       const char *reqerr;
       WOURLError urlerr;
+      WOURLError charcheck;
       strtbl *options = NULL;
 
 #ifdef WIN32
@@ -314,7 +315,18 @@ int doit(int argc, char *argv[], char **envp) {
       strcpy(url, script_name);
       strcat(url, path_info);
       WOLog(WO_INFO,"<CGI> new request: %s",url);
-      
+
+#ifndef __PRESERVE_UNSAFE_URLS
+      // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
+      charcheck = WOValidateInitialURL( url );
+      if ( charcheck != WOURLOK ) {
+         WOLog(WO_INFO, "Declining request due to forbidden URL characters.");
+         const char* _urlerr;
+         _urlerr = WOURLstrerror( charcheck );
+         die( _urlerr, HTTP_BAD_REQUEST );
+      }
+#endif
+
       urlerr = WOParseApplicationName(&wc, url);
       if (urlerr != WOURLOK) {
          const char *_urlerr;

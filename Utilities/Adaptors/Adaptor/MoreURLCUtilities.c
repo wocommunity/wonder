@@ -88,16 +88,27 @@ WOURLError WOParseApplicationName(WOURLComponents *wc, const char *url) {
     }
 
     /*
-    *	just validate the prefix gunk....
+    *   just validate the prefix gunk....
+    *   -- Added fix for invalid WO version info
     */
     if (extension != NULL) {
-       if (version && ((extension - (version+1) < 1) || ( !isdigit((int)*(extension-1)) )))
+       if (version && ((extension - (version+1) < 1) || (extension - (version+1) > 5) || ( !isdigit((int)*(extension-1)) )))
             return WOURLInvalidWebObjectsVersion;
     } else if (version != NULL) {
-       if ((end - (version+1) < 1) || ( !isdigit((int)*(end-1)) ))
+       if ((end - (version+1) < 1) || (end - (version+1) > 5) || ( !isdigit((int)*(end-1)) ))
             return WOURLInvalidWebObjectsVersion;
     } else if ((end - s) > 1 )
         return WOURLInvalidPrefix;
+
+    // Iterate the version string and match it to the regex: [a-z0-9\.\-_]+
+    //   Its length is already constrained by the above conditional statements.
+    if ( version != NULL ) {
+        int versionLen = ((extension) ? extension : end)-version;
+        for ( const char* v = (version+1); (*v) && v < version+versionLen; v++ ) {
+            if ( !isalnum( (int)*v ) && (*v != '.') && (*v != '-') && (*v != '_') )
+                return WOURLInvalidWebObjectsVersion;
+        }
+    }
 
     wc->prefix.start = url;
     wc->prefix.length = end - url;
@@ -198,6 +209,29 @@ unsigned int SizeURL(WOURLComponents *wc) {
     }
 
     return 4096;	/* .. and hope it's enough */
+}
+
+
+/*
+ * Filter for illegal URL characters in the passed adaptor request URL.
+ */
+WOURLError WOValidateInitialURL( const char* url ) {
+    const char* i;
+    int j;
+
+    char illegal_vals[] = { 0x0A, 0x0D };
+    int len = strlen( url );
+
+    i = (url != NULL) ? url : "";
+    WOLog(WO_DBG, "WOValidateInitialURL(): Inspecting URL: %s (%d)", url, len);
+
+    for( ; (*i) && i < (url+len); i++ ) {
+        for ( j = 0; j < (sizeof(illegal_vals)/sizeof(char)); j++ ) {
+            if ( *i == illegal_vals[j] )  return WOURLForbiddenCharacter;
+        }
+    }
+
+    return WOURLOK;
 }
 
 

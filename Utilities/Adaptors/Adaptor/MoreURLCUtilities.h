@@ -57,6 +57,9 @@ and limitations under the License.
 unsigned int SizeURL(WOURLComponents *wc);
 void ComposeURL(char *string, WOURLComponents *wc, int shouldProcessUrl);
 
+// Initial URL sanitization.
+WOURLError WOValidateInitialURL( const char* url );
+
 /*
  *	parses just the application name from the url, returns 0 on 
  *	success & fills in only wc.prefix, wc.webobjectsVersion and

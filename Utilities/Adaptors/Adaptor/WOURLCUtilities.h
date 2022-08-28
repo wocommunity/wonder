@@ -88,7 +88,8 @@ typedef enum {
     WOURLInvalidQueryString,
     WOURLInvalidSuffix,
     WOURLInvalidPostData,
-    WOURLNoPostData
+    WOURLNoPostData,
+    WOURLForbiddenCharacter
 } WOURLError;
 
 /*********** WOF dynamic URL functions. ***********/
