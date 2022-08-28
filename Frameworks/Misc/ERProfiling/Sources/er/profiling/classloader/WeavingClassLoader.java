@@ -1,12 +1,12 @@
 package er.profiling.classloader;
 
+import java.io.InputStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import sun.misc.Resource;
-import sun.misc.URLClassPath;
+import org.apache.commons.io.IOUtils;
 
 /**
  * The WeavingClassLoader is a custom URLClassLoader that implements the 
@@ -84,10 +84,10 @@ public class WeavingClassLoader extends URLClassLoader {
 		}
 
 		String path = name.replace('.', '/').concat(".class");
-		Resource res = new URLClassPath(getURLs()).getResource(path, false);
-		if (res != null) {
+		InputStream in = getSystemResourceAsStream(path);
+		if (in != null) {
 			try {
-				byte[] b = res.getBytes();
+				byte[] b = IOUtils.toByteArray(in);
 				byte[] transformed = transformer.transform(this, name, null,
 						null, b);
 				if (transformed == null)
