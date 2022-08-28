@@ -40,6 +40,14 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>wonder.d2w</groupId>
+            <artifactId>ERModernDirectToWeb</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>wonder.misc</groupId>
+            <artifactId>WOLips</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

@@ -17,6 +17,10 @@
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.eof</groupId>
 			<artifactId>ERRest</artifactId>
 		</dependency>

@@ -21,6 +21,10 @@
             <artifactId>ERDirectToWeb</artifactId>
         </dependency>
 		<dependency>
+            <groupId>wonder.d2w</groupId>
+            <artifactId>ERModernDirectToWeb</artifactId>
+        </dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
@@ -37,6 +41,10 @@
             <groupId>com.webobjects</groupId>
             <artifactId>JavaDirectToWeb</artifactId>
         </dependency>
+		<dependency>
+			<groupId>wonder.misc</groupId>
+			<artifactId>WOLips</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
