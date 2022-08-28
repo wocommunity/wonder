@@ -14,8 +14,16 @@
 			<name>org.objectstyle.wolips.incrementalbuilder</name>
 			<arguments>
 				<dictionary>
+					<key>nsprincipalclass</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
 					<key>res.exclude.patterns</key>
 					<value>*/Thumbs.db,*/.*,*~,*~/*,*/CVS/*,/CustomInfo.plist,/build.xml</value>
+				</dictionary>
+				<dictionary>
+					<key>res.include.patterns</key>
+					<value>/Properties,*.api,*.d2wmodel,*.xml,*.plist,*.strings,/Resources/*,*/*.wo/*,*/*.eomodeld/*</value>
 				</dictionary>
 				<dictionary>
 					<key>webserver.res.exclude.patterns</key>
@@ -25,18 +33,16 @@
 					<key>webserver.res.include.patterns</key>
 					<value>*.js,*.css,*.jpg,*.jpeg,*.png,*.gif,*.html,/WebResources/*,*.xsl</value>
 				</dictionary>
-				<dictionary>
-					<key>nsprincipalclass</key>
-					<value></value>
-				</dictionary>
-				<dictionary>
-					<key>res.include.patterns</key>
-					<value>/Properties,*.api,*.d2wmodel,*.xml,*.plist,*.strings,/Resources/*,*/*.wo/*,*/*.eomodeld/*</value>
-				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.objectstyle.wolips.incrementalframeworknature</nature>
 	</natures>

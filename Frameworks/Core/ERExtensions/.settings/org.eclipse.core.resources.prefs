@@ -1,4 +1,3 @@
-#Tue Dec 02 11:39:07 CET 2008
 eclipse.preferences.version=1
 encoding//Components/Nonlocalized.lproj/ERXAnyField.wo/ERXAnyField.wod=UTF-8
 encoding//Components/Nonlocalized.lproj/ERXBatchNavigationBar.wo/ERXBatchNavigationBar.wod=UTF-8
@@ -99,4 +98,6 @@ encoding//Components/Nonlocalized.lproj/ERXWOTestInterface.wo/ERXWOTestInterface
 encoding//Components/Nonlocalized.lproj/ERXWOTestResult.wo/ERXWOTestResult.wod=UTF-8
 encoding//Sources/er/extensions/components/ERXFlashMovie.java=UTF-8
 encoding//Sources/er/extensions/components/ERXIEConditionalComment.java=UTF-8
+encoding//Tests/Sources=UTF-8
 encoding/<project>=UTF-8
+encoding/Sources=UTF-8

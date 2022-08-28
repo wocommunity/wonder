@@ -1,6 +1,6 @@
 {
     "WebObjects Release" = "WebObjects 5.0"; 
-    encoding = NSWindowsCP1252StringEncoding; 
+    encoding = "UTF-8"; 
     variables = {
         movieDisplayGroup = {
             class = WODisplayGroup; 

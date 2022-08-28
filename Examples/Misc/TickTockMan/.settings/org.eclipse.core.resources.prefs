@@ -1,4 +1,3 @@
-#Sat Jan 17 17:24:24 PST 2009
 eclipse.preferences.version=1
 encoding//Components/TimeMeNow.api=UTF-8
 encoding//Components/TimeMeNow.wo=UTF-8
@@ -12,4 +11,6 @@ encoding//Components/TimeZonesPage.wo/TimeZonesPage.wod=UTF-8
 encoding//Components/TimeZonesPage.wo/TimeZonesPage.woo=UTF-8
 encoding//Sources/er/ticktock/ui/TimeMeNow.java=UTF-8
 encoding//Sources/er/ticktock/ui/TimeZonesPage.java=UTF-8
+encoding/<project>=UTF-8
 encoding/Components=UTF-8
+encoding/Sources=UTF-8
