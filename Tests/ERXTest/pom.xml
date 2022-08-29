@@ -19,6 +19,10 @@
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERPrototypes</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
