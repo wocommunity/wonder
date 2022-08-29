@@ -31,7 +31,7 @@
                 <plugin>
                     <groupId>org.wocommunity</groupId>
                     <artifactId>wolifecycle-maven-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.5</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -92,10 +92,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+					<compilerArgs>
+						<compilerArg>--add-exports</compilerArg>
+						<compilerArg>java.base/sun.security.action=ALL-UNNAMED</compilerArg>
+					</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
