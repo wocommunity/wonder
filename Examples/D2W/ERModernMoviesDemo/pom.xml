@@ -37,9 +37,17 @@
 			<artifactId>JavaDirectToWeb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<groupId>ch.qos.reload4j</groupId>
+			<artifactId>reload4j</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>wonder.d2w</groupId>
+            <artifactId>ERModernDirectToWeb</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>wonder.misc</groupId>
+            <artifactId>WOLips</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

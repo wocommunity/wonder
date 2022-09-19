@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
-	<classpathentry kind="con" path="WOFramework/ERJars"/>
-	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
-	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
-	<classpathentry kind="con" path="WOFramework/WOOgnl"/>
-	<classpathentry kind="con" path="WOFramework/JavaEOAccess"/>
-	<classpathentry kind="con" path="WOFramework/JavaEOControl"/>
-	<classpathentry kind="con" path="WOFramework/JavaFoundation"/>
-	<classpathentry kind="con" path="WOFramework/JavaJDBCAdaptor"/>
-	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
-	<classpathentry kind="con" path="WOFramework/JavaXML"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/ashwood-2.0.jar"/>
-	<classpathentry kind="lib" path="Libraries/commons-collections-3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/cayenne-server-3.1M3.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="target/classes" path="Sources">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="Tests">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -14,8 +14,16 @@
 			<name>org.objectstyle.wolips.incrementalbuilder</name>
 			<arguments>
 				<dictionary>
+					<key>nsprincipalclass</key>
+					<value>er.changenotification.ERCNNotificationCoordinator</value>
+				</dictionary>
+				<dictionary>
 					<key>res.exclude.patterns</key>
 					<value>*/.*,*~,*~/*,*/CVS/*,*/.*/*</value>
+				</dictionary>
+				<dictionary>
+					<key>res.include.patterns</key>
+					<value>/Resources/*,/Components/*,*/*.api,*/*.wo/*,*/*.eomodeld/*</value>
 				</dictionary>
 				<dictionary>
 					<key>webserver.res.exclude.patterns</key>
@@ -25,18 +33,16 @@
 					<key>webserver.res.include.patterns</key>
 					<value>/WebServerResources/*.*</value>
 				</dictionary>
-				<dictionary>
-					<key>nsprincipalclass</key>
-					<value>er.changenotification.ERCNNotificationCoordinator</value>
-				</dictionary>
-				<dictionary>
-					<key>res.include.patterns</key>
-					<value>/Resources/*,/Components/*,*/*.api,*/*.wo/*,*/*.eomodeld/*</value>
-				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.objectstyle.wolips.incrementalframeworknature</nature>
 	</natures>

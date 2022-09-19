@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/jaimbot-lib-1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/daim.jar"/>
-	<classpathentry kind="lib" path="Libraries/joscar-protocol.jar"/>
-	<classpathentry kind="lib" path="Libraries/joscar-common.jar"/>
-	<classpathentry kind="lib" path="Libraries/joscar-client.jar"/>
-	<classpathentry kind="lib" path="Libraries/jsocks-klea.jar"/>
-	<classpathentry kind="lib" path="Libraries/annotations.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>

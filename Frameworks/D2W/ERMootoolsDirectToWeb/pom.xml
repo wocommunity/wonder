@@ -29,6 +29,10 @@
 			<artifactId>Ajax</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>MooTools</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.d2w</groupId>
 			<artifactId>ERModernDirectToWeb</artifactId>
 		</dependency>

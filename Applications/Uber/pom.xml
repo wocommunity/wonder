@@ -5,7 +5,6 @@
 		<version>7.4-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.applications</groupId>
 	<artifactId>Uber</artifactId>
 	<name>Uber Application</name>
 	<packaging>woapplication</packaging>
@@ -61,6 +60,14 @@
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaXML</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>GoogleChart</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.misc</groupId>
+			<artifactId>WOLips</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
