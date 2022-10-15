@@ -83,6 +83,14 @@
 				background-color: rgb(255,150,160);
 			}
 		</style>
+		<script>
+			// For communicating with the WOLips server
+			function invokeURL( url ) {
+				const Http = new XMLHttpRequest();
+				Http.open("GET", url);
+				Http.send();
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -105,7 +113,7 @@
 				<wo:repetition list="$exceptionParser.stackTrace" item="$currentErrorLine">
 					<wo:container elementName="tr" class="$currentRowClass">
 						<td><wo:str value="$currentErrorLine.fileName" /></td>
-						<td><wo:str value="$currentErrorLine.lineNumber" /></td>
+						<td><wo:link href="$currentLineURL" disabled="$currentLineDisabled"><wo:str value="$currentErrorLine.lineNumber" /></wo:link></td>
 						<td><wo:str value="$currentErrorLine.methodName" /></td>
 						<td><wo:str value="$currentErrorLine.packageName" /></td>
 						<td><wo:str value="$currentBundle.name" /></td>
