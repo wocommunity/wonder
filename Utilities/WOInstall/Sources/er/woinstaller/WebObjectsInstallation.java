@@ -35,6 +35,15 @@ public class WebObjectsInstallation {
     return _systemLibrariesFolder;
   }
 
+  /**
+   * This method moves the folders which were designed for macOS
+   * to the locations required for linux or windows
+   * If the destination folder is /opt then
+   * /opt/Library becomes /opt/Local/Library
+   * /opt/System/Library becomes /opt/Library
+   * /opt/System is then deleted
+   * @throws IOException if folders already exist or can't move folders or can't delete empty folder /opt/System
+   */
   public void renameFolders() throws IOException {
     File localFolder = new File(_destinationFolder, "Local");
     if (localFolder.exists()) {
@@ -57,11 +66,12 @@ public class WebObjectsInstallation {
     if (!_systemLibrariesFolder.renameTo(libraryFolder)) {
       throw new IOException("Failed to move '" + _systemLibrariesFolder + "' to '" + libraryFolder + "'.");
     }
-    _systemLibrariesFolder = libraryFolder;
-
+    // Delete empty folder /opt/System BEFORE reassigning _systemLibrariesFolder otherwise we will lose reference to it
     if (!_systemLibrariesFolder.getParentFile().delete()) {
       throw new IOException("Failed to delete '" + _systemLibrariesFolder.getParentFile() + ".");
     }
+    _systemLibrariesFolder = libraryFolder;
+
     System.out.println("Done");
   }
 }
