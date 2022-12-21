@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
@@ -325,13 +326,13 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         */
     @Override
     public boolean evaluateWithObject(Object anObject) {
-        if ( ( anObject != null ) && ( anObject instanceof NSKeyValueCoding ) ) {
+        if (anObject != null) {
             String	aKey = key();
             Object	aMinimumValue = minimumValue();
             Object	aMaximumValue = maximumValue();
 
             if ( ( aKey != null ) && ( aMinimumValue != null ) && ( aMaximumValue != null ) ) {
-                Object	aValue = ( (NSKeyValueCoding) anObject ).valueForKey( aKey );
+                Object aValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(anObject, aKey);
 
                 if ( aValue != null ) {
                     NSComparator	aComparator = comparatorForObject( aValue );
