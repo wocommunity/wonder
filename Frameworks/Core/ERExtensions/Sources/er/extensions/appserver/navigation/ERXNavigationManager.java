@@ -6,6 +6,7 @@
 //
 package er.extensions.appserver.navigation;
 
+import java.net.URL;
 import java.util.Enumeration;
 
 import org.slf4j.Logger;
@@ -226,11 +227,17 @@ public class ERXNavigationManager {
 
     public void registerObserverForFramework(String frameworkName) {
         if (!WOApplication.application().isCachingEnabled() && !hasRegistered) {
-            String filePath = ERXFileUtilities.pathForResourceNamed(navigationMenuFileName(), frameworkName, null);
-            log.debug("Registering observer for filePath: {}", filePath);
-            ERXFileNotificationCenter.defaultCenter().addObserver(this,
-                                                                  new NSSelector("reloadNavigationMenu", ERXConstant.NotificationClassArray),
-                                                                  filePath);
+        	URL filePathUrl = ERXFileUtilities.pathURLForResourceNamed(navigationMenuFileName(), frameworkName, null);
+        	if(filePathUrl != null) {
+        		String filePath = filePathUrl.getFile();
+        		log.debug("Registering observer for filePath: {}", filePath);
+        		ERXFileNotificationCenter.defaultCenter().addObserver(this,
+        				new NSSelector("reloadNavigationMenu", ERXConstant.NotificationClassArray),
+        				filePath);
+        	}
+        	else {
+        		log.error("failed to registerObserverForFramework {}: Can't get filePathUrl for {}", frameworkName, navigationMenuFileName());
+        	}
         }
     }
 
