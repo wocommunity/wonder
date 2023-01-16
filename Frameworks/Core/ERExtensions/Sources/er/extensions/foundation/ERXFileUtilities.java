@@ -545,7 +545,7 @@ public class ERXFileUtilities {
      */
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
         String path = null;
-        NSBundle bundle = "app".equals(frameworkName) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
+        NSBundle bundle = (frameworkName == null || "app".equals(frameworkName)) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
         if(bundle != null && bundle.isJar()) {
             log.debug("Can't get path when run as jar: {} - {}", frameworkName, fileName);
         } else {
