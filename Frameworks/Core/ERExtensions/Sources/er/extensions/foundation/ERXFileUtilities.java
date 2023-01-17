@@ -540,7 +540,7 @@ public class ERXFileUtilities {
      * @param frameworkName name of the framework, <code>null</code> or "app"
      *		for the application bundle
      * @param languages array of languages to get localized resource or <code>null</code>
-     * @return the absolutePath method of of the file object 
+     * @return the absolutePath method off of the file object 
      *         or null if the resource is contained in a jar or doesn't exist.
      */
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
