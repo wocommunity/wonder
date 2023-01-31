@@ -402,7 +402,13 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
 
     private Connection createConnection() throws SQLException {
         try {
-            Class.forName(dbDriver);
+        	
+        	// When dbDriver null or blank, the driver is automatically registered via the SPI. 
+        	// Manual loading of the driver class is generally unnecessary.
+            if(dbDriver != null && !dbDriver.isEmpty()) {
+            	Class.forName(dbDriver);
+            }
+            
             Connection conn = DriverManager.getConnection(dbServer, dbLogin, dbPassword);
             return conn;
         } catch (ClassNotFoundException e2) {
