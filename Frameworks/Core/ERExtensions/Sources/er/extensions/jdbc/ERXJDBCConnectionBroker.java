@@ -404,7 +404,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         try {
         	
         	// When dbDriver null or blank, the driver is automatically registered via the SPI. 
-        	// Manual loading of the driver class is generally unnecessary.
+        	// Since JDBC 4.0, manual loading of the driver class is generally unnecessary.
             if(dbDriver != null && !dbDriver.isEmpty()) {
             	Class.forName(dbDriver);
             }

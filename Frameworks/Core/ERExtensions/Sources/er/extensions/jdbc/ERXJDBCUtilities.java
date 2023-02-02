@@ -159,11 +159,15 @@ public class ERXJDBCUtilities {
 			// Boolean readOnly = (Boolean) dict.objectForKey("readOnly");
 			// boolean ro = readOnly == null ? false : readOnly.booleanValue();
 
-			try {
-				Class.forName(driver);
-			}
-			catch (ClassNotFoundException e) {
-				throw new SQLException("Could not find driver: " + driver);
+        	// When dbDriver null or blank, the driver is automatically registered via the SPI. 
+        	// Since JDBC 4.0, manual loading of the driver class is generally unnecessary.
+			if(driver != null && !driver.isEmpty()) {
+				try {
+					Class.forName(driver);
+				}
+				catch (ClassNotFoundException e) {
+					throw new SQLException("Could not find driver: " + driver);
+				}
 			}
 			Connection con = DriverManager.getConnection(url, username, password);
 			DatabaseMetaData dbmd = con.getMetaData();
