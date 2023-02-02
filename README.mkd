@@ -36,7 +36,7 @@ To be proficent in developing web applications with Project Wonder, the followin
 Getting Started
 --------------------
 
-If you are new to Project Wonder you should look at the community's [Getting Started Guide](http://wiki.wocommunity.org/display/documentation/Home)
+If you are new to Project Wonder you should look at the community's [Getting Started Guide](https://wiki.wocommunity.org/display/documentation/Project+WONDER-Quickstart)
 
 Wiki
 --------------------
