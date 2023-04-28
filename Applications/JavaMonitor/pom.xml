@@ -21,6 +21,10 @@
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>WOOgnl</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
 		</dependency>
