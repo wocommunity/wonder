@@ -37,3 +37,9 @@ er.javamonitor.showMigrationsTab=false
 
 # Show the Mod_Proxy tab.
 er.javamonitor.showModProxyTab=true
+
+# OGNL
+# See https://wiki.wocommunity.org/display/documentation/WOOgnl+Framework
+ognl.helperFunctions=true
+ognl.inlineBindings=true
+
