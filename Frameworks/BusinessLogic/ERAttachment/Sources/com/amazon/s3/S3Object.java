@@ -9,6 +9,7 @@
 
 package com.amazon.s3;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,9 +22,9 @@ public class S3Object {
     /**
      * A Map from String to List of Strings representing the object's metadata
      */
-    public Map metadata;
+    public Map<String, List<String>> metadata;
 
-    public S3Object(byte[] data, Map metadata) {
+    public S3Object(byte[] data, Map<String, List<String>> metadata) {
         this.data = data;
         this.metadata = metadata;
     }
