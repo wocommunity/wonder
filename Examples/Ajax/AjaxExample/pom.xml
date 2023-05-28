@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.examples</groupId>
 		<artifactId>ajax</artifactId>
-		<version>7.4-SNAPSHOT</version>
+		<version>7.4</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.ajax</groupId>
