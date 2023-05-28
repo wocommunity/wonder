@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>plugins</artifactId>
-		<version>7.4</version>
+		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.plugins</groupId>
 	<artifactId>FrontBasePlugIn</artifactId>
