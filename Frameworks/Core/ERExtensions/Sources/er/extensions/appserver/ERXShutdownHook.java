@@ -3,6 +3,7 @@ package er.extensions.appserver;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSNotification;
@@ -57,7 +58,8 @@ public abstract class ERXShutdownHook extends Thread {
 					synchronized( ALL_HOOKS ) {
 						while( ALL_HOOKS.size() > 0 ) {
 							// Use System.out to minimize dependencies
-							System.out.println( "ShutdownHook waiting for " + ALL_HOOKS.size() + " hook" + (ALL_HOOKS.size() > 1 ? "s" : "") + " to complete" );
+							String names = ALL_HOOKS.stream().map( hook -> hook.name ).collect( Collectors.joining( ", " ) );
+							System.out.println( "ERXShutdownHook waiting for " + ALL_HOOKS.size() + " hook" + (ALL_HOOKS.size() > 1 ? "s" : "") + " to complete: " + names );
 							ALL_HOOKS.wait();
 						}
 
@@ -74,7 +76,7 @@ public abstract class ERXShutdownHook extends Thread {
 		} );
 	}
 	
-	private String name;
+	String name;
 
 	/**
 	 * Call this in your app constructor if you have no other shutdown hooks. If you don't call
