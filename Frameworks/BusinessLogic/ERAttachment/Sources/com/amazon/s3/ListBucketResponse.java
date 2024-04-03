@@ -32,7 +32,7 @@ public class ListBucketResponse extends Response {
      * A List of ListEntry objects representing the objects in the given bucket.  This will
      * be null if the request fails.
      */
-    public List entries = null;
+    public List<ListEntry> entries = null;
 
     public ListBucketResponse(HttpURLConnection connection) throws IOException {
         super(connection);
@@ -53,14 +53,14 @@ public class ListBucketResponse extends Response {
 
     class ListBucketHandler extends DefaultHandler {
 
-        private List entries = null;
+        private List<ListEntry> entries = null;
         private ListEntry currEntry = null;
         private StringBuffer currText = null;
         private SimpleDateFormat iso8601Parser = null;
 
         public ListBucketHandler() {
             super();
-            entries = new ArrayList();
+            entries = new ArrayList<>();
             iso8601Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             iso8601Parser.setTimeZone(new SimpleTimeZone(0, "GMT"));
             currText = new StringBuffer();
@@ -116,7 +116,7 @@ public class ListBucketResponse extends Response {
             currText.append(ch, start, length);
         }
 
-        public List getEntries() {
+        public List<ListEntry> getEntries() {
             return entries;
         }
     }

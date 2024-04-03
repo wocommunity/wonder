@@ -6,8 +6,7 @@ AppleImage: WOImage {
 	filename = "AppleLogo.gif";
 	height = 36;
 	width = 30;
-	align = "right";
-	border = 0;
+	alt = "Apple logo";
 }
 
 Content : WOComponentContent {

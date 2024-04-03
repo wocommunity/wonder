@@ -1,15 +1,19 @@
+<!DOCTYPE html>
+<html lang = "en">
 <webobject name=LoginSucceeded>
+<head>
+	<title>Monitor for WebObjects 5.4</title>
 	<webobject name=Refresh></webobject>
+</head>
 </webobject>
 
 <webobject name=LoginRequired>
-<html>
 <head>
 	<title>Monitor for WebObjects 5.4</title>
 	<webobject name = "ERXStyleSheet"/>
 </head>
 <body id ="LoginPage" onload="document.getElementById('password').focus()">
-	<h1 style="text-align: center;">JavaMonitor for WebObjects</h1>
+	<h1>JavaMonitor for WebObjects</h1>
 	<webobject name = "HasLoginError">
 		<p class="Box ErrorBox LoginErrorBox"><webobject name="ErrorMsg" /></p>
 	</webobject>
@@ -22,5 +26,5 @@
 	</div>
 
 </body>
-</html>
 </webobject> <!-- LoginRequired -->
+</html>

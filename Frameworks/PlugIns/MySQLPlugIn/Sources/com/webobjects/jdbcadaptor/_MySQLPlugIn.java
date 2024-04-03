@@ -36,7 +36,7 @@ import com.webobjects.foundation._NSStringUtilities;
 
 public class _MySQLPlugIn extends JDBCPlugIn {
 
-	private static final String DriverClassName = "com.mysql.jdbc.Driver";
+	private static final String DriverClassName = null;
 
 	private static final String DriverProductName = "MySQL";
 	

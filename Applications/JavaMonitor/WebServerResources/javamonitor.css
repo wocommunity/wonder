@@ -66,6 +66,10 @@ td {
 	margin-top: 50px;
 }
 
+#LoginPage h1 { 
+	text-align: center; 
+}
+
 .Box {
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -200,6 +204,12 @@ label {
 	bottom: 3px;
 	float: right;
 }
+
+#NavigationLogo img 
+{
+	text-align: right;
+}
+
 
 .Notes {
 	margin-top: 10px;

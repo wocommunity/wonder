@@ -41,7 +41,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -120,7 +119,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public Response createBucket(String bucket, Map headers)
+	public Response createBucket(String bucket, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		return new Response(makeRequest("PUT", bucket, headers));
 	}
@@ -145,7 +144,7 @@ public class AWSAuthConnection {
 	 * @throws IOException 
 	 */
 	public ListBucketResponse listBucket(String bucket, String prefix,
-			String marker, Integer maxKeys, Map headers)
+			String marker, Integer maxKeys, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		String path = Utils.pathForListOptions(bucket, prefix, marker, maxKeys);
 		return new ListBucketResponse(makeRequest("GET", path, headers));
@@ -163,7 +162,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public Response deleteBucket(String bucket, Map headers)
+	public Response deleteBucket(String bucket, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		return new Response(makeRequest("DELETE", bucket, headers));
 	}
@@ -184,7 +183,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public Response put(String bucket, String key, S3Object object, Map headers)
+	public Response put(String bucket, String key, S3Object object, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -195,7 +194,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		HttpURLConnection request = makeRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key), headers, object);
+				+ Utils.urlencodePath(key), headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(
@@ -221,7 +220,7 @@ public class AWSAuthConnection {
 	 * @throws IOException 
 	 */
 	public Response putStream(String bucket, String key, S3StreamObject object,
-			Map headers) throws MalformedURLException, IOException {
+			Map<String, List<String>> headers) throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
 				|| (key.trim().length() == 0);
@@ -230,7 +229,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		HttpURLConnection request = makeStreamRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key), headers, object);
+				+ Utils.urlencodePath(key), headers, object);
 
 		request.setDoOutput(true);
 		if (object.length != 0) {
@@ -263,7 +262,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public GetResponse get(String bucket, String key, Map headers)
+	public GetResponse get(String bucket, String key, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -274,7 +273,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -291,7 +290,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public GetStreamResponse getStream(String bucket, String key, Map headers)
+	public GetStreamResponse getStream(String bucket, String key, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -302,7 +301,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetStreamResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -319,7 +318,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public GetResponse getTorrent(String bucket, String key, Map headers)
+	public GetResponse getTorrent(String bucket, String key, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -330,7 +329,7 @@ public class AWSAuthConnection {
 			key = "";
 
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key) + "?torrent", headers));
+				+ Utils.urlencodePath(key) + "?torrent", headers));
 	}
 
 	/**
@@ -347,7 +346,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public Response delete(String bucket, String key, Map headers)
+	public Response delete(String bucket, String key, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
 				|| (key.trim().length() == 0);
@@ -356,7 +355,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		return new Response(makeRequest("DELETE", bucket + pathSep
-				+ Utils.urlencode(key), headers));
+				+ Utils.urlencodePath(key), headers));
 	}
 
 	/**
@@ -371,7 +370,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public GetResponse getBucketACL(String bucket, Map headers)
+	public GetResponse getBucketACL(String bucket, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		return getACL(bucket, "", headers);
 	}
@@ -390,7 +389,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public GetResponse getACL(String bucket, String key, Map headers)
+	public GetResponse getACL(String bucket, String key, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -400,7 +399,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		return new GetResponse(makeRequest("GET", bucket + pathSep
-				+ Utils.urlencode(key) + "?acl", headers));
+				+ Utils.urlencodePath(key) + "?acl", headers));
 	}
 
 	/**
@@ -417,7 +416,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public Response putBucketACL(String bucket, String aclXMLDoc, Map headers)
+	public Response putBucketACL(String bucket, String aclXMLDoc, Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		return putACL(bucket, "", aclXMLDoc, headers);
 	}
@@ -439,7 +438,7 @@ public class AWSAuthConnection {
 	 * @throws IOException 
 	 */
 	public Response putACL(String bucket, String key, String aclXMLDoc,
-			Map headers) throws MalformedURLException, IOException {
+			Map<String, List<String>> headers) throws MalformedURLException, IOException {
 		S3Object object = new S3Object(aclXMLDoc.getBytes(), null);
 
 		boolean isEmptyKey = (key == null) || (key.length() == 0)
@@ -449,7 +448,7 @@ public class AWSAuthConnection {
 		if (key == null)
 			key = "";
 		HttpURLConnection request = makeRequest("PUT", bucket + pathSep
-				+ Utils.urlencode(key) + "?acl", headers, object);
+				+ Utils.urlencodePath(key) + "?acl", headers, object);
 
 		request.setDoOutput(true);
 		request.getOutputStream().write(
@@ -468,7 +467,7 @@ public class AWSAuthConnection {
 	 * @throws MalformedURLException 
 	 * @throws IOException 
 	 */
-	public ListAllMyBucketsResponse listAllMyBuckets(Map headers)
+	public ListAllMyBucketsResponse listAllMyBuckets(Map<String, List<String>> headers)
 			throws MalformedURLException, IOException {
 		return new ListAllMyBucketsResponse(makeRequest("GET", "", headers));
 	}
@@ -477,7 +476,7 @@ public class AWSAuthConnection {
 	 * Make a new HttpURLConnection without passing an S3Object parameter.
 	 */
 	private HttpURLConnection makeRequest(String method, String resource,
-			Map headers) throws MalformedURLException, IOException {
+			Map<String, List<String>> headers) throws MalformedURLException, IOException {
 		return makeRequest(method, resource, headers, null);
 	}
 
@@ -495,7 +494,7 @@ public class AWSAuthConnection {
 	 *            The S3Object that is to be written (can be null).
 	 */
 	private HttpURLConnection makeRequest(String method, String resource,
-			Map headers, S3Object object) throws MalformedURLException,
+			Map<String, List<String>> headers, S3Object object) throws MalformedURLException,
 			IOException {
 		URL url = makeURL(resource);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -524,7 +523,7 @@ public class AWSAuthConnection {
 	 *            The S3StreamObject that is to be written (can be null).
 	 */
 	private HttpURLConnection makeStreamRequest(String method, String resource,
-			Map headers, S3StreamObject object) throws MalformedURLException,
+			Map<String, List<String>> headers, S3StreamObject object) throws MalformedURLException,
 			IOException {
 		URL url = makeURL(resource);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -548,7 +547,7 @@ public class AWSAuthConnection {
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
 	 */
-	private void addHeaders(HttpURLConnection connection, Map headers) {
+	private void addHeaders(HttpURLConnection connection, Map<String, List<String>> headers) {
 		addHeaders(connection, headers, "");
 	}
 
@@ -561,7 +560,7 @@ public class AWSAuthConnection {
 	 *            A Map of String to List of Strings representing the s3
 	 *            metadata for this resource.
 	 */
-	private void addMetadataHeaders(HttpURLConnection connection, Map metadata) {
+	private void addMetadataHeaders(HttpURLConnection connection, Map<String, List<String>> metadata) {
 		addHeaders(connection, metadata, Utils.METADATA_PREFIX);
 	}
 
@@ -578,14 +577,11 @@ public class AWSAuthConnection {
 	 *            The string to prepend to each key before adding it to the
 	 *            connection.
 	 */
-	private void addHeaders(HttpURLConnection connection, Map headers,
+	private void addHeaders(HttpURLConnection connection, Map<String, List<String>> headers,
 			String prefix) {
 		if (headers != null) {
-			for (Iterator i = headers.keySet().iterator(); i.hasNext();) {
-				String key = (String) i.next();
-				for (Iterator j = ((List) headers.get(key)).iterator(); j
-						.hasNext();) {
-					String value = (String) j.next();
+			for (String key : headers.keySet()) {
+				for (String value :headers.get(key)) {
 					connection.addRequestProperty(prefix + key, value);
 				}
 			}

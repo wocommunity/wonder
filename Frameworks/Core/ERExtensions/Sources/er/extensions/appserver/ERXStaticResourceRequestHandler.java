@@ -112,7 +112,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			File file = null;
 			StringBuilder sb = new StringBuilder(documentRoot.length() + uri.length());
 			String wodataKey = request.stringFormValueForKey("wodata");
-			if(uri.startsWith("/cgi-bin") && wodataKey != null) {
+			if(uri.startsWith(request.applicationURLPrefix()) && wodataKey != null) {
 				uri = wodataKey;
 				if(uri.startsWith("file:")) {
 					// remove file:/
