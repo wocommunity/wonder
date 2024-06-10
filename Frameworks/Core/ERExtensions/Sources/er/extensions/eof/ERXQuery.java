@@ -311,6 +311,7 @@ public class ERXQuery {
 		// Set defaults
 		fetchKeys = new NSMutableArray<>();
 		groupingKeys = new NSMutableArray<>();
+		groupingAttributes = new NSMutableArray<>();
 		orderings = new NSMutableArray<>();
 		refreshRefetchedObjects = false;
 		usesDistinct = false;
@@ -1275,7 +1276,6 @@ public class ERXQuery {
 		// Initialize arrays for storing the select attributes, 
 		// grouping attributes and sort orderings
 		selectAttributes = new NSMutableArray<>(20);
-		groupingAttributes = new NSMutableArray<>(20);
 		
 		// This keeps track of EOAttribute objects used
 		attributesByName = new NSMutableDictionary<>();
