@@ -201,11 +201,12 @@ jboolean
 GetJREHome(char *buf, jint bufsize, char *javaCommand)
 {
     char *cp;
-	
-	if(javaCommand == NULL)
-		return JNI_FALSE;
 
-	strcpy(buf, javaCommand);
+    if(javaCommand == NULL)
+        return JNI_FALSE;
+
+    replace_env_vars(javaCommand, buf, bufsize);
+
 	if(strrchr(buf, '\\') == 0)
 		return JNI_FALSE;
 	
@@ -220,6 +221,61 @@ GetJREHome(char *buf, jint bufsize, char *javaCommand)
 
     *cp = '\0';  /* remove the bin\ part */
     return JNI_TRUE;
+}
+
+char* replace_env_vars(const char* str, char* buf, size_t buf_size) {
+    char* result = buf; // Use the provided buffer for output
+    char* env_var_start = NULL;
+    char* env_var_end = NULL;
+    size_t env_var_len = 0;
+
+    // Copy the original string to the result buffer
+    strncpy(result, str, buf_size - 1);
+    result[buf_size - 1] = '\0'; // Ensure null termination
+
+    // Iterate through the string looking for environment variables
+    while ((env_var_start = strstr(result, "%")) != NULL) {
+        // Find the end of the environment variable name
+        env_var_end = strchr(env_var_start + 1, '%');
+
+        // Check if a valid environment variable name was found
+        if (env_var_end && env_var_start[1] != '%') {
+            env_var_len = env_var_end - env_var_start - 1;
+
+            // Extract the environment variable name
+            char env_var_name[env_var_len + 1];
+            strncpy(env_var_name, env_var_start + 1, env_var_len);
+            env_var_name[env_var_len] = '\0';
+
+            // Get the environment variable value
+            char* env_value = getenv(env_var_name);
+
+            // Replace the environment variable in the result string
+            if (env_value) {
+                size_t result_len = strlen(result);
+                size_t env_value_len = strlen(env_value);
+
+                // Ensure enough space in the buffer for replacement
+                if (result_len - (env_var_end - result) + env_value_len < buf_size) {
+                    memmove(env_var_start + 1, env_var_end + 1, result_len - (env_var_end - result) + 1);
+                    memcpy(env_var_start + 1, env_value, env_value_len);
+                } else {
+                    // Buffer overflow, truncate the replacement
+                    strncpy(env_var_start + 1, env_value, buf_size - (env_var_start - result) - 2);
+                    result[buf_size - 1] = '\0'; // Ensure null termination
+                }
+
+            } else {
+                // If the environment variable is not found, leave it as is
+                memmove(env_var_start + 1, env_var_end + 1, strlen(env_var_end) + 1);
+            }
+
+        } else {
+            break; // Invalid environment variable syntax
+        }
+    }
+
+    return result;
 }
 
 #ifdef JAVAW
