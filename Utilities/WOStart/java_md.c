@@ -102,6 +102,9 @@ GetJREPath(char *path, jint pathsize, char *javaCommand)
     if (GetJREHome(path, pathsize, javaCommand)) {
 	/* Is JRE co-located with the application? */
 	sprintf(javadll, "%s\\bin\\" JAVA_DLL, path);
+    if (_launcher_debug)
+      printf("Testing javadll %s\n", javadll);
+
 	if (stat(javadll, &s) == 0) {
 	    goto found;
 	}
@@ -193,6 +196,63 @@ GetXUsagePath(char *buf, jint bufsize)
     strcat(buf, "\\Xusage.txt");
 }
 
+// Function to replace environment variables with their actual values
+int replace_env_vars(const char *orig, char *target, size_t target_len) {
+    size_t i = 0, j = 0;
+    
+    while (orig[i] != '\0') {
+        if (orig[i] == '%' && orig[i+1] != '\0') {
+            // Start of an environment variable
+            i++;
+            char env_var[256] = {0};  // Buffer for the environment variable name
+            size_t var_len = 0;
+
+            // Read until the closing '%' (or max var length)
+            while (orig[i] != '%' && orig[i] != '\0' && var_len < sizeof(env_var) - 1) {
+                env_var[var_len++] = orig[i++];
+            }
+
+            if (orig[i] == '%') {
+                // We found the closing '%', so get the environment variable's value
+                env_var[var_len] = '\0';
+                char env_value[1024] = {0};  // Buffer for the environment variable value
+
+                DWORD len = GetEnvironmentVariable(env_var, env_value, sizeof(env_value));
+
+                if (len > 0 && len < sizeof(env_value)) {
+                    // Append the environment variable's value to the target buffer
+                    for (size_t k = 0; env_value[k] != '\0' && j < target_len - 1; k++) {
+                        target[j++] = env_value[k];
+                    }
+                }
+
+                // Move past the closing '%'
+                i++;
+            } else {
+                // If we didn't find a closing '%', copy the characters as is
+                for (size_t k = 0; k < var_len && j < target_len - 1; k++) {
+                    target[j++] = '%';
+                    target[j++] = env_var[k];
+                }
+            }
+        } else {
+            // Copy non-env-var characters to the target buffer
+            if (j < target_len - 1) {
+                target[j++] = orig[i++];
+            } else {
+                break; // Prevent buffer overflow
+            }
+        }
+    }
+
+    // Null-terminate the target buffer
+    target[j] = '\0';
+
+    return 0; // Success
+}
+
+
+
 /*
  * javaCommand is separate parameter, supply a path to java.exe
  * If javaCommand is "c:\foo\bin\java", then put "c:\foo" into buf.
@@ -221,61 +281,6 @@ GetJREHome(char *buf, jint bufsize, char *javaCommand)
 
     *cp = '\0';  /* remove the bin\ part */
     return JNI_TRUE;
-}
-
-char* replace_env_vars(const char* str, char* buf, size_t buf_size) {
-    char* result = buf; // Use the provided buffer for output
-    char* env_var_start = NULL;
-    char* env_var_end = NULL;
-    size_t env_var_len = 0;
-
-    // Copy the original string to the result buffer
-    strncpy(result, str, buf_size - 1);
-    result[buf_size - 1] = '\0'; // Ensure null termination
-
-    // Iterate through the string looking for environment variables
-    while ((env_var_start = strstr(result, "%")) != NULL) {
-        // Find the end of the environment variable name
-        env_var_end = strchr(env_var_start + 1, '%');
-
-        // Check if a valid environment variable name was found
-        if (env_var_end && env_var_start[1] != '%') {
-            env_var_len = env_var_end - env_var_start - 1;
-
-            // Extract the environment variable name
-            char env_var_name[env_var_len + 1];
-            strncpy(env_var_name, env_var_start + 1, env_var_len);
-            env_var_name[env_var_len] = '\0';
-
-            // Get the environment variable value
-            char* env_value = getenv(env_var_name);
-
-            // Replace the environment variable in the result string
-            if (env_value) {
-                size_t result_len = strlen(result);
-                size_t env_value_len = strlen(env_value);
-
-                // Ensure enough space in the buffer for replacement
-                if (result_len - (env_var_end - result) + env_value_len < buf_size) {
-                    memmove(env_var_start + 1, env_var_end + 1, result_len - (env_var_end - result) + 1);
-                    memcpy(env_var_start + 1, env_value, env_value_len);
-                } else {
-                    // Buffer overflow, truncate the replacement
-                    strncpy(env_var_start + 1, env_value, buf_size - (env_var_start - result) - 2);
-                    result[buf_size - 1] = '\0'; // Ensure null termination
-                }
-
-            } else {
-                // If the environment variable is not found, leave it as is
-                memmove(env_var_start + 1, env_var_end + 1, strlen(env_var_end) + 1);
-            }
-
-        } else {
-            break; // Invalid environment variable syntax
-        }
-    }
-
-    return result;
 }
 
 #ifdef JAVAW
@@ -501,7 +506,7 @@ ProcessDir(manifest_info* info, HKEY top_key) {
     DWORD   index = 0;
     HKEY    ver_key;
     char    name[MAXNAMELEN];
-    int	    len;
+    long	    len;
     char    *best = NULL;
 
     /*

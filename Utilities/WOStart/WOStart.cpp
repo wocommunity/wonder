@@ -14,7 +14,7 @@ string getNextRoot();
 string getNextLocal();
 
 #define APPNAME "WOStart"
-#define VERSION "1.1"
+#define VERSION "1.2"
 
 extern "C" {
   int Java_Main(int argc, char ** argv, char *javaCommand);
