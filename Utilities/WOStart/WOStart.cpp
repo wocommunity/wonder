@@ -406,6 +406,22 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 			jargs.push_back(argv[i]);
 			continue;
 		}
+
+		// special handing jvm arguments
+		if (arg[0] == '-' && (			
+				(strncmp(arg, "-add-exports", 12) == 0) ||  // jvm options
+				(strncmp(arg, "-add-opens", 10) == 0)       // jvm options
+			))
+		{
+			jargs.push_back(argv[i]);
+
+			if ((i+1) < argc)
+			{
+				jargs.push_back(argv[++i]);
+			}
+			
+			continue;
+		}
 		
 		appArgs.push_back(argv[i]);
 	}
