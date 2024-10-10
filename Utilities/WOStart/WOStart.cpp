@@ -389,6 +389,7 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 	}
 
 	vector<string> appArgs;
+	int firstElementsCounter = 0;
 
 	// process on the args - skipping arg 0 (command name)
 	for (int i = 1; i < argc; i++) {
@@ -409,16 +410,11 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 
 		// special handing jvm arguments
 		if (arg[0] == '-' && (			
-				(strncmp(arg, "-add-exports", 12) == 0) ||  // jvm options
-				(strncmp(arg, "-add-opens", 10) == 0)       // jvm options
+				(strncmp(arg, "--add-exports", 13) == 0) ||  // jvm options
+				(strncmp(arg, "--add-opens", 11) == 0)       // jvm options
 			))
 		{
-			jargs.push_back(argv[i]);
-
-			if ((i+1) < argc)
-			{
-				jargs.push_back(argv[++i]);
-			}
+		    jargs.insert(jargs.begin() + firstElementsCounter++, argv[i]);
 			
 			continue;
 		}
