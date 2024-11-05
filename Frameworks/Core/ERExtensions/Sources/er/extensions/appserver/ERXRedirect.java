@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXMutableURL;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * <span class="en">
@@ -364,8 +365,14 @@ public class ERXRedirect extends WOComponent {
 	
 			if (ERXAjaxApplication.isAjaxRequest(context.request())) {
 				boolean hasUpdateContainer = context.request().stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null;
+				boolean appendDefaultTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+				
 				if (hasUpdateContainer) {
-					response.appendContentString("<script type=\"text/javascript\">");
+					if(appendDefaultTypeAttribute) {
+						response.appendContentString("<script type=\"text/javascript\">");
+					} else {
+						response.appendContentString("<script>");
+					}
 				}
 				else {
 					response.setHeader("text/javascript", "Content-Type");

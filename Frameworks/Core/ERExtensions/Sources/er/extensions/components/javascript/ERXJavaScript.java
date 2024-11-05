@@ -46,6 +46,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding scriptKey if set, the content will get rendered into an external script src
  * @binding hideInComment boolean that specifies if the script content should
  *   be included in HTML comments, true by default of the script tag contains a script
+ * @binding type defaults to <i>"text/javascript"</i>, if property er.extensions.ERXResponseRewriter.javascriptTypeAttribute is <code>true</code>
  *   
  * @property er.extensions.ERXJavaScript.hideInComment sets globally if the script
  *   content should be included within HTML comments, defaults to <code>true</code>
@@ -86,6 +87,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	WOAssociation _scriptKey;
 	WOAssociation _hideInComment;
 	WOAssociation _language;
+	WOAssociation _type;
 
 	public ERXJavaScript(String s, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
 		super("script", nsdictionary, woelement);
@@ -98,6 +100,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		_hideInComment = _associations.removeObjectForKey("hideInComment");
 		_scriptFramework = _associations.removeObjectForKey("scriptFramework");
 		_framework = _associations.removeObjectForKey("framework");
+		_type = _associations.removeObjectForKey("type");
 		if((_scriptFile != null && _scriptString != null) 
 				|| (_scriptFile != null && (_scriptSource != null || _filename != null)) 
 				|| (_scriptString != null && (_scriptSource != null || _filename != null))) {
@@ -113,8 +116,16 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 
 	@Override
 	public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+		boolean appendDefaultTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+
 		WOComponent wocomponent = wocontext.component();
-		woresponse._appendContentAsciiString(" type=\"text/javascript\"");
+		
+		if(_type != null) {
+			woresponse._appendContentAsciiString(" type=\""+(String)_type.valueInComponent(wocomponent) +"\"");
+		}
+		else if(appendDefaultTypeAttribute) {
+			woresponse._appendContentAsciiString(" type=\"text/javascript\"");
+		}
 		
 		String framework = null;
 		String scriptName = null;
