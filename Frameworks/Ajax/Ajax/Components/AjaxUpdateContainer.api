@@ -30,5 +30,10 @@
 		<binding defaults="Boolean" name="stopped"/>
 	    <binding name="class"/>
 	    <binding name="style"/>
+        <binding name="aria-relevant"/>
+        <binding name="aria-live"/>
+        <binding name="aria-atomic"/>
+        <binding name="aria-busy"/>
+        <binding name="role"/>
     </wo>
 </wodefinitions>
