@@ -632,11 +632,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				try {
 					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
 					ClassPath.setAccessible(true);
-					if (ClassPath.get(NSBundle.class) != null) {
+//					if (ClassPath.get(NSBundle.class) != null) { // condition disabled on 2025-11-03 in an attempt to get bundleless builds to work 
 						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
 						init.setAccessible(true);
 						init.invoke(NSBundle.class);
-					}
+//					}
 				}
 				catch (Exception e) {
 					System.err.println(e);
