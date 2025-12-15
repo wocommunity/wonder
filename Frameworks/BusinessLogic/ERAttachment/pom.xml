@@ -6,10 +6,8 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.businesslogic</groupId>
-	<artifactId>ERAttachment</artifactId>
-	<name>ERAttachment Framework</name>
-	<packaging>woframework</packaging>
-
+	<artifactId>erattachment</artifactId>
+	<name>ERAttachment</name>
 	<properties>
 		<!-- VERY BAD PRACTICE: But there are broken tests -->
 		<maven.test.skip>true</maven.test.skip>
@@ -18,36 +16,32 @@
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERFoundation</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erprototypes</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.ajax</groupId>
-			<artifactId>Ajax</artifactId>
+			<artifactId>ajax</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eoaccess</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-webobjects</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.drewnoakes</groupId>
@@ -62,19 +56,8 @@
 			<artifactId>httpcore</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

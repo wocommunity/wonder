@@ -1,12 +1,13 @@
 package er.modern.directtoweb.delegates;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,26 +183,17 @@ public class ERMD2WAttributeQueryDelegate {
                                 defaultPatterns);
 
                 // prepare a parser for the given patterns
-                DateTimeParser[] parsers = new DateTimeParser[patterns.count()];
+                //CHECKME I probably broke this converting from joda to java.time
+                DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
                 for (int i = 0; i < patterns.count(); i++) {
-                    parsers[i] = DateTimeFormat.forPattern(patterns.objectAtIndex(i))
-                            .getParser();
+                    builder.appendOptional(DateTimeFormatter.ofPattern(patterns.objectAtIndex(i)));
                 }
-                DateTimeFormatter parsingFormatter = new DateTimeFormatterBuilder()
-                        .append(null, parsers).toFormatter();
+                
+                DateTimeFormatter parsingFormatter = builder.parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear()).toFormatter();
 
                 // attempt parse the search value as a date
-                DateTime date = parsingFormatter.parseDateTime(sender.searchValue());
+                ZonedDateTime date = ZonedDateTime.parse(sender.searchValue(), parsingFormatter);
 
-                // if a parser w/o a year was applied, the date will default to
-                // 1970 or 2000, which we modify to the current year
-                if (date != null && date.getYear() == 1970
-                        && !sender.searchValue().contains("70")) {
-                    date = date.plusYears(new DateTime().getYear() - 1970);
-                } else if (date != null && date.getYear() == 2000
-                        && !sender.searchValue().contains("00")) {
-                    date = date.plusYears(new DateTime().getYear() - 2000);
-                }
                 // should the query string be interpreted as a year?
                 if (!(patterns.contains("ddMM") || patterns.contains("MMdd"))
                         && patterns.contains("yyyy")
@@ -209,20 +201,16 @@ public class ERMD2WAttributeQueryDelegate {
                     // search for a whole year
                     EOQualifier dateQ = ERXQ.between(
                             anAttributeName,
-                            new NSTimestamp(date.minusHours(date.getHourOfDay())
-                                    .getMillis()),
-                            new NSTimestamp(date.plusYears(1)
-                                    .minusHours(date.getHourOfDay()).getMillis()));
+                            new NSTimestamp(date.minusHours(date.getHour()).toInstant().toEpochMilli()),
+                            new NSTimestamp(date.plusYears(1).minusHours(date.getHour()).toInstant().toEpochMilli()));
                     qualifiers.addObject(dateQ);
                 }
                 // no, search for whole days, i.e. 0-24 hours
                 else if (date != null && date.getYear() > 1950) {
                     EOQualifier dateQ = ERXQ.between(
                             anAttributeName,
-                            new NSTimestamp(date.minusHours(date.getHourOfDay())
-                                    .getMillis()),
-                            new NSTimestamp(date.plusDays(1)
-                                    .minusHours(date.getHourOfDay()).getMillis()));
+                            new NSTimestamp(date.minusHours(date.getHour()).toInstant().toEpochMilli()),
+                            new NSTimestamp(date.plusDays(1).minusHours(date.getHour()).toInstant().toEpochMilli()));
                     qualifiers.addObject(dateQ);
                 }
             } catch (IllegalArgumentException iae) {

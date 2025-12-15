@@ -7,54 +7,49 @@
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
-	<artifactId>ERModernDirectToWeb</artifactId>
-	<name>ERModernDirectToWeb Framework</name>
-	<packaging>woframework</packaging>
-
-	<build>
-		<sourceDirectory>${project.basedir}/Sources</sourceDirectory>
-	</build>
+	<artifactId>ermoderndirecttoweb</artifactId>
+	<name>ERModernDirectToWeb</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERDirectToWeb</artifactId>
+			<artifactId>erextensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>erdirecttoweb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.ajax</groupId>
-			<artifactId>Ajax</artifactId>
+			<artifactId>ajax</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.ajax</groupId>
-    		<artifactId>ERCoolComponents</artifactId>
+    		<artifactId>ercoolcomponents</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eoaccess</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-webobjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaDirectToWeb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.reload4j</groupId>
-			<artifactId>reload4j</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-directtoweb</artifactId>
 		</dependency>
 	</dependencies>
 </project>

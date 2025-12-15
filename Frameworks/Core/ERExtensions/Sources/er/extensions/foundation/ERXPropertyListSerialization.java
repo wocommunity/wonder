@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -38,8 +37,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -5545,24 +5542,6 @@ public class ERXPropertyListSerialization {
 	}
 		
 	/**
-	 * Parse binary plist to XML Document
-	 *
-	 * @param url the url to read from
-	 * @return Document for binary plist
-	 * @see Document
-	 * @since 5.5.3
-	 */
-	public static String xmlStringWithBinaryPropertyListURL(URL url) {
-		String ret = "";
-
-		if (url == null) {
-			return ret;
-		}
-
-		return ERXPropertyListSerialization/*_NSStringUtilities*/.convertDOMToString(documentWithBinaryPropertyListURL(url));
-	}
-	
-	/**
 	 * Reads a plist from the given URL using the specified format.
 	 * 
 	 * @param url the URL to read from
@@ -5780,20 +5759,4 @@ public class ERXPropertyListSerialization {
 		return (result instanceof NSDictionary ? (NSDictionary<K, V>) result : NSDictionary.<K, V> emptyDictionary());
 	}
 
-	private static String convertDOMToString(org.w3c.dom.Document doc) {
-        if (doc == null) {
-            return null;
-        }
-
-        StringWriter stringOut = new StringWriter();
-        try {
-            OutputFormat format = new OutputFormat(doc); // Serialize DOM
-            XMLSerializer serial = new XMLSerializer(stringOut, format);
-            serial.asDOMSerializer(); // As a DOM serializer
-            serial.serialize(doc.getDocumentElement());
-        } catch (IOException e) {
-            throw new NSForwardException(e);
-        }
-        return stringOut.toString();
-    }
 }

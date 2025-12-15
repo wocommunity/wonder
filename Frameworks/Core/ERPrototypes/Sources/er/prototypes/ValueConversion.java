@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.TimeZone;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -42,44 +41,6 @@ public class ValueConversion {
 
 	public static Date dateTime(OffsetDateTime value) {
 		return Timestamp.valueOf(value.atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime());
-	}
-
-	/**
-	 * @deprecated should use localTime instead
-	 */
-	@Deprecated
-	public static Date jodaLocalTime(org.joda.time.LocalTime value) {
-		Date javaTime = value.toDateTimeToday().toDate();
-		return javaTime;
-	}
-
-	/**
-	 * @deprecated should use localDate instead
-	 */
-	@Deprecated
-	public static Date jodaLocalDate(org.joda.time.LocalDate value) {
-		Date javaDate = value.toDate();
-		return javaDate;
-	}
-
-	/**
-	 * @deprecated should use localDateTime instead
-	 */
-	@Deprecated
-	public static Date jodaLocalDateTime(org.joda.time.LocalDateTime value) {
-		Date javaDate = value.toDate();
-		return javaDate;
-	}
-
-	/**
-	 * @deprecated should use dateTime instead
-	 */
-	@Deprecated
-	public static Date jodaDateTime(org.joda.time.DateTime value) {
-		long dateInMillis = value.toInstant().getMillis();
-		int offset = TimeZone.getDefault().getOffset(dateInMillis);
-		Date javaDate = new Date(dateInMillis - offset);
-		return javaDate;
 	}
 
 	@SuppressWarnings("rawtypes")

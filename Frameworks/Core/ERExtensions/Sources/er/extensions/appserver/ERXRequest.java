@@ -2,10 +2,10 @@ package er.extensions.appserver;
 
 import java.net.HttpCookie;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -558,7 +558,7 @@ public  class ERXRequest extends WORequest {
     public void setCredentials(String userName, String password) {
         String up = userName + ":" + password;
         byte[] bytes = up.getBytes();
-        String encodedString = Base64.encodeBase64String(bytes);
+        String encodedString = Base64.getEncoder().encodeToString(bytes);
         setHeader("Basic " +  encodedString, "authorization");
     }
 

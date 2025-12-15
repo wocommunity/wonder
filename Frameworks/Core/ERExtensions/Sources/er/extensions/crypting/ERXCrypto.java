@@ -9,8 +9,7 @@ package er.extensions.crypting;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.apache.commons.codec.binary.Base64;
+import java.util.Base64;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -160,7 +159,7 @@ public class ERXCrypto {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA");
 			md.update(v.getBytes());
-			base64HashedPassword = Base64.encodeBase64String(md.digest()); 
+			base64HashedPassword = Base64.getEncoder().encodeToString(md.digest()); 
 		}
 		catch (NoSuchAlgorithmException e) {
 			throw new NSForwardException(e, "Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
@@ -273,7 +272,7 @@ public class ERXCrypto {
 	 * @return the encoded string
 	 */
 	public static String base64Encode(byte[] byteArray) {
-		return Base64.encodeBase64String(byteArray);
+		return Base64.getEncoder().encodeToString(byteArray);
 	}
 	
 	/**
@@ -283,7 +282,7 @@ public class ERXCrypto {
 	 * @return the encoded string
 	 */
 	public static String base64urlEncode(byte[] byteArray) {
-		return Base64.encodeBase64URLSafeString(byteArray);
+		return Base64.getEncoder().encodeToString(byteArray);
 	}
 
 	/**
@@ -295,7 +294,7 @@ public class ERXCrypto {
 	 */
 	// TODO remove throws declaration when API change is possible
 	public static byte[] base64Decode(String s) throws IOException {
-		return Base64.decodeBase64(s);
+		return Base64.getDecoder().decode(s);
 	}
 
 	/**

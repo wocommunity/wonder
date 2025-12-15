@@ -6,52 +6,21 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.ajax</groupId>
-	<artifactId>Ajax</artifactId>
-	<name>Ajax Framework</name>
-	<packaging>woframework</packaging>
-
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.wocommunity</groupId>
-				<artifactId>wolifecycle-maven-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<artifactId>ajax</artifactId>
+	<name>Ajax</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code</groupId>
+			<groupId>org.jabsorb</groupId>
 			<artifactId>jabsorb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

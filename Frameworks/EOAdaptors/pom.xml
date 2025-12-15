@@ -10,10 +10,6 @@
 	<packaging>pom</packaging>
 	<name>EOAdaptors Frameworks</name>
 	<modules>
-		<module>JavaERJDBCAdaptor</module>
-		<module>JavaFSAdaptor</module>
-		<module>JavaLuceneAdaptor</module>
 		<module>JavaMemoryAdaptor</module>
-		<module>JavaNeo4JAdaptor</module>
 	</modules>
 </project>

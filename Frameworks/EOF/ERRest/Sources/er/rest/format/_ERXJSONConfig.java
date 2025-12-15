@@ -50,8 +50,6 @@ public class _ERXJSONConfig {
 	public static JsonConfig createDefaultConfig(ERXRestContext context) {
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(NSTimestamp.class, new GeneralObjectToStringProcessor(context));
-		config.registerJsonValueProcessor(org.joda.time.LocalDate.class, new GeneralObjectToStringProcessor(context));
-		config.registerJsonValueProcessor(org.joda.time.LocalDateTime.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(Date.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(LocalDate.class, new GeneralObjectToStringProcessor(context));
 		config.registerJsonValueProcessor(LocalDateTime.class, new GeneralObjectToStringProcessor(context));

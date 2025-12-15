@@ -6,20 +6,16 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
-	<artifactId>ERNeutralLook</artifactId>
-	<name>ERNeutralLook Framework</name>
-	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
+	<artifactId>erneutrallook</artifactId>
+	<name>ERNeutralLook</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERDirectToWeb</artifactId>
+			<artifactId>erdirecttoweb</artifactId>
 		</dependency>
 	</dependencies>
 </project>

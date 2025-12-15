@@ -7,38 +7,29 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.plugins</groupId>
-	<artifactId>MySQLPlugIn</artifactId>
-	<name>MySQLPlugIn Framework</name>
-	<packaging>woframework</packaging>
+	<artifactId>mysqlplugin</artifactId>
+	<name>MySQLPlugIn</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eoaccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-jdbcadaptor</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

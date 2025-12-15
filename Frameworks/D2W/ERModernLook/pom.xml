@@ -7,46 +7,49 @@
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
-	<artifactId>ERModernLook</artifactId>
-	<name>ERModernLook Framework</name>
-	<packaging>woframework</packaging>
-
-	<build>
-		<sourceDirectory>${project.basedir}/Sources</sourceDirectory>
-	</build>
+	<artifactId>ermodernlook</artifactId>
+	<name>ERModernLook</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERDirectToWeb</artifactId>
+			<artifactId>erdirecttoweb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>ajax</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>ercoolcomponents</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wonder.d2w</groupId>
-			<artifactId>ERModernDirectToWeb</artifactId>
+			<artifactId>ermoderndirecttoweb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-webobjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaDirectToWeb</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-directtoweb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eoaccess</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -83,10 +83,13 @@ public class ERXTimeZoneDetector extends ERXStatelessComponent {
 	}
 
 	public static NSArray<TimeZone> zonesWithRawOffset(int minutes, boolean dst, boolean southern) {
-		int rawOffset = minutes * 60 * 1000;
+		final int rawOffset = minutes * 60 * 1000;
 		EOQualifier q = ERXQ.equals("rawOffset", rawOffset);
 		q = ERXQ.and(q, dst ? ERXQ.isTrue("useDaylightTime") : ERXQ.isFalse("useDaylightTime"));
-		NSArray<TimeZone> result = EOQualifier.filteredArrayWithQualifier(allZones(), q);
+		NSArray<TimeZone> result = allZones().stream()
+				.filter(z -> z.getRawOffset() == rawOffset)
+				.filter(z -> z.useDaylightTime() == dst)
+				.collect(NSMutableArray::new, NSMutableArray::add, NSMutableArray::addAll);
 		if (dst) {
 			Date d = new NSTimestamp(2010, southern ? 0 : 5, 1, 0, 0, 0, TimeZone.getTimeZone("GMT"));
 			NSMutableArray<TimeZone> tzs = new NSMutableArray<>();

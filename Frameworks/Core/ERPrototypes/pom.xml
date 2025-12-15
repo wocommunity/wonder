@@ -6,16 +6,12 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
-	<artifactId>ERPrototypes</artifactId>
-	<name>ERPrototypes Framework</name>
-	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
+	<artifactId>erprototypes</artifactId>
+	<name>ERPrototypes</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 	</dependencies>
 </project>

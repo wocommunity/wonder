@@ -16,6 +16,5 @@
 		<module>ERNeutralLook</module>
 		<module>ERPrototypes</module>
 		<module>JavaWOExtensions</module>
-		<module>WOOgnl</module>
 	</modules>
 </project>

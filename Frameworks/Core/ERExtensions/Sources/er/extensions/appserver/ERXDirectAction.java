@@ -41,7 +41,6 @@ import er.extensions.logging.ERXLog4JConfiguration;
 import er.extensions.logging.ERXLogger;
 import er.extensions.statistics.ERXStatisticsPage;
 import er.extensions.statistics.ERXStats;
-import er.testrunner.ERXWOTestInterface;
 
 /**
  * Basic collector for direct action additions. All of the actions are password protected, 
@@ -82,34 +81,7 @@ public class ERXDirectAction extends WODirectAction {
     	}
     	return password.equals(requestPassword);
     }
-
-    /**
-     * Action used for junit tests. This method is only active when WOCachingEnabled is
-     * disabled (we take this to mean that the application is not in production).
-     * <h3>Synopsis:</h3>
-     * pw=<i>aPassword</i>&amp;case=<i>classNameOfTestCase</i>
-     * <h3>Form Values:</h3>
-     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXJUnitPassword</code>.
-     * <b>case</b> class name for unit test to be performed.
-     * 
-     * @return {@link er.testrunner.ERXWOTestInterface ERXWOTestInterface} 
-     * with the results after performing the given test.
-     */
-    public WOActionResults testAction() {
-        if (canPerformActionWithPasswordKey("er.extensions.ERXJUnitPassword")) {
-        	ERXWOTestInterface result = pageWithName(ERXWOTestInterface.class);
-            session().setObjectForKey(Boolean.TRUE, "ERXWOTestInterface.enabled");
-            String testCase = request().stringFormValueForKey("case");
-            if(testCase != null) {
-                result.theTest = testCase;
-                // (ak:I wish we could return a direct test result...)
-                // return (WOComponent)result.valueForKey("performTest");
-            }
-            return result;
-        }
-        return forbiddenResponse();
-    }
-    
+   
     /**
      * Flushes the component cache to allow reloading components even when WOCachingEnabled=true.
      * 

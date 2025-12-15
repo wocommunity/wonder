@@ -15,7 +15,6 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -85,44 +84,6 @@ public class ValueFactory {
 			throw new IllegalArgumentException("Expected java.sql.Timestamp object but got <" + value.getClass().getCanonicalName() + ">.");
 		}
 		return odt;
-	}
-
-	/**
-	 * @deprecated should use localDate instead
-	 */
-	@Deprecated
-	public static org.joda.time.LocalDate jodaLocalDate(Date value) {
-		org.joda.time.LocalDate ld = new org.joda.time.LocalDate(value.getTime());
-		return ld;
-	}
-
-	/**
-	 * @deprecated should use localDateTime instead
-	 */
-	@Deprecated
-	public static org.joda.time.LocalDateTime jodaLocalDateTime(Date value) {
-		org.joda.time.LocalDateTime ldt = new org.joda.time.LocalDateTime(value.getTime());
-		return ldt;
-	}
-
-	/**
-	 * @deprecated should use localTime instead
-	 */
-	@Deprecated
-	public static org.joda.time.LocalTime jodaLocalTime(Date value) {
-		org.joda.time.LocalTime time = new org.joda.time.LocalTime(value.getTime());
-		return time;
-	}
-
-	/**
-	 * @deprecated should use dateTime instead
-	 */
-	@Deprecated
-	public static org.joda.time.DateTime jodaDateTime(Date value) {
-		long dateInMillis = value.getTime();
-		int offset = TimeZone.getDefault().getOffset(dateInMillis);
-		org.joda.time.DateTime dateTime = new org.joda.time.DateTime(dateInMillis + offset);
-		return dateTime;
 	}
 
 	@SuppressWarnings("rawtypes")

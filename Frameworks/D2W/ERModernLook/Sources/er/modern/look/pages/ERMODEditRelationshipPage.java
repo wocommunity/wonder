@@ -3,8 +3,10 @@ package er.modern.look.pages;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -68,6 +70,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
    * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
    */
   private static final long serialVersionUID = 1L;
+  
+  private static final Logger LOG = LoggerFactory.getLogger(ERMODEditRelationshipPage.class);
 
 	public interface Keys extends ERD2WEditRelationshipPage.Keys {
 		public static String parentPageConfiguration = "parentPageConfiguration";
@@ -381,7 +385,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
 		if (relationshipKey != null && eo != null) {
-			if (ObjectUtils.notEqual(relationshipKey(), relationshipKey) ||
+			if (!Objects.equals(relationshipKey(), relationshipKey) ||
 					(masterObject() != null && !ERXEOControlUtilities.eoEquals(masterObject(), eo))) {
 //				NSLog.out.appendln("***ERMODEditRelationshipPage.setMasterObjectAndRelationshipKey: "
 //								+ "HAS CHANGES; " + eo + " - " + masterObject() + "  " + relationshipKey + " - " + relationshipKey() +"***");
@@ -438,8 +442,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey(Keys.userPreferencesSortOrdering);
-			if (log.isDebugEnabled()) {
-			  log.debug("Found sort Orderings in user prefs " + sortOrderings);
+			if (LOG.isDebugEnabled()) {
+			  LOG.debug("Found sort Orderings in user prefs " + sortOrderings);
 			}
 		}
 		if (sortOrderings == null) {
@@ -456,8 +460,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 					}
 				}
 				sortOrderings = validatedSortOrderings;
-				if (log.isDebugEnabled()) {
-					log.debug("Found sort Orderings in rules " + sortOrderings);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Found sort Orderings in rules " + sortOrderings);
 				}
 			}
 		}
@@ -492,7 +496,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	  }
 	  
 	  if (!validSortOrdering) {
-	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
+	    LOG.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
 	    validSortOrdering = false;
 	  }
 	  return validSortOrdering;
@@ -515,8 +519,8 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
                     .valueForKey("defaultBatchSize"), 5);
             Object batchSizePref = userPreferencesValueForPageConfigurationKey("batchSize");
             if (batchSizePref != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Found batch size in user prefs " + batchSizePref);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Found batch size in user prefs " + batchSizePref);
                 }
                 batchSize = ERXValueUtilities.IntegerValueWithDefault(batchSizePref,
                         batchSize);

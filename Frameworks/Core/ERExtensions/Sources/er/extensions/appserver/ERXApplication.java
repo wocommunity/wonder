@@ -35,16 +35,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
@@ -64,7 +58,6 @@ import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProperties;
-import com.webobjects.appserver._private.WOWebServicePatch;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObserverCenter;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
@@ -86,13 +79,11 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.development.NSBundleFactory;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components.ERXAnyField;
-import er.extensions.components.ERXGracefulShutdown;
 import er.extensions.components._private.ERXActiveImage;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.components._private.ERXWORepetition;
@@ -157,7 +148,7 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXComponentActionRedirector.enabled
  * @property er.extensions.ERXApplication.allowMultipleDevInstances
  */
-public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
+public abstract class ERXApplication extends ERXAjaxApplication {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXApplication.class);
 
@@ -620,12 +611,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (mainBundle == null) {
 				// AK: when we get here, the main bundle wasn't inited yet
 				// so we do it ourself...
-				
-				if (isDevelopmentModeSafe() && 
-						ERXConfigurationManager.defaultManager().isDeployedAsServlet()) {
-					// bundle-less builds do not appear to work when running in servlet mode, so make it prefer the legacy bundle style 
-					NSBundleFactory.registerBundleFactory(new com.webobjects.foundation.development.NSLegacyBundle.Factory());
-				}
 				
 				try {
 					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
@@ -1091,9 +1076,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (contextClassName().equals("WOContext")) {
 			setContextClassName(ERXWOContext.class.getName());
 		}
-		if (contextClassName().equals("WOServletContext") || contextClassName().equals("com.webobjects.jspservlet.WOServletContext")) {
-			setContextClassName(ERXWOServletContext.class.getName());
-		}
 
 		ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
 		try {
@@ -1137,16 +1119,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		
 		ERXStats.initStatisticsIfNecessary();
-
-		try {
-			WOWebServicePatch.initServer();
-		} catch (Throwable e) {
-			Throwable cause = ERXExceptionUtilities.getMeaningfulThrowable(e);
-			if (!(cause instanceof ClassNotFoundException ||
-					cause instanceof NoClassDefFoundError)) {
-				e.printStackTrace();
-			}
-		}
 		
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
     	// This is the workaround.
@@ -1231,10 +1203,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("addBalancerRouteCookieByNotification", new Class[] { NSNotification.class }), WORequestHandler.DidHandleRequestNotification, null);
 
-		// Signal handling support
-		if (ERXGracefulShutdown.isEnabled()) {
-			ERXGracefulShutdown.installHandler();
-		}
 		// AK: this makes it possible to retrieve the creating instance from an
 		// NSData PK.
 		// it should still be unique, as one host can only have one running
@@ -2165,17 +2133,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse createResponseInContext(WOContext context) {
 		WOResponse response = new ERXResponse(context);
 		return response;
-	}
-
-	/**
-	 * Override to perform any last minute cleanup before the application
-	 * terminates. See
-	 * {@link er.extensions.components.ERXGracefulShutdown ERXGracefulShutdown} for where
-	 * this is called if signal handling is enabled. Default implementation
-	 * calls terminate.
-	 */
-	public void gracefulTerminate() {
-		terminate();
 	}
 
 	/**

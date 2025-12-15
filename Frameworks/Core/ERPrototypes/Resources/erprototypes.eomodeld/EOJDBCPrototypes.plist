@@ -184,54 +184,6 @@
             valueType = t; 
         }, 
         {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaDateTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaDateTime; 
-            valueClassName = "org.joda.time.DateTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaDateTime; 
-            valueType = T; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalDate; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalDate; 
-            valueClassName = "org.joda.time.LocalDate"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalDate; 
-            valueType = D; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalDateTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalDateTime; 
-            valueClassName = "org.joda.time.LocalDateTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalDateTime; 
-            valueType = T; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalTime; 
-            valueClassName = "org.joda.time.LocalTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalTime; 
-            valueType = t; 
-        }, 
-        {
             columnName = ""; 
             externalType = LONG; 
             name = longNumber; 
@@ -399,7 +351,7 @@
             width = 10000000; 
         }
     ); 
-    attributesUsedForLocking = (boolean, id, jodaDateTime); 
+    attributesUsedForLocking = (boolean, id); 
     className = EOGenericRecord; 
     classProperties = (
         amount, 
@@ -424,10 +376,6 @@
         javaLocalDate, 
         javaLocalDateTime, 
         javaLocalTime, 
-        jodaDateTime, 
-        jodaLocalDate, 
-        jodaLocalDateTime, 
-        jodaLocalTime, 
         longNumber, 
         longText, 
         mutableArray, 
@@ -465,9 +413,6 @@
             javaLocalDate, 
             javaLocalDateTime, 
             javaLocalTime, 
-            jodaLocalDate, 
-            jodaLocalDateTime, 
-            jodaLocalTime, 
             longNumber, 
             longText, 
             mutableArray, 

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -3302,7 +3303,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 		}
 		
 		private String makeURI(String base, List<NameValuePair> parameters) {
-			return base + "?" + URLEncodedUtils.format(parameters, CharEncoding.UTF_8);
+			return base + "?" + URLEncodedUtils.format(parameters, StandardCharsets.UTF_8);
 		}
 		
 		/*

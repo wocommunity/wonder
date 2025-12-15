@@ -6,21 +6,24 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.plugins</groupId>
-	<artifactId>DerbyPlugIn</artifactId>
-	<name>Derby PlugIn</name>
-	<packaging>woframework</packaging>
+	<artifactId>derbyplugin</artifactId>
+	<name>DerbyPlugIn</name>
 	<dependencies>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eoaccess</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-jdbcadaptor</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -31,7 +34,4 @@
 			<artifactId>derbytools</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

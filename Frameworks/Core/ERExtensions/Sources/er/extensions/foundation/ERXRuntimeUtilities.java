@@ -91,8 +91,7 @@ public class ERXRuntimeUtilities {
     public static NSBundle loadBundleIfNeeded(File bundleFile) {
     	try {
     		String canonicalPath = bundleFile.getCanonicalPath();
-    		boolean isJar = bundleFile.isFile() && canonicalPath.endsWith(".jar");
-			return NSBundle._bundleWithPathShouldCreateIsJar(canonicalPath, true, isJar);
+    		return NSBundle.bundleWithPath(canonicalPath);
 		}
 		catch (IOException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);

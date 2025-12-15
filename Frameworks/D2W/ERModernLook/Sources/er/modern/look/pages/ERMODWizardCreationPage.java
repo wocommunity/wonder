@@ -1,6 +1,6 @@
 package er.modern.look.pages;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -191,7 +191,7 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 		D2WContext result = super.d2wContext();
 		if (_cachedEntity == null) {
 			_cachedEntity = result.entity();
-		} else if (ObjectUtils.notEqual(_cachedEntity, result.entity())) {
+		} else if (!Objects.equals(_cachedEntity, result.entity())) {
 			clearTabSectionsContents();
 			result.takeValueForKey(null, "tabSectionsContents");
 		    _cachedEntity = result.entity();

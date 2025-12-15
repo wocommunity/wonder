@@ -6,52 +6,28 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
-	<artifactId>ERJavaMail</artifactId>
-	<name>ERJavaMail Framework</name>
-	<packaging>woframework</packaging>
-
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
+	<artifactId>erjavamail</artifactId>
+	<name>ERJavaMail</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-foundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-eocontrol</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-webobjects</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>dsn</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>wonder.javamail</groupId>
-			<artifactId>mockmail</artifactId>
-			<version>1.0</version>
-			<scope>test</scope>
+			<artifactId>jakarta.mail</artifactId>
 		</dependency>
 	</dependencies>
 </project>

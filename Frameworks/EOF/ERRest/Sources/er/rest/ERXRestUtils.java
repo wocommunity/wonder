@@ -99,12 +99,6 @@ public class ERXRestUtils {
 		else if (Calendar.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
-		else if (org.joda.time.LocalDateTime.class.isAssignableFrom(valueType)) {
-			primitive = true;
-		}
-		else if (org.joda.time.LocalDate.class.isAssignableFrom(valueType)) {
-			primitive = true;
-		}
 		else if (Enum.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
@@ -153,12 +147,6 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof Date) {
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
-		}
-		else if (value instanceof org.joda.time.LocalDateTime) {
-			formattedValue = ERXRestUtils.jodaLocalDateTimeFormat(false, context).print((org.joda.time.LocalDateTime)value);
-		}
-		else if (value instanceof org.joda.time.LocalDate) {
-			formattedValue = ERXRestUtils.jodaLocalDateFormat(false, context).print((org.joda.time.LocalDate)value);
 		}
 		else if (value instanceof LocalDate) {
 			formattedValue = ERXRestUtils.javaDateFormat(context).format((TemporalAccessor)value);
@@ -231,46 +219,6 @@ public class ERXRestUtils {
 		return dateFormatter;
 	}
 	
-	protected static org.joda.time.format.DateTimeFormatter jodaLocalDateFormat(boolean spaces, ERXRestContext context) {
-		org.joda.time.format.DateTimeFormatter dateFormatter = (org.joda.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.jodaFormatter");
-		if (dateFormatter == null) {
-			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormat");
-			if (dateFormat == null) {
-				dateFormat = ERXProperties.stringForKey("er.rest.jodaFormat");
-				if (dateFormat == null) {
-					if (spaces) {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
-					}
-					else {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
-					}
-				}
-			}
-			dateFormatter = org.joda.time.format.DateTimeFormat.forPattern(dateFormat);
-		}
-		return dateFormatter;
-	}
-	
-	protected static org.joda.time.format.DateTimeFormatter jodaLocalDateTimeFormat(boolean spaces, ERXRestContext context) {
-		org.joda.time.format.DateTimeFormatter dateFormatter = (org.joda.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.jodaTimeFormatter");
-		if (dateFormatter == null) {
-			String dateFormat = (String)context.userInfoForKey("er.rest.jodaFormatTime");
-			if (dateFormat == null) {
-				dateFormat = ERXProperties.stringForKey("er.rest.jodaFormatTime");
-				if (dateFormat == null) {
-					if (spaces) {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
-					}
-					else {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.jodaFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
-					}
-				}
-			}
-			dateFormatter = org.joda.time.format.DateTimeFormat.forPattern(dateFormat);
-		}
-		return dateFormatter;
-	}
-
 	protected static java.time.format.DateTimeFormatter javaDateFormat(ERXRestContext context) {
 		java.time.format.DateTimeFormatter dateFormatter = (java.time.format.DateTimeFormatter)context.userInfoForKey("er.rest.javaDateFormatter");
 		if (dateFormatter == null) {
@@ -448,50 +396,6 @@ public class ERXRestUtils {
 					String msg = "Failed to parse '" + strValue + "' as a timestamp";
 					if (formatter != null) {
 						msg += " (example: " + formatter.format(new Date()) + ")";
-					}
-					msg += ".";
-					throw new IllegalArgumentException(msg, t);
-				}
-			}
-		}
-		else if (valueType != null && org.joda.time.LocalDateTime.class.isAssignableFrom(valueType)) {
-			if (value instanceof NSTimestamp) {
-				parsedValue = value;
-			}
-			else {
-				String strValue = (String) value;
-				org.joda.time.format.DateTimeFormatter formatter = null;
-				try {
-					boolean spaces = strValue.indexOf(' ') != -1;
-					formatter = ERXRestUtils.jodaLocalDateTimeFormat(spaces, context);
-					parsedValue = new org.joda.time.LocalDateTime(formatter.parseDateTime(strValue));
-				}
-				catch (Throwable t) {
-					String msg = "Failed to parse '" + strValue + "' as a timestamp";
-					if (formatter != null) {
-						msg += " (example: " + formatter.print(new org.joda.time.LocalDateTime()) + ")";
-					}
-					msg += ".";
-					throw new IllegalArgumentException(msg, t);
-				}
-			}
-		}
-		else if (valueType != null && org.joda.time.LocalDate.class.isAssignableFrom(valueType)) {
-			if (value instanceof NSTimestamp) {
-				parsedValue = value;
-			}
-			else {
-				String strValue = (String) value;
-				org.joda.time.format.DateTimeFormatter formatter = null;
-				try {
-					boolean spaces = strValue.indexOf(' ') != -1;
-					formatter = ERXRestUtils.jodaLocalDateFormat(spaces, context);
-					parsedValue = new org.joda.time.LocalDate(formatter.parseDateTime(strValue));
-				}
-				catch (Throwable t) {
-					String msg = "Failed to parse '" + strValue + "' as a timestamp";
-					if (formatter != null) {
-						msg += " (example: " + formatter.print(new org.joda.time.LocalDate()) + ")";
 					}
 					msg += ".";
 					throw new IllegalArgumentException(msg, t);

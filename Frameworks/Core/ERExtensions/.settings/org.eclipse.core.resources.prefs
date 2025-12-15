@@ -94,10 +94,15 @@ encoding//Components/Nonlocalized.lproj/ERXTableWithBorder.wo/ERXTableWithBorder
 encoding//Components/Nonlocalized.lproj/ERXToManyRelationship.wo/ERXToManyRelationship.wod=UTF-8
 encoding//Components/Nonlocalized.lproj/ERXToOneRelationship.wo/ERXToOneRelationship.wod=UTF-8
 encoding//Components/Nonlocalized.lproj/ERXUnreadMarker.wo/ERXUnreadMarker.wod=UTF-8
-encoding//Components/Nonlocalized.lproj/ERXWOTestInterface.wo/ERXWOTestInterface.wod=UTF-8
-encoding//Components/Nonlocalized.lproj/ERXWOTestResult.wo/ERXWOTestResult.wod=UTF-8
 encoding//Sources/er/extensions/components/ERXFlashMovie.java=UTF-8
 encoding//Sources/er/extensions/components/ERXIEConditionalComment.java=UTF-8
+encoding//Tests/Resources=UTF-8
 encoding//Tests/Sources=UTF-8
+encoding//src/main/resources=UTF-8
 encoding/<project>=UTF-8
+encoding/Components=UTF-8
+encoding/FilteredResources=UTF-8
+encoding/Resources=UTF-8
 encoding/Sources=UTF-8
+encoding/Tests=UTF-8
+encoding/WebServerResources=UTF-8

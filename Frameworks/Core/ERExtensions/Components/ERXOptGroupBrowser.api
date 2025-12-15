@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-  <wo class="com.webobjects.appserver._private.ERXOptGroupBrowser">
+  <wo class="er.extensions.appserver.ERXOptGroupBrowser">
     <binding name="selections" passthrough="NO" settable="YES"/>
     <binding name="selectedValues" passthrough="NO"/>
     <binding name="list" passthrough="NO" required="YES"/>

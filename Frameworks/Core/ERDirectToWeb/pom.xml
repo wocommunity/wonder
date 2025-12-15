@@ -6,24 +6,16 @@
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 	<groupId>wonder.core</groupId>
-	<artifactId>ERDirectToWeb</artifactId>
-	<name>ERDirectToWeb Framework</name>
-	<packaging>woframework</packaging>
-	<build>
-		<sourceDirectory>${basedir}/Sources</sourceDirectory>
-	</build>
+	<artifactId>erdirecttoweb</artifactId>
+	<name>ERDirectToWeb</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaDirectToWeb</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-directtoweb</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -7,11 +7,6 @@
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
-	<artifactId>ERModernDefaultSkin</artifactId>
-	<name>ERModernDefaultSkin Framework</name>
-	<packaging>woframework</packaging>
-
-	<build>
-		<sourceDirectory>${project.basedir}/Sources</sourceDirectory>
-	</build>
+	<artifactId>ermoderndefaultskin</artifactId>
+	<name>ERModernDefaultSkin</name>
 </project>

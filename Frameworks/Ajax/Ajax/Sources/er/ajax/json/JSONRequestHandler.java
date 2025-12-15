@@ -1,5 +1,6 @@
 package er.ajax.json;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -383,7 +384,7 @@ public class JSONRequestHandler extends WORequestHandler {
 			_context = context;
 		}
 
-		public void preInvoke(Object context, Object instance, Method method, Object[] arguments) throws Exception {
+		public void preInvoke(Object context, Object instance, AccessibleObject method, Object[] arguments) throws Exception {
 			if (instance instanceof JSONComponent) {
 				JSONComponent component = (JSONComponent) instance;
 				component._setContext(_context);
@@ -391,7 +392,7 @@ public class JSONRequestHandler extends WORequestHandler {
 			}
 		}
 
-		public void postInvoke(Object context, Object instance, Method method, Object result) throws Exception {
+		public void postInvoke(Object context, Object instance, AccessibleObject method, Object result) throws Exception {
 			// DO NOTHING
 		}
 	}

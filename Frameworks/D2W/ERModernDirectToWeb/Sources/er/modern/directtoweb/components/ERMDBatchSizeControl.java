@@ -1,5 +1,8 @@
 package er.modern.directtoweb.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSDictionary;
@@ -10,7 +13,6 @@ import er.directtoweb.components.ERDCustomComponent;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.batching.ERXBatchNavigationBar;
 import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -27,6 +29,7 @@ import er.extensions.localization.ERXLocalizer;
  *
  */
 public class ERMDBatchSizeControl extends ERDCustomComponent {
+	private static final Logger LOG = LoggerFactory.getLogger(ERMDBatchSizeControl.class);
 	
 	public static interface Keys {
 		 public static final String itemString = "itemString";
@@ -172,7 +175,7 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
                 allObjectsCount = ((ERXDisplayGroup<?>) displayGroup()).filteredObjects()
                         .count();
             } else {
-                log.warn("An ERXDisplayGroup is required to show the correct filtered objects count!");
+                LOG.warn("An ERXDisplayGroup is required to show the correct filtered objects count!");
             }
         }
         return allObjectsCount;

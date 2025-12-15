@@ -14,12 +14,10 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.development.NSMavenProjectBundle;
 import com.webobjects.woextensions.WOExceptionParser;
 import com.webobjects.woextensions.WOParsedErrorLine;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -116,12 +114,13 @@ public class ERXExceptionPage extends ERXComponent {
 
 		String path = null;
 
-		if( NSBundle.mainBundle() instanceof NSMavenProjectBundle ) {
-			path = bundle.bundlePath() + pathModifier + "/src/main/java/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
-		}
-		else {
-			path = bundle.bundlePath() + pathModifier + "/Sources/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
-		}
+//		if( NSBundle.mainBundle() instanceof NSMavenProjectBundle ) {
+//			path = bundle.bundlePath() + pathModifier + "/src/main/java/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
+//		}
+//		else {
+//			path = bundle.bundlePath() + pathModifier + "/Sources/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
+//		}
+		path = bundle.bundlePath() + pathModifier + "/Sources/" + nameOfThrowingClass.replace( ".", "/" ) + ".java";
 
 		return Paths.get( path );
 	}

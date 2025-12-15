@@ -6,20 +6,16 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.misc</groupId>
-	<artifactId>WOLips</artifactId>
-	<name>WOLips Framework</name>
-	<packaging>woframework</packaging>
+	<artifactId>wolips</artifactId>
+	<name>WOLips</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>org.wocommunity</groupId>
+			<artifactId>wonder-modular-webobjects</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

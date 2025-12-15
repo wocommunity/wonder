@@ -65,6 +65,7 @@ public abstract class ERXShutdownHook extends Thread {
 
 						if ( ! ERXApplication.erxApplication().getIsTerminating()) {
 							NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationWillTerminateNotification, NSKeyValueCoding.NullValue));
+							// TODO should this call super.terminate() here?
 						}
 
 						System.out.println( "APPLICATION SHUTDOWN SEQUENCE COMPLETE" );

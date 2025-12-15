@@ -1,6 +1,6 @@
 package er.ajax;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -52,7 +52,7 @@ public class AjaxPingUpdate extends WOComponent {
   		if(_lastCacheKey == NOT_INITIALIZED) {
   			_lastCacheKey = cacheKey;
   		}
-  		if (ObjectUtils.notEqual(_lastCacheKey, cacheKey)) {
+  		if (!Objects.equals(_lastCacheKey, cacheKey)) {
   			refreshTarget = true;
   			_lastCacheKey = cacheKey;
   		}

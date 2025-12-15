@@ -7,26 +7,21 @@
     </parent>
 
     <groupId>wonder.ajax</groupId>
-    <artifactId>ERCoolComponents</artifactId>
-    <name>ERCoolComponents Framework</name>
-    <packaging>woframework</packaging>
-
-    <build>
-        <sourceDirectory>Sources</sourceDirectory>
-    </build>
+    <artifactId>ercoolcomponents</artifactId>
+    <name>ERCoolComponents</name>
 
     <dependencies>
         <dependency>
             <groupId>wonder.core</groupId>
-            <artifactId>ERExtensions</artifactId>
+            <artifactId>erextensions</artifactId>
         </dependency>
         <dependency>
             <groupId>wonder.ajax</groupId>
-            <artifactId>Ajax</artifactId>
+            <artifactId>ajax</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaWebObjects</artifactId>
+            <groupId>org.wocommunity</groupId>
+            <artifactId>wonder-modular-webobjects</artifactId>
         </dependency>
     </dependencies>
 </project>

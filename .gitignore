@@ -5,3 +5,4 @@ bin
 ant.*
 dist
 .DS_Store
+**/Resources/Info.plist

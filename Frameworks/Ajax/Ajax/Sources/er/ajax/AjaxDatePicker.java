@@ -17,7 +17,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.formatters.ERXDateTimeFormatter;
-import er.extensions.formatters.ERXJodaFormat;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -140,9 +139,6 @@ public class AjaxDatePicker extends AjaxComponent {
     		}
     		else if (formatter instanceof SimpleDateFormat) {
     			format = ((SimpleDateFormat)formatter).toPattern();
-    		}
-    		else if (formatter instanceof ERXJodaFormat) {
-    			format = ((ERXJodaFormat)formatter).pattern();
     		}
     		else if (formatter instanceof ERXDateTimeFormatter) {
     			format = ((ERXDateTimeFormatter)formatter).pattern();

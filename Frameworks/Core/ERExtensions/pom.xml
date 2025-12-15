@@ -7,80 +7,34 @@
     </parent>
 
     <groupId>wonder.core</groupId>
-    <artifactId>ERExtensions</artifactId>
-    <name>ERExtensions Framework</name>
-    <packaging>woframework</packaging>
+    <artifactId>erextensions</artifactId>
+    <name>ERExtensions</name>
+    <packaging>jar</packaging>
 
-    <build>
-        <sourceDirectory>${basedir}/Sources</sourceDirectory>
-        <testSourceDirectory>${basedir}/Tests/Sources</testSourceDirectory>
-        <testResources>
-            <testResource>
-                <directory>${basedir}/Tests/Resources</directory>
-            </testResource>
-        </testResources>
-        <plugins>
-            <plugin>
-                <groupId>org.wocommunity</groupId>
-                <artifactId>wolifecycle-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
+    	<dependency>
+    	  <groupId>org.wocommunity</groupId>
+    	  <artifactId>wonder-modular-foundation</artifactId>
+    	</dependency>
+    	<dependency>
+    	  <groupId>org.wocommunity</groupId>
+    	  <artifactId>wonder-modular-eocontrol</artifactId>
+    	</dependency>
+    	<dependency>
+    	  <groupId>org.wocommunity</groupId>
+    	  <artifactId>wonder-modular-eoaccess</artifactId>
+    	</dependency>
+    	<dependency>
+    	  <groupId>org.wocommunity</groupId>
+    	  <artifactId>wonder-modular-jdbcadaptor</artifactId>
+    	</dependency>
+    	<dependency>
+    	  <groupId>org.wocommunity</groupId>
+    	  <artifactId>wonder-modular-webobjects</artifactId>
+    	</dependency>
         <dependency>
             <groupId>wonder.core</groupId>
-            <artifactId>ERFoundation</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>wonder.core</groupId>
-            <artifactId>ERWebObjects</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>wonder.core</groupId>
-            <artifactId>JavaWOExtensions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaFoundation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaXML</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaEOAccess</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaWebObjects</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaEOControl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaJDBCAdaptor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaWOJSPServlet</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.webobjects</groupId>
-            <artifactId>JavaWebServicesSupport</artifactId>
-            <version>${webobjects.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
+            <artifactId>javawoextensions</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.reload4j</groupId>
@@ -91,24 +45,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>

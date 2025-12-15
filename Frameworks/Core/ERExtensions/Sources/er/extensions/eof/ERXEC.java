@@ -22,9 +22,6 @@ import java.util.WeakHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
-
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -42,9 +39,9 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSDelegate;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXShutdownHook;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
-import er.extensions.foundation.ERXSignalHandler;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -1952,28 +1949,16 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/**
-	 * Register the OpenEditingContextLockSignalHandler signal handle on the HUP
-	 * signal.
+	 * Register a shutdown hook to dump open editing context locks.
 	 */
 	public static void registerOpenEditingContextLockSignalHandler() {
-		try {
-			ERXEC.registerOpenEditingContextLockSignalHandler("HUP");
-		}
-		catch (IllegalArgumentException e) {
-			log.warn("ERXEC's HUP signal handler was not registered, probably because your operating system does not support this signal.");
-		}
-	}
-
-	/**
-	 * Register the OpenEditingContextLockSignalHandler signal handle on the
-	 * named signal.
-	 * 
-	 * @param signalName
-	 *            the name of the signal to handle
-	 */
-	public static void registerOpenEditingContextLockSignalHandler(String signalName) {
-		ERXSignalHandler.register(signalName, new ERXEC.DumpLocksSignalHandler());
-		ERXSignalHandler.register(signalName, new ERXObjectStoreCoordinator.DumpLocksSignalHandler());
+		new ERXShutdownHook("ERXEC.DumpLocks") {	
+			@Override
+			public void hook() {
+				log.info(outstandingLockDescription());
+				ERXObjectStoreCoordinator.log.info(ERXObjectStoreCoordinator.outstandingLockDescription());
+			}
+		};
 	}
 
 	/**
@@ -2020,20 +2005,6 @@ public class ERXEC extends EOEditingContext {
 			// ignore
 		}
 		return null;
-	}
-	
-	/**
-	 * OpenEditingContextLockSignalHandler provides a signal handler that prints
-	 * out open editing context locks. By default, the handler attaches to
-	 * SIGHUP.
-	 * <p>
-	 * Call ERXEC.registerOpenEditingContextLockSignalHandler() to attach it.
-	 */
-	public static class DumpLocksSignalHandler implements SignalHandler {
-
-		public void handle(Signal signal) {
-			log.info(outstandingLockDescription());
-		}
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {

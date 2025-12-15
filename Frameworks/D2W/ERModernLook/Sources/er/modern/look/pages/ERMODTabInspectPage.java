@@ -1,6 +1,6 @@
 package er.modern.look.pages;
 
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -126,7 +126,7 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 		D2WContext result = super.d2wContext();
 		if (_previousTaskContext == null) {
 			_previousTaskContext = result.task();
-		} else if (ObjectUtils.notEqual(_previousTaskContext, result.task())) {
+		} else if (!Objects.equals(_previousTaskContext, result.task())) {
 			clearTabSectionsContents();
 			_previousTaskContext = result.task();
 		}
