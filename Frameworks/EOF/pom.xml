@@ -11,5 +11,6 @@
 	<name>EOF Frameworks</name>
 	<modules>
 		<module>ERRest</module>
+		<module>ERJGroupsSynchronizer</module>
 	</modules>
 </project>

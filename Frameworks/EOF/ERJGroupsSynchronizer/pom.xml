@@ -6,28 +6,16 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.eof</groupId>
-	<artifactId>ERJGroupsSynchronizer</artifactId>
+	<artifactId>erjgroupssynchronizer</artifactId>
 	<name>ERJGroupsSynchronizer</name>
-	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jgroups</groupId>
 			<artifactId>jgroups</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>
