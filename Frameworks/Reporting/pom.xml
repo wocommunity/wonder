@@ -11,9 +11,6 @@
 	<packaging>pom</packaging>
 	<name>Frameworks</name>
 	<modules>
-		<module>DRGrouping</module>
 		<module>ERJasperReports</module>
-		<module>ERPlot</module>
-		<module>WRReporting</module>
 	</modules>
 </project>

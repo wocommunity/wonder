@@ -8,38 +8,14 @@
 	<groupId>wonder.reporting</groupId>
 	<artifactId>ERJasperReports</artifactId>
 	<name>ERJasperReports Framework</name>
-	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOControl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.reload4j</groupId>
-			<artifactId>reload4j</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

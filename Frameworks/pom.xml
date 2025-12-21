@@ -19,5 +19,6 @@
 		<module>EOF</module>
 		<module>Misc</module>
 		<module>PlugIns</module>
+		<module>Reporting</module>
 	</modules>
 </project>

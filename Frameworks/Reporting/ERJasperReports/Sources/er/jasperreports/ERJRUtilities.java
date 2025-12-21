@@ -33,7 +33,7 @@ public class ERJRUtilities {
 	 * @param dataSource
 	 * @return the completed report PDF file
 	 */
-	public static File runCompiledReportToPDFFile(String compiledReportName, String frameworkName, Map parameters, JRDataSource dataSource) {
+	public static File runCompiledReportToPDFFile(String compiledReportName, String frameworkName, Map<String,Object> parameters, JRDataSource dataSource) {
 		try {
 			// TODO: Verify that the compiled report file exists so we can
 			// give a better error message, ie., fail early!
