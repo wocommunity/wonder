@@ -2,12 +2,12 @@ open module org.wocommunity.wonder.erextensions {
 	requires java.sql;
 	requires java.sql.rowset;
 	requires java.naming;
-	requires org.wocommunity.webobjects.foundation;
-	requires org.wocommunity.webobjects.eocontrol;
-	requires org.wocommunity.webobjects.eoaccess;
+	requires transitive org.wocommunity.webobjects.foundation;
+	requires transitive org.wocommunity.webobjects.eocontrol;
+	requires transitive org.wocommunity.webobjects.eoaccess;
 	requires transitive org.wocommunity.webobjects.webobjects;
-	requires org.wocommunity.webobjects.jdbcadaptor;
-	requires org.wocommunity.webobjects.woextensions;
+	requires transitive org.wocommunity.webobjects.jdbcadaptor;
+	requires transitive org.wocommunity.webobjects.woextensions;
 	requires org.slf4j;
 	requires org.apache.commons.lang3;
 	requires ch.qos.reload4j;

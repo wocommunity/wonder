@@ -1,9 +1,9 @@
 package er.pdf;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +73,7 @@ public class ERPDFUtilities {
    * @return an NSData object containing raw PDF data.
    */
   public static NSData htmlAsPdf(String content) {
-    return htmlAsPdf(content, CharEncoding.UTF_8, null, null);
+    return htmlAsPdf(content, StandardCharsets.UTF_8.name(), null, null);
   }
 
   /**

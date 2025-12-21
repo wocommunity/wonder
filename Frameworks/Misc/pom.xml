@@ -12,5 +12,6 @@
 	<modules>
 		<module>ERPersistentSessionStorage</module>
 		<module>WOLips</module>
+		<module>ERPDFGeneration</module>
 	</modules>
 </project>

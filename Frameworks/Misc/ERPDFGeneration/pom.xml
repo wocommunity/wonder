@@ -7,44 +7,23 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.core</groupId>
-	<artifactId>ERPDFGeneration</artifactId>
-	<name>ERPDF Generation Framework</name>
-	<packaging>woframework</packaging>
-
+	<artifactId>erpdfgeneration</artifactId>
+	<name>ERPDFGeneration</name>
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
+			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-core</artifactId>
-			<version>9.1.16</version>
+			<artifactId>flying-saucer-pdf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-pdf-openpdf</artifactId>
-			<version>9.1.16</version>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-swt</artifactId>
-			<version>9.1.16</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.ujac</groupId>
+			<groupId>net.sf.ujac</groupId>
 			<artifactId>ujac</artifactId>
 		</dependency>
 		<dependency>
@@ -56,8 +35,4 @@
 			<artifactId>fop</artifactId>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

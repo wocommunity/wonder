@@ -11,7 +11,7 @@ import org.xhtmlrenderer.pdf.ITextOutputDevice;
 import org.xhtmlrenderer.pdf.ITextReplacedElementFactory;
 import org.xhtmlrenderer.render.BlockBox;
 
-import com.lowagie.text.Image;
+import org.openpdf.text.Image;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver._private.WOURLValuedElementData;
