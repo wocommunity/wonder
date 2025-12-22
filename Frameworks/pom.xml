@@ -20,5 +20,6 @@
 		<module>Misc</module>
 		<module>PlugIns</module>
 		<module>Reporting</module>
+		<module>WOAdaptors</module>
 	</modules>
 </project>

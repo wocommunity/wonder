@@ -14,6 +14,7 @@
 
     <modules>
         <!-- <module>ERIMAdaptor</module> -->
-        <module>ERWOAdaptor</module>
+        <!-- <module>ERWOAdaptor</module> -->
+        <module>VertxWOAdaptor</module>
     </modules>
 </project>
