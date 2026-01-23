@@ -1,6 +1,7 @@
 package er.directtoweb.components.repetitions;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -34,7 +35,7 @@ public class ERDQueryPageRepetition extends ERDAttributeRepetition {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDQueryPageRepetition.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDQueryPageRepetition.class);
 	
     /**
      * Public constructor

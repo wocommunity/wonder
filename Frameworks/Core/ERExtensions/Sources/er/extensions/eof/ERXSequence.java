@@ -7,7 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOEntity;
@@ -37,7 +38,7 @@ public class ERXSequence {
 	
 	public ERXSequence(String name) {
 		_name = name;
-		log = Logger.getLogger(name);
+		log = LoggerFactory.getLogger(name);
 	}
 
 	public ERXSequence(String name, long initialValue) {
@@ -207,7 +208,7 @@ public class ERXSequence {
 	            		con.setReadOnly(false);
 	            	}
 	            } catch (SQLException e) {
-	                log.error(e, e);
+	                log.error(e.getMessage(), e);
 	            }
 
 	            for(int tries = 0; tries < 5; tries++) {

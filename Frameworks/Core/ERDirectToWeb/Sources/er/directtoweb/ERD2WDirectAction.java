@@ -8,7 +8,8 @@ package er.directtoweb;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -98,8 +99,8 @@ import er.extensions.foundation.ERXValueUtilities;
 public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /** logging support */
-    protected static final Logger log = Logger.getLogger(ERD2WDirectAction.class);
-    protected final Logger actionLog = Logger.getLogger(ERD2WDirectAction.class.getName() + ".actions");
+    protected static final Logger log = LoggerFactory.getLogger(ERD2WDirectAction.class);
+    protected final Logger actionLog = LoggerFactory.getLogger(ERD2WDirectAction.class.getName() + ".actions");
 
     /**
      * Public constructor

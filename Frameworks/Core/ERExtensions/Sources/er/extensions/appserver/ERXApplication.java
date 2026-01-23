@@ -36,9 +36,8 @@ import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
@@ -150,16 +149,16 @@ import er.extensions.statistics.ERXStats;
  */
 public abstract class ERXApplication extends ERXAjaxApplication {
 	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXApplication.class);
+	public static final Logger log = LoggerFactory.getLogger(ERXApplication.class);
 
 	/** request logging support */
-	public static final Logger requestHandlingLog = Logger.getLogger("er.extensions.ERXApplication.RequestHandling");
+	public static final Logger requestHandlingLog = LoggerFactory.getLogger("er.extensions.ERXApplication.RequestHandling");
 
 	/** statistic logging support */
-	public static final Logger statsLog = Logger.getLogger("er.extensions.ERXApplication.Statistics");
+	public static final Logger statsLog = LoggerFactory.getLogger("er.extensions.ERXApplication.Statistics");
 
 	/** startup logging support */
-	public static final Logger startupLog = Logger.getLogger("er.extensions.ERXApplication.Startup");
+	public static final Logger startupLog = LoggerFactory.getLogger("er.extensions.ERXApplication.Startup");
 
 	private static boolean wasERXApplicationMainInvoked = false;
 
@@ -1149,13 +1148,13 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		}
 		// ak: telling Log4J to re-init the Console appenders so we get logging
 		// into WOOutputPath again
-		for (Enumeration e = Logger.getRootLogger().getAllAppenders(); e.hasMoreElements();) {
-			Appender appender = (Appender) e.nextElement();
-			if (appender instanceof ConsoleAppender) {
-				ConsoleAppender app = (ConsoleAppender) appender;
-				app.activateOptions();
-			}
-		}
+//		for (Enumeration e = Logger.getRootLogger().getAllAppenders(); e.hasMoreElements();) {
+//			Appender appender = (Appender) e.nextElement();
+//			if (appender instanceof ConsoleAppender) {
+//				ConsoleAppender app = (ConsoleAppender) appender;
+//				app.activateOptions();
+//			}
+//		}
 		if(_loader != null) {
 			_loader._checker.reportErrors();
 			_loader._checker = null;
@@ -1592,16 +1591,16 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 			success = true;
 		}
 		catch (SecurityException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (NoSuchFieldException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (IllegalArgumentException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (IllegalAccessException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		if(!success) {
 			super.refuseNewSessions(value);
@@ -1890,8 +1889,8 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 				// state.
 				if (shouldQuit) {
 					NSLog.err.appendln("Ran out of memory, killing this instance");
-					log.fatal("Ran out of memory, killing this instance");
-					log.fatal("Ran out of memory, killing this instance", throwable);
+					log.error("Ran out of memory, killing this instance");
+					log.error("Ran out of memory, killing this instance", throwable);
 				}
 			}
 			else {
@@ -2032,7 +2031,7 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-			ERXApplication.requestHandlingLog.debug(request);
+			ERXApplication.requestHandlingLog.debug(request.toString());
 		}
 
 		try {

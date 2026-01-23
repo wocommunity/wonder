@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -70,8 +71,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public ERD2WInspectPage(WOContext context) { super(context); }
     
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WInspectPage.class);
-    public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
+    public static final Logger log = LoggerFactory.getLogger(ERD2WInspectPage.class);
+    public static final Logger validationCat = LoggerFactory.getLogger(ERD2WInspectPage.class+".validation");
 
 	protected static final String firstResponderContainerName = "FirstResponderContainer";
 

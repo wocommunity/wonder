@@ -8,7 +8,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -39,7 +40,7 @@ public abstract class ${entity.prefixClassNameWithoutPackage} extends #if ($enti
   public static final String ${relationship.uppercaseUnderscoreName}_KEY = ${relationship.uppercaseUnderscoreName}.key();
 #end
 
-  private static Logger LOG = Logger.getLogger(${entity.prefixClassNameWithoutPackage}.class);
+  private static Logger LOG = LoggerFactory.getLogger(${entity.prefixClassNameWithoutPackage}.class);
 
 #if (!$entity.partialEntitySet)
   public $entity.classNameWithOptionalPackage localInstanceIn(EOEditingContext editingContext) {

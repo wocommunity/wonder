@@ -1,6 +1,7 @@
 package er.directtoweb;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -54,7 +55,7 @@ will spare you a lot of work.
 public class ERD2WControllerFactory extends ERD2WFactory {
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WControllerFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WControllerFactory.class);
 	
     /**
      * Public constructor

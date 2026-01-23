@@ -9,7 +9,8 @@ package er.directtoweb;
 import java.net.URL;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -66,15 +67,15 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
     
     /** logging support */
-    public final static Logger log = Logger.getLogger("er.directtoweb.ERDirectToWeb");
+    public final static Logger log = LoggerFactory.getLogger("er.directtoweb.ERDirectToWeb");
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
     public final static String D2WDISPLAY_PAGE_METRICS_KEY = "ERDirectToWeb_displayPageMetrics";
     public final static String D2WDISPLAY_DETAILED_PAGE_METRICS_KEY = "ERDirectToWeb_displayDetailedPageMetrics";
-    public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
-    public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
-    public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    public final static Logger debugLog = LoggerFactory.getLogger("er.directtoweb.ERD2WDebugEnabled");
+    public final static Logger componentNameLog = LoggerFactory.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
+    public final static Logger propertyKeyLog = LoggerFactory.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
     public final static NSSelector D2WCONTEXT_SELECTOR = new NSSelector("d2wContext");
 
     static {
@@ -518,7 +519,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     private void configureTraceRuleFiringRapidTurnAround() {
         if (trace == null) {
             // otherwise not properly initialized
-            trace = Logger.getLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
+            trace = LoggerFactory.getLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE

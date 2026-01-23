@@ -2,7 +2,8 @@ package er.extensions.eof;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -23,7 +24,7 @@ import er.extensions.foundation.ERXSystem;
 public interface ERXEnterpriseObject extends EOEnterpriseObject {
     
     /** logging support for modified objects */
-    public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifiedObjects");
+    public static final Logger logMod = LoggerFactory.getLogger("er.transaction.delegate.EREditingContextDelegate.modifiedObjects");
 
     public static final boolean applyRestrictingQualifierOnInsert = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert");
     
@@ -234,55 +235,55 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     };
  
     /** logging support. Called after an object is successfully inserted */
-    public static final Logger tranLogDidInsert = Logger
+    public static final Logger tranLogDidInsert = LoggerFactory
             .getLogger("er.transaction.eo.did.insert.ERXGenericRecord");
 
     /** logging support. Called after an object is successfully deleted */
-    public static final Logger tranLogDidDelete = Logger
+    public static final Logger tranLogDidDelete = LoggerFactory
             .getLogger("er.transaction.eo.did.delete.ERXGenericRecord");
 
     /** logging support. Called after an object is successfully updated */
-    public static final Logger tranLogDidUpdate = Logger
+    public static final Logger tranLogDidUpdate = LoggerFactory
             .getLogger("er.transaction.eo.did.update.ERXGenericRecord");
 
     /** logging support. Called after an object is reverted. **/
-    public static final Logger tranLogDidRevert = Logger
+    public static final Logger tranLogDidRevert = LoggerFactory
             .getLogger("er.transaction.eo.did.revert.ERXGenericRecord");
 
     /** logging support. Called before an object is deleted */
-    public static final Logger tranLogMightDelete = Logger
+    public static final Logger tranLogMightDelete = LoggerFactory
             .getLogger("er.transaction.eo.might.delete.ERXGenericRecord");
 
     /** logging support. Called before an object is inserted */
-    public static final Logger tranLogWillInsert = Logger
+    public static final Logger tranLogWillInsert = LoggerFactory
             .getLogger("er.transaction.eo.will.insert.ERXGenericRecord");
 
     /** logging support. Called before an object is deleted */
-    public static final Logger tranLogWillDelete = Logger
+    public static final Logger tranLogWillDelete = LoggerFactory
             .getLogger("er.transaction.eo.will.delete.ERXGenericRecord");
 
     /** logging support. Called before an object is updated */
-    public static final Logger tranLogWillUpdate = Logger
+    public static final Logger tranLogWillUpdate = LoggerFactory
             .getLogger("er.transaction.eo.will.update.ERXGenericRecord");
 
     /** logging support. Called before an object is reverted. **/
-    public static final Logger tranLogWillRevert = Logger
+    public static final Logger tranLogWillRevert = LoggerFactory
             .getLogger("er.transaction.eo.will.revert.ERXGenericRecord");
 
     /** logging support for validation information */
-    public static final Logger validation = Logger
+    public static final Logger validation = LoggerFactory
             .getLogger("er.eo.validation.ERXGenericRecord");
 
     /** logging support for validation exceptions */
-    public static final Logger validationException = Logger
+    public static final Logger validationException = LoggerFactory
             .getLogger("er.eo.validationException.ERXGenericRecord");
 
     /** logging support for insertion tracking */
-    public static final Logger insertionTrackingLog = Logger
+    public static final Logger insertionTrackingLog = LoggerFactory
             .getLogger("er.extensions.ERXGenericRecord.insertion");
 
     /** general logging support */
-    public static final Logger log = Logger
+    public static final Logger log = LoggerFactory
             .getLogger("er.eo.ERXGenericRecord");
 
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.

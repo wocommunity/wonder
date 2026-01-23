@@ -8,7 +8,8 @@ package er.directtoweb.pages;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -72,7 +73,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 	 */
 	private static final long serialVersionUID = 1L;
 
-    public static final Logger log = Logger.getLogger(ERD2WEditableListPage.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WEditableListPage.class);
 
     public ERD2WEditableListPage(WOContext context) {super(context);}
 

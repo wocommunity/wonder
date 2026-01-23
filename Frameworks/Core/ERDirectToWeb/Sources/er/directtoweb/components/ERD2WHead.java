@@ -1,5 +1,6 @@
 package er.directtoweb.components;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -23,7 +24,7 @@ public class ERD2WHead extends D2WHead {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ERD2WHead.class);
+    static final Logger log = LoggerFactory.getLogger(ERD2WHead.class);
 
     protected static D2WContext _d2wContext;
 

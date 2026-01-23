@@ -8,7 +8,8 @@ package er.extensions.eof;
 
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -258,7 +259,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		Logger classLog = classLogs.objectForKey(getClass());
 		if (classLog == null) {
 			synchronized (classLogs) {
-				classLog = Logger.getLogger(getClass());
+				classLog = LoggerFactory.getLogger(getClass());
 				classLogs.setObjectForKey(classLog, getClass());
 			}
 		}

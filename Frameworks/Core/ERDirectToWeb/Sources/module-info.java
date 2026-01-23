@@ -1,7 +1,6 @@
 open module org.wocommunity.wonder.directtoweb {
 	requires org.apache.commons.lang3;
 	requires org.slf4j;
-	requires ch.qos.reload4j;
 	requires org.wocommunity.webobjects.foundation;
 	requires org.wocommunity.webobjects.eocontrol;
 	requires org.wocommunity.webobjects.eoaccess;

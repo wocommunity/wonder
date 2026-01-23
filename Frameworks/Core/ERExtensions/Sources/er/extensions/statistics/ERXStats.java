@@ -7,7 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -66,7 +67,7 @@ public class ERXStats {
     public static final String STATS_ENABLED_KEY = "er.extensions.erxStats.enabled";
     public static final String STATS_TRACE_COLLECTING_ENABLED_KEY = "er.extensions.erxStats.traceCollectingEnabled";
 
-    public static final Logger log = Logger.getLogger(ERXStats.class);
+    public static final Logger log = LoggerFactory.getLogger(ERXStats.class);
 
 	public interface Group {
 		public String Default = " ";

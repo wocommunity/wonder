@@ -6,7 +6,8 @@
 //
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -22,7 +23,7 @@ public class ERD2WList extends ERDCustomEditComponent {
 	private static final long serialVersionUID = 1L;
 
     /* logging support */
-    public static final Logger log = Logger.getLogger(ERD2WList.class);
+    public static final Logger log = LoggerFactory.getLogger(ERD2WList.class);
 
     /** caches the list */
     protected NSArray list;

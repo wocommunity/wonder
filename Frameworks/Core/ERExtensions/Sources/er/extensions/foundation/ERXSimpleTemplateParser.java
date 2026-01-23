@@ -18,8 +18,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.logging.ERXPatternLayout;
-
 /**
  * Very simple template parser.  For example if you have the delimiter:
  * {@literal @}{@literal @}, then a possible template might look like: "Hello, {@literal @}{@literal @}name{@literal @}{@literal @}.  How are

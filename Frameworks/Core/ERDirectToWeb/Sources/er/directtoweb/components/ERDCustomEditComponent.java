@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -34,7 +35,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
 	private static final long serialVersionUID = 2L;
 
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERDCustomEditComponent.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDCustomEditComponent.class);
 
     /** 
      * <span class="en">interface for all the keys used in this pages code</span>

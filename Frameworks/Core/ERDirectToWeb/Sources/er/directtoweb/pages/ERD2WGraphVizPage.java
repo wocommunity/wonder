@@ -122,9 +122,9 @@ public class ERD2WGraphVizPage extends ERD2WPage {
                     throw new IllegalArgumentException("Only handles 'pdf' and 'svg'");
                 }
             } catch (IOException ex) {
-                log.error(ex, ex);
+                log.error(ex.getMessage(), ex);
             } catch (TimeoutException ex) {
-                log.error(ex, ex);
+                log.error(ex.getMessage(), ex);
             } finally {
                 if(f != null) {
                     f.delete();

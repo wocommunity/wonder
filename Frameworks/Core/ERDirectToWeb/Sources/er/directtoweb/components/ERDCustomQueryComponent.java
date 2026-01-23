@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 
@@ -36,9 +34,6 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
     public static interface Keys {
       public static final String displayGroup = "displayGroup";
     }
-
-    /** logging support */
-    public final static Logger log = Logger.getLogger(ERDCustomQueryComponent.class);
 
     public ERDCustomQueryComponent(WOContext context) {
         super(context);

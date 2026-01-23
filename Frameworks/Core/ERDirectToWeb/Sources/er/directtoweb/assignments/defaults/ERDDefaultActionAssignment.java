@@ -71,7 +71,7 @@ public class ERDDefaultActionAssignment extends ERDAssignment {
      */
     public NSDictionary defaultActions(D2WContext c) {
         NSDictionary actions = new NSDictionary(new Object[] {defaultLeftActions(c), defaultRightActions(c)}, new Object [] {"left", "right"});
-        log.debug(actions);
+        log.debug(actions.toString());
         return actions;
     }
 

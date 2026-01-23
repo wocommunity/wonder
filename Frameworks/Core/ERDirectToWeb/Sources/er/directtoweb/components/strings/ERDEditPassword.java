@@ -1,6 +1,7 @@
 package er.directtoweb.components.strings;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -40,7 +41,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDEditPassword.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDEditPassword.class);
 
     public static final String passwordPropertyKey = "ERDEditPassword.propertyKey";
     

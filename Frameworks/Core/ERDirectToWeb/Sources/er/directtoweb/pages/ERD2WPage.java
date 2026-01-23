@@ -16,8 +16,8 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.log4j.Logger;
-import org.apache.log4j.NDC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -175,9 +175,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERD2WPage.class);
+    public final static Logger log = LoggerFactory.getLogger(ERD2WPage.class);
 
-    public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WPage");
+    public static final Logger validationLog = LoggerFactory.getLogger("er.directtoweb.validation.ERD2WPage");
 
     private String _statsKeyPrefix;
 
@@ -732,11 +732,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // Need to make sure that we have a clean plate, every time
         clearValidationFailed();
-        NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
+        //NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             super.takeValuesFromRequest(r, c);
         } finally {
-            NDC.pop();
+            //NDC.pop();
         }
     }
 
@@ -744,11 +744,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 	@Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults result = null;
-        NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
+        //NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             result = super.invokeAction(r, c);
         } finally {
-            NDC.pop();
+            //NDC.pop();
         }
         return result;
     }
@@ -774,7 +774,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void appendToResponse(WOResponse response, WOContext context) {
     	String info = "(" + d2wContext().dynamicPage() + ")";
     	// String info = "(" + getClass().getName() + (d2wContext() != null ? ("/" + d2wContext().valueForKey(Keys.pageConfiguration)) : "") + ")";
-        NDC.push(info);
+        //NDC.push(info);
         if (d2wContext() != null && !WOApplication.application().isCachingEnabled()) {
             synchronized (_allConfigurations) {
                 if (d2wContext().dynamicPage() != null) {
@@ -789,7 +789,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         super.appendToResponse(response, context);
         ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
 
-        NDC.pop();
+        //NDC.pop();
     }
 
     // **************************************************************************

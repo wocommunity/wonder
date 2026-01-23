@@ -1,6 +1,7 @@
 package er.directtoweb.components.buttons;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -31,7 +32,7 @@ public  class ERDActionButton extends ERDCustomComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDActionButton.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDActionButton.class);
 
     public interface Keys {
         public static final String object = "object";

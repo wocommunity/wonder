@@ -10,7 +10,8 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -42,7 +43,7 @@ public class ERDEditFile extends ERDCustomEditComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ERDEditFile.class);
+    static final Logger log = LoggerFactory.getLogger(ERDEditFile.class);
     // Instance variables for the name and contents of the upload
     public String fileName;
     public String uploadDirectory;

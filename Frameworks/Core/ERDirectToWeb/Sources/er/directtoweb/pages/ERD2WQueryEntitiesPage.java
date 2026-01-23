@@ -1,5 +1,6 @@
 package er.directtoweb.pages;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -32,7 +33,7 @@ public class ERD2WQueryEntitiesPage extends ERD2WPage implements QueryAllPageInt
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WQueryEntitiesPage.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WQueryEntitiesPage.class);
 
     protected EODatabaseDataSource queryDataSource;
     protected  WODisplayGroup displayGroup;

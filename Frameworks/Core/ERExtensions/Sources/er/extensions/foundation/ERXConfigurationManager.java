@@ -23,7 +23,6 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
-import er.extensions.logging.ERXLogger;
 
 /** 
  * Handles rapid turnaround for system configuration as well as swizzling of the EOModel connection
@@ -288,8 +287,6 @@ public class ERXConfigurationManager {
     		ERXProperties.transferPropertiesFromSourceToDest(systemProperties, System.getProperties());
     		ERXSystem.updateProperties();
     	}
-
-    	ERXLogger.configureLoggingWithSystemProperties();
     }
     
     /**

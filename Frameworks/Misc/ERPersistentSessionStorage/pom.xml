@@ -31,5 +31,9 @@
 			<groupId>wonder.core</groupId>
 			<artifactId>erextensions</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>erprototypes</artifactId>
+		</dependency>
 	</dependencies>
 </project>

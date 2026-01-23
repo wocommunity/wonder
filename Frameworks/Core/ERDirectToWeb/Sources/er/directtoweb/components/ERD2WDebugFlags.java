@@ -1,7 +1,5 @@
 package er.directtoweb.components;
 
-import org.apache.log4j.Level;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOStatsPage;
@@ -42,11 +40,8 @@ public class ERD2WDebugFlags extends WOComponent {
         return nextPage.submit();
     }
     
-    public WOComponent toggleD2WInfo() {    
+    public WOComponent toggleD2WInfo() {
         boolean currentState = ERDirectToWeb.d2wDebuggingEnabled(session());
-        Level level = currentState ? Level.INFO : Level.DEBUG;
-        ERDirectToWeb.debugLog.setLevel(level);
-        ERD2WModel.ruleTraceEnabledLog.setLevel(level);
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
         ERDirectToWeb.setD2wComponentNameDebuggingEnabled(session(), !currentState);
         ERDirectToWeb.setD2wPropertyKeyDebuggingEnabled(session(), !currentState);

@@ -2,7 +2,8 @@ package er.directtoweb.assignments;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -32,7 +33,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    static final Logger log = Logger.getLogger(ERDLocalizedAssignment.class);
+    static final Logger log = LoggerFactory.getLogger(ERDLocalizedAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

@@ -1,6 +1,5 @@
 open module org.wocommunity.wonder.erattachment {
 	requires java.desktop;
-	requires ch.qos.reload4j;
 	requires org.slf4j;
 	requires metadata.extractor;
 	requires org.apache.commons.codec;

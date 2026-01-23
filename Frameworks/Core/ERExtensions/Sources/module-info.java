@@ -8,9 +8,8 @@ open module org.wocommunity.wonder.erextensions {
 	requires transitive org.wocommunity.webobjects.webobjects;
 	requires transitive org.wocommunity.webobjects.jdbcadaptor;
 	requires transitive org.wocommunity.webobjects.woextensions;
-	requires org.slf4j;
+	requires transitive org.slf4j;
 	requires org.apache.commons.lang3;
-	requires ch.qos.reload4j;
 
 	exports er.extensions;
 	exports er.extensions.appserver;
@@ -33,7 +32,6 @@ open module org.wocommunity.wonder.erextensions {
 	exports er.extensions.foundation;
 	exports er.extensions.jdbc;
 	exports er.extensions.localization;
-	exports er.extensions.logging;
 	exports er.extensions.migration;
 	exports er.extensions.net;
 	exports er.extensions.partials;

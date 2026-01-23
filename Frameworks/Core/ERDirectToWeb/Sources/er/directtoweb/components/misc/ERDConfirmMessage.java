@@ -8,7 +8,8 @@ package er.directtoweb.components.misc;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -34,7 +35,7 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     public ERDConfirmMessage(WOContext context) { super(context); }
     
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERDConfirmMessage.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDConfirmMessage.class);
     
     public String message;
 

@@ -10,7 +10,8 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EODatabase;
@@ -34,7 +35,6 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXDatabase.CacheChange;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**
@@ -46,7 +46,7 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * manually.
  */
 public class ERXObjectStoreCoordinatorSynchronizer {
-	public static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorSynchronizer.class);
+	public static final Logger log = LoggerFactory.getLogger(ERXObjectStoreCoordinatorSynchronizer.class);
 
 	public static final String SYNCHRONIZER_KEY = "_synchronizer";
 
@@ -630,7 +630,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 					}
 				}
 			} catch (Throwable e) {
-				log.error(e, e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		

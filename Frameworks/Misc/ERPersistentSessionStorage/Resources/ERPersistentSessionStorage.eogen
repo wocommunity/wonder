@@ -1,1 +1,12 @@
- -destination /Users/rams/Repositories/ponder/ERPersistentSessionStorage/Sources -extension java -java -javaTemplate _WonderEntity.java -model Resources/ERPersistentSessionStorage.eomodeld -packagedirs -subclassDestination /Users/rams/Repositories/ponder/ERPersistentSessionStorage/Sources -subclassJavaTemplate WonderEntity.java -templatedir Templates -verbose -loadModelGroup -superclassPackage eogen
+ -destination Sources \
+ -extension java \
+ -java \
+ -javaTemplate _WonderEntity.java \
+ -model Resources/ERPersistentSessionStorage.eomodeld \
+ -packagedirs \
+ -subclassDestination Sources \
+ -subclassJavaTemplate WonderEntity.java \
+ -templatedir Templates \
+ -verbose \
+ -loadModelGroup \
+ -superclassPackage eogen

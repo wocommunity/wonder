@@ -1,6 +1,7 @@
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -31,7 +32,7 @@ public class ERD2WEditToManyFaultList extends D2WEditToManyFault {
 		super(arg0);
 	}
 
-	public static Logger log = Logger.getLogger(ERD2WEditToManyFaultList.class);
+	public static Logger log = LoggerFactory.getLogger(ERD2WEditToManyFaultList.class);
     
     // accessors
     public String addBoxID() {
