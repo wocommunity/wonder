@@ -12,8 +12,10 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDirectAction;
 import er.extensions.appserver.ERXResponse;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Allows you to log <code>window.console</code> JS messages from the browser to
@@ -86,28 +88,30 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 
 		@Override
 		public WOActionResults performActionNamed(String logger) {
-			String level = context().request().stringFormValueForKey("l");
-			String msg = context().request().stringFormValueForKey("m");
-			if (logger == null) {
-				logger = AjaxRemoteLogging.class.getSimpleName();
-			}
-			// trigger session loading if present
-			WOSession existing = existingSession();
-			Logger log = LoggerFactory.getLogger(logger);
-			if ("error".equalsIgnoreCase(level)) {
-				log.error(msg);
-			}
-			else if ("warn".equalsIgnoreCase(level)) {
-				log.warn(msg);
-			}
-			else if ("info".equalsIgnoreCase(level)) {
-				log.info(msg);
-			}
-			else if ("debug".equalsIgnoreCase(level)) {
-				log.debug(msg);
-			}
-			else if ("trace".equalsIgnoreCase(level)) {
-				log.trace(msg);
+			if(ERXApplication.isDevelopmentModeSafe() || ERXProperties.booleanForKeyWithDefault("er.ajax.AjaxRemoteLogging.enabled", false)) {
+				String level = context().request().stringFormValueForKey("l");
+				String msg = context().request().stringFormValueForKey("m");
+				if (logger == null) {
+					logger = AjaxRemoteLogging.class.getSimpleName();
+				}
+				// trigger session loading if present
+				WOSession existing = existingSession();
+				Logger log = LoggerFactory.getLogger(logger);
+				if ("error".equalsIgnoreCase(level)) {
+					log.error(msg);
+				}
+				else if ("warn".equalsIgnoreCase(level)) {
+					log.warn(msg);
+				}
+				else if ("info".equalsIgnoreCase(level)) {
+					log.info(msg);
+				}
+				else if ("debug".equalsIgnoreCase(level)) {
+					log.debug(msg);
+				}
+				else if ("trace".equalsIgnoreCase(level)) {
+					log.trace(msg);
+				}
 			}
 			return new ERXResponse();
 		}
