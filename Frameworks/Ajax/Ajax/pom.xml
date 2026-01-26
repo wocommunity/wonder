@@ -15,14 +15,6 @@
 			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jabsorb</groupId>
-			<artifactId>jabsorb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>

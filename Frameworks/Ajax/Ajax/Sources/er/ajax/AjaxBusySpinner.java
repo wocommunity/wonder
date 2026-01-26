@@ -1,12 +1,15 @@
 package er.ajax;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.foundation.ERXPropertyListSerialization;
 
 /**
  * AjaxBusySpinner provides various ways of performing operations when an Ajax request is in process.
@@ -90,18 +93,19 @@ public class AjaxBusySpinner extends AjaxComponent {
 		return (String) valueForBinding("onComplete", "null");
 	}
 	
-	public String spinOpts() throws JSONException {
+	public String spinOpts() {
 		String defaults = (String) valueForBinding("spinOpts", "{speed:1,color:'#000',shadow:false,trail:60,width:4,length:7,radius:10,lines:12}");
-		JSONObject json = new JSONObject(defaults);
-		json.putOpt("lines", valueForBinding("lines"));
-		json.putOpt("length", valueForBinding("length"));
-		json.putOpt("width", valueForBinding("width"));
-		json.putOpt("radius", valueForBinding("radius"));
-		json.putOpt("color", valueForBinding("color"));
-		json.putOpt("speed", valueForBinding("speed"));
-		json.putOpt("trail", valueForBinding("trail"));
-		json.putOpt("shadow", valueForBinding("shadow"));
-		return json.toString();
+		NSDictionary<String, Object> json = ERXPropertyListSerialization.dictionaryForJSONString(defaults);
+		Consumer<String> cons = key -> Optional.ofNullable(valueForBinding(key)).ifPresent(val -> json.put(key, val));
+		cons.accept("lines");
+		cons.accept("length");
+		cons.accept("width");
+		cons.accept("radius");
+		cons.accept("color");
+		cons.accept("speed");
+		cons.accept("trail");
+		cons.accept("shadow");
+		return ERXPropertyListSerialization.jsonStringFromPropertyList(json, true);
 	}
 
 	@Override

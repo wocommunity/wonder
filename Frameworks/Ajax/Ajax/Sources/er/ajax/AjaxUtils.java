@@ -1,8 +1,5 @@
 package er.ajax;
 
-import java.util.Collection;
-
-import org.jabsorb.JSONSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,23 +7,17 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXRedirect;
-import er.extensions.appserver.ERXResourceManager;
 import er.extensions.appserver.ERXResponseRewriter;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXStringUtilities;
 
 /**
  *
@@ -254,80 +245,6 @@ public class AjaxUtils {
 
 	public static void appendScriptFooter(WOResponse response) {
 		ERXResponseRewriter.appendScriptTagCloser(response);
-	}
-
-	/**
-	 * Returns the array bound to the given association.
-	 * 
-	 * @param <T> the array type
-	 * @param component the component to resolve against
-	 * @param association the association to retrieve a value for
-	 * @return an array (or null)
-	 */
-	public static <T> NSArray<T> arrayValueForAssociation(WOComponent component, WOAssociation association) {
-		NSArray<T> array = null;
-		if (association != null) {
-			array = AjaxUtils.arrayValueForObject(association.valueInComponent(component));
-		}
-		return array;
-	}
-
-	/**
-	 * Returns the array bound to the given binding name.
-	 * 
-	 * @param <T> the array type
-	 * @param component the component to resolve against
-	 * @param bindingName the name of the binding
-	 * @return an array (or null)
-	 */
-	public static <T> NSArray<T> arrayValueForBinding(WOComponent component, String bindingName) {
-		return AjaxUtils.arrayValueForObject(component.valueForBinding(bindingName));
-	}
-
-	/**
-	 * Returns the array for the given object.  If the object is a string, it will be parsed as a
-	 * JSON value.
-	 * 
-	 * @param <T> the array type
-	 * @param value the object value
-	 * @return an array (or null)
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> NSArray<T> arrayValueForObject(Object value) {
-		NSArray arrayValue;
-		if (value == null) {
-			arrayValue = null;
-		}
-		else if (value instanceof NSArray) {
-			arrayValue = (NSArray<T>) value;
-		}
-		else if (value instanceof String) {
-			try {
-				String strValue = ((String) value).trim();
-				if (!strValue.startsWith("[")) {
-					strValue = "[" + strValue + "]";
-				}
-				JSONSerializer serializer = new JSONSerializer();
-				serializer.registerDefaultSerializers();
-				Object objValue = serializer.fromJSON(strValue);
-				if (objValue.getClass().isArray()) {
-					arrayValue = new NSArray((Object[]) objValue);
-				}
-				else if (objValue instanceof Collection) {
-					arrayValue = new NSArray((Collection) objValue);
-				}
-				else {
-					arrayValue = new NSArray(objValue);
-				}
-			}
-			catch (Throwable e) {
-				throw new IllegalArgumentException("Failed to convert String to array.", e);
-			}
-		}
-		else {
-			throw new IllegalArgumentException("Unable to convert '" + value + "' to an array.");
-		}
-		return arrayValue;
 	}
 
 	/**
