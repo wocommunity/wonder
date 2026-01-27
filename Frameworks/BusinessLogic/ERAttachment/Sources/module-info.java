@@ -1,7 +1,6 @@
 open module org.wocommunity.wonder.erattachment {
 	requires java.desktop;
 	requires org.slf4j;
-	requires metadata.extractor;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.io;
 	requires org.apache.commons.lang3;
@@ -17,7 +16,6 @@ open module org.wocommunity.wonder.erattachment {
 	exports er.attachment;
 	exports er.attachment.components;
 	exports er.attachment.components.viewers;
-	exports er.attachment.metadata;
 	exports er.attachment.migrations;
 	exports er.attachment.model;
 	exports er.attachment.processors;
