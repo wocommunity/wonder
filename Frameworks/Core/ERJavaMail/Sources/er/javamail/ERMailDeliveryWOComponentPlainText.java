@@ -4,7 +4,7 @@
 
 package er.javamail;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 /**
  * <div class="en">

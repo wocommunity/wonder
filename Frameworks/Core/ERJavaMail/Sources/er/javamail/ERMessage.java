@@ -4,12 +4,12 @@
 
 package er.javamail;
 
-import javax.mail.Address;
-import javax.mail.Flags;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Address;
+import jakarta.mail.Flags;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.MimeMessage;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;

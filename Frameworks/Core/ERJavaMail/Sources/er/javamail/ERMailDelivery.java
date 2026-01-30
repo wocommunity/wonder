@@ -7,18 +7,18 @@ package er.javamail;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-import javax.activation.DataHandler;
-import javax.mail.Address;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
-import javax.mail.internet.MimeMultipart;
+import jakarta.activation.DataHandler;
+import jakarta.mail.Address;
+import jakarta.mail.BodyPart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Part;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMessage.RecipientType;
+import jakarta.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public abstract class ERMailDelivery {
 	private static final Logger log = LoggerFactory.getLogger(ERMailDelivery.class);
 
 	/** JavaMail session */
-	private javax.mail.Session _session;
+	private jakarta.mail.Session _session;
 
 	/**
 	 * <div class="en">
@@ -115,7 +115,7 @@ public abstract class ERMailDelivery {
 	public String _charset = DefaultCharset;
 
 	/** Designated constructor */
-	public ERMailDelivery(javax.mail.Session session) {
+	public ERMailDelivery(jakarta.mail.Session session) {
 		super();
 		_session = session;
 		_mimeMessage = new MimeMessage(session);
@@ -200,11 +200,11 @@ public abstract class ERMailDelivery {
 		_charset = charset;
 	}
 
-	protected javax.mail.Session session() {
+	protected jakarta.mail.Session session() {
 		return _session;
 	}
 
-	protected void setSession(javax.mail.Session aSession) {
+	protected void setSession(jakarta.mail.Session aSession) {
 		_session = aSession;
 	}
 

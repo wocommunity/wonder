@@ -6,10 +6,10 @@ package er.javamail;
 
 import java.util.Enumeration;
 
-import javax.mail.Address;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeUtility;
+import jakarta.mail.Address;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeUtility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +137,7 @@ public class ERMailUtils {
 			delivery.setSubject((subject == null) ? "" : subject);
 			delivery.sendMail();
 		}
-		catch (javax.mail.MessagingException e) {
+		catch (jakarta.mail.MessagingException e) {
 			// we must handle this exception correctly because the
 			// mail cannot be sent
 			log.warn("Could not send email.", e);

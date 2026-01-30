@@ -6,10 +6,10 @@
 
 package er.javamail;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.FolderNotFoundException;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.FolderNotFoundException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;

@@ -1,6 +1,6 @@
 open module org.wocommunity.wonder.erjavamail {
-	requires jakarta.mail;
 	requires java.naming;
+	requires jakarta.mail;
 	requires org.slf4j;
 	requires org.wocommunity.webobjects.foundation;
 	requires org.wocommunity.webobjects.eocontrol;

@@ -6,7 +6,7 @@ package er.javamail;
 
 import java.io.InputStream;
 
-import javax.activation.MimetypesFileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOResourceManager;

@@ -9,10 +9,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Enumeration;
 
-import javax.activation.DataHandler;
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.activation.DataHandler;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -290,7 +290,7 @@ public class ERWOMailDelivery {
 			try {
 				contentType = msg.getContentType();
 			}
-			catch (javax.mail.MessagingException x) {
+			catch (jakarta.mail.MessagingException x) {
 				ERWOMailDelivery.log.error("Could not get content type.", x);
 			}
 

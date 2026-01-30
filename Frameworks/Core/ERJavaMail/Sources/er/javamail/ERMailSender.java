@@ -11,12 +11,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.SendFailedException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -303,7 +303,7 @@ public class ERMailSender implements Runnable {
 	 * 戻す前にトランスポートへの接続を開始します。
 	 * </div>
 	 */
-	protected Transport _connectedTransportForSession(javax.mail.Session session, String smtpProtocol, boolean _throwExceptionIfConnectionFails) throws MessagingException {
+	protected Transport _connectedTransportForSession(jakarta.mail.Session session, String smtpProtocol, boolean _throwExceptionIfConnectionFails) throws MessagingException {
 		Transport transport = null;
 		try {
 			transport = session.getTransport(smtpProtocol);

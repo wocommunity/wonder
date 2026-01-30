@@ -252,8 +252,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * <span class="ja"> JavaMail のデフォルト・セッションです。 即時配信処理より共有されています。 延期配信は独自の JavaMail セッションを使用しています。 </span>
 	 */
-	protected volatile javax.mail.Session _defaultSession;
-	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<>();
+	protected volatile jakarta.mail.Session _defaultSession;
+	private final Map<String, jakarta.mail.Session> _sessions = new ConcurrentHashMap<>();
 
 	/**
 	 * <span class="en"> Sets the default JavaMail session to a particular value. This value is set by default at
@@ -261,14 +261,14 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * need to be instanciated for changes to be taken in account.
 	 * 
 	 * @param session
-	 *            the default <code>javax.mail.Session</code> </span>
+	 *            the default <code>jakarta.mail.Session</code> </span>
 	 * 
 	 *            <span class="ja"> JavaMail のデフォルト・セッションをセットします。 フレームワークの初期化時に設定されのですが、独自で設定する時には ここを実行するといいのです。
 	 * 
 	 * @param session
-	 *            - デフォルト <code>javax.mail.Session</code> </span>
+	 *            - デフォルト <code>jakarta.mail.Session</code> </span>
 	 */
-	public void setDefaultSession(javax.mail.Session session) {
+	public void setDefaultSession(jakarta.mail.Session session) {
 		session.setDebug(debugEnabled());
 		_defaultSession = session;
 	}
@@ -277,13 +277,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * <span class="en"> This is the deafult JavaMail Session accessor. It is shared among all deliverers for immediate
 	 * deliveries. Deferred deliverers, use their own JavaMail session.
 	 * 
-	 * @return the default <code>javax.mail.Session</code> instance </span>
+	 * @return the default <code>jakarta.mail.Session</code> instance </span>
 	 * 
 	 *         <span class="ja"> JavaMail のデフォルト・セッション・アクセス方法です。 即時配信処理のために共有されています。 延期配信は独自の JavaMail セッションを使用しています。
 	 * 
-	 * @return デフォルト <code>javax.mail.Session</code> インスタンス </span>
+	 * @return デフォルト <code>jakarta.mail.Session</code> インスタンス </span>
 	 */
-	public javax.mail.Session defaultSession() {
+	public jakarta.mail.Session defaultSession() {
 
 		if(_defaultSession == null) {
 			synchronized (this) {
@@ -301,29 +301,29 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @param props
 	 *            a <code>Properties</code> value
-	 * @return a <code>javax.mail.Session</code> value initialized from the given properties </span>
+	 * @return a <code>jakarta.mail.Session</code> value initialized from the given properties </span>
 	 * 
 	 *         <span class="ja"> 指定プロパティを使った新規セッションを戻します。
 	 * 
 	 * @param props
 	 *            - <code>Properties</code> 値
 	 * 
-	 * @return 指定プロパティで初期化されている <code>javax.mail.Session</code> 値 </span>
+	 * @return 指定プロパティで初期化されている <code>jakarta.mail.Session</code> 値 </span>
 	 */
-	public javax.mail.Session newSession(Properties props) {
+	public jakarta.mail.Session newSession(Properties props) {
 		return newSessionForContext(props, null);
 	}
 
 	/**
 	 * <span class="en"> Returns a newly allocated Session object from the System Properties
 	 * 
-	 * @return a <code>javax.mail.Session</code> value </span>
+	 * @return a <code>jakarta.mail.Session</code> value </span>
 	 * 
 	 *         <span class="ja"> システム・プロパティを使った新規セッションを戻します。
 	 * 
-	 * @return <code>javax.mail.Session</code> 値 </span>
+	 * @return <code>jakarta.mail.Session</code> 値 </span>
 	 */
-	public javax.mail.Session newSession() {
+	public jakarta.mail.Session newSession() {
 		return newSessionForContext(null);
 	}
 
@@ -332,18 +332,18 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @param message
 	 *            the message
-	 * @return a new <code>javax.mail.Session</code> value
+	 * @return a new <code>jakarta.mail.Session</code> value
 	 */
-	public javax.mail.Session newSessionForMessage(ERMessage message) {
+	public jakarta.mail.Session newSessionForMessage(ERMessage message) {
 		return newSessionForContext(message.contextString());
 	}
 
 	/**
 	 * Returns the Session object that is appropriate for the given message.
 	 * 
-	 * @return a <code>javax.mail.Session</code> value
+	 * @return a <code>jakarta.mail.Session</code> value
 	 */
-	public javax.mail.Session sessionForMessage(ERMessage message) {
+	public jakarta.mail.Session sessionForMessage(ERMessage message) {
 		return sessionForContext(message.contextString());
 	}
 
@@ -358,10 +358,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @param contextString
 	 *            the message context
-	 * @return a new <code>javax.mail.Session</code> value
+	 * @return a new <code>jakarta.mail.Session</code> value
 	 */
-	protected javax.mail.Session newSessionForContext(String contextString) {
-		javax.mail.Session session = null;
+	protected jakarta.mail.Session newSessionForContext(String contextString) {
+		jakarta.mail.Session session = null;
 		
 		if(log.isDebugEnabled()) log.debug("Create new mail session for context " + contextString);
 		boolean jndiLookup = ERXProperties.booleanForKeyWithDefault("er.javamail.sessionConfigViaJNDI", false);
@@ -373,9 +373,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
 			try {
 				if (log.isDebugEnabled())
-					log.debug("try to get javax.mail.Session for JNDI context " + jndiContextString);
+					log.debug("try to get jakarta.mail.Session for JNDI context " + jndiContextString);
 				InitialContext ic = new InitialContext();
-				session = (javax.mail.Session) ic.lookup(jndiContextString);
+				session = (jakarta.mail.Session) ic.lookup(jndiContextString);
 			}
 			catch (NamingException e) {
 				log.error("Failed to initialize JavaMail Session: " + e.getMessage());
@@ -403,13 +403,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @param properties
 	 *            a <code>Properties</code> value
-	 * @return a <code>javax.mail.Session</code> value initialized from the given properties
+	 * @return a <code>jakarta.mail.Session</code> value initialized from the given properties
 	 */
-	public javax.mail.Session newSessionForContext(Properties properties, String contextString) {
+	public jakarta.mail.Session newSessionForContext(Properties properties, String contextString) {
 		if (_delegate != null) {
 			_delegate.willCreateSessionWithPropertiesForContext(properties, contextString);
 		}
-		javax.mail.Session session = javax.mail.Session.getInstance(properties);
+		jakarta.mail.Session session = jakarta.mail.Session.getInstance(properties);
 		if (_delegate != null) {
 			_delegate.didCreateSession(session);
 		}
@@ -422,10 +422,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @param contextString
 	 *            the message context
-	 * @return a <code>javax.mail.Session</code> value
+	 * @return a <code>jakarta.mail.Session</code> value
 	 */
-	protected javax.mail.Session sessionForContext(String contextString) {
-		javax.mail.Session session;
+	protected jakarta.mail.Session sessionForContext(String contextString) {
+		jakarta.mail.Session session;
 		if (contextString == null || contextString.length() == 0) {
 			session = defaultSession();
 		}
@@ -1006,6 +1006,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	public static interface Delegate {
 		public void willCreateSessionWithPropertiesForContext(Properties properties, String contextString);
 
-		public void didCreateSession(javax.mail.Session session);
+		public void didCreateSession(jakarta.mail.Session session);
 	}
 }

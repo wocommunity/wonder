@@ -4,8 +4,8 @@
 
 package er.javamail;
 
-import javax.mail.BodyPart;
-import javax.mail.MessagingException;
+import jakarta.mail.BodyPart;
+import jakarta.mail.MessagingException;
 
 public abstract class ERMailAttachment {
 	protected Object _content;

@@ -4,7 +4,7 @@
 
 package er.javamail;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 
 /**
  * <div class="en">
@@ -20,7 +20,7 @@ import javax.activation.DataHandler;
 public class ERMailDeliveryPlainText extends ERMailDelivery {
 	
 	/** Designated constructor */
-	public ERMailDeliveryPlainText(javax.mail.Session session) {
+	public ERMailDeliveryPlainText(jakarta.mail.Session session) {
 		super(session);
 	}
 
