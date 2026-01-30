@@ -9,10 +9,11 @@
 
 package com.amazon.s3;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -21,8 +22,6 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.CharEncoding;
-import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -158,7 +157,7 @@ public class Utils {
         }
 
         // Compute the HMAC on the digest, and set it.
-        String b64 = Base64.encodeBase64String(mac.doFinal(canonicalString.getBytes()));
+        String b64 = Base64.getEncoder().encodeToString(mac.doFinal(canonicalString.getBytes()));
 
         if (urlencode) {
             return urlencode(b64);
@@ -182,12 +181,7 @@ public class Utils {
     }
 
     public static String urlencode(String unencoded) {
-        try {
-            return URLEncoder.encode(unencoded, CharEncoding.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            // should never happen
-            throw new RuntimeException("Could not url encode to UTF-8", e);
-        }
+        return URLEncoder.encode(unencoded, StandardCharsets.UTF_8);
     }
 
     public static String urlencodePath(String path) {
