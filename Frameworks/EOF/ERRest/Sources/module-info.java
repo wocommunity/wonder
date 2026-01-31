@@ -1,7 +1,6 @@
 open module org.wocommunity.wonder.errest {
 	requires java.desktop;
 	requires java.xml;
-	requires json.lib;
 	requires org.apache.commons.lang3;
 	requires org.slf4j;
 	requires org.wocommunity.webobjects.foundation;

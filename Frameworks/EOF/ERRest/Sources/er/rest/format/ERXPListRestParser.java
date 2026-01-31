@@ -16,7 +16,7 @@ import er.rest.ERXRestUtils;
  * @author mschrag
  */
 public class ERXPListRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object, boolean rootNode, ERXRestFormat.Delegate delegate) {
+	static ERXRestRequestNode createRequestNodeForObject(String name, Object object, boolean rootNode, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
 		if (object == null) {

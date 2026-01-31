@@ -1,9 +1,10 @@
 package er.rest.format;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONSerializer;
-import net.sf.json.JsonConfig;
+//import net.sf.json.JSON;
+//import net.sf.json.JSONSerializer;
+//import net.sf.json.JsonConfig;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXPropertyListSerialization;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
@@ -23,9 +24,9 @@ public class ERXJSONRestWriter extends ERXRestWriter {
 	public ERXJSONRestWriter() {
 	}
 	
-	protected JsonConfig configWithContext(ERXRestContext context) {
-		return _ERXJSONConfig.createDefaultConfig(context);
-	}
+//	protected JsonConfig configWithContext(ERXRestContext context) {
+//		return _ERXJSONConfig.createDefaultConfig(context);
+//	}
 	
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		return node;
@@ -48,8 +49,9 @@ public class ERXJSONRestWriter extends ERXRestWriter {
 			response.appendContentString(String.valueOf(object));
 		}
 		else {
-			JSON jsonObject = JSONSerializer.toJSON(object, configWithContext(context));
-			String json = (CONSTANTS.SHOULD_PRETTY_PRINT ? jsonObject.toString(CONSTANTS.PRETTY_PRINT_INDENT) : jsonObject.toString());
+//			JSON jsonObject = JSONSerializer.toJSON(object, configWithContext(context));
+//			String json = (CONSTANTS.SHOULD_PRETTY_PRINT ? jsonObject.toString(CONSTANTS.PRETTY_PRINT_INDENT) : jsonObject.toString());
+			String json = ERXPropertyListSerialization.jsonStringFromPropertyList(object, CONSTANTS.SHOULD_PRETTY_PRINT);
 			response.appendContentString(json);
 		}
 		response.appendContentString("\n");
