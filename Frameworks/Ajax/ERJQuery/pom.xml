@@ -2,12 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>wonder.frameworks</groupId>
+		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
 		<artifactId>ajax</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
-	<groupId>wonder.ajax</groupId>
+	<groupId>io.github.wocommunity.wonder.ajax</groupId>
 	<artifactId>ERJQuery</artifactId>
 	<name>ERJQuery Framework</name>
 	<packaging>woframework</packaging>
@@ -18,7 +18,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>

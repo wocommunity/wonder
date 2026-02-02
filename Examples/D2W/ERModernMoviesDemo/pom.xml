@@ -1,27 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.examples</groupId>
+		<groupId>io.github.wocommunity.wonder.examples</groupId>
 		<artifactId>d2w</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.d2w</groupId>
+	<groupId>io.github.wocommunity.wonder.d2w</groupId>
 	<artifactId>ERModernMoviesDemo</artifactId>
 	<name>ERModernMoviesDemo Application</name>
 	<packaging>woapplication</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.businesslogic</groupId>
+			<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 			<artifactId>ERMoviesLogic</artifactId>
 		</dependency>
 		<dependency>
@@ -41,11 +41,11 @@
 			<artifactId>reload4j</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>wonder.d2w</groupId>
+            <groupId>io.github.wocommunity.wonder.d2w</groupId>
             <artifactId>ERModernDirectToWeb</artifactId>
         </dependency>
 		<dependency>
-            <groupId>wonder.misc</groupId>
+            <groupId>io.github.wocommunity.wonder.misc</groupId>
             <artifactId>WOLips</artifactId>
         </dependency>
 	</dependencies>

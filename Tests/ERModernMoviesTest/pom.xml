@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.tests</groupId>
+		<groupId>io.github.wocommunity.wonder.tests</groupId>
 		<artifactId>tests</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.tests</groupId>
+	<groupId>io.github.wocommunity.wonder.tests</groupId>
 	<artifactId>ERModernMoviesTest</artifactId>
 	<name>ERModernMoviesTest Application</name>
 	<packaging>woapplication</packaging>
@@ -17,43 +17,43 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.businesslogic</groupId>
+			<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 			<artifactId>ERMoviesLogic</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERPrototypes</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.plugins</groupId>
+			<groupId>io.github.wocommunity.wonder.plugins</groupId>
 			<artifactId>H2PlugIn</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.d2w</groupId>
+			<groupId>io.github.wocommunity.wonder.d2w</groupId>
 			<artifactId>ERModernLook</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.d2w</groupId>
+			<groupId>io.github.wocommunity.wonder.d2w</groupId>
 			<artifactId>ERModernDirectToWeb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.d2w</groupId>
+			<groupId>io.github.wocommunity.wonder.d2w</groupId>
 			<artifactId>ERModernDefaultSkin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>wonder.misc</groupId>
+			<groupId>io.github.wocommunity.wonder.misc</groupId>
 			<artifactId>WOLips</artifactId>
 		</dependency>
 		<dependency>

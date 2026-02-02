@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>wonder.frameworks</groupId>
+		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
 		<artifactId>d2w</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
-	<groupId>wonder.d2w</groupId>
+	<groupId>io.github.wocommunity.wonder.d2w</groupId>
 	<artifactId>ermoderndirecttoweb</artifactId>
 	<name>ERModernDirectToWeb</name>
 
@@ -16,19 +16,19 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>erextensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>erdirecttoweb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.ajax</groupId>
+			<groupId>io.github.wocommunity.wonder.ajax</groupId>
 			<artifactId>ajax</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.ajax</groupId>
+			<groupId>io.github.wocommunity.wonder.ajax</groupId>
     		<artifactId>ercoolcomponents</artifactId>
 		</dependency>
 		<dependency>

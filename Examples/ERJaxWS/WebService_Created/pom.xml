@@ -1,23 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.examples</groupId>
+		<groupId>io.github.wocommunity.wonder.examples</groupId>
 		<artifactId>erjaxws</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.erxpartial</groupId>
+	<groupId>io.github.wocommunity.wonder.erxpartial</groupId>
 	<artifactId>WebService_Created</artifactId>
 	<name>WebService Created Framework</name>
 	<packaging>woframework</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.misc</groupId>
+			<groupId>io.github.wocommunity.wonder.misc</groupId>
 			<artifactId>ERJaxWS</artifactId>
 		</dependency>
 	</dependencies>

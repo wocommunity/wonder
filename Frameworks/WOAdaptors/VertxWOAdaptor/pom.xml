@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>wonder.frameworks</groupId>
+		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
 		<artifactId>woadaptors</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
-	<groupId>wonder.woadaptors</groupId>
+	<groupId>io.github.wocommunity.wonder.woadaptors</groupId>
 	<artifactId>vertxwoadaptor</artifactId>
 	<name>VertxWOAdaptor</name>
 	<dependencies>

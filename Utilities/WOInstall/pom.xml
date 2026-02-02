@@ -2,12 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>wonder.utilities</groupId>
+		<groupId>io.github.wocommunity.wonder.utilities</groupId>
 		<artifactId>utilities</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
-	<groupId>wonder.utilities</groupId>
+	<groupId>io.github.wocommunity.wonder.utilities</groupId>
 	<artifactId>WOInstall</artifactId>
 	<name>WOInstaller</name>
 	<packaging>jar</packaging>

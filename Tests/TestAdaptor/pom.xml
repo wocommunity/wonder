@@ -1,23 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.tests</groupId>
+		<groupId>io.github.wocommunity.wonder.tests</groupId>
 		<artifactId>tests</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.tests</groupId>
+	<groupId>io.github.wocommunity.wonder.tests</groupId>
 	<artifactId>TestAdaptor</artifactId>
 	<name>TestAdaptor Application</name>
 	<packaging>woapplication</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.woadaptors</groupId>
+			<groupId>io.github.wocommunity.wonder.woadaptors</groupId>
 			<artifactId>ERWOAdaptor</artifactId>
 			<version>${project.version}</version>
 		</dependency>

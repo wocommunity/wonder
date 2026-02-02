@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder</groupId>
+	<groupId>io.github.wocommunity.wonder</groupId>
 	<artifactId>wonder</artifactId>
 	<version>7.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -201,192 +201,192 @@
 				<version>${womodular.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.core</groupId>
+				<groupId>io.github.wocommunity.wonder.core</groupId>
 				<artifactId>javawoextensions</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.core</groupId>
+				<groupId>io.github.wocommunity.wonder.core</groupId>
 				<artifactId>erextensions</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.core</groupId>
+				<groupId>io.github.wocommunity.wonder.core</groupId>
 				<artifactId>erdirecttoweb</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.core</groupId>
+				<groupId>io.github.wocommunity.wonder.core</groupId>
 				<artifactId>erprototypes</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.core</groupId>
+				<groupId>io.github.wocommunity.wonder.core</groupId>
 				<artifactId>erjavamail</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.d2w</groupId>
+				<groupId>io.github.wocommunity.wonder.d2w</groupId>
 				<artifactId>ermoderndirecttoweb</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.businesslogic</groupId>
+				<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 				<artifactId>ERCoreBusinessLogic</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.businesslogic</groupId>
+				<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 				<artifactId>BTBusinessLogic</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.businesslogic</groupId>
+				<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 				<artifactId>ERTaggable</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.businesslogic</groupId>
+				<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 				<artifactId>erattachment</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.businesslogic</groupId>
+				<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
 				<artifactId>ERMoviesLogic</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>ajax</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>SproutCore</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>MooTools</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>YUI</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>ERDivaLook</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>ERIUI</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.reporting</groupId>
+				<groupId>io.github.wocommunity.wonder.reporting</groupId>
 				<artifactId>WRReporting</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.reporting</groupId>
+				<groupId>io.github.wocommunity.wonder.reporting</groupId>
 				<artifactId>DRGrouping</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.reporting</groupId>
+				<groupId>io.github.wocommunity.wonder.reporting</groupId>
 				<artifactId>ERPlot</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.eof</groupId>
+				<groupId>io.github.wocommunity.wonder.eof</groupId>
 				<artifactId>Validity</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.eof</groupId>
+				<groupId>io.github.wocommunity.wonder.eof</groupId>
 				<artifactId>errest</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.eof</groupId>
+				<groupId>io.github.wocommunity.wonder.eof</groupId>
 				<artifactId>ERIndexing</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERSelenium</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERCalendar</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERChronic</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>JavaMonitorFramework</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERDirectToRest</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>wolips</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>EROpenID</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERDivaliteLook</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERJaxWS</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.eoadaptors</groupId>
+				<groupId>io.github.wocommunity.wonder.eoadaptors</groupId>
 				<artifactId>javamemoryadaptor</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>ercoolcomponents</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.misc</groupId>
+				<groupId>io.github.wocommunity.wonder.misc</groupId>
 				<artifactId>ERCaptcha</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.excel</groupId>
+				<groupId>io.github.wocommunity.wonder.excel</groupId>
 				<artifactId>ExcelGenerator</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.excel</groupId>
+				<groupId>io.github.wocommunity.wonder.excel</groupId>
 				<artifactId>ERExcelLook</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>wonder.ajax</groupId>
+				<groupId>io.github.wocommunity.wonder.ajax</groupId>
 				<artifactId>GoogleChart</artifactId>
 				<version>${project.version}</version>
 			</dependency>

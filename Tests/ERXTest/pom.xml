@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.tests</groupId>
+		<groupId>io.github.wocommunity.wonder.tests</groupId>
 		<artifactId>tests</artifactId>
 		<version>7.5-SNAPSHOT</version>
 	</parent>
@@ -15,11 +15,11 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.core</groupId>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
 			<artifactId>ERPrototypes</artifactId>
 		</dependency>
 		<dependency>
@@ -27,7 +27,7 @@
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.eoadaptors</groupId>
+			<groupId>io.github.wocommunity.wonder.eoadaptors</groupId>
 			<artifactId>JavaMemoryAdaptor</artifactId>
 		</dependency>
 		<dependency>
@@ -39,7 +39,7 @@
 			<artifactId>hamcrest-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>wonder.misc</groupId>
+			<groupId>io.github.wocommunity.wonder.misc</groupId>
 			<artifactId>ERChronic</artifactId>
 		</dependency>
 	</dependencies>
