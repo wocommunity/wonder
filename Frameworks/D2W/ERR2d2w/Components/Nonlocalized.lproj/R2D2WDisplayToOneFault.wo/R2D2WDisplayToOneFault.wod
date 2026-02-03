@@ -1,0 +1,23 @@
+InspectAction: ERXLinkButton5 {
+	class = "inspectToOne";
+	directActionName = directActionName;
+	queryDictionary = queryDictionary;
+	string = d2wContext.displayNameForProperty;
+	title = helpString;
+}
+
+InspectLink: ERXLinkButton5 {
+	action = toOneAction;
+	class = "inspectToOne";
+	string = d2wContext.displayNameForProperty;
+	title = helpString;
+}
+
+UseComponentAction: WOConditional {
+	condition = d2wContext.shouldUseDirectActions;
+	negate = true;
+}
+
+UseDirectAction: WOConditional {
+	condition = d2wContext.shouldUseDirectActions;	
+}

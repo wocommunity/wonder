@@ -1,0 +1,34 @@
+ButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.editButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.buttonContentComponentName;
+}
+
+EditRelationship: ERXLinkButton5 {
+	action = editRelationship;
+	class = "editToOne";
+	disabled = d2wContext.disabled;
+	value = d2wContext.editButtonLabel;
+	title = helpString;
+}
+
+InspectObject: ERXLinkButton5 {
+	action = toOneAction;
+	class = "inspectToOne";
+	string = toOneDescription;
+}
+
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = "label";
+}
+
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}
+

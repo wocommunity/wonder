@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2D2WEditBoolean.java" wocomponentcontent="false">
+
+        
+        <binding name="localContext"/>
+        <binding name="propertyKey"/>
+        <binding name="object"/>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </wo>
+</wodefinitions>

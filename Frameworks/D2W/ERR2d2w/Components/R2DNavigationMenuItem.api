@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DNavigationMenuItem.java" wocomponentcontent="false">
+
+        <binding name="navigationItem"/>
+        <binding name="level"/>
+    </wo>
+</wodefinitions>

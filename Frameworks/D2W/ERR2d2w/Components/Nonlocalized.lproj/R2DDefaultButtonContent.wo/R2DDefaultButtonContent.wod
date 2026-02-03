@@ -1,0 +1,4 @@
+Label: WOString {
+	escapeHTML = true;
+	value = ^buttonLabel;
+}

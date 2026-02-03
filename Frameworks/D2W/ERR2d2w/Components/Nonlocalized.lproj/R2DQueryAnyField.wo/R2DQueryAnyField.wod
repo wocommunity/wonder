@@ -1,0 +1,10 @@
+AnyField: R2DAnyField {
+	displayGroup = displayGroup;
+	displayKey = relationshipContext.displayNameForProperty;
+	formatter = relationshipContext.formatter; // VALID
+	key = relationshipContext.propertyKey;
+	keyList = relationshipContextDisplayAttributesKeys;
+	relationshipKey = relationshipKey;
+	selectedKey = selectedKey;
+	sourceEntityName = entity.name;
+}

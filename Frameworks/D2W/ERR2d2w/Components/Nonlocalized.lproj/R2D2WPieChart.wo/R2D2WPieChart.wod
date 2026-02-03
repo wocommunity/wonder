@@ -1,0 +1,6 @@
+PieChart: R2DPieChart {
+	chartDictionary = chartDictionary;
+	inanimate = false;
+	inline = true;
+	showPercentages = true;
+}

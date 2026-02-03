@@ -1,0 +1,106 @@
+<webobject name = "Table">
+	<webobject name = "CaptionComponent"/>
+	<webobject name = "IsGrouping">
+		<webobject name = "GroupingColgroup">
+			<webobject name = "GroupingCol"/>
+		</webobject>
+	</webobject>
+	<webobject name = "LeftActionColgroup">
+		<webobject name = "LeftActionCol"/>
+	</webobject>
+	<webobject name = "SectionRepetition">
+		<webobject name = "Colgroup">
+			<webobject name = "AttributeRepetition">
+				<webobject name = "Col"/>
+			</webobject>
+		</webobject>
+	</webobject>
+	<webobject name = "RightActionColgroup">
+		<webobject name = "RightActionCol"/>
+	</webobject>
+	<thead>
+		<webobject name = "HasMultipleSections">
+		<tr class="sectionHeaders">
+			<webobject name = "IsGrouping">
+				<webobject name = "GroupHeaderTall">
+					<webobject name = "GroupHeaderComponent"/>
+				</webobject>
+			</webobject>
+			<webobject name = "LeftActionHeaderTall"></webobject>
+			<webobject name = "SectionRepetition">
+				<webobject name = "SectionHeader"><webobject name = "SectionHeaderString"/></webobject>
+			</webobject>
+			<webobject name = "RightActionHeaderTall"></webobject>
+		</tr>
+		</webobject>
+		<tr class="attributeHeaders">
+			<webobject name = "IsNotMultipleSections">
+				<webobject name = "IsGrouping">
+					<webobject name = "GroupHeader">
+						<webobject name = "GroupHeaderComponent"/>
+					</webobject>
+				</webobject>
+				<webobject name = "LeftActionHeader"></webobject>
+			</webobject>
+			<webobject name = "SectionRepetition">
+				<webobject name = "AttributeRepetition">
+					<webobject name = "AttributeHeaderCell">
+						<webobject name = "AttributeHeaderComponent"/>
+					</webobject>
+				</webobject>
+			</webobject>
+			<webobject name = "IsNotMultipleSections">
+				<webobject name = "RightActionHeader"></webobject>
+			</webobject>
+		</tr>
+	</thead>
+	<webobject name = "IsGrouping">
+		<webobject name = "GroupingRepetition">
+			<tbody>
+				<tr class="group">
+					<webobject name = "GroupingHeader">
+						<webobject name = "GroupComponent"/>
+					</webobject>
+				</tr>
+				<webobject name = "GroupingObjectRepetition">
+					<webobject name = "ObjectTableRow">
+						<webobject name = "LeftActionCell"><webobject name = "LeftActionRepetition"><webobject name = "Action"/></webobject></webobject>
+						<webobject name = "SectionRepetition">
+							<webobject name = "AttributeRepetition">
+								<webobject name = "AttributeCell">
+									<webobject name = "AttributeComponent"/>
+									<webobject name = "PropertyMessage"/>
+									<webobject name = "ComponentDebug"/>
+								</webobject>
+							</webobject>
+						</webobject>
+						<webobject name = "RightActionCell"><webobject name = "RightActionRepetition"><webobject name = "Action"/></webobject></webobject>
+					</webobject>
+				</webobject>
+			</tbody>
+		</webobject>
+	</webobject>
+	<webobject name = "IsNotGrouping">
+		<tbody>
+			<webobject name = "ObjectRepetition">
+				<webobject name = "ObjectTableRow">
+					<webobject name = "LeftActionCell">
+						<webobject name = "LeftActionRepetition"><webobject name = "Action"/></webobject>
+					</webobject>
+					<webobject name = "SectionRepetition">
+						<webobject name = "AttributeRepetition">
+							<webobject name = "AttributeCell">
+								<webobject name = "AttributeComponent"/>
+								<webobject name = "PropertyMessage"/>
+								<webobject name = "ComponentDebug"/>
+							</webobject>
+						</webobject>
+					</webobject>
+					<webobject name = "RightActionCell">
+						<webobject name = "RightActionRepetition"><webobject name = "Action"/></webobject>
+					</webobject>
+				</webobject>
+			</webobject>
+		</tbody>
+	</webobject>
+</webobject>

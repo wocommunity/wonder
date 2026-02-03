@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
+		<artifactId>d2w</artifactId>
+		<version>7.5-SNAPSHOT</version>
+	</parent>
+	<groupId>io.github.wocommunity.wonder.d2w</groupId>
+	<artifactId>err2d2w</artifactId>
+	<name>ERR2d2w</name>
+	<dependencies>
+		<dependency>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
+			<artifactId>erextensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
+			<artifactId>javawoextensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.wocommunity.wonder.core</groupId>
+			<artifactId>erdirecttoweb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.wocommunity.wonder.businesslogic</groupId>
+			<artifactId>erattachment</artifactId>
+		</dependency>
+	</dependencies>
+</project>

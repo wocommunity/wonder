@@ -1,0 +1,16 @@
+PropertyName: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+}
+
+SortOrdering: R2DSortOrder {
+	d2wContext = d2wContext;
+	displayGroup = ^displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
+}
+
+Debug: R2DDebuggingComponentHelp {
+	localContext = d2wContext;
+}

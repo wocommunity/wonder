@@ -1,0 +1,58 @@
+Branch: WOActionURL {
+	action = nextPageAction;
+}
+
+BranchName: WOString {
+	value = branch.branchButtonLabel; //VALID
+}
+
+BranchRepetition: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+ExplanationComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+	dataSource = dataSource;
+	object = object;
+	pageConfiguration = d2wContext.explanationConfigurationName;
+}
+
+HasBranches: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
+}
+
+HasMessage: WOConditional {
+	condition = message;
+}
+
+HasNextPage: WOConditional {
+	condition = hasNextPage;
+}
+
+HasNoBranches: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Message: WOString {
+	escapeHTML = false;
+	value = message;
+}
+
+OKButton: WOActionURL {
+	action = nextPageAction;
+}
+
+OKName: WOString {
+	value = d2wContext.okButtonLabel;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+

@@ -1,0 +1,53 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+Form: ERXWOForm {
+	class = d2wContext.task;
+	disabled = disableForm;
+	multipleSubmit = true;
+	enctype = d2wContext.formEncoding;
+	secure = d2wContext.secureForm;
+}
+
+FilteringComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.filteringComponentName;
+	displayGroup = displayGroup;
+	localContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	localContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
+NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+ShowNav: WOConditional {
+	condition = shouldShowBatchNavigation;
+}

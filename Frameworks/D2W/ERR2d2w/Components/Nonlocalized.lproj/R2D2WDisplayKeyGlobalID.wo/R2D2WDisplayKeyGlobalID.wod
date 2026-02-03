@@ -1,0 +1,11 @@
+InspectEntityButton: ERXLinkButton5 {
+	action = inspectEntity;
+	title = inspectEntityTitle;
+	value = inspectEntityLabel;
+}
+
+InspectEntityButtonContent: WOSwitchComponent {
+	WOComponentName = d2wContext.buttonContentComponentName;
+	localContext = d2wContext;
+	buttonLabel = inspectEntityLabel;
+}

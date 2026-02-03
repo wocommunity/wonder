@@ -1,0 +1,12 @@
+ActivityMarker: WOImage {
+	filename = "NewMarker.gif";
+	framework = "ERExtensions";
+}
+
+DisplayName: WOString {
+	value = ^displayName;
+}
+
+HasActivity: WOConditional {
+	condition = d2wContext.navigationItem.hasActivity;
+}

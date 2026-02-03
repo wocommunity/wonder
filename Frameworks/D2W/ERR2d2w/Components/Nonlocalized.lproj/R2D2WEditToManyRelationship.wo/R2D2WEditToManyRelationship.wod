@@ -1,0 +1,22 @@
+EditToManyRelationship: R2DToManyRelationship {
+	class = d2wContext.propertyClasses;
+	destinationDisplayKey = keyWhenRelationship;
+	destinationEntityName = d2wContext.destinationEntityName;
+	destinationSortKey = d2wContext.sortKey;
+	disabled = d2wContext.disabled;
+	id = labelID;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	possibleChoices = restrictedChoiceList;
+    propertyLabel = d2wContext.displayNameForProperty;
+	relationshipKey = d2wContext.propertyKey;
+	size = d2wContext.size;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
+	sourceEntityName = d2wContext.entity.name;
+	sourceObject = d2wContext.object;
+	uiStyle = d2wContext.toManyUIStyle;
+	// isMandatory = d2wContext.relationship.isMandatory;
+	// maxColumns = d2wContext.numCols;
+	// width = d2wContext.itemWidth;
+	// goingVertically = d2wContext.goingVertically;
+	// shouldShowSelectAllButtons = shouldShowSelectAllButtons;
+}

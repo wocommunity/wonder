@@ -1,0 +1,55 @@
+HasAction: WOConditional {
+	condition = navigationItem.action.trim.length;
+}
+
+HasDirectAction: WOConditional {
+	condition = hasDirectAction;
+}
+
+HasHREF: WOConditional {
+	condition = navigationItem.href.trim.length;
+}
+
+HasPageName: WOConditional {
+	condition = navigationItem.pageName.trim.length;
+}
+
+MeetsDisplayConditions: WOConditional {
+	condition = meetsDisplayConditions;
+}
+
+NavAction: ERXLinkButton5 {
+	action = action;
+	disabled = isDisabled;
+	submit = false;
+	secure = secureInContext;
+}
+
+NavButtonComponent: WOSwitchComponent {
+	WOComponentName = ^navigationButtonContentComponentName;
+	localContext = ^navContext;
+	displayName = displayName;
+}
+
+NavDirectAction: ERXLinkButton5 {
+	actionClass = navigationItem.directActionClass;
+	directActionName = navigationItem.uneditedDirectActionName;
+	disabled = isDisabled;
+	queryDictionary = queryDictionary;
+	submit = false;
+	secure = secureInContext;
+}
+
+NavHREF: ERXLinkButton5 {
+	disabled = isDisabled;
+	href = navigationItem.href;
+	submit = false;
+}
+
+NavPageName: ERXLinkButton5 {
+	disabled = isDisabled;
+	pageName = navigationItem.pageName;
+	queryDictionary = queryDictionary;
+	submit = false;
+	secure = secureInContext;
+}

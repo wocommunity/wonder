@@ -1,0 +1,14 @@
+HasPropertyName: WOConditional {
+	condition = d2wContext.hidePropertyName;
+	negate = true;
+}
+
+PropertyContainer: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = d2wContext.propertyNameComponentWrapper;
+}
+
+PropertyName: WOString {
+	escapeHTML = false;
+    value = d2wContext.displayNameForProperty;
+}

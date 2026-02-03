@@ -1,0 +1,16 @@
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}
+
+Selector: R2DBooleanSelector {
+	yesString = stringForYes;
+	noString = stringForNo;
+	noSelectionString = stringForNull;
+	labelString = d2wContext.displayNameForProperty;
+	selection = objectPropertyValue;
+	uiMode = d2wContext.uiStyle;
+	disabled = d2wContext.disabled;
+	class = d2wContext.propertyClasses;
+}
+

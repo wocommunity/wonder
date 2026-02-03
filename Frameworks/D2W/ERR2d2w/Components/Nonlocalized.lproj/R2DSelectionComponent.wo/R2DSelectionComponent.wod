@@ -1,0 +1,15 @@
+CheckBox: WOSwitchComponent {
+    WOComponentName = selectionWidgetName;
+	checked = checked;
+	onclick ="window.event.cancelBubble = true";
+	id = labelID;
+}
+
+Label: WOGenericContainer {
+	elementName = "label";
+	for = labelID;
+}
+
+LabelString: ERXLocalizedString {
+	value = "R2DSelectionComponent.selectRow";
+}

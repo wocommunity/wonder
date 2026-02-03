@@ -1,0 +1,20 @@
+ErrorPanel: R2DErrorDictionaryPanel {
+	errorKeyOrder = ^errorKeyOrder;
+	errorMessages = ^errorMessages;
+	extraErrorMessage = ^extraErrorMessage;
+}
+
+ErrorHeading: WOString {
+	value = ^errorDialogTitle;
+}
+
+ErrorIcon: R2DSVGUseImage {
+	localContext = d2wContext;
+	imageID = "stop_icon";
+	imageHeight = "64";
+	imageWidth = "64";
+}
+
+UseSVG: WOConditional {
+	condition = session.objectStore.modernizr.svg;
+}

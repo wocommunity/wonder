@@ -1,0 +1,4 @@
+CDataString: WOString {
+	escapeHTML = d2wContext.escapeHTML;
+	value = stringValue;
+}

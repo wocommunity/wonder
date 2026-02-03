@@ -1,0 +1,10 @@
+BoolSpan: WOGenericContainer {
+	elementName = "span";
+	class = spanClass;
+	title = spanTitle;
+}
+
+BoolIcon: R2DSVGUseImage {
+	localContext = d2wContext;
+	imageID = imageID;
+}

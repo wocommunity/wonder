@@ -1,0 +1,43 @@
+CalendarCellComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.calendarCellComponentName;
+	localContext = d2wContext;
+	rangeGrouper = ^rangeGrouper;
+}
+
+CalendarTable: WOGenericContainer {
+	border = 1;
+	cellpadding = 2;
+	cellspacing = 2;
+	class = "month calendar";
+	elementName = "table";
+}
+
+DatesForCurrentWeek: WORepetition {
+	item = ^rangeGrouper.currentDate;
+	list = ^rangeGrouper.datesForCurrentWeek;
+}
+
+DatesForWeeks: WORepetition {
+	list = ^rangeGrouper.datesForWeeksForCurrentMonth;
+	item = ^rangeGrouper.datesForCurrentWeek;
+}
+
+DayName: WOString {
+	formatter = calendarHeaderFormat;
+	value = ^rangeGrouper.currentDate;
+}
+
+HeaderLoop: WORepetition {
+	list = ^rangeGrouper.datesForCurrentWeek;
+	item = ^rangeGrouper.currentDate;
+}
+
+MonthName: WOString {
+	formatter = calendarCaptionFormat;
+	value = ^rangeGrouper.selectedDate;
+}
+
+CurrentDate: WOGenericContainer {
+	class = styleClasses;
+	elementName = "td";
+}

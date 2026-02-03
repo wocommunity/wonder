@@ -1,0 +1,24 @@
+FalseString: WOString {
+	value = d2wContext.falseString;
+}
+
+IsFalse: WOConditional {
+	condition = isFalse;
+}
+
+IsTrue: WOConditional {
+	condition = objectPropertyValue;
+}
+
+TrueString: WOString {
+	value = d2wContext.trueString;
+}
+
+IsNull: WOConditional {
+	condition = objectPropertyValueIsNonNull;
+	negate = true;
+}
+
+NullString: WOString {
+	value = d2wContext.nullString;
+}

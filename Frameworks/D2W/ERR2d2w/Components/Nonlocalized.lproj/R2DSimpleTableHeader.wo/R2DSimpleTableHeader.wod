@@ -1,0 +1,9 @@
+PropertyName: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+}
+
+Debug: R2DDebuggingComponentHelp {
+	localContext = d2wContext;
+}

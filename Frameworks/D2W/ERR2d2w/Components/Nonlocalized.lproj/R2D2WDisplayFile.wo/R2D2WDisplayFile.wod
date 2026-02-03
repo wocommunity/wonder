@@ -1,0 +1,20 @@
+DisplayEmpty: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyAttachmentComponentName;
+	localContext = d2wContext;
+	object = object;
+}
+
+DisplayFile: WOSwitchComponent {
+	WOComponentName = d2wContext.attachmentComponentName;
+	localContext = d2wContext;
+	object = object;
+}
+
+HasFile: WOConditional {
+	condition = objectPropertyValue;
+}
+
+HasNoFile: WOConditional {
+	condition = objectPropertyValue;
+	negate = true;
+}

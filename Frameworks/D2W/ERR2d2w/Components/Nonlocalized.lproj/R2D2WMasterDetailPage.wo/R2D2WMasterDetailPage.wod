@@ -1,0 +1,21 @@
+HasSelection: WOConditional {
+	condition = selectedObject;
+}
+
+InspectPage: ERXD2WInspect {
+	entityName = d2wContext.entityName;
+	object = selectedObject;
+	pageConfiguration = d2wContext.inspectEmbeddedConfigurationName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+SelectPage: ERXD2WSelect {
+	action = selectObjectAction;
+	dataSource = displayGroup.dataSource;
+	entityName = d2wContext.entityName;
+	pageConfiguration = d2wContext.selectEmbeddedConfigurationName;
+	selectedObject = selectedObject;
+}

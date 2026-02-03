@@ -1,0 +1,38 @@
+Hint: R2D2WHintString {
+	d2wContext = d2wContext;
+}
+
+MaxField: WOTextField {
+	numberformat = d2wContext.formatter;
+	id = maxID;
+	size = length;
+	value = maxValue;
+}
+
+MaxLabel: WOGenericContainer {
+	elementName = "label";
+	for = maxID;
+}
+
+MaxString: ERXLocalizedString {
+	object = d2wContext;
+	templateString = "R2D2W.maximumNumberFieldLabel";
+}
+
+MinField: WOTextField {
+	numberformat = d2wContext.formatter;
+	id = minID;
+	size = length;
+	value = minValue;
+}
+
+MinLabel: WOGenericContainer {
+	elementName = "label";
+	for = minID;
+}
+
+MinString: ERXLocalizedString {
+	object = d2wContext;
+	templateString = "R2D2W.minimumNumberFieldLabel";
+}
+

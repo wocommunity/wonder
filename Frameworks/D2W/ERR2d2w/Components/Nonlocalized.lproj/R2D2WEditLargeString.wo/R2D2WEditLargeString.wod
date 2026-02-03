@@ -1,0 +1,33 @@
+EditString: WOText {
+	class = d2wContext.propertyClasses;
+	cols = d2wContext.length;
+	disabled = d2wContext.disabled;
+	id = labelID;
+	rows = d2wContext.rows;
+	title = d2wContext.tooltip;
+	value = value;
+}
+
+HasMaxLength: WOConditional {
+	condition = d2wContext.maxLength;
+}
+
+Hint: R2D2WHintString {
+	d2wContext = d2wContext;
+}
+
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = "label";
+	for = labelID;
+}
+
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}
+

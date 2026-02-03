@@ -1,0 +1,32 @@
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+BranchButton: ERXLinkButton5 {
+	action = performAction;
+	class = d2wContext.branch.branchButtonID;
+	title = d2wContext.tooltip;
+	value = d2wContext.branch.branchButtonLabel;
+}
+
+BranchButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.branch.branchButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.buttonContentComponentName;
+}
+
+HasChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+LI: WOGenericContainer {
+	elementName = "li";
+	class = "action";
+}
+
+UL: WOGenericContainer {
+	elementName = "ul";
+	class = "actions";
+}

@@ -1,0 +1,47 @@
+# Properties goodies.  You'll probably want to use most of these.
+# The ones for XHTML are the only ones enabled by default though.
+
+# XHTML Strict Compliance
+er.extensions.ERXWOForm.useIdInsteadOfNameTag=true
+er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true
+
+# Don't use componentIdentifier
+er.extensions.foundation.ERXPatcher.DynamicElementsPatches.appendComponentIdentifier=false
+
+# ERR2D2W
+#er.r2d2w.ERR2d2w.createsDerivedCounts=true
+#er.r2d2w.ERR2d2w.ignoreModels=(ERAttachment,erprototypes)
+
+# GZip Responses
+#er.extensions.ERXApplication.responseCompressionEnabled=true
+
+# Localization
+#ERXLanguages=(en,ja);
+#er.extensions.ERXLocalizer.availableLanguages=(English,Japanese)
+#er.extensions.ERXLocalizer.defaultLanguage=English
+#er.extensions.ERXLocalizer.fileNamesToWatch=("Localizable.strings","ValidationTemplate.strings")
+#er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERR2d2w,ERDirectToWeb,ERExtensions)
+#er.extensions.ERXLocalizer.useLocalizedFormatters=true
+
+# Project Encoding
+#er.extensions.ERXApplication.DefaultEncoding=UTF-8
+
+# Click to Open
+#wolips.password=password
+#wolips.host=localhost
+#wolips.port=9485
+#er.component.clickToOpen=true
+#er.extensions.ERXApplication.developmentMode=true
+# These two are unnecessary if using the Ajax framework in Wonder
+#wolips.prototype.framework=app
+#wolips.prototype.fileName=prototype.js
+
+# ERJavaMail
+#er.javamail.adminEmail=admin@yourhost.com
+#er.javamail.centralize=false
+#er.javamail.debugEnabled=false
+#er.javamail.milliSecondsWaitIfSenderOverflowed=6000
+#er.javamail.smtpHost=your.smtpserver.com
+#er.javamail.smtpAuth=false
+#er.javamail.smtpUser=
+#er.javamail.smtpPassword=

@@ -1,0 +1,18 @@
+AttributeName: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+AttributeRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+AttributeValue: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = object;
+}
+
+Separator: ERXLocalizedString {
+	value = "R2D2WPlainTextInspectPage.keyValueSeparator";
+}

@@ -1,0 +1,45 @@
+BrowserList: WOBrowser {
+	disabled = ^disabled;
+	displayString = theCurrentValue;
+	id = ^id;
+	item = theCurrentItem;
+	list = theList;
+	multiple = true;
+	selections = selections;
+	size = ^size;
+}
+
+CheckboxLabelString: WOString {
+	value = theCurrentValue;
+}
+
+CheckboxFieldset: R2DCheckboxFieldset {
+	item = theCurrentItem;
+	list = theList;
+	selections = selections;
+	class = ^class;
+	id = ^id;
+	legendString = ^propertyLabel;
+	shouldShowSelectAllButtons = ^shouldShowSelectAllButtons;
+	disabled = ^disabled;
+	
+}
+
+IsBrowserConditional: WOConditional {
+	condition = isCheckBox;
+	negate = true;
+}
+
+IsCheckboxConditional: WOConditional {
+	condition = isCheckBox;
+}
+
+LabelString: WOString {
+	value = ^propertyLabel;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = ^class;
+	elementName = "label";
+	for = ^id;
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DErrorDictionaryPanel.java" wocomponentcontent="false">
+
+        <binding name="errorKeyOrder"/>
+        <binding name="errorMessages"/>
+        <binding name="extraErrorMessage"/>
+    </wo>
+</wodefinitions>

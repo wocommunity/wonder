@@ -1,0 +1,28 @@
+HasQueryAttributes: WOConditional {
+	condition = queryAttributes.count;
+}
+
+LabelString: WOString {
+	value = displayName;
+}
+
+OptionMenu: ERXOptGroupPopupButton {
+	list = displayKeys;
+	item = item;
+	displayString = displayString;
+	group = group;
+	label = groupLabel;
+	selection = selectedKey;
+	noSelectionString = d2wContext.noSelectionStringValue;
+}
+
+PropertyLabel: WOGenericContainer {
+	elementName = "label";
+	for = labelID;
+}
+
+QueryField: WOTextField {
+	id = labelID;
+	value = queryValue;
+}
+

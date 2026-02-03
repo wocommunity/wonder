@@ -1,0 +1,44 @@
+HasBatches: WOConditional {
+	condition = ^displayGroup.hasMultipleBatches;
+}
+
+OrderedList: WOGenericContainer {
+	elementName = "ol";
+	class = "pages";
+	start = startValue;
+}
+
+BatchRepetition: WORepetition {
+	count = limitedBatchCount;
+	index = index;
+}
+
+BatchIndexLink: ERXLinkButton5 {
+	action = selectBatch;
+	disabled = isCurrentBatch;
+	string = batchIndex;
+}
+
+AvailableBatchSizes: WORepetition {
+	list = availableBatchSizes;
+	item = batchSize;
+}
+
+BatchSizeLink: ERXLinkButton5 {
+	action = selectBatchSize;
+	class = "batchSize";
+	disabled = currentBatchSizeSelected;
+	string = batchSizeString;
+}
+
+PageNumber: WOString {
+	value = localizer.R2DBatchNavigationBar.page;
+}
+
+ItemsPerPage: WOString {
+	value = localizer.R2DBatchNavigationBar.items_per_page;
+}
+
+DisplayBatchSizes: WOConditional {
+	condition = hasMultipleBatchSizes;
+}

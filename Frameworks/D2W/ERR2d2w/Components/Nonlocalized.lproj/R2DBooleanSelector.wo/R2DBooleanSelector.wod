@@ -1,0 +1,56 @@
+WOPopUpButton : WOPopUpButton {
+	list = options;
+	item = option;
+	displayString = displayString;
+	noSelectionString = noSelectionString;
+	selection = ^selection;
+	class = ^class;
+	style = ^style;
+	id = labelID;
+	disabled = ^disabled;
+}
+
+RadioButtonFieldset: R2DRadioButtonFieldset {
+	item = proxy;
+	list = proxyOptions;
+	selection = proxySelection;
+	uniqueID = ^uniqueID;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+	legendString = ^labelString;
+}
+
+IsCheckbox : WOConditional {
+	condition = isCheckbox;
+}
+
+IsPopup : WOConditional {
+	condition = isPopup;
+}
+
+IsRadio : WOConditional {
+	condition = isRadio;
+}
+
+DisplayName: WOString {
+	value = displayString;
+}
+
+WOCheckbox: WOCheckBox {
+	checked = ^selection;
+	class = ^class;
+	disabled = ^disabled;
+	id = labelID;
+	style = ^style;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = ^class;
+	elementName = "label";
+	for = labelID;
+}
+
+LabelString: WOString {
+	value = ^labelString;
+}

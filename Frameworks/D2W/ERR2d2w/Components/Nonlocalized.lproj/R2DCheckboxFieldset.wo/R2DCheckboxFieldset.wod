@@ -1,0 +1,52 @@
+Checkbox: WOGenericElement {
+	checked = checkboxChecked;
+	disabled = checkboxDisabled;
+	elementName = "input";
+	id = generateID;
+	name = wrapperElementID;
+	type = "checkbox";
+	value = index;
+}
+
+CheckboxRepetition: WORepetition {
+	list = maybeSortedList;
+	item = currentItem;
+	index = index;
+}
+
+/*
+Disabled until I can put a VALID tag on this that works.
+Using a switch component to get around the red x
+CheckboxWrapper : WOGenericContainer {
+	elementID = wrapperElementID;
+	name = context.elementID;
+	formValues = selections;
+}
+*/
+
+CheckboxWrapper : WOSwitchComponent {
+	WOComponentName = "WOGenericContainer";
+	// ** Because there's no elementName, this is an invisible wrapper element.
+	elementID = wrapperElementID;
+	name = context.elementID;
+	formValues = selections;
+}
+
+Content: WOComponentContent {
+}
+
+Fieldset: WOGenericContainer {
+	elementName = "fieldset";
+	class = ^class;
+	id = ^id;
+}
+
+Label: WOGenericContainer {
+	class = ^class;
+	elementName = "label";
+	for = labelID;
+}
+
+LegendString: WOString {
+	value = ^legendString;
+}

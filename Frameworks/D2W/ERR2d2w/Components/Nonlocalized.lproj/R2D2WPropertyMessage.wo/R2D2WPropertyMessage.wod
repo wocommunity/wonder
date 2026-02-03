@@ -1,0 +1,16 @@
+HasMessage: WOConditional {
+	condition = ^propertyMessage.length;
+}
+
+UseSVG: WOConditional {
+	condition = session.objectStore.modernizr.svg;
+}
+
+SVGIcon: R2DSVGUseImage {
+	localContext = d2wContext;
+}
+
+Message: WOString {
+	escapeHTML = false;
+	value = ^propertyMessage;
+}

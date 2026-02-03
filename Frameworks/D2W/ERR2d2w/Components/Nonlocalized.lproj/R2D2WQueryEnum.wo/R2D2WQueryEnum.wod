@@ -1,0 +1,24 @@
+QueryEnum: WOSwitchComponent {
+	WOComponentName = componentName;
+    disabled = d2wContext.disabled;
+    propertyLabel = d2wContext.displayNameForProperty;
+    possibleChoices = restrictedChoiceList;
+    item = enumItem;
+    displayString = enumDisplayString;
+	sourceEntityName = d2wContext.entity.name;
+	sourceObject = self;
+	relationshipKey = "value";
+	size = d2wContext.size;
+	displayGroup = displayGroup;
+	//uiStyle = d2wContext.toOneUIStyle;
+	uiStyle = d2wContext.uiStyle;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	//destinationEntityName = d2wContext.destinationEntityName;
+    //isMandatory = d2wContext.isMandatory;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
+	destinationSortKey = d2wContext.sortKey;
+	noSelectionString = d2wContext.noSelectionString;
+	id = labelID;
+	class = d2wContext.propertyClasses;
+	//popupName = d2wContext.popupName;
+}

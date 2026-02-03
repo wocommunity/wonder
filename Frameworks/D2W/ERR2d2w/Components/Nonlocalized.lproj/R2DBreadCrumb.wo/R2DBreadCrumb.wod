@@ -1,0 +1,16 @@
+HasNextPage: WOConditional {
+	condition = ^page.nextPage;
+}
+
+NextCrumb: R2DBreadCrumb {
+	page = ^page.nextPage;
+}
+
+HasMoreCrumbs: WOConditional {
+	condition = hasMoreCrumbs;
+}
+
+NextPageLink: ERXLinkButton5 {
+	action = ^page.nextPage;
+	string = nextPageString;
+}

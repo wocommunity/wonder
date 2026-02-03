@@ -1,0 +1,19 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+Login: WOSwitchComponent {
+	WOComponentName = d2wContext.loginComponentName;
+	pageWrapperName = d2wContext.loginWrapperComponentName;
+}
+
+LoginOptions: WORepetition {
+	list = d2wContext.loginComponentNames;
+	item = d2wContext.loginComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+

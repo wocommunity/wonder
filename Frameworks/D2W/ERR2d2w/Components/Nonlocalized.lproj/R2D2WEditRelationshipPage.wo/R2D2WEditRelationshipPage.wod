@@ -1,0 +1,79 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+DisplayList: WOConditional {
+	condition = displayList;
+}
+
+DisplayInspect: WOConditional {
+	condition = displayInspect;
+}
+
+DisplayQuery: WOConditional {
+	condition = displayQuery;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+FilteringComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.filteringComponentName;
+	displayGroup = relationshipDisplayGroup;
+	localContext = d2wContext;
+}
+
+HasObjects: WOConditional {
+	condition = relationshipDisplayGroup.allObjects.count;
+}
+
+InspectComponent: ERXD2WInspect {
+    pageConfiguration = inspectConfigurationName;
+    task = inlineTask;
+	action = saveAction;
+	entityName = entity.name;
+	object = objectInRelationship;
+	settings = settings;
+}
+
+ListComponent: ERXD2WSelect {
+	action = selectAction;
+	dataSource = selectDataSource;
+	entityName = entity.name;
+	selectedObject = objectToAddToRelationship;
+}
+
+ListEmpty: WOConditional {
+	condition = relationshipDisplayGroup.allObjects.count;
+	negate = true;
+}
+
+ObjectRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	localContext = d2wContext;
+	displayGroup = relationshipDisplayGroup;
+}
+
+NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	displayGroup = relationshipDisplayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	d2wContext = d2wContext;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+QueryComponent: ERXD2WQuery {
+	action = queryAction;
+	entityName = entity.name;
+	queryDataSource = selectDataSource;
+}
+
+ShowNav: WOConditional {
+	condition = shouldShowBatchNavigation;
+}

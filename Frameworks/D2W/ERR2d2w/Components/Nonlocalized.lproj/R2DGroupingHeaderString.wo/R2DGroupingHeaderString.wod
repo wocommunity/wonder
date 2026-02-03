@@ -1,0 +1,3 @@
+HeaderString: WOString {
+	value = groupingString;
+}

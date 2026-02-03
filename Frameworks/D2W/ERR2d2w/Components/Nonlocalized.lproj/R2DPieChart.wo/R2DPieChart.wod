@@ -1,0 +1,107 @@
+AnimateTransform: WOGenericElement {
+	attributeName = "transform";
+	begin = "mouseover";
+	dur = "2s";
+	elementName = "svg:animateTransform";
+	fill = "freeze";
+	type = "translate";
+	values = animateValues; //TODO, set dynamically
+}
+
+Ellipse: WOGenericElement {
+	cx = cx;
+	cy = cy;
+	elementName = "svg:ellipse";
+	fill = fillColor;
+	rx = rx;
+	ry = ry;
+	stroke = "#333";
+}
+
+HasKeys: WOConditional {
+	condition = chartDictionary.count;
+}
+
+IsSelfContained: WOConditional {
+	condition = ^inline;
+	negate = true;
+}
+
+KeyRepetition: WORepetition {
+	item = sliceKey;
+	list = sortedChartKeys;
+}
+
+Label: WOString {
+	value = labelString;
+}
+
+LabelGroup: WOGenericContainer {
+	elementName = "svg:g";	
+}
+
+LabelShapes: WOGenericContainer {
+	elementName = "svg:g";	
+}
+
+LabelBox: WOGenericElement {
+	elementName = "svg:rect";
+	fill = fillColor;
+	height = labelSize;
+	stroke = "#333";
+	width = labelSize;
+	x = "380";
+	y = labelBoxY;
+}
+
+LabelText: WOGenericContainer {
+	elementName = "svg:text";
+	font-size = labelSize;
+	x = "400";
+	y = labelTextY;
+}
+
+NotSingleKey: WOConditional {
+	condition = singleKey;
+	negate = true;
+}
+
+PieGroup: WOGenericContainer {
+	elementName = "svg:g";
+}
+
+ShouldAnimate: WOConditional {
+	condition = ^inanimate;
+	negate = true;
+}
+
+SingleKey: WOConditional {
+	condition = singleKey;
+}
+
+Slice: WOGenericElement {
+	d = pathData;
+	elementName = "svg:path";
+	stroke = "#333";
+}
+
+SliceGroup: WOGenericContainer {
+	elementName = "svg:g";
+}
+
+SliceShapes: WOGenericContainer {
+	elementName = "svg:g";
+	fill = fillColor;
+}
+
+SVG: WOGenericContainer {
+	class = "piechart";
+	elementName = "svg:svg";
+	height = "360";
+	version = "1.1";
+	viewBox = ^viewBox;
+	width = "640";
+	"xmlns:svg" = "http://www.w3.org/2000/svg";
+	"xmlns:xlink" = "http://www.w3.org/1999/xlink";
+}
+

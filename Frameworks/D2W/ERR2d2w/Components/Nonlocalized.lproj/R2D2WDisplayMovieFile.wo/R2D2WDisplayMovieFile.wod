@@ -1,0 +1,10 @@
+AltText: WOString {
+	value = d2wContext.altText;
+}
+
+Movie: ERAttachmentQuickTimeViewer {
+	attachment = objectPropertyValue;
+	height = objectPropertyValue.height; //VALID
+	parameterDictionary = d2wContext.parameterDictionary;
+	width = objectPropertyValue.width; //VALID
+}

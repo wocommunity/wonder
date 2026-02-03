@@ -1,0 +1,22 @@
+EditToOneRelationship: R2DToOneRelationship {
+	class = d2wContext.propertyClasses;
+    destinationDisplayKey = keyWhenRelationship;
+	destinationEntityName = d2wContext.destinationEntityName;
+    destinationSortKey = d2wContext.sortKey;
+    disabled = d2wContext.disabled;
+    id = labelID;
+    //isMandatory = d2wContext.isMandatory;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+    //maxColumns = d2wContext.numCols;
+	noSelectionString = d2wContext.noSelectionString;
+	popupName = d2wContext.popupName;
+    possibleChoices = restrictedChoiceList;
+    propertyLabel = d2wContext.displayNameForProperty;
+    relationshipKey = d2wContext.propertyKey;
+    size = d2wContext.size;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
+    sourceEntityName = d2wContext.object.entityName;
+    sourceObject = d2wContext.object;
+    uiStyle = d2wContext.toOneUIStyle;
+	uniqueID = d2wContext.uniqueID;
+}

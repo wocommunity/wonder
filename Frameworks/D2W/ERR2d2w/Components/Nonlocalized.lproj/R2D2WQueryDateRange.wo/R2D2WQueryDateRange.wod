@@ -1,0 +1,34 @@
+Hint: R2D2WHintString {
+	d2wContext = d2wContext;
+}
+
+MaxField: WOTextField {
+	id = maxID;
+	value = maxDateString;
+}
+
+MaxLabel: WOGenericContainer {
+	elementName = "label";
+	for = maxID;
+}
+
+MaxString: ERXLocalizedString {
+	object = d2wContext;
+	templateString = "R2D2W.maximumDateFieldLabel";
+}
+
+MinField: WOTextField {
+	id = minID;
+	value = minDateString;
+}
+
+MinLabel: WOGenericContainer {
+	elementName = "label";
+	for = minID;
+}
+
+MinString: ERXLocalizedString {
+	object = d2wContext;
+	templateString = "R2D2W.minimumDateFieldLabel";
+}
+

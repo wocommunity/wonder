@@ -1,0 +1,8 @@
+Selector: R2DBooleanSelector {
+	yesString = stringForYes;
+	noString = stringForNo;
+	noSelectionString = stringForNull;
+	selection = value;
+	uiMode = d2wContext.uiStyle;
+	labelString = d2wContext.displayNameForProperty;
+}

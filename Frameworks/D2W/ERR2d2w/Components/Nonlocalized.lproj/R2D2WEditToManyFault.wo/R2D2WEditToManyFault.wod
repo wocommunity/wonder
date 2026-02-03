@@ -1,0 +1,42 @@
+ButtonContent: WOSwitchComponent {
+	buttonLabel = browserList.count;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.buttonContentComponentName;
+}
+
+EditLink: ERXLinkButton5 {
+	action = editValues;
+	class = "editToMany";
+	disabled = d2wContext.disabled;
+	value = browserList.count;
+	title = helpString;
+}
+
+HasValues: WOConditional {
+	condition = browserList.count;
+}
+
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = "label";
+	for = labelFor;
+}
+
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}
+
+Values: WOBrowser {
+	id = labelID;
+	item = browserItem;
+	list = browserList;
+	multiple = true;
+	size = d2wContext.size;
+	displayString = browserStringForItem;
+}
+

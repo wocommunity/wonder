@@ -1,0 +1,45 @@
+Content: WOComponentContent {}
+
+HasNoTabs: WOConditional {
+	condition = hasTabs;
+	negate = true;
+}
+
+HasTabs: WOConditional {
+	condition = hasTabs;
+}
+
+IsNotSelectedTab: WOConditional {
+	condition = isCellShaded;
+}
+
+IsSelectedTab: WOConditional {
+	condition = isCellShaded;
+	negate = true;
+}
+
+SelectedTabItem: ERXLinkButton5 {
+	href = "#";
+	disabled = true;
+	value = currentTabName;
+}
+
+TabItem: ERXLinkButton5 {
+	action = switchSubmitTab;
+	name = currentTabNameWithoutSpaces;
+	value = currentTabName;
+}
+
+TabRepetition: WORepetition {
+	item = currentTab;
+	list = tabs;
+}
+
+Tabs: WOGenericContainer {
+	elementName = "ul";
+	class = "tabs";
+}
+
+Wrapper: ERXUniquingWrapper {
+	id = selectedTabIdentifier;
+}

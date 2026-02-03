@@ -1,0 +1,22 @@
+UnorderedList: WOGenericContainer {
+	elementName = "ul";
+	class = ^class;
+	id = ^id;
+	style = ^style;
+	title = ^title;
+}
+
+Languages: WORepetition {
+	item = languageOption;
+	list = availableLanguages;
+}
+
+LanguageLink: ERXLinkButton5 {
+	action = languageAction;
+	disabled = isSelected;
+	hreflang = hrefLang;
+	rel = "alternate";
+	string = displayStringForLanguage;
+	submit = false;
+	"xml:lang" = languageCode;
+}

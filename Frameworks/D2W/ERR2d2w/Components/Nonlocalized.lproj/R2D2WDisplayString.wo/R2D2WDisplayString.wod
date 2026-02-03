@@ -1,0 +1,11 @@
+String: WOString {
+	escapeHTML = d2wContext.escapeHTML;
+	value = objectPropertyValue;
+	valueWhenEmpty = d2wContext.valueWhenEmpty;
+}
+
+Wrapper: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = d2wContext.dipslayStringWrapper;
+	omitTags = omitWrapper;
+}

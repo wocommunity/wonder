@@ -1,0 +1,41 @@
+ActionLegend: WOString {
+	value = d2wContext.controllerButtonLegend;
+}
+
+BranchChoices: WOPopUpButton {
+	id = labelID;
+	item = d2wContext.branch;
+	list = branchChoices;
+	displayString = d2wContext.branch.branchButtonLabel;
+	selection = selectedBranch;
+	noSelectionString = d2wContext.noSelectionStringValue;
+}
+
+HasChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+LabelString: WOString {
+	value = d2wContext.controllerPopupLabel;
+}
+
+OptionalForm: ERXWOForm {
+	disabled = context.isInForm;
+	secure = d2wContext.secureForm;
+}
+
+PopupLabel: WOGenericContainer {
+	elementName = "label";
+	for = labelID;
+}
+
+SubmitButton: ERXLinkButton5 {
+	action = performAction;
+	value = d2wContext.controllerButtonLabel;
+}
+
+SubmitButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.controllerButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.controllerButtonContentComponentName;
+}

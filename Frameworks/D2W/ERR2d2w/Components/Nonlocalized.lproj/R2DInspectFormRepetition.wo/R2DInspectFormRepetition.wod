@@ -1,0 +1,42 @@
+Sections: WORepetition {
+    list = sectionsContents;
+    item = currentSection;
+}
+
+Fieldset: WOGenericContainer {
+	elementName = "fieldset";
+	class = currentSection.name;
+}
+
+Legend: WOGenericContainer {
+	elementName = "legend";
+}
+
+LegendString: WOString {
+	value = d2wContext.displayNameForSectionKey;
+	valueWhenEmpty = d2wContext.displayNameForEntity;
+}
+
+AttributeRepetition: WORepetition {
+	item = propertyKey;
+	list = currentSectionKeys;
+}
+
+AttributeComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = localContext;
+	object = d2wContext.object;	
+}
+
+ComponentDebug: R2DDebuggingComponentHelp {
+	localContext = d2wContext;
+}
+
+PropertyMessage: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyMessageComponentName;
+	localContext = d2wContext;
+}
+
+DisplayProperty: WOConditional {
+	condition = d2wContext.displayProperty;
+}

@@ -1,0 +1,23 @@
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+OperatorPopUp: WOPopUpButton {
+	list = allQualifierOperators;
+	selection = selectedElement;
+	item = currentElement;
+	displayString = currentElement.value;
+}
+
+PropertyLabel: WOGenericContainer {
+	elementName = "label";
+	for = labelID;
+}
+
+TextField: WOTextField {
+	formatter = d2wContext.formatObject;
+	id = labelID;
+	size = length;
+	value = value;
+}
+

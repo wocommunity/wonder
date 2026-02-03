@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DPieChart.java" wocomponentcontent="false">
+
+        <binding name="chartDictionary"/>
+        <binding defaults="Boolean" name="showPercentages"/>
+        <binding name="viewBox"/>
+        <validation message="'chartDictionary' is a required binding.">
+            <unbound name="chartDictionary"/>
+        </validation>
+    <binding defaults="Boolean" name="inline"/>
+        <binding defaults="Boolean" name="inanimate"/>
+    </wo>
+</wodefinitions>

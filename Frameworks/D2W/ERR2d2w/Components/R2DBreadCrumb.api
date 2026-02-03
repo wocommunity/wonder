@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DBreadCrumb.java" wocomponentcontent="false">
+
+        <binding name="page"/>
+        <validation message="'page' is a required binding.">
+            <unbound name="page"/>
+        </validation>
+    </wo>
+</wodefinitions>

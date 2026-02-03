@@ -1,0 +1,30 @@
+AboveDisplayPropertyKeys: R2D2WExtraDisplayPropertyKeys {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	localContext = d2wContext;
+}
+
+BelowDisplayPropertyKeys: R2D2WExtraDisplayPropertyKeys {
+    localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
+}
+
+ComponentWrapper: WOGenericContainer {
+	elementName = d2wContext.componentWrapperElementName;
+	class = d2wContext.pageClasses;
+}
+
+Content: WOComponentContent {}
+
+Errors: WOSwitchComponent {
+	WOComponentName = d2wContext.errorPanelComponentName;
+	localContext = d2wContext;
+}
+
+Help: R2DDebuggingHelp {
+	d2wContext = d2wContext;
+}

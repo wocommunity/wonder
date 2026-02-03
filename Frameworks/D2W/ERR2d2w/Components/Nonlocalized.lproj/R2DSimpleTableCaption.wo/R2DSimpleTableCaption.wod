@@ -1,0 +1,11 @@
+HasCaption: WOConditional {
+	condition = d2wContext.tableCaption.trim.length;
+}
+
+Caption: WOGenericContainer {
+	elementName = "caption";
+}
+
+CaptionString: WOString {
+	value = d2wContext.tableCaption;
+}

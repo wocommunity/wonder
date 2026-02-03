@@ -1,0 +1,73 @@
+Browser: WOBrowser {
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	multiple = false;
+	selections = selection;
+	size = ^size;
+    name=^popupName;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+HasItems: WOConditional {
+	condition = theList.count;
+}
+
+HasNoItems: WOConditional {
+	condition = theList.count;
+	negate = true;
+}
+
+IsBrowserConditional: WOConditional {
+	condition = isBrowser;
+}
+
+IsPopupConditional: WOConditional {
+	condition = isPopup;
+}
+
+IsRadioConditional: WOConditional {
+	condition = isRadio;
+}
+
+PopupList: WOPopUpButton { 
+	displayString = theCurrentValue;
+	item = theCurrentItem;
+	list = theList;
+	selection = selection;
+    name=^popupName;
+	onChange = ^onChange;
+	onBlur = ^onBlur;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+}
+
+RadioButtonFieldset: R2DRadioButtonFieldset {
+	item = theCurrentItem;
+	list = theList;
+	selection = selection;
+	uniqueID = ^uniqueID;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
+	legendString = ^propertyLabel;
+}
+
+String: WOString {
+	value = theCurrentValue;
+	//escapeHTML = false;
+}
+
+LabelString: WOString {
+	value = ^propertyLabel;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = ^class;
+	elementName = "label";
+	for = ^id;
+}
+

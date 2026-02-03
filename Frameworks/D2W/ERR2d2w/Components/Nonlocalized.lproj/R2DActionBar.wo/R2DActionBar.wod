@@ -1,0 +1,21 @@
+BranchChoices: WORepetition {
+	item = d2wContext.branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+BranchButton: ERXLinkButton5 {
+	action = performAction;
+	class = d2wContext.branch.branchButtonID;
+	value = d2wContext.branch.branchButtonLabel;
+}
+
+BranchButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.branch.branchButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.buttonContentComponentName;
+}
+
+HasChoices: WOConditional {
+	condition = hasBranchChoices;
+}

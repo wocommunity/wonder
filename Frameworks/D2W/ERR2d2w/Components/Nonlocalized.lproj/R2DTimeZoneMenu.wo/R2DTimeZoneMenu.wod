@@ -1,0 +1,11 @@
+TimeZoneMenu: WOPopUpButton {
+	list = zoneList;
+	item = zone;
+	selection = ^selection;
+	displayString = zoneDisplayName;
+	class = ^class;
+	disabled = ^disabled;
+	escapeHTML = ^escapeHTML;
+	id = ^id;
+	noSelectionString = ^noSelectionString;
+}

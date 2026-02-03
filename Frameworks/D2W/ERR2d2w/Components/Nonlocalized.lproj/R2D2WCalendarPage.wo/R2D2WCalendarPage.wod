@@ -1,0 +1,26 @@
+CalendarComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.calendarComponentName;
+	localContext = d2wContext;
+	rangeGrouper = rangeGrouper;
+}
+
+CalendarNavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.calendarNavigationBarComponentName;
+	rangeGrouper = rangeGrouper;
+	localContext = d2wContext;
+}
+
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+ListComponent: D2WList {
+	entityName = d2wContext.entity.name;
+	list = displayGroup.displayedObjects;
+	pageConfiguration = d2wContext.listEmbeddedConfigurationName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}

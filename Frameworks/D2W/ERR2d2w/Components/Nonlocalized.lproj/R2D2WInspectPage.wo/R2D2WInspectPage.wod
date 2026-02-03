@@ -1,0 +1,45 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+EditingForm: ERXWOForm {
+	class = d2wContext.task;
+	disabled = disableForm;
+	multipleSubmit = true;
+	enctype = d2wContext.formEncoding;
+	secure = d2wContext.secureForm;
+}
+
+EmptyMessage: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+HasObject: WOConditional {
+	condition = object;
+}
+
+InspectRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	displayPropertyKeys = currentTab.keys;
+	localContext = d2wContext;
+	object = object;
+}
+
+MissingObject: WOConditional {
+	condition = object;
+	negate = true;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+TabPanel : WOSwitchComponent {
+	WOComponentName = d2wContext.tabComponentName;
+	selectedTab = currentTab;
+	submitActionName = switchTabActionName;
+	tabNameKey = "displayName";
+	tabs = tabSectionsContents;
+}

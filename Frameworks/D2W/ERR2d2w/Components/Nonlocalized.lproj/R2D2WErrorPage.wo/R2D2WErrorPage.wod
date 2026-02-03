@@ -1,0 +1,24 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+Error: R2DErrorDictionaryPanel {
+	extraErrorMessage = message;
+}
+
+OkButton: ERXLinkButton5 {
+	action = nextPage;
+	class = "ok";
+	value = d2wContext.okButtonLabel;
+}
+
+OkButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.okButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.okButtonContentComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}

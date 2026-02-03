@@ -1,0 +1,16 @@
+SortButton: ERXLinkButton5 {
+	action = toggleClicked;
+	class = sortClass;
+	string = displayKey;
+	title = helpString;
+}
+
+Content: WOComponentContent {
+	
+}
+
+SortImage: WOSwitchComponent {
+	WOComponentName = ^d2wContext.sortImageComponentName;
+	d2wContext = ^d2wContext;
+	sortState = currentState;
+}

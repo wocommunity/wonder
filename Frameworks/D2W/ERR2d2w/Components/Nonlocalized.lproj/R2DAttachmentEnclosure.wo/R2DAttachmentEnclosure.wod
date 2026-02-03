@@ -1,0 +1,6 @@
+Enclosure: WOGenericElement {
+	elementName = "enclosure";
+	length = ^attachment.size;
+	type = ^attachment.mimeType;
+	url = attachmentUrl;
+}

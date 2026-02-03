@@ -1,0 +1,19 @@
+HasObjects: WOConditional {
+	condition = ^displayGroup.allObjects.count;
+}
+
+ListElement: WOGenericContainer {
+	elementName = listElement;
+	start = startValue;
+}
+
+ObjectRepetition: WORepetition {
+	list = ^displayGroup.displayedObjects;
+	item = d2wContext.object;
+}
+
+InspectRepetition: WOSwitchComponent {
+	WOComponentName = ^embeddedRepetitionComponentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+}

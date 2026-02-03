@@ -1,0 +1,6 @@
+SortImage: R2DSVGUseImage {
+	localContext = ^d2wContext;
+	imageID = imageID;
+	imageHeight = ^d2wContext.sortImageHeight;
+	imageWidth = ^d2wContext.sortImageWidth;
+}

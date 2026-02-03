@@ -1,0 +1,7 @@
+HeaderElement: WOGenericContainer {
+	elementName = headerElementName;
+}
+
+HeaderString: WOString {
+	value = d2wContext.displayNameForPageConfiguration;
+}

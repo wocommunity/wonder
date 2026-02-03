@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="112" width="64" version="1.1">
+	<use xlink:href="icons.svg#zoom" x="0" y ="0"/>
+	<use xlink:href="icons.svg#zoom_in" x="16" y ="0"/>
+	<use xlink:href="icons.svg#zoom_out" x="32" y ="0"/>
+	<use xlink:href="icons.svg#inline_help" x="48" y ="0"/>
+	<use xlink:href="icons.svg#inline_up" x="0" y ="16"/>
+	<use xlink:href="icons.svg#inline_down" x="16" y ="16"/>
+	<use xlink:href="icons.svg#inline_left" x="32" y ="16"/>
+	<use xlink:href="icons.svg#inline_right" x="48" y ="16"/>
+	<use xlink:href="icons.svg#inline_add" x="0" y ="32"/>
+	<use xlink:href="icons.svg#inline_remove" x="16" y ="32"/>
+	<use xlink:href="icons.svg#inline_delete" x="32" y ="32"/>
+	<use xlink:href="icons.svg#inline_inspect" x="48" y ="32"/>
+	<use xlink:href="icons.svg#inline_edit" x="0" y ="48"/>
+	<use xlink:href="icons.svg#sort_unsort" x="16" y ="48"/>
+	<use xlink:href="icons.svg#sort_asc" x="32" y ="48"/>
+	<use xlink:href="icons.svg#sort_desc" x="48" y ="48"/>
+	<use xlink:href="icons.svg#stop_icon" x="0" y ="64"/>
+	<use xlink:href="icons.svg#warning_icon" x="16" y ="64"/>
+	<use xlink:href="icons.svg#chat_bubble" x="32" y ="64"/>
+	<use xlink:href="icons.svg#success_icon" x="48" y ="64"/>
+	<use xlink:href="icons.svg#ballot_boolean_true" x="0" y ="80"/>
+	<use xlink:href="icons.svg#ballot_boolean_false" x="16" y ="80"/>
+	<use xlink:href="icons.svg#ballot_boolean_null" x="32" y ="80"/>
+	<use xlink:href="icons.svg#boolean_true" x="48" y ="80"/>
+	<use xlink:href="icons.svg#boolean_false" x="0" y ="96"/>
+	<use xlink:href="icons.svg#lock" x="16" y ="96"/>
+	<use xlink:href="icons.svg#flower_spinner" x="32" y ="96"/>
+	<use xlink:href="icons.svg#boolean_true" x="48" y ="96"/>
+</svg>

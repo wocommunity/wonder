@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>NSExecutable</key>
+        <string>${project.name}</string>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleExecutable</key>
+        <string>${project.name}</string>
+        <key>CFBundleGetInfoString</key>
+        <string></string>
+        <key>CFBundleIconFile</key>
+        <string>WOAfile.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>${project.groupId}.${project.artifactId}</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>WOA</string>
+        <key>CFBundlePackageType</key>
+        <string>FMWK</string>
+        <key>CFBundleShortVersionString</key>
+        <string>${project.version}</string>
+        <key>CFBundleSignature</key>
+        <string>webo</string>
+        <key>CFBundleVersion</key>
+        <string>${project.version}</string>
+        <key>Java</key>
+        <dict>
+                <key>JVMVersion</key>
+                <string>${maven.compiler.release}</string>
+        </dict>
+        <key>NSJavaClientRoot</key>
+        <string>Contents/WebServerResources/Java</string>
+        <key>NSJavaNeeded</key>
+        <true/>
+        <key>NSJavaPath</key>
+        <array>
+                <string>${project.build.finalName}.jar</string>
+        </array>
+        <key>NSJavaPathClient</key>
+        <string>${project.build.finalName}.jar</string>
+        <key>NSJavaRoot</key>
+        <string>Contents/Resources/Java</string>
+        <key>NSPrincipalClass</key>
+        <string>er.r2d2w.ERR2d2w</string>
+
+</dict>
+</plist>

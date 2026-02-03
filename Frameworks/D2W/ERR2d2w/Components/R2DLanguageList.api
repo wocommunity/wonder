@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="R2DLanguageList" wocomponentcontent="false">    <binding name="language"/>
+        <validation message="'language' must be bound to a settable value">
+            <unsettable name="language"/>
+        </validation>
+        <binding name="id"/>
+        <binding name="class"/>
+        <binding name="title"/>
+        <binding name="style"/>
+        <validation message="'language' is a required binding.">
+            <unbound name="language"/>
+        </validation>
+    </wo>
+</wodefinitions>

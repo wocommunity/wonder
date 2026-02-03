@@ -1,0 +1,41 @@
+Attachment: WOSwitchComponent {
+	WOComponentName = d2wContext.attachmentComponentName;
+	localContext = d2wContext;
+	object = object;
+}
+
+CurrentAttachment: WOConditional {
+	condition = objectPropertyValue;
+}
+
+FileUpload: WOFileUpload {
+	filePath = filePath;
+	streamToFilePath = tempFilePath;
+	finalFilePath = finalFilePath;
+	mimeType = mimeType;
+	overwrite = true;
+	id = labelID;
+	class = componentClasses;
+	title = d2wContext.tooltip;
+	accept = acceptTypes;
+	disabled = disabled;
+}
+
+Hint: R2D2WHintString {
+	d2wContext = d2wContext;
+}
+
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = "label";
+	for = labelID;
+}
+
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}

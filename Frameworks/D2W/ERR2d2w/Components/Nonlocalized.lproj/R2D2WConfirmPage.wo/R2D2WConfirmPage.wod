@@ -1,0 +1,109 @@
+BranchButton: ERXLinkButton5 {
+	action = nextPageAction;
+	class = d2wContext.branch.branchButtonID;
+	value = d2wContext.branch.branchButtonLabel;
+}
+
+BranchButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.branch.branchButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.buttonContentComponentName;
+}
+
+BranchRepetition: WORepetition {
+	item = d2wContext.branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+CancelButton: ERXLinkButton5 {
+	action = cancelAction;
+	class = "cancel";
+	value = d2wContext.cancelButtonLabel;
+}
+
+CancelButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.cancelButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.cancelButtonContentComponentName;
+}
+
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+ERDConfirmMessage: ERDConfirmMessage {
+	confirmMessageManditory = d2wContext.confirmMessageManditory;
+	dataSource = dataSource;
+	object = object;
+	confirmMessageKey = d2wContext.confirmMessageKey;
+	confirmRows = d2wContext.confirmRows;
+	confirmMessageTextfieldSize = d2wContext.confirmMessageTextfieldSize;
+	confirmMessageManditoryErrorMessage = d2wContext.confirmMessageManditoryErrorMessage;
+	confirmMessageExplanation = d2wContext.confirmMessageExplanation;
+	confirmMessageIsTextfield = d2wContext.confirmMessageIsTextfield;
+	confirmMessageTextfieldMaxlength = d2wContext.confirmMessageTextfieldMaxlength;
+}
+
+Errors: R2DErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+}
+
+Form: ERXWOForm {
+	disabled = d2wContext.formDisabled;
+	enctype = d2wContext.formEncoding;
+	multipleSubmit = true;
+	secure = d2wContext.secureForm;
+}
+
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasMessage: ERXNonNullConditional {
+	condition = message;
+}
+
+HasNoBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Message: WOString {
+	value = message;
+	escapeHTML = false;
+}
+
+OkButton: ERXLinkButton5 {
+	action = nextPageAction;
+	class = "ok";
+	value = d2wContext.okButtonLabel;
+}
+
+OkButtonContent: WOSwitchComponent {
+	buttonLabel = d2wContext.okButtonLabel;
+	localContext = d2wContext;
+	WOComponentName = d2wContext.okButtonContentComponentName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+explanationComponentName: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+	dataSource = dataSource;
+	object = object;
+	pageConfiguration = d2wContext.explanationConfigurationName;
+	settings = settings;
+}
+
+shouldProvideConfirmMessage: WOConditional {
+	condition = d2wContext.shouldProvideConfirmMessage;
+}
+
+showExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
+}

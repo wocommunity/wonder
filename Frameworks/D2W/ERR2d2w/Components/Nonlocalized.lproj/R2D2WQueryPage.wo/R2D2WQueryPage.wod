@@ -1,0 +1,36 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+ListPage: ERXD2WList {
+	dataSource = queryDataSource;
+	entityName = entity.name;
+	pageConfiguration = d2wContext.listConfigurationName;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+QueryForm: ERXWOForm {
+	class = d2wContext.task;
+	disabled = disableForm;
+	multipleSubmit = true;
+	enctype = d2wContext.formEncoding;
+	secure = d2wContext.secureForm;
+}
+
+QueryRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	localContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
+ShowListInPage: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+ShowResults: WOConditional {
+	condition = showResults;
+}

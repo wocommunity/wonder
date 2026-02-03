@@ -1,0 +1,24 @@
+EditEmail: ERXWOEmailField {
+	class = d2wContext.propertyClasses;
+	disabled = d2wContext.disabled;
+	id = labelID;
+	maxlength = d2wContext.maxLength;
+	size = length;
+	title = d2wContext.tooltip;
+	value = value;
+}
+
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+PropertyLabel: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = "label";
+	for = labelID;
+}
+
+Wrapper: WOGenericContainer {
+	class = componentClasses;
+	elementName = "div";
+}

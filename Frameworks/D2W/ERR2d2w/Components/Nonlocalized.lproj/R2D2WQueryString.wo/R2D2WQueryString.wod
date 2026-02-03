@@ -1,0 +1,15 @@
+LabelString: WOString {
+	value = d2wContext.displayNameForProperty;
+}
+
+String: WOTextField {
+	formatter = d2wContext.formatObject;
+	id = labelID;
+	value = displayGroupQueryMatchValue;
+}
+
+PropertyLabel: WOGenericContainer {
+	elementName = "label";
+	for = labelID;
+}
+

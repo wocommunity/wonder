@@ -1,0 +1,7 @@
+BreadCrumb: R2DBreadCrumb {
+	page = ^page;
+}
+
+ShowsTrail: WOConditional {
+	condition = showTrail;
+}

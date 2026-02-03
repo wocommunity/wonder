@@ -1,0 +1,34 @@
+Content: WOComponentContent {
+}
+
+Fieldset: WOGenericContainer {
+	elementName = "fieldset";
+	class = ^class;
+}
+
+Label: WOGenericContainer {
+	class = ^class;
+	elementName = "label";
+	for = labelID;
+}
+
+LegendString: WOString {
+	value = ^legendString;
+}
+
+RadioButton: WOGenericElement {
+	elementName = "input";
+	id = generateID;
+	name = uniqueID;
+	checked = isCurrentItemSelected;
+	type = "radio";
+	value = index;
+	disabled = isCurrentItemDisabled;
+}
+
+RadioButtonRepetition: WORepetition {
+	index = index;
+	item = currentItem;
+	list = ^list;
+}
+

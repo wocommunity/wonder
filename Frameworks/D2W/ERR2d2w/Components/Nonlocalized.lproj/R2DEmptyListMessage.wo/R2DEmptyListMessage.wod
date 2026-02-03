@@ -1,0 +1,33 @@
+CreateObjectLink : ERXLinkButton5 {
+	action = createObject;
+}
+
+CreateObjectString : ERXLocalizedString {
+	templateString = "ERDEmptyListMessage.createObjectStringTemplate";
+	object = bindings;
+	escapeHTML = false;
+}
+
+EmptyListMessage: WOString {
+	value = ^emptyListMessage;
+	escapeHTML = false;
+}
+
+EmptyListTemplate: ERXLocalizedString {
+	templateString = "ERDEmptyListMessage.emptyListMessage";
+	object = bindings;
+	escapeHTML = false;
+}
+
+HasMessage: ERXNonNullConditional {
+	condition = ^emptyListMessage;
+}
+
+HasNoMessage: ERXNonNullConditional {
+	condition = ^emptyListMessage;
+	negate = true;
+}
+
+ShowCreateObjectLink : WOConditional {
+	condition = showCreateObjectLink;
+}

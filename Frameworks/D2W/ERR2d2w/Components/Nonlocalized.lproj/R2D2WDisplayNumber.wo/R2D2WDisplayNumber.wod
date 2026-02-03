@@ -1,0 +1,11 @@
+Number: WOString {
+	numberformat = d2wContext.formatter;
+	value = objectPropertyValue;
+	valueWhenEmpty = d2wContext.valueWhenEmpty;
+}
+
+Wrapper: WOGenericContainer {
+	class = d2wContext.propertyClasses;
+	elementName = d2wContext.wrapperElement;
+	omitTags = hasWrapper;
+}

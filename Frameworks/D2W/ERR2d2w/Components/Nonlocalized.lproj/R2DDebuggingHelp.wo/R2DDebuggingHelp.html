@@ -1,0 +1,81 @@
+<webobject name = "ShowHelp">
+  <div class = "debugHelp">
+    <webobject name = "ComponentNameDebuggingEnabled">
+      <webobject name = "ToggleComponentNameDebugging">HIDE property-level component names</webobject>
+    </webobject>
+    <webobject name = "ComponentNameDebuggingDisabled">
+      <webobject name = "ToggleComponentNameDebugging">SHOW property-level component names</webobject>
+    </webobject>
+    <table border="1" cellpadding="1" cellspacing="1" class="debug">
+      <tr>
+        <td>Page Configuration</td>
+        <td>
+          <webobject name = "ConfigName" />
+          <div class = "contextHelp debug">
+            ◊ 
+              <table border="1">
+                <webobject name = "ContextKeys">
+                  <tr>
+                    <td><webobject name = "CurrentKey" /></td>
+                    <td><webobject name = "CurrentValue" /></td>
+                  </tr>
+                </webobject>
+              </table>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Task</td>
+        <td><webobject name = "Task" /></td>
+      </tr>
+      <tr>
+        <td>SubTask</td>
+        <td><webobject name = "SubTask" /></td>
+      </tr>
+      <tr>
+        <td>Tab Section</td>
+        <td><webobject name = "TabSection" /></td>
+      </tr>
+      <tr>
+        <td>Entity Name</td>
+        <td><webobject name = "EntityName" /></td>
+      </tr>
+      <tr>
+        <td>Template Name</td>
+        <td><webobject name = "TemplateName" /></td>
+      </tr>
+      <tr>
+        <td>Parent Page Configuration</td>
+        <td><webobject name = "ParentConfig" /></td>
+      </tr>
+      <webobject name = "HasEditingContext">
+        <tr>
+          <td>Page Editing Context</td>
+          <td>
+            <webobject name = "PageEC" />: 
+            <webobject name = "ShowECLink">Show</webobject>
+          </td>
+        </tr>
+      </webobject>
+      <tr>
+        <td>Default Editing Context</td>
+        <td>
+          <webobject name = "DefaultEC" />: 
+          <webobject name = "ShowDefaultECLink">Show</webobject>
+        </td>
+      </tr>
+      <tr>
+        <td>Rule tracing</td>
+        <td>Turn <webobject name = "OnOffLink" /></td>
+      </tr>
+    </table>
+    <webobject name = "D2WKeyForm">
+      <fieldset>
+        <legend>D2W Key</legend>
+        <label>Key</label>
+        <webobject name = "KeyField" />
+        <webobject name = "ValueOfD2WKey" />
+      </fieldset>
+    </webobject>
+  </div>
+</webobject>

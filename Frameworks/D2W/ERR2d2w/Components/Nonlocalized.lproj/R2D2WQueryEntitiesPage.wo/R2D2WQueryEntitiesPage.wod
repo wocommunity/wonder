@@ -1,0 +1,42 @@
+ContentWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.contentWrapperComponentName;
+	localContext = d2wContext;
+}
+
+EntitiesRepetition: WORepetition {
+	item = entityName;
+	list = d2wContext.visibleEntityNames;
+}
+
+HasQueryAttributes: WOConditional {
+	condition = hasQueryAttributes;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+}
+
+QueryAnyField: R2D2WQueryAnyField {
+	displayGroup = displayGroup;
+	localContext = d2wContext;
+	noSelectionString = d2wContext.noSelectionStringValue;
+}
+
+QueryForm: ERXWOForm {
+	action = queryAction;
+	disabled = d2wContext.formDisabled;
+	enctype = d2wContext.formEncoding;
+	multipleSubmit = true;
+	secure = d2wContext.secureForm;
+}
+
+QueryLink: ERXLinkButton5 {
+	action = showRegularQueryAction;
+	submit = false;
+	string = d2wContext.moreOptionsButtonLabel;
+}
+
+SearchButton: ERXLinkButton5 {
+	action = queryAction;
+	value = d2wContext.findButtonLabel;
+}

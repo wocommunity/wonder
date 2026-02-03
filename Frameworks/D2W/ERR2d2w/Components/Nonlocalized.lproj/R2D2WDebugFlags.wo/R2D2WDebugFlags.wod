@@ -1,0 +1,51 @@
+Show: WOConditional {
+	condition = application.isDevelopmentMode;
+}
+
+Log4J: ERXLinkButton5 {
+	actionClass = "ERXDirectAction";
+	directActionName = "log4j";
+	string = "Log4J";
+	target = "log4j";
+}
+
+D2W: ERXLinkButton5 {
+	action = toggleD2WInfo;
+	string = "D2W";
+}
+
+SQL: ERXLinkButton5 {
+	action = toggleAdaptorLogging;
+	string = "Toggle SQL";
+}
+
+Clear: ERXLinkButton5 {
+	action = clearD2WRuleCache;
+	string = "Clear D2W Cache";
+}
+
+Dump: ERXLinkButton5 {
+	actionClass = "ERXDirectAction";
+	directActionName = "dumpCreatedKeys";
+	string = "Created keys";
+	target = "dumpLocalizedKeys";
+}
+
+WOStats: ERXLinkButton5 {
+	action = statisticsPage;
+	string = "WOStats";
+	target = "stats";
+}
+
+Localization: ERXLinkButton5 {
+	actionClass = "ERXDirectAction";
+	directActionName = "editLocalizedFiles";
+	string = "Localization";
+	target = "localizer";
+}
+
+Test: ERXLinkButton5 {
+	actionClass = "er.selenium.SeleniumStartTesting";
+	string = "Run Test";
+	target = "selenium";
+}

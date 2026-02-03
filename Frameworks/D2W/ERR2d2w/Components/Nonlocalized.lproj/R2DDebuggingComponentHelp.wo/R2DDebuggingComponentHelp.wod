@@ -1,0 +1,16 @@
+ContextKeys: WORepetition {
+	list = contextDictionaryForPropertyKey.allKeys.@sortAsc.toString; // VALID
+	item = currentKey;
+}
+
+CurrentKey: WOString {
+	value = currentKey;
+}
+
+CurrentValue: WOString {
+	value = currentValue;
+}
+
+DebuggingEnabled: WOConditional {
+	condition = d2wDebuggingEnabled;
+}

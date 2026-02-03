@@ -1,0 +1,75 @@
+Checkbox: WOGenericElement {
+	elementName = "input";
+	type = "checkbox";
+	id = checkboxID;
+}
+
+IsSelected: WOConditional {
+	condition = isSelected;
+}
+
+Label: WOGenericContainer {
+	elementName = "label";
+	for = checkboxID;
+}
+
+Level1Items: WORepetition {
+	list = level1Items;
+	item = navigationItem;
+}
+
+Level2Items: WORepetition {
+	list = level2Items;
+	item = navigationItem;
+}
+
+Level3Items: WORepetition {
+	list = level3Items;
+	item = navigationItem;
+}
+
+ListItem: WOGenericContainer {
+	elementName = "li";
+	class = listItemClass;
+	omitTags = omitListItem;
+}
+
+L1NavObject: R2DNavigationMenuItem {
+	navigationItem = aNavigationItem;
+    level=1;
+    secure = navContext.secure; //VALID
+    navigationButtonContentComponentName = navigationButtonContentComponentName;
+    d2wContext = navContext;
+}
+
+L2NavObject: R2DNavigationMenuItem {
+	navigationItem = aNavigationItem;
+	level=2;
+    secure = navContext.secure; //VALID
+    navigationButtonContentComponentName = navigationButtonContentComponentName;
+    d2wContext = navContext;
+}
+
+L3NavObject: R2DNavigationMenuItem {
+	navigationItem = aNavigationItem;
+    level=3;
+    secure = navContext.secure; //VALID
+    navigationButtonContentComponentName = navigationButtonContentComponentName;
+    d2wContext = navContext;
+}
+
+NavLabel: ERXLocalizedString {
+	value = "R2DNavigationMenu.navMenuLabel";
+}
+
+ShowLevel1: WOConditional {
+	condition = level1Items.count;
+}
+
+ShowLevel2: WOConditional {
+	condition = showLevel2;
+}
+
+ShowLevel3: WOConditional {
+	condition = showLevel3;
+}

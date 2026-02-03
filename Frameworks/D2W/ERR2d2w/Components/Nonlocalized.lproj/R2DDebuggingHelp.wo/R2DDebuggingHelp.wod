@@ -1,0 +1,102 @@
+ComponentNameDebuggingDisabled: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
+	negate = true;
+}
+
+ComponentNameDebuggingEnabled: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
+}
+
+ConfigName: WOString {
+	value = ^d2wContext.pageConfiguration;
+	valueWhenEmpty = "No Page Configuration";
+}
+
+ContextKeys: WORepetition {
+	list = contextDictionaryForPage.allKeys.@sortAsc.toString; // VALID
+	item = currentKey;
+}
+
+CurrentKey: WOString {
+	value = currentKey;
+}
+
+CurrentValue: WOString {
+	value = currentValue;
+}
+
+D2WKeyForm: ERXWOForm {
+	disabled = context.isInForm;
+	secure = d2wContext.secureForm;
+}
+
+DefaultEC: WOString {
+	value = session.defaultEditingContext;
+}
+
+EntityName: WOString {
+	value = ^d2wContext.entity.name;
+}
+
+HasEditingContext: WOConditional {
+	condition = hasEditingContext;
+}
+
+KeyField: WOTextField {
+	value = key;
+}
+
+OnOffLink: ERXLinkButton5 {
+	action = toggleRuleTracing;
+	string = ruleTracingState;
+}
+
+PageEC: WOString {
+	value = editingContext;
+}
+
+ParentConfig: WOString {
+	value = ^d2wContext.parentPageConfiguration;
+	valueWhenEmpty = "No Parent Configuration";
+}
+
+ShowDefaultECLink: ERXLinkButton5 {
+	action = showDefaultEditingContext;
+}
+
+ShowECLink: ERXLinkButton5 {
+	action = showEditingContext;
+}
+
+ShowHelp: WOConditional {
+	condition = showHelp;
+}
+
+SubTask: WOString {
+	value = ^d2wContext.subTask;
+	valueWhenEmpty = "No Sub Task";
+}
+
+TabSection: WOString {
+	value = ^d2wContext.tabKey;
+	valueWhenEmpty = "No Current Page Name";
+}
+
+Task: WOString {
+	value = ^d2wContext.task;
+}
+
+TemplateName: WOString {
+	value = ^d2wContext.pageName;
+	valueWhenEmpty = "Now this is very strange";
+}
+
+ToggleComponentNameDebugging: ERXLinkButton5 {
+	action = toggleComponentNameDebugging;
+}
+
+ValueOfD2WKey: WOString {
+	value = debugValueForKey;
+	valueWhenEmpty = "No value set or empty";
+}
+

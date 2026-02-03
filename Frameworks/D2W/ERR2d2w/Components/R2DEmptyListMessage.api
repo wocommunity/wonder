@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DEmptyListMessage.java" wocomponentcontent="false">
+
+        <binding name="d2wContext"/>
+    <binding name="emptyListMessage"/>
+    </wo>
+</wodefinitions>

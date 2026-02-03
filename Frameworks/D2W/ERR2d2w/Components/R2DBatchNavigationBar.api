@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DBatchNavigationBar.java" wocomponentcontent="false">
+
+        <binding name="d2wContext"/>
+        <binding name="displayGroup"/>
+        <binding name="objectName"/>
+        <binding name="sortKeyList"/>
+    </wo>
+</wodefinitions>
