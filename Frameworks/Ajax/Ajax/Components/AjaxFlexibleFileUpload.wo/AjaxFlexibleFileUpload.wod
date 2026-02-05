@@ -1,9 +1,3 @@
-AjaxProxy : AjaxProxy {
-  name = ajaxProxyName;
-  proxyName = "wopage";
-  proxy = proxy;
-}
-
 SelectFileButtonWrapper : WOGenericContainer {
   elementName = "div";
   id = selectFileButtonWrapperId;

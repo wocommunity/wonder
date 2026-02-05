@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -13,7 +14,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXRequest;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.foundation.ERXPropertyListSerialization;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -101,45 +104,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
 		public static final String onClickBefore = "onClickBefore";
 	}
-
-	/**
-	 * Wrapper class to expose only the methods we need to {@link AjaxProxy}.
-	 * 
-	 * @author paulh
-	 * @see <a href="https://github.com/wocommunity/wonder/issues/768">#768</a>
-	 */
-	public final class Proxy {
-		/**
-		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
-		 * 
-		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
-		 */
-		public NSDictionary<String, ?> uploadState() {
-			return AjaxFlexibleFileUpload.this.uploadState();
-		}
-
-		/**
-		 * Wrapper for {@link AjaxFlexibleFileUpload#cancelUpload()}.
-		 */
-		public void cancelUpload() {
-			AjaxFlexibleFileUpload.this.cancelUpload();
-			return;
-		}
-
-		/**
-		 * Wrapper for {@link AjaxFlexibleFileUpload#uploadState()}.
-		 * 
-		 * @return see {@link AjaxFlexibleFileUpload#uploadState()}
-		 */
-		public WOActionResults clearFileResults() {
-			return AjaxFlexibleFileUpload.this.clearFileResults();
-		}
-	}
-
-	/**
-	 * Proxy used for method access by {@link AjaxProxy}
-	 */
-	public final Proxy proxy = new Proxy();
 
 	private String _refreshTime;
 	private String _clearLabel;
@@ -490,13 +454,72 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		return String.format("AFUProgressBarValue%s", id());
 	}
 	
+	private String componentUrl;
+	
+	public void awake() {
+		super.awake();
+		componentUrl = AjaxUtils.ajaxComponentActionUrl(context());
+	}
+	
 	/**
-	 * Unique identifier for the ajax proxy object for this upload component
+	 * This used to produce the name key for the Ajax proxy on the client side
+	 * script. Now it produces a request handler script since AjaxProxy is
+	 * removed.
 	 * 
-	 * @return identifier for the ajax proxy object for this upload component
+	 * @return the script which handles requests for upload, cancel, and clear.
 	 */
 	public String ajaxProxyName() {
-		return "jsonrpc" + id();
+		StringBuilder sb = new StringBuilder();
+		sb.append("{ wopage: { ")
+			.append("clearFileResults: function() {")
+			.append("var result;")
+			.append("new Ajax.Request('")
+			.append(componentUrl)
+			.append("', AjaxOptions.defaultOptions({parameters: {methodName: 'clearFileResults'}, asynchronous: false, onSuccess: function(transport){result=transport.responseText;}, onFailure: function(transport){result={};}})")
+			.append(");")
+			.append("return result;")
+			.append("},")
+			.append("cancelUpload: function() {")
+			.append("var result;")
+			.append("new Ajax.Request('")
+			.append(componentUrl)
+			.append("', AjaxOptions.defaultOptions({parameters: {methodName: 'cancelUpload'}, asynchronous: false, onSuccess: function(transport){result=transport.responseText;}, onFailure: function(transport){result={};}})")
+			.append(");")
+			.append("return result;")
+			.append("},")
+			.append("uploadState: function() {")
+			.append("var result;")
+			.append("new Ajax.Request('")
+			.append(componentUrl)
+			.append("', AjaxOptions.defaultOptions({parameters: {methodName: 'uploadState'}, asynchronous: false, onSuccess: function(transport){result=transport.responseJSON;}, onFailure: function(transport){result={};}})")
+			.append(");")
+			.append("return result;")
+			.append("}")
+			.append("}}");
+		return sb.toString();
+	}
+	
+	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+		if(AjaxUtils.shouldHandleRequest(aRequest, aContext, null)) {
+			String method = aRequest.stringFormValueForKey("methodName");
+			final WOActionResults result;
+			if("uploadState".equals(method)) {
+				String json = ERXPropertyListSerialization.jsonStringFromPropertyList(new NSDictionary<String,Object>(uploadState(), "nsdictionary"));
+				ERXResponse response = new ERXResponse(json);
+				response.setHeader("application/json", "Content-Type");
+				result = response;
+			} else if("clearFileResults".equals(method)) {
+				result = clearFileResults();
+			} else if("cancelUpload".equals(method)) {
+				cancelUpload();
+				result = super.invokeAction(aRequest, aContext);
+			} else {
+				result = super.invokeAction(aRequest, aContext);
+			}
+			return result;
+		} else {
+			return super.invokeAction(aRequest, aContext);
+		}
 	}
 	
 	/**
