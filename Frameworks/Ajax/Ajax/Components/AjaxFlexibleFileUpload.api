@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="AjaxFlexibleFileUpload" wocomponentcontent="false">    <binding defaults="Boolean" name="allowCancel"/>
+        <binding defaults="Boolean" name="autoSubmit"/>
+        <binding name="cancelButtonClass"/>
+        <binding name="canceledAction"/>
+        <binding name="cancelingText"/>
+        <binding name="cancelLabel"/>
+        <binding name="clearButtonClass"/>
+        <binding name="clearLabel"/>
+        <binding name="data"/>
+        <binding name="failedAction"/>
+        <binding name="filePath"/>
+        <binding name="finalFilePath"/>
+        <binding name="finishedAction"/>
+        <binding name="inputStream"/>
+        <binding name="keepTempFile"/>
+        <binding name="outputStream"/>
+        <binding defaults="Boolean" name="overwrite"/>
+        <binding name="refreshTime"/>
+        <binding name="selectFileButtonClass"/>
+        <binding name="selectFileLabel"/>
+        <binding name="startingText"/>
+        <binding name="streamToFilePath"/>
+        <binding name="succeededAction"/>
+        <binding name="uploadButtonClass"/>
+        <binding name="uploadLabel"/>
+    <binding defaults="Boolean" name="injectDefaultCSS"/>
+    <binding name="startedFunction"/>
+        <binding name="canceledFunction"/>
+        <binding name="succeededFunction"/>
+        <binding name="failedFunction"/>
+        <binding name="finishedFunction"/>
+    <binding defaults="Boolean" name="clearUploadProgressOnSuccess"/>
+    <binding name="mimeType"/>
+    <binding name="clearedFunction"/>
+        <binding name="clearedAction"/>
+    <binding name="accept"/>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,97 @@
+AjaxProxy : AjaxProxy {
+  name = ajaxProxyName;
+  proxyName = "wopage";
+  proxy = proxy;
+}
+
+SelectFileButtonWrapper : WOGenericContainer {
+  elementName = "div";
+  id = selectFileButtonWrapperId;
+}
+
+SelectFileButton : WOHyperlink {
+  href = "javascript:void(0);";
+  id = selectFileButtonId;
+  class = selectFileButtonClass;
+}
+
+SelectFileLabel : WOString {
+  value = selectFileLabel;
+}
+
+FileObjectWrapper : WOGenericContainer {
+  elementName = "div";
+  id = fileObjectId;
+  style = "display:none;";
+}
+
+FileNameWrapper : WOGenericContainer {
+  elementName = "div";
+  id = fileNameId;
+  class = "AFUFileNameWrapper";
+}
+
+FileNamePlaceholder : WOString {
+  value = startingText;
+}
+
+NotAutoSubmit : WOConditional {
+  condition = autoSubmit;
+  negate = true;
+}
+
+ManualUploadSubmitButton : WOHyperlink {
+  href = "javascript:void(0);";
+  onclick = manualSubmitUploadFunction;
+  id = submitUploadButtonId;
+  class = uploadButtonClass;
+}
+
+ManualUploadLabel : WOString {
+  value = uploadLabel;
+}
+
+ClearUploadButton : WOHyperlink {
+  href = "javascript:void(0);";
+  onclick = clearUploadFunction;
+  class = clearButtonClass;
+  id = clearUploadButtonId;
+  style = "display:none";
+}
+
+ClearLabel : WOString {
+  value = clearLabel;
+}
+
+ProgressBarWrapper : WOGenericContainer {
+  elementName = "div";
+  id = progressWrapperId;
+  class = "AFUProgressBarWrapper";
+  style = "display:none;";
+}
+
+ProgressBarAmount : WOGenericContainer {
+  elementName = "div";
+  class = "AFUProgressAmount";
+  id = progressBarValueId;
+}
+
+CancelButton : WOHyperlink {
+  href = "javascript:void(0);";
+  onclick = cancelUploadFunction;
+  id = cancelButtonId;
+  class = cancelButtonClass;
+  style = "display:none";
+}
+
+CancelLabel : WOString {
+  value = cancelLabel;
+}
+
+UploadScriptWrapper : ERXJavaScript {
+  hideInComment = false;
+}
+
+AjaxUploadScript : WOString {
+  value = ajaxUploadScript;
+}
