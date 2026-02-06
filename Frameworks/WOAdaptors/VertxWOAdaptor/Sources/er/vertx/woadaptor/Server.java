@@ -31,10 +31,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.bridge.BridgeEventType;
 import io.vertx.ext.bridge.PermittedOptions;
-import io.vertx.ext.web.RequestBody;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.sockjs.BridgeEvent;
 import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
@@ -113,10 +111,28 @@ public class Server extends VerticleBase {
 		 * The vertx 5 default is 10MB but a WORequest can handle int content length.
 		 * Anything over this value will return a 413 content too large.
 		 */
-		.handler(BodyHandler.create().setBodyLimit(Integer.MAX_VALUE))
+		//.handler(BodyHandler.create(false).setBodyLimit(Integer.MAX_VALUE))
+		/*
+		 * BodyHandler will parse form content and we want to pass it unmolested to WO.
+		 * So we will do it ourselves in this handler. This does NOT work in the
+		 * blocking handler below, because of errors indicating the request was already
+		 * read.
+		 */
+		.handler(context -> {
+			Buffer body = Buffer.buffer();
+			context.request().handler(body::appendBuffer);
+			context.request().endHandler(nil -> {
+				context.put("WORequestData", body);
+				context.next();
+			});
+		})
 		// TODO make WO non-blocking? :)
 		.blockingHandler(context -> {
-			final WORequest request = woRequestFromRoutingContext(context);
+			Buffer body = context.get("WORequestData");
+			NSData data = body.length() > 0 
+					? new WOInputStreamData(new NSData(body.getBytes())) 
+					: NSData.EmptyData;
+			final WORequest request = woRequestFromRoutingContext(context, data);
 			final WOResponse response = WOApplication.application().dispatchRequest(request);
 			handleResponseInContext(response, context);
 		});
@@ -153,7 +169,7 @@ public class Server extends VerticleBase {
 				: server.close();
 	}
 
-	private WORequest woRequestFromRoutingContext(final RoutingContext context) {
+	private WORequest woRequestFromRoutingContext(final RoutingContext context, NSData bodyData) {
 		// Read the headers
 		final NSMutableDictionary<String, NSMutableArray<String>> headers =
 				context.request().headers().entries().stream()
@@ -163,20 +179,7 @@ public class Server extends VerticleBase {
 						Collectors.mapping(
 								Map.Entry::getValue,
 								Collectors.toCollection(NSMutableArray::new))));
-		/*
-		 * Large bodies will block here, so we need to re-implement NSData using Java
-		 * NIO to fix that. Instead of using context.body(), implementing a
-		 * context.request().handler of some kind. Small bodies should enjoy good
-		 * performance however, assuming server responses are fast.
-		 */
-		final NSData data = Optional.of(context)
-				.map(RoutingContext::body)
-				.map(RequestBody::buffer)
-				.map(Buffer::getBytes)
-				.map(NSData::new)
-				.map(WOInputStreamData::new)
-				.map(NSData.class::cast)
-				.orElse(NSData.EmptyData);
+
 		final String httpVersion = switch (context.request().version()) {
 		case HTTP_1_0:
 			yield "HTTP/1.0";
@@ -190,7 +193,7 @@ public class Server extends VerticleBase {
 				context.request().absoluteURI(),
 				httpVersion,
 				headers,
-				data,
+				bodyData,
 				null // userInfo dictionary
 				);
 		worequest._setOriginatingAdaptor(adaptor);
