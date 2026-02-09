@@ -2,7 +2,6 @@ Table: WOGenericContainer {
 	elementName = "table";
 	summary = d2wContext.tableSummary;
 	class = d2wContext.tableClasses;
-	border = "1";
 }
 
 CaptionComponent: WOSwitchComponent {
