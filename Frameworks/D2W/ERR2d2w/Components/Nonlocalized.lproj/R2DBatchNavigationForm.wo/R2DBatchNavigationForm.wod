@@ -1,0 +1,71 @@
+HasBatches: WOConditional {
+	condition = ^displayGroup.hasMultipleBatches;
+}
+
+AnchorPrev: WOGenericContainer {
+	elementName = "a";
+	omitTags = isNotFirstBatch;
+}
+
+PreviousBatchLink: WOHyperlink {
+	disabled = isFirstBatch;
+	action = displayPreviousBatch;
+	string = localizer.R2DBatchNavigationBar.prevButtonLabel;
+	rel = "prev";
+}
+
+AnchorNext: WOGenericContainer {
+	elementName = "a";
+	omitTags = isNotLastBatch;
+}
+
+NextBatchLink: WOHyperlink {
+	disabled = isLastBatch;
+	action = displayNextBatch;
+	string = localizer.R2DBatchNavigationBar.nextButtonLabel;
+	rel = "next";
+}
+
+AvailableBatchSizes: WOPopUpButton {
+	list = availableBatchSizes;
+	item = batchSize;
+	displayString = batchSizeString;
+	selection = selectedBatchSize;
+}
+
+ApplyBatchSize: WOSubmitButton {
+	action = selectBatchSize;
+	value = localizer.R2DBatchNavigationBar.applyBatchSize;
+}
+
+PageNumber: WOString {
+	value = localizer.R2DBatchNavigationBar.page;
+}
+
+ItemsPerPage: WOString {
+	value = localizer.R2DBatchNavigationBar.items_per_page;
+}
+
+DisplayBatchSizes: WOConditional {
+	condition = hasMultipleBatchSizes;
+}
+
+BatchPageForm: ERXWOForm {}
+
+BatchSizeForm: ERXWOForm {}
+
+PageNumberField: ERXWONumberField {
+	min = 1;
+	max = ^displayGroup.batchCount;
+	value = page;
+}
+
+BatchCount: WOString {
+	numberformat = "#,###,##0";
+	value = ^displayGroup.batchCount;
+}
+
+GoToPage: WOSubmitButton {
+	action = goToPage;
+	value = localizer.R2DBatchNavigationBar.goToPage;
+}
