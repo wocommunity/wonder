@@ -1,9 +1,13 @@
-UnorderedList: WOGenericContainer {
-	elementName = "ul";
+Nav: WOGenericContainer {
+	elementName = "nav";
 	class = ^class;
 	id = ^id;
 	style = ^style;
 	title = ^title;
+}
+
+UnorderedList: WOGenericContainer {
+	elementName = "ul";
 }
 
 Languages: WORepetition {

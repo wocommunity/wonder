@@ -1,5 +1,7 @@
 package er.r2d2w.components.misc;
 
+import java.util.Objects;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
@@ -68,7 +70,16 @@ public class R2DLanguageList extends ERXStatelessComponent {
 	 * @return the name for the language localized in that language
 	 */
 	public String displayStringForLanguage() {
-		return ERXLocalizer.localizerForLanguage(languageOption()).localizedStringForKeyWithDefault(languageOption());
+		StringBuilder sb = new StringBuilder();
+		final ERXLocalizer current = ERXLocalizer.currentLocalizer();
+		String inCurrentLang = current.localizedStringForKeyWithDefault(languageOption());
+		final ERXLocalizer option = ERXLocalizer.localizerForLanguage(languageOption());
+		String inLocalLang = option.localizedStringForKeyWithDefault(languageOption());
+		sb.append(inLocalLang);
+		if(!Objects.equals(current, option)) {
+			sb.append(" (").append(inCurrentLang).append(")");
+		}
+		return sb.toString();
 	}
 
 	/**
