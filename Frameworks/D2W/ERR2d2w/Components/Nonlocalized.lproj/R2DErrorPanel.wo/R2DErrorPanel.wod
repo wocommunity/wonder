@@ -16,5 +16,5 @@ ErrorIcon: R2DSVGUseImage {
 }
 
 UseSVG: WOConditional {
-	condition = session.objectStore.modernizr.svg;
+	condition = d2wContext.enableSVG;
 }

@@ -3,7 +3,7 @@ HasMessage: WOConditional {
 }
 
 UseSVG: WOConditional {
-	condition = session.objectStore.modernizr.svg;
+	condition = d2wContext.enableSVG;
 }
 
 SVGIcon: R2DSVGUseImage {
