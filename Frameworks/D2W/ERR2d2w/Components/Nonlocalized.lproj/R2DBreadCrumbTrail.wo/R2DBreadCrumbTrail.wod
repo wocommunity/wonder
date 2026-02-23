@@ -1,7 +1,11 @@
-BreadCrumb: R2DBreadCrumb {
-	page = ^page;
+BreadCrumbs: R2DBreadCrumb {
+	page = context.page;
 }
 
 ShowsTrail: WOConditional {
 	condition = showTrail;
+}
+
+PageName: WOString {
+	value = d2wContext.displayNameForPageConfiguration;
 }

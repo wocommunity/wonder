@@ -1,6 +1,5 @@
 package er.r2d2w.components;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WPage;
 
@@ -19,11 +18,6 @@ public class R2DBreadCrumbTrail extends ERD2WStatelessComponent {
     }
 
 	public Boolean showTrail() {
-		WOComponent page = (WOComponent) valueForBinding("page");
-		if (page instanceof D2WPage) {
-			D2WPage d2wPage = (D2WPage) page;
-			return (d2wPage.nextPage() != null);
-		}
-		return false;
+		return context().page() instanceof D2WPage;
 	}
 }

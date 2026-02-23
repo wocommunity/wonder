@@ -1,16 +1,5 @@
-Checkbox: WOGenericElement {
-	elementName = "input";
-	type = "checkbox";
-	id = checkboxID;
-}
-
 IsSelected: WOConditional {
 	condition = isSelected;
-}
-
-Label: WOGenericContainer {
-	elementName = "label";
-	for = checkboxID;
 }
 
 Level1Items: WORepetition {
