@@ -6,36 +6,29 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.BindException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +85,6 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.formatters.ERXFormatterFactory;
-import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXExceptionUtilities;
@@ -317,52 +309,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		}
 	}
 
-	static class AppClassLoader extends URLClassLoader {
-
-		public static ClassLoader getAppClassLoader() {
-			String classPath = System.getProperty("java.class.path");
-			if (System.getProperty("com.webobjects.classpath") != null) {
-				classPath += File.pathSeparator + System.getProperty("com.webobjects.classpath");
-			}
-			String files[] = classPath.split(File.pathSeparator);
-			URL urls[] = new URL[files.length];
-			for (int i = 0; i < files.length; i++) {
-				String string = files[i];
-				try {
-					urls[i] = new File(string).toURI().toURL();
-				}
-				catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return new AppClassLoader(urls, Thread.currentThread().getContextClassLoader());
-		}
-
-		@Override
-		public synchronized Class<?> loadClass(String s, boolean flag) throws ClassNotFoundException {
-			SecurityManager securitymanager = System.getSecurityManager();
-			if (securitymanager != null) {
-				String s1 = s.replace('/', '.');
-				if (s1.startsWith("[")) {
-					int i = s1.lastIndexOf('[') + 2;
-					if (i > 1 && i < s1.length()) {
-						s1 = s1.substring(i);
-					}
-				}
-				int j = s1.lastIndexOf('.');
-				if (j != -1) {
-					securitymanager.checkPackageAccess(s1.substring(0, j));
-				}
-			}
-			return super.loadClass(s, flag);
-		}
-
-		AppClassLoader(URL aurl[], ClassLoader classloader) {
-			super(aurl, classloader);
-		}
-	}
-
 	private static Loader _loader;
 
 	/**
@@ -373,16 +319,10 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 	 * @author ak
 	 */
 	public static class Loader {
-
-		private JarChecker _checker;
-
-		/** Holds the framework names during startup */
-		private Set<String> allFrameworks;
-
-		private Properties allBundleProps;
-		private Properties defaultProperties;
 		
-		private List<URL> allBundlePropURLs = new ArrayList<>();
+		private Properties allBundleProps;
+		
+		private boolean didLoad;
 		
 		private Properties readProperties(File file) {
 			if (!file.exists()) {
@@ -455,147 +395,12 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		 */
 		public Loader(String[] argv) {
 			wasERXApplicationMainInvoked = true;
-			String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
 			propertiesFromArgv = NSProperties.valuesFromArgv(argv);
-			defaultProperties = (Properties) NSProperties._getProperties().clone();
-			allFrameworks = new HashSet<>();
-			_checker = new JarChecker();
-
-			for (int var = 0; var < cps.length; var++) {
-				String cpName = cps[var];
-				String cp = System.getProperty(cpName);
-				if (cp != null) {
-					String parts[] = cp.split(File.pathSeparator);
-					String normalLibs = "";
-					String systemLibs = "";
-					String jarLibs = "";
-					String frameworkPattern = ".*?/(\\w+)\\.framework/Resources/Java/\\1.jar".toLowerCase();
-					String appPattern = ".*?/(\\w+)\\.woa/Contents/Resources/Java/\\1.jar".toLowerCase();
-					String folderPattern = ".*?/Resources/Java/?$".toLowerCase();
-					String projectPattern = ".*?/(\\w+)/bin$".toLowerCase();
-					for (int i = 0; i < parts.length; i++) {
-						String jar = parts[i];
-						// Windows has \, we need to normalize
-						String fixedJar = jar.replace(File.separatorChar, '/').toLowerCase();
-						debugMsg("Checking: " + jar);
-						// all patched frameworks here
-						if (isSystemJar(jar)) {
-							systemLibs += jar + File.pathSeparator;
-						}
-						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
-							normalLibs += jar + File.pathSeparator;
-						}
-						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/erfoundation.jar") || fixedJar.matches(".*?/erwebobjects.jar")) {
-							normalLibs += jar + File.pathSeparator;
-						}
-						else {
-							jarLibs += jar + File.pathSeparator;
-						}
-						String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
-						String excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
-						if (bundle.matches("^\\w+$") && !bundle.matches(excludes)) {
-							String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
-							if (new File(info).exists()) {
-								allFrameworks.add(bundle);
-								debugMsg("Added Real Bundle: " + bundle);
-							}
-							else {
-								debugMsg("Omitted: " + info);
-							}
-						}
-						else if (jar.endsWith(".jar")) {
-							String info = stringFromJar(jar, "Resources/Info.plist");
-							if (info != null) {
-								NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(info);
-								bundle = (String) dict.objectForKey("CFBundleExecutable");
-								allFrameworks.add(bundle);
-								debugMsg("Added Jar bundle: " + bundle);
-							}
-						}
-						// MS: This is totally hacked in to make Wonder startup properly with the new rapid turnaround. It's duplicating (poorly)
-						// code from NSProjectBundle. I'm not sure we actually need this anymore, because NSBundle now fires an "all bundles loaded" event.
-						else if ((jar.endsWith("/bin") && new File(new File(jar).getParentFile(), "build.properties").exists()) || (jar.endsWith("/target/classes") && new File(new File(jar).getParentFile().getParentFile(), "build.properties").exists())) {
-							// AK: I have no idea if this is checked anywhere else, but this keeps is from having to set it in the VM args.
-							debugMsg("Plain bundle: " + jar);
-							for (File classpathFolder = new File(bundle); classpathFolder != null && classpathFolder.exists(); classpathFolder = classpathFolder.getParentFile()) {
-								File buildPropertiesFile = new File(classpathFolder, "build.properties");
-
-								if (buildPropertiesFile.exists()) {
-									try {
-										boolean isBundle = false;
-										String bundleName = classpathFolder.getName();
-										
-										if (buildPropertiesFile.exists()) {
-											Properties buildProperties = new Properties();
-											buildProperties.load(new FileReader(buildPropertiesFile));
-											if (buildProperties.get("project.name") != null) {
-												// the project folder might be named differently than the actual bundle name
-												bundleName = (String) buildProperties.get("project.name");
-
-												// Basing isBundle on "project.type" (commented out code) is probably better, but the maven archetypes don't contain a "project.type" property // Hugi 2025-11-07
-												isBundle = bundleName != null;
-												/*
-												String projectType = (String) buildProperties.get("project.type");
-												
-												if( "application".equals(projectType) || "framework".equals(projectType) ) {
-													isBundle = true;
-												}
-												*/
-											}
-										}
-
-										if (isBundle) {
-											System.setProperty("NSProjectBundleEnabled", "true");
-											allFrameworks.add(bundleName);
-											debugMsg("Added Binary Bundle (Project bundle): " + bundleName);
-										} else {
-											debugMsg("Skipping binary bundle: " + jar);
-										}
-									}
-									catch (Throwable t) {
-										System.err.println("Skipping '" + buildPropertiesFile + "': " + t);
-									}
-									break;
-								}
-								debugMsg("Skipping, no project: " + buildPropertiesFile);
-							}
-						}
-					}
-					String newCP = "";
-					if (normalLibs.length() > 1) {
-						normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
-						newCP += normalLibs;
-					}
-					if (systemLibs.length() > 1) {
-						systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-						newCP += (newCP.length() > 0 ? File.pathSeparator : "") + systemLibs;
-					}
-					if (jarLibs.length() > 1) {
-						jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
-						newCP += (newCP.length() > 0 ? File.pathSeparator : "") + jarLibs;
-					}
-					String jars[] = newCP.split(File.pathSeparator);
-					for (int i = 0; i < jars.length; i++) {
-						String jar = jars[i];
-						_checker.processJar(jar);
-					}
-					if (System.getProperty("_DisableClasspathReorder") == null) {
-						System.setProperty(cpName, newCP);
-					}
-				}
-			}
-			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray), "NSBundleDidLoadNotification", null);
-		}
-		
-		// for logging before logging has been setup and configured by loading the properties files
-		private void debugMsg(String msg) {
-			if ("DEBUG".equals(System.getProperty("er.extensions.appserver.projectBundleLoading"))) {
-				System.out.println(msg); 
-			}
+			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray), NSBundle.AllBundlesDidLoadNotification, null);
 		}
 		
 		public boolean didLoad() {
-			return (allFrameworks != null && allFrameworks.size() == 0);
+			return didLoad;
 		}
 
 		private NSBundle mainBundle() {
@@ -605,26 +410,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 				mainBundle = NSBundle.bundleForName(mainBundleName);
 			}
 			if (mainBundle == null) {
-				mainBundle = NSBundle.mainBundle();
-			}
-			if (mainBundle == null) {
-				// AK: when we get here, the main bundle wasn't inited yet
-				// so we do it ourself...
-				
-				try {
-					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
-					ClassPath.setAccessible(true);
-					if (ClassPath.get(NSBundle.class) != null) {
-						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
-						init.setAccessible(true);
-						init.invoke(NSBundle.class);
-					}
-				}
-				catch (Exception e) {
-					System.err.println(e);
-					e.printStackTrace();
-					System.exit(1);
-				}
 				mainBundle = NSBundle.mainBundle();
 			}
 			return mainBundle;
@@ -642,12 +427,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		 */
 		public void bundleDidLoad(NSNotification n) {
 			NSBundle bundle = (NSBundle) n.object();
-			if (allFrameworks.contains(bundle.name())) {
-				allFrameworks.remove(bundle.name());
-				debugMsg("Loaded " + bundle.name() + ". Remaining: " + allFrameworks);
-			} else if (bundle.isFramework()) {
-				debugMsg("Loaded unexpected framework bundle '" + bundle.name() + "'. Ensure your build.properties settings like project.name match the bundle name (including case).");
-			}
 			if (allBundleProps == null) {
 				allBundleProps = new Properties();
 			}
@@ -657,7 +436,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 			applyIfUnset(readProperties(bundle, "Properties." + userName));
 			applyIfUnset(readProperties(bundle, null));
 
-			if (allFrameworks.size() == 0) {
 				mainProps = null;
 				mainUserProps = null;
 				
@@ -692,8 +470,8 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 				}
 				urls.add(0,urls.remove(urls.size()-1));
 				// System.out.print(urls);
+				didLoad = true;
 				NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
-			}
 		}
 		
 
@@ -745,13 +523,10 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 
 						if (mainBundleJarPattern.matcher(urlAsString.toLowerCase()).find()) {
 							try {
-								propertiesPath = new URL(URLDecoder.decode(urlAsString, CharEncoding.UTF_8));
-								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
+								propertiesPath = new URI(URLDecoder.decode(urlAsString, StandardCharsets.UTF_8)).toURL();
+								userPropertiesPath = new URI(propertiesPath.toExternalForm() + userName).toURL();
 							}
-							catch (MalformedURLException exception) {
-								exception.printStackTrace();
-							}
-							catch (UnsupportedEncodingException exception) {
+							catch (MalformedURLException | URISyntaxException exception) {
 								exception.printStackTrace();
 							}
 
@@ -781,74 +556,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 			}
 		}
 
-	private boolean isSystemJar(String jar) {
-		// check system path
-		String systemRoot = System.getProperty("WORootDirectory");
-		if (systemRoot != null) {
-			if (jar.startsWith(systemRoot)) {
-				return true;
-			}
-		}
-		// check maven path
-		if (jar.indexOf("webobjects" + File.separator + "apple") > 0) {
-			return true;
-		}
-		// check mac path
-		if (jar.indexOf("System" + File.separator + "Library") > 0) {
-			return true;
-		}
-		// check win path
-		if (jar.indexOf("Apple" + File.separator + "Library") > 0) {
-			return true;
-		}
-		// if embedded, check explicit names
-		if (jar.matches("Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
-			return true;
-		}
-		return false;
-	}
-
-	private String stringFromJar(String jar, String path) {
-		JarFile f;
-		InputStream is = null;
-		try {
-			if (!new File(jar).exists()) {
-				ERXApplication.log.warn("Will not process jar '" + jar + "' because it cannot be found ...");
-				return null;
-			}
-			f = new JarFile(jar);
-			JarEntry e = (JarEntry) f.getEntry(path);
-			if (e != null) {
-				is = f.getInputStream(e);
-				ByteArrayOutputStream bout = new ByteArrayOutputStream();
-				int read = -1;
-				byte[] buf = new byte[1024 * 50];
-				while ((read = is.read(buf)) != -1) {
-					bout.write(buf, 0, read);
-				}
-
-				String content = new String(bout.toByteArray(), CharEncoding.UTF_8);
-				return content;
-			}
-			return null;
-		}
-		catch (FileNotFoundException e1) {
-			return null;
-		}
-		catch (IOException e1) {
-			throw NSForwardException._runtimeExceptionForThrowable(e1);
-		}
-		finally {
-			if (is != null) {
-				try {
-					is.close();
-				}
-				catch (IOException e) {
-					// ignore
-				}
-			}
-		}
-	}
 	}
 	
 	// You should not use ERXShutdownHook when deploying as servlet.
@@ -921,120 +628,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 	}
 	
 	/**
-	 * Utility class to track down duplicate items in the class path. Reports
-	 * duplicate packages and packages that are present in different versions.
-	 * 
-	 * @author ak
-	 */
-	public static class JarChecker {
-		private static class Entry {
-			long _size;
-			String _jar;
-
-			public Entry(long aL, String jar) {
-				_size = aL;
-				_jar = jar;
-			}
-
-			public long size() {
-				return _size;
-			}
-
-			public String jar() {
-				return _jar;
-			}
-
-			@Override
-			public boolean equals(Object other) {
-				if (other != null && other instanceof Entry) {
-					return ((Entry) other).size() == size();
-				}
-				return false;
-			}
-
-			@Override
-			public int hashCode() {
-				return (int) _size;
-			}
-
-			@Override
-			public String toString() {
-				return size() + "->" + jar();
-			}
-		}
-
-		private NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<>();
-
-		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<>();
-
-		private void processJar(String jar) {
-			File jarFile = new File(jar);
-			if (!jarFile.exists() || jarFile.isDirectory()) {
-				return;
-			}
-			try (JarFile f = new JarFile(jar)) {
-				for (Enumeration<JarEntry> enumerator = f.entries(); enumerator.hasMoreElements();) {
-					JarEntry entry = enumerator.nextElement();
-					String name = entry.getName();
-					if (entry.getName().endsWith("/") && !(name.matches("^\\w+/$") || name.startsWith("META-INF"))) {
-						NSMutableArray<String> bundles = packages.objectForKey(name);
-						if (bundles == null) {
-							bundles = new NSMutableArray<>();
-							packages.setObjectForKey(bundles, name);
-						}
-						bundles.addObject(jar);
-					}
-					else if (!(name.startsWith("src") || name.startsWith("META-INF"))) {
-						Entry e = new Entry(entry.getSize(), jar);
-						NSMutableSet<Entry> set = classes.objectForKey(name);
-						if (set == null) {
-							set = new NSMutableSet<>();
-							classes.setObjectForKey(set, name);
-						}
-						set.addObject(e);
-					}
-				}
-			}
-			catch (IOException e) {
-				startupLog.error("Error in processing jar: "+ jar, e);
-			}
-		}
-
-		private void reportErrors() {
-			StringBuilder sb = new StringBuilder();
-			String message = null;
-			NSArray<String> keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
-			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
-				String packageName = enumerator.nextElement();
-				NSMutableArray<String> bundles = packages.objectForKey(packageName);
-				if (bundles.count() > 1) {
-					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
-				}
-			}
-			message = sb.toString();
-			if (message.length() > 0) {
-				startupLog.debug("The following packages appear multiple times:\n" + message);
-			}
-			sb = new StringBuilder();
-			NSMutableSet<String> classPackages = new NSMutableSet<>();
-			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
-			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
-				String className = enumerator.nextElement();
-				String packageName = className.replaceAll("/[^/]+?$", "");
-				NSMutableSet<Entry> bundles = classes.objectForKey(className);
-				if (bundles.count() > 1 && !classPackages.containsObject(packageName)) {
-					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
-					classPackages.addObject(packageName);
-				}
-			}
-			message = sb.toString();
-			if (message.length() > 0) {
-				startupLog.debug("The following packages have different versions, you should remove the version you don't want:\n" + message);
-			}
-		}
-	}
-
-	/**
 	 * This heuristic to determine if an application is deployed as servlet relays on the fact, 
 	 * that contextClassName() is set WOServletContext or ERXWOServletContext
 	 * 
@@ -1051,10 +644,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 	 */
 	public static void setup(String[] argv) {
 		_loader = new Loader(argv);
-		if (System.getProperty("_DisableClasspathReorder") == null) {
-			ClassLoader loader = AppClassLoader.getAppClassLoader();
-			Thread.currentThread().setContextClassLoader(loader);
-		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		// NSPropertiesCoordinator.loadProperties();
@@ -1141,7 +730,7 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		if (_loader == null) {
 			System.out.println("No loader: " + System.getProperty("java.class.path"));
 		} else if (!_loader.didLoad()) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Debugging information can be enabled by adding the JVM argument: '-Der.extensions.appserver.projectBundleLoading=DEBUG'. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
+			throw new RuntimeException("ERXExtensions have not been initialized. Debugging information can be enabled by adding the JVM argument: '-Der.extensions.appserver.projectBundleLoading=DEBUG'. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + "none" + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
@@ -1155,10 +744,6 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 //				app.activateOptions();
 //			}
 //		}
-		if(_loader != null) {
-			_loader._checker.reportErrors();
-			_loader._checker = null;
-		}
 		didCreateApplication();
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
