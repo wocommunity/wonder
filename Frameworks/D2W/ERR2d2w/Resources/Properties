@@ -5,6 +5,9 @@
 er.extensions.ERXWOForm.useIdInsteadOfNameTag=true
 er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true
 
+#IE is long dead
+er.extensions.components.ERXLinkButton5.useIEConditionals=false
+
 # Don't use componentIdentifier
 er.extensions.foundation.ERXPatcher.DynamicElementsPatches.appendComponentIdentifier=false
 
