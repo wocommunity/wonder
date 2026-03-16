@@ -104,7 +104,12 @@ public class ERXLinkButton5 extends WOHTMLDynamicElement {
 	 * Defines if the hyperlink adds a default <code>rel="nofollow"</code> if an action is bound.
 	 */
 	private static boolean defaultNoFollow = ERXProperties.booleanForKey("er.extensions.ERXHyperlink.defaultNoFollow");
-
+	
+	/**
+	 * Property controlling the default value for useIEConditionals binding.
+	 */
+	private static boolean defaultUseIEConditionals = ERXProperties.booleanForKeyWithDefault("er.extensions.components.ERXLinkButton5.useIEConditionals", true);
+	
 	protected NSDictionary<String, WOAssociation> _otherQueryAssociations;
 	
 	protected WOAssociation _action;
@@ -390,7 +395,7 @@ public class ERXLinkButton5 extends WOHTMLDynamicElement {
 	
 	protected boolean useIEConditionalsInContext(WOContext context) {
 		return (_useIEConditionals == null)?
-				true:
+				defaultUseIEConditionals:
 				ERXValueUtilities.booleanValueWithDefault(_useIEConditionals.valueInComponent(context.component()), true);
 	}
 	
