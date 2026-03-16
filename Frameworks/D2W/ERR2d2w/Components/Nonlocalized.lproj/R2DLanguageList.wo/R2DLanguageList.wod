@@ -23,4 +23,5 @@ LanguageLink: ERXLinkButton5 {
 	string = displayStringForLanguage;
 	submit = false;
 	"xml:lang" = languageCode;
+	lang = languageCode;
 }
