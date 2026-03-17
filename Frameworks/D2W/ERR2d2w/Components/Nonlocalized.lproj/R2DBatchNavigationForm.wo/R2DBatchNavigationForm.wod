@@ -33,7 +33,7 @@ AvailableBatchSizes: WOPopUpButton {
 	selection = selectedBatchSize;
 }
 
-ApplyBatchSize: WOSubmitButton {
+ApplyBatchSize: ERXLinkButton5 {
 	action = selectBatchSize;
 	value = localizer.R2DBatchNavigationBar.applyBatchSize;
 }
@@ -65,7 +65,7 @@ BatchCount: WOString {
 	value = ^displayGroup.batchCount;
 }
 
-GoToPage: WOSubmitButton {
+GoToPage: ERXLinkButton5 {
 	action = goToPage;
 	value = localizer.R2DBatchNavigationBar.goToPage;
 }
