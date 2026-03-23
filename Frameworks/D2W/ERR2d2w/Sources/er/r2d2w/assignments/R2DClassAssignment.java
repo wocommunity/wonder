@@ -49,7 +49,7 @@ public class R2DClassAssignment extends ERDAssignment {
 	}
 	
 	protected String classesForKey(D2WContext c, String keyPath) {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("contentWrapper");
 		NSArray<String> keys = dependentKeys.objectForKey(keyPath);
 		for(String key : keys) {
 			String value = (String)c.valueForKeyPath(key);
