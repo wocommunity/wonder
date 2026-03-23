@@ -105,7 +105,6 @@ public class Server extends VerticleBase {
 				.addInboundPermitted(new PermittedOptions().setAddressRegex("client-req\\..+"))
 				.addOutboundPermitted(new PermittedOptions().setAddressRegex("server-event\\..+"));
 		router.route("/socket/*").subRouter(sockJS.bridge(bridgeOpts, SOCKET_EVENT_HANDLER));
-		// TODO register observers on NSNotificationCenter for event bus messages
 		router.route()
 		/*
 		 * The vertx 5 default is 10MB but a WORequest can handle int content length.

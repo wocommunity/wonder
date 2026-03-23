@@ -38,7 +38,6 @@ public class VertxWOAdaptor extends WOAdaptor implements VertxConfigDelegate {
 	private final int maxWorkers;
 	private final String wohost;
 	private final File certificatePath;
-	private final NSNotificationBridge bridge;
 
 	public VertxWOAdaptor(final String aName, final NSDictionary<String, Object> arguments) {
 		super(aName, arguments);
@@ -92,7 +91,6 @@ public class VertxWOAdaptor extends WOAdaptor implements VertxConfigDelegate {
 				.map(VertxConfigDelegate.class::cast)
 				.orElse(this)
 				.createVertx(this);
-		bridge = new NSNotificationBridge(vertx.eventBus());
 	}
 
 	public File certificatePath() {
@@ -120,7 +118,6 @@ public class VertxWOAdaptor extends WOAdaptor implements VertxConfigDelegate {
 
 	@Override
 	public void registerForEvents() {
-		bridge.registerForEvents();
 		final Server server = new Server(this);
 		/*
 		 * Block here until success. Otherwise, the auto launch might send your browser
@@ -151,7 +148,6 @@ public class VertxWOAdaptor extends WOAdaptor implements VertxConfigDelegate {
 
 	@Override
 	public void unregisterForEvents() {
-		bridge.unregisterForEvents();
 		Optional.ofNullable(serverId).ifPresent(vertx::undeploy);
 	}
 
