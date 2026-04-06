@@ -11,6 +11,36 @@
     <artifactId>woadaptors</artifactId>
     <packaging>pom</packaging>
     <name>WOAdaptors Frameworks</name>
+	<description>Project Wonder: A collection of frameworks designed for use with WebObjects.</description>
+	<url>https://wocommunity.org</url>
+
+	<organization>
+		<name>WOCommunity</name>
+		<url>http://www.wocommunity.org/</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>NetStruxr Public Software License</name>
+			<url>https://github.com/wocommunity/wonder/blob/master/Frameworks/Core/ERExtensions/Documentation/LICENSE.NPL</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Ramsey Gurley</name>
+			<email>ramseygurley@gmail.com</email>
+			<organization>WOCommunity</organization>
+			<organizationUrl>https://github.com/wocommunity/</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://github.com/wocommunity/wonder.git</connection>
+		<url>scm:git:https://github.com/wocommunity/wonder.git</url>
+		<developerConnection>scm:git:https://github.com/wocommunity/wonder.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
     <modules>
         <!-- <module>ERIMAdaptor</module> -->
