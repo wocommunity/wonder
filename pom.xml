@@ -49,7 +49,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<webobjects.version>5.4.3</webobjects.version>
-		<womodular.version>1.0.0</womodular.version>
 		<project.scm.id>github</project.scm.id>
 		<maven.compiler.release>25</maven.compiler.release>
 	</properties>
@@ -193,42 +192,42 @@
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-foundation</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-eocontrol</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-eoaccess</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-jdbcadaptor</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-webobjects</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-dtwgeneration</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-eoproject</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wocommunity</groupId>
 				<artifactId>wonder-modular-directtoweb</artifactId>
-				<version>${womodular.version}</version>
+				<version>[1.0.0,)</version>
 			</dependency>
 			<dependency>
 				<groupId>io.github.wocommunity.wonder.core</groupId>
