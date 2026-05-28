@@ -20,6 +20,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
       - name: Set up
         uses: actions/setup-java@v4
         with:
@@ -32,7 +36,12 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Install WebObjects
-        run: mvn io.github.wocommunity:woinstall-maven-plugin:woinstall
+        run: |
+          mkdir woinstalltmp
+          cd woinstalltmp
+          mvn io.github.wocommunity:woinstall-maven-plugin:woinstall
+          cd ..
+          rm -rf woinstalltmp
       - name: Configure git user
         run: |
           git config user.name "Github Actions"
@@ -48,9 +57,5 @@ jobs:
         working-directory: ./womodular
       - name: Cleanup womodular
         run: rm -rf womodular
-      - name: Checkout source
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch }}
       - name: Test build
         run: mvn clean verify
