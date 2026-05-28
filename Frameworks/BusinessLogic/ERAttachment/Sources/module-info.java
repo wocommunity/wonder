@@ -7,7 +7,7 @@ open module org.wocommunity.wonder.erattachment {
 	requires org.wocommunity.webobjects.eocontrol;
 	requires org.wocommunity.webobjects.eoaccess;
 	requires org.wocommunity.webobjects.webobjects;
-	requires org.wocommunity.wonder.ajax;
+	requires static org.wocommunity.wonder.ajax;
 	requires org.wocommunity.wonder.erextensions;
 
 	exports er.attachment;
