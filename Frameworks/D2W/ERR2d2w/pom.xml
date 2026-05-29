@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
 		<artifactId>d2w</artifactId>
-		<version>7.5-SNAPSHOT</version>
+		<version>8.0.0</version>
 	</parent>
 	<groupId>io.github.wocommunity.wonder.d2w</groupId>
 	<artifactId>err2d2w</artifactId>
@@ -37,7 +37,7 @@
 		<connection>scm:git:https://github.com/wocommunity/wonder.git</connection>
 		<url>scm:git:https://github.com/wocommunity/wonder.git</url>
 		<developerConnection>scm:git:https://github.com/wocommunity/wonder.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>wonder-8.0.0</tag>
 	</scm>
 	<dependencies>
 		<dependency>

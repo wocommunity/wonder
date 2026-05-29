@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.wocommunity.wonder</groupId>
 	<artifactId>wonder</artifactId>
-	<version>7.5-SNAPSHOT</version>
+	<version>8.0.0</version>
 	<packaging>pom</packaging>
 	
 	<name>Project Wonder</name>
@@ -37,7 +35,7 @@
 		<connection>scm:git:https://github.com/wocommunity/wonder.git</connection>
 		<url>scm:git:https://github.com/wocommunity/wonder.git</url>
 		<developerConnection>scm:git:https://github.com/wocommunity/wonder.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>wonder-8.0.0</tag>
 	</scm>
 
 	<modules>
