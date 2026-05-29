@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.github.wocommunity.wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>8.0.0</version>
+		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>eoadaptors</artifactId>
 	<packaging>pom</packaging>
@@ -37,7 +37,7 @@
 		<connection>scm:git:https://github.com/wocommunity/wonder.git</connection>
 		<url>scm:git:https://github.com/wocommunity/wonder.git</url>
 		<developerConnection>scm:git:https://github.com/wocommunity/wonder.git</developerConnection>
-		<tag>wonder-8.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<modules>
 		<module>JavaMemoryAdaptor</module>
