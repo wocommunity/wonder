@@ -710,12 +710,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
      * @return true if the list is not empty and shouldShowEditListButton is true
      */
     public Boolean shouldShowEditListButton() {
-        Boolean shouldShowEditListButton = !isListEmpty();
-        if (shouldShowEditListButton && ERXValueUtilities
-                .booleanValue(d2wContext().valueForKey("shouldShowEditListButton"))) {
-            shouldShowEditListButton = true;
-        }
-        return shouldShowEditListButton;
+    	return !isListEmpty() && ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowEditListButton"));
     }
 
 }
