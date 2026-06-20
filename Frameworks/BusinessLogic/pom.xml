@@ -41,5 +41,6 @@
 	</scm>
 	<modules>
 		<module>ERAttachment</module>
+		<module>ERCoreBusinessLogic</module>
 	</modules>
 </project>

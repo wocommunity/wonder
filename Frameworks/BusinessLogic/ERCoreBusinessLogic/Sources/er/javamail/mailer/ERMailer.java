@@ -9,8 +9,6 @@ package er.javamail.mailer;
 import java.io.File;
 import java.util.Enumeration;
 
-import javax.mail.MessagingException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +30,7 @@ import er.javamail.ERMailDelivery;
 import er.javamail.ERMailDeliveryHTML;
 import er.javamail.ERMailDeliveryPlainText;
 import er.javamail.ERMailFileAttachment;
+import jakarta.mail.MessagingException;
 
 /**
  * Mailer bridge class. Used to pull mail out of the
