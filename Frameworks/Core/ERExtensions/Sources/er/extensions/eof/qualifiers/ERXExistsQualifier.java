@@ -44,7 +44,6 @@ import com.webobjects.foundation.NSMutableSet;
 import er.extensions.eof.ERXKey;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
 
 /**
  * A qualifier that qualifies using an EXISTS clause.
@@ -68,7 +67,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 */
 	static final Logger log = LoggerFactory.getLogger(ERXExistsQualifier.class);
 
-	private static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ ,\\.'\"\\(]|$)");
+	static final Pattern PATTERN = Pattern.compile("([ '\"\\(]|^)(t)([0-9])([ ,\\.'\"\\(]|$)");
 
 	public static final String EXISTS_ALIAS = "exists";
 	public static final boolean UseSQLInClause = true;
@@ -95,6 +94,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * Public single argument constructor. Use this constructor for sub-qualification on the same table.
 	 * @param subqualifier sub-qualifier
 	 */
+	@SuppressWarnings("hiding")
 	public ERXExistsQualifier(EOQualifier subqualifier) {
 		this(subqualifier, null);
 	}
@@ -106,6 +106,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * @param baseKeyPath to the entity to which the subqualifier will be applied.  Note that this should end in a
      * relationship rather than an attribute, e.g., the key path from an Employee might be <code>department.division</code>.
 	 */
+	@SuppressWarnings("hiding")
 	public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath) {
 		super();
 		/*
@@ -136,7 +137,8 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
      * relationship rather than an attribute, e.g., the key path from an Employee might be <code>department.division</code>.
      * @param usesInQualInstead when true will convert the EXISTS clause into an IN clause - to be used if it makes the query plan faster.
 	 */
-    public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath, boolean usesInQualInstead) {
+    @SuppressWarnings("hiding")
+	public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath, boolean usesInQualInstead) {
 		this(subqualifier, baseKeyPath);
 		setUsesInQualInstead(usesInQualInstead);
 	}
@@ -470,12 +472,13 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	@Override
 	public boolean evaluateWithObject(Object object) {
 		boolean match = false;
-		NSKeyValueCodingAdditions obj = (NSKeyValueCodingAdditions) object;
-		if (obj != null && subqualifier != null) {
-			NSKeyValueCodingAdditions finalObj = baseKeyPath != null ? (NSKeyValueCodingAdditions) obj.valueForKeyPath(baseKeyPath) : obj;
-			if (finalObj != null) {
-				if (finalObj instanceof NSArray) {
-					NSArray<NSKeyValueCoding> objArray = (NSArray<NSKeyValueCoding>) finalObj;
+		if (object != null && subqualifier != null) {
+			if (baseKeyPath != null) {
+				object = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, baseKeyPath);
+			}
+			if (object != null) {
+				if (object instanceof NSArray) {
+					NSArray<NSKeyValueCoding> objArray = (NSArray<NSKeyValueCoding>) object;
 					objArray = ERXArrayUtilities.removeNullValues(objArray);
 					if (objArray != null && objArray.count() > 0) {
 						for (NSKeyValueCoding objInArray : objArray) {
@@ -491,7 +494,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 						}
 					}
 				} else {
-					match = subqualifier.evaluateWithObject(finalObj);
+					match = subqualifier.evaluateWithObject(object);
 				}
 			}
 		}
@@ -502,8 +505,8 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 		return usesInQualInstead;
 	}
 
+	@SuppressWarnings("hiding")
 	public void setUsesInQualInstead(boolean usesInQualInstead) {
 		this.usesInQualInstead = usesInQualInstead;
 	}
-	
 }
