@@ -1663,8 +1663,9 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	}
 
 	protected void _setValuesFromTargetAttribute() {
-		if (isFlattened()) {
-			EOAttribute property = (EOAttribute) _definitionArray.lastObject();
+		Object definition = _definitionArray.lastObject();
+		if (definition instanceof EOAttribute) {
+			EOAttribute property = (EOAttribute) definition;
 			setExternalType(property.externalType());
 			setClassName(property.className());
 			setValueType(property.valueType());
@@ -1676,19 +1677,18 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			setParameterDirection(property.parameterDirection());
 			setUserInfo(property.userInfo());
 			_setInternalInfo(property._internalInfo());
+			setValueFactoryClassName(property.valueFactoryClassName());
+			setValueFactoryMethodName(property.valueFactoryMethodName());
+			setAdaptorValueConversionClassName(property.adaptorValueConversionClassName());
+			setAdaptorValueConversionMethodName(property.adaptorValueConversionMethodName());
+			setFactoryMethodArgumentType(property.factoryMethodArgumentType());
 			int adaptorDataType = property.adaptorValueType();
 			if (adaptorDataType == AdaptorNumberType) {
 				setPrecision(property.precision());
 				setScale(property.scale());
 			}
-			else if (adaptorDataType == AdaptorDateType)
+			else if (adaptorDataType == AdaptorDateType) {
 				setServerTimeZone(property.serverTimeZone());
-			else if (adaptorDataType == AdaptorBytesType) {
-				setValueFactoryClassName(property.valueFactoryClassName());
-				setValueFactoryMethodName(property.valueFactoryMethodName());
-				setAdaptorValueConversionClassName(property.adaptorValueConversionClassName());
-				setAdaptorValueConversionMethodName(property.adaptorValueConversionMethodName());
-				setFactoryMethodArgumentType(property.factoryMethodArgumentType());
 			}
 		}
 	}
