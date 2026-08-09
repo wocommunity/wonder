@@ -22,6 +22,7 @@ import java.util.Properties;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -110,7 +111,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     * 
     * <div class="ja">タイプ変換されている値を内部でキャシュし、何回も同じ変換をする必要なくなります</div>
     */
-    private static Map<String, Object> _cache = Collections.synchronizedMap(new HashMap<>());
+    private static Map<String, Object> _cache = new ConcurrentHashMap<>();
 
     
     /**
