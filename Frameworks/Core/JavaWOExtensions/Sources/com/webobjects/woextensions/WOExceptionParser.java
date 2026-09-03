@@ -20,14 +20,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class WOExceptionParser {
     protected NSMutableArray _stackTrace;
@@ -45,31 +41,7 @@ public class WOExceptionParser {
     }
 
     protected NSArray _ignoredPackages() {
-        NSBundle bundle;
-        String path, content;
-        NSDictionary dic = null;
-        NSMutableArray<NSBundle> allBundles = new NSMutableArray<>(NSBundle.frameworkBundles());
-        NSMutableArray<String> ignored = new NSMutableArray<>();
-
-        for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {
-            bundle = (NSBundle) enumerator.nextElement();
-            path = WOApplication.application().resourceManager().pathForResourceNamed("WOIgnoredPackage.plist",bundle.name(),null);
-            if (path != null) {
-                content = _stringFromFileSafely(path);
-                if (content != null) {
-                    dic = (NSDictionary) NSPropertyListSerialization.propertyListFromString(content);
-                    if (dic != null && dic.containsKey("ignoredPackages")) {
-                        @SuppressWarnings("unchecked")
-						NSArray<String> tmpArray = (NSArray<String>) dic.objectForKey("ignoredPackages");
-                        if (tmpArray != null && tmpArray.count() > 0) {
-                            ignored.addObjectsFromArray(tmpArray);
-                        }
-                    }
-                }
-            }
-        }
-
-        return ignored;
+    	return NSArray.EmptyArray;
     }
 
     protected void _verifyPackageForLine(WOParsedErrorLine line, NSArray packages) {
