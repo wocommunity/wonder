@@ -685,10 +685,10 @@ public abstract class ERXApplication extends ERXAjaxApplication {
 		// ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 	}
 
-	@Override
-	public WOResourceManager createResourceManager() {
-		return new ERXResourceManager();
-	}
+//	@Override
+//	public WOResourceManager createResourceManager() {
+//		return new ERXResourceManager();
+//	}
 
 	/**
 	 * The ERXApplication constructor.
