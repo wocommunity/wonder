@@ -853,6 +853,7 @@
 							<publishingServerId>central</publishingServerId>
 							<tokenAuth>true</tokenAuth>
 							<autoPublish>true</autoPublish>
+							<checksums>required</checksums>
 						</configuration>
 					</plugin>
 					<plugin>
