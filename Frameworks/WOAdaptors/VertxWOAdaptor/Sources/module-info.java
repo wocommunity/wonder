@@ -4,6 +4,7 @@ open module org.wocommunity.wonder.vertxwoadaptor {
 	requires org.bouncycastle.provider;
 	requires org.bouncycastle.pkix;
 	requires io.netty.codec.compression;
+	requires io.netty.codec.http2;
 	requires transitive io.vertx.core;
 	requires io.vertx.eventbusbridge;
 	requires io.vertx.web;

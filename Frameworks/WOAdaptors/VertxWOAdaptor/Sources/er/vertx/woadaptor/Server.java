@@ -1,6 +1,9 @@
 package er.vertx.woadaptor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +20,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import io.netty.handler.codec.compression.StandardCompressionOptions;
+import io.netty.handler.codec.http2.Http2Error;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.VerticleBase;
@@ -89,8 +93,31 @@ public class Server extends VerticleBase {
 			cookie.setPath(wocookie.path());
 			cookie.setMaxAge(calculateMaxAge(wocookie));
 			return cookie;
-		}).forEach(res::addCookie); 
-		res.end(Buffer.buffer(response.content().bytes()));
+		}).forEach(res::addCookie);
+		if(response.contentInputStream() == null) {
+			res.end(Buffer.buffer(response.content().bytes()));
+		} else {
+			int bufferSize = response.contentInputStreamBufferSize();
+			byte[] chunk = new byte[bufferSize];
+			long contentLength = response.contentInputStreamLength();
+			int bytesRead;
+			res.putHeader(io.vertx.core.http.HttpHeaders.CONTENT_LENGTH, String.valueOf(contentLength));
+			try(InputStream is = response.contentInputStream()) {
+			    while ((bytesRead = is.read(chunk)) != -1) {
+			        if (res.closed()) break;
+			        Buffer buff = (bytesRead == bufferSize)
+			        		? Buffer.buffer(chunk)
+			        		: Buffer.buffer(Arrays.copyOfRange(chunk, 0, bytesRead));
+			        res.write(buff);
+			    }
+			    res.end();
+			} catch (IOException e) {
+				NSLog.err.appendln(e);
+				if(!res.ended()) {
+					res.reset(Http2Error.INTERNAL_ERROR.code());
+				}
+			}
+		}
 	}
 
 	HttpServer server() {
