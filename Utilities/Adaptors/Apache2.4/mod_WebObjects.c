@@ -41,6 +41,7 @@
  */
 
 #include "config.h"
+#include "shmem.h"
 #include "womalloc.h"
 #include "request.h"
 #include "response.h"
@@ -617,9 +618,30 @@ static void *WebObjects_create_config(apr_pool_t *p, server_rec *s)
  *	to assume it's in the apache conf directory.
  *
  */
+/*
+ *	Runs when Apache clears the configuration pool: at every graceful restart or
+ *	restart, before the configuration is read again and this module is reloaded.
+ *	Releases the shared-memory mapping that init_adaptor() made (see
+ *	WOShmem_cleanup in shmem.c for why this matters).
+ */
+static apr_status_t WebObjects_shutdown(void *data) {
+    WOShmem_cleanup();
+    adaptorEnabled = 0;
+    initCalled = 0;
+    return APR_SUCCESS;
+}
+
 static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
                                    apr_pool_t *ptemp, server_rec *s)  {
     WebObjects_config *wc;
+
+    /*
+     *	Apache runs post_config twice when it starts (the first pass only checks
+     *	the configuration) and once per restart. Nothing is mapped during the
+     *	check pass, which also covers "apachectl configtest".
+     */
+    if (ap_state_query(AP_SQ_MAIN_STATE) == AP_SQ_MS_CREATE_PRE_CONFIG)
+        return OK;
 
     if(!initCalled) {
         _webobjects_server = s;
@@ -635,10 +657,12 @@ static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
             adaptorEnabled = 1;
         } else {
             WOLog(WO_ERR, "WebObjects_post_config(): Adaptor initialization failed. All requests will be declined.");
+            WOShmem_cleanup();
             return DECLINED;
         }
 
         initCalled = 1;
+        apr_pool_cleanup_register(pconf, NULL, WebObjects_shutdown, apr_pool_cleanup_null);
     }
 
     return OK;

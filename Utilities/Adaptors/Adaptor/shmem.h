@@ -57,6 +57,11 @@ and limitations under the License.
 int WOShmem_init(const char *file, size_t memsize);
 
 /*
+ * Unmap the shared memory and close the backing file. See shmem.c.
+ */
+void WOShmem_cleanup(void);
+
+/*
  * Allocate or look up a chunk of shared memory.
  * regionName specifies the name of the region to locate.
  * If a region named regionName is found, and it's element

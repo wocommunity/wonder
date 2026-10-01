@@ -274,6 +274,33 @@ int WOShmem_init(const char *file, size_t memsize)
    return WOShmem_fd == -1;
 }
 
+/*
+ * Release the mapping made by WOShmem_init() and close its file descriptor.
+ *
+ * Apache unloads and reloads this module on every graceful restart or restart
+ * (SIGUSR1 / SIGHUP), which resets the statics above and runs WOShmem_init()
+ * again in the SAME parent process: a fresh, already-unlinked state file was
+ * mapped each time and the previous mapping was never released. On a 32-bit
+ * server every restart therefore ate address space until mmap() failed with
+ * ENOMEM ("WOShmem_init(): couldn't map file: Not enough space") and the
+ * adaptor declined every request until Apache was fully stopped and started
+ * (seen 2026-09-27 on an AIX box after about a year of nightly logrotate
+ * restarts). The Apache module calls this from a cleanup registered on the
+ * configuration pool, which Apache clears before each restart.
+ * Safe to call when nothing is mapped. Children that still hold the old
+ * mapping are not affected: the file lives on until its last mapping goes.
+ */
+void WOShmem_cleanup(void)
+{
+   if (WOShmem_base_address != MAP_FAILED && WOShmem_size != 0 && WOShmem_size != (unsigned int)-1)
+      munmap(WOShmem_base_address, WOShmem_size);
+   WOShmem_base_address = MAP_FAILED;
+   WOShmem_size = 0;
+   if (WOShmem_fd != -1)
+      close(WOShmem_fd);
+   WOShmem_fd = -1;
+}
+
 
 
 void *WOShmem_alloc(const char *regionName, size_t elementSize, unsigned int *elementCount)
