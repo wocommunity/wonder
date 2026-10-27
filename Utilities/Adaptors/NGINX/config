@@ -38,9 +38,16 @@ ADAPTOR_GIT_COMMIT=$(git -C "$ngx_addon_dir" rev-parse --short=8 HEAD 2>/dev/nul
 if [ -z "$ADAPTOR_GIT_COMMIT" ]; then
     ADAPTOR_GIT_COMMIT=$(git rev-parse --short=8 HEAD 2>/dev/null)
 fi
-if [ -n "$ADAPTOR_GIT_COMMIT" ]; then
-    CFLAGS="$CFLAGS -DADAPTOR_GIT_COMMIT=\\\"$ADAPTOR_GIT_COMMIT\\\""
+if [ -z "$ADAPTOR_GIT_COMMIT" ] && [ -f "$ngx_addon_dir/../../../.git-commit" ]; then
+    ADAPTOR_GIT_COMMIT=$(cut -c1-8 "$ngx_addon_dir/../../../.git-commit" 2>/dev/null)
 fi
+if [ -z "$ADAPTOR_GIT_COMMIT" ] && [ -f "$ngx_addon_dir/../.git-commit" ]; then
+    ADAPTOR_GIT_COMMIT=$(cut -c1-8 "$ngx_addon_dir/../.git-commit" 2>/dev/null)
+fi
+if [ -z "$ADAPTOR_GIT_COMMIT" ]; then
+    ADAPTOR_GIT_COMMIT="unknown"
+fi
+CFLAGS="$CFLAGS -DADAPTOR_GIT_COMMIT=\\\"$ADAPTOR_GIT_COMMIT\\\""
 
 if [ -n "$SUPPORT_REFUSENEWSESSION_ATTR" ] && [ "$SUPPORT_REFUSENEWSESSION_ATTR" != "0" ] && [ "$SUPPORT_REFUSENEWSESSION_ATTR" != "no" ]; then
     CFLAGS="$CFLAGS -DSUPPORT_REFUSENEWSESSION_ATTR"

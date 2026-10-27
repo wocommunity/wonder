@@ -23,9 +23,15 @@ ifdef SUPPORT_REFUSENEWSESSION_ATTR
 CFLAGS += -DSUPPORT_REFUSENEWSESSION_ATTR
 endif
 ADAPTOR_GIT_COMMIT ?= $(shell git rev-parse --short=8 HEAD 2>/dev/null)
-ifneq "$(ADAPTOR_GIT_COMMIT)" ""
-CFLAGS += -DADAPTOR_GIT_COMMIT=\"$(ADAPTOR_GIT_COMMIT)\"
+ifeq "$(ADAPTOR_GIT_COMMIT)" ""
+ifneq ("$(wildcard ../../.git-commit)","")
+ADAPTOR_GIT_COMMIT := $(shell cut -c1-8 ../../.git-commit 2>/dev/null)
 endif
+endif
+ifeq "$(ADAPTOR_GIT_COMMIT)" ""
+ADAPTOR_GIT_COMMIT := unknown
+endif
+CFLAGS += -DADAPTOR_GIT_COMMIT=\"$(ADAPTOR_GIT_COMMIT)\"
 CFLAGS += $(EXTRA_CFLAGS)
 
 COMMON_SRC = \
