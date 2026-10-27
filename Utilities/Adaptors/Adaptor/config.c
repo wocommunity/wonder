@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright (c) 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -136,7 +136,11 @@ int init_adaptor(struct _strtbl *options)
 #ifdef _MSC_VER // SWK adding more information to log string
     WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION " (Windows Apache Module).");
 #else
-    WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION ".");
+    if (ADAPTOR_GIT_COMMIT[0] != '\0') {
+        WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION " (commit " ADAPTOR_GIT_COMMIT ").");
+    } else {
+        WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION ".");
+    }
 #endif
     if (options) {
         char *optionsDescription = st_description(options);

@@ -97,6 +97,12 @@ HTTPResponse *WOAdaptorInfo(HTTPRequest *req, WOURLComponents *wc) {
    str_appendLiteral(content, "<p>Server = ");
    str_append(content, WA_adaptorName);
    str_appendLiteral(content, "<br>WebObjects Server Adaptor version = " ADAPTOR_VERSION);
+#if defined(ADAPTOR_GIT_COMMIT)
+   if (ADAPTOR_GIT_COMMIT[0] != '\0')
+   {
+      str_appendLiteral(content, "<br>Git commit = " ADAPTOR_GIT_COMMIT);
+   }
+#endif
    str_append(content, "<br>");
    str_appendLiteral(content, "WebObjects Configuration URI(s) = ");
    ac_description(content);

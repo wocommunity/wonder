@@ -16,6 +16,7 @@
 #include "MoreURLCUtilities.h"
 #include "log.h"
 #include "Platform.h"
+#include "listing.h"
 
 #define DEFAULT_WORKER_THREADS 10
 #define DEFAULT_REQUESTS_PER_THREAD 20
@@ -206,6 +207,7 @@ int main(int argc, char **argv) {
     unlink(log_file_path);
     st_add(options, WOLOGPATH, log_file_path, 0);
     st_add(options, WOLOGLEVEL, "DEBUG", 0);
+    st_add(options, WOUSERNAME, "public", 0);
     unlink("/tmp/test_shmem_state");
     st_add(options, WOSTATEFILE, "test_shmem_state", 0);
 
@@ -230,6 +232,36 @@ int main(int argc, char **argv) {
         pthread_join(threads[t], NULL);
     }
 
+    /* Test WOAdaptorInfo generation */
+    int info_check_ok = 1;
+    WOURLComponents wc;
+    memset(&wc, 0, sizeof(wc));
+    wc.prefix.start = "/cgi-bin/WebObjects";
+    wc.prefix.length = strlen(wc.prefix.start);
+    wc.applicationName.start = "WOAdaptorInfo";
+    wc.applicationName.length = strlen(wc.applicationName.start);
+    HTTPResponse *info_resp = WOAdaptorInfo(NULL, &wc);
+    if (info_resp && info_resp->content) {
+        if (!strstr(info_resp->content, "WebObjects Server Adaptor version = " ADAPTOR_VERSION)) {
+            fprintf(stderr, "ERROR: WOAdaptorInfo missing version string!\n");
+            info_check_ok = 0;
+        }
+        if (ADAPTOR_GIT_COMMIT[0] != '\0') {
+            if (!strstr(info_resp->content, "<br>Git commit = " ADAPTOR_GIT_COMMIT)) {
+                fprintf(stderr, "ERROR: WOAdaptorInfo missing git commit string!\n");
+                info_check_ok = 0;
+            } else {
+                printf("WOAdaptorInfo verified: version %s, git commit %s\n", ADAPTOR_VERSION, ADAPTOR_GIT_COMMIT);
+            }
+        }
+    } else {
+        fprintf(stderr, "ERROR: WOAdaptorInfo returned NULL or empty content!\n");
+        info_check_ok = 0;
+    }
+    if (info_resp) {
+        resp_free(info_resp);
+    }
+
     printf("\n=== Test Results ===\n");
     printf("Total requests sent:     %d\n", atomic_load(&total_sent));
     printf("Successful requests:     %d\n", atomic_load(&total_success));
@@ -242,7 +274,7 @@ int main(int argc, char **argv) {
     free(args);
 
     unlink("/tmp/test_shmem_state");
-    if (atomic_load(&total_failed) > 0 || atomic_load(&headers_without_colon) > 0) {
+    if (!info_check_ok || atomic_load(&total_failed) > 0 || atomic_load(&headers_without_colon) > 0) {
         printf("\nTEST RESULT: ISSUES DETECTED!\n");
         return 1;
     } else {
