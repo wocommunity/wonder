@@ -60,7 +60,7 @@ typedef int  intptr_t;
 #define ADAPTOR_VERSION "4.6.8"
 
 #ifndef ADAPTOR_GIT_COMMIT
-#define ADAPTOR_GIT_COMMIT ""
+#define ADAPTOR_GIT_COMMIT "unknown"
 #endif
 
 /* Used to turn the value of a macro into a string literal */

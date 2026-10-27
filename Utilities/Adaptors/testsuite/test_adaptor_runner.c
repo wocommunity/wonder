@@ -246,13 +246,14 @@ int main(int argc, char **argv) {
             fprintf(stderr, "ERROR: WOAdaptorInfo missing version string!\n");
             info_check_ok = 0;
         }
-        if (ADAPTOR_GIT_COMMIT[0] != '\0') {
-            if (!strstr(info_resp->content, "<br>Git commit = " ADAPTOR_GIT_COMMIT)) {
-                fprintf(stderr, "ERROR: WOAdaptorInfo missing git commit string!\n");
-                info_check_ok = 0;
-            } else {
-                printf("WOAdaptorInfo verified: version %s, git commit %s\n", ADAPTOR_VERSION, ADAPTOR_GIT_COMMIT);
-            }
+        const char *expected_commit = (ADAPTOR_GIT_COMMIT[0] != '\0') ? ADAPTOR_GIT_COMMIT : "unknown";
+        char commit_needle[64];
+        snprintf(commit_needle, sizeof(commit_needle), "<br>Git commit = %s", expected_commit);
+        if (!strstr(info_resp->content, commit_needle)) {
+            fprintf(stderr, "ERROR: WOAdaptorInfo missing expected commit needle '%s'!\n", commit_needle);
+            info_check_ok = 0;
+        } else {
+            printf("WOAdaptorInfo verified: version %s, git commit %s\n", ADAPTOR_VERSION, expected_commit);
         }
     } else {
         fprintf(stderr, "ERROR: WOAdaptorInfo returned NULL or empty content!\n");

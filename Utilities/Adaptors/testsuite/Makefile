@@ -1,6 +1,14 @@
 CC = clang
 GIT_COMMIT ?= $(shell git rev-parse --short=8 HEAD 2>/dev/null)
-COMMIT_FLAG = $(if $(GIT_COMMIT),-DADAPTOR_GIT_COMMIT=\"$(GIT_COMMIT)\")
+ifeq "$(GIT_COMMIT)" ""
+ifneq ("$(wildcard ../../../.git-commit)","")
+GIT_COMMIT := $(shell cut -c1-8 ../../../.git-commit 2>/dev/null)
+endif
+endif
+ifeq "$(GIT_COMMIT)" ""
+GIT_COMMIT := unknown
+endif
+COMMIT_FLAG = -DADAPTOR_GIT_COMMIT=\"$(GIT_COMMIT)\"
 CFLAGS = -O2 -g -Wall -Wsign-compare -I../Adaptor -DMACOS -DMULTITHREADED_ADAPTOR -DTHREAD_MODEL=2 -DALWAYS_LOG $(COMMIT_FLAG)
 CFLAGS_SINGLE = -O2 -g -Wall -Wsign-compare -I../Adaptor -DMACOS -DSINGLE_THREADED_ADAPTOR -DALWAYS_LOG $(COMMIT_FLAG)
 LDFLAGS = -lpthread
