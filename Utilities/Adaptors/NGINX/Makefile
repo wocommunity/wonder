@@ -22,6 +22,10 @@ CFLAGS ?= -O2 -g -Wall -fPIC -Wno-deprecated-non-prototype -Wno-unused-parameter
 ifdef SUPPORT_REFUSENEWSESSION_ATTR
 CFLAGS += -DSUPPORT_REFUSENEWSESSION_ATTR
 endif
+ADAPTOR_GIT_COMMIT ?= $(shell git rev-parse --short=8 HEAD 2>/dev/null)
+ifneq "$(ADAPTOR_GIT_COMMIT)" ""
+CFLAGS += -DADAPTOR_GIT_COMMIT=\"$(ADAPTOR_GIT_COMMIT)\"
+endif
 CFLAGS += $(EXTRA_CFLAGS)
 
 COMMON_SRC = \
