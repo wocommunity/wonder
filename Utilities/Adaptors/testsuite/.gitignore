@@ -1,0 +1,23 @@
+# Compiled test binaries
+test_wastring
+test_wastring_single
+test_adaptor_runner
+test_adaptor_runner_single
+
+# Object and debug symbol files
+*.o
+*.lo
+*.slo
+*.dSYM/
+
+# Runtime log and shared memory state files
+*.log
+test_adaptor.log
+test_shmem_state
+
+# Python cache and temporary files
+__pycache__/
+*.pyc
+
+# macOS system files
+.DS_Store
