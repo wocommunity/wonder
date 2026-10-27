@@ -182,7 +182,8 @@ WOURLError WOCheckURL(WOURLComponents *components) {
     const WOURLError e[11] = { WOURLInvalidPrefix, WOURLInvalidWebObjectsVersion, WOURLInvalidApplicationName,  WOURLInvalidSessionID, WOURLInvalidPageName, WOURLInvalidContextID, WOURLInvalidSenderID, WOURLInvalidApplicationNumber, WOURLInvalidApplicationHost, WOURLInvalidSuffix, WOURLInvalidQueryString };
 
     WOURLComponents prefixComponents;
-    int i, j;
+    int i;
+    unsigned int j;
 
     /* Check component starts. */
     for (i = 0; i <= 10; ++i) {

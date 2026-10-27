@@ -39,7 +39,7 @@ and limitations under the License.
 #include <stdio.h>	/* sprintf() */
 #include <stdlib.h>
 
-#ifdef SOLARIS || defined(AIX)
+#if defined(SOLARIS) || defined(AIX)
 #include <alloca.h>
 #endif
 

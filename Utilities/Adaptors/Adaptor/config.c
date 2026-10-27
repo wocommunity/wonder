@@ -156,10 +156,11 @@ int init_adaptor(struct _strtbl *options)
 
         /* Initialize the choice for a WOAdaptorState file */
         if ((s = st_valueFor(options, WOSTATEFILE)) != NULL) {
-            sharedS = WOMALLOC(strlen(TEMPDIRWITHSLASH) + strlen(s) + 1);
+            size_t prefixLen = strlen(TEMPDIRWITHSLASH);
+            sharedS = WOMALLOC(prefixLen + strlen(s) + 1);
             stateFile = sharedS;
-            strncpy(sharedS, TEMPDIRWITHSLASH, strlen(TEMPDIRWITHSLASH));
-            strcpy(sharedS+strlen(TEMPDIRWITHSLASH), s);
+            memcpy(sharedS, TEMPDIRWITHSLASH, prefixLen);
+            strcpy(sharedS + prefixLen, s);
         }
         WOLog(WO_INFO,"Adaptor shared state file: %s",stateFile);
 

@@ -448,38 +448,38 @@ static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *
    if (app->name[wc->applicationName.length - 1] == '/')	/* garbage? */
        app->name[wc->applicationName.length - 1] = '\0';
 
-       if (wc->applicationHost.length > 0) {
-          strncpy(app->host, wc->applicationHost.start, wc->applicationHost.length);
-          app->host[wc->applicationHost.length] = '\0';
-       } else
-       app->host[0] = '\0';
+   if (wc->applicationHost.length > 0) {
+      strncpy(app->host, wc->applicationHost.start, wc->applicationHost.length);
+      app->host[wc->applicationHost.length] = '\0';
+   } else
+   app->host[0] = '\0';
 
-       /*
-        *	is the session/application information in the URL?
-        *	if not, look in the cookies for the application instance number
-        *	in the cookies.
-        */
-       app->instance[0] = 0; /* default to any instance */
-       if (wc->applicationNumber.length > 0) {
-          if (wc->applicationNumber.length < WA_MAX_INSTANCE_NUMBER_LENGTH)
-          {
-             memcpy(app->instance, wc->applicationNumber.start, wc->applicationNumber.length);
-             app->instance[wc->applicationNumber.length] = 0;
-          }
-       } else {
-          const char *cookie, *woinst;
+   /*
+    *	is the session/application information in the URL?
+    *	if not, look in the cookies for the application instance number
+    *	in the cookies.
+    */
+   app->instance[0] = 0; /* default to any instance */
+   if (wc->applicationNumber.length > 0) {
+      if (wc->applicationNumber.length < WA_MAX_INSTANCE_NUMBER_LENGTH)
+      {
+         memcpy(app->instance, wc->applicationNumber.start, wc->applicationNumber.length);
+         app->instance[wc->applicationNumber.length] = 0;
+      }
+   } else {
+      const char *cookie, *woinst;
 
-          cookie = req_HeaderForKey(req, COOKIE);
-          if (cookie && ((woinst = strstr(cookie, INST_COOKIE)) != NULL)) {
-             const char *instid = &woinst[sizeof(INST_COOKIE)-1];
-             int len = 0;
-             while (len < WA_MAX_INSTANCE_NUMBER_LENGTH && instid[len] != ';' && instid[len])
-                len++;
-             if (len < WA_MAX_INSTANCE_NUMBER_LENGTH)
-             {
-                memcpy(app->instance, instid, len);
-                app->instance[len] = 0;
-             }
+      cookie = req_HeaderForKey(req, COOKIE);
+      if (cookie && ((woinst = strstr(cookie, INST_COOKIE)) != NULL)) {
+         const char *instid = &woinst[sizeof(INST_COOKIE)-1];
+         int len = 0;
+         while (len < WA_MAX_INSTANCE_NUMBER_LENGTH && instid[len] != ';' && instid[len])
+            len++;
+         if (len < WA_MAX_INSTANCE_NUMBER_LENGTH)
+         {
+            memcpy(app->instance, instid, len);
+            app->instance[len] = 0;
+         }
 
 			 // remove any quotes from the instance number
 #ifdef _MSC_VER // SWK Start VC can't define attributes here using '{' fixed it
@@ -497,21 +497,21 @@ static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *
 #ifdef _MSC_VER // SWK End
 			 }
 #endif
-             WOLog(WO_INFO,"Cookie instance %s from %s",app->instance,cookie);
-          }
-       }
+         WOLog(WO_INFO,"Cookie instance %s from %s",app->instance,cookie);
+      }
+   }
 
-       app->urlVersion = (wc->webObjectsVersion.start) ?
-       atoi(wc->webObjectsVersion.start) : CURRENT_WOF_VERSION_MAJOR;
+   app->urlVersion = (wc->webObjectsVersion.start) ?
+   atoi(wc->webObjectsVersion.start) : CURRENT_WOF_VERSION_MAJOR;
 
-       /*
-        *	Add the adaptor identifier header.
-        *  WOFramework checks for the presence of this header, so the name should not change.
-        *  (The value of the header is ignored by WOFramework.)
-        */
-       req_addHeader(req, "x-webobjects-adaptor-version", WA_adaptorName, 0);
+   /*
+    *	Add the adaptor identifier header.
+    *  WOFramework checks for the presence of this header, so the name should not change.
+    *  (The value of the header is ignored by WOFramework.)
+    */
+   req_addHeader(req, "x-webobjects-adaptor-version", WA_adaptorName, 0);
 
-       return NULL;  /* no errors */
+   return NULL;  /* no errors */
 }
 
 /*

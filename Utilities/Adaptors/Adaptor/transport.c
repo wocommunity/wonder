@@ -106,7 +106,7 @@ static void tr_clearConnectionPoolCallback(ShmemArray *array, unsigned int eleme
 WOConnection *tr_wrap_net_fd(net_fd s)
 {
    WOConnection *c;
-   c = WOCALLOC(sizeof(WOConnection), 1);
+   c = WOCALLOC(1, sizeof(WOConnection));
    if (c)
    {
       c->fd = s;
@@ -269,8 +269,8 @@ WOConnection *tr_open(WOInstanceHandle instHandle) {
       {
          if (usedPooledConnection)
             inst->reusedPoolConnectionCount++;
-         if (addedPooledConnection > inst->peakPoolSize)
-            inst->peakPoolSize = addedPooledConnection;
+         if (addedPooledConnection > 0 && (unsigned int)addedPooledConnection > inst->peakPoolSize)
+            inst->peakPoolSize = (unsigned int)addedPooledConnection;
       }
       ac_unlockInstance(instHandle);
    }
