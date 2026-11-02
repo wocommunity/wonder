@@ -307,6 +307,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                     if (pomFile.exists()) {
                         is = new FileInputStream(pomFile);
                         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+                        // Disable DTDs to prevent XML entity attacks
+                        String FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
+                        factory.setFeature(FEATURE, true);
+
                         DocumentBuilder builder = factory.newDocumentBuilder();
                         Document xml = builder.parse(is);
                         XPath xPath = XPathFactory.newInstance().newXPath();
