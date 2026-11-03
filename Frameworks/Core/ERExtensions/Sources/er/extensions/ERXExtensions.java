@@ -91,6 +91,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLogger;
+import er.extensions.logging.ERXNSLogSlf4jBridge;
 import er.extensions.partials.ERXPartialInitializer;
 import er.extensions.qualifiers.ERXFalseQualifier;
 import er.extensions.qualifiers.ERXFalseQualifierSupport;
@@ -210,7 +211,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         		// default behaviour:
         		ERXLogger.configureLoggingWithSystemProperties();
         	}
-        	
+
+        	// Reinstall after properties are loaded so the NSLog debug level is applied
+        	// unless er.extensions.ERXNSLogSlf4jBridge.ignoreNSLogSettings is true.
+        	ERXNSLogSlf4jBridge.install();
+
             ERXArrayUtilities.initialize();
             
     		// False by default

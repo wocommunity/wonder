@@ -114,6 +114,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXNSLogSlf4jBridge;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
 
@@ -1073,6 +1074,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			Thread.currentThread().setContextClassLoader(loader);
 		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
+
+		// Route NSLog through SLF4J before the principal class starts logging.
+		ERXNSLogSlf4jBridge.install();
+
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		// NSPropertiesCoordinator.loadProperties();
 		
