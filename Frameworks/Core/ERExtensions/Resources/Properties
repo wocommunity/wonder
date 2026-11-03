@@ -206,13 +206,6 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXOpenEditingContextLockTracesPassword = pw
 
 #########################################################################
-# Signal Handling
-#########################################################################
-# By default graceful signal handling is disabled
-er.extensions.ERXGracefulShutdown.Enabled=false
-er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
-
-#########################################################################
 # Navigation 
 #########################################################################
 # er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
