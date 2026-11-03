@@ -66,8 +66,10 @@ public class ERPDFWrapper extends ERXDynamicElement implements WOActionResults {
       NSData data = responseAsPdf(response, context);
       
       String filename = stringValueForBinding("filename", "result.pdf", component);
-      response.setHeader("inline; filename=\"" + filename + "\"", "content-disposition");
+      String downloadName = filename.endsWith(".pdf") ? filename : filename + ".pdf";
       response.setHeader("application/pdf", "Content-Type");
+      String cd = "inline; filename=\"" + downloadName.replace("\"", "") + "\"";
+      response.setHeader(cd, "Content-Disposition");
       response.setHeader(String.valueOf(data.length()), "Content-Length");
       response.setContent(data);
     }
