@@ -8,7 +8,8 @@ package er.directtoweb;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.BooleanAssignment;
@@ -46,7 +47,7 @@ import er.extensions.foundation.ERXDictionaryUtilities;
  */
 
 public class ERD2WContextDictionary {
-    private static final Logger log = Logger.getLogger(ERD2WContextDictionary.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WContextDictionary.class);
 
     public static class Configuration {
    		

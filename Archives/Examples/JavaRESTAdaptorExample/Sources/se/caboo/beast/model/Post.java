@@ -1,7 +1,8 @@
 package se.caboo.beast.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Post extends _Post {
-  private static Logger log = Logger.getLogger(Post.class);
+  private static Logger log = LoggerFactory.getLogger(Post.class);
 }

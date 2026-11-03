@@ -8,11 +8,12 @@ package er.workerchannel;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ERTestWorkUnit extends ERWorkUnit {
 
-    public static Logger log = Logger.getLogger(ERTestWorkUnit.class);
+    public static Logger log = LoggerFactory.getLogger(ERTestWorkUnit.class);
 
     private final String _name; 
     private final int _number; 

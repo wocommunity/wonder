@@ -1,6 +1,7 @@
 package er.directtoweb.pages;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 
@@ -23,7 +24,7 @@ public class ERD2WProgressPage extends ERD2WMessagePage {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WProgressPage.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WProgressPage.class);
 
     /** holds the task */
     protected ERXLongResponseTask _longResponseTask;

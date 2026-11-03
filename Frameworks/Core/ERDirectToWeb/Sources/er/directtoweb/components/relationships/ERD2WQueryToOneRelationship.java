@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components.relationships;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -49,7 +50,7 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ERD2WQueryToOneRelationship.class);
+    static final Logger log = LoggerFactory.getLogger(ERD2WQueryToOneRelationship.class);
 
     public ERD2WQueryToOneRelationship(WOContext context) {
         super(context);

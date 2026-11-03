@@ -1,6 +1,7 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -92,21 +93,21 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 			}
 			// trigger session loading if present
 			WOSession existing = existingSession();
-			Logger log = Logger.getLogger(logger);
+			Logger log = LoggerFactory.getLogger(logger);
 			if ("fatal".equalsIgnoreCase(level)) {
-				log.fatal(msg);
+				log.error("{}", msg);
 			}
 			else if ("error".equalsIgnoreCase(level)) {
-				log.error(msg);
+				log.error("{}", msg);
 			}
 			else if ("warn".equalsIgnoreCase(level)) {
-				log.warn(msg);
+				log.warn("{}", msg);
 			}
 			else if ("info".equalsIgnoreCase(level)) {
-				log.info(msg);
+				log.info("{}", msg);
 			}
 			else if ("debug".equalsIgnoreCase(level)) {
-				log.debug(msg);
+				log.debug("{}", msg);
 			}
 			return new ERXResponse();
 		}

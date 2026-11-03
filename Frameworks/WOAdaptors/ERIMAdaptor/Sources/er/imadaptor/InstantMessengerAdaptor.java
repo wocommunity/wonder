@@ -7,7 +7,8 @@ import java.util.Map;
 
 import net.kano.joscar.logging.LoggingSystem;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
@@ -31,7 +32,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	static {
 		LoggingSystem.setLogManager(new JOscarLogManager());
 	}
-	public static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
+	public static Logger log = LoggerFactory.getLogger(InstantMessengerAdaptor.class);
 
 	public static final String IM_FACTORY_KEY = "IMFactory";
 	public static final String SCREEN_NAME_KEY = "IMScreenName";

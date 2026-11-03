@@ -1,6 +1,7 @@
 package er.plugintest.tests;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
@@ -14,7 +15,7 @@ import er.plugintest.model.CountryLanguage;
 
 public class ReadTest extends PluginTest {
 
-	public static final Logger log = Logger.getLogger(ReadTest.class);
+	public static final Logger log = LoggerFactory.getLogger(ReadTest.class);
 	public ReadTest(String name) {
 		super(name);
 	}

@@ -6,11 +6,14 @@
 //
 package er.workerchannel;
 
-import er.extensions.logging.ERXLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class ERFutureResult extends ERResultUnit {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERFutureResult.class);
+    public static final Logger log = LoggerFactory.getLogger(ERFutureResult.class);
 
     private ERResultUnit _result;
 

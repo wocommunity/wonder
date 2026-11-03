@@ -1,6 +1,7 @@
 package er.directtoweb.components.buttons._ajax;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -24,7 +25,7 @@ import er.extensions.validation.ERXValidationFactory;
 
 public class ERDAjaxTrashcan extends ERDTrashcan {
 	public String effectDuration = "0.8"; // FIXME: turn into property
-    public final static Logger log = Logger.getLogger(ERDAjaxTrashcan.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDAjaxTrashcan.class);
     public String errorMessage = null;
 
     public ERDAjaxTrashcan(WOContext context) {

@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -27,7 +28,7 @@ public abstract class _SPSecretPal extends  ERXGenericRecord {
   public static final String GIVER_KEY = GIVER.key();
   public static final String RECEIVER_KEY = RECEIVER.key();
 
-  private static Logger LOG = Logger.getLogger(_SPSecretPal.class);
+  private static Logger LOG = LoggerFactory.getLogger(_SPSecretPal.class);
 
   public SPSecretPal localInstanceIn(EOEditingContext editingContext) {
     SPSecretPal localInstance = (SPSecretPal)EOUtilities.localInstanceOfObject(editingContext, this);

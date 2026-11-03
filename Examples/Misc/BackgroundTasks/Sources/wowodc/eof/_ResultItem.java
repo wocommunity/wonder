@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import er.extensions.eof.*;
@@ -52,7 +53,7 @@ public abstract class _ResultItem extends er.extensions.eof.ERXGenericRecord {
     public static final String KEY_TASK_INFO = "taskInfo";
     public static final ERXKey<wowodc.eof.TaskInfo> XKEY_TASK_INFO = new ERXKey<wowodc.eof.TaskInfo>(KEY_TASK_INFO);
 
-  private static Logger LOG = Logger.getLogger(_ResultItem.class);
+  private static Logger LOG = LoggerFactory.getLogger(_ResultItem.class);
 
   public ResultItem localInstanceIn(EOEditingContext editingContext) {
     ResultItem localInstance = (ResultItem)EOUtilities.localInstanceOfObject(editingContext, this);

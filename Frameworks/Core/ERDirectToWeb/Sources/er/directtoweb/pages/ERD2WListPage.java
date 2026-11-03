@@ -13,7 +13,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -101,7 +102,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	private static final long serialVersionUID = 1L;
 
 	/** logging support */
-	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
+	public final static Logger log = LoggerFactory.getLogger(ERD2WListPage.class);
     
     protected boolean _shouldRefetch;
     

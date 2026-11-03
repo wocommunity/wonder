@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -31,7 +32,7 @@ public abstract class _SPWish extends  ERXGenericRecord {
   public static final String SUGGESTED_BY_KEY = SUGGESTED_BY.key();
   public static final String SUGGESTED_FOR_KEY = SUGGESTED_FOR.key();
 
-  private static Logger LOG = Logger.getLogger(_SPWish.class);
+  private static Logger LOG = LoggerFactory.getLogger(_SPWish.class);
 
   public SPWish localInstanceIn(EOEditingContext editingContext) {
     SPWish localInstance = (SPWish)EOUtilities.localInstanceOfObject(editingContext, this);

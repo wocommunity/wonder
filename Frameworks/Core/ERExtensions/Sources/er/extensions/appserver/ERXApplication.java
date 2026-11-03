@@ -40,7 +40,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -113,6 +114,7 @@ import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXNSLogSlf4jBridge;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
 
@@ -159,16 +161,16 @@ import er.extensions.statistics.ERXStats;
  */
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
 	/** logging support */
-	public static final Logger log = Logger.getLogger(ERXApplication.class);
+	public static final Logger log = LoggerFactory.getLogger(ERXApplication.class);
 
 	/** request logging support */
-	public static final Logger requestHandlingLog = Logger.getLogger("er.extensions.ERXApplication.RequestHandling");
+	public static final Logger requestHandlingLog = LoggerFactory.getLogger("er.extensions.ERXApplication.RequestHandling");
 
 	/** statistic logging support */
-	public static final Logger statsLog = Logger.getLogger("er.extensions.ERXApplication.Statistics");
+	public static final Logger statsLog = LoggerFactory.getLogger("er.extensions.ERXApplication.Statistics");
 
 	/** startup logging support */
-	public static final Logger startupLog = Logger.getLogger("er.extensions.ERXApplication.Startup");
+	public static final Logger startupLog = LoggerFactory.getLogger("er.extensions.ERXApplication.Startup");
 
 	private static boolean wasERXApplicationMainInvoked = false;
 
@@ -1072,6 +1074,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			Thread.currentThread().setContextClassLoader(loader);
 		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
+
+		// Route NSLog through SLF4J before the principal class starts logging.
+		ERXNSLogSlf4jBridge.install();
+
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		// NSPropertiesCoordinator.loadProperties();
 		
@@ -1177,7 +1183,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		// ak: telling Log4J to re-init the Console appenders so we get logging
 		// into WOOutputPath again
-		for (Enumeration e = Logger.getRootLogger().getAllAppenders(); e.hasMoreElements();) {
+		for (Enumeration e = org.apache.log4j.Logger.getRootLogger().getAllAppenders(); e.hasMoreElements();) {
 			Appender appender = (Appender) e.nextElement();
 			if (appender instanceof ConsoleAppender) {
 				ConsoleAppender app = (ConsoleAppender) appender;
@@ -1624,16 +1630,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			success = true;
 		}
 		catch (SecurityException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (NoSuchFieldException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (IllegalArgumentException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		catch (IllegalAccessException e) {
-			log.error(e, e);
+			log.error(e.getMessage(), e);
 		}
 		if(!success) {
 			super.refuseNewSessions(value);
@@ -1922,8 +1928,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				// state.
 				if (shouldQuit) {
 					NSLog.err.appendln("Ran out of memory, killing this instance");
-					log.fatal("Ran out of memory, killing this instance");
-					log.fatal("Ran out of memory, killing this instance", throwable);
+					log.error("Ran out of memory, killing this instance");
+					log.error("Ran out of memory, killing this instance", throwable);
 				}
 			}
 			else {
@@ -2064,7 +2070,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-			ERXApplication.requestHandlingLog.debug(request);
+			ERXApplication.requestHandlingLog.debug("{}", request);
 		}
 
 		try {

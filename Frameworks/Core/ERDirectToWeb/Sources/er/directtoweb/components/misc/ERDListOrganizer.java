@@ -8,7 +8,8 @@ package er.directtoweb.components.misc;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -39,7 +40,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     public ERDListOrganizer(WOContext context) { super(context); }
     
     /* logging support */
-    public static final Logger log = Logger.getLogger(ERDListOrganizer.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDListOrganizer.class);
 
     public ERXKeyValuePair availableObject;
     public NSMutableArray selectedObjects;   

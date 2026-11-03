@@ -3,7 +3,8 @@ package er.caching;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.meetup.memcached.SockIOPool;
 import com.meetup.memcached.test.UnitTests;
@@ -31,7 +32,7 @@ import er.extensions.foundation.ERXProperties;
  */
 public class ERCaching extends ERXFrameworkPrincipal {
 
-	private static Logger log = Logger.getLogger(ERCaching.class);
+	private static Logger log = LoggerFactory.getLogger(ERCaching.class);
 	
     static {
         setUpFrameworkPrincipalClass(ERCaching.class);

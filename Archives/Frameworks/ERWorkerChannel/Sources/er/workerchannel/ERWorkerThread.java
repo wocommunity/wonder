@@ -6,11 +6,14 @@
 //
 package er.workerchannel;
 
-import er.extensions.logging.ERXLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 class ERWorkerThread extends Thread {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERWorkerThread.class);
+    public static final Logger log = LoggerFactory.getLogger(ERWorkerThread.class);
 
     private final ERWorkerChannel _channel;
     private volatile boolean _wasShutdownRequested = false;

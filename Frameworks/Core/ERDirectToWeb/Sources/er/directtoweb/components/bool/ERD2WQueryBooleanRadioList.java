@@ -1,6 +1,7 @@
 package er.directtoweb.components.bool;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryBoolean;
@@ -34,7 +35,7 @@ public class ERD2WQueryBooleanRadioList extends D2WQueryBoolean {
 
     /** logging support */
     @SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ERD2WQueryBooleanRadioList.class);
+	private static final Logger log = LoggerFactory.getLogger(ERD2WQueryBooleanRadioList.class);
     protected NSArray<String> _choicesNames;
     
     public ERD2WQueryBooleanRadioList(WOContext context) {

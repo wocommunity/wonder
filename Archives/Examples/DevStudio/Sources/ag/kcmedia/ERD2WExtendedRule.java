@@ -6,7 +6,8 @@
 //
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.Rule;
@@ -20,7 +21,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
 
 public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderInterface {
-    private static Logger log = Logger.getLogger(DirectAction.class);
+    private static Logger log = LoggerFactory.getLogger(DirectAction.class);
 
     public ERD2WExtendedRule() {
         super();

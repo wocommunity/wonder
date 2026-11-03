@@ -1,6 +1,7 @@
 package er.ercmail;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.ERXConstant;
 
@@ -10,7 +11,7 @@ import er.extensions.eof.ERXConstant;
 public class ERCMailState extends ERXConstant.StringConstant {
 
 	/** logging support */
-    public static final Logger log = Logger.getLogger(ERCMailState.class);
+    public static final Logger log = LoggerFactory.getLogger(ERCMailState.class);
 
     public ERCMailState(String key, String name) {
         super(key, name);

@@ -2,8 +2,9 @@
 package $entity.packageName;
 
 #end
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ${entity.classNameWithoutPackage} extends ${entity.prefixClassNameWithOptionalPackage} {
-  private static Logger log = Logger.getLogger(${entity.classNameWithoutPackage}.class);
+  private static Logger log = LoggerFactory.getLogger(${entity.classNameWithoutPackage}.class);
 }

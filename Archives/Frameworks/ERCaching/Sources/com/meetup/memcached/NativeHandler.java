@@ -20,7 +20,8 @@ package com.meetup.memcached;
 import java.util.Date;
 
 import org.apache.commons.lang.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handle encoding standard Java types directly which can result in significant
@@ -92,7 +93,7 @@ public class NativeHandler {
 
 	// logger
 	private static Logger log =
-		Logger.getLogger( NativeHandler.class.getName() );
+		LoggerFactory.getLogger( NativeHandler.class.getName() );
 
 	/** 
 	 * Detemine of object can be natively serialized by this class. 

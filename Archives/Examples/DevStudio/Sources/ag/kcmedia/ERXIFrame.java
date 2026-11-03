@@ -6,14 +6,15 @@
 //
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 
 public class ERXIFrame extends WOComponent {
-    static final Logger log = Logger.getLogger(ERXIFrame.class);
+    static final Logger log = LoggerFactory.getLogger(ERXIFrame.class);
 
     public ERXIFrame(WOContext context) {
         super(context);

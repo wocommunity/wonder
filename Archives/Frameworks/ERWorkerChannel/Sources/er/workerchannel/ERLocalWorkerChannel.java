@@ -6,11 +6,14 @@
 //
 package er.workerchannel;
 
-import er.extensions.logging.ERXLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class ERLocalWorkerChannel implements ERWorkerChannel {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERLocalWorkerChannel.class);
+    public static final Logger log = LoggerFactory.getLogger(ERLocalWorkerChannel.class);
 
     private final int _queueSize;
     private ERWorkUnit[] _workUnitQueue;

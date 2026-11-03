@@ -13,7 +13,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eodistribution.client.EOHTTPChannel;
 import com.webobjects.foundation.NSCoder;
@@ -38,7 +39,7 @@ import er.extensions.foundation.ERXProperties;
  */
 public class ERHTTPChannel extends EOHTTPChannel {
 
-	private static final Logger log = Logger.getLogger(ERHTTPChannel.class);
+	private static final Logger log = LoggerFactory.getLogger(ERHTTPChannel.class);
 
 	private String url;
 	

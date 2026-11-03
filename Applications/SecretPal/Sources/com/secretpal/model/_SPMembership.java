@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -31,7 +32,7 @@ public abstract class _SPMembership extends  ERXGenericRecord {
   public static final String GROUP_KEY = GROUP.key();
   public static final String PERSON_KEY = PERSON.key();
 
-  private static Logger LOG = Logger.getLogger(_SPMembership.class);
+  private static Logger LOG = LoggerFactory.getLogger(_SPMembership.class);
 
   public SPMembership localInstanceIn(EOEditingContext editingContext) {
     SPMembership localInstance = (SPMembership)EOUtilities.localInstanceOfObject(editingContext, this);

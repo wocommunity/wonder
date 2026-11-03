@@ -3,7 +3,8 @@ package er.attachment.thumbnail;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
@@ -19,7 +20,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public abstract class ERImageProcessor implements IERImageProcessor {
-  public static final Logger log = Logger.getLogger(ERImageProcessor.class);
+  public static final Logger log = LoggerFactory.getLogger(ERImageProcessor.class);
 
   public static volatile IERImageProcessor _imageProcessor;
 

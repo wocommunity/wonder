@@ -8,7 +8,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSForwardException;
 
@@ -68,7 +69,7 @@ public class ERXECLockingTestCase extends ERXTestCase {
         }
     }
     
-    public static final Logger log = Logger.getLogger(ERXECLockingTestCase.class);
+    public static final Logger log = LoggerFactory.getLogger(ERXECLockingTestCase.class);
     private static final long JOIN_TIME = 2000L;
     
     public static class EC extends ERXEC {

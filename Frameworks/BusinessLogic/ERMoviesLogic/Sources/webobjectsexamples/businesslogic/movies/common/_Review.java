@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -27,7 +28,7 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
   // Relationships
   public static final String MOVIE_KEY = MOVIE.key();
 
-  private static Logger LOG = Logger.getLogger(_Review.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Review.class);
 
   public Review localInstanceIn(EOEditingContext editingContext) {
     Review localInstance = (Review)EOUtilities.localInstanceOfObject(editingContext, this);

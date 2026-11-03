@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.lf5.util.StreamUtils;
-
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -69,7 +67,11 @@ public class ImageMagickCommandlineMetadataParser implements IERMetadataParser {
     byte[] metadataBytes;
     if (metadataFile.exists() && metadataFile.length() > 0) {
       try (FileInputStream fis = new FileInputStream(metadataFile); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-        StreamUtils.copy(fis, baos, ImageMagickCommandlineMetadataParser.BUFFER_SIZE);
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int read;
+        while ((read = fis.read(buffer)) != -1) {
+          baos.write(buffer, 0, read);
+        }
         metadataBytes = baos.toByteArray();
       }
       metadataFile.delete();

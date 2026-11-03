@@ -9,7 +9,8 @@ package er.directtoweb.assignments;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
@@ -37,7 +38,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
 	private static final long serialVersionUID = 1L;
 
     /** logging supprt */
-    public final static Logger log = Logger.getLogger("er.directtoweb.rules.ERDAssignment");
+    public final static Logger log = LoggerFactory.getLogger("er.directtoweb.rules.ERDAssignment");
 
     /** Cached context class array */
     // MOVEME: ERDConstants

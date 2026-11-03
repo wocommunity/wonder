@@ -2,7 +2,8 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.ercmail;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -39,7 +40,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     //	---------------------------------------------------------------------------
         
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERCMailMessage.class);
+    public static final Logger log = LoggerFactory.getLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";

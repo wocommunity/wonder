@@ -1,8 +1,9 @@
 package er.distribution.example.client.eo;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Review extends _Review {
 	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(Review.class);
+	private static Logger log = LoggerFactory.getLogger(Review.class);
 }

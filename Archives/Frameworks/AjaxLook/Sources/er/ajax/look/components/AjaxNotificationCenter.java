@@ -1,6 +1,7 @@
 package er.ajax.look.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -45,7 +46,7 @@ public class AjaxNotificationCenter extends ERDCustomComponent {
 	private NSMutableDictionary<String, String> propertyObserverIDs = new NSMutableDictionary<String, String>();
 	private NSMutableArray<String> updateContainerIDs = new NSMutableArray<String>();
 	
-	private static final Logger log = Logger.getLogger(AjaxNotificationCenter.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxNotificationCenter.class);
 
 	public String id() {
 		if(id == null) {

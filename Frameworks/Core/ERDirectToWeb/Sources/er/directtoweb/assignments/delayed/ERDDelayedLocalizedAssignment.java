@@ -1,5 +1,6 @@
 package er.directtoweb.assignments.delayed;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -19,7 +20,7 @@ public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implemen
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    static final Logger log = Logger.getLogger(ERDDelayedLocalizedAssignment.class);
+    static final Logger log = LoggerFactory.getLogger(ERDDelayedLocalizedAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

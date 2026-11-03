@@ -9,7 +9,8 @@ package ag.kcmedia;
 import java.io.File;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -30,7 +31,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import org.apache.commons.lang3.StringUtils;
 
 public class RuleEditor extends WOComponent {
-    static final Logger log = Logger.getLogger(RuleEditor.class);
+    static final Logger log = LoggerFactory.getLogger(RuleEditor.class);
 
     public WODisplayGroup group;
     public String qualifierString;

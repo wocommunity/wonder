@@ -1,6 +1,7 @@
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -24,7 +25,7 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class EOModeler extends WOComponent {
     /** logging support */
-    private static final Logger log = Logger.getLogger(EOModeler.class);
+    private static final Logger log = LoggerFactory.getLogger(EOModeler.class);
 
     /**
      * Public constructor.
@@ -52,7 +53,7 @@ public class EOModeler extends WOComponent {
                 modelPath = "/Volumes/Home/Roots/AHLogic.framework/Resources/armehaut.eomodeld";
             }
             //setModelPath(modelPath);
-            log.info(modelPath);
+            log.info("{}", modelPath);
         }
         return modelPath;
     }

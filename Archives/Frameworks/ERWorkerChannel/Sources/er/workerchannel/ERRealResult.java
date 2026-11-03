@@ -6,11 +6,14 @@
 //
 package er.workerchannel;
 
-import er.extensions.logging.ERXLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class ERRealResult extends ERResultUnit {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERRealResult.class);
+    public static final Logger log = LoggerFactory.getLogger(ERRealResult.class);
 
     public static final ERRealResult EmptyResult = new ERRealResult("EmptyResult", null);
 
