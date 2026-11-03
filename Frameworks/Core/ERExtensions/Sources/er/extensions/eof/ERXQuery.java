@@ -551,6 +551,10 @@ public class ERXQuery {
 	 * 
 	 * <pre><code>SELECT * FROM ( query ) WHERE ROWNUM <= limit</code></pre>
 	 * 
+	 * or this with the enhanced ERXSQLHelper.OracleSQLHelper with support for Oracle 12c batch fetch support:
+	 * 
+	 * <pre><code>statement + " FETCH NEXT " + limit + " ROWS ONLY";</code></pre>
+	 * 
 	 * @param limit max number of rows in result
 	 * 
 	 * @return this query
@@ -1216,7 +1220,9 @@ public class ERXQuery {
 			mainExpression.setStatement(sqlWithBindingsInline);
 		}	
 		
-		// See if you have to add SELECT * FROM ( original select SQL ) WHERE ROWNUM <= fetchLimit 
+		// See if you have serverFetchLimit which will translate to SELECT ... FETCH FIRST fetchLimit ROWS ONLY 
+		// with the enhanced ERXSQLHelper.OracleSQLHelper or something similar for other database products as
+		// determined by ERXSQLHelper's concrete class implementation of the limitExpressionForSQL() method.
 		if (serverFetchLimit > 0) {
 			String statementWithLimitClause = addLimitClause(mainEntity, mainExpression.statement(), serverFetchLimit);
 			mainExpression.setStatement(statementWithLimitClause);
@@ -1230,6 +1236,10 @@ public class ERXQuery {
 	 * 
 	 * <pre><code>"SELECT * FROM ( " + statement + " ) WHERE ROWNUM <= " + limit;</code></pre>
 	 * 
+	 * or this with the enhanced ERXSQLHelper.OracleSQLHelper with support for Oracle 12c batch fetch support:
+	 * 
+	 * <pre><code>statement + " FETCH NEXT " + limit + " ROWS ONLY";</code></pre>
+	 * 
 	 * @param entity entity on which to fetch
 	 * @param statement SQL statement
 	 * @param limit max number of rows in result
@@ -1237,11 +1247,6 @@ public class ERXQuery {
 	 * @return SQL string
 	 */
 	protected String addLimitClause(EOEntity entity, String statement, int limit) {
-		// This works for ORACLE and I think it is better for my needs that what ERXSQLHelper does. 
-		if ("oracle".equals(databaseProductName(entity))) {
-			return wrapped("SELECT * FROM ( ",  statement, " ) WHERE ROWNUM <= " + limit);
-		}
-		// Use ERXSQLHelper for all the other database products
 		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(entity);
 		return sqlHelper.limitExpressionForSQL(null, null, statement, 0, limit);
 	}

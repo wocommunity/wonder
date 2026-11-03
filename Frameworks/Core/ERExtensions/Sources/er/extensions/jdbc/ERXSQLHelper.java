@@ -1773,7 +1773,7 @@ public class ERXSQLHelper {
 			 * the net and I can't test them as it doesn't even install on OSX.
 			 * Pick your poison.
 			 */
-			int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 3);
+			int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 4);
 			if (debug == 1) {
 				// this only works for the first page
 				limitSQL = "select * from (" + sql + ") where rownum between " + (start + 1) + " and " + end;
@@ -1789,6 +1789,28 @@ public class ERXSQLHelper {
 				}
 				else {
 					limitSQL = "select * from (select a.*, rownum eo_rownum from (" + sql + ") a where rownum <= " + end + ") where eo_rownum >= " + (start + 1);
+				}
+			}
+			else if (debug == 4) {
+				// Use ORACLE 12c syntax for this:
+				//
+				// [ OFFSET offset { ROW | ROWS } ]
+				// [ FETCH { FIRST | NEXT } [ { rowcount | percent PERCENT } ]
+				//     { ROW | ROWS } { ONLY | WITH TIES } ] 
+				//
+				long offset = start;
+				long rowcount = end - start;
+				String fetchClause;
+				if (offset == 0) {
+					fetchClause = " FETCH FIRST " + rowcount + " ROWS ONLY";
+				} else {
+					fetchClause = " OFFSET " + offset + " ROWS FETCH NEXT " + rowcount + " ROWS ONLY";
+				}
+				if (expression != null) {
+					limitSQL = expression.statement() + fetchClause;
+				}
+				else {
+					limitSQL = sql + fetchClause;
 				}
 			}
 			else {
