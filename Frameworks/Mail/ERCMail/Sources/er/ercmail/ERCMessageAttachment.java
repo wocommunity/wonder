@@ -4,7 +4,8 @@ package er.ercmail;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
@@ -18,7 +19,7 @@ public class ERCMessageAttachment extends _ERCMessageAttachment {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ERCMessageAttachment.class);
+    static final Logger log = LoggerFactory.getLogger(ERCMessageAttachment.class);
 
     public ERCMessageAttachment() {
         super();

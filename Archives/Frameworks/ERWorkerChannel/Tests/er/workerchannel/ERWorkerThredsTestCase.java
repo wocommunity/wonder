@@ -8,11 +8,12 @@ package er.workerchannel;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ERWorkerThredsTestCase extends TestCase {
 
-    public static Logger log = Logger.getLogger(ERWorkerThredsTestCase.class);
+    public static Logger log = LoggerFactory.getLogger(ERWorkerThredsTestCase.class);
 
     public ERWorkerThredsTestCase(String name) { 
         super(name); 

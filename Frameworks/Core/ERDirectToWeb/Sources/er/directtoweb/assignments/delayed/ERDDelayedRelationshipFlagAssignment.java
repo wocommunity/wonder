@@ -2,7 +2,8 @@ package er.directtoweb.assignments.delayed;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
@@ -29,7 +30,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
     }
     
     /** Logging support */
-    public final static Logger log = Logger.getLogger(ERDDelayedRelationshipFlagAssignment.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDDelayedRelationshipFlagAssignment.class);
 
     public ERDDelayedRelationshipFlagAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRelationshipFlagAssignment(String key, Object value) { super(key,value); }

@@ -1,6 +1,7 @@
 package er.divalite.components.buttons;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -24,7 +25,7 @@ import er.extensions.validation.ERXValidationFactory;
 
 public class ERLITTrashCan extends ERDTrashcan {
 	
-    public final static Logger log = Logger.getLogger(ERLITTrashCan.class);
+    public final static Logger log = LoggerFactory.getLogger(ERLITTrashCan.class);
 
 
 	public ERLITTrashCan(WOContext aContext) {

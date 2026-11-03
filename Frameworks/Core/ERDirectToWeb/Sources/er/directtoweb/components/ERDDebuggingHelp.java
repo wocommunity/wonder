@@ -121,8 +121,8 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     
     public void toggleRuleTracing() {
         boolean off = ERD2WModel.ruleTraceEnabledLog.isDebugEnabled();
-        ERDirectToWeb.trace.setLevel(off ? Level.INFO : Level.DEBUG);
-        ERD2WModel.ruleTraceEnabledLog.setLevel(off ? Level.INFO : Level.DEBUG);
+        org.apache.log4j.Logger.getLogger(ERDirectToWeb.trace.getName()).setLevel(off ? Level.INFO : Level.DEBUG);
+        org.apache.log4j.Logger.getLogger(ERD2WModel.ruleTraceEnabledLog.getName()).setLevel(off ? Level.INFO : Level.DEBUG);
         ERDirectToWeb.configureTraceRuleFiring();
     }
     

@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
@@ -31,7 +32,7 @@ public abstract class _Company extends  EOGenericRecord {
 	// Relationships
 	public static final String EMPLOYEES_KEY = "employees";
 
-  private static Logger LOG = Logger.getLogger(_Company.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Company.class);
 
   public Company localInstanceIn(EOEditingContext editingContext) {
     Company localInstance = (Company)EOUtilities.localInstanceOfObject(editingContext, this);

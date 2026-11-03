@@ -3,7 +3,8 @@ package er.ajax.mootools.example.components;
 
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -32,7 +33,7 @@ public abstract class _Employee extends  ERXGenericRecord {
   // Relationships
   public static final String COMPANY_KEY = COMPANY.key();
 
-  private static Logger LOG = Logger.getLogger(_Employee.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Employee.class);
 
   public Employee localInstanceIn(EOEditingContext editingContext) {
     Employee localInstance = (Employee)EOUtilities.localInstanceOfObject(editingContext, this);

@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -27,7 +28,7 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
   // Relationships
   public static final String GENDER_TYPE_KEY = GENDER_TYPE.key();
 
-  private static Logger LOG = Logger.getLogger(_Person.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Person.class);
 
   public Person localInstanceIn(EOEditingContext editingContext) {
     Person localInstance = (Person)EOUtilities.localInstanceOfObject(editingContext, this);

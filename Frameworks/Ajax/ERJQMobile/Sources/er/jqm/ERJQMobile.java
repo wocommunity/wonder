@@ -1,6 +1,7 @@
 package er.jqm;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.ERXFrameworkPrincipal;
 
@@ -13,7 +14,7 @@ public class ERJQMobile extends ERXFrameworkPrincipal
 {
 	public static Class[] REQUIRES = new Class[0];
 
-	public static final Logger log = Logger.getLogger(ERJQMobile.class);
+	public static final Logger log = LoggerFactory.getLogger(ERJQMobile.class);
 
 	public static String frameworkName()
 	{

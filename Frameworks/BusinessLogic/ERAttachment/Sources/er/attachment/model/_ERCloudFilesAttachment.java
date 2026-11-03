@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -53,7 +54,7 @@ public abstract class _ERCloudFilesAttachment extends er.attachment.model.ERAtta
   public static final String CHILDREN_ATTACHMENTS_KEY = CHILDREN_ATTACHMENTS.key();
   public static final String PARENT_ATTACHMENT_KEY = PARENT_ATTACHMENT.key();
 
-  private static Logger LOG = Logger.getLogger(_ERCloudFilesAttachment.class);
+  private static Logger LOG = LoggerFactory.getLogger(_ERCloudFilesAttachment.class);
 
   public ERCloudFilesAttachment localInstanceIn(EOEditingContext editingContext) {
     ERCloudFilesAttachment localInstance = (ERCloudFilesAttachment)EOUtilities.localInstanceOfObject(editingContext, this);

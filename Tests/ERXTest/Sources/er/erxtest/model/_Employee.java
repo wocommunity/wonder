@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -47,7 +48,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   public static final String PAYCHECKS_KEY = PAYCHECKS.key();
   public static final String ROLES_KEY = ROLES.key();
 
-  private static Logger LOG = Logger.getLogger(_Employee.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Employee.class);
 
   public Employee localInstanceIn(EOEditingContext editingContext) {
     Employee localInstance = (Employee)EOUtilities.localInstanceOfObject(editingContext, this);

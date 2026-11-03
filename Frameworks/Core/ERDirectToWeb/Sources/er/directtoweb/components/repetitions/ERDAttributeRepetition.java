@@ -1,6 +1,7 @@
 package er.directtoweb.components.repetitions;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -38,7 +39,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDAttributeRepetition.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDAttributeRepetition.class);
 
     public static final String DisplayVariantChanged = "DisplayVariantChanged";
     

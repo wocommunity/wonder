@@ -8,7 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -32,7 +33,7 @@ import er.extensions.foundation.ERXProperties;
  */
 public class JarResourceRequestHandler extends WOResourceRequestHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(JarResourceRequestHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JarResourceRequestHandler.class);
 
     private final WOApplication _app;
     private String _documentRoot;

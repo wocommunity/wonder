@@ -8,7 +8,8 @@ package er.ercmail;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -35,7 +36,7 @@ public class ERCMailDelivery {
     //	---------------------------------------------------------------------------
 
     /** logging supprt */
-    public static final Logger log = Logger.getLogger(ERCMailDelivery.class);
+    public static final Logger log = LoggerFactory.getLogger(ERCMailDelivery.class);
 
     //	===========================================================================
     //	Class Variable(s)

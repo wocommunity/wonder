@@ -2,7 +2,8 @@ package er.directtoweb.components.strings;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -25,7 +26,7 @@ public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);
+    public static final Logger log = LoggerFactory.getLogger(ERDEditStringWithChoices.class);
     public ERXKeyValuePair currentChoice;
     public NSArray _choices;
     

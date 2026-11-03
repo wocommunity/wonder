@@ -9,7 +9,8 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -30,7 +31,7 @@ public class TestFOP {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(TestFOP.class);
+	private static final Logger logger = LoggerFactory.getLogger(TestFOP.class);
 
 	//private String _fopxslLocation = "er/pdfexamples/xsl/xhtml2xslfo.xsl";
 	private String _fopxslLocation = "er/pdfexamples/xsl/testxml2fo.xsl";
@@ -70,7 +71,7 @@ public class TestFOP {
 	public static void main(String[] args) throws FileNotFoundException, Throwable {
 
 		BasicConfigurator.configure();
-		logger.setLevel(Level.DEBUG);
+		org.apache.log4j.Logger.getLogger(logger.getName()).setLevel(Level.DEBUG);
 		if (logger.isDebugEnabled()) {
 			logger.debug("main(String[] args=" + args + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$
 		}

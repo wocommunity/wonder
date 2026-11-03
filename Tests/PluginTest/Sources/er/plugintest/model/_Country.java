@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -57,7 +58,7 @@ public abstract class _Country extends  ERXGenericRecord {
   public static final String CITIES_KEY = CITIES.key();
   public static final String COUNTRY_LANGUAGES_KEY = COUNTRY_LANGUAGES.key();
 
-  private static Logger LOG = Logger.getLogger(_Country.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Country.class);
 
   public Country localInstanceIn(EOEditingContext editingContext) {
     Country localInstance = (Country)EOUtilities.localInstanceOfObject(editingContext, this);

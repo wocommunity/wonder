@@ -24,7 +24,8 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.meetup.memcached.MemcachedClient;
 import com.meetup.memcached.SockIOPool;
@@ -33,7 +34,7 @@ public class UnitTests {
     
     // logger
     private static Logger log =
-        Logger.getLogger( UnitTests.class.getName() );
+        LoggerFactory.getLogger( UnitTests.class.getName() );
 
     public static MemcachedClient mc  = null;
 
@@ -338,7 +339,7 @@ public class UnitTests {
      */
     public static void main(String[] args) {
         //BasicConfigurator.configure();
-        Logger.getLogger("com").setLevel( Level.WARN );
+        org.apache.log4j.Logger.getLogger("com").setLevel( Level.WARN );
     	log.warn("starting tests");
     	long time = System.currentTimeMillis();
         try {

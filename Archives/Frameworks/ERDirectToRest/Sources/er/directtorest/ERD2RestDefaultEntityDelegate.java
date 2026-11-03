@@ -2,7 +2,8 @@ package er.directtorest;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -30,7 +31,7 @@ import er.rest.entityDelegates.IERXRestSecurityDelegate;
 public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate {
     
     private IERXRestSecurityDelegate _securityHandler = new ERD2RestAllowSecurityDelegate();
-	private static Logger log = Logger.getLogger(ERD2RestDefaultEntityDelegate.class);
+	private static Logger log = LoggerFactory.getLogger(ERD2RestDefaultEntityDelegate.class);
 
     @Override
     public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {

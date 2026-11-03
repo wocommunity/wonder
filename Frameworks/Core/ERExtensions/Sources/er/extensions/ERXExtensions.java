@@ -22,7 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
@@ -267,7 +268,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         // name and port are resolved via WOApplication.application()
         // ERXLogger.configureLoggingWithSystemProperties();
         
-        _log = Logger.getLogger(ERXExtensions.class);
+        _log = LoggerFactory.getLogger(ERXExtensions.class);
 		ERXProperties.pathsForUserAndBundleProperties(true);
 
 		try {
@@ -722,9 +723,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public static void configureAdaptorContextRapidTurnAround(Object anObserver) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
-            adaptorLogger = Logger.getLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
+            adaptorLogger = LoggerFactory.getLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
             
-            sharedEOadaptorLogger = Logger.getLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
+            sharedEOadaptorLogger = LoggerFactory.getLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
             if ((adaptorLogger.isDebugEnabled() 
             		&& !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess))
             		|| ERXProperties.booleanForKey("EOAdaptorDebugEnabled")) {

@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -98,7 +99,7 @@ public class ERD2WFactory extends D2W {
 	}
 
 	/** logging support */
-    protected static final Logger log = Logger.getLogger(ERD2WFactory.class);
+    protected static final Logger log = LoggerFactory.getLogger(ERD2WFactory.class);
 
     /**
      * Gets the D2W factory cast as an ERD2WFactory objects.

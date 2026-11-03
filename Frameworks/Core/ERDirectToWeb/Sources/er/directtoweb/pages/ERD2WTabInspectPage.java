@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -43,8 +44,8 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     }
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERD2WTabInspectPage.class);
-    public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WTabInspectPage");
+    public static final Logger log = LoggerFactory.getLogger(ERD2WTabInspectPage.class);
+    public static final Logger validationLog = LoggerFactory.getLogger("er.directtoweb.validation.ERD2WTabInspectPage");
 
 
     public String switchTabActionName() { return isEditing() ? "switchTabAction" : null; }

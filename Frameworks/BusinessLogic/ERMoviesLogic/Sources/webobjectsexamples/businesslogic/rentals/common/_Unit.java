@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -31,7 +32,7 @@ public abstract class _Unit extends er.extensions.eof.ERXGenericRecord {
   public static final String RENTALS_KEY = RENTALS.key();
   public static final String VIDEO_KEY = VIDEO.key();
 
-  private static Logger LOG = Logger.getLogger(_Unit.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Unit.class);
 
   public Unit localInstanceIn(EOEditingContext editingContext) {
     Unit localInstance = (Unit)EOUtilities.localInstanceOfObject(editingContext, this);

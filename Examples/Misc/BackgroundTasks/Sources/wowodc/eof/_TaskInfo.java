@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import er.extensions.eof.*;
@@ -44,7 +45,7 @@ public abstract class _TaskInfo extends er.extensions.eof.ERXGenericRecord {
 
     // Relationships
 
-  private static Logger LOG = Logger.getLogger(_TaskInfo.class);
+  private static Logger LOG = LoggerFactory.getLogger(_TaskInfo.class);
 
   public TaskInfo localInstanceIn(EOEditingContext editingContext) {
     TaskInfo localInstance = (TaskInfo)EOUtilities.localInstanceOfObject(editingContext, this);

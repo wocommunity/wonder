@@ -6,7 +6,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("all")
 public abstract class _Join extends  EOGenericRecord {
@@ -18,7 +19,7 @@ public abstract class _Join extends  EOGenericRecord {
 	public static final String FIRST_ENTITY_KEY = "firstEntity";
 	public static final String SECOND_ENTITY_KEY = "secondEntity";
 
-  private static Logger LOG = Logger.getLogger(_Join.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Join.class);
 
   public Join localInstanceIn(EOEditingContext editingContext) {
     Join localInstance = (Join)EOUtilities.localInstanceOfObject(editingContext, this);

@@ -1,6 +1,7 @@
 package er.directtoweb.components.repetitions;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -33,7 +34,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERDListPageRepetition.class);
+    private static final Logger log = LoggerFactory.getLogger(ERDListPageRepetition.class);
 
     protected static final NSDictionary NO_ACTIONS = NSDictionary.EmptyDictionary;
     

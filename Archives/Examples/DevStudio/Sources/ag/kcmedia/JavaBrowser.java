@@ -6,7 +6,8 @@
 //
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ag.kcmedia.Jode.ClassProxy;
 import ag.kcmedia.Jode.PackageProxy;
@@ -18,7 +19,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 public class JavaBrowser extends WOComponent {
-    static final Logger log = Logger.getLogger(JavaBrowser.class);
+    static final Logger log = LoggerFactory.getLogger(JavaBrowser.class);
 
     public PackageProxy currentPackage;
     public ClassProxy currentClass;

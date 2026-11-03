@@ -7,7 +7,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import java.math.*;
 import java.util.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import er.extensions.eof.*;
 import er.extensions.foundation.*;
@@ -37,7 +38,7 @@ public abstract class _Company extends  ERXGenericRecord {
   public static final String DEPARTMENTS_KEY = DEPARTMENTS.key();
 
 
-  private static Logger LOG = Logger.getLogger(_Company.class);
+  private static Logger LOG = LoggerFactory.getLogger(_Company.class);
 
   public Company localInstanceIn(EOEditingContext editingContext) {
     Company localInstance = (Company)EOUtilities.localInstanceOfObject(editingContext, this);

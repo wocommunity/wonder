@@ -1,8 +1,9 @@
 package er.distribution.example.client.eo;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Director extends _Director {
 	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(Director.class);
+	private static Logger log = LoggerFactory.getLogger(Director.class);
 }

@@ -6,7 +6,8 @@ import java.text.ParseException;
 import java.util.Enumeration;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -61,7 +62,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final Logger log = Logger.getLogger(ERDSavedQueriesComponent.class);
+	public static final Logger log = LoggerFactory.getLogger(ERDSavedQueriesComponent.class);
 
     public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
     public static final EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
@@ -181,7 +182,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 			if (log.isDebugEnabled()) {
 				log.debug("END key=" + key + ", destination.class=" + destination.getClass().getName() + ", destination=" + destination + "\r\n");
 
-				log.debug(logDictionary(key, destination, "**"));
+				log.debug("{}", logDictionary(key, destination, "**"));
 			}
 
 			return destination;
@@ -242,7 +243,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 			if (queryMatch == null)
 				queryMatch = NSDictionary.EmptyDictionary;
 
-			log.debug(logDictionary("setQueryMatch", queryMatch, "==="));
+			log.debug("{}", logDictionary("setQueryMatch", queryMatch, "==="));
 
 			dict.setObjectForKey(queryMatch, QUERY_MATCH_KEY);
 		}

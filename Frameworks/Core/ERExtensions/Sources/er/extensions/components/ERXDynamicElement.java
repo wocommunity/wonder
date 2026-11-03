@@ -2,7 +2,8 @@ package er.extensions.components;
 
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -30,7 +31,7 @@ import er.extensions.appserver.ERXWOContext;
  * @author jw
  */
 public abstract class ERXDynamicElement extends WODynamicGroup {
-	protected Logger log = Logger.getLogger(getClass());
+	protected Logger log = LoggerFactory.getLogger(getClass());
 	private final NSDictionary<String, WOAssociation> _associations;
 
 	public ERXDynamicElement(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {

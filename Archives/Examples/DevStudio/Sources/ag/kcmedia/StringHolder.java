@@ -6,14 +6,15 @@
 //
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.components.ERXStatelessComponent;
 
 public class StringHolder extends ERXStatelessComponent {
-    static final Logger log = Logger.getLogger(StringHolder.class);
+    static final Logger log = LoggerFactory.getLogger(StringHolder.class);
     public String string;
     protected boolean isDocumentation;
 

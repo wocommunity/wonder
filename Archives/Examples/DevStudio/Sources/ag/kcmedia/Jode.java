@@ -20,7 +20,8 @@ import jode.bytecode.TypeSignature;
 import jode.decompiler.Decompiler;
 import jode.type.Type;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.foundation.NSArray;
@@ -32,7 +33,7 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.localization.ERXLocalizer;
 
 public class Jode extends Object {
-    static final Logger log = Logger.getLogger(JavaBrowser.class);
+    static final Logger log = LoggerFactory.getLogger(JavaBrowser.class);
 
     public static NSMutableArray documentationPaths = new NSMutableArray();
     public static NSMutableDictionary allClasses = new NSMutableDictionary();
@@ -269,7 +270,7 @@ public class Jode extends Object {
                 prettyString.invoke(JavaCCtoHTML, sourceCode);
                 // sourceCode = JavaCCtoHTML.prettyString(sourceCode);
             } catch (Exception ex) {
-                log.error(ex);
+                log.error(ex.getMessage(), ex);
             }
             sourceCode = StringUtils.replace(sourceCode, "\n\n", "<br>");
             return sourceCode;

@@ -1,6 +1,7 @@
 package er.directtoweb.embed;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQuery;
@@ -23,7 +24,7 @@ public class ERD2WQuery extends D2WQuery {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WQuery.class);
+    private static final Logger log = LoggerFactory.getLogger(ERD2WQuery.class);
 	
     /**
      * Public constructor

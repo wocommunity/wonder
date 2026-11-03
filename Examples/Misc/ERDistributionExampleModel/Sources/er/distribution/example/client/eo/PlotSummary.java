@@ -1,8 +1,9 @@
 package er.distribution.example.client.eo;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PlotSummary extends _PlotSummary {
 	@SuppressWarnings("unused")
-	private static Logger log = Logger.getLogger(PlotSummary.class);
+	private static Logger log = LoggerFactory.getLogger(PlotSummary.class);
 }

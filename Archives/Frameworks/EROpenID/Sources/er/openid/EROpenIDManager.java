@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
@@ -52,7 +53,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class EROpenIDManager {
-  public static final Logger log = Logger.getLogger(EROpenIDManager.class);
+  public static final Logger log = LoggerFactory.getLogger(EROpenIDManager.class);
 
   private static final String DISCOVERY_INFO_KEY = "openIDDiscoveryInfo";
   private static EROpenIDManager _openIDManager;

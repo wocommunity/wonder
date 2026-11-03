@@ -8,7 +8,8 @@ package er.directtoweb.components.misc;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -39,7 +40,7 @@ public class ERDEditList extends ERDCustomEditComponent {
 
     public ERDEditList(WOContext context) { super(context); }
 
-    public final static Logger log = Logger.getLogger(ERDEditList.class);
+    public final static Logger log = LoggerFactory.getLogger(ERDEditList.class);
     
     public String choices;
     public String choiceDisplayKey;

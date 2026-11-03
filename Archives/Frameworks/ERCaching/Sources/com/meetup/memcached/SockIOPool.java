@@ -39,7 +39,8 @@ import java.net.*;
 import java.io.*;
 import java.nio.channels.*;
 import java.util.concurrent.locks.ReentrantLock;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** 
  * This class is a connection pool for maintaning a pool of persistent connections<br/>
@@ -127,7 +128,7 @@ public class SockIOPool {
 
 	// logger
 	private static Logger log =
-		Logger.getLogger( SockIOPool.class.getName() );
+		LoggerFactory.getLogger( SockIOPool.class.getName() );
 
 	// store instances of pools
 	private static Map<String,SockIOPool> pools =
@@ -1445,7 +1446,7 @@ public class SockIOPool {
 
 		// logger
 		private static Logger log =
-			Logger.getLogger( MaintThread.class.getName() );
+			LoggerFactory.getLogger( MaintThread.class.getName() );
 
 		private SockIOPool pool;
 		private long interval      = 1000 * 3; // every 3 seconds
@@ -1511,7 +1512,7 @@ public class SockIOPool {
 
 		// logger
 		private static Logger log =
-			Logger.getLogger( SockIO.class.getName() );
+			LoggerFactory.getLogger( SockIO.class.getName() );
 
 		// pool
 		private SockIOPool pool;

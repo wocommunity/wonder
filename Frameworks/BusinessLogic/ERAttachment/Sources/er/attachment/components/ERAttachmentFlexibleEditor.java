@@ -1,6 +1,7 @@
 package er.attachment.components;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -83,7 +84,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected final Logger log = Logger.getLogger(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	public static interface Keys {
 		public static final String masterObject = "masterObject";
@@ -412,7 +413,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	public String uploadFinishedFunction() {
 		String finishedFunction = stringValueForBinding(Keys.uploadFinishedFunction, "");
 		String result = "function(e) { " + refreshContainerFunction() + " " + finishedFunction + " }";
-		if (log.isDebugEnabled()) log.debug(result);
+		if (log.isDebugEnabled()) log.debug("{}", result);
 		return result;
 	}
 	
@@ -424,7 +425,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	public String startedFunction() {
 		String startedFunction = stringValueForBinding(Keys.uploadStartedFunction, "");
 		String result =  "function(e) { $('" + cancelButtonWrapperID() + "').hide(); " + startedFunction + "}";
-		if (log.isDebugEnabled()) log.debug(result);
+		if (log.isDebugEnabled()) log.debug("{}", result);
 		return result;
 	}
 

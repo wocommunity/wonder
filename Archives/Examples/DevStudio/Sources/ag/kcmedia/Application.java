@@ -6,7 +6,8 @@
 //
 package ag.kcmedia;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.EOEventCenter;
@@ -19,7 +20,7 @@ import er.extensions.eof.ERXConstant;
 
 public class Application extends ERXApplication {
 
-    static Logger log = Logger.getLogger(Application.class);
+    static Logger log = LoggerFactory.getLogger(Application.class);
     
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);

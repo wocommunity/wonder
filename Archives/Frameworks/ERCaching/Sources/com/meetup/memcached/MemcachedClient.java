@@ -25,7 +25,8 @@ import java.io.*;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang.CharEncoding;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a Memcached client for the Java platform available from
@@ -156,7 +157,7 @@ public class MemcachedClient {
 
 	// logger
 	private static Logger log =
-		Logger.getLogger( MemcachedClient.class.getName() );
+		LoggerFactory.getLogger( MemcachedClient.class.getName() );
 
 	// return codes
 	private static final String VALUE        = "VALUE";			// start of value line from server

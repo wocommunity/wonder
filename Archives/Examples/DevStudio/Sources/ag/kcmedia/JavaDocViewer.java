@@ -4,7 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.tidy.Node;
 import org.w3c.tidy.TagTable;
 import org.w3c.tidy.Tidy;
@@ -28,7 +29,7 @@ public class JavaDocViewer extends WOComponent {
     public ClassProxy selectedClass;
     public TagTable tt;
     /** logging support */
-    private static final Logger log = Logger.getLogger(JavaDocViewer.class);
+    private static final Logger log = LoggerFactory.getLogger(JavaDocViewer.class);
 	
     /**
      * Public constructor.
@@ -56,7 +57,7 @@ public class JavaDocViewer extends WOComponent {
             tidy.setShowWarnings(false);
             TagTable tt = new TagTable();
             tt.setConfiguration(tidy.getConfiguration());
-            log.info(filename);
+            log.info("{}", filename);
             document = tidy.parse(new FileInputStream(filename), null);
             document = document.findBody(tt);
             comments = new NSMutableArray();
