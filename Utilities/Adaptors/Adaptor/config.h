@@ -59,13 +59,16 @@ typedef int  intptr_t;
 
 #define ADAPTOR_VERSION "4.6.8"
 
-#ifndef ADAPTOR_GIT_COMMIT
-#define ADAPTOR_GIT_COMMIT "unknown"
-#endif
-
 /* Used to turn the value of a macro into a string literal */
 #define _Str(x) #x
 #define Str(x) _Str(x)
+
+#ifdef ADAPTOR_GIT_COMMIT_RAW
+#undef ADAPTOR_GIT_COMMIT
+#define ADAPTOR_GIT_COMMIT Str(ADAPTOR_GIT_COMMIT_RAW)
+#elif !defined(ADAPTOR_GIT_COMMIT)
+#define ADAPTOR_GIT_COMMIT "unknown"
+#endif
 
 /* maximum number of wotaskds the adaptor can query for config info */
 #define WA_MAX_CONFIG_SERVERS		16
