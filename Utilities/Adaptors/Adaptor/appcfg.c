@@ -151,6 +151,8 @@ typedef struct {
 } ConfigTimes;
 
 static ConfigTimes *configTimes;
+/* Thread-level mutex to synchronize config reading and avoid fcntl EDEADLK collisions across threads */
+static WA_recursiveLock configTimes_lock = NULL;
 static int *configuredInstances = NULL;
 
 static char *_public_config = NULL;		/*  .../WebObjects.xml */
@@ -201,6 +203,10 @@ int ac_init(strtbl *dict)
    unsigned int count;	
    unsigned int ret = 0;
    const char *config_uri, *config_interval_setting;
+
+   /* Create thread lock for config read/reset synchronization */
+   if (!configTimes_lock)
+      configTimes_lock = WA_createLock("configTimes_lock");
 
    appsBase = WOShmem_alloc("application list", sizeof(WOApp), &appListSize);
    if (appsBase == NULL)
@@ -268,6 +274,11 @@ int ac_init(strtbl *dict)
 void ac_resetConfigTimers()
 {
    void *lockHandle;
+
+   /* Synchronize threads in this process to avoid conflicting fcntl record lock attempts */
+   if (configTimes_lock)
+      WA_lock(configTimes_lock);
+
    lockHandle = WOShmem_lock(configTimes, sizeof(ConfigTimes), 1);
    if(lockHandle)
    {
@@ -277,6 +288,9 @@ void ac_resetConfigTimers()
 	   configTimes->config_servers_read_time = 0;
 	   WOShmem_unlock(lockHandle);
 	}
+
+   if (configTimes_lock)
+      WA_unlock(configTimes_lock);
 }
 
 
@@ -287,7 +301,7 @@ void ac_resetConfigTimers()
  */
 WOAppHandle ac_findApplication(const char *name)
 {
-   int i;
+   unsigned int i;
    _WOApp *app = NULL;
    for (i=0; i<appListSize; i++)
    {
@@ -310,7 +324,7 @@ WOAppHandle ac_findApplication(const char *name)
       }
 #endif
    }
-   return i < appListSize && app != NULL ? i : AC_INVALID_HANDLE;
+   return (i < appListSize && app != NULL) ? (WOAppHandle)i : AC_INVALID_HANDLE;
 }
 
 /*
@@ -361,7 +375,7 @@ int ac_authorizeAppListing(WOURLComponents *wc) {
 	   /* fail if both user and password are null */
            /* looking for a string of form foo+bar */
            if ((wc->queryString.start != NULL) && (wc->queryString.length != 0)) {
-              int userLen = 0, passwdLen = 0;
+              size_t userLen = 0, passwdLen = 0;
 
               if (WOAdaptorInfo_username)
                  userLen = strlen(WOAdaptorInfo_username);
@@ -463,7 +477,8 @@ static int ac_prepareToModifyConfig()
  */
 static void ac_finishedModifyingConfig()
 {
-   int i, j, instanceCount, foundInstance;
+   int j, instanceCount, foundInstance;
+   unsigned int i;
    int appHandle;
    _WOApp *app;
    _WOInstance *inst;
@@ -500,7 +515,7 @@ static void ac_finishedModifyingConfig()
                      foundInstance = 0;
                      for (j=0; j<WA_MAX_APP_INSTANCE_COUNT && (!foundInstance || !instanceCount); j++)
                      {
-                        if (app->instances[j] == i)
+                        if (app->instances[j] == (WOInstanceHandle)i)
                         {
                            app->instances[j] = AC_INVALID_HANDLE;
                            foundInstance = 1;
@@ -536,7 +551,8 @@ static void ac_finishedModifyingConfig()
  */
 static WOAppHandle ac_newApplication(WOApp *newApp)
 {
-   int newIndex = AC_INVALID_HANDLE, index;
+   int newIndex = AC_INVALID_HANDLE;
+   unsigned int index;
    _WOApp *app = NULL;
 
    /* search for an available slot in the app table; we hold the config lease so don't need to lock */
@@ -552,7 +568,7 @@ static WOAppHandle ac_newApplication(WOApp *newApp)
       {
          /* Found an available slot for the new app, and now it is locked. Initialize it. */
          memcpy(app, newApp, sizeof(WOApp));
-         newIndex = index;
+         newIndex = (int)index;
       }
    } else {
       WOLog(WO_ERR, "ac_newApplication(): no room to create application: %s", newApp->name);
@@ -567,7 +583,8 @@ static WOAppHandle ac_newApplication(WOApp *newApp)
  */
 static WOInstanceHandle ac_newInstance(WOInstance *newInstance)
 {
-   int newIndex = AC_INVALID_HANDLE, index;
+   int newIndex = AC_INVALID_HANDLE;
+   unsigned int index;
    _WOInstance *instance = NULL;
 
    /* search for an available slot in the app table; we hold the config lease so don't need to lock */
@@ -590,7 +607,7 @@ static WOInstanceHandle ac_newInstance(WOInstance *newInstance)
          instance->generation = generation + 1; /* don't reset the generation number */
          WOLog(WO_INFO, "ac_newInstance(): added %s:%s (%d)", app->name, instance->instanceNumber, instance->port);
          ac_unlockInstance(index);
-         newIndex = index;
+         newIndex = (int)index;
       }
    } else {
       WOLog(WO_ERR, "ac_newInstance(): no room to create instance: %s (%s)", appsBase[instance->app].name, instance->instanceNumber);
@@ -653,25 +670,25 @@ static int updateNumericSetting(const char *settingName, int *dest, const char *
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static int updateAppKey(const char *key, const char *value, _WOApp *app)
+static void updateAppKey(const char *key, const char *value, void *userdata)
 {
-   int changed = 0;
+   _WOApp *app = (_WOApp *)userdata;
    if (strcmp(key, WOSCHEDULER) == 0)
-      changed = updateStringSetting(key, app->loadbalance, value, WA_LB_MAX_NAME_LENGTH);
+      updateStringSetting(key, app->loadbalance, value, WA_LB_MAX_NAME_LENGTH);
    else if (strcmp(key, WOERRREDIR) == 0)
-      changed = updateStringSetting(key, app->redirect_url, value, WA_MAX_URL_LENGTH);
+      updateStringSetting(key, app->redirect_url, value, WA_MAX_URL_LENGTH);
    else if (strcmp(key, WOADDITIONALARGS) == 0)
-      changed = updateStringSetting(key, app->additionalArgs, value, WA_MAX_ADDITIONAL_ARGS_LENGTH);
+      updateStringSetting(key, app->additionalArgs, value, WA_MAX_ADDITIONAL_ARGS_LENGTH);
    else if (strcmp(key, WOAPPNAME) == 0)
-      changed = updateStringSetting(key, (char *)app->name, value, WA_MAX_APP_NAME_LENGTH);
+      updateStringSetting(key, (char *)app->name, value, WA_MAX_APP_NAME_LENGTH);
    else if (strcmp(key, WORETRIES) == 0)
-      changed = updateNumericSetting(key, &app->retries, value);
+      updateNumericSetting(key, &app->retries, value);
    else if (strcmp(key, WODEADAPP) == 0)
-      changed = updateNumericSetting(key, &app->deadInterval, value);
+      updateNumericSetting(key, &app->deadInterval, value);
    else if (strcmp(key, WOPOOLSZ) == 0)
-      changed = updateNumericSetting(key, &app->connectionPoolSize, value);
+      updateNumericSetting(key, &app->connectionPoolSize, value);
    else if (strcmp(key, WOURLVERSION) == 0)
-      changed = updateNumericSetting(key, &app->urlVersion, value);
+      updateNumericSetting(key, &app->urlVersion, value);
    else if (strcmp(key, "protocol") == 0)
    {
       /* not currently used */
@@ -679,39 +696,37 @@ static int updateAppKey(const char *key, const char *value, _WOApp *app)
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in application config: \"%s\", value = \"%s\"", key, value);
    }
-   
-   return changed;
 }
 
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static int updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
+static void updateInstanceKey(const char *key, const char *value, void *userdata)
 {
-   int changed = 0;
+   _WOInstance *instance = (_WOInstance *)userdata;
 
 #if defined(SUPPORT_REFUSENEWSESSION_ATTR)
    instance->refuseNewSessions = 0;
 #endif
 
    if (strcmp(key, WOINSTANCENUMBER) == 0)
-      changed = updateStringSetting(key, instance->instanceNumber, value, WA_MAX_INSTANCE_NUMBER_LENGTH);
+      updateStringSetting(key, instance->instanceNumber, value, WA_MAX_INSTANCE_NUMBER_LENGTH);
    else if (strcmp(key, WOHOST) == 0)
-      changed = updateStringSetting(key, instance->host, value, WA_MAX_HOST_NAME_LENGTH);
+      updateStringSetting(key, instance->host, value, WA_MAX_HOST_NAME_LENGTH);
    else if (strcmp(key, WOADDITIONALARGS) == 0)
-      changed = updateStringSetting(key, instance->additionalArgs, value, WA_MAX_ADDITIONAL_ARGS_LENGTH);
+      updateStringSetting(key, instance->additionalArgs, value, WA_MAX_ADDITIONAL_ARGS_LENGTH);
    else if (strcmp(key, WOPORT) == 0)
-      changed = updateNumericSetting(key, &instance->port, value);
+      updateNumericSetting(key, &instance->port, value);
    else if (strcmp(key, WOSENDBUFSIZE) == 0)
-      changed = updateNumericSetting(key, (int*)&instance->sendSize, value);
+      updateNumericSetting(key, (int*)&instance->sendSize, value);
    else if (strcmp(key, WORECVBUFSIZE) == 0)
-      changed = updateNumericSetting(key, (int*)&instance->recvSize, value);
+      updateNumericSetting(key, (int*)&instance->recvSize, value);
    else if (strcmp(key, WOSENDTIMEOUT) == 0)
-      changed = updateNumericSetting(key, (int*)&instance->sendTimeout, value);
+      updateNumericSetting(key, (int*)&instance->sendTimeout, value);
    else if (strcmp(key, WORECVTIMEOUT) == 0)
-      changed = updateNumericSetting(key, (int*)&instance->recvTimeout, value);
+      updateNumericSetting(key, (int*)&instance->recvTimeout, value);
    else if (strcmp(key, WOCNCTTIMEOUT) == 0)
-      changed = updateNumericSetting(key, (int*)&instance->connectTimeout, value);
+      updateNumericSetting(key, (int*)&instance->connectTimeout, value);
 #if defined(SUPPORT_REFUSENEWSESSION_ATTR)
    else if (strcmp(key, WOREFUSENEWSESSIONS) == 0)
    {
@@ -726,8 +741,6 @@ static int updateInstanceKey(const char *key, const char *value, _WOInstance *in
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);
    }
-   
-   return changed;
 }
 
 /*
@@ -782,7 +795,7 @@ static int ac_updateInstance(_WOApp *app, int appIndex, strtbl *instanceSettings
          instance->deadInterval = app->deadInterval;
 
          /* process instance settings dict */
-         st_perform(instanceSettings, (st_perform_callback)updateInstanceKey, instance);
+         st_perform(instanceSettings, updateInstanceKey, instance);
          if (instance != &newInstance)
          {
             ac_unlockInstance(app->instances[appInstanceIndex]);
@@ -812,7 +825,8 @@ static int ac_updateInstance(_WOApp *app, int appIndex, strtbl *instanceSettings
  */
 void ac_updateApplication(strtbl *appSettingsDict, list *instancesSettings)
 {
-   _WOApp *app, localApp;
+   static const _WOApp emptyApp;
+   _WOApp *app, localApp = emptyApp;
    const char *name;
    char configuredInstances[WA_MAX_APP_INSTANCE_COUNT];
    int i, appInstanceIndex, count;
@@ -837,7 +851,7 @@ void ac_updateApplication(strtbl *appSettingsDict, list *instancesSettings)
          app = ac_lockedApp(appHandle);
       if (app != NULL)
       {
-         st_perform(appSettingsDict, (st_perform_callback)updateAppKey, app);
+         st_perform(appSettingsDict, updateAppKey, app);
          /* if this is a new application, need to add it to the public list */
          if (app == &localApp)
          {
@@ -960,14 +974,49 @@ int ac_readConfiguration()
    void *lockHandle;
 
    now = time(NULL);
+
+   /*
+    * Fast path check (double-checked locking pattern):
+    * configTimes->config_read_time resides in shared memory. Under heavy load, every worker thread
+    * invokes ac_readConfiguration() while awaiting backend instance responses. Checking the timestamp
+    * before acquiring any lock allows 99.99% of all requests to return immediately without competing
+    * for the cross-process fcntl file lock.
+    */
+   if (configTimes && (now - configTimes->config_read_time) < config_interval) {
+      return 0;
+   }
+
+   /*
+    * Acquire process-internal thread lock before taking the cross-process file lock.
+    * In a multithreaded web server (such as Apache with Worker/Event MPM), POSIX fcntl record locks
+    * are associated with the process PID, not the individual thread TID. If multiple threads of the
+    * same process invoke fcntl(F_SETLKW) simultaneously on the same region, the kernel detects a
+    * self-deadlock and immediately returns EDEADLK ("Resource deadlock avoided").
+    * Serializing threads within the process eliminates intra-process fcntl collisions.
+    */
+   if (configTimes_lock)
+      WA_lock(configTimes_lock);
+
+   /* Re-verify the timestamp once the intra-process lock is acquired */
+   now = time(NULL);
+   if (configTimes && (now - configTimes->config_read_time) < config_interval) {
+      if (configTimes_lock)
+         WA_unlock(configTimes_lock);
+      return 0;
+   }
+
    lockHandle = WOShmem_lock(configTimes, sizeof(ConfigTimes), 1);
    if (!lockHandle)
    {
+      if (configTimes_lock)
+         WA_unlock(configTimes_lock);
       WOLog(WO_ERR, "ac_readConfiguration: WOShmem_lock() failed. Skipping reading config.");
       return 0;
    }
    if ((now - configTimes->config_read_time) < config_interval) {
       WOShmem_unlock(lockHandle);
+      if (configTimes_lock)
+         WA_unlock(configTimes_lock);
       WOLog(WO_DBG, "ac_readConfiguration(): skipped reading config");
       return 0;
    }
@@ -975,6 +1024,8 @@ int ac_readConfiguration()
    if (ac_prepareToModifyConfig())
    {
       WOShmem_unlock(lockHandle);
+      if (configTimes_lock)
+         WA_unlock(configTimes_lock);
       WOLog(WO_INFO, "ac_readConfiguration(): can't update at this time");
       return 0;
    }
@@ -990,7 +1041,7 @@ int ac_readConfiguration()
             configTimes->config_servers_read_time = now;
          }
          setConfigServersViaMulticast(adaptor_valueForKey(WOCONFIG));
-         /* fall through to CM_LIST to query the servers */
+         /* fallthrough */
       case CM_LIST:
          readServerConfig();
          break;
@@ -1036,6 +1087,8 @@ int ac_readConfiguration()
 
    ac_finishedModifyingConfig();
    WOShmem_unlock(lockHandle);
+   if (configTimes_lock)
+      WA_unlock(configTimes_lock);
    return 1;
 }
 
@@ -1139,7 +1192,7 @@ static void readServerConfig() {
 	}
    
 	if(!oneOrMoreModified) {
-		int i;
+		unsigned int i;
 		for(i=0;i<instanceListSize;i++)
 			configuredInstances[i] = 1;
 		WOLog(WO_INFO, "All settings are unmodified");
@@ -1245,7 +1298,8 @@ static char *_retrieveServerInfo(ConfigServer *server, net_fd s, int *len, char 
          const char *c;
          mtime = st_valueFor(resp->headers, HTTP_LASTMODIFIED);
          if (mtime != NULL) {
-            strncpy(server->lastModifiedTime, mtime, WA_MAX_LAST_MODIFIED_LENGTH);
+            strncpy(server->lastModifiedTime, mtime, WA_MAX_LAST_MODIFIED_LENGTH - 1);
+            server->lastModifiedTime[WA_MAX_LAST_MODIFIED_LENGTH - 1] = '\0';
          }
          c = st_valueFor(resp->headers, CONTENT_TYPE);
          if ((c != NULL) && (strlen(c) < CONTENT_TYPE_LENGTH_MAX)) {
@@ -1532,9 +1586,11 @@ static void setConfigServers(const char *s)
          } else {
             if (freeServer != -1)
             {
-               strncpy(configServers[freeServer].host, h->h_name, WA_MAX_HOST_NAME_LENGTH);
+               strncpy(configServers[freeServer].host, h->h_name, WA_MAX_HOST_NAME_LENGTH - 1);
+               configServers[freeServer].host[WA_MAX_HOST_NAME_LENGTH - 1] = '\0';
                configServers[freeServer].port = port;
-               strncpy(configServers[freeServer].path, path, WA_MAX_URL_LENGTH);
+               strncpy(configServers[freeServer].path, path, WA_MAX_URL_LENGTH - 1);
+               configServers[freeServer].path[WA_MAX_URL_LENGTH - 1] = '\0';
                WOLog(WO_INFO, "Added new config server %s:%d.", configServers[freeServer].host, configServers[freeServer].port);
             } else {
                WOLog(WO_ERR, "No room to add config server %s:%d. Increase WA_MAX_CONFIG_SERVERS.", host, port);

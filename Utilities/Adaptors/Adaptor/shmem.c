@@ -80,8 +80,8 @@ static unsigned int WOShmem_size = 0;
 
 static WA_recursiveLock WOShmem_mutex;
 
-#define offset_to_addr(offset) ((void *)(WOShmem_base_address + offset))
-#define addr_to_offset(addr) ((void *)addr - WOShmem_base_address)
+#define offset_to_addr(offset) ((void *)((char *)WOShmem_base_address + (offset)))
+#define addr_to_offset(addr) ((char *)(addr) - (char *)WOShmem_base_address)
 
 #ifndef MAP_FILE
 #define MAP_FILE 0
@@ -136,14 +136,19 @@ static int append_zeros(int fd, int len)
    return ret;
 }
 
+#ifndef EDEADLK
+#define EDEADLK 35
+#endif
+
 /*
  * This function is used to lock a section of a file using fcntl file locking.
- * Returns zero if the lock was aquired, nonzero if it could not be aquired.
+ * Returns zero if the lock was acquired, nonzero if it could not be acquired.
  * The provided lockInfo struct is initialized and passed to fcntl().
- * fcntl() can fail with EAGAIN, so this function retries as needed.
- * The lock will be quickly retried RETRY_SLEEP_COUNT times. If it has still not been
- * aquired then the retry loop will then pause between attempts. If we have not aquired the
- * lock after RETRY_FAIL_COUNT attempts, give up.
+ * Under Linux and POSIX, fcntl(F_SETLKW) can return EAGAIN, EINTR, or EDEADLK
+ * ("Resource deadlock avoided") during cross-process lock contention.
+ * We treat these as transient, retryable conditions and back off with WA_yield().
+ * The lock will be quickly retried RETRY_SLEEP_COUNT times before pausing between attempts.
+ * If we have not acquired the lock after RETRY_FAIL_COUNT attempts, give up.
  */
 #define LOCK_RETRY_SLEEP_COUNT 10
 #define LOCK_RETRY_FAIL_COUNT 50
@@ -159,13 +164,14 @@ inline static int lock_file_section(int fd, off_t start, off_t len, struct flock
       {
          err = WA_error();
          errCount++;
-         if (err != EAGAIN || errCount % 10 == 0)
+         /* Only log unexpected non-transient errors, or periodic warnings on high attempt counts */
+         if ((err != EAGAIN && err != EDEADLK && err != EINTR) || errCount % 10 == 0)
          {
             char *errMsg = WA_errorDescription(err);
             WOLog(WO_ERR, "lock_file_section(): failed to lock (%d attempts): %s", errCount, errMsg);
             WA_freeErrorDescription(errMsg);
          }
-         if (err == EAGAIN)
+         if (err == EAGAIN || err == EDEADLK || err == EINTR)
          {
             WA_yield();
             if (errCount > LOCK_RETRY_SLEEP_COUNT)
@@ -177,7 +183,7 @@ inline static int lock_file_section(int fd, off_t start, off_t len, struct flock
          }
       } else
          err = 0;
-   } while (err == EAGAIN && errCount < LOCK_RETRY_FAIL_COUNT);
+   } while ((err == EAGAIN || err == EDEADLK || err == EINTR) && errCount < LOCK_RETRY_FAIL_COUNT);
    return err;
 }
 
@@ -200,7 +206,7 @@ static int ensure_file_size(int fd, size_t size)
       WOLog(WO_ERR, "ensure_file_size(): initial fstat() failed: %s", errMsg);
       error = 1;
    }
-   if (!error && st.st_size < size)
+   if (!error && (size_t)st.st_size < size)
    {
       if (lock_file_section(WOShmem_fd, st.st_size, size - st.st_size, &lockInfo, 1))
       {
@@ -214,10 +220,10 @@ static int ensure_file_size(int fd, size_t size)
             WA_freeErrorDescription(errMsg);
             error = 1;
          }
-         if (!error && st.st_size < size)
+         if (!error && (size_t)st.st_size < size)
          {
             st.st_size += append_zeros(WOShmem_fd, size - st.st_size);
-            if (st.st_size < size)
+            if ((size_t)st.st_size < size)
                error = 1;
          }
          lockInfo.l_type = F_UNLCK;
@@ -248,9 +254,10 @@ int WOShmem_init(const char *file, size_t memsize)
       /* The mmap should still be in effect */
       unlink(file);
 #endif
-      WOShmem_size = ensure_file_size(WOShmem_fd, memsize);
-      if (WOShmem_size != -1)
+      int shm_size = ensure_file_size(WOShmem_fd, memsize);
+      if (shm_size != -1)
       {
+         WOShmem_size = (unsigned int)shm_size;
          WOShmem_base_address = (void *)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
          if (WOShmem_base_address == MAP_FAILED)
          {
@@ -498,7 +505,7 @@ void sha_clearLocalData(ShmemArray *array, unsigned int elementNumber)
 ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, unsigned int elementCount)
 {
    ShmemArray *array;
-   int i;
+   unsigned int i;
 
    array = WOMALLOC(sizeof(ShmemArray) + sizeof(ShmemArrayElement) * (elementCount-1));
    if (array)
@@ -508,7 +515,7 @@ ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, uns
       array->elementCount = elementCount;
       for (i=0; i<array->elementCount; i++)
       {
-         array->elements[i].element = (void *)(arrayBase + elementSize * i);
+         array->elements[i].element = (void *)((char *)arrayBase + elementSize * i);
          array->elements[i].lock = WA_createLock("array element lock");
          array->elements[i].writeLock = WA_createLock("array element write lock");
          array->elements[i].lockCount = 0;

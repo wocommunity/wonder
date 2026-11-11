@@ -342,17 +342,28 @@ static TR_STATUS reset(net_fd appfd)
       result = nonBlockingRecv(appfd, 0, appfd->buf, NETBUFSZ);
       if (result > 0 && warned == 0)
       {
-         WOLog(WO_WARN, "reset(): leftover data in socket buffer");
+         WOLog(WO_WARN, "reset(): leftover data in socket buffer, dropping connection");
          warned = 1;
       }
       if (result == -1 && appfd->status == TR_TIMEOUT)
          appfd->status = TR_OK;
    } while (result > 0);
+
+   if (warned != 0)
+   {
+      appfd->status = TR_ERROR;
+      return TR_ERROR;
+   }
+
    /* clear our buffer */
    if (appfd->status == TR_OK)
    {
       if (appfd->count != 0)
-         WOLog(WO_WARN, "reset(): leftover data in buffer");
+      {
+         WOLog(WO_WARN, "reset(): leftover data in buffer, dropping connection");
+         appfd->status = TR_ERROR;
+         return TR_ERROR;
+      }
       appfd->count = 0;
       appfd->pos = appfd->buf;
 
@@ -506,7 +517,7 @@ static TR_STATUS sendBuffers(net_fd appfd, struct iovec *buffers, int bufferCoun
          /* be sure all data was sent */
          while (sent > 0)
          {
-            if (sent >= buffers->iov_len)
+            if ((size_t)sent >= buffers->iov_len)
             {
                sent -= buffers->iov_len;
                buffers++;
