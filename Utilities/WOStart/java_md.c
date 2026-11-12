@@ -940,19 +940,3 @@ UnsetEnv(char *name)
     free(buf);
     return (ret);
 }
-
-/*
- * The following just map the common UNIX name to the Windows API name,
- * so that the common UNIX name can be used in shared code.
- */
-int
-strcasecmp(const char *s1, const char *s2)
-{
-    return (stricmp(s1, s2));
-}
-
-int
-strncasecmp(const char *s1, const char *s2, size_t n)
-{
-    return (strnicmp(s1, s2, n));
-}

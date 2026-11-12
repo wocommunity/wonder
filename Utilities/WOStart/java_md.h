@@ -47,7 +47,21 @@ extern int _main(int argc, char **argv);
 char *LocateJRE(manifest_info* info);
 void ExecJRE(char *jre, char **argv);
 int UnsetEnv(char *name);
-int strcasecmp(const char *s1, const char *s2);
-int strncasecmp(const char *s1, const char *s2, size_t n);
+
+/*
+ * strcasecmp()/strncasecmp() are POSIX names that are not part of the
+ * Windows API; msvcrt provides _stricmp()/_strnicmp() instead. mingw-w64
+ * header already define strcasecmp/strncasecmp (as inline wrappers or as
+ * #defines to _stricmp/_strnicmp); for toolchains that do not provide
+ * them, alias the POSIX names to the msvcrt functions. Using #defines
+ * here (instead of own wrapper functions) avoids redefining _stricmp at
+ * link time on toolchains where strcasecmp is a #define itself.
+ */
+#ifndef strcasecmp
+#define strcasecmp _stricmp
+#endif
+#ifndef strncasecmp
+#define strncasecmp _strnicmp
+#endif
 
 #endif
