@@ -28,6 +28,15 @@ The `ApplicationClass` described in the comment section in the file's head is ta
 Please note, that for the option `JVM`, you have to supply a valid path to a JVM of the very same architecture as the WOStart you use.
 Environment variables (e.g. `%JAVA_HOME%`) in the JVM path are resolved before the JVM is started.
 
+## Command Line Options
+
+- `-version` - print the WOStart version and exit, like `java -version`:
+
+  ```
+  C:\> MyApp.exe -version
+  WOStart 1.2
+  ```
+
 ## Windows Service
 
 This WOStart also enables you, to install and start your WebObjects application as windows service. You just have to install it as services using the Windows tool `SC`. You can supply the command line arguments the very same way.
@@ -46,4 +55,5 @@ would install your App `WOApp1` at a given path to start with the given heap set
 - JVM options `--add-exports` and `--add-opens` are recognized and passed to the JVM before all other JVM arguments, as required by Java 11 upwards.
 - `-x`, `-agentlib` and `-javaagent` are treated as JVM arguments, so debug agents and similar can be supplied from `CLSSPATH.TXT`.
 - Environment variables (e.g. `%JAVA_HOME%`) in the JVM path are resolved before the JVM is started.
+- A `-version` flag prints the WOStart version and exits, like `java -version`.
 - Version number raised to 1.2.

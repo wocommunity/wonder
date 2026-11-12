@@ -461,6 +461,14 @@ void checkForUpdate(string& appPath) {
 int wostart_main(int argc, TCHAR* argv[])
 {
 	try {
+		// -version: print our version and exit (like java -version)
+		for (int i = 1; i < argc; i++) {
+			if (_tcsicmp(argv[i], _T("-version")) == 0) {
+				cout << APPNAME << " " << VERSION << endl;
+				return 0;
+			}
+		}
+
 		// tell the world about ourselves;
 		cout << APPNAME << " " << VERSION << endl;
 
