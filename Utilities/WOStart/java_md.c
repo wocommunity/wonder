@@ -102,6 +102,9 @@ GetJREPath(char *path, jint pathsize, char *javaCommand)
     if (GetJREHome(path, pathsize, javaCommand)) {
 	/* Is JRE co-located with the application? */
 	sprintf(javadll, "%s\\bin\\" JAVA_DLL, path);
+    if (_launcher_debug)
+      printf("Testing javadll %s\n", javadll);
+
 	if (stat(javadll, &s) == 0) {
 	    goto found;
 	}
@@ -193,6 +196,63 @@ GetXUsagePath(char *buf, jint bufsize)
     strcat(buf, "\\Xusage.txt");
 }
 
+// Function to replace environment variables with their actual values
+int replace_env_vars(const char *orig, char *target, size_t target_len) {
+    size_t i = 0, j = 0;
+    
+    while (orig[i] != '\0') {
+        if (orig[i] == '%' && orig[i+1] != '\0') {
+            // Start of an environment variable
+            i++;
+            char env_var[256] = {0};  // Buffer for the environment variable name
+            size_t var_len = 0;
+
+            // Read until the closing '%' (or max var length)
+            while (orig[i] != '%' && orig[i] != '\0' && var_len < sizeof(env_var) - 1) {
+                env_var[var_len++] = orig[i++];
+            }
+
+            if (orig[i] == '%') {
+                // We found the closing '%', so get the environment variable's value
+                env_var[var_len] = '\0';
+                char env_value[1024] = {0};  // Buffer for the environment variable value
+
+                DWORD len = GetEnvironmentVariable(env_var, env_value, sizeof(env_value));
+
+                if (len > 0 && len < sizeof(env_value)) {
+                    // Append the environment variable's value to the target buffer
+                    for (size_t k = 0; env_value[k] != '\0' && j < target_len - 1; k++) {
+                        target[j++] = env_value[k];
+                    }
+                }
+
+                // Move past the closing '%'
+                i++;
+            } else {
+                // If we didn't find a closing '%', copy the characters as is
+                for (size_t k = 0; k < var_len && j < target_len - 1; k++) {
+                    target[j++] = '%';
+                    target[j++] = env_var[k];
+                }
+            }
+        } else {
+            // Copy non-env-var characters to the target buffer
+            if (j < target_len - 1) {
+                target[j++] = orig[i++];
+            } else {
+                break; // Prevent buffer overflow
+            }
+        }
+    }
+
+    // Null-terminate the target buffer
+    target[j] = '\0';
+
+    return 0; // Success
+}
+
+
+
 /*
  * javaCommand is separate parameter, supply a path to java.exe
  * If javaCommand is "c:\foo\bin\java", then put "c:\foo" into buf.
@@ -201,11 +261,12 @@ jboolean
 GetJREHome(char *buf, jint bufsize, char *javaCommand)
 {
     char *cp;
-	
-	if(javaCommand == NULL)
-		return JNI_FALSE;
 
-	strcpy(buf, javaCommand);
+    if(javaCommand == NULL)
+        return JNI_FALSE;
+
+    replace_env_vars(javaCommand, buf, bufsize);
+
 	if(strrchr(buf, '\\') == 0)
 		return JNI_FALSE;
 	
@@ -240,15 +301,9 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
 /*
  * Helpers to look in the registry for a public JRE.
  */
-		    /* Same for 1.5.0, 1.5.1, 1.5.2 etc. */
-#define DOTRELEASE5  "1.5"
-#define DOTRELEASE6  "1.6"
-#define DOTRELEASE7  "1.7"
-#define DOTRELEASE8  "1.8"
-#define DOTRELEASE9  "9."
-#define DOTRELEASE10 "10."
 
-#define JRE_KEY_10     "Software\\JavaSoft\\JRE"
+#define JRE_KEY_10x     "Software\\JavaSoft\\JRE"
+#define JDK_KEY_10x     "Software\\JavaSoft\\JDK"
 #define JRE_KEY     "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
@@ -273,11 +328,13 @@ GetPublicJREHome(char *buf, jint bufsize)
     char version[MAXPATHLEN];
 
     /* Find the current version of the JRE */
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY_10, 0, KEY_READ, &key) != 0) {
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JDK_KEY_10x, 0, KEY_READ, &key) != 0) {
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY_10x, 0, KEY_READ, &key) != 0) {
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY, 0, KEY_READ, &key) != 0) {
                 fprintf(stderr, "Error opening registry key '" JRE_KEY "'\n");
                 return JNI_FALSE;
             }
+        }
     }
 
     if (!GetStringFromRegistry(key, "CurrentVersion",
@@ -288,6 +345,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	return JNI_FALSE;
     }
 
+/* no longer check for specific version
     if (strcmp(version, DOTRELEASE5) != 0 &&
 		strcmp(version, DOTRELEASE6) != 0 &&
                 strcmp(version, DOTRELEASE7) != 0 &&
@@ -299,6 +357,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
+*/
 
     /* Find directory where the current version is installed. */
     if (RegOpenKeyEx(key, version, 0, KEY_READ, &subkey) != 0) {
@@ -307,7 +366,7 @@ GetPublicJREHome(char *buf, jint bufsize)
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
-
+    
     if (!GetStringFromRegistry(subkey, "JavaHome", buf, bufsize)) {
 	fprintf(stderr, "Failed reading value of registry key:\n\t"
 		JRE_KEY "\\%s\\JavaHome\n", version);
@@ -447,7 +506,7 @@ ProcessDir(manifest_info* info, HKEY top_key) {
     DWORD   index = 0;
     HKEY    ver_key;
     char    name[MAXNAMELEN];
-    int	    len;
+    long	    len;
     char    *best = NULL;
 
     /*
@@ -880,20 +939,4 @@ UnsetEnv(char *name)
     ret = _putenv(buf);
     free(buf);
     return (ret);
-}
-
-/*
- * The following just map the common UNIX name to the Windows API name,
- * so that the common UNIX name can be used in shared code.
- */
-int
-strcasecmp(const char *s1, const char *s2)
-{
-    return (stricmp(s1, s2));
-}
-
-int
-strncasecmp(const char *s1, const char *s2, size_t n)
-{
-    return (strnicmp(s1, s2, n));
 }
