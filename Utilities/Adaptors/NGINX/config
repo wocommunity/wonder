@@ -32,7 +32,7 @@ ADAPTOR_SRCS=" \
 "
 
 # Global CFLAGS for compiling Adaptor sources and Nginx module
-CFLAGS="$CFLAGS -DMULTITHREADED_ADAPTOR -DNGX_HTTP_WEBOBJECTS -Wno-error"
+CFLAGS="$CFLAGS -DMULTITHREADED_ADAPTOR -DTHREAD_MODEL=2 -DNGX_HTTP_WEBOBJECTS -Wno-error"
 
 ADAPTOR_GIT_COMMIT=$(git -C "$ngx_addon_dir" rev-parse --short=8 HEAD 2>/dev/null)
 if [ -z "$ADAPTOR_GIT_COMMIT" ]; then
