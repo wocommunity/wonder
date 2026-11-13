@@ -229,6 +229,13 @@ void WOLog(int level, const char *format, ...)
 // TODO - figure out how to report this for other web servers
 #if defined(APACHE)
          ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "Failed to append to log file '%s': %s. This can occur when the file is not writable by the child httpd process. A workaround is to change the file ownership to match the child httpd process. Beware that other restrictions may apply when running Apache using systemd with the PrivateTmp option active.", logPath, strerror(errno));
+#else
+         static time_t last_warn = 0;
+         time_t now_err = time(NULL);
+         if (now_err - last_warn > 10) {
+            fprintf(stderr, "WOLog: Failed to append to log file '%s': %s (check file ownership and directory permissions for Nginx worker user)\n", logPath, strerror(errno));
+            last_warn = now_err;
+         }
 #endif
       }
    }

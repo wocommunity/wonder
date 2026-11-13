@@ -180,7 +180,7 @@ static int xml_parseConfiguration(char *buf, int len)
    if (error != 0) {
       /* config error */
       WOLog(WO_ERR,"Error parsing configuration: %s", xmlcParserErrorDescription(error));
-      if ((void *)config.errorLocation < (void *)buf + len)
+      if (config.errorLocation < buf + len)
       {
          char *badconfig = WOMALLOC((len+1)*sizeof(char));
          strncpy(badconfig, buf, len);

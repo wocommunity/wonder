@@ -57,11 +57,11 @@ int str_init()
 
 int str_ensureCapacity(String *s, int newMinCapacity)
 {
-   int size;
+   unsigned int size;
    char *newBuffer;
 
    //WOLog(WO_DBG, "str_ensureCapacity() called, capacity = %d, newMinCapacity = %d", s->bufferSize, newMinCapacity);
-   if (newMinCapacity < s->bufferSize)		/* never let the buffer shrink */
+   if (newMinCapacity <= 0 || (unsigned int)newMinCapacity < s->bufferSize)		/* never let the buffer shrink */
       return 1;
    if (newMinCapacity < MINIMUM_CAPACITY)	/* always get at least MINIMUM_CAPACITY bytes */
       newMinCapacity = MINIMUM_CAPACITY;
@@ -69,7 +69,7 @@ int str_ensureCapacity(String *s, int newMinCapacity)
    /* Determine the new buffer size. */
    /* Double the buffer size up to a limit, then increase linearly. */
    size = s->bufferSize < MINIMUM_CAPACITY ? MINIMUM_CAPACITY : s->bufferSize;
-   while (size < newMinCapacity)
+   while (size < (unsigned int)newMinCapacity)
       size += size < MAX_QUANTUM_TO_ADD ? size : MAX_QUANTUM_TO_ADD;
    newBuffer = WOMALLOC(size);
    if (newBuffer)
@@ -82,7 +82,7 @@ int str_ensureCapacity(String *s, int newMinCapacity)
       s->text = newBuffer;
       s->bufferSize = size;
    }
-   return s->bufferSize >= newMinCapacity;
+   return s->bufferSize >= (unsigned int)newMinCapacity;
 }
 
 String *str_create(const char *initialText, int sizeHint)
@@ -116,7 +116,7 @@ String *str_create(const char *initialText, int sizeHint)
          s->text[0] = 0;
       s->next = NULL;
       s->cached = 0;
-      if (sizeHint && sizeHint > s->bufferSize)
+      if (sizeHint > 0 && (unsigned int)sizeHint > s->bufferSize)
          str_ensureCapacity(s, sizeHint);
       if (initialText)
       {
@@ -133,30 +133,54 @@ String *str_create(const char *initialText, int sizeHint)
 
 void str_free(String *s)
 {
-   String *str;
-   if (s)
+   String *curr, *tail;
+
+   if (!s)
+      return;
+
+   /*
+    * Lock the cache mutex for the entire free operation.
+    * This guarantees that if two threads ever attempt to free the same String
+    * concurrently, the second thread will see s->cached == 1 and immediately abort,
+    * completely preventing double-frees, concurrent WOFREE(text), or circular loops in cache.
+    */
+   WA_lock(str_lock);
+
+   if (s->cached)
    {
-      str = s;
-      do {
-         str->cached = 1;
-         if (str->bufferSize > MAX_BUFFER_SIZE_TO_CACHE)
-         {
-            //WOLog(WO_DBG, "str_free(): freeing string buffer (size = %d)", str->bufferSize);
-            WOFREE(str->text);
-            str->bufferSize = 0;
-            str->text = NULL;
-         }
-         if (!str->next || (str->next && str->next->cached))
-         {
-            /* got to the end of the list; chain to the cache */
-            WA_lock(str_lock);
-            str->next = cache;
-         }
-         str = str->next;
-      } while (str != cache);
-      cache = s;
       WA_unlock(str_lock);
+      return;
    }
+
+   curr = s;
+   tail = NULL;
+   while (curr)
+   {
+      curr->cached = 1;
+      if (curr->bufferSize > MAX_BUFFER_SIZE_TO_CACHE)
+         {
+         //WOLog(WO_DBG, "str_free(): freeing string buffer (size = %d)", curr->bufferSize);
+         WOFREE(curr->text);
+         curr->bufferSize = 0;
+         curr->text = NULL;
+         }
+      tail = curr;
+      /* If the next node is already cached, cut the link to avoid cycles */
+      if (curr->next && curr->next->cached)
+         {
+         curr->next = NULL;
+         break;
+      }
+      curr = curr->next;
+         }
+
+   if (tail)
+   {
+      tail->next = cache;
+      cache = s;
+   }
+
+   WA_unlock(str_lock);
 }
 
 char *str_unwrap(String *s)
@@ -172,14 +196,16 @@ char *str_unwrap(String *s)
 
 int str_appendLength(String *s, const char * const str, int length)
 {
-   int requiredBufferSize;
+   unsigned int requiredBufferSize;
 
-   requiredBufferSize = s->length + length + 1;
+   if (length < 0)
+      return 1;
+   requiredBufferSize = s->length + (unsigned int)length + 1;
    if (requiredBufferSize > s->bufferSize)
-      if (str_ensureCapacity(s, requiredBufferSize) == 0)
+      if (str_ensureCapacity(s, (int)requiredBufferSize) == 0)
          return 1;
    memcpy(&s->text[s->length], str, length);
-   s->length = s->length + length;
+   s->length = s->length + (unsigned int)length;
    s->text[s->length] = 0;
    return 0;
 }
@@ -194,7 +220,8 @@ int str_append(String *s, const char * const str)
 
 int str_vappendf(String *s, const char *format, va_list args)
 {
-   int i, len, requiredBufferSize;
+   int i, len;
+   unsigned int requiredBufferSize;
 #ifdef _MSC_VER // SWK VC va handling
    va_list sizer = args;
 #else
@@ -229,9 +256,11 @@ int str_vappendf(String *s, const char *format, va_list args)
 #ifndef _MSC_VER // SWK VC va handling
    va_end(sizer);
 #endif
-   requiredBufferSize = s->length + len + 1;
+   if (len < 0)
+      return 1;
+   requiredBufferSize = s->length + (unsigned int)len + 1;
    if (requiredBufferSize > s->bufferSize)
-      if (str_ensureCapacity(s, requiredBufferSize) == 0)
+      if (str_ensureCapacity(s, (int)requiredBufferSize) == 0)
          return 1;
    s->length += vsprintf(&s->text[s->length], format, args);
    s->text[s->length] = 0;

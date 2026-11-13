@@ -1,0 +1,70 @@
+ngx_addon_name=ngx_http_webobjects_module
+
+ADAPTOR_SRCS=" \
+    $ngx_addon_dir/../Adaptor/MoreURLCUtilities.c \
+    $ngx_addon_dir/../Adaptor/Platform.c \
+    $ngx_addon_dir/../Adaptor/WOURLCUtilities.c \
+    $ngx_addon_dir/../Adaptor/WOURLCUtilities_3.c \
+    $ngx_addon_dir/../Adaptor/appcfg.c \
+    $ngx_addon_dir/../Adaptor/cfgparse.c \
+    $ngx_addon_dir/../Adaptor/config.c \
+    $ngx_addon_dir/../Adaptor/hostlookup.c \
+    $ngx_addon_dir/../Adaptor/list.c \
+    $ngx_addon_dir/../Adaptor/listing.c \
+    $ngx_addon_dir/../Adaptor/loadaverage.c \
+    $ngx_addon_dir/../Adaptor/loadbalancing.c \
+    $ngx_addon_dir/../Adaptor/log.c \
+    $ngx_addon_dir/../Adaptor/nbsocket.c \
+    $ngx_addon_dir/../Adaptor/random.c \
+    $ngx_addon_dir/../Adaptor/request.c \
+    $ngx_addon_dir/../Adaptor/response.c \
+    $ngx_addon_dir/../Adaptor/roundrobin.c \
+    $ngx_addon_dir/../Adaptor/shmem.c \
+    $ngx_addon_dir/../Adaptor/strdict.c \
+    $ngx_addon_dir/../Adaptor/strtbl.c \
+    $ngx_addon_dir/../Adaptor/transaction.c \
+    $ngx_addon_dir/../Adaptor/transport.c \
+    $ngx_addon_dir/../Adaptor/wastring.c \
+    $ngx_addon_dir/../Adaptor/womalloc.c \
+    $ngx_addon_dir/../Adaptor/xmlcparser.c \
+    $ngx_addon_dir/../Adaptor/xmlctokenizer.c \
+    $ngx_addon_dir/../Adaptor/xmlparse.c \
+"
+
+# Global CFLAGS for compiling Adaptor sources and Nginx module
+CFLAGS="$CFLAGS -DMULTITHREADED_ADAPTOR -DTHREAD_MODEL=2 -DNGX_HTTP_WEBOBJECTS -Wno-error"
+
+ADAPTOR_GIT_COMMIT=$(git -C "$ngx_addon_dir" rev-parse --short=8 HEAD 2>/dev/null)
+if [ -z "$ADAPTOR_GIT_COMMIT" ]; then
+    ADAPTOR_GIT_COMMIT=$(git rev-parse --short=8 HEAD 2>/dev/null)
+fi
+if [ -z "$ADAPTOR_GIT_COMMIT" ] && [ -f "$ngx_addon_dir/../../../.git-commit" ]; then
+    ADAPTOR_GIT_COMMIT=$(cut -c1-8 "$ngx_addon_dir/../../../.git-commit" 2>/dev/null)
+fi
+if [ -z "$ADAPTOR_GIT_COMMIT" ] && [ -f "$ngx_addon_dir/../.git-commit" ]; then
+    ADAPTOR_GIT_COMMIT=$(cut -c1-8 "$ngx_addon_dir/../.git-commit" 2>/dev/null)
+fi
+if [ -z "$ADAPTOR_GIT_COMMIT" ]; then
+    ADAPTOR_GIT_COMMIT="unknown"
+fi
+CFLAGS="$CFLAGS -DADAPTOR_GIT_COMMIT=\\\"$ADAPTOR_GIT_COMMIT\\\""
+
+if [ -n "$SUPPORT_REFUSENEWSESSION_ATTR" ] && [ "$SUPPORT_REFUSENEWSESSION_ATTR" != "0" ] && [ "$SUPPORT_REFUSENEWSESSION_ATTR" != "no" ]; then
+    CFLAGS="$CFLAGS -DSUPPORT_REFUSENEWSESSION_ATTR"
+fi
+
+if test -n "$ngx_module_link"; then
+    ngx_module_type=HTTP
+    ngx_module_name=ngx_http_webobjects_module
+    ngx_module_incs="$ngx_addon_dir/../Adaptor"
+    ngx_module_deps="$ngx_addon_dir/../Adaptor/config.h"
+    ngx_module_srcs="$ngx_addon_dir/ngx_http_webobjects_module.c $ADAPTOR_SRCS"
+    ngx_module_libs="-lpthread"
+
+    . auto/module
+else
+    HTTP_MODULES="$HTTP_MODULES ngx_http_webobjects_module"
+    NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_webobjects_module.c $ADAPTOR_SRCS"
+    CORE_INCS="$CORE_INCS $ngx_addon_dir/../Adaptor"
+    CORE_LIBS="$CORE_LIBS -lpthread"
+fi

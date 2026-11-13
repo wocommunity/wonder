@@ -1,0 +1,129 @@
+name: Build WOAdaptor NGINX
+run-name: WOAdaptor NGINX [${{ github.ref_name }}]
+
+on:
+  push:
+    branches:
+      - woadaptor-nginx
+      - master
+    paths:
+      - 'Utilities/Adaptors/NGINX/**'
+      - 'Utilities/Adaptors/Adaptor/**'
+      - '.github/workflows/woadaptor-nginx.yml'
+  pull_request:
+    paths:
+      - 'Utilities/Adaptors/NGINX/**'
+      - 'Utilities/Adaptors/Adaptor/**'
+      - '.github/workflows/woadaptor-nginx.yml'
+  workflow_dispatch:
+
+jobs:
+  discover-versions:
+    name: Discover NGINX versions
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Discover versions from nginx.org
+        id: set-matrix
+        run: |
+          python3 -c "
+          import urllib.request, re, json, sys
+
+          fallback = ['1.31.8', '1.30.6', '1.28.3', '1.26.3', '1.24.0', '1.22.1', '1.20.2', '1.18.0']
+          versions = []
+
+          try:
+              req = urllib.request.Request('https://nginx.org/en/download.html', headers={'User-Agent': 'Mozilla/5.0'})
+              html = urllib.request.urlopen(req, timeout=15).read().decode('utf-8')
+              raw_versions = re.findall(r'/download/nginx-(\d+\.\d+\.\d+)\.tar\.gz', html)
+              seen = set()
+              for v in raw_versions:
+                  if v not in seen:
+                      seen.add(v)
+                      try:
+                          parts = tuple(map(int, v.split('.')))
+                          if parts >= (1, 18, 0):
+                              versions.append(v)
+                      except Exception:
+                          pass
+          except Exception as e:
+              print(f'Warning: Failed to fetch nginx versions from nginx.org: {e}', file=sys.stderr)
+
+          if not versions:
+              versions = fallback
+
+          include = []
+          for v in versions:
+              parts = tuple(map(int, v.split('.')))
+              os_name = 'ubuntu-22.04' if parts < (1, 21, 5) else 'ubuntu-latest'
+              include.append({'nginx_version': v, 'os': os_name})
+
+          matrix = {'include': include}
+          matrix_json = json.dumps(matrix, separators=(',', ':'))
+          with open(sys.argv[1], 'a') as f:
+              f.write(f'matrix={matrix_json}\n')
+          " "$GITHUB_OUTPUT"
+
+  nginx-module:
+    name: WOAdaptor nginx / ${{ matrix.nginx_version }}
+    needs: discover-versions
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover-versions.outputs.matrix) }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential zlib1g-dev libssl-dev
+          # Ubuntu 22.04 (nginx 1.18, 1.20) uses libpcre3-dev; Ubuntu 24.04 (nginx 1.22+) uses libpcre2-dev
+          if [ "${{ matrix.os }}" = "ubuntu-22.04" ]; then
+            sudo apt-get install -y libpcre3-dev
+          else
+            sudo apt-get install -y libpcre2-dev
+          fi
+
+      - name: Download and extract NGINX ${{ matrix.nginx_version }}
+        run: |
+          curl -fsSL "https://nginx.org/download/nginx-${{ matrix.nginx_version }}.tar.gz" -o nginx.tar.gz
+          tar -xzf nginx.tar.gz
+
+      - name: Configure and build module for NGINX ${{ matrix.nginx_version }}
+        run: |
+          cd "nginx-${{ matrix.nginx_version }}"
+          ./configure \
+            --with-compat \
+            --with-threads \
+            --with-http_ssl_module \
+            --add-dynamic-module="$GITHUB_WORKSPACE/Utilities/Adaptors/NGINX"
+          make -j$(nproc)
+          cp objs/ngx_http_webobjects_module.so "$GITHUB_WORKSPACE/Utilities/Adaptors/NGINX/ngx_http_webobjects_module-${{ matrix.nginx_version }}.so"
+          cp objs/ngx_http_webobjects_module.so "$GITHUB_WORKSPACE/Utilities/Adaptors/NGINX/ngx_http_webobjects_module.so"
+
+      - name: Test module loading in NGINX ${{ matrix.nginx_version }}
+        run: |
+          cd "nginx-${{ matrix.nginx_version }}"
+          mkdir -p logs
+          sed -i 's/listen *80;/listen 18080;/g' conf/nginx.conf
+          objs/nginx -V
+          objs/nginx -t -p "$PWD" -g "load_module $GITHUB_WORKSPACE/Utilities/Adaptors/NGINX/ngx_http_webobjects_module.so;"
+
+      - name: Verify built module
+        run: |
+          cd "$GITHUB_WORKSPACE/Utilities/Adaptors/NGINX"
+          ls -lh "ngx_http_webobjects_module-${{ matrix.nginx_version }}.so"
+          file "ngx_http_webobjects_module-${{ matrix.nginx_version }}.so"
+          strings "ngx_http_webobjects_module-${{ matrix.nginx_version }}.so" | grep -E "Adaptor version|Git commit =" || true
+
+      - name: Upload NGINX ${{ matrix.nginx_version }} module artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: woadaptor-nginx-${{ matrix.nginx_version }}
+          path: |
+            Utilities/Adaptors/NGINX/ngx_http_webobjects_module-${{ matrix.nginx_version }}.so
+            Utilities/Adaptors/NGINX/ngx_http_webobjects_module.so

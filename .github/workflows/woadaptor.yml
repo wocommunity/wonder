@@ -1,0 +1,159 @@
+name: Build WOAdaptor
+run-name: WOAdaptor (Linux, macOS, IIS) [${{ github.ref_name }}]
+
+on:
+  push:
+    branches:
+      - woadaptor-bugfixes
+      - master
+    paths:
+      - 'Utilities/Adaptors/**'
+      - '.github/workflows/woadaptor.yml'
+  pull_request:
+    paths:
+      - 'Utilities/Adaptors/**'
+      - '.github/workflows/woadaptor.yml'
+  workflow_dispatch:
+
+jobs:
+  apache24-linux:
+    name: WOAdaptor apache2.4 / linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Apache 2.4 development packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apache2-dev build-essential
+
+      - name: Build WOAdaptor for Apache 2.4
+        run: |
+          make -C Utilities/Adaptors ADAPTOR_OS=LINUX OS=LINUX ADAPTORS=Apache2.4
+
+      - name: Verify built module
+        run: |
+          ls -lh Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          file Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          ldd Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          strings Utilities/Adaptors/Apache2.4/mod_WebObjects.so | grep -E "Adaptor version|Git commit ="
+
+      - name: Upload Apache 2.4 Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: woadaptor-apache2.4-linux
+          path: Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+
+  apache24-macos:
+    name: WOAdaptor apache2.4 / macos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Zig and LLVM tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential llvm xz-utils
+          mkdir -p /tmp/zig /tmp/llvm-bin
+          curl -fsSL "https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz" -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /tmp/zig --strip-components=1
+          echo "/tmp/zig" >> "$GITHUB_PATH"
+          LIPO_BIN=$(find /usr/lib/llvm* /usr/bin -maxdepth 3 \( -name 'llvm-lipo' -o -name 'llvm-lipo-*' \) 2>/dev/null | sort -V | tail -n 1)
+          OBJDUMP_BIN=$(find /usr/lib/llvm* /usr/bin -maxdepth 3 \( -name 'llvm-objdump' -o -name 'llvm-objdump-*' \) 2>/dev/null | sort -V | tail -n 1)
+          ln -sf "$LIPO_BIN" /tmp/llvm-bin/llvm-lipo
+          ln -sf "$OBJDUMP_BIN" /tmp/llvm-bin/llvm-objdump
+          echo "/tmp/llvm-bin" >> "$GITHUB_PATH"
+          /tmp/llvm-bin/llvm-lipo --version
+          /tmp/llvm-bin/llvm-objdump --version
+
+      - name: Fetch Apache 2.4 & APR headers for macOS
+        run: |
+          python3 - <<'PY'
+          import io, json, os, tarfile, urllib.request
+
+          inc_dir = "/tmp/macos-apache-inc"
+          os.makedirs(inc_dir, exist_ok=True)
+          preferred = ("arm64_sequoia", "arm64_tahoe", "arm64_golden_gate", "arm64_sonoma")
+          for pkg in ("httpd", "apr", "apr-util"):
+              data = json.load(urllib.request.urlopen(f"https://formulae.brew.sh/api/formula/{pkg}.json"))
+              files = data["bottle"]["stable"]["files"]
+              tag = next(
+                  (t for t in preferred if t in files),
+                  next(t for t in files if t.startswith("arm64_") and t != "arm64_linux"),
+              )
+              url = files[tag]["url"]
+              tok = json.load(urllib.request.urlopen(
+                  f"https://ghcr.io/token?service=ghcr.io&scope=repository:homebrew/core/{pkg}:pull"
+              ))["token"]
+              req = urllib.request.Request(url, headers={"Authorization": f"Bearer {tok}"})
+              blob = urllib.request.urlopen(req).read()
+              with tarfile.open(fileobj=io.BytesIO(blob), mode="r:gz") as tf:
+                  for m in tf.getmembers():
+                      if m.isfile() and "/include/" in m.name and m.name.endswith(".h"):
+                          out_path = os.path.join(inc_dir, os.path.basename(m.name))
+                          with open(out_path, "wb") as f:
+                              f.write(tf.extractfile(m).read())
+              print(f"{pkg} ({tag}): total {len(os.listdir(inc_dir))} headers in {inc_dir}")
+          PY
+
+      - name: Build WOAdaptor for Apache 2.4 (macOS arm64 + x86_64 universal)
+        run: |
+          make -C Utilities/Adaptors ADAPTOR_OS=MACOS OS=MACOS ADAPTORS=Apache2.4 NO_APXS=1 \
+            CC="zig cc -target aarch64-macos" RC_CFLAGS="-fPIC" APACHEINCLUDE_DIR=/tmp/macos-apache-inc
+          cp Utilities/Adaptors/Apache2.4/mod_WebObjects.so /tmp/mod_WebObjects.arm64.so
+
+          make -C Utilities/Adaptors/Apache2.4 clean
+          make -C Utilities/Adaptors ADAPTOR_OS=MACOS OS=MACOS ADAPTORS=Apache2.4 NO_APXS=1 \
+            CC="zig cc -target x86_64-macos" RC_CFLAGS="-fPIC" APACHEINCLUDE_DIR=/tmp/macos-apache-inc
+          cp Utilities/Adaptors/Apache2.4/mod_WebObjects.so /tmp/mod_WebObjects.x86_64.so
+
+          llvm-lipo -create /tmp/mod_WebObjects.arm64.so /tmp/mod_WebObjects.x86_64.so \
+            -output Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+
+      - name: Verify built module
+        run: |
+          ls -lh Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          file Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          llvm-lipo -info Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+          llvm-objdump --macho --private-headers /tmp/mod_WebObjects.arm64.so | grep -E "filetype|LC_CODE_SIGNATURE" || true
+          strings Utilities/Adaptors/Apache2.4/mod_WebObjects.so | grep -E "Adaptor version|Git commit ="
+
+      - name: Upload Apache 2.4 macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: woadaptor-apache2.4-macos
+          path: Utilities/Adaptors/Apache2.4/mod_WebObjects.so
+
+  iis-windows:
+    name: WOAdaptor IIS / windows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install MinGW-w64 64-bit cross-compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64 build-essential
+
+      - name: Build WOAdaptor for IIS (64-bit)
+        run: |
+          make -C Utilities/Adaptors ADAPTOR_OS=MINGW OS=MINGW ADAPTORS=IIS CC=x86_64-w64-mingw32-gcc
+
+      - name: Verify built DLL
+        run: |
+          ls -lh Utilities/Adaptors/IIS/WebObjects.dll
+          file Utilities/Adaptors/IIS/WebObjects.dll
+          x86_64-w64-mingw32-objdump -p Utilities/Adaptors/IIS/WebObjects.dll | grep -A 15 "Export Address Table"
+          strings Utilities/Adaptors/IIS/WebObjects.dll | grep -E "Adaptor version|Git commit ="
+
+      - name: Upload IIS Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: woadaptor-iis-windows
+          path: Utilities/Adaptors/IIS/WebObjects.dll
