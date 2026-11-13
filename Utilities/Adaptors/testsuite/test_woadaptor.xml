@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adaptor>
+  <application name="TestApp" retries="1" scheduler="ROUNDROBIN" urlVersion="4">
+    <instance id="1" port="8999" host="127.0.0.1" sendTimeout="10" recvTimeout="10"/>
+  </application>
+</adaptor>

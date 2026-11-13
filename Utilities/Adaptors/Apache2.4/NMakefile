@@ -1,6 +1,6 @@
 all: mod_WebObjects.so
 
-CLFLAGS=/nologo /MD /W3 /O2 /D WIN32 /D _WINDOWS /D NDEBUG /D SINGLE_THREADED_ADAPTOR -I"C:\Apache24\include" -I"../Adaptor" /c
+CLFLAGS=/nologo /MD /W3 /O2 /D WIN32 /D _WINDOWS /D NDEBUG /D MULTITHREADED_ADAPTOR -I"C:\Apache24\include" -I"../Adaptor" /c
 
 mod_WebObjects.so : mod_WebObjects.c ..\Adaptor\*.c
 	cl $(CLFLAGS) /Fomod_WebObjects.lo mod_WebObjects.c
