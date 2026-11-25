@@ -338,8 +338,8 @@ static char *ngx_http_webobjects_merge_loc_conf(ngx_conf_t *cf, void *parent, vo
         ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
             "ngx_http_webobjects: no 'webobjects_thread_pool' configured for WebObjects location! "
             "Backend communication will run synchronously on the NGINX event loop and slow requests "
-            "will freeze the worker process for all other requests. Define a 'thread_pool' in http "
-            "and set 'webobjects_thread_pool <name>;' in this location.");
+            "will freeze the worker process for all other requests. Define a 'thread_pool' in the main "
+            "context (outside http) and set 'webobjects_thread_pool <name>;' in this location.");
     }
 #else
     if (conf->enable == 1) {

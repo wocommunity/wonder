@@ -21,7 +21,7 @@ NGINX is built on an asynchronous, event-driven architecture (`epoll`/`kqueue`) 
 > If `webobjects_thread_pool` is omitted in `nginx.conf`, `tr_handleRequest()` will execute directly on the NGINX event-loop worker thread. 
 > A single slow or long-running request will **freeze the entire NGINX worker process** in `recv()`. While blocked, that worker cannot accept new connections or process ANY other traffic — **even requests to completely different WebObjects applications or static files will be blocked!**
 > 
-> In production, you **MUST** configure a thread pool (`thread_pool` in `http` context and `webobjects_thread_pool` in the WebObjects `location`).
+> In production, you **MUST** configure a thread pool (`thread_pool` in the top-level `main` context and `webobjects_thread_pool` in the WebObjects `location`).
 
 ### How Thread Pool Offloading Works:
 
@@ -124,6 +124,13 @@ load_module modules/ngx_http_webobjects_module.so;
 
 worker_processes auto;
 
+# =============================================================================
+# STEP 1: Define dedicated thread pool in main context (OUTSIDE the http block)
+# =============================================================================
+# threads:   Number of worker threads (default 32, increase for high concurrency)
+# max_queue: Maximum queue length for pending tasks before returning 500
+thread_pool wo_pool threads=32 max_queue=65536;
+
 events {
     worker_connections 4096;
     multi_accept on;
@@ -137,13 +144,6 @@ http {
     tcp_nopush      on;
     tcp_nodelay     on;
     keepalive_timeout 65;
-
-    # =========================================================================
-    # STEP 1: Define dedicated thread pool for WebObjects backend transactions
-    # =========================================================================
-    # threads:   Number of worker threads (default 32, increase for high concurrency)
-    # max_queue: Maximum queue length for pending tasks before returning 500
-    thread_pool wo_pool threads=32 max_queue=65536;
 
     server {
         listen 80;
@@ -205,9 +205,9 @@ If a slow request to `AppA` causes requests to `AppB` (or other instances) to ha
 
 1. **Check NGINX compile options:**
    Run `nginx -V` and ensure `--with-threads` is present in the `configure arguments:`. If missing, NGINX cannot run thread pools.
-2. **Check for `webobjects_thread_pool` in `nginx.conf`:**
+2. **Check for `thread_pool` and `webobjects_thread_pool` in `nginx.conf`:**
    Ensure both:
-   - `thread_pool <name> threads=...;` is present in `http { ... }`.
+   - `thread_pool <name> threads=...;` is present in the **main context** (outside `http { ... }`, near `worker_processes`).
    - `webobjects_thread_pool <name>;` is present inside `location /cgi-bin/WebObjects { ... }`.
    If omitted, the module logs a warning on startup:
    ```text
