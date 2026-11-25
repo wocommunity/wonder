@@ -12,15 +12,22 @@ This module natively embeds the shared C core of the Apple / Project Wonder WebO
 
 ---
 
-## 1. Architecture: NGINX Thread Pool Integration
+## 1. Architecture: NGINX Thread Pool Integration (CRITICAL)
 
-NGINX is built on an asynchronous, event-driven architecture (`epoll`/`kqueue`). The WebObjects Adaptor C core communicates synchronously with application instances using blocking TCP sockets. 
+NGINX is built on an asynchronous, event-driven architecture (`epoll`/`kqueue`) with a single event-loop thread per worker process. In contrast, the WebObjects Adaptor C core communicates synchronously with application instances using **blocking TCP sockets** (`connect()`, `send()`, `recv()`).
 
-To prevent blocking the NGINX event loop worker processes, this module leverages **NGINX Thread Pools** (`aio threads` / `ngx_thread_pool_t`):
+> [!CAUTION]
+> **Without an NGINX Thread Pool, the module runs in synchronous blocking fallback mode!**
+> If `webobjects_thread_pool` is omitted in `nginx.conf`, `tr_handleRequest()` will execute directly on the NGINX event-loop worker thread. 
+> A single slow or long-running request will **freeze the entire NGINX worker process** in `recv()`. While blocked, that worker cannot accept new connections or process ANY other traffic — **even requests to completely different WebObjects applications or static files will be blocked!**
+> 
+> In production, you **MUST** configure a thread pool (`thread_pool` in `http` context and `webobjects_thread_pool` in the WebObjects `location`).
+
+### How Thread Pool Offloading Works:
 
 1. **Non-blocking Request Intake:** NGINX accepts client connections on the event loop and reads the request body asynchronously.
-2. **Asynchronous Task Offloading:** The WebObjects transaction is dispatched to a background worker thread (`ngx_thread_task_post`).
-3. **Synchronous Adaptor Core Execution:** The worker thread executes `tr_handleRequest()` and manages backend socket I/O to the WebObjects instance.
+2. **Asynchronous Task Offloading:** The WebObjects transaction is dispatched to a background worker thread via `ngx_thread_task_post()`.
+3. **Synchronous Adaptor Core Execution:** The worker thread executes `tr_handleRequest()` in parallel with other worker threads and handles backend socket I/O to the WebObjects instance without blocking the event loop.
 4. **Non-blocking Response Delivery:** Upon completion, the thread notifies the main event loop, which delivers the buffered response chain back to the client using non-blocking output filters.
 
 ---
@@ -29,10 +36,10 @@ To prevent blocking the NGINX event loop worker processes, this module leverages
 
 ### Method A: As a Dynamic Module with NGINX Sources (Recommended)
 
-Download the source code of the exact NGINX version running on your system, configure the module, and compile:
+Download the source code of the exact NGINX version running on your system, configure the module with `--with-threads`, and compile:
 
 ```bash
-cd /path/to/nginx-1.24.0
+cd /path/to/nginx-1.26.3
 
 ./configure \
     --with-compat \
@@ -42,6 +49,9 @@ cd /path/to/nginx-1.24.0
 
 make modules
 ```
+
+> [!IMPORTANT]
+> The `--with-threads` flag is **required** to enable NGINX thread pool support (`NGX_THREADS`). Without it, thread pool directives are ignored and the module runs in synchronous blocking mode.
 
 #### Optional Compile Flags (e.g., `SUPPORT_REFUSENEWSESSION_ATTR`)
 To enable optional features such as `SUPPORT_REFUSENEWSESSION_ATTR` (which restores the legacy `refuseNewSessions` XML instance attribute for static or mixed deployments):
@@ -77,14 +87,14 @@ If you have NGINX source or development headers available:
 
 ```bash
 cd Utilities/Adaptors/NGINX
-make NGINX_SRC=/path/to/nginx-1.24.0
+make NGINX_SRC=/path/to/nginx-1.26.3
 ```
 
 With optional compile flags:
 ```bash
-make NGINX_SRC=/path/to/nginx-1.24.0 SUPPORT_REFUSENEWSESSION_ATTR=1
+make NGINX_SRC=/path/to/nginx-1.26.3 SUPPORT_REFUSENEWSESSION_ATTR=1
 # or:
-make NGINX_SRC=/path/to/nginx-1.24.0 EXTRA_CFLAGS="-DSUPPORT_REFUSENEWSESSION_ATTR"
+make NGINX_SRC=/path/to/nginx-1.26.3 EXTRA_CFLAGS="-DSUPPORT_REFUSENEWSESSION_ATTR"
 ```
 
 ---
@@ -94,9 +104,9 @@ make NGINX_SRC=/path/to/nginx-1.24.0 EXTRA_CFLAGS="-DSUPPORT_REFUSENEWSESSION_AT
 | Directive | Context | Description |
 |---|---|---|
 | `webobjects on \| off` | `location` | Enables or disables WebObjects request processing for this location. |
+| `webobjects_thread_pool <name>` | `http`, `server`, `location` | **(Crucial for Multi-Threading)** Name of the NGINX thread pool used to offload blocking backend socket I/O. Without this, requests execute synchronously and block the event loop. |
 | `webobjects_config <url> [interval]` | `http`, `server`, `location` | Configuration URL (e.g. `"http://127.0.0.1:1085" 10;`, multiple URLs `"http://host1:81/WOConfig.xml,http://host2:81/WOConfig.xml" 5;`, or trailing comma syntax `"http://host:81/WOConfig.xml,5";`). |
 | `webobjects_log <path> [level]` | `http`, `server`, `location` | Path to WebObjects log file and logging level (`DEBUG`, `INFO`, `WARN`, `ERR`). Note: If not set to `ALWAYS_LOG`, logging is activated on demand when `/tmp/logWebObjects` exists. |
-| `webobjects_thread_pool <name>` | `http`, `server`, `location` | Name of the NGINX thread pool used to offload blocking backend socket I/O. |
 | `webobjects_document_root <path>` | `http`, `server`, `location` | Path to the web server document root directory. |
 | `webobjects_alias <path>` | `http`, `server`, `location` | WebObjects request alias (default: `/cgi-bin/WebObjects`). |
 | `webobjects_user <name> [password]` | `http`, `server`, `location` | Username and optional password for `WOAdaptorInfo` access. Set user to `public` to allow unrestricted public access without password prompt. |
@@ -106,19 +116,33 @@ make NGINX_SRC=/path/to/nginx-1.24.0 EXTRA_CFLAGS="-DSUPPORT_REFUSENEWSESSION_AT
 
 ## 4. Production Example (`nginx.conf`)
 
+Here is a complete, production-ready `nginx.conf` demonstrating proper multi-threaded thread pool setup:
+
 ```nginx
 # Load dynamic module at the very top of nginx.conf
 load_module modules/ngx_http_webobjects_module.so;
 
+worker_processes auto;
+
 events {
     worker_connections 4096;
+    multi_accept on;
 }
 
 http {
     include       mime.types;
     default_type  application/octet-stream;
 
-    # Define dedicated thread pool for WebObjects backend calls
+    sendfile        on;
+    tcp_nopush      on;
+    tcp_nodelay     on;
+    keepalive_timeout 65;
+
+    # =========================================================================
+    # STEP 1: Define dedicated thread pool for WebObjects backend transactions
+    # =========================================================================
+    # threads:   Number of worker threads (default 32, increase for high concurrency)
+    # max_queue: Maximum queue length for pending tasks before returning 500
     thread_pool wo_pool threads=32 max_queue=65536;
 
     server {
@@ -136,30 +160,63 @@ http {
         ssl_protocols       TLSv1.2 TLSv1.3;
         ssl_ciphers         HIGH:!aNULL:!MD5;
 
-        # Optional: redirect HTTP to HTTPS
-        # if ($scheme = http) {
-        #     return 301 https://$host$request_uri;
-        # }
-
-        # 1. Forward WebObjects application requests
+        # =========================================================================
+        # STEP 2: Forward WebObjects requests and bind them to the thread pool
+        # =========================================================================
         location /cgi-bin/WebObjects {
             webobjects on;
             webobjects_config "http://wotaskd1:1085,http://wotaskd2:1085" 10;
             webobjects_log "/var/log/nginx/webobjects.log" info;
+
+            # MANDATORY for true multi-threaded operation:
             webobjects_thread_pool wo_pool;
 
             # Optional: Allow public access to WOAdaptorInfo without basic auth prompt
             webobjects_user public;
 
             client_max_body_size 100M;
+            client_body_buffer_size 1M;
         }
 
-        # 2. Serve static WebObjects web resources directly via NGINX
+        # -------------------------------------------------------------------------
+        # Serve static WebObjects web resources directly via NGINX (high performance)
+        # -------------------------------------------------------------------------
         location /WebObjects {
             alias /opt/Apple/Library/WebObjects/WebServerResources;
             expires 30d;
             add_header Cache-Control "public, no-transform";
+            access_log off;
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root html;
         }
     }
 }
 ```
+
+---
+
+## 5. Troubleshooting: Concurrency & Blocked Requests
+
+### Symptom: Long-running requests block other requests (even for different applications)
+If a slow request to `AppA` causes requests to `AppB` (or other instances) to hang or time out:
+
+1. **Check NGINX compile options:**
+   Run `nginx -V` and ensure `--with-threads` is present in the `configure arguments:`. If missing, NGINX cannot run thread pools.
+2. **Check for `webobjects_thread_pool` in `nginx.conf`:**
+   Ensure both:
+   - `thread_pool <name> threads=...;` is present in `http { ... }`.
+   - `webobjects_thread_pool <name>;` is present inside `location /cgi-bin/WebObjects { ... }`.
+   If omitted, the module logs a warning on startup:
+   ```text
+   [warn] ngx_http_webobjects: no 'webobjects_thread_pool' configured for WebObjects location!
+   ```
+3. **Thread Pool Sizing:**
+   If your application experiences bursts of concurrent long-running requests, the thread pool queue may fill up. Increase the thread count:
+   ```nginx
+   thread_pool wo_pool threads=64 max_queue=65536;
+   ```
+4. **Worker Processes:**
+   Ensure `worker_processes auto;` is set in `nginx.conf` so NGINX utilizes all CPU cores.

@@ -334,6 +334,19 @@ static char *ngx_http_webobjects_merge_loc_conf(ngx_conf_t *cf, void *parent, vo
         if (conf->thread_pool == NULL) {
             return NGX_CONF_ERROR;
         }
+    } else if (conf->enable == 1) {
+        ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
+            "ngx_http_webobjects: no 'webobjects_thread_pool' configured for WebObjects location! "
+            "Backend communication will run synchronously on the NGINX event loop and slow requests "
+            "will freeze the worker process for all other requests. Define a 'thread_pool' in http "
+            "and set 'webobjects_thread_pool <name>;' in this location.");
+    }
+#else
+    if (conf->enable == 1) {
+        ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
+            "ngx_http_webobjects: NGINX was compiled without thread pool support (NGX_THREADS)! "
+            "Backend communication will run synchronously on the NGINX event loop and slow requests "
+            "will freeze the worker process for all other requests. Recompile NGINX with --with-threads.");
     }
 #endif
 
@@ -432,6 +445,17 @@ static ngx_int_t ngx_http_webobjects_handler(ngx_http_request_t *r)
                 pthread_mutex_unlock(&ngx_wo_init_mutex);
                 return NGX_HTTP_INTERNAL_SERVER_ERROR;
             }
+#if (NGX_THREADS)
+            if (lcf->thread_pool == NULL) {
+                ngx_log_error(NGX_LOG_WARN, r->connection->log, 0,
+                              "ngx_http_webobjects: running without thread pool ('webobjects_thread_pool' not configured); "
+                              "backend communication is synchronous and slow requests will block the NGINX event loop");
+            }
+#else
+            ngx_log_error(NGX_LOG_WARN, r->connection->log, 0,
+                          "ngx_http_webobjects: running without thread support (compiled without NGX_THREADS); "
+                          "backend communication is synchronous and slow requests will block the NGINX event loop");
+#endif
             lcf->adaptor_initialized = 1;
         }
         pthread_mutex_unlock(&ngx_wo_init_mutex);
