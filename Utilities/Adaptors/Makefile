@@ -57,3 +57,6 @@ IIS::
 NSAPI::
 	cd NSAPI ; ${MAKE}
 
+NGINX::
+	cd NGINX ; ${MAKE}
+
