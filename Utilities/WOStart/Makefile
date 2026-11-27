@@ -2,7 +2,7 @@ include make.config
 
 WOStart${EXESUFFIX}: java.o java_md.o manifest_info.o WOStart.o
 	${CC} ${CFLAGS} -o WOStart${EXESUFFIX} *.o ${LIBS}
-	strip WOStart${EXESUFFIX}
+	${STRIP} WOStart${EXESUFFIX}
 
 .c.o:
 	${CC} ${CFLAGS} -c $<

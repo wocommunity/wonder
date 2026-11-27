@@ -49,6 +49,14 @@
 #endif
 
 /*
+ * The definitions of these functions live in version_comp.h and are
+ * instantiated by java_md.c; including that header here would define
+ * them a second time, so declare them only.
+ */
+int acceptable_release(char *release, char *version_string);
+int valid_version_string(char *version_string);
+
+/*
  * The following environment variable is used to influence the behavior
  * of the jre exec'd through the SelectVersion routine.  The command line
  * options which specify the version are not passed to the exec'd version,

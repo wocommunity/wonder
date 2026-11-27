@@ -1,0 +1,67 @@
+name: Build WOStart
+
+on:
+  push:
+    branches:
+      - build-wostart
+      - master
+    paths:
+      - 'Utilities/WOStart/**'
+      - '.github/workflows/wostart.yml'
+  pull_request:
+    paths:
+      - 'Utilities/WOStart/**'
+      - '.github/workflows/wostart.yml'
+  workflow_dispatch:
+
+jobs:
+  wostart-windows:
+    name: WOStart / windows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install MinGW-w64 64-bit cross-compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 binutils-mingw-w64-x86-64 build-essential
+
+      - name: Prepare Windows JNI headers
+        run: |
+          JNI_H=$(find /usr/lib/jvm -name jni.h | head -n 1)
+          test -n "$JNI_H"
+          mkdir -p /tmp/jni-win32
+          cp "$JNI_H" /tmp/jni-win32/jni.h
+          cat <<'EOF' > /tmp/jni-win32/jni_md.h
+          #ifndef _JAVASOFT_JNI_MD_H_
+          #define _JAVASOFT_JNI_MD_H_
+
+          #define JNIEXPORT __declspec(dllexport)
+          #define JNIIMPORT __declspec(dllimport)
+          #define JNICALL __stdcall
+
+          typedef long jint;
+          typedef __int64 jlong;
+          typedef signed char jbyte;
+
+          #endif
+          EOF
+
+      - name: Build WOStart for Windows (64-bit)
+        run: |
+          make -C Utilities/WOStart CC=x86_64-w64-mingw32-gcc STRIP=x86_64-w64-mingw32-strip CFLAGS="-I/tmp/jni-win32 -L./"
+
+      - name: Verify built executable
+        run: |
+          ls -lh Utilities/WOStart/WOStart.exe
+          file Utilities/WOStart/WOStart.exe
+          x86_64-w64-mingw32-objdump -p Utilities/WOStart/WOStart.exe | grep "DLL Name"
+
+      - name: Upload WOStart Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wostart-windows
+          path: Utilities/WOStart/WOStart.exe
+

@@ -14,7 +14,7 @@ string getNextRoot();
 string getNextLocal();
 
 #define APPNAME "WOStart"
-#define VERSION "1.1"
+#define VERSION "1.2"
 
 extern "C" {
   int Java_Main(int argc, char ** argv, char *javaCommand);
@@ -389,6 +389,7 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 	}
 
 	vector<string> appArgs;
+	int firstElementsCounter = 0;
 
 	// process on the args - skipping arg 0 (command name)
 	for (int i = 1; i < argc; i++) {
@@ -396,11 +397,25 @@ void buildCommand(vector<string>& jargs, string& classpath, int argc, TCHAR* arg
 
 		// special handing jvm arguments
 		if (arg[0] == '-' && (			
-			   (arg[1] == 'X') ||                      // jvm "special" arguments
-			   (arg[1] == 'D' && strchr(arg + 2, '=')) // property definitions
+				(arg[1] == 'x') ||                      // jvm "special" arguments
+				(arg[1] == 'X') ||                      // jvm "special" arguments
+				(strncmp(arg, "-agentlib", 9) == 0) ||  // jvm debug options
+				(strncmp(arg, "-javaagent", 10) == 0) ||  // jvm agent option
+				(arg[1] == 'D' && strchr(arg + 2, '=')) // property definitions
 			))
 		{
 			jargs.push_back(argv[i]);
+			continue;
+		}
+
+		// special handing jvm arguments
+		if (arg[0] == '-' && (			
+				(strncmp(arg, "--add-exports", 13) == 0) ||  // jvm options
+				(strncmp(arg, "--add-opens", 11) == 0)       // jvm options
+			))
+		{
+		    jargs.insert(jargs.begin() + firstElementsCounter++, argv[i]);
+			
 			continue;
 		}
 		
@@ -446,6 +461,14 @@ void checkForUpdate(string& appPath) {
 int wostart_main(int argc, TCHAR* argv[])
 {
 	try {
+		// -version: print our version and exit (like java -version)
+		for (int i = 1; i < argc; i++) {
+			if (_tcsicmp(argv[i], _T("-version")) == 0) {
+				cout << APPNAME << " " << VERSION << endl;
+				return 0;
+			}
+		}
+
 		// tell the world about ourselves;
 		cout << APPNAME << " " << VERSION << endl;
 
