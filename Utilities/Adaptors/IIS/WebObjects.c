@@ -82,7 +82,8 @@ client certificate support **/
 //             clean-up operations.  Please feel free to set this value to 
 //             '0' if you think (or even know) that a sleep operation isn't 
 //             necessary after an HSE_REQ_CLOSE_CONNECTION event.
-#define HSE_REQ_CLOSE_CONNECTION_CLEANUP_SLEEP 250
+// Under load, sleeping 250ms on worker threads exhausts the thread pool. Set to 0.
+#define HSE_REQ_CLOSE_CONNECTION_CLEANUP_SLEEP 0
 
 char *WA_adaptorName = "IIS";
 
@@ -95,13 +96,8 @@ static int adaptorEnabled;
  */
 MS_BOOL WINAPI DllMain( HANDLE hinst, ULONG reason, LPVOID ptr)
 {
-   strtbl *config_options;
-
    switch( reason ) {
       case DLL_PROCESS_ATTACH:
-         config_options = read_registry_config();
-         adaptorEnabled = init_adaptor(config_options)==0;
-         break;
       case DLL_THREAD_ATTACH:
       case DLL_THREAD_DETACH:
       case DLL_PROCESS_DETACH:
@@ -112,11 +108,16 @@ MS_BOOL WINAPI DllMain( HANDLE hinst, ULONG reason, LPVOID ptr)
 
 __declspec(dllexport) MS_BOOL __stdcall GetExtensionVersion (HSE_VERSION_INFO *pVer)
 {
+   strtbl *config_options;
+
    pVer->dwExtensionVersion = CURRENT_WOF_VERSION_MAJOR;
    pVer->dwExtensionVersion = (pVer->dwExtensionVersion << 16 ) | CURRENT_WOF_VERSION_MINOR;
 
    strcpy(pVer->lpszExtensionDesc, "WebObjects Extension DLL for IIS Servers by Apple Computer, Inc.  version " ADAPTOR_VERSION);
-   return TRUE;
+
+   config_options = read_registry_config();
+   adaptorEnabled = (init_adaptor(config_options) == 0);
+   return adaptorEnabled ? TRUE : FALSE;
 }
 
 /**
@@ -199,7 +200,7 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
          }
 
          /* resp->content_valid will be 0 for HEAD requests and empty responses */
-         if (resp->content_valid) {
+         if (resp->content_valid && browserStatus == 0) {
             long long count;
             while (resp->content_read < resp->content_length &&
                    (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID &&
@@ -213,6 +214,7 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
                 {
                    browserStatus = -1;
                    WOLog(WO_ERR,"Failed to send content (%d)", GetLastError());
+                   break;
                 }
 
                 if(browserStatus == 0)
@@ -228,6 +230,11 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
                       resp->content_read += count;
                       resp->content_valid = count;
                    }
+                   if(count < 0)
+                   {
+                      WOLog(WO_WARN, "sendResponse(): error reading response content from instance.");
+                      break;
+                   }
                    if(count != 0)
                    {
                       // 2009/04/30: error while reading response content (this can happen
@@ -238,6 +245,10 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
                    }
                 }
             }
+            // RESP_LENGTH_INVALID is also the regular end-of-stream marker for
+            // responses without content-length (streaming): content_valid then
+            // holds the last (partial) block, or 0 if nothing was received.
+            // That block must still be sent to the client.
             if(browserStatus == 0)
             {
                len = resp->content_valid;
@@ -304,7 +315,7 @@ static DWORD die(EXTENSION_CONTROL_BLOCK *p, const char *msg, int status)
 /* You're responsible for freeing the header returned ! */
 static char *getHeader(EXTENSION_CONTROL_BLOCK *p, const char *key)
 {
-#define BUFSZ 2048
+#define BUFSZ 4096
    char temp_hdr[BUFSZ];
    DWORD	len = BUFSZ;
    char *hdr = NULL;
@@ -322,59 +333,48 @@ static char *getHeader(EXTENSION_CONTROL_BLOCK *p, const char *key)
 }
 
 static void copyHeaderForServerVariable(char *var, EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
-    char *buf, *value, stackBuf[2048];
-    DWORD bufsz = sizeof(stackBuf), pos;
+    char stackBuf[16384];
+    char *buf = stackBuf;
+    DWORD bufsz = sizeof(stackBuf);
 
     WOLog(WO_DBG, "reading buffer for server variable %s", var);
-    if (p->GetServerVariable(p->ConnID, var, stackBuf, &bufsz) == TRUE) {
-        buf = stackBuf;
-    } else {
-        if(GetLastError() == 122) // ERROR_INSUFFICIENT_BUFFER
-        {
-            WOLog(WO_DBG, "buffer too small; need %d", bufsz);
-            buf = WOMALLOC(bufsz);
-            if (p->GetServerVariable(p->ConnID, var, buf, &bufsz) != TRUE)
-            {
+    if (p->GetServerVariable(p->ConnID, var, stackBuf, &bufsz) != TRUE) {
+        DWORD err = GetLastError();
+        if (bufsz > sizeof(stackBuf) || err == 122 /* ERROR_INSUFFICIENT_BUFFER */ || err == 234 /* ERROR_MORE_DATA */) {
+            DWORD allocSize = bufsz + 4096;
+            DWORD callSize = allocSize;
+            WOLog(WO_DBG, "buffer too small for %s; need %u, allocating %u", var, (unsigned int)bufsz, (unsigned int)allocSize);
+            buf = (char *)WOMALLOC(allocSize);
+            if (!buf)
+                return;
+            if (p->GetServerVariable(p->ConnID, var, buf, &callSize) != TRUE) {
                 WOFREE(buf);
-                WOLog(WO_ERR, "Could not get header.");
+                WOLog(WO_ERR, "Could not get server variable %s (needed %u bytes, error %u).", var, (unsigned int)allocSize, (unsigned int)GetLastError());
                 return;
             }
-        } else
-            return; // header not set
-    }
-
-    if (buf) {
-        //WOLog(WO_DBG, "got raw buffer: %s", buf);
-        pos = 0;
-        while (pos < bufsz) {
-            while (pos < bufsz && buf[pos] < 33)
-                pos++;
-            if (pos < bufsz)  {
-                /* got start of new value */
-                value = &buf[pos];
-                do {
-                    while (pos < bufsz && buf[pos] != '\r')
-                        pos++;
-                    if (pos + 2 < bufsz && buf[pos+1] == '\n' && (buf[pos+2] == ' ' || buf[pos+2] == '\t')) {
-                        /* got a multiline header; change CRLF to whitespace and keep parsing */
-                        buf[pos] = ' ';
-                        buf[pos+1] = ' ';
-                    } else {
-                        buf[pos] = 0;
-                    }
-                } while (pos < bufsz && buf[pos] != 0);
-                WOLog(WO_DBG, "found value=\"%s\"", value ? value : "(NULL)");
-                if (value)
-                    req_addHeader(req, var, value, STR_COPYKEY|STR_COPYVALUE);
-                else
-                    req_addHeader(req, var, "", STR_COPYKEY);
-            }
+            bufsz = callSize;
+            buf[bufsz < allocSize ? bufsz : allocSize - 1] = '\0';
+        } else {
+            return; // variable not set
         }
-        if (buf != stackBuf)
-            WOFREE(buf);
     }
 
-   return;
+    if (buf && buf[0] != '\0') {
+        /* Strip trailing \r, \n, spaces */
+        size_t len = strlen(buf);
+        while (len > 0 && (buf[len - 1] == '\r' || buf[len - 1] == '\n' || buf[len - 1] == ' ' || buf[len - 1] == '\t')) {
+            buf[--len] = '\0';
+        }
+        if (len > 0) {
+            WOLog(WO_DBG, "found server variable %s=\"%s\"", var, buf);
+            req_addHeader(req, var, buf, STR_COPYKEY | STR_COPYVALUE);
+        }
+    }
+
+    if (buf != stackBuf)
+        WOFREE(buf);
+
+    return;
 }
 
 /** client certificate support
@@ -394,7 +394,7 @@ static char* make_cert_one_line(BYTE* bytes, int len) {
  end client certificate support **/
 
 static void copyHeadersAllRaw(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
-    char *buf, *key, *value, stackBuf[2048];
+    char *buf = NULL, *key, *value, stackBuf[16384];
     DWORD bufsz = sizeof(stackBuf), pos;
 
     /** client certificate support 
@@ -407,60 +407,127 @@ static void copyHeadersAllRaw(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
     if (p->GetServerVariable(p->ConnID, "ALL_RAW", stackBuf, &bufsz) == TRUE) {
         buf = stackBuf;
     } else {
-        WOLog(WO_DBG, "buffer too small; need %d", bufsz);
-        buf = WOMALLOC(bufsz);
-        if (p->GetServerVariable(p->ConnID, "ALL_RAW", buf, &bufsz) != TRUE) {
-            WOFREE(buf);
-            WOLog(WO_ERR, "Could not get headers.");
+        DWORD err = GetLastError();
+        if (bufsz > sizeof(stackBuf) || err == 122 /* ERROR_INSUFFICIENT_BUFFER */ || err == 234 /* ERROR_MORE_DATA */) {
+            DWORD allocSize = bufsz + 4096;
+            DWORD callSize = allocSize;
+            WOLog(WO_DBG, "headers buffer too small; need %u, allocating %u", (unsigned int)bufsz, (unsigned int)allocSize);
+            buf = (char *)WOMALLOC(allocSize);
+            if (!buf)
+                return;
+            if (p->GetServerVariable(p->ConnID, "ALL_RAW", buf, &callSize) != TRUE) {
+                WOFREE(buf);
+                WOLog(WO_ERR, "Could not get headers (needed %u bytes, error %u).", (unsigned int)allocSize, (unsigned int)GetLastError());
+                return;
+            }
+            bufsz = callSize;
+            buf[bufsz < allocSize ? bufsz : allocSize - 1] = '\0';
+        } else {
+            WOLog(WO_DBG, "GetServerVariable ALL_RAW failed with error %u", (unsigned int)err);
             return;
         }
     }
 
     if (buf) {
-        //WOLog(WO_DBG, "got raw buffer: %s", buf);
         pos = 0;
-        while (pos < bufsz) {
-            while (pos < bufsz && buf[pos] < 31)
+        while (pos < bufsz && buf[pos] != '\0') {
+            /* skip leading whitespace / CRLF */
+            while (pos < bufsz && (unsigned char)buf[pos] <= ' ' && buf[pos] != '\0')
                 pos++;
-            if (pos < bufsz)  {
-                /* got start of new header */
-                key = &buf[pos];
-                value = NULL;
-                /* search for ':' */
-                while (pos < bufsz && buf[pos] != ':')
-                    pos++;
-                /* change ':' to 0 to terminate key */
-                buf[pos] = 0;
+            if (pos >= bufsz || buf[pos] == '\0')
+                break;
+
+            /* got start of new header */
+            key = &buf[pos];
+            value = NULL;
+
+            /* search for ':' */
+            while (pos < bufsz && buf[pos] != ':' && buf[pos] != '\r' && buf[pos] != '\n' && buf[pos] != '\0')
                 pos++;
-                /* look for start of value */
-                while (pos < bufsz && (buf[pos] == ' ' || buf[pos] == '\t'))
+
+            if (pos >= bufsz || buf[pos] != ':') {
+                /* malformed line without colon; advance to next line */
+                while (pos < bufsz && buf[pos] != '\n' && buf[pos] != '\0')
                     pos++;
-                if (pos < bufsz && buf[pos] > 31) {
-                    /* got start of value */
-                    value = &buf[pos];
-                    do {
-                        while (pos < bufsz && buf[pos] != '\r')
-                            pos++;
+                if (pos < bufsz && buf[pos] == '\n')
+                    pos++;
+                continue;
+            }
+
+            /* change ':' to 0 to terminate key */
+            buf[pos] = '\0';
+            pos++;
+
+            /* look for start of value (skip leading space / tab) */
+            while (pos < bufsz && (buf[pos] == ' ' || buf[pos] == '\t'))
+                pos++;
+
+            if (pos < bufsz && buf[pos] != '\r' && buf[pos] != '\n' && buf[pos] != '\0') {
+                /* got start of value */
+                value = &buf[pos];
+                while (pos < bufsz && buf[pos] != '\0') {
+                    if (buf[pos] == '\r') {
                         if (pos + 2 < bufsz && buf[pos+1] == '\n' && (buf[pos+2] == ' ' || buf[pos+2] == '\t')) {
-                            /* got a multiline header; change CRLF to whitespace and keep parsing */
+                            /* multiline header folded with whitespace */
                             buf[pos] = ' ';
                             buf[pos+1] = ' ';
+                            pos += 2;
                         } else {
-                            buf[pos] = 0;
+                            buf[pos] = '\0';
+                            pos++;
+                            if (pos < bufsz && buf[pos] == '\n')
+                                pos++;
+                            break;
                         }
-                    } while (pos < bufsz && buf[pos] != 0);
+                    } else if (buf[pos] == '\n') {
+                        if (pos + 1 < bufsz && (buf[pos+1] == ' ' || buf[pos+1] == '\t')) {
+                            buf[pos] = ' ';
+                            pos++;
+                        } else {
+                            buf[pos] = '\0';
+                            pos++;
+                            break;
+                        }
+                    } else {
+                        pos++;
+                    }
                 }
+            } else {
+                /* empty value, advance past line ending */
+                while (pos < bufsz && (buf[pos] == '\r' || buf[pos] == '\n'))
+                    pos++;
+            }
 
+            if (key && *key) {
                 // do not pass connection setting from client to WO app as this interferes
-                //  with our own connection pooling
+                // with our own connection pooling
                 if (strcasecmp(key, CONNECTION) == 0)
                     continue;
-                
-                WOLog(WO_DBG, "found key=\"%s\", value=\"%s\"", key, value ? value : "(NULL)");
-                if (value)
-                    req_addHeader(req, key, value, STR_COPYKEY|STR_COPYVALUE);
-                else
-                    req_addHeader(req, key, "", STR_COPYKEY);
+
+                WOLog(WO_DBG, "found key=\"%s\", value=\"%s\"", key, value ? value : "");
+
+                /*
+                 * In HTTP/2 or with multiple Cookie headers, RFC 7540 / RFC 6265 requires
+                 * concatenating multiple Cookie header lines with "; ".
+                 */
+                if (strcasecmp(key, "Cookie") == 0 || strcasecmp(key, COOKIE) == 0) {
+                    const char *existing = req_HeaderForKey(req, COOKIE);
+                    if (existing && *existing) {
+                        size_t elen = strlen(existing);
+                        size_t vlen = strlen(value ? value : "");
+                        char *combined = (char *)WOMALLOC(elen + 2 + vlen + 1);
+                        if (combined) {
+                            memcpy(combined, existing, elen);
+                            combined[elen] = ';';
+                            combined[elen + 1] = ' ';
+                            memcpy(combined + elen + 2, value ? value : "", vlen + 1);
+                            st_setValueForKey(req->headers, COOKIE, combined, STR_COPYKEY | STR_FREEVALUE);
+                            continue;
+                        }
+                    }
+                }
+
+                req_addHeader(req, key, value ? value : "", STR_COPYKEY | STR_COPYVALUE);
             }
         }
         if (buf != stackBuf)
@@ -497,6 +564,11 @@ static void copyHeaders(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
     copyHeadersAllRaw(p, req);
     // Get everything else
     copyHeadersServerVariables((char **)iis_http_headers, p, req); // mstoll 13.10.2005 cast added
+
+    // Explicit fallback for Cookie: if ALL_RAW failed or omitted it, query HTTP_COOKIE directly
+    if (req_HeaderForKey(req, COOKIE) == NULL) {
+        copyHeaderForServerVariable("HTTP_COOKIE", p, req);
+    }
 }
 
 
@@ -553,7 +625,6 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
            {
               WOLog(WO_ERR,"ReadClient failed");
            }
-           die(p, INV_FORM_DATA, HTTP_BAD_REQUEST);
            return -1;
         }
 
@@ -622,11 +693,16 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
     *	extract WebObjects request components from URI
     */
    script_name = getHeader(p, CGI_SCRIPT_NAME);
-   uri = WOMALLOC(strlen(p->lpszPathInfo) + strlen(script_name) + 1);
-   strcpy(uri, script_name);
-   strcat(uri, p->lpszPathInfo);
+   {
+      const char *s_name = script_name ? script_name : "";
+      const char *p_info = p->lpszPathInfo ? p->lpszPathInfo : "";
+      uri = WOMALLOC(strlen(p_info) + strlen(s_name) + 1);
+      strcpy(uri, s_name);
+      strcat(uri, p_info);
+   }
    WOLog(WO_INFO,"<WebObjects ISAPI> new request: %s", uri);
-   WOFREE(script_name);
+   if (script_name)
+      WOFREE(script_name);
 
 #ifndef __PRESERVE_UNSAFE_URLS
    // Make sure the URL does not contain forbidden characters (0x0D or 0x0A).
@@ -661,7 +737,7 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
    /*
     *	build the request...
     */
-   req = req_new(p->lpszMethod, NULL);
+   req = req_new(p->lpszMethod ? p->lpszMethod : "GET", NULL);
    req->api_handle = p;
 
    /*
@@ -716,8 +792,9 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
    if (resp == NULL) {
       /* if no error so far... */
       server_protocol = getHeader(p, CGI_SERVER_PROTOCOL);
-      resp = tr_handleRequest(req, uri, &wc, server_protocol, NULL);
-      WOFREE(server_protocol);
+      resp = tr_handleRequest(req, uri, &wc, server_protocol ? server_protocol : "HTTP/1.1", NULL);
+      if (server_protocol)
+         WOFREE(server_protocol);
    }
 
    if (resp != NULL) {

@@ -76,7 +76,7 @@ strtbl	*st_new(int hint)
 
 void st_free(strtbl *st)
 {
-   int i;
+   unsigned int i;
    strtblelem *el;
 
    for (i=0, el=st->head; i < st->count; i++, el++)
@@ -100,7 +100,7 @@ void st_free(strtbl *st)
  */
 static strtblelem *st_newKV(strtbl *st)
 {
-   int i;
+   unsigned int i;
 
    for (i = st->firstNull; i < st->count; i++)
       if (st->head[i].key == NULL)
@@ -145,12 +145,12 @@ void st_add(strtbl *st, const char *key, const char *value, int flags)
 inline
 static int st_findKey(strtbl *st, const char *key)
 {
-   int index;
+   unsigned int index;
    strtblelem *el;
 
    for (index=0, el=st->head; index < st->count; index++, el++)
       if (el->key && strcasecmp(el->key, key) == 0)
-         return index;
+         return (int)index;
    return -1;
 }
 
@@ -202,8 +202,8 @@ void st_removeKey(strtbl *st, const char *key)
 	  el->value = NULL;	/* clear the element */
 	  el->flags = 0;	/* clear the element */
 #endif
-      if (st->firstNull > index)
-         st->firstNull = index;
+      if (st->firstNull > (unsigned int)index)
+         st->firstNull = (unsigned int)index;
       st->count--;
    }
    return;
@@ -219,7 +219,7 @@ const char *st_valueFor(strtbl *st, const char *key)
 
 void st_perform(strtbl *st, st_perform_callback callback, void *userdata)
 {
-   int i;
+   unsigned int i;
    strtblelem *el;
 
    for (i=0, el=st->head; i < st->count; el++)

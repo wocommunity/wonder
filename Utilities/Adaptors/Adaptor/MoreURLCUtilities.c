@@ -217,7 +217,7 @@ unsigned int SizeURL(WOURLComponents *wc) {
  */
 WOURLError WOValidateInitialURL( const char* url ) {
     const char* i;
-    int j;
+    size_t j;
 
     char illegal_vals[] = { 0x0A, 0x0D };
     int len = strlen( url );

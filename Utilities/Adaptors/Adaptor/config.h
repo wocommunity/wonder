@@ -57,11 +57,18 @@ typedef int  intptr_t;
 #define CURRENT_WOF_VERSION_MAJOR	4
 #define CURRENT_WOF_VERSION_MINOR	6
 
-#define ADAPTOR_VERSION			"4.6.7"
+#define ADAPTOR_VERSION "4.6.8"
 
 /* Used to turn the value of a macro into a string literal */
 #define _Str(x) #x
 #define Str(x) _Str(x)
+
+#ifdef ADAPTOR_GIT_COMMIT_RAW
+#undef ADAPTOR_GIT_COMMIT
+#define ADAPTOR_GIT_COMMIT Str(ADAPTOR_GIT_COMMIT_RAW)
+#elif !defined(ADAPTOR_GIT_COMMIT)
+#define ADAPTOR_GIT_COMMIT "unknown"
+#endif
 
 /* maximum number of wotaskds the adaptor can query for config info */
 #define WA_MAX_CONFIG_SERVERS		16

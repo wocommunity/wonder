@@ -39,7 +39,7 @@ and limitations under the License.
 #include <stdio.h>	/* sprintf() */
 #include <stdlib.h>
 
-#ifdef SOLARIS || defined(AIX)
+#if defined(SOLARIS) || defined(AIX)
 #include <alloca.h>
 #endif
 
@@ -97,6 +97,14 @@ HTTPResponse *WOAdaptorInfo(HTTPRequest *req, WOURLComponents *wc) {
    str_appendLiteral(content, "<p>Server = ");
    str_append(content, WA_adaptorName);
    str_appendLiteral(content, "<br>WebObjects Server Adaptor version = " ADAPTOR_VERSION);
+   if (ADAPTOR_GIT_COMMIT[0] != '\0')
+   {
+      str_appendLiteral(content, "<br>Git commit = " ADAPTOR_GIT_COMMIT);
+   }
+   else
+   {
+      str_appendLiteral(content, "<br>Git commit = unknown");
+   }
    str_append(content, "<br>");
    str_appendLiteral(content, "WebObjects Configuration URI(s) = ");
    ac_description(content);

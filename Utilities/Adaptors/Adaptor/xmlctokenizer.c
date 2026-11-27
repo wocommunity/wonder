@@ -226,7 +226,7 @@ XMLCToken xmlcTokenizerNextToken(XMLCTokenizer *s)
                             s->tokState = T_IN_CDATA;
                             for(i=0;i<6 && s->tokState == T_IN_CDATA;i++) {
                                 getChar(ch);
-                                if (!ch == "CDATA["[i])
+                                if (ch != "CDATA["[i])
                               		s->tokState = T_IN_DECLARATION;
                             }
                             if (s->tokState == T_IN_CDATA)
@@ -286,6 +286,7 @@ XMLCToken xmlcTokenizerNextToken(XMLCTokenizer *s)
                     s->tokState = T_IN_START_PCDATA;
                     return s->tokType = DECLARATION_TOKEN;
                 }
+                break;
 
             case T_IN_COMMENT: /* scan until --> allow everything */
                 if (ch == '-') {

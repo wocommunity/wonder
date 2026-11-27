@@ -44,14 +44,14 @@ and limitations under the License.
 #ifdef SINGLE_THREADED_ADAPTOR
 #define THREAD_MODEL SINGLE
 #else
+#ifndef THREAD_MODEL
 #ifdef WIN32
 #define THREAD_MODEL WIN32_THREADS
-#endif
-#ifdef SOLARIS
+#elif defined(SOLARIS) || defined(HPUX) || defined(LINUX) || defined(MACOS)
+#define THREAD_MODEL PTHREADS
+#else
 #define THREAD_MODEL PTHREADS
 #endif
-#ifdef HPUX
-#define THREAD_MODEL PTHREADS
 #endif
 
 /* Override the previous definition if we are building NSAPI. */

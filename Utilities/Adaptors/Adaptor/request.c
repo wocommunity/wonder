@@ -43,7 +43,7 @@ and limitations under the License.
 
 
 
-static RequestMethod get_http_method();
+static RequestMethod get_http_method(const char *method);
 static const char *customHeaderFor(const char *header);
 
 
@@ -229,7 +229,7 @@ typedef struct {
 static void req_appendHeader(const char *key, const char *val, String *headers) 
 {
    int valLength = strlen(val);
-   while (val[valLength - 1] == '\r' || val[valLength - 1] == '\n') 
+   while (valLength > 0 && (val[valLength - 1] == '\r' || val[valLength - 1] == '\n')) 
    {
       valLength--;
    }
@@ -258,7 +258,7 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    buffers[1].iov_base = "\r\n";
    buffers[1].iov_len = 2;
    bufferCount = 2;
-   if (req->content_length > 0) 
+   if (req->content_length > 0 && req->content != NULL && req->content_buffer_size > 0) 
    {
       bufferCount++;
       buffers[2].iov_base = req->content;
@@ -271,38 +271,46 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    /* Note that we reuse buffers, and the existing content-data buffer. */
    if (req->content_length > req->content_buffer_size)
    {
-      long long total_sent = req->content_buffer_size;
-      long long len_read, amount_to_read;
-      req->haveReadStreamedData = 1;
-      while (total_sent < req->content_length)
+      if (req->getMoreContent == NULL)
       {
-         amount_to_read = req->content_length - total_sent;
-         if (amount_to_read > req->content_buffer_size)
-            amount_to_read = req->content_buffer_size;
-         len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
-         if (len_read > 0)
+         WOLog(WO_ERR, "req_sendRequest_V3: content_length (%lld) > content_buffer_size (%lld) but getMoreContent is NULL",
+               req->content_length, req->content_buffer_size);
+      }
+      else
+      {
+         long long total_sent = req->content_buffer_size;
+         long long len_read, amount_to_read;
+         req->haveReadStreamedData = 1;
+         while (total_sent < req->content_length)
          {
-            if(appStatus == 0)
+            amount_to_read = req->content_length - total_sent;
+            if (amount_to_read > req->content_buffer_size)
+               amount_to_read = req->content_buffer_size;
+            len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
+            if (len_read > 0)
             {
-               buffers[0].iov_base = req->content;
-               buffers[0].iov_len = len_read;
-               appStatus = transport->sendBuffers(socket, buffers, 1);
-               // 2009/04/28: in case of a transport error, carry on with reading
-               //             incoming input stream (= browser data).  That way,
-               //             the browser (hopefully) switch to the receive mode
-               //             after sending the complete request and receives/shows
-               //             the adaptor error message (old behaviour: endless
-               //             sending/uploading view).
-               if(appStatus != 0)
+               if(appStatus == 0)
                {
-                  WOLog(WO_ERR, "Failed to send streamed content.");
+                  buffers[0].iov_base = req->content;
+                  buffers[0].iov_len = len_read;
+                  appStatus = transport->sendBuffers(socket, buffers, 1);
+                  // 2009/04/28: in case of a transport error, carry on with reading
+                  //             incoming input stream (= browser data).  That way,
+                  //             the browser (hopefully) switch to the receive mode
+                  //             after sending the complete request and receives/shows
+                  //             the adaptor error message (old behaviour: endless
+                  //             sending/uploading view).
+                  if(appStatus != 0)
+                  {
+                     WOLog(WO_ERR, "Failed to send streamed content.");
+                  }
                }
+               total_sent += len_read;
+            } else if (len_read < 0) {
+               WOLog(WO_ERR, "Failed to read streamed content.");
+               browserStatus = -1;
+               break;
             }
-            total_sent += len_read;
-         } else if (len_read < 0) {
-            WOLog(WO_ERR, "Failed to read streamed content.");
-            browserStatus = -1;
-            break;
          }
       }
    }
@@ -336,7 +344,7 @@ static void setupIOVec(const char *key, const char *value, struct iovec **iov)
    (*iov)++;
    (*iov)->iov_base = (void *)value;
    (*iov)->iov_len = strlen(value);
-   while (value[(*iov)->iov_len - 1] == '\r' || value[(*iov)->iov_len - 1] == '\n')
+   while ((*iov)->iov_len > 0 && (value[(*iov)->iov_len - 1] == '\r' || value[(*iov)->iov_len - 1] == '\n'))
       (*iov)->iov_len--;
    (*iov)++;
    (*iov)->iov_base = "\r\n";
@@ -357,7 +365,7 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    bufferIterator->iov_base = "\r\n";
    bufferIterator->iov_len = 2;
    bufferCount = st_count(req->headers) * 4 + 2;
-   if (req->content_length > 0)
+   if (req->content_length > 0 && req->content != NULL && req->content_buffer_size > 0)
    {
       bufferCount++;
       bufferIterator++;
@@ -370,24 +378,32 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
    /* Note that we reuse buffers, and the existing content-data buffer. */
    if (req->content_length > req->content_buffer_size)
    {
-      long long total_sent = req->content_buffer_size;
-      long long len_read, amount_to_read;
-      req->haveReadStreamedData = 1;
-      while (total_sent < req->content_length && result == 0)
+      if (req->getMoreContent == NULL)
       {
-         amount_to_read = req->content_length - total_sent;
-         if (amount_to_read > req->content_buffer_size)
-            amount_to_read = req->content_buffer_size;
-         len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
-         if (len_read > 0)
+         WOLog(WO_ERR, "req_sendRequest: content_length (%lld) > content_buffer_size (%lld) but getMoreContent is NULL",
+               req->content_length, req->content_buffer_size);
+      }
+      else
+      {
+         long long total_sent = req->content_buffer_size;
+         long long len_read, amount_to_read;
+         req->haveReadStreamedData = 1;
+         while (total_sent < req->content_length && result == 0)
          {
-            buffers[0].iov_base = req->content;
-            buffers[0].iov_len = len_read;
-            result = transport->sendBuffers(socket, buffers, 1);
-            total_sent += len_read;
-         } else if (len_read < 0) {
-            WOLog(WO_ERR, "Failed to read streamed content.");
-            result = -1;
+            amount_to_read = req->content_length - total_sent;
+            if (amount_to_read > req->content_buffer_size)
+               amount_to_read = req->content_buffer_size;
+            len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
+            if (len_read > 0)
+            {
+               buffers[0].iov_base = req->content;
+               buffers[0].iov_len = len_read;
+               result = transport->sendBuffers(socket, buffers, 1);
+               total_sent += len_read;
+            } else if (len_read < 0) {
+               WOLog(WO_ERR, "Failed to read streamed content.");
+               result = -1;
+            }
          }
       }
    }
